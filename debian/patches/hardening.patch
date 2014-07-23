@@ -1,0 +1,25 @@
+Description: pass compiler flags set in debian/rules to compiler
+Author: Devid Antonio Filoni <d.filoni@ubuntu.com>
+
+Index: shotwell-0.15.0/Makefile
+===================================================================
+--- shotwell-0.15.0.orig/Makefile	2013-10-04 02:23:04.000000000 +0200
++++ shotwell-0.15.0/Makefile	2013-10-13 09:51:58.893357001 +0200
+@@ -35,7 +35,7 @@
+ LOCAL_LANG_DIR=locale-langpack
+ SYSTEM_LANG_DIR := $(DESTDIR)$(PREFIX)/share/locale
+ 
+-VALAFLAGS := -g --enable-checking --target-glib=2.32 --thread --fatal-warnings --enable-experimental --enable-deprecated $(USER_VALAFLAGS)
++VALAFLAGS := $(foreach w,$(CPPFLAGS) $(CFLAGS) $(LDFLAGS),-X $(w)) --enable-checking --target-glib=2.32 --thread --fatal-warnings --enable-experimental --enable-deprecated $(USER_VALAFLAGS)
+ ifdef UNITY_SUPPORT
+ VALAFLAGS := $(VALAFLAGS) --define UNITY_SUPPORT
+ endif
+@@ -673,7 +673,7 @@
+ 	@
+ 
+ $(EXPANDED_OBJ_FILES): %.o: %.c $(CONFIG_IN) Makefile
+-	$(CC) -c $(VALA_CFLAGS) $(CFLAGS) -o $@ $<
++	$(CC) -c $(VALA_CFLAGS) $(CPPFLAGS) $(CFLAGS) -o $@ $<
+ 
+ $(PROGRAM): $(EXPANDED_OBJ_FILES) $(RESOURCES) $(LANG_STAMP) $(THUMBNAILER_BIN) misc/gschemas.compiled $(DOC_LANG_STAMP)
+ 	$(CC) $(EXPANDED_OBJ_FILES) $(CFLAGS) $(LDFLAGS) $(RESOURCES) $(VALA_LDFLAGS) $(EXPORT_FLAGS) -o $@

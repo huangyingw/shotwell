@@ -1,0 +1,16 @@
+Description: do not install files in libexec directory
+Author: Luca Falavigna <dktrkranz@debian.org>
+
+Index: shotwell-0.15.0/Makefile
+===================================================================
+--- shotwell-0.15.0.orig/Makefile	2013-10-13 09:51:58.893357001 +0200
++++ shotwell-0.15.0/Makefile	2013-10-13 09:54:33.885361749 +0200
+@@ -27,7 +27,7 @@
+ 
+ -include configure.mk
+ ifndef LIBEXECDIR
+-LIBEXECDIR=$(PREFIX)/libexec/shotwell
++LIBEXECDIR=$(PREFIX)/share/shotwell
+ endif
+ 
+ CORE_SUPPORTED_LANGUAGES=$(shell cat po/LINGUAS)

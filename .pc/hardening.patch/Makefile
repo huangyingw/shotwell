@@ -27,7 +27,7 @@ LIB=lib
 
 -include configure.mk
 ifndef LIBEXECDIR
-LIBEXECDIR=$(PREFIX)/share/shotwell
+LIBEXECDIR=$(PREFIX)/libexec/shotwell
 endif
 
 CORE_SUPPORTED_LANGUAGES=$(shell cat po/LINGUAS)
@@ -35,7 +35,7 @@ CORE_SUPPORTED_LANGUAGES=$(shell cat po/LINGUAS)
 LOCAL_LANG_DIR=locale-langpack
 SYSTEM_LANG_DIR := $(DESTDIR)$(PREFIX)/share/locale
 
-VALAFLAGS := $(foreach w,$(CPPFLAGS) $(CFLAGS) $(LDFLAGS),-X $(w)) --enable-checking --target-glib=2.32 --thread --fatal-warnings --enable-experimental --enable-deprecated $(USER_VALAFLAGS)
+VALAFLAGS := -g --enable-checking --target-glib=2.32 --thread --fatal-warnings --enable-experimental --enable-deprecated $(USER_VALAFLAGS)
 ifdef UNITY_SUPPORT
 VALAFLAGS := $(VALAFLAGS) --define UNITY_SUPPORT
 endif
@@ -673,7 +673,7 @@ $(EXPANDED_C_FILES): $(VALA_STAMP)
 	@
 
 $(EXPANDED_OBJ_FILES): %.o: %.c $(CONFIG_IN) Makefile
-	$(CC) -c $(VALA_CFLAGS) $(CPPFLAGS) $(CFLAGS) -o $@ $<
+	$(CC) -c $(VALA_CFLAGS) $(CFLAGS) -o $@ $<
 
 $(PROGRAM): $(EXPANDED_OBJ_FILES) $(RESOURCES) $(LANG_STAMP) $(THUMBNAILER_BIN) misc/gschemas.compiled $(DOC_LANG_STAMP)
 	$(CC) $(EXPANDED_OBJ_FILES) $(CFLAGS) $(LDFLAGS) $(RESOURCES) $(VALA_LDFLAGS) $(EXPORT_FLAGS) -o $@

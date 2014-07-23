@@ -27,7 +27,7 @@ LIB=lib
 
 -include configure.mk
 ifndef LIBEXECDIR
-LIBEXECDIR=$(PREFIX)/share/shotwell
+LIBEXECDIR=$(PREFIX)/libexec/shotwell
 endif
 
 CORE_SUPPORTED_LANGUAGES=$(shell cat po/LINGUAS)
