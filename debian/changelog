@@ -1,10 +1,16 @@
 shotwell (0.18.1-2) unstable; urgency=medium
 
   * New Maintainer (Closes: #755416).
-  * rewrite debian/copyright into machine-readable format.
-  * Add Vcs-Browser & Vcs-Git 
+  * debian/copyright 
+    - Rewrite into machine-readable format.
+    - Add myself to the list of authors for debian/*.
+  * debian/control
+    - set myself as maintainer.
+    - For previously not existing Vcs
+      + Create a new git repository on alioth.
+      + Add the Fields Vcs-Browser and Vcs-Git.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Tue, 22 Jul 2014 18:45:55 +0200
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Thu, 24 Jul 2014 16:35:18 +0200
 
 shotwell (0.18.1-1) unstable; urgency=medium
 

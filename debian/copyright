@@ -8,7 +8,7 @@ Copyright: 2009-2013 Yorba Foundation
            2010      Evgeniy Polyakov
            2010      Maxim Kartashev
            2013      Jens Bav
-License: LGPL-2.1+
+License: LGPL-2.1
 
 Files: debian/*
 Copyright: 2009-2011 Devid Antonio Filoni <d.filoni@ubuntu.com>
@@ -32,7 +32,7 @@ Copyright: 2009      Sebastian Porta <sebastianporta@gmail.com>
            2009      Rosetta Contributors and Canonical Ltd.
 License: CC-BY-SA-3.0
 
-License: LGPL-2.1+
+License: LGPL-2.1
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
  License as published by the Free Software Foundation; either
