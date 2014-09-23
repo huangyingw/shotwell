@@ -1358,7 +1358,7 @@ public abstract class EditingHostPage : SinglePhotoPage {
     
     protected override bool on_shift_pressed(Gdk.EventKey? event) {
         // show quick compare of original only if no tool is in use, the original pixbuf is handy
-        if (current_tool == null && !get_ctrl_pressed() && !get_alt_pressed())
+        if (current_tool == null && !get_ctrl_pressed() && !get_alt_pressed() && has_photo())
             swap_in_original();
         
         return base.on_shift_pressed(event);
@@ -1386,13 +1386,13 @@ public abstract class EditingHostPage : SinglePhotoPage {
     }
 
     private void swap_in_original() {
-        Gdk.Pixbuf? original;
-        
-        original =
-            get_photo().get_original_orientation().rotate_pixbuf(get_photo().get_prefetched_copy());
-        
-        if (original == null)
+        Gdk.Pixbuf original;
+        try {
+            original = get_photo().get_original_orientation().rotate_pixbuf(
+                get_photo().get_prefetched_copy());
+        } catch (Error err) {
             return;
+        }
         
         // store what's currently displayed only for the duration of the shift pressing
         swapped = get_unscaled_pixbuf();
@@ -1999,8 +1999,15 @@ public abstract class EditingHostPage : SinglePhotoPage {
     }
     
     public void on_set_background() {
-        if (has_photo())
-            DesktopIntegration.set_background(get_photo());
+        if (has_photo()) {
+            SetBackgroundPhotoDialog dialog = new SetBackgroundPhotoDialog();
+            bool desktop, screensaver;
+            if (dialog.execute(out desktop, out screensaver)) {
+                AppWindow.get_instance().set_busy_cursor();
+                DesktopIntegration.set_background(get_photo(), desktop, screensaver);
+                AppWindow.get_instance().set_normal_cursor();
+            }
+        }
     }
 
     protected override bool on_ctrl_pressed(Gdk.EventKey? event) {
@@ -3137,6 +3144,9 @@ public class LibraryPhotoPage : EditingHostPage {
         
         // move on to the next one in the collection
         on_next_photo();
+        
+        ViewCollection view = get_view();
+        view.remove_marked(view.mark(view.get_view_for_source(photo)));
         if (photo.equals(get_photo())) {
             // this indicates there is only one photo in the controller, or now zero, so switch 
             // to the Photos page, which is guaranteed to be there

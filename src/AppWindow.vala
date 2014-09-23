@@ -145,12 +145,9 @@ public class FullscreenWindow : PageWindow {
             
             return true;
         }
-
+        
         // Make sure this event gets propagated to the underlying window...
-        AppWindow.get_instance().key_press_event(event);
-
-        // ...then let the base class take over
-        return (base.key_press_event != null) ? base.key_press_event(event) : false;
+        return AppWindow.get_instance().key_press_event(event);
     }
     
     private void on_close() {
@@ -450,7 +447,10 @@ public abstract class AppWindow : PageWindow {
         GLib.List<Gdk.Pixbuf> pixbuf_list = new GLib.List<Gdk.Pixbuf>();
         foreach (string resource in Resources.APP_ICONS)
             pixbuf_list.append(Resources.get_icon(resource, 0));
-        set_default_icon_list(pixbuf_list);
+        // Use copy() because set_default_icon_list() actually accepts an owned reference
+        // If we didn't hold the pixbufs in memory, would need to use copy_deep()
+        // See https://mail.gnome.org/archives/vala-list/2014-August/msg00022.html
+        set_default_icon_list(pixbuf_list.copy());
 
         // restore previous size and maximization state
         if (this is LibraryWindow) {
