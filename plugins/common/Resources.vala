@@ -6,7 +6,7 @@
 
 namespace Resources {
 
-public const string WEBSITE_NAME = _("Visit the Yorba web site");
+public const string WEBSITE_NAME = _("Visit the Shotwell home page");
 public const string WEBSITE_URL = "https://wiki.gnome.org/Apps/Shotwell";
 
 public const string LICENSE = """

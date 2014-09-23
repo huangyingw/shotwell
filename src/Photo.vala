@@ -619,6 +619,12 @@ public abstract class Photo : PhotoSource, Dateable {
         interrogator.interrogate();
         
         DetectedPhotoInformation? detected = interrogator.get_detected_photo_information();
+        if (detected == null || interrogator.get_is_photo_corrupted()) {
+            // TODO: Probably should remove from database, but simply exiting for now (prior code
+            // didn't even do this check)
+            return;
+        }
+        
         bpr.dim = detected.image_dim;
         bpr.filesize = info.get_size();
         bpr.timestamp = timestamp.tv_sec;
@@ -1149,9 +1155,12 @@ public abstract class Photo : PhotoSource, Dateable {
             return ImportResult.DECODE_ERROR;
         }
         
+        if (interrogator.get_is_photo_corrupted())
+            return ImportResult.NOT_AN_IMAGE;
+        
         // if not detected photo information, unsupported
         DetectedPhotoInformation? detected = interrogator.get_detected_photo_information();
-        if (detected == null)
+        if (detected == null || detected.file_format == PhotoFileFormat.UNKNOWN)
             return ImportResult.UNSUPPORTED_FORMAT;
         
         // copy over supplied MD5s if provided
@@ -1261,7 +1270,7 @@ public abstract class Photo : PhotoSource, Dateable {
         try {
             interrogator.interrogate();
             DetectedPhotoInformation? detected = interrogator.get_detected_photo_information();
-            if (detected != null)
+            if (detected != null && !interrogator.get_is_photo_corrupted() && detected.file_format != PhotoFileFormat.UNKNOWN)
                 params.row.master.file_format = detected.file_format;
         } catch (Error err) {
             debug("Unable to interrogate photo file %s: %s", file.get_path(), err.message);
@@ -1288,7 +1297,7 @@ public abstract class Photo : PhotoSource, Dateable {
         PhotoFileInterrogator interrogator = new PhotoFileInterrogator(file, options);
         interrogator.interrogate();
         detected = interrogator.get_detected_photo_information();
-        if (detected == null) {
+        if (detected == null || interrogator.get_is_photo_corrupted()) {
             critical("Photo update: %s no longer a recognized image", to_string());
             
             return null;
@@ -2232,7 +2241,7 @@ public abstract class Photo : PhotoSource, Dateable {
         }
         
         DetectedPhotoInformation? detected = interrogator.get_detected_photo_information();
-        if (detected == null) {
+        if (detected == null || interrogator.get_is_photo_corrupted()) {
             critical("file_exif_updated: %s no longer an image", to_string());
             
             return;
@@ -3216,14 +3225,15 @@ public abstract class Photo : PhotoSource, Dateable {
      *
      * @return A Pixbuf with the image data from unmodified_precached.
      */
-    public Gdk.Pixbuf? get_prefetched_copy() {
+    public Gdk.Pixbuf get_prefetched_copy() throws Error {
         lock (unmodified_precached) {
             if (unmodified_precached == null) {
                 try {
                     populate_prefetched();
                 } catch (Error e) {
-                    warning("raw pixbuf for %s could not be loaded", this.to_string());
-                    return null;
+                    message("pixbuf for %s could not be loaded: %s", to_string(), e.message);
+                    
+                    throw e;
                 }
             }
 
@@ -3322,12 +3332,10 @@ public abstract class Photo : PhotoSource, Dateable {
         populate_prefetched();
 
         Gdk.Pixbuf pixbuf = get_prefetched_copy();
-
+        
         // remember to delete the cached copy if it isn't being used.
         secs_since_access.start();
         debug("pipeline being run against %s, timer restarted.", this.to_string());
-
-        assert(pixbuf != null);
         
         //
         // Image transformation pipeline
