@@ -20,7 +20,7 @@ Build-Depends:
  librest-dev (>= 0.7),
  libsoup2.4-dev (>= 2.26.0),
  libsqlite3-dev (>= 3.5.9),
- libwebkitgtk-3.0-dev (>= 1.4.0),
+ libwebkitgtk-3.0-dev (>= 2.4.5-2),
  libxml2 (>= 2.6.32),
  m4,
  valac (>= 0.22.0)

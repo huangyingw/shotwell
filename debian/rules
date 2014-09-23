@@ -7,10 +7,14 @@ LDFLAGS:=$(shell dpkg-buildflags --get LDFLAGS)
 VALAFLAGS:=$(foreach w,$(CPPFLAGS) $(CFLAGS) $(LDFLAGS),-X $(w))
 
 %:
-	dh $@ --dbg-package=shotwell-dbg
+	dh $@ 
+#--dbg-package=shotwell-dbg
 
 override_dh_auto_configure:
-	./configure --prefix=/usr --libexec=/usr/lib --disable-schemas-compile
+	./configure --debug --prefix=/usr --libexec=/usr/lib --disable-schemas-compile
 
 override_dh_installchangelogs:
 	dh_installchangelogs NEWS
+
+override_dh_strip:
+	dh_strip --dbg-package=shotwell-dbg
