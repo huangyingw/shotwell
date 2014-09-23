@@ -20,13 +20,13 @@ Build-Depends:
  librest-dev (>= 0.7),
  libsoup2.4-dev (>= 2.26.0),
  libsqlite3-dev (>= 3.5.9),
- libwebkitgtk-3.0-dev (>= 2.4.5-2),
+ libwebkitgtk-3.0-dev (>= 1.4.0),
  libxml2 (>= 2.6.32),
  m4,
  valac (>= 0.22.0)
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Homepage: https://wiki.gnome.org/Apps/Shotwell
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=collab-maint/shotwell.git;a=summary
+Vcs-Browser: http://anonscm.debian.org/cgit/collab-maint/shotwell.git/
 Vcs-Git: git://anonscm.debian.org/collab-maint/shotwell.git
 
 Package: shotwell
