@@ -16,19 +16,19 @@ Copyright: 2009-2011 Devid Antonio Filoni <d.filoni@ubuntu.com>
 License: GPL-2+
 
 Files: icons/pin-toolbar.svg
-       icons/hidden.svg
        icons/crop.svg
        icons/import.svg
-Copyright: 2009      Sebastian Porta <sebastianporta@gmail.com>
-           2009      Cory Kontros <coryisatm@ubuntu.com>
-           2009      Oliver Scholtz <scholli_tz@yahoo.de>
-           2009      Daniel Planas <daniplanas.a@gmail.com>
-           2007      David Vignoni <david@icon-king.com>
+       icons/import-all.png
+Copyright: 2007      David Vignoni <david@icon-king.com>
            2007      Johann Ollivier Lapeyre <johann@oxygen-icons.org>
            2007      Kenneth Wimer <kwwii@bootsplash.org>
            2007      Nuno Fernades Pinheiro <nf.pinheiro@gmail.com>
            2007      Riccardo Iaconelli <riccardo@oxygen-icons.org>
            2007      David Miller <miller@oxygen-icons.org>
+           2009      Sebastian Porta <sebastianporta@gmail.com>
+           2009      Cory Kontros <coryisatm@ubuntu.com>
+           2009      Oliver Scholtz <scholli_tz@yahoo.de>
+           2009      Daniel Planas <daniplanas.a@gmail.com>
            2009      Rosetta Contributors and Canonical Ltd.
 License: CC-BY-SA-3.0
 

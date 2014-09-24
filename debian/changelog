@@ -2,12 +2,18 @@ shotwell (0.20.0-1) unstable; urgency=medium
 
   * New upstream release (Closes: #762357).
   * debian/control:
-    - Bump Standarts Version to 3.9.6 (no changes required).
+    - Bump Standards-Version to 3.9.6 (no changes required).
     - Change Vcs-Browser to cgit.
   * debian/copyright:
+    - Remove deleted file icons/hidden.svg.
+    - Add missed file icons/import-all.png.
     - Remove whitspaces at EOL.
+  * debian/rules:
+    - Enable hardening=+all because files can open over network.
+    - Remove useless variable assignments.
+    - Add --debug to configure.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Tue, 23 Sep 2014 14:35:53 +0200
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Tue, 23 Sep 2014 18:56:52 +0200
 
 shotwell (0.18.1-2) unstable; urgency=medium
 
