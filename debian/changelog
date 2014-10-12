@@ -1,10 +1,13 @@
-shotwell (0.20.0-2) unstable; urgency=medium
+shotwell (0.20.1-1) unstable; urgency=medium
 
+  * New upstream release.
+  * Add sharedobject-in-library-directory-missing-soname to
+    lintian-overrides.
   * debian/patch/hardening.patch:
     - Add removal of --fatal-warnings at plugins/Makefile.plugins.mk
       to prevent build errors on armel and mips.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Thu, 09 Oct 2014 08:59:04 +0200
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Thu, 09 Oct 2014 11:57:41 +0200
 
 shotwell (0.20.0-1) unstable; urgency=medium
 

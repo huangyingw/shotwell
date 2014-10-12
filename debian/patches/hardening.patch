@@ -3,8 +3,8 @@ Author: Devid Antonio Filoni <d.filoni@ubuntu.com>
 
 Index: trunk/Makefile
 ===================================================================
---- trunk.orig/Makefile	2014-10-09 08:02:24.871560620 +0200
-+++ trunk/Makefile	2014-10-09 08:02:24.867560531 +0200
+--- trunk.orig/Makefile	2014-10-09 12:18:23.260829459 +0200
++++ trunk/Makefile	2014-10-09 12:18:23.252829340 +0200
 @@ -35,7 +35,7 @@
  LOCAL_LANG_DIR=locale-langpack
  SYSTEM_LANG_DIR := $(DESTDIR)$(PREFIX)/share/locale
@@ -25,8 +25,8 @@ Index: trunk/Makefile
  	$(CC) $(EXPANDED_OBJ_FILES) $(CFLAGS) $(LDFLAGS) $(RESOURCES) $(VALA_LDFLAGS) $(EXPORT_FLAGS) -o $@
 Index: trunk/plugins/Makefile.plugin.mk
 ===================================================================
---- trunk.orig/plugins/Makefile.plugin.mk	2014-03-04 23:54:12.000000000 +0100
-+++ trunk/plugins/Makefile.plugin.mk	2014-10-09 08:02:56.340224031 +0200
+--- trunk.orig/plugins/Makefile.plugin.mk	2014-10-09 12:18:23.260829459 +0200
++++ trunk/plugins/Makefile.plugin.mk	2014-10-09 12:19:22.945701585 +0200
 @@ -41,7 +41,7 @@
  all: $(PLUGIN).so
  
