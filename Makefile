@@ -2,7 +2,7 @@ PROGRAM = shotwell
 PROGRAM_THUMBNAILER = shotwell-video-thumbnailer
 PROGRAM_MIGRATOR = shotwell-settings-migrator
 
-VERSION = 0.20.1
+VERSION = 0.20.2
 GITVER := $(shell git log -n 1 2>/dev/null | head -n 1 | awk '{print $$2}')
 GETTEXT_PACKAGE = $(PROGRAM)
 BUILD_ROOT = 1
@@ -151,6 +151,7 @@ RESOURCE_FILES = \
 	search_bar.ui \
 	search_sidebar_context.ui \
 	set_background_dialog.glade \
+	set_background_slideshow_dialog.glade \
 	shotwell.glade \
 	shotwell.xml \
 	sidebar_default_context.ui \
