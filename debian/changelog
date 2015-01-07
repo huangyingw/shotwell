@@ -8,6 +8,7 @@ shotwell (0.20.2-1) unstable; urgency=medium
   * New debian/patches/500-buildflags.patch:
     - Poke buildflags into Makefile
   * Add year 2015 for debian/* into debian/copyright.
+  * Remove debian/source/options because compression xz is standard now.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 07 Jan 2015 14:23:48 +0100
 
