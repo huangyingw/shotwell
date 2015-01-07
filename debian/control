@@ -62,8 +62,7 @@ Package: shotwell-dbg
 Priority: extra
 Section: debug
 Architecture: linux-any
-Depends: ${shlibs:Depends},
-         ${misc:Depends},
+Depends: ${misc:Depends},
          shotwell (= ${binary:Version})
 Description: digital photo organizer - debugging symbols
  Shotwell is a digital photo organizer designed for the GNOME desktop

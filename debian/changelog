@@ -1,3 +1,15 @@
+shotwell (0.20.2-1) unstable; urgency=medium
+
+  * New upstream release (Closes: #769025).
+  * debian/control:
+    - Remove useless ${shlibs:Depends} from shotwell-dbg.
+  * debian/rules:
+    - Remove useless hardening parts.
+  * New debian/patches/500-buildflags.patch:
+    - Poke buildflags into Makefile
+
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 07 Jan 2015 14:23:48 +0100
+
 shotwell (0.20.1-1) unstable; urgency=medium
 
   * New upstream release.

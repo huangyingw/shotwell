@@ -1,0 +1,22 @@
+Description: Poke requested Debian buildflags for hardening into Makefile
+Author: Jörg Frings-Fürst <debian@jff-webhosting.net>
+Last-Update: 2015-01-07
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+Index: trunk/Makefile
+===================================================================
+--- trunk.orig/Makefile
++++ trunk/Makefile
+@@ -394,10 +394,11 @@ VALA_CFLAGS := `pkg-config --cflags $(EX
+ 	$(foreach def,$(DEFINES),-D$(def))
+ 
+ VALA_LDFLAGS := `pkg-config --libs $(EXT_PKGS) $(DIRECT_LIBS) gthread-2.0`
++VALA_LDFLAGS += -fPIE -pie -Wl,-z,relro -Wl,-z,now
+ 
+ # REQUIRED_CFLAGS absolutely get appended to CFLAGS, whatever the
+ # the value of CFLAGS in the environment
+-REQUIRED_CFLAGS := -fPIC
++REQUIRED_CFLAGS := -fPIC -g -O2 -fstack-protector-strong -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2
+ 
+ # setting CFLAGS in configure.mk overrides build type
+ ifndef CFLAGS

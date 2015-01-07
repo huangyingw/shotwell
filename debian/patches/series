@@ -1,2 +1,3 @@
+500-buildflags.patch
 hardening.patch
 libexec.patch
