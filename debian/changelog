@@ -7,6 +7,7 @@ shotwell (0.20.2-1) unstable; urgency=medium
     - Remove useless hardening parts.
   * New debian/patches/500-buildflags.patch:
     - Poke buildflags into Makefile
+  * Add year 2015 for debian/* into debian/copyright.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 07 Jan 2015 14:23:48 +0100
 
