@@ -15,6 +15,7 @@ Build-Depends:
  libgstreamer1.0-dev (>= 1.0.0),
  libgtk-3-dev (>= 3.6.0),
  libgudev-1.0-dev (>= 145),
+ libicu-dev,
  libjson-glib-dev,
  libraw-dev (>= 0.14),
  librest-dev (>= 0.7),

@@ -1,3 +1,4 @@
 500-buildflags.patch
+505-fix-viewer-desktop-file.patch
 hardening.patch
 libexec.patch
