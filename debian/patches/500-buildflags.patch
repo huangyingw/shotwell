@@ -16,7 +16,18 @@ Index: trunk/Makefile
  # REQUIRED_CFLAGS absolutely get appended to CFLAGS, whatever the
  # the value of CFLAGS in the environment
 -REQUIRED_CFLAGS := -fPIC
-+REQUIRED_CFLAGS := -fPIC -g -O2 -fstack-protector-strong -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2
++REQUIRED_CFLAGS := -g -O2 -fPIE -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2
  
  # setting CFLAGS in configure.mk overrides build type
  ifndef CFLAGS
+@@ -410,8 +411,8 @@ PLUGIN_CFLAGS = -O2 -g -pipe
+ endif
+ endif
+ 
+-CFLAGS += $(PROFILE_FLAGS) $(REQUIRED_CFLAGS)
+-PLUGIN_CFLAGS += $(PROFILE_FLAGS) $(REQUIRED_CFLAGS)
++CFLAGS += $(PROFILE_FLAGS) $(REQUIRED_CFLAGS) -fstack-protector-strong
++PLUGIN_CFLAGS += $(PROFILE_FLAGS) $(REQUIRED_CFLAGS) -fPIC -fno-stack-protector
+ 
+ # Required for gudev-1.0
+ CFLAGS += -DG_UDEV_API_IS_SUBJECT_TO_CHANGE

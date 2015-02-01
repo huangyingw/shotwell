@@ -8,9 +8,12 @@ shotwell (0.20.2-2) UNRELEASED; urgency=medium
       + debian/shotwell.postrm
       + debian/shotwell.examples
     - Thanks to Teo Romera <teoromera@gmail.com>.
-  * Add debian/505-fix-viewer-desktop-file.patch to correct build of
-    shotwell-viewer.desktop (Closes: #776745).
-    - thanks to Raphaël Halimi <raphael.halimi@gmail.com>.
+  * debian/patches:
+    - Add 505-fix-viewer-desktop-file.patch to correct build of
+      shotwell-viewer.desktop (Closes: #776745).
+      + thanks to Raphaël Halimi <raphael.halimi@gmail.com>.
+    - Rewrite 500-buildflags.patch to prevent FTBFS at 
+      architectures i386 and powerpc.
   * debian/control:
     - Add Build-Depends libicu-dev for missing unicode/ucnv.h.
 
