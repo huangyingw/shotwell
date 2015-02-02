@@ -1,4 +1,4 @@
-shotwell (0.20.2-2) UNRELEASED; urgency=medium
+shotwell (0.20.2-2) unstable; urgency=low
 
   * Add user scripts to replace shotwell-video-thumbnailer
     if the thumbnailer is broken (Closes: #768637):
@@ -17,7 +17,7 @@ shotwell (0.20.2-2) UNRELEASED; urgency=medium
   * debian/control:
     - Add Build-Depends libicu-dev for missing unicode/ucnv.h.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Thu, 22 Jan 2015 18:03:59 +0100
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Mon, 02 Feb 2015 05:16:56 +0100
 
 shotwell (0.20.2-1) unstable; urgency=medium
 
