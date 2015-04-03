@@ -3,9 +3,9 @@ Author: Devid Antonio Filoni <d.filoni@ubuntu.com>
 
 Index: trunk/Makefile
 ===================================================================
---- trunk.orig/Makefile	2014-10-09 12:18:23.260829459 +0200
-+++ trunk/Makefile	2014-10-09 12:18:23.252829340 +0200
-@@ -35,7 +35,7 @@
+--- trunk.orig/Makefile
++++ trunk/Makefile
+@@ -35,7 +35,7 @@ CORE_SUPPORTED_LANGUAGES=$(shell cat po/
  LOCAL_LANG_DIR=locale-langpack
  SYSTEM_LANG_DIR := $(DESTDIR)$(PREFIX)/share/locale
  
@@ -14,7 +14,7 @@ Index: trunk/Makefile
  ifdef UNITY_SUPPORT
  VALAFLAGS := $(VALAFLAGS) --define UNITY_SUPPORT
  endif
-@@ -671,7 +671,7 @@
+@@ -673,7 +673,7 @@ $(EXPANDED_C_FILES): $(VALA_STAMP)
  	@
  
  $(EXPANDED_OBJ_FILES): %.o: %.c $(CONFIG_IN) Makefile
@@ -25,9 +25,9 @@ Index: trunk/Makefile
  	$(CC) $(EXPANDED_OBJ_FILES) $(CFLAGS) $(LDFLAGS) $(RESOURCES) $(VALA_LDFLAGS) $(EXPORT_FLAGS) -o $@
 Index: trunk/plugins/Makefile.plugin.mk
 ===================================================================
---- trunk.orig/plugins/Makefile.plugin.mk	2014-10-09 12:18:23.260829459 +0200
-+++ trunk/plugins/Makefile.plugin.mk	2014-10-09 12:19:22.945701585 +0200
-@@ -41,7 +41,7 @@
+--- trunk.orig/plugins/Makefile.plugin.mk
++++ trunk/plugins/Makefile.plugin.mk
+@@ -41,7 +41,7 @@ DEFINES := -D_VERSION='"$(PLUGINS_VERSIO
  all: $(PLUGIN).so
  
  .stamp: $(SRC_FILES) $(MAKE_FILES) $(HEADER_FILES)

@@ -5,7 +5,8 @@ Author: Raphaël Halimi <raphael.halimi@gmail.com>
 Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=776745
 Bug: https://bugzilla.gnome.org/show_bug.cgi?id=743799
 Forwarded: https://bugzilla.gnome.org/show_bug.cgi?id=743799
-Last-Update: 2015-02-01
+Applied-Upstream: 0.22.0, https://git.gnome.org/browse/shotwell/commit/?id=2ecda59a5562565967647b6c3d44dd99a48a04ef
+Last-Update: 2015-04-03
 ---
 This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 Index: trunk/Makefile

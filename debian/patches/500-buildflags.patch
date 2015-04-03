@@ -7,7 +7,7 @@ Index: trunk/Makefile
 ===================================================================
 --- trunk.orig/Makefile
 +++ trunk/Makefile
-@@ -394,10 +394,11 @@ VALA_CFLAGS := `pkg-config --cflags $(EX
+@@ -395,10 +395,11 @@ VALA_CFLAGS := `pkg-config --cflags $(EX
  	$(foreach def,$(DEFINES),-D$(def))
  
  VALA_LDFLAGS := `pkg-config --libs $(EXT_PKGS) $(DIRECT_LIBS) gthread-2.0`
@@ -20,7 +20,7 @@ Index: trunk/Makefile
  
  # setting CFLAGS in configure.mk overrides build type
  ifndef CFLAGS
-@@ -410,8 +411,8 @@ PLUGIN_CFLAGS = -O2 -g -pipe
+@@ -411,8 +412,8 @@ PLUGIN_CFLAGS = -O2 -g -pipe
  endif
  endif
  
