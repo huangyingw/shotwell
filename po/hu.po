@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: shotwell master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=shotwell&keywords=I18N+L10N&component=Internationalization\n"
-"POT-Creation-Date: 2014-10-06 22:50+0000\n"
-"PO-Revision-Date: 2014-10-09 01:02+0200\n"
+"POT-Creation-Date: 2014-09-26 23:14+0000\n"
+"PO-Revision-Date: 2014-10-08 23:08+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -168,6 +168,12 @@ msgid "Gallery3 publishing module"
 msgstr "Gallery3 közzétételi modul"
 
 #: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:114
+#| msgid ""
+#| "You are not currently logged into YouTube.\n"
+#| "\n"
+#| "You must have already signed up for a Google account and set it up for "
+#| "use with YouTube to continue. You can set up most accounts by using your "
+#| "browser to log into the YouTube site at least once."
 msgid ""
 "You are not currently logged into your Gallery.\n"
 "\n"
@@ -184,6 +190,7 @@ msgid "Shotwell"
 msgstr "Shotwell"
 
 #: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:117
+#| msgid "Shotwell Preferences"
 msgid "Shotwell default directory"
 msgstr "Shotwell alapértelmezett könyvtár"
 
@@ -206,30 +213,48 @@ msgid ""
 "Note that Gallery3 only supports the video types that Flowplayer does."
 msgstr ""
 "\n"
-"Ne feledje, hogy a Gallery3 csak a Flowplayer által támogatott "
-"videotípusokat támogatja."
+"Ne feledje, hogy a Gallery3 csak a Flowplayer által támogatott videotípusokat "
+"támogatja."
 
 #: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1022
-#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1774
-msgid "A file required for publishing is unavailable. Publishing to "
-msgstr "Egy, a közzétételhez szükséges fájl nem érhető el. A közzététel ide: "
+#, c-format
+#| msgid ""
+#| "A file required for publishing is unavailable. Publishing to Picasa can't "
+#| "continue."
+msgid ""
+"A file required for publishing is unavailable. Publishing to %s can't "
+"continue."
+msgstr ""
+"Egy, a közzétételhez szükséges fájl nem érhető el. A közzététel nem "
+"folytatódhat ide: %s."
 
 #. populate any widgets whose contents are
 #. programmatically-generated
-#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1550
+#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1551
 #, c-format
+#| msgid "Publish Photos and Videos"
 msgid "Publishing to %s as %s."
 msgstr "Közzététel ide: %s, mint %s."
 
-#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1816
+#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1775
+#| msgid ""
+#| "A file required for publishing is unavailable. Publishing to Flickr can't "
+#| "continue."
+msgid "A file required for publishing is unavailable. Publishing to "
+msgstr "Egy, a közzétételhez szükséges fájl nem érhető el. A közzététel ide: "
+
+#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1817
+#| msgid ""
+#| "Enter the URL of your Piwigo photo library as well as the username and "
+#| "password associated with your Piwigo account for that library."
 msgid ""
 "Enter the URL for your Gallery3 site and the username and password (or API "
 "key) for your Gallery3 account."
 msgstr ""
-"Adja meg a Gallery3 oldalának URL-címét, valamint az ahhoz tartozó Gallery3 "
-"fiókjának felhasználónevét és jelszavát (vagy API kulcsát)."
+"Adja meg a Gallery3 oldalának URL-címét, valamint az ahhoz tartozó "
+"Gallery3 fiókjának felhasználónevét és jelszavát (vagy API kulcsát)."
 
-#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1817
+#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1818
 msgid ""
 "The username and password or API key were incorrect. To try again, re-enter "
 "your username and password below."
@@ -237,21 +262,21 @@ msgstr ""
 "A felhasználónév és a jelszó vagy API kulcs helytelen. Az újrapróbálkozáshoz "
 "adja meg újra a felhasználónevét és jelszavát alább."
 
-#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1818
+#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1819
 msgid ""
 "The URL entered does not appear to be the main directory of a Gallery3 "
 "instance. Please make sure you typed it correctly and it does not have any "
 "trailing components (e.g., index.php)."
 msgstr ""
-"A megadott URL nem tűnik egy Gallery3 telepítés gyökérkönyvtárának. "
-"Győződjön meg róla, hogy helyesen írta, és nem tartalmaz záró összetevőket "
-"(például: index.php)."
+"A megadott URL nem tűnik egy Gallery3 telepítés gyökérkönyvtárának. Győződjön "
+"meg róla, hogy helyesen írta, és nem tartalmaz záró összetevőket (például: "
+"index.php)."
 
-#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1871
+#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1872
 msgid "Unrecognized User"
 msgstr "Ismeretlen felhasználó"
 
-#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1876
+#: ../plugins/shotwell-publishing-extras/GalleryConnector.vala:1877
 msgid " Site Not Found"
 msgstr " Az oldal nem található"
 
@@ -260,18 +285,23 @@ msgid "Copyright (C) 2013 rajce.net"
 msgstr "Copyright (C) 2013 rajce.net"
 
 #: ../plugins/shotwell-publishing-extras/RajcePublishing.vala:742
+#| msgid ""
+#| "An error message occurred when publishing to Piwigo. Please try again."
 msgid "An error message occurred when publishing to Rajce. Please try again."
 msgstr "Hibaüzenet érkezett a Rajce-n való közzététel során. Próbálja újra."
 
 #: ../plugins/shotwell-publishing-extras/RajcePublishing.vala:831
+#| msgid "Enter the username and password associated with your Tumblr account."
 msgid "Enter email and password associated with your Rajce account."
 msgstr "Adja meg a Rajce fiókjához tartozó e-mail címet és jelszót."
 
 #: ../plugins/shotwell-publishing-extras/RajcePublishing.vala:832
+#| msgid "Username and/or password invalid. Please try again"
 msgid "Invalid email and/or password. Please try again"
 msgstr "Érvénytelen e-mail cím és/vagy jelszó, próbálja újra."
 
 #: ../plugins/shotwell-publishing-extras/RajcePublishing.vala:863
+#| msgid "Invalid User Name or Password"
 msgid "Invalid User Email or Password"
 msgstr "Érvénytelen felhasználói e-mail cím vagy jelszó"
 
@@ -290,6 +320,7 @@ msgstr "_Jelszó"
 
 #: ../plugins/shotwell-publishing-extras/RajcePublishing.vala:892
 #: ../plugins/shotwell-publishing-extras/rajce_authentication_pane.glade.h:4
+#| msgid "_Remember Password"
 msgid "_Remember"
 msgstr "_Megjegyzés"
 
@@ -307,6 +338,9 @@ msgstr "_Album elrejtése"
 
 #: ../plugins/shotwell-publishing-extras/RajcePublishing.vala:1013
 #, c-format
+#| msgid ""
+#| "You are logged into Facebook as %s.\n"
+#| "\n"
 msgid "You are logged into Rajce as %s."
 msgstr "Bejelentkezett a Rajce-ra %s néven."
 
@@ -363,13 +397,13 @@ msgid "Copyright 2012 BJA Electronics"
 msgstr "Copyright 2012 BJA Electronics"
 
 #: ../plugins/shotwell-publishing-extras/TumblrPublishing.vala:104
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1229
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1232
 #: ../plugins/shotwell-publishing/PiwigoPublishing.vala:1246
 msgid "500 x 375 pixels"
 msgstr "500 x 375 képpont"
 
 #: ../plugins/shotwell-publishing-extras/TumblrPublishing.vala:105
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1230
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1233
 #: ../plugins/shotwell-publishing/PiwigoPublishing.vala:1247
 msgid "1024 x 768 pixels"
 msgstr "1024 x 768 képpont"
@@ -437,6 +471,7 @@ msgid "Shotwell Extra Publishing Services"
 msgstr "Shotwell extra közzétételi szolgáltatások"
 
 #: ../plugins/shotwell-publishing-extras/gallery3_authentication_pane.glade.h:1
+#| msgid "Back"
 msgid "Go _Back"
 msgstr "_Vissza"
 
@@ -455,10 +490,12 @@ msgid "_Gallery3 URL:"
 msgstr "_Gallery3 URL:"
 
 #: ../plugins/shotwell-publishing-extras/gallery3_authentication_pane.glade.h:5
+#| msgid "User _name"
 msgid "_User name:"
 msgstr "_Felhasználónév:"
 
 #: ../plugins/shotwell-publishing-extras/gallery3_authentication_pane.glade.h:6
+#| msgid "_Password"
 msgid "_Password:"
 msgstr "_Jelszó:"
 
@@ -467,22 +504,29 @@ msgid "API _Key:"
 msgstr "API _kulcs:"
 
 #: ../plugins/shotwell-publishing-extras/gallery3_authentication_pane.glade.h:8
+#| msgid "hour"
+#| msgid_plural "hours"
 msgid "or"
 msgstr "vagy"
 
 #: ../plugins/shotwell-publishing-extras/gallery3_publishing_options_pane.glade.h:3
+#| msgid "A _new album named:"
 msgid "A _new album"
 msgstr "Új _album"
 
 #: ../plugins/shotwell-publishing-extras/gallery3_publishing_options_pane.glade.h:4
+#| msgid "An _existing album:"
 msgid "An _existing album"
 msgstr "_Egy létező album"
 
 #: ../plugins/shotwell-publishing-extras/gallery3_publishing_options_pane.glade.h:5
+#| msgid ""
+#| "_Remove location, camera, and other identifying information before "
+#| "uploading"
 msgid "_Remove location, tag and camera-identifying data before uploading"
 msgstr ""
-"_Hely-, címke- és a fényképezőgép azonosításra alkalmas adatok eltávolítása "
-"a feltöltés előtt"
+"_Hely-, címke- és a fényképezőgép azonosításra alkalmas adatok eltávolítása a "
+"feltöltés előtt"
 
 #: ../plugins/shotwell-publishing-extras/gallery3_publishing_options_pane.glade.h:6
 #, fuzzy
@@ -493,15 +537,17 @@ msgid "'Publishing to $url as $username' (populated in application code)"
 msgstr "küldjünk bugot hogy ezt szedjék ki"
 
 #: ../plugins/shotwell-publishing-extras/gallery3_publishing_options_pane.glade.h:7
+#| msgid "_Scaling constraint:"
 msgid "Scaling constraint:"
 msgstr "Méretezési megszorítás:"
 
 #: ../plugins/shotwell-publishing-extras/gallery3_publishing_options_pane.glade.h:8
+#| msgid " _pixels"
 msgid "pixels"
 msgstr "képpont"
 
 #: ../plugins/shotwell-publishing-extras/gallery3_publishing_options_pane.glade.h:9
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1233
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1236
 #: ../plugins/shotwell-publishing/PiwigoPublishing.vala:1250
 #: ../src/Dimensions.vala:17
 msgid "Original size"
@@ -529,10 +575,14 @@ msgid "Photo _size:"
 msgstr "Fénykép _mérete:"
 
 #: ../plugins/shotwell-publishing-extras/rajce_publishing_options_pane.glade.h:1
+#| msgid ""
+#| "You are logged into Facebook as %s.\n"
+#| "\n"
 msgid "you are logged in rajce as $name"
 msgstr "Bejelentkezett a Rajce-ra $name néven"
 
 #: ../plugins/shotwell-publishing-extras/rajce_publishing_options_pane.glade.h:7
+#| msgid "Videos will appear in:"
 msgid "$mediatype will appear in"
 msgstr "A $mediatype itt jelennek meg:"
 
@@ -643,12 +693,12 @@ msgid "Upload _size:"
 msgstr "Feltöltés _mérete:"
 
 #: ../plugins/shotwell-publishing/FacebookPublishing.vala:1180
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1211
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1214
 msgid "Just me"
 msgstr "Csak én"
 
 #: ../plugins/shotwell-publishing/FacebookPublishing.vala:1182
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1207
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1210
 #: ../plugins/shotwell-publishing/PiwigoPublishing.vala:1234
 msgid "Everyone"
 msgstr "Mindenki"
@@ -703,55 +753,58 @@ msgstr ""
 "Bejelentkezett a Flickr-re %s néven.\n"
 "\n"
 
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1155
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1156
 #, c-format
 #| msgid ""
 #| "Your free Flickr account limits how much data you can upload per month.\n"
-#| "This month you have %d megabyte remaining in your upload quota."
-#| msgid_plural ""
-#| "Your free Flickr account limits how much data you can upload per month.\n"
-#| "This month you have %d megabytes remaining in your upload quota."
+#| "This month, you have %d megabytes remaining in your upload quota."
 msgid ""
 "Your free Flickr account limits how much data you can upload per month.\n"
-"This month, you have %d megabytes remaining in your upload quota."
-msgstr ""
+"This month you have %d megabyte remaining in your upload quota."
+msgid_plural ""
+"Your free Flickr account limits how much data you can upload per month.\n"
+"This month you have %d megabytes remaining in your upload quota."
+msgstr[0] ""
+"Az ingyenes Flickr fiókja korlátozza a havonta feltölthető adatmennyiséget.\n"
+"Ebben a hónapban még %d megabájt feltöltésére van lehetősége."
+msgstr[1] ""
 "Az ingyenes Flickr fiókja korlátozza a havonta feltölthető adatmennyiséget.\n"
 "Ebben a hónapban még %d megabájt feltöltésére van lehetősége."
 
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1157
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1160
 msgid "Your Flickr Pro account entitles you to unlimited uploads."
 msgstr "Az Ön Flickr Pro fiókja korlátlan feltöltést engedélyez."
 
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1162
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1165
 msgid "Photos _visible to:"
 msgstr "A _fényképeket láthatja:"
 
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1164
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1167
 msgid "Videos _visible to:"
 msgstr "A _videókat láthatja:"
 
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1167
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1170
 msgid "Photos and videos _visible to:"
 msgstr "A _fényképeket/videókat láthatja:"
 
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1208
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1211
 msgid "Friends & family only"
 msgstr "Csak barátok és család"
 
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1209
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1212
 msgid "Family only"
 msgstr "Csak család"
 
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1210
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1213
 msgid "Friends only"
 msgstr "Csak barátok"
 
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1231
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1234
 #: ../plugins/shotwell-publishing/PiwigoPublishing.vala:1248
 msgid "2048 x 1536 pixels"
 msgstr "2048 x 1536 képpont"
 
-#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1232
+#: ../plugins/shotwell-publishing/FlickrPublishing.vala:1235
 #: ../plugins/shotwell-publishing/PiwigoPublishing.vala:1249
 msgid "4096 x 3072 pixels"
 msgstr "4096 x 3072 képpont"
@@ -987,7 +1040,7 @@ msgid "Logout"
 msgstr "Kijelentkezés"
 
 #: ../plugins/shotwell-publishing/piwigo_publishing_options_pane.glade.h:12
-#: ../src/Resources.vala:268
+#: ../src/Resources.vala:270
 msgid "Publish"
 msgstr "Közzététel"
 
@@ -1115,7 +1168,7 @@ msgstr "_Hiba jelentése…"
 
 #: ../src/AppWindow.vala:624 ../src/AppWindow.vala:645
 #: ../src/AppWindow.vala:662 ../src/Dialogs.vala:20 ../src/Dialogs.vala:28
-#: ../src/Dialogs.vala:1417 ../src/Dialogs.vala:1440
+#: ../src/Dialogs.vala:1422 ../src/Dialogs.vala:1445
 #: ../src/data_imports/DataImportsUI.vala:399
 #: ../src/publishing/PublishingUI.vala:498
 msgid "_Cancel"
@@ -1462,9 +1515,9 @@ msgid_plural "This will remove the tag \"%s\" from %d photos.  Continue?"
 msgstr[0] "Ez eltávolítja a(z) „%s” címkét egy fényképről. Folytatja?"
 msgstr[1] "Ez eltávolítja a(z) „%s” címkét %d fényképről. Folytatja?"
 
-#: ../src/Dialogs.vala:20 ../src/Dialogs.vala:28 ../src/Dialogs.vala:1385
-#: ../src/Resources.vala:328 ../src/Resources.vala:376
-#: ../src/Resources.vala:641
+#: ../src/Dialogs.vala:20 ../src/Dialogs.vala:28 ../src/Dialogs.vala:1390
+#: ../src/Resources.vala:336 ../src/Resources.vala:384
+#: ../src/Resources.vala:649
 msgid "_Delete"
 msgstr "_Törlés"
 
@@ -1948,49 +2001,52 @@ msgstr "Esemény átnevezése"
 msgid "Name:"
 msgstr "Név:"
 
-#: ../src/Dialogs.vala:1329 ../src/Resources.vala:272
+#. Dialog title
+#. Button label
+#: ../src/Dialogs.vala:1330 ../src/Resources.vala:275
 msgid "Edit Title"
 msgstr "Cím szerkesztése"
 
-#: ../src/Dialogs.vala:1329 ../src/Properties.vala:340
+#: ../src/Dialogs.vala:1331 ../src/Properties.vala:340
 msgid "Title:"
 msgstr "Cím:"
 
-#: ../src/Dialogs.vala:1343 ../src/Resources.vala:278
+#. Dialog title
+#: ../src/Dialogs.vala:1347 ../src/Resources.vala:282
 msgid "Edit Event Comment"
 msgstr "Eseménymegjegyzés szerkesztése"
 
-#: ../src/Dialogs.vala:1343
+#: ../src/Dialogs.vala:1348
 msgid "Edit Photo/Video Comment"
 msgstr "Fotó/videó megjegyzés szerkesztése"
 
-#: ../src/Dialogs.vala:1344 ../src/Properties.vala:630
+#: ../src/Dialogs.vala:1349 ../src/Properties.vala:630
 msgid "Comment:"
 msgstr "Megjegyzés:"
 
-#: ../src/Dialogs.vala:1360
+#: ../src/Dialogs.vala:1365
 msgid "Remove and _Trash File"
 msgid_plural "Remove and _Trash Files"
 msgstr[0] "_Fájl eltávolítása és a Kukába helyezése"
 msgstr[1] "_Fájlok eltávolítása és a Kukába helyezésük"
 
-#: ../src/Dialogs.vala:1364
+#: ../src/Dialogs.vala:1369
 msgid "_Remove From Library"
 msgstr "_Eltávolítás a gyűjteményből"
 
-#: ../src/Dialogs.vala:1384 ../src/camera/ImportPage.vala:1739
+#: ../src/Dialogs.vala:1389 ../src/camera/ImportPage.vala:1739
 msgid "_Keep"
 msgstr "_Megtartás"
 
-#: ../src/Dialogs.vala:1407
+#: ../src/Dialogs.vala:1412
 msgid "Revert External Edit?"
 msgstr "Visszavonja a külső szerkesztést?"
 
-#: ../src/Dialogs.vala:1407
+#: ../src/Dialogs.vala:1412
 msgid "Revert External Edits?"
 msgstr "Visszavonja a külső szerkesztéseket?"
 
-#: ../src/Dialogs.vala:1409
+#: ../src/Dialogs.vala:1414
 #, c-format
 msgid "This will destroy all changes made to the external file.  Continue?"
 msgid_plural ""
@@ -1999,87 +2055,87 @@ msgstr[0] "Ezzel a külső fájlon végzett minden változtatás elvész. Folyta
 msgstr[1] ""
 "Ezzel a külső %d fájlon végzett minden változtatás elvész. Folytatja?"
 
-#: ../src/Dialogs.vala:1413
+#: ../src/Dialogs.vala:1418
 msgid "Re_vert External Edit"
 msgstr "Külső szerkesztés _visszavonása"
 
-#: ../src/Dialogs.vala:1413
+#: ../src/Dialogs.vala:1418
 msgid "Re_vert External Edits"
 msgstr "Külső szerkesztések _visszavonása"
 
-#: ../src/Dialogs.vala:1434
+#: ../src/Dialogs.vala:1439
 #, c-format
 msgid "This will remove the photo from the library.  Continue?"
 msgid_plural "This will remove %d photos from the library.  Continue?"
 msgstr[0] "Ezzel eltávolítja a fényképet a gyűjteményből. Folytatja?"
 msgstr[1] "Ezzel eltávolít %d fényképet a gyűjteményből. Folytatja?"
 
-#: ../src/Dialogs.vala:1441
+#: ../src/Dialogs.vala:1446
 msgid "_Remove"
 msgstr "_Eltávolítás"
 
-#: ../src/Dialogs.vala:1442
+#: ../src/Dialogs.vala:1447
 msgid "Remove Photo From Library"
 msgstr "Fénykép eltávolítása a gyűjteményből"
 
-#: ../src/Dialogs.vala:1442
+#: ../src/Dialogs.vala:1447
 msgid "Remove Photos From Library"
 msgstr "Fényképek eltávolítása a gyűjteményből"
 
-#: ../src/Dialogs.vala:1535
+#: ../src/Dialogs.vala:1540
 #, c-format
 msgid "%d%%"
 msgstr "%d%%"
 
-#: ../src/Dialogs.vala:1682
+#: ../src/Dialogs.vala:1687
 msgid "AM"
 msgstr "DE"
 
-#: ../src/Dialogs.vala:1683
+#: ../src/Dialogs.vala:1688
 msgid "PM"
 msgstr "DU"
 
-#: ../src/Dialogs.vala:1684
+#: ../src/Dialogs.vala:1689
 msgid "24 Hr"
 msgstr "24 óra"
 
-#: ../src/Dialogs.vala:1699
+#: ../src/Dialogs.vala:1704
 msgid "_Shift photos/videos by the same amount"
 msgstr "Fotók/videók _eltolása azonos mennyiséggel"
 
-#: ../src/Dialogs.vala:1704
+#: ../src/Dialogs.vala:1709
 msgid "Set _all photos/videos to this time"
 msgstr "Min_den fotó/videó beállítása erre az időre"
 
-#: ../src/Dialogs.vala:1711
+#: ../src/Dialogs.vala:1716
 msgid "_Modify original photo file"
 msgstr "Eredeti fényképfájl _módosítása"
 
-#: ../src/Dialogs.vala:1711
+#: ../src/Dialogs.vala:1716
 msgid "_Modify original photo files"
 msgstr "Eredeti fényképfájlok _módosítása"
 
-#: ../src/Dialogs.vala:1714
+#: ../src/Dialogs.vala:1719
 msgid "_Modify original file"
 msgstr "Eredeti fájl _módosítása"
 
-#: ../src/Dialogs.vala:1714
+#: ../src/Dialogs.vala:1719
 msgid "_Modify original files"
 msgstr "Eredeti fájlok _módosítása"
 
-#: ../src/Dialogs.vala:1800
+#: ../src/Dialogs.vala:1805
 msgid "Original: "
 msgstr "Eredeti: "
 
-#: ../src/Dialogs.vala:1801
+#: ../src/Dialogs.vala:1806
 msgid "%m/%d/%Y, %H:%M:%S"
 msgstr "%Y. %m. %d., %k.%M.%S"
 
-#: ../src/Dialogs.vala:1802
+#: ../src/Dialogs.vala:1807
 msgid "%m/%d/%Y, %I:%M:%S %p"
 msgstr "%Y. %m. %d., %l.%M.%S %p"
 
-#: ../src/Dialogs.vala:1891
+#: ../src/Dialogs.vala:1896
 #, c-format
 msgid ""
 "Exposure time will be shifted forward by\n"
@@ -2088,7 +2144,7 @@ msgstr ""
 "A képek készítése előre lesz tolva ennyivel:\n"
 "%d %s, %d %s, %d %s, és %d %s."
 
-#: ../src/Dialogs.vala:1892
+#: ../src/Dialogs.vala:1897
 #, c-format
 msgid ""
 "Exposure time will be shifted backward by\n"
@@ -2097,31 +2153,31 @@ msgstr ""
 "A képek készítése vissza lesz tolva ennyivel:\n"
 "%d %s, %d %s, %d %s, és %d %s."
 
-#: ../src/Dialogs.vala:1894
+#: ../src/Dialogs.vala:1899
 msgid "day"
 msgid_plural "days"
 msgstr[0] "nap"
 msgstr[1] "nap"
 
-#: ../src/Dialogs.vala:1895
+#: ../src/Dialogs.vala:1900
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "óra"
 msgstr[1] "óra"
 
-#: ../src/Dialogs.vala:1896
+#: ../src/Dialogs.vala:1901
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "perc"
 msgstr[1] "perc"
 
-#: ../src/Dialogs.vala:1897
+#: ../src/Dialogs.vala:1902
 msgid "second"
 msgid_plural "seconds"
 msgstr[0] "másodperc"
 msgstr[1] "másodperc"
 
-#: ../src/Dialogs.vala:1941
+#: ../src/Dialogs.vala:1946
 #, c-format
 msgid ""
 "\n"
@@ -2140,53 +2196,53 @@ msgstr[1] ""
 "\n"
 "És %d egyéb."
 
-#: ../src/Dialogs.vala:1963 ../src/Dialogs.vala:1990
+#: ../src/Dialogs.vala:1968 ../src/Dialogs.vala:1995
 msgid "Tags (separated by commas):"
 msgstr "Címkék (vesszővel elválasztva):"
 
-#: ../src/Dialogs.vala:2070
+#: ../src/Dialogs.vala:2075
 msgid "Welcome!"
 msgstr "Üdvözöljük!"
 
-#: ../src/Dialogs.vala:2077
+#: ../src/Dialogs.vala:2082
 msgid "Welcome to Shotwell!"
 msgstr "Üdvözöljük a Shotwellben!"
 
-#: ../src/Dialogs.vala:2081
+#: ../src/Dialogs.vala:2086
 msgid "To get started, import photos in any of these ways:"
 msgstr "Az alábbi módokon importálhatja fényképeit:"
 
-#: ../src/Dialogs.vala:2100
+#: ../src/Dialogs.vala:2105
 #, c-format
 msgid "Choose <span weight=\"bold\">File %s Import From Folder</span>"
 msgstr ""
 "Válassza a <span weight=\"bold\">Fájl %s Importálás mappából</span> "
 "menüpontot"
 
-#: ../src/Dialogs.vala:2101
+#: ../src/Dialogs.vala:2106
 msgid "Drag and drop photos onto the Shotwell window"
 msgstr "Húzza fényképeit a Shotwell ablakába"
 
-#: ../src/Dialogs.vala:2102
+#: ../src/Dialogs.vala:2107
 msgid "Connect a camera to your computer and import"
 msgstr ""
 "Csatlakoztasson egy fényképezőgépet a számítógéphez, és importálja a "
 "fényképeit"
 
-#: ../src/Dialogs.vala:2112
+#: ../src/Dialogs.vala:2117
 #, c-format
 msgid "_Import photos from your %s folder"
 msgstr "Fényképek i_mportálása a(z) %s mappájából"
 
-#: ../src/Dialogs.vala:2119
+#: ../src/Dialogs.vala:2124
 msgid "You can also import photos in any of these ways:"
 msgstr "Fényképeket a következő módokon is importálhat:"
 
-#: ../src/Dialogs.vala:2129
+#: ../src/Dialogs.vala:2134
 msgid "_Don't show this message again"
 msgstr "_Ne jelenjen meg ez az üzenet többé"
 
-#: ../src/Dialogs.vala:2164
+#: ../src/Dialogs.vala:2169
 #, c-format
 msgid "Import photos from your %s library"
 msgstr "Fényképek importálása a(z) %s gyűjteményéből"
@@ -2194,41 +2250,41 @@ msgstr "Fényképek importálása a(z) %s gyűjteményéből"
 #. We're installed system-wide, so use the system help.
 #. We're being run from the build directory; we'll have to handle clicks to this
 #. link manually ourselves, due to a limitation ghelp: URIs.
-#: ../src/Dialogs.vala:2308 ../src/Dialogs.vala:2312
+#: ../src/Dialogs.vala:2313 ../src/Dialogs.vala:2317
 msgid "(Help)"
 msgstr "(Súgó)"
 
-#: ../src/Dialogs.vala:2321
+#: ../src/Dialogs.vala:2326
 #, c-format
 msgid "Year%sMonth%sDay"
 msgstr "Év%sHónap%sNap"
 
-#: ../src/Dialogs.vala:2323
+#: ../src/Dialogs.vala:2328
 #, c-format
 msgid "Year%sMonth"
 msgstr "Év%sHónap"
 
-#: ../src/Dialogs.vala:2325
+#: ../src/Dialogs.vala:2330
 #, c-format
 msgid "Year%sMonth-Day"
 msgstr "Év%sHónap-Nap"
 
-#: ../src/Dialogs.vala:2327
+#: ../src/Dialogs.vala:2332
 msgid "Year-Month-Day"
 msgstr "Év-Hónap-Nap"
 
-#: ../src/Dialogs.vala:2328 ../src/editing_tools/EditingTools.vala:781
+#: ../src/Dialogs.vala:2333 ../src/editing_tools/EditingTools.vala:781
 msgid "Custom"
 msgstr "Egyéni"
 
 #. Invalid pattern.
-#: ../src/Dialogs.vala:2565
+#: ../src/Dialogs.vala:2570
 msgid "Invalid pattern"
 msgstr "Érvénytelen minta"
 
 #. This function is used to determine whether or not files should be copied or linked when imported.
 #. Returns ACCEPT for copy, REJECT for link, and CANCEL for (drum-roll) cancel.
-#: ../src/Dialogs.vala:2668
+#: ../src/Dialogs.vala:2673
 msgid ""
 "Shotwell can copy the photos into your library folder or it can import them "
 "without copying."
@@ -2236,31 +2292,31 @@ msgstr ""
 "A Shotwell átmásolhatja a fényképeket a gyűjtemény könyvtárába, vagy "
 "importálhatja azokat másolás nélkül is."
 
-#: ../src/Dialogs.vala:2673
+#: ../src/Dialogs.vala:2678
 msgid "Co_py Photos"
 msgstr "Fény_képek másolása"
 
-#: ../src/Dialogs.vala:2674
+#: ../src/Dialogs.vala:2679
 msgid "_Import in Place"
 msgstr "_Importálás"
 
-#: ../src/Dialogs.vala:2675
+#: ../src/Dialogs.vala:2680
 msgid "Import to Library"
 msgstr "Importálás a gyűjteménybe"
 
-#: ../src/Dialogs.vala:2685 ../src/PhotoPage.vala:3086
+#: ../src/Dialogs.vala:2690 ../src/PhotoPage.vala:3086
 msgid "Remove From Library"
 msgstr "Eltávolítás a gyűjteményből"
 
-#: ../src/Dialogs.vala:2686 ../src/PhotoPage.vala:3086
+#: ../src/Dialogs.vala:2691 ../src/PhotoPage.vala:3086
 msgid "Removing Photo From Library"
 msgstr "Fényképek eltávolítás a gyűjteményből"
 
-#: ../src/Dialogs.vala:2686
+#: ../src/Dialogs.vala:2691
 msgid "Removing Photos From Library"
 msgstr "Fényképek eltávolítása a gyűjteményből"
 
-#: ../src/Dialogs.vala:2700
+#: ../src/Dialogs.vala:2705
 #, c-format
 msgid ""
 "This will remove the photo/video from your Shotwell library.  Would you also "
@@ -2283,7 +2339,7 @@ msgstr[1] ""
 "\n"
 "Ez a művelet nem vonható vissza."
 
-#: ../src/Dialogs.vala:2704
+#: ../src/Dialogs.vala:2709
 #, c-format
 msgid ""
 "This will remove the video from your Shotwell library.  Would you also like "
@@ -2306,7 +2362,7 @@ msgstr[1] ""
 "\n"
 "Ez a művelet nem vonható vissza."
 
-#: ../src/Dialogs.vala:2708
+#: ../src/Dialogs.vala:2713
 #, c-format
 msgid ""
 "This will remove the photo from your Shotwell library.  Would you also like "
@@ -2329,7 +2385,7 @@ msgstr[1] ""
 "\n"
 "Ez a művelet nem vonható vissza."
 
-#: ../src/Dialogs.vala:2740
+#: ../src/Dialogs.vala:2745
 #, c-format
 msgid ""
 "The photo or video cannot be moved to your desktop trash.  Delete this file?"
@@ -2339,7 +2395,7 @@ msgstr[0] "%d fotó vagy videó nem helyezhető át a Kukába. Törli a fájlt?"
 msgstr[1] "%d fotó vagy videó nem helyezhető át a Kukába. Törli a fájlokat?"
 
 #. Alert the user that the files were not removed.
-#: ../src/Dialogs.vala:2757
+#: ../src/Dialogs.vala:2762
 #, c-format
 msgid "The photo or video cannot be deleted."
 msgid_plural "%d photos/videos cannot be deleted."
@@ -3187,347 +3243,353 @@ msgstr "Összes fénykép megjelenítése, a visszautasítottak is"
 msgid "_All Photos"
 msgstr "Öss_zes fénykép"
 
-#: ../src/Resources.vala:249 ../src/Resources.vala:250
+#. Button label
+#. Button tooltip
+#: ../src/Resources.vala:250 ../src/Resources.vala:252
 msgid "Show all photos"
 msgstr "Összes fénykép megjelenítése"
 
-#: ../src/Resources.vala:252
+#: ../src/Resources.vala:254
 msgid "_Ratings"
 msgstr "É_rtékelések"
 
-#: ../src/Resources.vala:253
+#: ../src/Resources.vala:255
 msgid "Display each photo's rating"
 msgstr "A fényképek értékelésének megjelenítése"
 
-#: ../src/Resources.vala:255
+#: ../src/Resources.vala:257
 msgid "_Filter Photos"
 msgstr "_Fényképek szűrése"
 
-#: ../src/Resources.vala:256
+#: ../src/Resources.vala:258
 msgid "Filter Photos"
 msgstr "Fényképek szűrése"
 
-#: ../src/Resources.vala:257
+#: ../src/Resources.vala:259
 msgid "Limit the number of photos displayed based on a filter"
 msgstr "A megjelenített fényképek számának korlátozása szűrővel"
 
-#: ../src/Resources.vala:259
+#: ../src/Resources.vala:261
 msgid "_Duplicate"
 msgstr "_Többszörözés"
 
-#: ../src/Resources.vala:260
+#: ../src/Resources.vala:262
 msgid "Duplicate"
 msgstr "Többszörözés"
 
-#: ../src/Resources.vala:261
+#: ../src/Resources.vala:263
 msgid "Make a duplicate of the photo"
 msgstr "Másolat készítése a fényképről"
 
-#: ../src/Resources.vala:263
+#: ../src/Resources.vala:265
 msgid "_Export..."
 msgstr "_Exportálás…"
 
-#: ../src/Resources.vala:265
+#: ../src/Resources.vala:267
 msgid "_Print..."
 msgstr "_Nyomtatás…"
 
-#: ../src/Resources.vala:267
+#: ../src/Resources.vala:269
 msgid "Pu_blish..."
 msgstr "Kö_zzététel…"
 
-#: ../src/Resources.vala:269
+#: ../src/Resources.vala:271
 msgid "Publish to various websites"
 msgstr "Közzététel különböző weboldalakon"
 
-#: ../src/Resources.vala:271
+#: ../src/Resources.vala:273
 msgid "Edit _Title..."
 msgstr "_Cím szerkesztése…"
 
-#: ../src/Resources.vala:274
+#: ../src/Resources.vala:277
 msgid "Edit _Comment..."
 msgstr "Megjegyzés s_zerkesztése…"
 
-#: ../src/Resources.vala:275
+#. Button label
+#: ../src/Resources.vala:279
 msgid "Edit Comment"
 msgstr "A megjegyzés szerkesztése"
 
-#: ../src/Resources.vala:277
+#: ../src/Resources.vala:281
 msgid "Edit Event _Comment..."
 msgstr "_Eseménymegjegyzés szerkesztése…"
 
-#: ../src/Resources.vala:280
+#: ../src/Resources.vala:284
 msgid "_Adjust Date and Time..."
 msgstr "_Dátum és idő módosítása…"
 
-#: ../src/Resources.vala:281
+#: ../src/Resources.vala:285
 msgid "Adjust Date and Time"
 msgstr "Dátum és idő módosítása"
 
-#: ../src/Resources.vala:283
+#: ../src/Resources.vala:287
 msgid "Add _Tags..."
 msgstr "_Címkék hozzáadása…"
 
-#: ../src/Resources.vala:284
+#: ../src/Resources.vala:288
 msgid "_Add Tags..."
 msgstr "Címkék hozzáadása…"
 
-#: ../src/Resources.vala:285 ../src/Resources.vala:316
+#. Dialog title
+#. Undo/Redo command name (in Edit menu)
+#: ../src/Resources.vala:290 ../src/Resources.vala:323
 msgid "Add Tags"
 msgstr "Címkék hozzáadása"
 
-#: ../src/Resources.vala:287
+#: ../src/Resources.vala:292
 msgid "_Preferences"
 msgstr "_Beállítások"
 
-#: ../src/Resources.vala:289
+#: ../src/Resources.vala:294
 msgid "Open With E_xternal Editor"
 msgstr "Megnyitás külső _szerkesztővel"
 
-#: ../src/Resources.vala:291
+#: ../src/Resources.vala:296
 msgid "Open With RA_W Editor"
 msgstr "Megnyitás RA_W szerkesztővel"
 
-#: ../src/Resources.vala:293
+#: ../src/Resources.vala:298
 msgid "Send _To..."
 msgstr "Kül_dés…"
 
-#: ../src/Resources.vala:294
+#: ../src/Resources.vala:299
 msgid "Send T_o..."
 msgstr "Küldés _célja…"
 
-#: ../src/Resources.vala:296
+#: ../src/Resources.vala:301
 msgid "_Find..."
 msgstr "_Keresés…"
 
-#: ../src/Resources.vala:297
+#: ../src/Resources.vala:302
 msgid "Find"
 msgstr "Keresés"
 
-#: ../src/Resources.vala:298
+#: ../src/Resources.vala:303
 msgid "Find an image by typing text that appears in its name or tags"
 msgstr "Kép keresése a névben vagy a címkékben megjelenő szöveg beírásával"
 
-#: ../src/Resources.vala:300
+#: ../src/Resources.vala:305
 msgid "_Flag"
 msgstr "_Megjelölés"
 
-#: ../src/Resources.vala:302
+#: ../src/Resources.vala:307
 msgid "Un_flag"
 msgstr "Megjelölés _törlése"
 
-#: ../src/Resources.vala:305
+#: ../src/Resources.vala:310
 #, c-format
 msgid "Unable to launch editor: %s"
 msgstr "A szerkesztő nem indítható el: %s"
 
-#: ../src/Resources.vala:310
+#: ../src/Resources.vala:315
 #, c-format
 msgid "Add Tag \"%s\""
 msgstr "„%s” címke hozzáadása"
 
-#: ../src/Resources.vala:312
+#. Used when adding two tags to photo(s)
+#: ../src/Resources.vala:318
 #, c-format
 msgid "Add Tags \"%s\" and \"%s\""
 msgstr "„%s” és „%s” címke hozzáadása"
 
-#: ../src/Resources.vala:320
+#: ../src/Resources.vala:328
 #, c-format
 msgid "_Delete Tag \"%s\""
 msgstr "„%s” címke _törlése"
 
-#: ../src/Resources.vala:324
+#: ../src/Resources.vala:332
 #, c-format
 msgid "Delete Tag \"%s\""
 msgstr "„%s” címke törlése"
 
-#: ../src/Resources.vala:327
+#: ../src/Resources.vala:335
 msgid "Delete Tag"
 msgstr "Címke törlése"
 
-#: ../src/Resources.vala:330
+#: ../src/Resources.vala:338
 msgid "_New"
 msgstr "Ú_j"
 
-#: ../src/Resources.vala:333
+#: ../src/Resources.vala:341
 #, c-format
 msgid "Re_name Tag \"%s\"..."
 msgstr "„%s” címke át_nevezése…"
 
-#: ../src/Resources.vala:337
+#: ../src/Resources.vala:345
 #, c-format
 msgid "Rename Tag \"%s\" to \"%s\""
 msgstr "„%s” címke átnevezése erre: „%s”"
 
-#: ../src/Resources.vala:340
+#: ../src/Resources.vala:348
 msgid "_Rename..."
 msgstr "Át_nevezés…"
 
-#: ../src/Resources.vala:342
+#: ../src/Resources.vala:350
 msgid "Modif_y Tags..."
 msgstr "Cí_mkék módosítása…"
 
-#: ../src/Resources.vala:343
+#: ../src/Resources.vala:351
 msgid "Modify Tags"
 msgstr "Címkék módosítása"
 
-#: ../src/Resources.vala:346
+#: ../src/Resources.vala:354
 #, c-format
 msgid "Tag Photo as \"%s\""
 msgstr "Fényképek címkézése ezzel: „%s”"
 
-#: ../src/Resources.vala:346
+#: ../src/Resources.vala:354
 #, c-format
 msgid "Tag Photos as \"%s\""
 msgstr "Fényképek címkézése ezzel: „%s”"
 
-#: ../src/Resources.vala:350
+#: ../src/Resources.vala:358
 #, c-format
 msgid "Tag the selected photo as \"%s\""
 msgstr "Kiválasztott fényképek címkézése ezzel: „%s”"
 
-#: ../src/Resources.vala:351
+#: ../src/Resources.vala:359
 #, c-format
 msgid "Tag the selected photos as \"%s\""
 msgstr "Kiválasztott fényképek címkézése ezzel: „%s”"
 
-#: ../src/Resources.vala:355
+#: ../src/Resources.vala:363
 #, c-format
 msgid "Remove Tag \"%s\" From _Photo"
 msgstr "„%s” címke _eltávolítása a fényképről"
 
-#: ../src/Resources.vala:356
+#: ../src/Resources.vala:364
 #, c-format
 msgid "Remove Tag \"%s\" From _Photos"
 msgstr "„%s” címke _eltávolítása a fényképekről"
 
-#: ../src/Resources.vala:360
+#: ../src/Resources.vala:368
 #, c-format
 msgid "Remove Tag \"%s\" From Photo"
 msgstr "„%s” címke eltávolítása a fényképről"
 
-#: ../src/Resources.vala:361
+#: ../src/Resources.vala:369
 #, c-format
 msgid "Remove Tag \"%s\" From Photos"
 msgstr "„%s” címke eltávolítása a fényképekről"
 
-#: ../src/Resources.vala:365
+#: ../src/Resources.vala:373
 #, c-format
 msgid "Unable to rename tag to \"%s\" because the tag already exists."
 msgstr "A címke nem nevezhető át erre: „%s”, mert a címke már létezik."
 
-#: ../src/Resources.vala:369
+#: ../src/Resources.vala:377
 #, c-format
 msgid "Unable to rename search to \"%s\" because the search already exists."
 msgstr "Nem lehet átnevezni a keresést erre: „%s”, mert a keresés már létezik."
 
-#: ../src/Resources.vala:372
+#: ../src/Resources.vala:380
 msgid "Saved Search"
 msgstr "Mentett keresés"
 
-#: ../src/Resources.vala:374
+#: ../src/Resources.vala:382
 msgid "Delete Search"
 msgstr "Keresés törlése"
 
-#: ../src/Resources.vala:377
+#: ../src/Resources.vala:385
 msgid "_Edit..."
 msgstr "S_zerkesztés…"
 
-#: ../src/Resources.vala:378
+#: ../src/Resources.vala:386
 msgid "Re_name..."
 msgstr "Át_nevezés…"
 
-#: ../src/Resources.vala:381
+#: ../src/Resources.vala:389
 #, c-format
 msgid "Rename Search \"%s\" to \"%s\""
 msgstr "„%s” keresés átnevezése erre: „%s”"
 
-#: ../src/Resources.vala:385
+#: ../src/Resources.vala:393
 #, c-format
 msgid "Delete Search \"%s\""
 msgstr "„%s” keresés törlése"
 
-#: ../src/Resources.vala:543
+#: ../src/Resources.vala:551
 #, c-format
 msgid "Rate %s"
 msgstr "%s értékelés"
 
-#: ../src/Resources.vala:544
+#: ../src/Resources.vala:552
 #, c-format
 msgid "Set rating to %s"
 msgstr "Értékelés beállítása erre: %s"
 
-#: ../src/Resources.vala:545
+#: ../src/Resources.vala:553
 #, c-format
 msgid "Setting rating to %s"
 msgstr "Értékelés beállítása erre: %s"
 
-#: ../src/Resources.vala:547
+#: ../src/Resources.vala:555
 #, c-format
 msgid "Display %s"
 msgstr "%s megjelenítése"
 
-#: ../src/Resources.vala:548
+#: ../src/Resources.vala:556
 #, c-format
 msgid "Only show photos with a rating of %s"
 msgstr "Csak azon fényképek megjelenítése, amelyek értékelése %s"
 
-#: ../src/Resources.vala:549
+#: ../src/Resources.vala:557
 #, c-format
 msgid "%s or Better"
 msgstr "%s vagy jobb"
 
-#: ../src/Resources.vala:550
+#: ../src/Resources.vala:558
 #, c-format
 msgid "Display %s or Better"
 msgstr "%s vagy jobb megjelenítése"
 
-#: ../src/Resources.vala:551
+#: ../src/Resources.vala:559
 #, c-format
 msgid "Only show photos with a rating of %s or better"
 msgstr "Csak azon fényképek mutatása, amelyek értékelése %s vagy jobb"
 
-#: ../src/Resources.vala:642
+#: ../src/Resources.vala:650
 msgid "Remove the selected photos from the trash"
 msgstr "Kijelölt fényképek eltávolítása a Kukából"
 
-#: ../src/Resources.vala:643
+#: ../src/Resources.vala:651
 msgid "Remove the selected photos from the library"
 msgstr "Kijelölt fényképek eltávolítása a gyűjteményből"
 
-#: ../src/Resources.vala:645
+#: ../src/Resources.vala:653
 msgid "_Restore"
 msgstr "_Visszaállítás"
 
-#: ../src/Resources.vala:646
+#: ../src/Resources.vala:654
 msgid "Move the selected photos back into the library"
 msgstr "Kijelölt fényképek visszaállítása a gyűjteménybe"
 
-#: ../src/Resources.vala:648
+#: ../src/Resources.vala:656
 msgid "Show in File Mana_ger"
 msgstr "_Megjelenítés a fájlkezelőben"
 
-#: ../src/Resources.vala:649
+#: ../src/Resources.vala:657
 msgid "Open the selected photo's directory in the file manager"
 msgstr "Kijelölt fénykép könyvtárának megnyitása a fájlkezelőben"
 
-#: ../src/Resources.vala:652
+#: ../src/Resources.vala:660
 #, c-format
 msgid "Unable to open in file manager: %s"
 msgstr "Nem nyitható meg a fájlkezelőben: %s"
 
-#: ../src/Resources.vala:655
+#: ../src/Resources.vala:663
 msgid "R_emove From Library"
 msgstr "_Eltávolítás a gyűjteményből"
 
-#: ../src/Resources.vala:657
+#: ../src/Resources.vala:665
 msgid "_Move to Trash"
 msgstr "Á_thelyezés a Kukába"
 
-#: ../src/Resources.vala:659
+#: ../src/Resources.vala:667
 msgid "Select _All"
 msgstr "Összes _kijelölése"
 
-#: ../src/Resources.vala:660
+#: ../src/Resources.vala:668
 msgid "Select all items"
 msgstr "Minden elem kijelölése"
 
@@ -3535,20 +3597,20 @@ msgstr "Minden elem kijelölése"
 #. / Locale-specific time format for 12-hour time, i.e. 8:31 PM
 #. / Precede modifier with a dash ("-") to pad with spaces, otherwise will pad with zeroes
 #. / See http://developer.gnome.org/glib/2.32/glib-GDateTime.html#g-date-time-format
-#: ../src/Resources.vala:741
+#: ../src/Resources.vala:749
 msgid "%-I:%M %p"
 msgstr "%H.%M"
 
 #. / Locale-specific time format for 12-hour time with seconds, i.e. 8:31:42 PM
 #. / Precede modifier with a dash ("-") to pad with spaces, otherwise will pad with zeroes
 #. / See http://developer.gnome.org/glib/2.32/glib-GDateTime.html#g-date-time-format
-#: ../src/Resources.vala:746
+#: ../src/Resources.vala:754
 msgid "%-I:%M:%S %p"
 msgstr "%H.%M.%S"
 
 #. / Locale-specific calendar date format, i.e. "Tue Mar 08, 2006"
 #. / See http://developer.gnome.org/glib/2.32/glib-GDateTime.html#g-date-time-format
-#: ../src/Resources.vala:750
+#: ../src/Resources.vala:758
 msgid "%a %b %d, %Y"
 msgstr "%Y. %b. %d., %a"
 
@@ -3558,14 +3620,14 @@ msgstr "%Y. %b. %d., %a"
 #. / Locale-specific calendar date format for multi-month strings,
 #. / i.e. the "Tue Mar 08" in "Tue Mar 08 to Mon Apr 06, 2006"
 #. / See http://developer.gnome.org/glib/2.32/glib-GDateTime.html#g-date-time-format
-#: ../src/Resources.vala:755 ../src/Resources.vala:765
+#: ../src/Resources.vala:763 ../src/Resources.vala:773
 msgid "%a %b %d"
 msgstr "%a. %b. %d"
 
 #. / Locale-specific ending date format for multi-date strings,
 #. / i.e. the "10, 2006" in "Tue Mar 08 - 10, 2006"
 #. / See http://developer.gnome.org/glib/2.32/glib-GDateTime.html#g-date-time-format
-#: ../src/Resources.vala:760
+#: ../src/Resources.vala:768
 msgid "%d, %Y"
 msgstr "%Y. %d."
 
@@ -4735,6 +4797,7 @@ msgid "Tags"
 msgstr "Címkék"
 
 #: ../ui/set_background_dialog.glade.h:1
+#| msgid "Set as _Desktop Background"
 msgid "Set as Desktop Background"
 msgstr "Beállítás asztalháttérként"
 
@@ -4923,13 +4986,6 @@ msgstr "_Cím megjelenítése"
 #: ../ui/shotwell.glade.h:42
 msgid "seconds"
 msgstr "másodperc"
-
-#~ msgid ""
-#~ "A file required for publishing is unavailable. Publishing to %s can't "
-#~ "continue."
-#~ msgstr ""
-#~ "Egy, a közzétételhez szükséges fájl nem érhető el. A közzététel nem "
-#~ "folytatódhat ide: %s."
 
 #~ msgid "Only _Remove"
 #~ msgstr "_Csak eltávolítás"
