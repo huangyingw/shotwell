@@ -8,7 +8,7 @@ export VALAFLAGS:=$(foreach w,$(CPPFLAGS) $(CFLAGS) $(LDFLAGS),-X $(w))
 	dh $@
 
 override_dh_auto_configure:
-	./configure --prefix=/usr --libexec=/usr/lib --disable-schemas-compile --debug
+	./configure --prefix=/usr --libexec=/usr/lib --disable-schemas-compile 
 
 override_dh_install:
 	dh_install
