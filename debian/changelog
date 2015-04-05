@@ -1,6 +1,6 @@
 shotwell (0.22.0-1) UNRELEASED; urgency=medium
 
-  * New upstream release.
+  * New upstream release (Closes: #775950).
   * Refresh patches:
     - debian/patches/hardening.patch
     - debían/patches/500-buildflags.patch
