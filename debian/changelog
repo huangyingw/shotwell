@@ -6,6 +6,18 @@ shotwell (0.22.0-1) UNRELEASED; urgency=medium
     - debían/patches/500-buildflags.patch
   * Remove upstream applied patch:
     - debian/patches/505-fix-viewer-desktop-file.patch
+  * For better debuging:
+    - shotwell-dbg:
+      + Add the tempoary *.c files produced by valac
+        into temp-source.tar.xz placed at the doc directory.
+    - debian/rules:
+      + Add --debug as configure parameter.
+      + Add override_dh_compress to exclude the *.tar.xz from compress
+    - debian/docs:
+      + Move to shotwell.docs
+    - New debian/shotwell-dbg.README.Debian.
+    - New link from debian/shotwell.README.Debian to
+      debian/shotwell-common.README.Debian
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Fri, 03 Apr 2015 13:16:32 +0200
 

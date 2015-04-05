@@ -8,10 +8,21 @@ export VALAFLAGS:=$(foreach w,$(CPPFLAGS) $(CFLAGS) $(LDFLAGS),-X $(w))
 	dh $@
 
 override_dh_auto_configure:
-	./configure --prefix=/usr --libexec=/usr/lib --disable-schemas-compile
+	./configure --prefix=/usr --libexec=/usr/lib --disable-schemas-compile --debug
+
+override_dh_install:
+	dh_install
+	mkdir -p debian/shotwell-dbg/usr/share/doc/shotwell-dbg/temp-source
+	find -type f -name '*.c' -exec cp --parent '{}' debian/shotwell-dbg/usr/share/doc/shotwell-dbg/temp-source/ ';'
+	cd debian/shotwell-dbg/usr/share/doc/shotwell-dbg && \
+	tar cJf temp-source.tar.xz temp-source
+	rm -fr debian/shotwell-dbg/usr/share/doc/shotwell-dbg/temp-source
 
 override_dh_installchangelogs:
 	dh_installchangelogs NEWS
 
 override_dh_strip:
 	dh_strip --dbg-package=shotwell-dbg
+
+override_dh_compress:
+	dh_compress -X.tar.xz
