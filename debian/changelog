@@ -18,6 +18,12 @@ shotwell (0.22.0-1) UNRELEASED; urgency=medium
     - New debian/shotwell-dbg.README.Debian.
     - New link from debian/shotwell.README.Debian to
       debian/shotwell-common.README.Debian
+  * debian/control:
+    - For the libgphoto2 transition change the Build-Depends for 
+      libgphoto2-dev to 2.5.4
+  * New bugreporting:
+    - New debian/shotwell.bug-script
+    - New debian/shotwell.install to install the apport file.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Fri, 03 Apr 2015 13:16:32 +0200
 
