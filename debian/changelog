@@ -1,4 +1,4 @@
-shotwell (0.22.0-1) UNRELEASED; urgency=low
+shotwell (0.22.0-1) unstable; urgency=low
 
   * New upstream release:
     - Correct edited file handling (Closes: #747443).
@@ -27,7 +27,7 @@ shotwell (0.22.0-1) UNRELEASED; urgency=low
     - New debian/shotwell.bug-script
     - New debian/shotwell.install to install the apport file.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Fri, 03 Apr 2015 13:16:32 +0200
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Mon, 06 Apr 2015 06:28:58 +0200
 
 shotwell (0.20.2-2) unstable; urgency=low
 
