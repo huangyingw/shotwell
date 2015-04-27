@@ -6,25 +6,25 @@ shotwell (0.22.0-1) unstable; urgency=low
   * Refresh patches:
     - debian/patches/hardening.patch
     - debían/patches/500-buildflags.patch
-  * Remove upstream applied patch:
+  * Remove patch applied upstream:
     - debian/patches/505-fix-viewer-desktop-file.patch
   * For better debugging:
     - shotwell-dbg:
       + Add the temporary *.c files produced by valac
-        into temp-source.tar.xz placed at the doc directory.
+        to temp-source.tar.xz placed in doc directory.
     - debian/rules:
       + Add --debug as configure parameter.
-      + Add override_dh_compress to exclude the *.tar.xz from compress
+      + Add override_dh_compress to exclude the *.tar.xz from compress.
     - debian/docs:
-      + Move to shotwell.docs
+      + Move to shotwell.docs.
     - New debian/shotwell-dbg.README.Debian.
     - New link from debian/shotwell.README.Debian to
-      debian/shotwell-common.README.Debian
+      debian/shotwell-common.README.Debian.
   * debian/control:
-    - For the libgphoto2 transition change the Build-Depends for
-      libgphoto2-dev to 2.5.4
-  * New bugreporting:
-    - New debian/shotwell.bug-script
+    - For the libgphoto2 transition, set the minimum version for
+      libgphoto2-dev in Build-Depends to 2.5.4.
+  * New bug reporting:
+    - New debian/shotwell.bug-script.
     - New debian/shotwell.install to install the apport file.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Mon, 06 Apr 2015 07:59:33 +0200
