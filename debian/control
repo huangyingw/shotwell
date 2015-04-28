@@ -32,11 +32,13 @@ Vcs-Git: git://anonscm.debian.org/collab-maint/shotwell.git
 
 Package: shotwell
 Architecture: linux-any
-Depends: ${shlibs:Depends},
-         ${misc:Depends},
-         shotwell-common (= ${source:Version}),
-         librsvg2-common,
-         dbus-x11
+Depends: 
+ ${shlibs:Depends},
+ ${misc:Depends},
+ shotwell-common (= ${source:Version}),
+ dconf-cli,
+ dbus-x11,
+ librsvg2-common
 Description: digital photo organizer
  Shotwell is a digital photo organizer designed for the GNOME desktop
  environment. It allows you to import photos from disk or camera, organize
