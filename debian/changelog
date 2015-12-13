@@ -1,4 +1,4 @@
-shotwell (0.22.0-3) UNRELEASED; urgency=medium
+shotwell (0.22.0-3) unstable; urgency=medium
 
   * debian/rules:
     - To make build reproducible touch temporary c files 
@@ -14,7 +14,7 @@ shotwell (0.22.0-3) UNRELEASED; urgency=medium
         with libwebkit2gtk-4.0-dev.
   * Rename patches.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Mon, 02 Nov 2015 22:21:02 +0100
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 13 Dec 2015 18:39:32 +0100
 
 shotwell (0.22.0-2) unstable; urgency=medium
 
