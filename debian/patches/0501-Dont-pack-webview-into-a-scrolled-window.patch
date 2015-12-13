@@ -1,0 +1,44 @@
+From 130ebe6f1eda9564e89ab617bdfa30a50f828e47 Mon Sep 17 00:00:00 2001
+From: Michael Catanzaro <mcatanzaro@igalia.com>
+Date: Fri, 4 Dec 2015 17:33:43 +0100
+Subject: [PATCH] Don't pack webview into a scrolled window
+
+The scrollbar is drawn by WebKitWebView in WK2.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=751709
+---
+ plugins/common/RESTSupport.vala | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+Index: trunk/plugins/common/RESTSupport.vala
+===================================================================
+--- trunk.orig/plugins/common/RESTSupport.vala
++++ trunk/plugins/common/RESTSupport.vala
+@@ -725,7 +725,6 @@ public abstract class GooglePublisher :
+         
+         private WebKit.WebView webview;
+         private Gtk.Box pane_widget;
+-        private Gtk.ScrolledWindow webview_frame;
+         private string auth_sequence_start_url;
+ 
+         public signal void authorized(string auth_code);
+@@ -735,18 +734,13 @@ public abstract class GooglePublisher :
+ 
+             pane_widget = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+ 
+-            webview_frame = new Gtk.ScrolledWindow(null, null);
+-            webview_frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN);
+-            webview_frame.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
+-
+             webview = new WebKit.WebView();
+             webview.get_settings().enable_plugins = false;
+ 
+             webview.load_changed.connect(on_page_load_changed);
+             webview.context_menu.connect(() => { return false; });
+ 
+-            webview_frame.add(webview);
+-            pane_widget.pack_start(webview_frame, true, true, 0);
++            pane_widget.pack_start(webview, true, true, 0);
+         }
+         
+         public static bool is_cache_dirty() {

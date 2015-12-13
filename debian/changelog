@@ -3,6 +3,16 @@ shotwell (0.22.0-3) UNRELEASED; urgency=medium
   * debian/rules:
     - To make build reproducible touch temporary c files 
       with date of d/changelog
+  * CVE TEMP-0807110-881366 (Closes: #807110):
+    - Add patches from upstream to debian/patches:
+      + 0500-Port-to-webkit2gtk-40.patch
+      + 0501-Dont-pack-webview-into-a-scrolled-window.patch
+      + 0502-Have-all-soup-sessions-validate-TLS-certificates.patch
+      + 0503-facebook-Dont-disable-XSS-auditor.patch
+    - Port to webkit2gtk-4.0:
+      + debian/control Replace Build-Depeds libwebkitgtk-3.0-dev
+        with libwebkit2gtk-4.0-dev.
+  * Rename patches.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Mon, 02 Nov 2015 22:21:02 +0100
 

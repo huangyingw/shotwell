@@ -1,3 +1,7 @@
-500-buildflags.patch
-hardening.patch
-libexec.patch
+0001-buildflags.patch
+0005-hardening.patch
+0010-libexec.patch
+0500-Port-to-webkit2gtk-40.patch
+0501-Dont-pack-webview-into-a-scrolled-window.patch
+0502-Have-all-soup-sessions-validate-TLS-certificates.patch
+0503-facebook-Dont-disable-XSS-auditor.patch

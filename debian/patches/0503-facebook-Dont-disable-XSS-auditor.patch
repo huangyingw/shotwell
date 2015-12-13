@@ -1,0 +1,25 @@
+From 2a1dd48e702b0e8524a4ed212252aa4c49c6b0f0 Mon Sep 17 00:00:00 2001
+From: Michael Catanzaro <mcatanzaro@igalia.com>
+Date: Fri, 4 Dec 2015 18:08:54 +0100
+Subject: [PATCH] facebook: Don't disable XSS auditor
+
+This is a separate commit to make it possible to revert easily, as
+I don't know why it was disabled.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=751709
+---
+ plugins/shotwell-publishing/FacebookPublishing.vala | 1 -
+ 1 file changed, 1 deletion(-)
+
+Index: trunk/plugins/shotwell-publishing/FacebookPublishing.vala
+===================================================================
+--- trunk.orig/plugins/shotwell-publishing/FacebookPublishing.vala
++++ trunk/plugins/shotwell-publishing/FacebookPublishing.vala
+@@ -829,7 +829,6 @@ internal class WebAuthenticationPane : S
+ 
+         webview = new WebKit.WebView();
+         webview.get_settings().enable_plugins = false;
+-        webview.get_settings().enable_xss_auditor = false;
+ 
+         webview.load_changed.connect(on_page_load_changed);
+         webview.context_menu.connect(() => { return true; });

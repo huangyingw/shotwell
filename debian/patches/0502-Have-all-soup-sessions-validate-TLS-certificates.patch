@@ -1,0 +1,39 @@
+From ac6efab13554d1ef39eb8b86744234d72773c2da Mon Sep 17 00:00:00 2001
+From: Michael Catanzaro <mcatanzaro@igalia.com>
+Date: Fri, 4 Dec 2015 17:34:17 +0100
+Subject: [PATCH] Have all soup sessions validate TLS certificates
+
+Note that this commit is *not* sufficient to fix certificate verification
+on its own. The port to WK2 is also required, else WebKit's soup session
+will not verify certificates.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=751709
+---
+ plugins/common/RESTSupport.vala                     | 1 +
+ plugins/shotwell-publishing/FacebookPublishing.vala | 1 +
+ 2 files changed, 2 insertions(+)
+
+Index: trunk/plugins/common/RESTSupport.vala
+===================================================================
+--- trunk.orig/plugins/common/RESTSupport.vala
++++ trunk/plugins/common/RESTSupport.vala
+@@ -20,6 +20,7 @@ public abstract class Session {
+     public Session(string? endpoint_url = null) {
+         this.endpoint_url = endpoint_url;
+         soup_session = new Soup.SessionAsync();
++        this.soup_session.ssl_use_system_ca_file = true;
+     }
+     
+     protected void notify_wire_message_unqueued(Soup.Message message) {
+Index: trunk/plugins/shotwell-publishing/FacebookPublishing.vala
+===================================================================
+--- trunk.orig/plugins/shotwell-publishing/FacebookPublishing.vala
++++ trunk/plugins/shotwell-publishing/FacebookPublishing.vala
+@@ -1473,6 +1473,7 @@ internal class GraphSession {
+         this.soup_session.timeout = 15;
+         this.access_token = null;
+         this.current_message = null;
++        this.soup_session.ssl_use_system_ca_file = true;
+     }
+ 
+     ~GraphSession() {
