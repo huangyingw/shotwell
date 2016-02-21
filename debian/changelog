@@ -1,20 +1,21 @@
 shotwell (0.22.0-3) unstable; urgency=medium
 
   * debian/rules:
-    - To make build reproducible touch temporary c files 
-      with date of d/changelog
-  * CVE TEMP-0807110-881366 (Closes: #807110):
-    - Add patches from upstream to debian/patches:
+    - Touch temporary C files with the timestamp of
+      debian/changelog to make the build reproducible.
+  * Verify TLS certificates (Closes: #807110):
+    - Cherry-pick patches from upstream in debian/patches:
       + 0500-Port-to-webkit2gtk-40.patch
       + 0501-Dont-pack-webview-into-a-scrolled-window.patch
       + 0502-Have-all-soup-sessions-validate-TLS-certificates.patch
       + 0503-facebook-Dont-disable-XSS-auditor.patch
-    - Port to webkit2gtk-4.0:
-      + debian/control Replace Build-Depeds libwebkitgtk-3.0-dev
-        with libwebkit2gtk-4.0-dev.
+    - Replace libwebkitgtk-3.0-dev with libwebkit2gtk-4.0-dev
+      in Build-Depends in debian/control.
   * Rename patches.
+  * debian/copyright:
+    - Update for 2016.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 13 Dec 2015 18:39:32 +0100
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 10 Jan 2016 16:53:26 +0100
 
 shotwell (0.22.0-2) unstable; urgency=medium
 
