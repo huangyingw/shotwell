@@ -1,0 +1,96 @@
+Index: trunk/src/camera/ImportPage.vala
+===================================================================
+--- trunk.orig/src/camera/ImportPage.vala
++++ trunk/src/camera/ImportPage.vala
+@@ -766,6 +766,15 @@ public class ImportPage : CheckerboardPa
+     ~ImportPage() {
+         LibraryPhoto.global.contents_altered.disconnect(on_media_added_removed);
+         Video.global.contents_altered.disconnect(on_media_added_removed);
++
++        // iOS 8 issue. Release the camera here
++        if (camera != null) {
++          GPhoto.Result res = camera.exit(spin_idle_context.context);
++          if (res != GPhoto.Result.OK) {
++              // log but don't fail
++              warning("ImportPage destructor: Unable to unlock camera: %s", res.to_full_string());
++          }
++        }
+     }
+     
+     public override Gtk.Toolbar get_toolbar() {
+@@ -1153,11 +1162,14 @@ public class ImportPage : CheckerboardPa
+         update_status(busy, false);
+         
+         refresh_error = null;
+-        refresh_result = camera.init(spin_idle_context.context);
+-        if (refresh_result != GPhoto.Result.OK) {
+-            warning("Unable to initialize camera: %s", refresh_result.to_full_string());
+-            
+-            return (refresh_result == GPhoto.Result.IO_LOCK) ? RefreshResult.LOCKED : RefreshResult.LIBRARY_ERROR;
++        // iOS 8 issue
++        if (camera == null) {
++          refresh_result = camera.init(spin_idle_context.context);
++          if (refresh_result != GPhoto.Result.OK) {
++              warning("Unable to initialize camera: %s", refresh_result.to_full_string());
++
++              return (refresh_result == GPhoto.Result.IO_LOCK) ? RefreshResult.LOCKED : RefreshResult.LIBRARY_ERROR;
++          }
+         }
+ 
+         update_status(true, refreshed);
+@@ -1262,13 +1274,15 @@ public class ImportPage : CheckerboardPa
+         progress_bar.set_ellipsize(Pango.EllipsizeMode.NONE);
+         progress_bar.set_text("");
+         progress_bar.set_fraction(0.0);
+-        
++
++#if 0
+         GPhoto.Result res = camera.exit(spin_idle_context.context);
+         if (res != GPhoto.Result.OK) {
+             // log but don't fail
+             warning("Unable to unlock camera: %s", res.to_full_string());
+         }
+-        
++#endif
++
+         if (refresh_result == GPhoto.Result.OK) {
+             update_status(false, true);
+         } else {
+@@ -1634,11 +1648,15 @@ public class ImportPage : CheckerboardPa
+     }
+     
+     private void import(Gee.Iterable<DataObject> items) {
+-        GPhoto.Result res = camera.init(spin_idle_context.context);
+-        if (res != GPhoto.Result.OK) {
+-            AppWindow.error_message(_("Unable to lock camera: %s").printf(res.to_full_string()));
+-            
+-            return;
++        // We now keep the camera open as long as we can to
++        // work around the iOS 8 directory name shuffling issue.
++        if (camera == null) {
++          GPhoto.Result res = camera.init(spin_idle_context.context);
++          if (res != GPhoto.Result.OK) {
++              AppWindow.error_message(_("Unable to lock camera: %s").printf(res.to_full_string()));
++
++              return;
++          }
+         }
+ 
+         update_status(true, refreshed);
+@@ -1774,12 +1792,15 @@ public class ImportPage : CheckerboardPa
+     }
+ 
+     private void close_import() {
++// iOS 8 issue
++#if 0
+         GPhoto.Result res = camera.exit(spin_idle_context.context);
+         if (res != GPhoto.Result.OK) {
+             // log but don't fail
+             message("Unable to unlock camera: %s", res.to_full_string());
+         }
+-        
++#endif
++
+         update_status(false, refreshed);
+         
+         on_view_changed();
