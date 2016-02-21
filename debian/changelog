@@ -6,6 +6,7 @@ shotwell (0.22.0-4) UNRELEASED; urgency=medium
       Thanks to Obsidian.
   * debian/control:
     - Bump Standards-Version to 3.9.7 (no changes required).
+    - Change Vcs-* to secure uri.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 21 Feb 2016 10:20:39 +0100
 
