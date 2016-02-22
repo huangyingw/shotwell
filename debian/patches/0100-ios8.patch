@@ -1,3 +1,10 @@
+Description: Reset iOS 8 devices to download files
+Origin: https://bugzilla.gnome.org/show_bug.cgi?id=742295#c22
+Bug: https://bugzilla.gnome.org/show_bug.cgi?id=742295
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=792016
+Last-Update: 2016-02-22
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 Index: trunk/src/camera/ImportPage.vala
 ===================================================================
 --- trunk.orig/src/camera/ImportPage.vala
