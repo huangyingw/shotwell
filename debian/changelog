@@ -4,6 +4,7 @@ shotwell (0.22.1-1) UNRELEASED; urgency=medium
     - Update translations.
   * debian/control:
     - Bump Standards-Version to 3.9.8 (no changes required).
+    - Correct Vcs-Git uri.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 17 Apr 2016 07:26:27 +0200
 
