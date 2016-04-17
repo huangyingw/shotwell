@@ -6,10 +6,11 @@ shotwell (0.22.1-1) UNRELEASED; urgency=medium
     - Bump Standards-Version to 3.9.8 (no changes required).
     - Correct Vcs-Git uri.
     - Rewrite the packages description (Closes: #818671).
-    - Remove the following tags because oldstable release 
+    - Remove the following tags because oldstable release
       are 0.12.3-2~:
       + Breaks: shotwell (<< 0.12.3-1)
       + Replaces: shotwell (<< 0.12.3-1)
+  * Set compat level to 10 (no changes required).
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 17 Apr 2016 07:26:27 +0200
 
