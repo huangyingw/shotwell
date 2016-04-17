@@ -12,6 +12,9 @@ shotwell (0.22.1-1) UNRELEASED; urgency=medium
       + Replaces: shotwell (<< 0.12.3-1)
   * Set compat level to 10 (no changes required).
   * Correct typo at shotwell-dbg.README.Debian.
+  * debian/rules:
+    - To make the build reproducibly use the solution from
+      https://wiki.debian.org/ReproducibleBuilds/TimestampsInTarball.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 17 Apr 2016 07:26:27 +0200
 

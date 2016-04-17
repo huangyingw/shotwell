@@ -5,7 +5,6 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 export VALAFLAGS:=$(foreach w,$(CPPFLAGS) $(CFLAGS) $(LDFLAGS),-X $(w))
 
 CHDATE:=$(shell dpkg-parsechangelog --show-field=Date)
-B_DATE:=$(shell date -d "$(CHDATE)")
 
 %:
 	dh $@
@@ -21,8 +20,7 @@ override_dh_install:
 	mkdir -p debian/shotwell-dbg/usr/share/doc/shotwell-dbg/temp-source
 	find -type f -name '*.c' -exec cp --parent '{}' debian/shotwell-dbg/usr/share/doc/shotwell-dbg/temp-source/ ';'
 	cd debian/shotwell-dbg/usr/share/doc/shotwell-dbg && \
-	find . -newermt '$(B_DATE)' -print0 | xargs -0r touch --no-dereference --date='$(B_DATE)' && \
-	tar --mtime="$(B_DATE)" -cJf temp-source.tar.xz temp-source
+	tar --mtime="$(CHDATE)" -cJf temp-source.tar.xz temp-source
 	rm -fr debian/shotwell-dbg/usr/share/doc/shotwell-dbg/temp-source
 
 override_dh_installchangelogs:
