@@ -4,17 +4,17 @@ shotwell (0.22.1-1) unstable; urgency=medium
     - Update translations.
   * debian/control:
     - Bump Standards-Version to 3.9.8 (no changes required).
-    - Correct Vcs-Git uri.
-    - Rewrite the packages description (Closes: #818671).
-    - Remove the following tags because oldstable release
-      are 0.12.3-2~:
+    - Correct Vcs-Git URI.
+    - Improve package description (Closes: #818671).
+    - Drop the following fields because even oldstable has 0.12.3-2~:
       + Breaks: shotwell (<< 0.12.3-1)
       + Replaces: shotwell (<< 0.12.3-1)
   * Set compat level to 10 (no changes required).
   * Correct typo at shotwell-dbg.README.Debian.
   * debian/rules:
-    - To make the build reproducibly use the solution from
-      https://wiki.debian.org/ReproducibleBuilds/TimestampsInTarball.
+    - Touch generated C files with mtime of debian/changelog to ensure
+      the mtime of these C files never changes before installing them
+      into the shotwell-dbg package. Makes build reproducible.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 17 Apr 2016 22:15:57 +0200
 
