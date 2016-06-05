@@ -1,0 +1,26 @@
+Description: Delay size_request
+Author: Jens Georg <mail@jensge.org>
+Origin: https://git.gnome.org/browse/shotwell/commit/?id=4a70d87
+Bug: https://bugzilla.gnome.org/show_bug.cgi?id=766864
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=823835
+Forwarded: not-needed
+Last-Update: 2015-06-05
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+Index: trunk/src/CheckerboardLayout.vala
+===================================================================
+--- trunk.orig/src/CheckerboardLayout.vala
++++ trunk/src/CheckerboardLayout.vala
+@@ -911,7 +911,11 @@ public class CheckerboardLayout : Gtk.Dr
+             debug("on_viewport_resized: due_to_reflow=%s set_size_request %dx%d",
+                 size_allocate_due_to_reflow.to_string(), parent_allocation.width, req.height);
+ #endif
+-            set_size_request(parent_allocation.width - SCROLLBAR_PLACEHOLDER_WIDTH, req.height);
++            // But if the current height is 0, don't request a size yet. Delay
++            // it to do_reflow (bgo#766864)
++            if (req.height != 0) {
++                set_size_request(parent_allocation.width - SCROLLBAR_PLACEHOLDER_WIDTH, req.height);
++            }
+         } else {
+             // set the layout's width and height to always match the parent's
+             set_size_request(parent_allocation.width, parent_allocation.height);

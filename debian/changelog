@@ -19,8 +19,11 @@ shotwell (0.23.1-1) unstable; urgency=medium
       + Fix files mode in temp-source tarball.
       Thanks to Alexis Bienvenüe <pado@passoire.fr>.
   * New debian/shotwell-common.postrm to rebuild icon cache after purge / remove.
+  * New cherry-picked patches from upstream (Closes: #823835):
+    - 0510-Delay_size_request.patch
+    - 0515-Fix_background_color_drawing.patch
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 05 Jun 2016 15:05:46 +0200
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 05 Jun 2016 22:36:26 +0200
 
 shotwell (0.22.1-1) unstable; urgency=medium
 
