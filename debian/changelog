@@ -1,14 +1,16 @@
-shotwell (0.23.1-1) UNRELEASED; urgency=medium
+shotwell (0.23.1-1) unstable; urgency=medium
 
   * New upstream release (Closes: #824164, #825788).
     - Renew Patches.
-    - Remove upstream apllayed patches:
+    - Remove upstream applied patches:
       + 0500-Port-to-webkit2gtk-40.patch
       + 0501-Dont-pack-webview-into-a-scrolled-window.patch
       + 0502-Have-all-soup-sessions-validate-TLS-certificates.patch
       + 0503-facebook-Dont-disable-XSS-auditor.patch
-    - Close upstream apllayed bugs:
-      + Inconsistent licensing metadata in icons/rejected.svg (Closes: #800902).
+    - Close upstream applied bugs:
+      + Fix inconsistent licensing metadata in icons/rejected.svg
+        (Closes: #800902).
+      + Fix crash open files with external editor (Closes: #806248).
     - debian/copyright: Move copyright to Software Freedom Conservancy Inc.
   * Rewrite rule at debian/watch.
   * debian/rules:
@@ -16,8 +18,9 @@ shotwell (0.23.1-1) UNRELEASED; urgency=medium
       + Fix date handling for non-English locales.
       + Fix files mode in temp-source tarball.
       Thanks to Alexis Bienvenüe <pado@passoire.fr>.
+  * New debian/shotwell-common.postrm to rebuild icon cache after purge / remove.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sat, 04 Jun 2016 23:14:30 +0200
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 05 Jun 2016 15:05:46 +0200
 
 shotwell (0.22.1-1) unstable; urgency=medium
 
