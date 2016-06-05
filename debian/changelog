@@ -2,7 +2,14 @@ shotwell (0.23.1-1) UNRELEASED; urgency=medium
 
   * New upstream release (Closes: #824164, #825788).
     - Renew Patches.
-    - Remove upstream apllayed patches.
+    - Remove upstream apllayed patches:
+      + 0500-Port-to-webkit2gtk-40.patch
+      + 0501-Dont-pack-webview-into-a-scrolled-window.patch
+      + 0502-Have-all-soup-sessions-validate-TLS-certificates.patch
+      + 0503-facebook-Dont-disable-XSS-auditor.patch
+    - Close upstream apllayed bugs:
+      + Inconsistent licensing metadata in icons/rejected.svg (Closes: #800902).
+    - debian/copyright: Move copyright to Software Freedom Conservancy Inc.
   * Rewrite rule at debian/watch.
   * debian/rules:
     - To make build reproducible (Closes: #822948):
