@@ -14,7 +14,7 @@ Index: trunk/Makefile
  ifdef UNITY_SUPPORT
  VALAFLAGS := $(VALAFLAGS) --define UNITY_SUPPORT
  endif
-@@ -673,7 +673,7 @@ $(EXPANDED_C_FILES): $(VALA_STAMP)
+@@ -677,7 +677,7 @@ $(EXPANDED_C_FILES): $(VALA_STAMP)
  	@
  
  $(EXPANDED_OBJ_FILES): %.o: %.c $(CONFIG_IN) Makefile
@@ -27,12 +27,12 @@ Index: trunk/plugins/Makefile.plugin.mk
 ===================================================================
 --- trunk.orig/plugins/Makefile.plugin.mk
 +++ trunk/plugins/Makefile.plugin.mk
-@@ -41,7 +41,7 @@ DEFINES := -D_VERSION='"$(PLUGINS_VERSIO
+@@ -42,7 +42,7 @@ DEFINES := -D_VERSION='"$(PLUGINS_VERSIO
  all: $(PLUGIN).so
  
  .stamp: $(SRC_FILES) $(MAKE_FILES) $(HEADER_FILES)
--	$(VALAC) --target-glib=$(MIN_GLIB_VERSION) -g --enable-checking --fatal-warnings --save-temps --compile --enable-deprecated \
-+	$(VALAC) --target-glib=$(MIN_GLIB_VERSION) -g --enable-checking --save-temps --compile --enable-deprecated \
+-	$(VALAC) --target-glib=$(MIN_GLIB_VERSION) -g --enable-checking --fatal-warnings --ccode --enable-deprecated \
++	$(VALAC) --target-glib=$(MIN_GLIB_VERSION) -g --enable-checking --ccode --enable-deprecated \
  		--vapidir=../ $(foreach pkg,$(PKGS),--pkg=$(pkg)) $(foreach pkg,$(CUSTOM_VAPI_PKGS),--pkg=$(pkg)) \
- 		-X -I../.. -X -fPIC \
- 		$(foreach dfn,$(DEFINES),-X $(dfn)) \
+ 		$(USER_VALAFLAGS) \
+ 		--vapidir=../../vapi \

@@ -7,20 +7,7 @@ Index: trunk/Makefile
 ===================================================================
 --- trunk.orig/Makefile
 +++ trunk/Makefile
-@@ -395,10 +395,11 @@ VALA_CFLAGS := `pkg-config --cflags $(EX
- 	$(foreach def,$(DEFINES),-D$(def))
- 
- VALA_LDFLAGS := `pkg-config --libs $(EXT_PKGS) $(DIRECT_LIBS) gthread-2.0`
-+VALA_LDFLAGS += -fPIE -pie -Wl,-z,relro -Wl,-z,now
- 
- # REQUIRED_CFLAGS absolutely get appended to CFLAGS, whatever the
- # the value of CFLAGS in the environment
--REQUIRED_CFLAGS := -fPIC
-+REQUIRED_CFLAGS := -g -O2 -fPIE -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2
- 
- # setting CFLAGS in configure.mk overrides build type
- ifndef CFLAGS
-@@ -411,8 +412,8 @@ PLUGIN_CFLAGS = -O2 -g -pipe
+@@ -403,8 +403,8 @@ PLUGIN_CFLAGS = -O2 -g -pipe
  endif
  endif
  
