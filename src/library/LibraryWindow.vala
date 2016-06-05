@@ -1,12 +1,11 @@
-/* Copyright 2009-2015 Yorba Foundation
+/* Copyright 2016 Software Freedom Conservancy Inc.
  *
  * This software is licensed under the GNU Lesser General Public License
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
 public class LibraryWindow : AppWindow {
-    public const int SIDEBAR_MIN_WIDTH = 224;
-    public const int SIDEBAR_MAX_WIDTH = 320;
+    public const int SIDEBAR_MIN_WIDTH = 120;
     
     public static int PAGE_MIN_WIDTH {
         get {

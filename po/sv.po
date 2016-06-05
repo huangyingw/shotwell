@@ -1,5 +1,5 @@
 # Swedish translation for Shotwell
-# Copyright (C) 2009-2015 Yorba Foundation
+# Copyright 2016 Software Freedom Conservancy Inc.
 # See COPYING for license.
 # Translators:
 # alexanderstyre <lessneurope@yandex.com>, 2013
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: shotwell\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=shotwell&keywords=I18N+L10N&component=Internationalization\n"
-"POT-Creation-Date: 2015-11-01 14:19+0000\n"
+"POT-Creation-Date: 2015-07-20 11:39+0000\n"
 "PO-Revision-Date: 2015-07-20 18:14+0200\n"
 "Last-Translator: Josef Andersson <josef.andersson@fripost.org>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
