@@ -5,12 +5,14 @@ PLUGIN_PKGS := \
 	gtk+-3.0 \
 	gexiv2 \
 	gee-0.8 \
-	sqlite3
+	sqlite3 \
+	libxml-2.0 \
+	libsoup-2.4
 
 SRC_FILES := \
 	shotwell-data-imports.vala \
-	../common/VersionNumber.vala \
-	../common/SqliteSupport.vala \
+	VersionNumber.vala \
+	SqliteSupport.vala \
 	FSpotImporter.vala \
 	FSpotDatabaseBehavior.vala \
 	FSpotDatabase.vala \
