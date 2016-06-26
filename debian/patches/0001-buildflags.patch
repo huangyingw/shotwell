@@ -7,7 +7,7 @@ Index: trunk/Makefile
 ===================================================================
 --- trunk.orig/Makefile
 +++ trunk/Makefile
-@@ -402,8 +402,8 @@ PLUGIN_CFLAGS = -O2 -g -pipe
+@@ -385,8 +385,8 @@ PLUGIN_CFLAGS = -O2 -g -pipe
  endif
  endif
  

@@ -14,7 +14,7 @@ Index: trunk/Makefile
  ifdef UNITY_SUPPORT
  VALAFLAGS := $(VALAFLAGS) --define UNITY_SUPPORT
  endif
-@@ -676,7 +676,7 @@ $(EXPANDED_C_FILES): $(VALA_STAMP)
+@@ -661,7 +661,7 @@ $(EXPANDED_C_FILES): $(VALA_STAMP)
  	@
  
  $(EXPANDED_OBJ_FILES): %.o: %.c $(CONFIG_IN) Makefile
@@ -27,12 +27,12 @@ Index: trunk/plugins/Makefile.plugin.mk
 ===================================================================
 --- trunk.orig/plugins/Makefile.plugin.mk
 +++ trunk/plugins/Makefile.plugin.mk
-@@ -42,7 +42,7 @@ DEFINES := -D_VERSION='"$(PLUGINS_VERSIO
- all: $(PLUGIN).so
+@@ -42,7 +42,7 @@ PLUGIN_EXTRAFLAGS ?= --vapidir=../common
+ PLUGIN_EXTRALINKFLAGS ?= -L../common/ -lshotwell-plugin-common
  
  .stamp: $(SRC_FILES) $(MAKE_FILES) $(HEADER_FILES)
 -	$(VALAC) --target-glib=$(MIN_GLIB_VERSION) -g --enable-checking --fatal-warnings --ccode --enable-deprecated \
 +	$(VALAC) --target-glib=$(MIN_GLIB_VERSION) -g --enable-checking --ccode --enable-deprecated \
  		--vapidir=../ $(foreach pkg,$(PKGS),--pkg=$(pkg)) $(foreach pkg,$(CUSTOM_VAPI_PKGS),--pkg=$(pkg)) \
  		$(USER_VALAFLAGS) \
- 		--vapidir=../../vapi \
+ 		$(PLUGIN_EXTRAFLAGS) \

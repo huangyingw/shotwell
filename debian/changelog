@@ -1,4 +1,4 @@
-shotwell (0.23.1-1) unstable; urgency=medium
+shotwell (0.23.2-1) unstable; urgency=medium
 
   * New upstream release (Closes: #824164, #825788).
     - Renew Patches.
