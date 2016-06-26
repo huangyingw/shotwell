@@ -7,7 +7,7 @@ Build-Depends:
  desktop-file-utils,
  gnome-doc-utils,
  libexif-dev (>= 0.6.16),
- libgee-0.8-dev (>= 0.8.5),
+ libgee-0.8-dev (>= 0.10),
  libgexiv2-dev (>= 0.4.90),
  libglib2.0-dev (>= 2.30.0),
  libgphoto2-dev (>= 2.5.4),

@@ -22,8 +22,9 @@ shotwell (0.23.2-1) unstable; urgency=medium
       Thanks to Alexis Bienvenüe <pado@passoire.fr>.
   * New debian/shotwell-common.postrm to rebuild icon cache after
     purge / remove.
+  * Change minimal version of libgee-0.8 to 0.10.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 26 Jun 2016 10:55:45 +0200
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 26 Jun 2016 11:15:06 +0200
 
 shotwell (0.22.1-1) unstable; urgency=medium
 
