@@ -11,6 +11,8 @@ shotwell (0.23.2-1) unstable; urgency=medium
       + Fix inconsistent licensing metadata in icons/rejected.svg
         (Closes: #800902).
       + Fix crash open files with external editor (Closes: #806248).
+      + Fix background color drawing & fix missing scroll bars in events
+        (Closes: #823835).
     - debian/copyright: Move copyright to Software Freedom Conservancy Inc.
   * Rewrite rule at debian/watch.
   * debian/rules:
@@ -18,12 +20,10 @@ shotwell (0.23.2-1) unstable; urgency=medium
       + Fix date handling for non-English locales.
       + Fix files mode in temp-source tarball.
       Thanks to Alexis Bienvenüe <pado@passoire.fr>.
-  * New debian/shotwell-common.postrm to rebuild icon cache after purge / remove.
-  * New cherry-picked patches from upstream (Closes: #823835):
-    - 0510-Delay_size_request.patch
-    - 0515-Fix_background_color_drawing.patch
+  * New debian/shotwell-common.postrm to rebuild icon cache after
+    purge / remove.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 05 Jun 2016 22:36:26 +0200
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 26 Jun 2016 10:55:45 +0200
 
 shotwell (0.22.1-1) unstable; urgency=medium
 
