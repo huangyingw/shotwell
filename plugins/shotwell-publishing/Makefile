@@ -17,9 +17,7 @@ SRC_FILES := \
 	PicasaPublishing.vala \
 	FlickrPublishing.vala \
 	YouTubePublishing.vala \
-	PiwigoPublishing.vala \
-	../../src/util/string.vala \
-	../common/RESTSupport.vala
+	PiwigoPublishing.vala
 
 RC_FILES := \
 	facebook.png \

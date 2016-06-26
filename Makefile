@@ -2,7 +2,7 @@ PROGRAM = shotwell
 PROGRAM_THUMBNAILER = shotwell-video-thumbnailer
 PROGRAM_MIGRATOR = shotwell-settings-migrator
 
-VERSION = 0.23.1
+VERSION = 0.23.2
 GITVER := $(shell git rev-parse HEAD)
 GETTEXT_PACKAGE = $(PROGRAM)
 BUILD_ROOT = 1
@@ -38,10 +38,6 @@ SYSTEM_LANG_DIR := $(DESTDIR)$(PREFIX)/share/locale
 VALAFLAGS := -g --enable-checking --target-glib=2.32 --thread --fatal-warnings --enable-experimental --enable-deprecated $(USER_VALAFLAGS)
 ifdef UNITY_SUPPORT
 VALAFLAGS := $(VALAFLAGS) --define UNITY_SUPPORT
-endif
-
-ifdef WITH_GPHOTO_25
-VALAFLAGS := $(VALAFLAGS) --define WITH_GPHOTO_25
 endif
 
 DEFINES := _PREFIX='"$(PREFIX)"' _VERSION='"$(VERSION)"' GETTEXT_PACKAGE='"$(GETTEXT_PACKAGE)"' \
@@ -119,16 +115,11 @@ VAPI_FILES = \
 	LConv.vapi \
 	libexif.vapi \
 	libraw.vapi \
-	unity.vapi
+	unity.vapi \
+	libgphoto2.vapi
 
 DEPS_FILES = \
 	unity.deps
-
-ifdef WITH_GPHOTO_25
-GPHOTO_VAPI_FILE = vapi/gphoto-2.5/libgphoto2.vapi
-else
-GPHOTO_VAPI_FILE = vapi/gphoto-2.4/libgphoto2.vapi
-endif
 
 RESOURCE_FILES = \
 	collection.ui \
@@ -227,13 +218,6 @@ ICON_FILES = \
 VAPI_DIRS = \
 	./vapi
 
-ifdef WITH_GPHOTO_25
-VAPI_DIRS += ./vapi/gphoto-2.5
-else
-VAPI_DIRS += ./vapi/gphoto-2.4
-endif
-
-
 HEADER_DIRS = \
 	./vapi
 
@@ -275,7 +259,7 @@ THUMBNAILER_PKGS = \
 DIRECT_LIBS =
 
 EXT_PKG_VERSIONS = \
-	gee-0.8 >= 0.8.5 \
+	gee-0.8 >= 0.10.0 \
 	gexiv2 >= 0.4.90 \
 	gio-unix-2.0 >= 2.20 \
 	glib-2.0 >= $(MIN_GLIB_VERSION) \
@@ -293,8 +277,7 @@ EXT_PKG_VERSIONS = \
 	libxml-2.0 >= 2.6.32 \
 	rest-0.7 >= 0.7 \
 	sqlite3 >= 3.5.9 \
-	webkit2gtk-4.0 \
-	gnome-doc-utils
+	webkit2gtk-4.0
 
 DIRECT_LIBS_VERSIONS =
 
@@ -327,7 +310,8 @@ UNITIZE_INITS := $(foreach nm,$(UNIT_NAMESPACES),$(UNITIZE_DIR)/_$(nm)Internals.
 UNITIZE_STAMP := $(UNITIZE_DIR)/.unitized
 
 PLUGINS_DIR := plugins
-PLUGINS_SO := $(foreach plugin,$(PLUGINS),$(PLUGINS_DIR)/$(plugin)/$(plugin).so)
+INSTALL_PLUGINS = $(filter-out common,$(PLUGINS))
+PLUGINS_SO := $(foreach plugin,$(INSTALL_PLUGINS),$(PLUGINS_DIR)/$(plugin)/$(plugin).so)
 EXTRA_PLUGINS_SO := $(foreach plugin,$(EXTRA_PLUGINS),$(PLUGINS_DIR)/$(plugin)/$(plugin).so)
 PLUGINS_DIST_FILES := `$(MAKE) --directory=plugins --no-print-directory listfiles`
 
@@ -372,7 +356,6 @@ DIST_FILES = Makefile configure chkver $(EXPANDED_DIST_SRC_FILES) $(EXPANDED_VAP
 	$(EXPANDED_DOC_PAGES) $(EXPANDED_DOC_IMAGES) $(EXPANDED_DOC_PO) help/Makefile.am \
 	apport/shotwell.py $(UNIT_RESOURCES) $(UNIT_MKS) \
 	unitize.mk units.mk $(PC_INPUT) $(PLUGINS_DIST_FILES) \
-	vapi/gphoto-2.5/libgphoto2.vapi vapi/gphoto-2.4/libgphoto2.vapi \
 	$(EXPANDED_THUMBNAILER_SRC_FILES) $(MIGRATOR_BIN)
 
 DIST_TAR = $(PROGRAM)-$(VERSION).tar
@@ -581,6 +564,7 @@ endif
 		$(SYSTEM_LANG_DIR)/$(lang)/LC_MESSAGES/shotwell.mo`)
 	mkdir -p $(DESTDIR)$(PREFIX)/$(LIB)/shotwell/plugins/builtin
 	$(INSTALL_PROGRAM) $(PLUGINS_SO) $(DESTDIR)$(PREFIX)/$(LIB)/shotwell/plugins/builtin
+	$(INSTALL_PROGRAM) plugins/common/libshotwell-plugin-common.so $(DESTDIR)$(PREFIX)/$(LIB)
 ifdef PLUGINS_RC
 	$(INSTALL_DATA) $(PLUGINS_RC) $(DESTDIR)$(PREFIX)/$(LIB)/shotwell/plugins/builtin
 endif
@@ -629,6 +613,7 @@ ifdef ENABLE_APPORT_HOOK_INSTALL
 endif
 	$(foreach lang,$(CORE_SUPPORTED_LANGUAGES),`rm -f $(SYSTEM_LANG_DIR)/$(lang)/LC_MESSAGES/shotwell.mo`)
 	rm -rf $(DESTDIR)$(PREFIX)/$(LIB)/shotwell/plugins/builtin
+	rm -rf $(DESTDIR)$(PREFIX)/$(LIB)/libshotwell-plugin-common.so
 ifdef INSTALL_HEADERS
 	rm -rf $(DESTDIR)$(PREFIX)/include/shotwell
 	rm -f $(foreach vapi,$(PLUGIN_VAPI),$(DESTDIR)$(PREFIX)/share/vala/vapi/$(notdir $(vapi)))
@@ -660,7 +645,7 @@ $(UNITIZE_INITS) $(UNITIZE_ENTRIES): $(UNITIZE_STAMP)
 	@
 
 # EXPANDED_SRC_FILES includes UNITIZE_INITS and UNITIZE_ENTRY
-$(VALA_STAMP): $(EXPANDED_SRC_FILES) $(EXPANDED_VAPI_FILES) $(GPHOTO_VAPI_FILE) $(EXPANDED_SRC_HEADER_FILES)
+$(VALA_STAMP): $(EXPANDED_SRC_FILES) $(EXPANDED_VAPI_FILES) $(EXPANDED_SRC_HEADER_FILES)
 	$(call check_valac_version)
 	@echo Compiling Vala code...
 	@mkdir -p $(BUILD_DIR)
