@@ -6,6 +6,7 @@ Build-Depends:
  debhelper (>= 9),
  desktop-file-utils,
  gnome-doc-utils,
+ itstool,
  libexif-dev (>= 0.6.16),
  libgee-0.8-dev (>= 0.10),
  libgexiv2-dev (>= 0.4.90),
