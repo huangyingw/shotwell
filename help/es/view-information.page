@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="view-information" xml:lang="es">
+
+    <info>
+        <link type="guide" xref="index#view"/>
+        <desc>Ver información más detallada sobre las fotos, como el modo de exposición usado por la cámara.</desc>
+        
+        <link type="next" xref="view-view"/>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Daniel Mustieles</mal:name>
+      <mal:email>daniel.mustieles@gmail.com</mal:email>
+      <mal:years>2014 - 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Dámaris Letelier</mal:name>
+      <mal:email>dam.letelier@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+	<title>Información básica y extendida</title>
+
+<p>El panel de información básica aparece en la parte inferior de la barra lateral, y muestra un breve resumen de las fotos que ha seleccionado. Si no se ha seleccionado ninguna foto, muestra un resumen de la colección completa. Puede cambiar la visibilidad de este panel usando el comando <guiseq><gui>Ver</gui><gui>Información básica</gui></guiseq>.</p>
+
+<p>The floating Extended Information window displays more information about the selected photo.  The <guiseq><gui>View</gui><gui>Extended Information</gui></guiseq> command or <keyseq><key>Ctrl</key><key>Shift</key><key>X</key></keyseq> toggles the display of this window.</p>
+
+</page>

@@ -11,7 +11,8 @@ public class PiwigoService : Object, Spit.Pluggable, Spit.Publishing.Service {
     
     public PiwigoService(GLib.File resource_directory) {
         if (icon_pixbuf_set == null)
-            icon_pixbuf_set = Resources.load_icon_set(resource_directory.get_child(ICON_FILENAME));
+            icon_pixbuf_set = Resources.load_from_resource
+                (Resources.RESOURCE_PATH + "/" + ICON_FILENAME);
     }
     
     public int get_pluggable_interface(int min_host_interface, int max_host_interface) {
@@ -63,7 +64,7 @@ internal class Category {
     public string comment;
     public string display_name;
     public string uppercats;
-    public static const int NO_ID = -1;
+    public const int NO_ID = -1;
 
     public Category(int id, string name, string uppercats, string? comment = "") {
         this.id = id;
@@ -911,6 +912,8 @@ public class PiwigoPublisher : Spit.Publishing.Publisher, GLib.Object {
             error_type = "LOCAL_FILE_ERROR";
         } else if(e is Spit.Publishing.PublishingError.EXPIRED_SESSION) {
             error_type = "EXPIRED_SESSION";
+        } else if (e is Spit.Publishing.PublishingError.SSL_FAILED) {
+            error_type = "SECURE_CONNECTION_FAILED";
         }
         
         debug("Unhandled error: type=%s; message='%s'".printf(error_type, e.message));
@@ -1001,12 +1004,9 @@ internal class AuthenticationPane : Spit.Publishing.DialogPane, Object {
     public AuthenticationPane(PiwigoPublisher publisher, Mode mode = Mode.INTRO) {
         this.pane_widget = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-        File ui_file = publisher.get_host().get_module_file().get_parent().
-            get_child("piwigo_authentication_pane.glade");
-        
         try {
             builder = new Gtk.Builder();
-            builder.add_from_file(ui_file.get_path());
+            builder.add_from_resource (Resources.RESOURCE_PATH + "/piwigo_authentication_pane.ui");
             builder.connect_signals(null);
             Gtk.Alignment align = builder.get_object("alignment") as Gtk.Alignment;
             
@@ -1156,12 +1156,9 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, Object {
         this.last_title_as_comment = last_title_as_comment;
         this.last_no_upload_tags = last_no_upload_tags;
 
-        File ui_file = publisher.get_host().get_module_file().get_parent().
-            get_child("piwigo_publishing_options_pane.glade");
-        
         try {
             builder = new Gtk.Builder();
-            builder.add_from_file(ui_file.get_path());
+            builder.add_from_resource (Resources.RESOURCE_PATH + "/piwigo_publishing_options_pane.ui");
             builder.connect_signals(null);
             Gtk.Alignment align = builder.get_object("alignment") as Gtk.Alignment;
             

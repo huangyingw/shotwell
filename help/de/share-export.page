@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="share-export" xml:lang="de">
+
+    <info>
+        <link type="guide" xref="index#share"/>
+        <desc>So kopieren Sie Fotos aus Shotwell heraus, um sie anderweitig abzulegen.</desc>
+        
+        <link type="next" xref="share-print"/>
+    </info>
+
+	<title>Fotos exportieren</title>
+
+<p>Um Fotos aus Shotwell mittels Ziehen-und-Ablegen zu exportieren, ziehen Sie die Fotos aus Shotwell in das Fenster einer Dateiverwaltung oder auf Ihre Arbeitsfläche. Die neuen Dateien entsprechen dann einer Kopie der Fotos Ihrer Bibliothek in Originalgröße.</p>
+
+<p>
+Alternatively, select a set of photos and choose the <guiseq><gui>File</gui><gui>Export...</gui></guiseq> command or press <keyseq><key>Shift</key><key>Ctrl</key><key>E</key></keyseq>, which exports photos while letting you fine-tune the size and dimensions of your photo files.
+A window will appear allowing you to make several choices:
+</p>
+
+<list>
+<item><p>Ein Exportformat.</p>
+<list>
+<item><p>Wählen Sie <gui>Unverändert</gui>, um Fotos im ursprünglichen Format ohne Veränderungen durch Shotwell zu exportieren. RAW-Fotos werden im ursprünglichen RAW-Format exportiert.</p></item>
+<item><p>Wählen Sie <gui>Aktuell</gui>, um Fotos einschließlich aller in Shotwell gemachter Änderungen zu exportieren. RAW-Fotos werden im JPEG-Format exportiert, wenn sie diese in Shotwell bearbeitet haben, anderenfalls werden sie in ihren RAW-Format exportiert.</p></item>
+<item><p>Alternativ wählen Sie ein bestimmtes Bildformat (JPEG, PNG, TIFF, BMP) für den Export. Alle in Shotwell getätigten Änderungen werden mit einbezogen und Shotwell wandelt die Fotos in das Zielformat um.</p></item>
+</list>
+</item>
+<item><p>Die Bildqualität beim Exportieren (gering, mittel, hoch oder maximal).</p></item>
+<item><p>Eine Skalierungsbeschränkung (sie legt fest, wie Shotwell entscheidet die Fotos zu skalieren) und die gewünschte Pixelgröße.</p></item>
+<item><p>Legt fest, ob Metadaten wie beispielsweise Markierungen oder Bewertungen exportiert werden sollen. Im Falle von Metadaten für Ortsdienste oder anderweitiger privater Markierungen kann dies dabei helfen, Ihre Privatsphäre zu schützen.</p></item>
+</list>
+
+<p>Legt fest, ob Shotwell Markierungen, Titel und andere Metadaten in die neuen Dateien schreiben soll.</p>
+
+</page>

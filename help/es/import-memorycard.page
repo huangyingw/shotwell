@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="import-memorycard" xml:lang="es">
+
+    <info>
+        <link type="guide" xref="index#import"/>
+        <desc>Importar fotos desde una tarjeta de memoria de una cámara digital.</desc>
+        
+        <link type="next" xref="import-file"/>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Daniel Mustieles</mal:name>
+      <mal:email>daniel.mustieles@gmail.com</mal:email>
+      <mal:years>2014 - 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Dámaris Letelier</mal:name>
+      <mal:email>dam.letelier@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+	<title>Importar desde una tarjeta de memoria</title>
+
+<p>Para importar fotos desde una tarjeta de memoria de una cámara:</p>
+
+<steps>
+ <item>
+  <p>Coloque la tarjeta en el lector de tarjetas. Asegúrese de que el lector está conectado al equipo y encendido.</p>
+ </item>
+ <item>
+  <p>El lector de tarjetas y la tarjeta se deberían detectar automáticamente.</p>
+ </item>
+ <item>
+  <p>Follow the instructions for <link xref="import-file">importing photos from your hard disk</link>. If you click <guiseq><gui>File</gui><gui>Import From Folder...</gui></guiseq>, the memory card should be visible as a folder in the side bar of the file selection window.</p>
+ </item>
+</steps>
+
+<p>Shotwell puede importar fotos de una tarjeta de memoria que sea compatible con su lector de tarjetas.</p>
+
+<p>If the card is not detected automatically, your card reader may not have been recognized. Try unplugging it and then plugging it in again. If that doesn't work, you should still be able to import photos by <link xref="import-camera">connecting your camera directly to the computer</link>, though.</p>
+
+</page>

@@ -31,9 +31,10 @@ public bool confirm_delete_saved_search(SavedSearch search) {
 
 public bool confirm_warn_developer_changed(int number) {
     Gtk.MessageDialog dialog = new Gtk.MessageDialog.with_markup(AppWindow.get_instance(),
-        Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE, "%s",
-        "<span weight=\"bold\" size=\"larger\">%s</span>".printf(ngettext("Switching developers will undo all changes you have made to this photo in Shotwell",
-        "Switching developers will undo all changes you have made to these photos in Shotwell", number)));
+        Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
+        "<span weight=\"bold\" size=\"larger\">%s</span>",
+        ngettext("Switching developers will undo all changes you have made to this photo in Shotwell",
+        "Switching developers will undo all changes you have made to these photos in Shotwell", number));
 
     dialog.add_buttons(Resources.CANCEL_LABEL, Gtk.ResponseType.CANCEL);
     dialog.add_buttons(_("_Switch Developer"), Gtk.ResponseType.YES);
@@ -1113,7 +1114,7 @@ public abstract class SetBackgroundDialog {
 public class SetBackgroundPhotoDialog : SetBackgroundDialog {
     
     public SetBackgroundPhotoDialog() {
-        Gtk.Builder builder = AppWindow.create_builder("set_background_dialog.glade", this);
+        Gtk.Builder builder = AppWindow.create_builder("set_background_dialog.ui", this);
         base(builder);
     }
     
@@ -1133,7 +1134,7 @@ public class SetBackgroundSlideshowDialog : SetBackgroundDialog {
     private int delay_value = 0;
     
     public SetBackgroundSlideshowDialog() {
-        Gtk.Builder builder = AppWindow.create_builder("set_background_slideshow_dialog.glade", this);
+        Gtk.Builder builder = AppWindow.create_builder("set_background_slideshow_dialog.ui", this);
         base(builder);
         
         delay_value_label = builder.get_object("delay_value_label") as Gtk.Label;
@@ -1329,7 +1330,7 @@ public class EventRenameDialog : TextEntryDialogMediator {
 public class EditTitleDialog : TextEntryDialogMediator {
     public EditTitleDialog(string? photo_title) {
         // Dialog title
-        base (_("Edit Title"),
+        base (C_("Dialog Title", "Edit Title"),
             _("Title:"), photo_title);
     }
     
@@ -1974,7 +1975,9 @@ public abstract class TagsDialog : TextEntryDialogMediator {
 
 public class AddTagsDialog : TagsDialog {
     public AddTagsDialog() {
-        base (Resources.ADD_TAGS_TITLE, _("Tags (separated by commas):"));
+        var title = GLib.dpgettext2 (null, "Dialog Title",
+                Resources.ADD_TAGS_TITLE);
+        base (title, _("Tags (separated by commas):"));
     }
 
     public string[]? execute() {
@@ -2325,7 +2328,7 @@ public class PreferencesDialog {
             pattern_help.set_markup("<a href=\"" + Resources.DIR_PATTERN_URI_SYSWIDE + "\">" + _("(Help)") + "</a>");
         } else {
             // We're being run from the build directory; we'll have to handle clicks to this
-            // link manually ourselves, due to a limitation ghelp: URIs.
+            // link manually ourselves, due to a limitation of help: URIs.
             pattern_help.set_markup("<a href=\"dummy:\">" + _("(Help)") + "</a>");
             pattern_help.activate_link.connect(on_local_pattern_help);
         }
@@ -2390,7 +2393,7 @@ public class PreferencesDialog {
     // the help viewer and specify the full path to the subsection we want...
     private bool on_local_pattern_help(string ignore) {
         try {
-            Resources.launch_help(AppWindow.get_instance().get_screen(), "?other-files");
+            Resources.launch_help(AppWindow.get_instance().get_screen(), "other-files.page");
         } catch (Error e) {
             message("Unable to launch help: %s", e.message);
         }

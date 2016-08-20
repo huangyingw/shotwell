@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="edit-rotate" xml:lang="es">
+
+    <info>
+        <link type="guide" xref="index#edit"/>
+        <desc>Pulse el botón <gui>Girar</gui>, o elija uno de los comandos en el menú <gui>Foto</gui>.</desc>
+        
+        <link type="next" xref="edit-straighten"/>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Daniel Mustieles</mal:name>
+      <mal:email>daniel.mustieles@gmail.com</mal:email>
+      <mal:years>2014 - 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Dámaris Letelier</mal:name>
+      <mal:email>dam.letelier@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+	<title>Girar o voltear una foto</title>
+
+    <p>You can rotate your photos left and right (clockwise and counterclockwise) with the <gui>Rotate</gui> button on the toolbar of most views. You can also make a mirror image of any photo.</p>
+    
+    <p>To rotate right, click on the <gui>Rotate</gui> button. To rotate left, press and hold the <key>Ctrl</key> key and then click the button. Both commands are available in the <gui>Photos</gui> menu too.  Alternatively, use the following keyboard shortcuts:</p>
+    <list>
+    <item><p>rotar a la izquierda: <keyseq><key>Mayús</key><key>Ctrl</key><key>R</key></keyseq> o <key>[</key></p></item>
+    <item><p>rotar a la derecha: <keyseq><key>Ctrl</key><key>R</key></keyseq> or <key>]</key></p></item>
+    </list>
+    <p>To create a mirror image of a photo, use the <gui>Flip Horizontally</gui> command in the <gui>Photos</gui> menu. To flip an image vertically, use the <gui>Flip Vertically</gui> command in the same menu.</p>
+    
+    <note>
+     <p>Si selecciona más de una imagen, puede girar todas ellas al mismo tiempo.</p>
+    </note>
+    
+</page>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="share-slideshow" xml:lang="sv">
+
+    <info>
+        <link type="guide" xref="index#share"/>
+        <desc>Se en bildpresentation av dina bilder.</desc>
+        
+        <link type="next" xref="share-export"/>
+    </info>
+
+	<title>Bildpresentationer</title>
+
+    <p>För att se ett bildspel över en samling i Shotwell, navigera över samlingen och markera <guiseq><gui>Visa</gui><gui>Bildspel</gui></guiseq> eller tryck <key>F5</key>.</p>
+    
+    <p>Du kan ändra en del inställningar i ett körande bildspel:</p>
+    
+    <list>
+    <item><p>Hur länge en bild ska visas: 1 - 30 sekunder</p></item>
+    <item><p>Du kan välja olika övergångseffekter.</p></item>
+    <item><p>Tiden för övergångseffekter: 0,1 - 1,0 sekunder</p></item>
+    </list>
+</page>

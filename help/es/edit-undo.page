@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="edit-undo" xml:lang="es">
+
+    <info>
+        <link type="guide" xref="index#edit"/>
+        <desc>Restaurar una foto a su estado original, sin edición.</desc>
+        
+        <link type="seealso" xref="edit-nondestructive"/>
+        
+        <link type="next" xref="edit-nondestructive"/>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Daniel Mustieles</mal:name>
+      <mal:email>daniel.mustieles@gmail.com</mal:email>
+      <mal:years>2014 - 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Dámaris Letelier</mal:name>
+      <mal:email>dam.letelier@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+	<title>Deshacer cambios</title>
+    
+    <p>Because Shotwell is a non-destructive photo editor, you can undo any alterations you make to a photograph.</p>
+    
+    <p>If you want to see what a photo looked like before your modifications, press the <key>Shift</key> key. The original photo will be displayed as long as you hold the key down.</p>
+
+    <p>To completely undo all the changes you've made to a photo, click <guiseq><gui>Photos</gui><gui>Revert to Original</gui></guiseq>. The only exception is that time and date adjustments will not be reverted.</p>
+
+</page>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="edit-external" xml:lang="cs">
+
+    <info>
+        <link type="guide" xref="index#edit"/>
+        <desc>Jak použít k úpravě fotografií jiný program.</desc>
+        
+        <link type="next" xref="edit-redeye"/>
+    </info>
+
+    <title>Úprava fotografií v externím programu</title>
+
+    <p>K dodatečným úpravám fotografie můžete chtít použít externí editor. Pokud máte nainstalovány GIMP a UFRaw, jsou zvoleny jako výchozí externí editory pro úpravy fotografií respektive surových fotografií. Pokud nainstalovány nejsou, musíte si upřednostňované editory zvolit pomocí <guiseq><gui>Upravit</gui> <gui>Předvolby</gui></guiseq> a výběrem v rozbalovacím seznamu nainstalovaných aplikací.</p>
+
+    <p>
+        Once your editors have been set, select a photo and choose <guiseq><gui>Photos</gui>
+        <gui>Open With External Editor</gui></guiseq> to open the photo with the external editor.
+        Likewise, if the original photo is a RAW file, select <guiseq><gui>Photos</gui><gui>Open 
+        With RAW Editor</gui></guiseq> to edit the RAW file directly with the set RAW editor.
+    </p>
+
+    <p>Až dokončíte své úpravy a soubor uložíte, Shotwell si změn povšimne a fotografii aktualizuje. Pokud je fotografie externě upravená, můžete se zmáčknutím a podržením klávesy <key>Shift</key> při zobrazení v celém okně podívat na původní verzi fotografie místo té upravené.</p>
+                            
+    <p>Návrat k originálu smaže všechny externí úpravy.</p>
+    
+    <note>
+        <p>Pokud provedete externí úpravu surové fotografie RAW a výsledek uložíte do jiného obrázku, jako je JPGE nebo PNG, nemůže Shotwell automaticky zjistit, že se mají původní RAW a nový obrázek spárovat.</p>
+            
+        <p>Jestli chcete s výsledným obrázkem pracovat v aplikaci Shotwell, musíte si jej sami naimportovat.</p>
+    </note>    
+</page>
