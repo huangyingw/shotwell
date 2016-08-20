@@ -22,6 +22,9 @@ override_dh_install:
 	cd debian/shotwell-dbg/usr/share/doc/shotwell-dbg && \
 	tar --mode=go=rX,u+rw,a-s --mtime="$(B_DATE)" -cJf temp-source.tar.xz temp-source
 	rm -fr debian/shotwell-dbg/usr/share/doc/shotwell-dbg/temp-source
+	# Remove unwanted la files
+	rm -f debian/shotwell/usr/lib/shotwell/plugins/builtin/*.la
+	rm -f debian/shotwell/usr/lib/*.la
 
 override_dh_installchangelogs:
 	dh_installchangelogs NEWS

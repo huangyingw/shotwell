@@ -32,6 +32,8 @@ shotwell (0.23.5-1) unstable; urgency=medium
   * Remove man page from shotwell-common to prevent overlapping
     file installation.
   * New patches/0600-remove_wrong_marco.patch to remove the wrong macro 'R'.
+  * debian/rules:
+    - Remove unwanted la files.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 26 Jun 2016 11:15:06 +0200
 
