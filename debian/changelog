@@ -27,6 +27,9 @@ shotwell (0.23.5-1) unstable; urgency=medium
     - Add itstool to Build-Depends.
   * debian/shotwell.install:
     - Remove missing apport/shotwell.py.
+  * Remove debian/manpages to use the upstream man page.
+  * Remove man page from shotwell-common to prevent overlapping
+    file installation.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 26 Jun 2016 11:15:06 +0200
 
