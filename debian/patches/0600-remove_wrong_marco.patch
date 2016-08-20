@@ -1,0 +1,19 @@
+Description: Remove wrong macro 'R' from manpage
+Author: Jörg Frings-Fürst <debian@jff-webhosting.net>
+Last-Update: 2016-08-20
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+Index: trunk/help/shotwell.1
+===================================================================
+--- trunk.orig/help/shotwell.1
++++ trunk/help/shotwell.1
+@@ -13,7 +13,8 @@ import photos from disk or camera, organ
+ 
+ .SH "OPTIONS"
+ .B \-h, \-\-help
+-.R Show help options
++Show help options
++.RE
+ 
+ .B \-d, \-\-datadir=DIRECTORY
+ .RS
