@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="edit-adjustments" xml:lang="de">
+
+    <info>
+        <link type="guide" xref="index#edit"/>
+        <desc>Change the exposure, saturation, tint, and shadows of a photo.</desc>
+        
+        <link type="next" xref="edit-crop"/>
+    </info>
+
+   <title>Farbanpassungen</title>
+
+<p>The <gui>Adjust</gui> button opens a floating window with a histogram and sliders to adjust a photo's exposure, saturation, tint, temperature, and shadows. The histogram also has sliders to reduce the upper and lower intensity thresholds of the photograph, expanding the contrast of the middle range.</p>
+
+<p>The <gui>Enhance</gui> button adjusts the histogram and shadows sliders to improve the quality of a photo.</p>
+
+<p>When the photo's colors and contrast are to your liking, press <gui>OK</gui> to save the changes. <gui>Reset</gui> will return the image to its original state. <gui>Cancel</gui> discards all changes you've made.</p>
+
+<section>
+ <title>Was bewirken die Farbregler?</title>
+ <terms>
+  <item>
+   <title>Belichtung</title>
+   <p>Änderung der Helligkeit, so dass es aussieht, also ob das Foto länger oder kürzer belichtet worden wäre. Verwenden Sie diese Möglichkeit, um über- und unterbelichtete Fotos zu korrigieren.</p>
+  </item>
+  <item>
+   <title>Sättigung</title>
+   <p>Changes how vivid colors look. If your photo looks gray and washed out, try increasing the saturation. If colors look too bold, try decreasing it.</p>
+  </item>
+  <item>
+   <title>Farbton</title>
+   <p>This tints the photo with a color. It's useful for correcting photos taken with the wrong white balance setting, which typically have an unnatural color cast. For example, photos taken outdoors with the white balance set to "Tungsten" may have a blue cast.</p>
+  </item>
+  <item>
+   <title>Temperatur</title>
+   <p>Changes how "warm" or "cool" the picture looks. Use this to make cold, depressing scenes look more lively, for example.</p>
+  </item>
+  <item>
+   <title>Schatten</title>
+   <p>This makes shadowy areas appear lighter. Use this to make detail more visible if it's obscured by the darkness of a shadow.</p>
+  </item>
+  <item>
+   <title>Intensity Threshold (sliders on the histogram)</title>
+   <p>These sliders change how light the brightest white is and how dark the darkest black is. Use them to change the contrast of the photo. Photos which look washed out should particularly benefit from changing these settings.</p>
+  </item>
+ </terms>
+</section>
+    
+</page>

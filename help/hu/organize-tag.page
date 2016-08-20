@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="tag" xml:lang="hu">
+
+    <info>
+        <link type="guide" xref="index#organize"/>
+        <desc>Fényképek rendezése azok felcímkézésével.</desc>
+        
+        <link type="seealso" xref="event"/>
+        
+        <link type="next" xref="title"/>
+    </info>
+
+	<title>Fényképek címkézése</title>
+
+    <p>A kijelölt fényképekhez címkéket rendelhet. Egy címke lehet egy vagy több szó, amelyet hozzá szeretne rendelni azokhoz a fényképekhez.</p>
+    
+    <p>Új címkék fényképekhez adásához válassza ki a címkézendő fényképeket, majd tegye a következők egyikét:</p>
+    
+    <list>
+		<item><p>Choose <guiseq><gui>Tags</gui><gui>Add Tags...</gui></guiseq>.</p></item>
+		<item><p>Nyomja le a <keyseq><key>Ctrl</key><key>T</key></keyseq> billentyűkombinációt.</p></item>
+		<item><p>Fogja meg a kijelölt fényképeket, és ejtse azokat a kívánt címkére.</p></item>
+    </list>
+     
+    <p>
+		When you use <keyseq><key>Ctrl</key><key>T</key></keyseq> or 
+		<guiseq><gui>Tags</gui><gui>Add Tags...</gui></guiseq> you can type
+		in the names of one or more tags, separated by commas.
+		Once you have created a tag, you can rename it by selecting that 
+		tag in the sidebar and choosing 
+		<guiseq><gui>Tags</gui><gui>Rename Tag "[name]"...</gui></guiseq>,
+		by rightclicking on it and choose <gui>Rename...</gui> or
+		double-click on the tag in the sidebar.
+	</p>
+    
+    <p>
+		To change which tags are associated with a particular photo, 
+		select that photo, choose 
+		<guiseq><gui>Tags</gui><gui>Modify Tags...</gui></guiseq> or
+		right-click on a photo and select <gui>Modify Tags...</gui> and
+		edit the comma separated list.
+		To remove a tag from one or more photos, first select that tag 
+		in the sidebar, then select the photos you would like to remove, 
+		and choose 
+		<guiseq><gui>Tags</gui><gui>Remove Tag "[name]" from Photos</gui></guiseq> 
+		or right-click on the photos an select 
+		<gui>Remove Tag "[name]" from Photos</gui>.
+	</p>
+    
+    <p>Egy címke teljes törléséhez jelölje ki a címkét az oldalsávon, és válassza a <guiseq><gui>Címkék</gui><gui>„[név]” címke törlése</gui></guiseq> menüpontot, vagy kattintson az egér jobb gombjával, és válassza a <gui>„[név]” címke törlése</gui> menüpontot.</p>
+
+    <p>
+		When you create a tag, it will appear in the sidebar under the 
+		<gui>Tags</gui> item, which is hidden if there are no tags. Photos
+		can have multiple tags attached to them, and when you click on the
+		name of a given tag in the sidebar, you will see all the photos
+		associated with that tag.
+	</p>
+    
+    <section id="hierarchaicaltags">
+        <title>Hierarchikus címkék</title>
+            <p>A Shotwell támogatja a hierarchikus címkéket is. Újrarendezheti a címkéit fogd és vidd módon egymásra rakva. Egy új alcímke létrehozásához kattintson az egér jobb gombjával egy címkére, és válassza az <gui>Új</gui> menüpontot.</p>
+            
+            <p>A hierarchikus címkék segítségére lehetnek abban, hogy a címkelistáját oly módon rendezhesse, ahogy az a legjobban illeszkedik a gondolkodásához. Például hely címkéket tárolhat – mint „Hegyek” vagy „Tengerpart” – egy „Helyek” szülőcímke alatt, amely szintén el lehet helyezve a „Nyári szabadság” címke alatt.</p>
+			
+			<p>Ne feledje, hogy egy szülőcímke törlése törölni fogja annak gyermekcímkéit is.</p>
+    </section>
+</page>

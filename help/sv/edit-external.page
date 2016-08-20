@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="edit-external" xml:lang="sv">
+
+    <info>
+        <link type="guide" xref="index#edit"/>
+        <desc>Använda ett annat program för att redigera en bild.</desc>
+        
+        <link type="next" xref="edit-redeye"/>
+    </info>
+
+    <title>Redigera bilder med ett externt program</title>
+
+    <p>Du kan vilja använda en extern redigerare för att utföra ytterligare arbete på en bild. Om installerade så är GIMP och UFRaw de externa standardredigerarna för bilder och RAW-redigering. Om dessa program inte är installerade måste du välja dina föredragna redigerare genom att välja <guiseq><gui>Redigera</gui><gui>Inställningar</gui></guiseq> och markera redigerare från rullgardinsmenyn för installerade program.</p>
+
+    <p>
+        Once your editors have been set, select a photo and choose <guiseq><gui>Photos</gui>
+        <gui>Open With External Editor</gui></guiseq> to open the photo with the external editor.
+        Likewise, if the original photo is a RAW file, select <guiseq><gui>Photos</gui><gui>Open 
+        With RAW Editor</gui></guiseq> to edit the RAW file directly with the set RAW editor.
+    </p>
+
+    <p>När du är klar med redigering och sparar filen kommer Shotwell att upptäcka ändringarna och uppdatera bilden. Om externa ändringar har skett, tryck och håll <key>Skift</key>-tangenten i helskärmsvyn för att visa originalbilden istället för den externt redigerade.</p>
+                            
+    <p>Återställning till originalet kommer att radera externa ändringar.</p>
+    
+    <note>
+        <p>Om du externt redigerar en RAW-bild och sparar resultatet till en annan bild, som JPEG eller PNG, kan inte Shotwell automatiskt bestämma att den ursprungliga RAW-filen och den nya bilden ska kopplas samman.</p>
+            
+        <p>Om du vill arbeta med bildresultatet i Shotwell måste du importera det.</p>
+    </note>    
+</page>

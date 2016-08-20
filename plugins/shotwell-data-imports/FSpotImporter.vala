@@ -13,7 +13,9 @@ public class FSpotService : Object, Spit.Pluggable, Spit.DataImports.Service {
         // initialize the database layer
         DataImports.FSpot.Db.init();
         if (icon_pixbuf_set == null)
-            icon_pixbuf_set = Resources.load_icon_set(resource_directory.get_child(ICON_FILENAME));
+            icon_pixbuf_set =
+                Resources.load_from_resource("/org/gnome/Shotwell/Imports/"
+                        + ICON_FILENAME);
     }
     
     public int get_pluggable_interface(int min_host_interface, int max_host_interface) {
@@ -252,8 +254,8 @@ public class FSpotImportableEvent : Spit.DataImports.ImportableEvent, GLib.Objec
 }
 
 public class FSpotImportableRating : Spit.DataImports.ImportableRating, GLib.Object {
-    public static const int REJECTED = -1;
-    public static const int UNRATED = 0;
+    public const int REJECTED = -1;
+    public const int UNRATED = 0;
     
     private int rating_value;
     

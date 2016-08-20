@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="import-memorycard" xml:lang="sv">
+
+    <info>
+        <link type="guide" xref="index#import"/>
+        <desc>Importera bilder från en digitalkameras minneskort.</desc>
+        
+        <link type="next" xref="import-file"/>
+    </info>
+
+	<title>Importera från ett minneskort</title>
+
+<p>För att importera bilder från en kameras minneskort:</p>
+
+<steps>
+ <item>
+  <p>Stoppa i kortet i din kortläsare. Försäkra dig om att kortläsaren är ansluten till datorn och påslagen.</p>
+ </item>
+ <item>
+  <p>Kortläsaren och kortet bör upptäckas automatiskt.</p>
+ </item>
+ <item>
+  <p>Follow the instructions for <link xref="import-file">importing photos from your hard disk</link>. If you click <guiseq><gui>File</gui><gui>Import From Folder...</gui></guiseq>, the memory card should be visible as a folder in the side bar of the file selection window.</p>
+ </item>
+</steps>
+
+<p>Shotwell kan importera bilder från minneskort som är kompatibla med din kortläsare.</p>
+
+<p>Om kortet inte upptäcks automatiskt kanske din kortläsare inte kände igen det. Prova att koppla från det och sedan ansluta det igen. Om det inte fungerar bör du ändå kunna importera bilder genom att ansluta <link xref="import-camera"> din kamera direkt till datorn </link>.</p>
+
+</page>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="import-camera" xml:lang="es">
+
+    <info>
+        <link type="guide" xref="index#import"/>
+        <desc>Copiar fotos desde una cámara digital.</desc>
+        
+        <link type="next" xref="import-memorycard"/>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Daniel Mustieles</mal:name>
+      <mal:email>daniel.mustieles@gmail.com</mal:email>
+      <mal:years>2014 - 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Dámaris Letelier</mal:name>
+      <mal:email>dam.letelier@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+	<title>Importar desde una cámara</title>
+
+    <p>Para importar fotos desde una cámara digital:</p>
+
+   <steps>
+    <item>
+     <p>Conecte la cámara al equipo y enciéndala. Shotwell la detectará y la mostrará en la barra lateral.</p>
+    </item>
+    <item>
+     <p>Seleccione la cámara en la barra lateral. Se mostrará la vista previa de cada una de las fotos de la cámara.</p>
+    </item>
+    <item>
+     <p>If you like, you can choose a set of specific photos to import. To do this, hold down the <key>Ctrl</key> key and click to select individual photos. You can hold down <key>Shift</key> and click to select a range of photos too.</p>
+    </item>
+    <item>
+     <p>Click either <gui>Import Selected</gui> or <gui>Import All</gui>. The photos will be copied from the camera and saved on your computer.</p>
+    </item>
+   </steps>
+   
+    <p>Once the import is complete, you can open the <gui>Last Import</gui> view (in the sidebar) to see all photos that were imported. The Events list (also in the sidebar) will also show the new photos, organized by date.</p>
+</page>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="title" xml:lang="sv">
+
+    <info>
+        <link type="guide" xref="index#organize"/>
+        <desc>Namnge dina bilder.</desc>
+        
+        <link type="next" xref="event"/>
+    </info>
+
+	<title>Namn</title>
+
+<p>Kryssrutan <guiseq><gui>Visa</gui><gui>Titlar</gui></guiseq> aktiverar visningen av titlar under varje bild. Som standard är en bilds namn dess filnamn.</p>
+
+<p>To change a photo's title,
+select the photo and click <guiseq><gui>Photos</gui><gui>Edit Title...</gui></guiseq>, or press <key>F2</key>.</p>
+
+</page>

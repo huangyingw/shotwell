@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="import-f-spot" xml:lang="es">
+
+    <info>
+        <link type="guide" xref="index#import"/>
+        <desc>Shotwell puede importar todas sus fotos y etiquetas desde el gestor de fotos F-Spot.</desc>
+        
+        <link type="next" xref="import-camera"/>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Daniel Mustieles</mal:name>
+      <mal:email>daniel.mustieles@gmail.com</mal:email>
+      <mal:years>2014 - 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Dámaris Letelier</mal:name>
+      <mal:email>dam.letelier@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+	<title>Importar desde F-Spot</title>
+
+    <p>Para importar una colección de fotos existente desde F-Spot:</p>
+    <steps>
+    <item><p>Seleccione <guiseq><gui>Archivo</gui><gui>Importar desde F-Spot</gui></guiseq>.</p></item>
+    <item><p>Now choose either the default F-Spot library or another F-Spot database.
+    If importing from another F-Spot database, select a directory and file from the chooser dialog box.</p></item>
+    </steps>
+    <p>Shotwell will import your photos, together with their tags and other information.
+    Once the import is complete, you can select <gui>Last Import</gui> in the sidebar to see all photos successfully imported. The Events list will also show new entries for the dates corresponding to the imported photos.</p>
+</page>

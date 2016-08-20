@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="share-print" xml:lang="es">
+
+    <info>
+        <link type="guide" xref="index#share"/>
+        <desc>Pulse <guiseq><gui>Archivo</gui><gui>Imprimir...</gui></guiseq>. Para más opciones de impresión, seleccione la pestaña <gui>Configuración de página</gui> en el diálogo <gui>Imprimir</gui>.</desc>
+        
+        <link type="next" xref="share-upload"/>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Daniel Mustieles</mal:name>
+      <mal:email>daniel.mustieles@gmail.com</mal:email>
+      <mal:years>2014 - 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Dámaris Letelier</mal:name>
+      <mal:email>dam.letelier@gmail.com</mal:email>
+      <mal:years>2014</mal:years>
+    </mal:credit>
+  </info>
+
+	<title>Imprimir</title>
+
+    <p>To print a photo, select it and choose <guiseq><gui>File</gui><gui>Print...</gui></guiseq>.</p>
+     
+    <p>
+    Shotwell can also print multiple images in one page; to do this, select multiple images, 
+    choose <guiseq><gui>File</gui><gui>Print...</gui></guiseq>, and in the <gui>Print</gui> dialog,
+    choose the <gui>Image Settings</gui> tab. In <gui>Image Settings</gui>, choose one of the 
+    multiple-image-per-page options under <gui>Autosize</gui>.
+    </p>
+
+    <p>Si quiere establecer el formato, el tamaño del papel, y la orientación, seleccione la pestaña <gui>Configuración de la página</gui>en el cuadro de diálogo <gui>Imprimir</gui> antes de imprimir.</p>
+</page>

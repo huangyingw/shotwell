@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="share-export" xml:lang="sv">
+
+    <info>
+        <link type="guide" xref="index#share"/>
+        <desc>Kopiera bilder från Shotwell så att du kan använda dem på andra ställen.</desc>
+        
+        <link type="next" xref="share-print"/>
+    </info>
+
+	<title>Exportera bilder</title>
+
+<p>För att exportera bilder från Shotwell via dra-och-släpp, dra bilderna från Shotwell till ett filhanterarfönster eller ditt skrivbord. De nya filerna kommer att vara kopior av bilderna i ditt bibliotek.</p>
+
+<p>
+Alternatively, select a set of photos and choose the <guiseq><gui>File</gui><gui>Export...</gui></guiseq> command or press <keyseq><key>Shift</key><key>Ctrl</key><key>E</key></keyseq>, which exports photos while letting you fine-tune the size and dimensions of your photo files.
+A window will appear allowing you to make several choices:
+</p>
+
+<list>
+<item><p>Ett format för export.</p>
+<list>
+<item><p>Välj <gui>Oförändrad</gui> för att exportera bilderna i deras originalformat utan redigeringar gjorda i Shotwell. RAW-bilder kommer att exporteras i deras original-RAW-format.</p></item>
+<item><p>Välj <gui>Aktuellt</gui> för att exportera bilder med ändringar gjorda i Shotwell. RAW-bilder kommer att exporteras i JPEG-format om du har redigerat dem i Shotwell, annars i deras ursprungliga RAW-format.</p></item>
+<item><p>Eller så kan du välja ett specifikt bildformat (JPEG, PNG, TIFF, BMP) för exporten. Ändringar gjorda i Shotwell kommer att inkluderas och Shotwell kommer att konvertera bilderna till målformatet.</p></item>
+</list>
+</item>
+<item><p>Bildkvaliteten för export (låg, mellan, hög eller maximal)</p></item>
+<item><p>En skalningsbegränsning (vilket betyder hur Shotwell bestämmer hur bilderna ska skalas) och önskad bildpunktsstorlek.</p></item>
+<item><p>Huruvida du vill exportera metadata som taggar eller betyg. Detta kan skydda din sekretess om du har geoplats-taggar eller taggar ingen bör se.</p></item>
+</list>
+
+<p>Om valt kommer Shotwell att skriva taggar, titlar och annan metadata till de nya filerna.</p>
+
+</page>

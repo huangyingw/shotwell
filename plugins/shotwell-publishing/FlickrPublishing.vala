@@ -4,8 +4,6 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-extern string hmac_sha1(string key, string message);
-
 public class FlickrService : Object, Spit.Pluggable, Spit.Publishing.Service {
     private const string ICON_FILENAME = "flickr.png";
 
@@ -13,7 +11,8 @@ public class FlickrService : Object, Spit.Pluggable, Spit.Publishing.Service {
     
     public FlickrService(GLib.File resource_directory) {
         if (icon_pixbuf_set == null)
-            icon_pixbuf_set = Resources.load_icon_set(resource_directory.get_child(ICON_FILENAME));
+            icon_pixbuf_set = Resources.load_from_resource
+                (Resources.RESOURCE_PATH + "/" + ICON_FILENAME);
     }
 
     public int get_pluggable_interface(int min_host_interface, int max_host_interface) {
@@ -436,7 +435,8 @@ public class FlickrPublisher : Spit.Publishing.Publisher, GLib.Object {
         Gtk.Builder builder = new Gtk.Builder();
         
         try {
-            builder.add_from_file(host.get_module_file().get_parent().get_child("flickr_pin_entry_pane.glade").get_path());
+            builder.add_from_resource (Resources.RESOURCE_PATH + "/" +
+                    "flickr_pin_entry_pane.ui");
         } catch (Error e) {
             warning("Could not parse UI file! Error: %s.", e.message);
             host.post_error(
@@ -585,9 +585,8 @@ public class FlickrPublisher : Spit.Publishing.Publisher, GLib.Object {
         try {
             // the trailing get_path() is required, since add_from_file can't cope
             // with File objects directly and expects a pathname instead.
-            builder.add_from_file(
-                host.get_module_file().get_parent().
-                get_child("flickr_publishing_options_pane.glade").get_path());
+            builder.add_from_resource(Resources.RESOURCE_PATH + "/" +
+                    "flickr_publishing_options_pane.ui");
         } catch (Error e) {
             warning("Could not parse UI file! Error: %s.", e.message);
             host.post_error(
@@ -1029,7 +1028,7 @@ internal class Session : Publishing.RESTSupport.Session {
         debug("signing key = '%s'", signing_key);
 
         // compute the signature
-        string signature = hmac_sha1(signing_key, signature_base_string);
+        string signature = RESTSupport.hmac_sha1(signing_key, signature_base_string);
         signature = Soup.URI.encode(signature, ENCODE_RFC_3986_EXTRA);
 
         debug("signature = '%s'", signature);

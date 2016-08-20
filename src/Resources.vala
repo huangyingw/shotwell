@@ -30,7 +30,7 @@ namespace Resources {
     public const string HOME_URL = "https://wiki.gnome.org/Apps/Shotwell";
     public const string FAQ_URL = "https://wiki.gnome.org/Apps/Shotwell/FAQ";
     public const string BUG_DB_URL = "https://wiki.gnome.org/Apps/Shotwell/ReportingABug";
-    public const string DIR_PATTERN_URI_SYSWIDE = "ghelp:shotwell?other-files";
+    public const string DIR_PATTERN_URI_SYSWIDE = "help:shotwell/other-files";
 
     private const string LIB = _LIB;
     private const string LIBEXECDIR = _LIBEXECDIR;
@@ -270,12 +270,9 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
     public const string DISPLAY_REJECTED_ONLY_TOOLTIP = _("Show only rejected photos");
     
     public const string DISPLAY_REJECTED_OR_HIGHER_MENU = _("All + _Rejected");
-    public const string DISPLAY_REJECTED_OR_HIGHER_LABEL = _("Show all photos, including rejected");
-    public const string DISPLAY_REJECTED_OR_HIGHER_TOOLTIP = _("Show all photos, including rejected");
+    public const string DISPLAY_REJECTED_OR_HIGHER_TOOLTIP = NC_("Tooltip", "Show all photos, including rejected");
     
     public const string DISPLAY_UNRATED_OR_HIGHER_MENU = _("_All Photos");
-    // Button label
-    public const string DISPLAY_UNRATED_OR_HIGHER_LABEL = _("Show all photos");
     // Button tooltip
     public const string DISPLAY_UNRATED_OR_HIGHER_TOOLTIP = _("Show all photos");
 
@@ -300,7 +297,7 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
 
     public const string EDIT_TITLE_MENU = _("Edit _Title...");
     // Button label
-    public const string EDIT_TITLE_LABEL = _("Edit Title");
+    public const string EDIT_TITLE_LABEL = NC_("Button Label", "Edit Title");
 
     public const string EDIT_COMMENT_MENU = _("Edit _Comment...");
     // Button label
@@ -315,7 +312,7 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
     public const string ADD_TAGS_MENU = _("Add _Tags...");
     public const string ADD_TAGS_CONTEXT_MENU = _("_Add Tags...");
     // Dialog title
-    public const string ADD_TAGS_TITLE = _("Add Tags");
+    public const string ADD_TAGS_TITLE = NC_("Dialog Title", "Add Tags");
 
     public const string PREFERENCES_MENU = _("_Preferences");
     
@@ -348,7 +345,7 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
                 HierarchicalTagUtilities.get_basename(names[1]));
         } else {
             // Undo/Redo command name (in Edit menu)
-            return _("Add Tags");
+            return C_("UndoRedo menu entry", "Add Tags");
         }
     }
     
@@ -705,6 +702,7 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
     private string START_MULTIDAY_DATE_FORMAT_STRING = null;
     private string END_MULTIDAY_DATE_FORMAT_STRING = null;
     private string START_MULTIMONTH_DATE_FORMAT_STRING = null;
+    private string END_MULTIMONTH_DATE_FORMAT_STRING = null;
         
     public void init () {
         // load application-wide stock icons as IconSets
@@ -786,18 +784,23 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
         /// Locale-specific starting date format for multi-date strings,
         /// i.e. the "Tue Mar 08" in "Tue Mar 08 - 10, 2006"
         /// See http://developer.gnome.org/glib/2.32/glib-GDateTime.html#g-date-time-format
-        START_MULTIDAY_DATE_FORMAT_STRING = _("%a %b %d");
+        START_MULTIDAY_DATE_FORMAT_STRING = C_("MultidayFormat", "%a %b %d");
         
         /// Locale-specific ending date format for multi-date strings,
         /// i.e. the "10, 2006" in "Tue Mar 08 - 10, 2006"
         /// See http://developer.gnome.org/glib/2.32/glib-GDateTime.html#g-date-time-format
-        END_MULTIDAY_DATE_FORMAT_STRING = _("%d, %Y");
+        END_MULTIDAY_DATE_FORMAT_STRING = C_("MultidayFormat", "%d, %Y");
         
         /// Locale-specific calendar date format for multi-month strings,
         /// i.e. the "Tue Mar 08" in "Tue Mar 08 to Mon Apr 06, 2006"
         /// See http://developer.gnome.org/glib/2.32/glib-GDateTime.html#g-date-time-format
-        START_MULTIMONTH_DATE_FORMAT_STRING = _("%a %b %d");
-        
+        START_MULTIMONTH_DATE_FORMAT_STRING = C_("MultimonthFormat", "%a %b %d");
+
+        /// Locale-specific calendar date format for multi-month strings,
+        /// i.e. the "Mon Apr 06, 2006" in "Tue Mar 08 to Mon Apr 06, 2006"
+        /// See http://developer.gnome.org/glib/2.32/glib-GDateTime.html#g-date-time-format
+        END_MULTIMONTH_DATE_FORMAT_STRING = C_("MultimonthFormat", "%a %b %d, %Y");
+
         // ...put everything back like we found it.
         if (old_messages != null) {
             Intl.setlocale(LocaleCategory.MESSAGES, old_messages);
@@ -861,7 +864,11 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
     }
 
     public string get_end_multimonth_span_format_string() {
-        return get_long_date_format_string();
+        if (END_MULTIMONTH_DATE_FORMAT_STRING == null) {
+            fetch_lc_time_format();
+        }
+
+        return END_MULTIMONTH_DATE_FORMAT_STRING;
     }
 
     public File get_ui(string filename) {
@@ -1023,7 +1030,7 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
             }
             
             string[] argv = new string[3];
-            argv[0] = "gnome-help";
+            argv[0] = "yelp";
             argv[1] = help_path;
             argv[2] = null;
             
@@ -1038,9 +1045,9 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
         
         // launch from system-installed help
         if (anchor != null) {
-            sys_show_uri(screen, "ghelp:shotwell" + anchor);
+            sys_show_uri(screen, "help:shotwell" + anchor);
         } else {
-            sys_show_uri(screen, "ghelp:shotwell");
+            sys_show_uri(screen, "help:shotwell");
         }
     }
     

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="import-f-spot" xml:lang="de">
+
+    <info>
+        <link type="guide" xref="index#import"/>
+        <desc>Shotwell can import all your photos and tags from the F-Spot photo manager.</desc>
+        
+        <link type="next" xref="import-camera"/>
+    </info>
+
+	<title>Importieren aus F-Spot</title>
+
+    <p>So importieren Sie eine bestehende Fotosammlung aus F-Spot:</p>
+    <steps>
+    <item><p>Wählen Sie <guiseq><gui>Datei</gui><gui>Importieren aus F-Spot</gui></guiseq>.</p></item>
+    <item><p>Wählen Sie anschließend die voreingestellte F-Spot-Bibliothek oder eine andere F-Spot-Datenbank. Wenn Sie aus einer anderen F-Spot-Datenbank importieren, wählen Sie einen Ordner und eine Datei im Dateiwähler.</p></item>
+    </steps>
+    <p>Shotwell will import your photos, together with their tags and other information.
+    Once the import is complete, you can select <gui>Last Import</gui> in the sidebar to see all photos successfully imported. The Events list will also show new entries for the dates corresponding to the imported photos.</p>
+</page>

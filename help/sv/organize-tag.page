@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="tag" xml:lang="sv">
+
+    <info>
+        <link type="guide" xref="index#organize"/>
+        <desc>Organisera bilder genom att sätta taggar på dem.</desc>
+        
+        <link type="seealso" xref="event"/>
+        
+        <link type="next" xref="title"/>
+    </info>
+
+	<title>Tagga bilder</title>
+
+    <p>Du kan tilldela en eller fler taggar för att markera bilder. En tagg kan vara en eller flera ord som du vill associera med dessa bilder.</p>
+    
+    <p>För att lägga till taggar till bilder, markera bilderna du skulle vilja lägga tagga, och gör sedan följande:</p>
+    
+    <list>
+		<item><p>Choose <guiseq><gui>Tags</gui><gui>Add Tags...</gui></guiseq>.</p></item>
+		<item><p>Skriv in <keyseq><key>Ctrl</key><key>T</key></keyseq>.</p></item>
+		<item><p>Dra de markerade bilderna och släpp dem på den önskade taggen.</p></item>
+    </list>
+     
+    <p>
+		When you use <keyseq><key>Ctrl</key><key>T</key></keyseq> or 
+		<guiseq><gui>Tags</gui><gui>Add Tags...</gui></guiseq> you can type
+		in the names of one or more tags, separated by commas.
+		Once you have created a tag, you can rename it by selecting that 
+		tag in the sidebar and choosing 
+		<guiseq><gui>Tags</gui><gui>Rename Tag "[name]"...</gui></guiseq>,
+		by rightclicking on it and choose <gui>Rename...</gui> or
+		double-click on the tag in the sidebar.
+	</p>
+    
+    <p>
+		To change which tags are associated with a particular photo, 
+		select that photo, choose 
+		<guiseq><gui>Tags</gui><gui>Modify Tags...</gui></guiseq> or
+		right-click on a photo and select <gui>Modify Tags...</gui> and
+		edit the comma separated list.
+		To remove a tag from one or more photos, first select that tag 
+		in the sidebar, then select the photos you would like to remove, 
+		and choose 
+		<guiseq><gui>Tags</gui><gui>Remove Tag "[name]" from Photos</gui></guiseq> 
+		or right-click on the photos an select 
+		<gui>Remove Tag "[name]" from Photos</gui>.
+	</p>
+    
+    <p>För att fullständigt ta bort en tagg, markera taggen i sidopanelen och välj <guiseq><gui>Taggar</gui><gui>Ta bort tagg "[namn]"</gui></guiseq> eller högerklicka och välj <gui>Ta bort tagg "[namn]"</gui>.</p>
+
+    <p>
+		When you create a tag, it will appear in the sidebar under the 
+		<gui>Tags</gui> item, which is hidden if there are no tags. Photos
+		can have multiple tags attached to them, and when you click on the
+		name of a given tag in the sidebar, you will see all the photos
+		associated with that tag.
+	</p>
+    
+    <section id="hierarchaicaltags">
+        <title>Hierarkiska taggar</title>
+            <p>Shotwell stödjer också hierarkiska taggar. Du kan flytta om dina taggar genom att dra och släppa en tagg på en annan. För att skapa en ny undertagg, högerklicka på en tagg och markera <gui>Ny</gui>.</p>
+            
+            <p>Hierarkiska taggar kan hjälpa dig att sortera din tagglista på sätt som bättre matchar hur du tänker eller jobbar - exempelvis kan du lagra platstaggar som ”Berg” eller ”Strand” under en överordnad tagg ”Platser”, vilken i sig själv kan placeras under taggen ”Sommarsemester”.</p>
+			
+			<p>Observera att ta bort en överordnad tagg också kommer att bort underordnade taggar.</p>
+    </section>
+</page>

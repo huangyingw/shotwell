@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="import-file" xml:lang="sv">
+
+    <info>
+        <link type="guide" xref="index#import"/>
+        <desc>Importera bilder som redan är sparade på din dator.</desc>
+        
+        <link type="next" xref="import-f-spot"/>
+    </info>
+
+	<title>Importera från din hårddisk</title>
+
+    <p>För att importera bildfiler från din hårddisk till Shotwell, dra dem från din filhanterare till Shotwell-fönstret.</p>
+    
+    <p>Alternatively, click <guiseq><gui>File</gui><gui>Import From Folder...</gui></guiseq> and select the folder containing the photos you want to import.</p>
+    
+    <p>Shotwell kommer att fråga huruvida du vill kopiera bildfiler till din biblioteksmapp (vanligtvis mappen <file>Bilder</file> i din hemkatalog) eller importera dem direkt utan att kopiera filerna.</p>
+    
+    <p>Om du håller ner <key>Ctrl</key> när du drar in bilder kommer Shotwell att kopiera bilderna till din biblioteksmapp utan att fråga. På samma sätt, om du håller ner <keyseq><key>Ctrl</key><key>Skift</key></keyseq> medan du drar in bilder kommer Shotwell att importera bilderna utan att kopiera dem.</p>
+
+    <p>När importen är färdig kan du välja <gui>Senaste import</gui> i sidopanelen för att se alla importerade bilder. Händelselistan kommer också att visa nya poster för datumen som motsvarar de importerade bilderna.</p>
+
+</page>

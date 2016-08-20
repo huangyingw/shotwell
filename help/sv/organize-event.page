@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="event" xml:lang="sv">
+
+    <info>
+        <link type="guide" xref="index#organize"/>
+        <desc>Gruppera bilder som tagits samtidigt. Lär dig att byta namn, sammanfoga och sortera händelser.</desc>
+        
+        <link type="next" xref="flag"/>
+    </info>
+
+	<title>Händelser</title>
+
+    <p>En händelse är en grupp bilder som tagits ungefär samtidigt. När du importerar bilder kontrollerar Shotwell när varje bild tagits. Det grupperar sedan bilderna i händelser.</p>
+    
+    <p>Välj <gui>Händelser</gui> från sidopanelen för att se dina bilder ordnade efter datum. Om du väljer en månad eller ett år från sidopanelen visas en lista över händelser i huvudfönstret. Dubbelklicka på en händelse för att se alla bilder som togs vid den tiden.</p>
+    
+    <p>Om en bild inte har inbäddad datum/tid-information kan inte Shotwell automatiskt placera dem i någon händelse. I detta fall kommer bilden att visas i vyn <gui>Ingen händelse</gui> tillgänglig från sidopanelen. Du kan fortfarande flytta bilden till vilken händelse du vill, som beskrivs nedan.</p>
+    
+    <section>
+    <title>Byta namn på händelser</title>
+
+    <p>To give an event a name rather than referring to it by its date, select the event, click <guiseq><gui>Events</gui><gui>Rename Event...</gui></guiseq> and enter a new name. Another way of renaming an event is to double-click its name in the sidebar; type a new name and then press <key>Enter</key>.</p>
+    </section>
+
+    <section>
+    <title>Flytta bilder mellan händelser</title>
+
+    <p>Även om bilder inledningsvis grupperas i händelser efter datum kan du flytta bilder mellan händelser. För att göra detta, dra en bild till sidopanelen och släpp den på en händelse.</p>
+    </section>
+
+    <section>
+    <title>Skapa och sammanfoga händelser</title>
+    <p>För att skapa nya händelser, markera de bilder du skulle vilja ha i en ny händelse och klicka <guiseq><gui>Händelser</gui><gui>Ny händelse</gui></guiseq>.</p>
+    <p>För att sammanfoga händelser, välj <guiseq><gui>Händelser</gui></guiseq> från sidopanelen och sedan, medan du håller ner <key>Ctrl</key>, klicka på händelserna du vill sammanfoga i huvudfönstret. Slutligen, klicka på <guiseq><gui>Händelser</gui><gui>Sammanfoga händelser</gui></guiseq>.</p>
+    </section>
+
+    <section>
+    <title>Sortera händelser</title>
+
+    <p>Händelser visas i ett träd i sidopanelen, ordnade efter år och månad efter de tidigaste bilderna i en händelse. För att ändra sorteringsordning, klicka <guiseq><gui>Visa</gui><gui>Sortera händelser</gui></guiseq> och välj antingen stigande eller fallande.</p>
+    
+    </section>
+    
+    <section>
+    <title>Ändra bilden som representerar varje händelse.</title>
+
+    <p>If you select the <gui>Events</gui> item in the sidebar, you'll see a single photo which represents each event. This is called the key photo.</p>
+
+    <p>Som standard använder Shotwell den första bilden i varje händelse som dess nyckelbild. För att använda en annan nyckelbild, markera bilden och välj <guiseq><gui>Bilder</gui><gui>Skapa nyckelbild för händelse</gui></guiseq>.</p>
+    
+    </section>
+    
+</page>
