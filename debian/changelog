@@ -21,7 +21,8 @@ shotwell (0.23.5-1) unstable; urgency=medium
       + Fix files mode in temp-source tarball.
       Thanks to Alexis Bienvenüe <pado@passoire.fr>.
   * New debian/shotwell-common.postrm to rebuild icon cache after
-    purge / remove.
+    purge / remove with test that gtk-update-icon-cache exists 
+    and is executable.
   * Change minimal version of libgee-0.8 to 0.10.
   * debian/control:
     - Add itstool to Build-Depends.

@@ -9,7 +9,9 @@ case "$1" in
     #
     # rebuild icon cache
     #
-    gtk-update-icon-cache /usr/share/icons/hicolor
+    if [ -x gtk-update-icon-cache ] ; then
+	gtk-update-icon-cache /usr/share/icons/hicolor
+    fi
 
 esac
 
