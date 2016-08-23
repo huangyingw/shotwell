@@ -3,6 +3,8 @@ shotwell (0.23.5-1) unstable; urgency=medium
   * New upstream release (Closes: #824164, #825788).
     - Renew Patches.
     - Remove upstream applied patches:
+      + 0001-buildflags.patch
+      + 0005-hardening.patch
       + 0500-Port-to-webkit2gtk-40.patch
       + 0501-Dont-pack-webview-into-a-scrolled-window.patch
       + 0502-Have-all-soup-sessions-validate-TLS-certificates.patch
@@ -13,6 +15,8 @@ shotwell (0.23.5-1) unstable; urgency=medium
       + Fix crash open files with external editor (Closes: #806248).
       + Fix background color drawing & fix missing scroll bars in events
         (Closes: #823835).
+      + Fix install shotwell-settings-migrator and
+        shotwell-video-thumbnailer in /usr/lib/shotwell(Closes: #833236).
     - debian/copyright: Move copyright to Software Freedom Conservancy Inc.
   * Rewrite rule at debian/watch.
   * debian/rules:
@@ -20,23 +24,22 @@ shotwell (0.23.5-1) unstable; urgency=medium
       + Fix date handling for non-English locales.
       + Fix files mode in temp-source tarball.
       Thanks to Alexis Bienvenüe <pado@passoire.fr>.
+    - Remove unwanted la files.
   * New debian/shotwell-common.postrm to rebuild icon cache after
-    purge / remove with test that gtk-update-icon-cache exists 
+    purge / remove with test that gtk-update-icon-cache exists
     and is executable.
-  * Change minimal version of libgee-0.8 to 0.10.
   * debian/control:
     - Add itstool to Build-Depends.
+    - Change minimal version of libgee-0.8 to 0.10.
   * debian/shotwell.install:
     - Remove missing apport/shotwell.py.
   * Move debian/manpages to debian/shotwell.manpages and use the
-    upstream man page.
+    upstream manpage.
   * Remove man page from shotwell-common to prevent overlapping
     file installation.
   * New patches/0600-remove_wrong_marco.patch to remove the wrong macro 'R'.
-  * debian/rules:
-    - Remove unwanted la files.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Sun, 26 Jun 2016 11:15:06 +0200
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Tue, 23 Aug 2016 23:35:56 +0200
 
 shotwell (0.22.1-1) unstable; urgency=medium
 
