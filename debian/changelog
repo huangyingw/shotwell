@@ -1,4 +1,4 @@
-shotwell (0.23.5-1) unstable; urgency=medium
+shotwell (0.23.6-1) unstable; urgency=medium
 
   * New upstream release (Closes: #824164, #825788).
     - Renew Patches.
@@ -31,6 +31,8 @@ shotwell (0.23.5-1) unstable; urgency=medium
   * debian/control:
     - Add itstool to Build-Depends.
     - Change minimal version of libgee-0.8 to 0.10.
+    - Switch Depends from dbus-x11 to
+      default-dbus-session-bus | dbus-session-bus (Closes: #836046).
   * debian/shotwell.install:
     - Remove missing apport/shotwell.py.
   * Move debian/manpages to debian/shotwell.manpages and use the
@@ -39,7 +41,7 @@ shotwell (0.23.5-1) unstable; urgency=medium
     file installation.
   * New patches/0600-remove_wrong_marco.patch to remove the wrong macro 'R'.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Tue, 23 Aug 2016 23:35:56 +0200
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 31 Aug 2016 05:38:35 +0200
 
 shotwell (0.22.1-1) unstable; urgency=medium
 
