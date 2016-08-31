@@ -6,7 +6,19 @@
         <desc>Tegye közzé fényképeit a Facebook, Flickr, Picasa Webalbumok vagy más oldalakon</desc>
         
         <link type="next" xref="share-send"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Úr Balázs</mal:name>
+      <mal:email>urbalazs at gmail dot hu</mal:email>
+      <mal:years>2015, 2016.</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Közzététel a weben</title>
 
@@ -23,9 +35,7 @@
     
     <p>Egy gyűjtemény kiválasztott fényképeinek közzétételéhez válassza a <guiseq><gui>Szerkesztés</gui><gui>Beállítások</gui></guiseq> menüpontot, és kattintson a <gui>Bővítmények</gui> lapra azon szolgáltatás bővítményének bekapcsolásához, amelyen közzé szeretné tenni a fényképeket. Ezután válassza a <guiseq><gui>Fájl</gui><gui>Közzététel</gui></guiseq> menüpontot, nyomja meg a <gui>Közzététel</gui> eszköztárgombot, vagy használja a <keyseq><key>Ctrl</key><key>P</key></keyseq> kombinációt. A megjelenő ablakban kiválaszthat egy közzétételi szolgáltatást. Ezután be kell jelentkeznie vagy létre kell hoznia egy fiókot.</p>
     
-    <p>Publishing to Facebook requires you to grant certain permissions to the Shotwell Facebook application.
-    You only need to grant these permissions once, when you first associate Shotwell with your Facebook account.
-</p>
+    <p>A Facebookra való közzétételhez bizonyos jogosultságokat kell adnia a Shotwell Facebook alkalmazásnak. Ezeket a jogosultságokat csak egyszer kell megadnia, amikor a Shotwell programot először társítja a Facebook fiókjához.</p>
     <note style="advanced"><p>You will be only able to publish images with at most the permission you granted to the Shotwell Facebook application</p></note>
     
     <p>Ehhez hasonlóan a Flickr-en való közzétételhez is be kell jelentkeznie, és engedélyeznie kell a Shotwell Connectnek a fiók elérését.</p>

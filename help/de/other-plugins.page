@@ -3,12 +3,30 @@
 
     <info>
         <link type="guide" xref="index#other"/>
-        <desc>Extend Shotwell's functionality dynamically.</desc>
+        <desc>Die Funktionalität von Shotwell dynamisch erweitern.</desc>
         
         <link type="next" xref="other-missing"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2009, 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014-2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014, 2106</mal:years>
+    </mal:credit>
+  </info>
 
-	<title>Erweiterungen</title>
+	<title>Plugins</title>
         <p>
             Shotwell can be used with <em>plugins</em>, which are companion shared libraries that can
             add support for new publishing destinations or new slideshow transitions.

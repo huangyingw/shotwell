@@ -3,18 +3,32 @@
 
     <info>
         <link type="guide" xref="index#organize"/>
-        <desc>Find photos and videos in your collection by a variety of criteria.</desc>
+        <desc>So finden Sie Fotos und Videos in Ihrer Sammlung anhand einer Vielzahl von Kriterien.</desc>
         
         <link type="next" xref="tag"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2009, 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014-2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014, 2106</mal:years>
+    </mal:credit>
+  </info>
 
     <title>Suchen</title>
     
-    <p>
-        There are two ways to search in Shotwell: the filter toolbar, and with a saved search.  The search 
-        bar allows you to quickly search the current view for certain criteria.  Saved Searches feature
-        more complex search criteria and persist in the sidebar between sessions.
-    </p>
+    <p>Es gibt zwei Suchmöglichkeiten in Shotwell: Die Filter-Werkzeugleiste und gespeicherte Suchen. Die Suchleiste ermöglicht eine schneller Suche in der aktuellen Ansicht nach einem bestimmten Kriterium. Gespeicherte Suchen bieten komplexere Suchkriterien und verbleiben über Sitzungen hinweg in der Seitenleiste.</p>
     
     <section id="searchbar">
         <title>Suchleiste</title>

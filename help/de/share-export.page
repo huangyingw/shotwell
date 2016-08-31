@@ -6,7 +6,25 @@
         <desc>So kopieren Sie Fotos aus Shotwell heraus, um sie anderweitig abzulegen.</desc>
         
         <link type="next" xref="share-print"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2009, 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014-2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014, 2106</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Fotos exportieren</title>
 
@@ -18,7 +36,7 @@ A window will appear allowing you to make several choices:
 </p>
 
 <list>
-<item><p>Ein Exportformat.</p>
+<item><p>Ein Format für den Export.</p>
 <list>
 <item><p>Wählen Sie <gui>Unverändert</gui>, um Fotos im ursprünglichen Format ohne Veränderungen durch Shotwell zu exportieren. RAW-Fotos werden im ursprünglichen RAW-Format exportiert.</p></item>
 <item><p>Wählen Sie <gui>Aktuell</gui>, um Fotos einschließlich aller in Shotwell gemachter Änderungen zu exportieren. RAW-Fotos werden im JPEG-Format exportiert, wenn sie diese in Shotwell bearbeitet haben, anderenfalls werden sie in ihren RAW-Format exportiert.</p></item>

@@ -6,7 +6,19 @@
         <desc>Keep the Shotwell library in sync with photo files on disk.</desc>
         
         <link type="next" xref="other-plugins"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Úr Balázs</mal:name>
+      <mal:email>urbalazs at gmail dot hu</mal:email>
+      <mal:years>2015, 2016.</mal:years>
+    </mal:credit>
+  </info>
 
    <title>Photo files</title>
 
@@ -34,7 +46,7 @@
         <table frame="all" rules="rowgroups">
             <tbody>
                 <tr>
-                    <td><p> </p></td> <td><p><em>Symbol</em></p></td> <td><p><em>Meaning</em></p></td> <td><p><em>Example</em></p></td>
+                    <td><p> </p></td> <td><p><em>Szimbólum</em></p></td> <td><p><em>Jelentés</em></p></td> <td><p><em>Példa</em></p></td>
                 </tr>
             </tbody>
             <tbody>

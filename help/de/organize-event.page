@@ -6,7 +6,25 @@
         <desc>Group photos together that were taken at the same time. Learn how to rename, merge, and sort events.</desc>
         
         <link type="next" xref="flag"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2009, 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014-2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014, 2106</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Ereignisse</title>
 
@@ -21,25 +39,25 @@
     </p>
     
     <section>
-    <title>Renaming events</title>
+    <title>Ereignisse umbenennen</title>
 
     <p>To give an event a name rather than referring to it by its date, select the event, click <guiseq><gui>Events</gui><gui>Rename Event...</gui></guiseq> and enter a new name. Another way of renaming an event is to double-click its name in the sidebar; type a new name and then press <key>Enter</key>.</p>
     </section>
 
     <section>
-    <title>Moving photos between events</title>
+    <title>Fotos zwischen Ereignissen verschieben</title>
 
     <p>Even though photos are initially grouped into events by their date, you can move photos between events. To do this, drag any photo to the sidebar and drop it on an event.</p>
     </section>
 
     <section>
-    <title>Creating and merging events</title>
+    <title>Ereignisse erstellen und zusammenführen</title>
     <p>To create a new event, select the photos you would like in the new event and click <guiseq><gui>Events</gui><gui>New Event</gui></guiseq>.</p>
     <p>To merge events, select <guiseq><gui>Events</gui></guiseq> from the sidebar, then, while holding down <key>Ctrl</key> click on the events you want to merge in the main window area. Finally, click <guiseq><gui>Events</gui><gui>Merge Events</gui></guiseq>.</p>
     </section>
 
     <section>
-    <title>Sorting events</title>
+    <title>Ereignisse sortieren</title>
 
     <p>Events are displayed in a tree in the sidebar, organized by the year and month of the earliest photo in the event.
     To change the event sort order, click <guiseq><gui>View</gui><gui>Sort Events</gui></guiseq> and select either ascending or descending.</p>

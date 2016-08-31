@@ -20,6 +20,7 @@
 #include <gee.h>
 #include <gio/gio.h>
 #include <locale.h>
+#include <langinfo.h>
 #include <gdk/gdk.h>
 
 #define _g_free0(var) (var = (g_free (var), NULL))
@@ -517,7 +518,7 @@ gchar* resources_launch_editor_failed (GError* err) {
 	result = _tmp3_;
 #line 335 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 490 "Resources.c"
+#line 491 "Resources.c"
 }
 
 
@@ -531,7 +532,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 	_tmp0__length1 = names_length1;
 #line 339 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0__length1 == 1) {
-#line 504 "Resources.c"
+#line 505 "Resources.c"
 		const gchar* _tmp1_ = NULL;
 		gchar** _tmp2_ = NULL;
 		gint _tmp2__length1 = 0;
@@ -562,7 +563,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 		result = _tmp7_;
 #line 340 "/home/jens/Source/shotwell/src/Resources.vala"
 		return result;
-#line 535 "Resources.c"
+#line 536 "Resources.c"
 	} else {
 		gchar** _tmp8_ = NULL;
 		gint _tmp8__length1 = 0;
@@ -572,7 +573,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 		_tmp8__length1 = names_length1;
 #line 341 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (_tmp8__length1 == 2) {
-#line 545 "Resources.c"
+#line 546 "Resources.c"
 			const gchar* _tmp9_ = NULL;
 			gchar** _tmp10_ = NULL;
 			gint _tmp10__length1 = 0;
@@ -620,7 +621,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 			result = _tmp19_;
 #line 343 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 593 "Resources.c"
+#line 594 "Resources.c"
 		} else {
 			const gchar* _tmp20_ = NULL;
 			gchar* _tmp21_ = NULL;
@@ -632,7 +633,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 			result = _tmp21_;
 #line 348 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 605 "Resources.c"
+#line 606 "Resources.c"
 		}
 	}
 }
@@ -655,7 +656,7 @@ gchar* resources_delete_tag_menu (const gchar* name) {
 	result = _tmp2_;
 #line 353 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 628 "Resources.c"
+#line 629 "Resources.c"
 }
 
 
@@ -676,7 +677,7 @@ gchar* resources_delete_tag_label (const gchar* name) {
 	result = _tmp2_;
 #line 357 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 649 "Resources.c"
+#line 650 "Resources.c"
 }
 
 
@@ -697,7 +698,7 @@ gchar* resources_rename_tag_menu (const gchar* name) {
 	result = _tmp2_;
 #line 366 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 670 "Resources.c"
+#line 671 "Resources.c"
 }
 
 
@@ -723,7 +724,7 @@ gchar* resources_rename_tag_label (const gchar* old_name, const gchar* new_name)
 	result = _tmp3_;
 #line 370 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 696 "Resources.c"
+#line 697 "Resources.c"
 }
 
 
@@ -739,20 +740,20 @@ gchar* resources_tag_photos_label (const gchar* name, gint count) {
 	_tmp1_ = count;
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp1_ == 1) {
-#line 712 "Resources.c"
+#line 713 "Resources.c"
 		const gchar* _tmp2_ = NULL;
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp2_ = _ ("Tag Photo as \"%s\"");
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp2_;
-#line 718 "Resources.c"
+#line 719 "Resources.c"
 	} else {
 		const gchar* _tmp3_ = NULL;
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp3_ = _ ("Tag Photos as \"%s\"");
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp3_;
-#line 725 "Resources.c"
+#line 726 "Resources.c"
 	}
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = name;
@@ -762,7 +763,7 @@ gchar* resources_tag_photos_label (const gchar* name, gint count) {
 	result = _tmp5_;
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 735 "Resources.c"
+#line 736 "Resources.c"
 }
 
 
@@ -778,20 +779,20 @@ gchar* resources_tag_photos_tooltip (const gchar* name, gint count) {
 	_tmp1_ = count;
 #line 383 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp1_ == 1) {
-#line 751 "Resources.c"
+#line 752 "Resources.c"
 		const gchar* _tmp2_ = NULL;
 #line 383 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp2_ = _ ("Tag the selected photo as \"%s\"");
 #line 383 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp2_;
-#line 757 "Resources.c"
+#line 758 "Resources.c"
 	} else {
 		const gchar* _tmp3_ = NULL;
 #line 384 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp3_ = _ ("Tag the selected photos as \"%s\"");
 #line 384 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp3_;
-#line 764 "Resources.c"
+#line 765 "Resources.c"
 	}
 #line 383 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = name;
@@ -801,7 +802,7 @@ gchar* resources_tag_photos_tooltip (const gchar* name, gint count) {
 	result = _tmp5_;
 #line 383 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 774 "Resources.c"
+#line 775 "Resources.c"
 }
 
 
@@ -817,20 +818,20 @@ gchar* resources_untag_photos_menu (const gchar* name, gint count) {
 	_tmp1_ = count;
 #line 388 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp1_ == 1) {
-#line 790 "Resources.c"
+#line 791 "Resources.c"
 		const gchar* _tmp2_ = NULL;
 #line 388 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp2_ = _ ("Remove Tag \"%s\" From _Photo");
 #line 388 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp2_;
-#line 796 "Resources.c"
+#line 797 "Resources.c"
 	} else {
 		const gchar* _tmp3_ = NULL;
 #line 389 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp3_ = _ ("Remove Tag \"%s\" From _Photos");
 #line 389 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp3_;
-#line 803 "Resources.c"
+#line 804 "Resources.c"
 	}
 #line 388 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = name;
@@ -840,7 +841,7 @@ gchar* resources_untag_photos_menu (const gchar* name, gint count) {
 	result = _tmp5_;
 #line 388 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 813 "Resources.c"
+#line 814 "Resources.c"
 }
 
 
@@ -856,20 +857,20 @@ gchar* resources_untag_photos_label (const gchar* name, gint count) {
 	_tmp1_ = count;
 #line 393 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp1_ == 1) {
-#line 829 "Resources.c"
+#line 830 "Resources.c"
 		const gchar* _tmp2_ = NULL;
 #line 393 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp2_ = _ ("Remove Tag \"%s\" From Photo");
 #line 393 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp2_;
-#line 835 "Resources.c"
+#line 836 "Resources.c"
 	} else {
 		const gchar* _tmp3_ = NULL;
 #line 394 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp3_ = _ ("Remove Tag \"%s\" From Photos");
 #line 394 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp3_;
-#line 842 "Resources.c"
+#line 843 "Resources.c"
 	}
 #line 393 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = name;
@@ -879,7 +880,7 @@ gchar* resources_untag_photos_label (const gchar* name, gint count) {
 	result = _tmp5_;
 #line 393 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 852 "Resources.c"
+#line 853 "Resources.c"
 }
 
 
@@ -900,7 +901,7 @@ gchar* resources_rename_tag_exists_message (const gchar* name) {
 	result = _tmp2_;
 #line 398 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 873 "Resources.c"
+#line 874 "Resources.c"
 }
 
 
@@ -921,7 +922,7 @@ gchar* resources_rename_search_exists_message (const gchar* name) {
 	result = _tmp2_;
 #line 402 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 894 "Resources.c"
+#line 895 "Resources.c"
 }
 
 
@@ -947,7 +948,7 @@ gchar* resources_rename_search_label (const gchar* old_name, const gchar* new_na
 	result = _tmp3_;
 #line 414 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 920 "Resources.c"
+#line 921 "Resources.c"
 }
 
 
@@ -968,7 +969,7 @@ gchar* resources_delete_search_label (const gchar* name) {
 	result = _tmp2_;
 #line 418 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 941 "Resources.c"
+#line 942 "Resources.c"
 }
 
 
@@ -981,27 +982,27 @@ const gchar* resources_rating_menu (Rating rating) {
 	switch (_tmp0_) {
 #line 422 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_REJECTED:
-#line 954 "Resources.c"
+#line 955 "Resources.c"
 		{
 #line 424 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_REJECTED_MENU;
 #line 424 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 960 "Resources.c"
+#line 961 "Resources.c"
 		}
 #line 422 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_UNRATED:
-#line 964 "Resources.c"
+#line 965 "Resources.c"
 		{
 #line 426 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_UNRATED_MENU;
 #line 426 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 970 "Resources.c"
+#line 971 "Resources.c"
 		}
 #line 422 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_ONE:
-#line 974 "Resources.c"
+#line 975 "Resources.c"
 		{
 			const gchar* _tmp1_ = NULL;
 #line 428 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1010,11 +1011,11 @@ const gchar* resources_rating_menu (Rating rating) {
 			result = _tmp1_;
 #line 428 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 983 "Resources.c"
+#line 984 "Resources.c"
 		}
 #line 422 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_TWO:
-#line 987 "Resources.c"
+#line 988 "Resources.c"
 		{
 			const gchar* _tmp2_ = NULL;
 #line 430 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1023,11 +1024,11 @@ const gchar* resources_rating_menu (Rating rating) {
 			result = _tmp2_;
 #line 430 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 996 "Resources.c"
+#line 997 "Resources.c"
 		}
 #line 422 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_THREE:
-#line 1000 "Resources.c"
+#line 1001 "Resources.c"
 		{
 			const gchar* _tmp3_ = NULL;
 #line 432 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1036,11 +1037,11 @@ const gchar* resources_rating_menu (Rating rating) {
 			result = _tmp3_;
 #line 432 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1009 "Resources.c"
+#line 1010 "Resources.c"
 		}
 #line 422 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FOUR:
-#line 1013 "Resources.c"
+#line 1014 "Resources.c"
 		{
 			const gchar* _tmp4_ = NULL;
 #line 434 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1049,11 +1050,11 @@ const gchar* resources_rating_menu (Rating rating) {
 			result = _tmp4_;
 #line 434 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1022 "Resources.c"
+#line 1023 "Resources.c"
 		}
 #line 422 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FIVE:
-#line 1026 "Resources.c"
+#line 1027 "Resources.c"
 		{
 			const gchar* _tmp5_ = NULL;
 #line 436 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1062,7 +1063,7 @@ const gchar* resources_rating_menu (Rating rating) {
 			result = _tmp5_;
 #line 436 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1035 "Resources.c"
+#line 1036 "Resources.c"
 		}
 		default:
 		{
@@ -1070,7 +1071,7 @@ const gchar* resources_rating_menu (Rating rating) {
 			result = RESOURCES_RATE_UNRATED_MENU;
 #line 438 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1043 "Resources.c"
+#line 1044 "Resources.c"
 		}
 	}
 }
@@ -1085,27 +1086,27 @@ const gchar* resources_rating_label (Rating rating) {
 	switch (_tmp0_) {
 #line 443 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_REJECTED:
-#line 1058 "Resources.c"
+#line 1059 "Resources.c"
 		{
 #line 445 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_REJECTED_LABEL;
 #line 445 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1064 "Resources.c"
+#line 1065 "Resources.c"
 		}
 #line 443 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_UNRATED:
-#line 1068 "Resources.c"
+#line 1069 "Resources.c"
 		{
 #line 447 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_UNRATED_LABEL;
 #line 447 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1074 "Resources.c"
+#line 1075 "Resources.c"
 		}
 #line 443 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_ONE:
-#line 1078 "Resources.c"
+#line 1079 "Resources.c"
 		{
 			const gchar* _tmp1_ = NULL;
 #line 449 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1114,11 +1115,11 @@ const gchar* resources_rating_label (Rating rating) {
 			result = _tmp1_;
 #line 449 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1087 "Resources.c"
+#line 1088 "Resources.c"
 		}
 #line 443 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_TWO:
-#line 1091 "Resources.c"
+#line 1092 "Resources.c"
 		{
 			const gchar* _tmp2_ = NULL;
 #line 451 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1127,11 +1128,11 @@ const gchar* resources_rating_label (Rating rating) {
 			result = _tmp2_;
 #line 451 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1100 "Resources.c"
+#line 1101 "Resources.c"
 		}
 #line 443 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_THREE:
-#line 1104 "Resources.c"
+#line 1105 "Resources.c"
 		{
 			const gchar* _tmp3_ = NULL;
 #line 453 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1140,11 +1141,11 @@ const gchar* resources_rating_label (Rating rating) {
 			result = _tmp3_;
 #line 453 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1113 "Resources.c"
+#line 1114 "Resources.c"
 		}
 #line 443 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FOUR:
-#line 1117 "Resources.c"
+#line 1118 "Resources.c"
 		{
 			const gchar* _tmp4_ = NULL;
 #line 455 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1153,11 +1154,11 @@ const gchar* resources_rating_label (Rating rating) {
 			result = _tmp4_;
 #line 455 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1126 "Resources.c"
+#line 1127 "Resources.c"
 		}
 #line 443 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FIVE:
-#line 1130 "Resources.c"
+#line 1131 "Resources.c"
 		{
 			const gchar* _tmp5_ = NULL;
 #line 457 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1166,7 +1167,7 @@ const gchar* resources_rating_label (Rating rating) {
 			result = _tmp5_;
 #line 457 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1139 "Resources.c"
+#line 1140 "Resources.c"
 		}
 		default:
 		{
@@ -1174,7 +1175,7 @@ const gchar* resources_rating_label (Rating rating) {
 			result = RESOURCES_RATE_UNRATED_LABEL;
 #line 459 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1147 "Resources.c"
+#line 1148 "Resources.c"
 		}
 	}
 }
@@ -1189,27 +1190,27 @@ const gchar* resources_rating_combo_box (Rating rating) {
 	switch (_tmp0_) {
 #line 464 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_REJECTED:
-#line 1162 "Resources.c"
+#line 1163 "Resources.c"
 		{
 #line 466 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_REJECTED_COMBO_BOX;
 #line 466 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1168 "Resources.c"
+#line 1169 "Resources.c"
 		}
 #line 464 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_UNRATED:
-#line 1172 "Resources.c"
+#line 1173 "Resources.c"
 		{
 #line 468 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_UNRATED_COMBO_BOX;
 #line 468 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1178 "Resources.c"
+#line 1179 "Resources.c"
 		}
 #line 464 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_ONE:
-#line 1182 "Resources.c"
+#line 1183 "Resources.c"
 		{
 			const gchar* _tmp1_ = NULL;
 #line 470 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1218,11 +1219,11 @@ const gchar* resources_rating_combo_box (Rating rating) {
 			result = _tmp1_;
 #line 470 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1191 "Resources.c"
+#line 1192 "Resources.c"
 		}
 #line 464 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_TWO:
-#line 1195 "Resources.c"
+#line 1196 "Resources.c"
 		{
 			const gchar* _tmp2_ = NULL;
 #line 472 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1231,11 +1232,11 @@ const gchar* resources_rating_combo_box (Rating rating) {
 			result = _tmp2_;
 #line 472 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1204 "Resources.c"
+#line 1205 "Resources.c"
 		}
 #line 464 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_THREE:
-#line 1208 "Resources.c"
+#line 1209 "Resources.c"
 		{
 			const gchar* _tmp3_ = NULL;
 #line 474 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1244,11 +1245,11 @@ const gchar* resources_rating_combo_box (Rating rating) {
 			result = _tmp3_;
 #line 474 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1217 "Resources.c"
+#line 1218 "Resources.c"
 		}
 #line 464 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FOUR:
-#line 1221 "Resources.c"
+#line 1222 "Resources.c"
 		{
 			const gchar* _tmp4_ = NULL;
 #line 476 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1257,11 +1258,11 @@ const gchar* resources_rating_combo_box (Rating rating) {
 			result = _tmp4_;
 #line 476 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1230 "Resources.c"
+#line 1231 "Resources.c"
 		}
 #line 464 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FIVE:
-#line 1234 "Resources.c"
+#line 1235 "Resources.c"
 		{
 			const gchar* _tmp5_ = NULL;
 #line 478 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1270,7 +1271,7 @@ const gchar* resources_rating_combo_box (Rating rating) {
 			result = _tmp5_;
 #line 478 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1243 "Resources.c"
+#line 1244 "Resources.c"
 		}
 		default:
 		{
@@ -1278,7 +1279,7 @@ const gchar* resources_rating_combo_box (Rating rating) {
 			result = RESOURCES_RATE_UNRATED_MENU;
 #line 480 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1251 "Resources.c"
+#line 1252 "Resources.c"
 		}
 	}
 }
@@ -1293,7 +1294,7 @@ gchar* resources_get_rating_filter_tooltip (RatingFilter filter) {
 	switch (_tmp0_) {
 #line 485 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_REJECTED_OR_HIGHER:
-#line 1266 "Resources.c"
+#line 1267 "Resources.c"
 		{
 			gchar* _tmp1_ = NULL;
 #line 487 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1302,11 +1303,11 @@ gchar* resources_get_rating_filter_tooltip (RatingFilter filter) {
 			result = _tmp1_;
 #line 487 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1275 "Resources.c"
+#line 1276 "Resources.c"
 		}
 #line 485 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_ONE_OR_HIGHER:
-#line 1279 "Resources.c"
+#line 1280 "Resources.c"
 		{
 			const gchar* _tmp2_ = NULL;
 			gchar* _tmp3_ = NULL;
@@ -1318,11 +1319,11 @@ gchar* resources_get_rating_filter_tooltip (RatingFilter filter) {
 			result = _tmp3_;
 #line 490 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1291 "Resources.c"
+#line 1292 "Resources.c"
 		}
 #line 485 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_TWO_OR_HIGHER:
-#line 1295 "Resources.c"
+#line 1296 "Resources.c"
 		{
 			const gchar* _tmp4_ = NULL;
 			gchar* _tmp5_ = NULL;
@@ -1334,11 +1335,11 @@ gchar* resources_get_rating_filter_tooltip (RatingFilter filter) {
 			result = _tmp5_;
 #line 493 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1307 "Resources.c"
+#line 1308 "Resources.c"
 		}
 #line 485 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_THREE_OR_HIGHER:
-#line 1311 "Resources.c"
+#line 1312 "Resources.c"
 		{
 			const gchar* _tmp6_ = NULL;
 			gchar* _tmp7_ = NULL;
@@ -1350,11 +1351,11 @@ gchar* resources_get_rating_filter_tooltip (RatingFilter filter) {
 			result = _tmp7_;
 #line 496 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1323 "Resources.c"
+#line 1324 "Resources.c"
 		}
 #line 485 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_FOUR_OR_HIGHER:
-#line 1327 "Resources.c"
+#line 1328 "Resources.c"
 		{
 			const gchar* _tmp8_ = NULL;
 			gchar* _tmp9_ = NULL;
@@ -1366,13 +1367,13 @@ gchar* resources_get_rating_filter_tooltip (RatingFilter filter) {
 			result = _tmp9_;
 #line 499 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1339 "Resources.c"
+#line 1340 "Resources.c"
 		}
 #line 485 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_FIVE_ONLY:
 #line 485 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_FIVE_OR_HIGHER:
-#line 1345 "Resources.c"
+#line 1346 "Resources.c"
 		{
 			const gchar* _tmp10_ = NULL;
 			gchar* _tmp11_ = NULL;
@@ -1384,11 +1385,11 @@ gchar* resources_get_rating_filter_tooltip (RatingFilter filter) {
 			result = _tmp11_;
 #line 503 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1357 "Resources.c"
+#line 1358 "Resources.c"
 		}
 #line 485 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_REJECTED_ONLY:
-#line 1361 "Resources.c"
+#line 1362 "Resources.c"
 		{
 			gchar* _tmp12_ = NULL;
 #line 506 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1397,12 +1398,12 @@ gchar* resources_get_rating_filter_tooltip (RatingFilter filter) {
 			result = _tmp12_;
 #line 506 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1370 "Resources.c"
+#line 1371 "Resources.c"
 		}
 		default:
 #line 485 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_UNRATED_OR_HIGHER:
-#line 1375 "Resources.c"
+#line 1376 "Resources.c"
 		{
 			gchar* _tmp13_ = NULL;
 #line 510 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1411,7 +1412,7 @@ gchar* resources_get_rating_filter_tooltip (RatingFilter filter) {
 			result = _tmp13_;
 #line 510 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1384 "Resources.c"
+#line 1385 "Resources.c"
 		}
 	}
 }
@@ -1426,7 +1427,7 @@ gchar* resources_rating_progress (Rating rating) {
 	switch (_tmp0_) {
 #line 515 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_REJECTED:
-#line 1399 "Resources.c"
+#line 1400 "Resources.c"
 		{
 			gchar* _tmp1_ = NULL;
 #line 517 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1435,11 +1436,11 @@ gchar* resources_rating_progress (Rating rating) {
 			result = _tmp1_;
 #line 517 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1408 "Resources.c"
+#line 1409 "Resources.c"
 		}
 #line 515 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_UNRATED:
-#line 1412 "Resources.c"
+#line 1413 "Resources.c"
 		{
 			gchar* _tmp2_ = NULL;
 #line 519 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1448,11 +1449,11 @@ gchar* resources_rating_progress (Rating rating) {
 			result = _tmp2_;
 #line 519 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1421 "Resources.c"
+#line 1422 "Resources.c"
 		}
 #line 515 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_ONE:
-#line 1425 "Resources.c"
+#line 1426 "Resources.c"
 		{
 			const gchar* _tmp3_ = NULL;
 			gchar* _tmp4_ = NULL;
@@ -1464,11 +1465,11 @@ gchar* resources_rating_progress (Rating rating) {
 			result = _tmp4_;
 #line 521 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1437 "Resources.c"
+#line 1438 "Resources.c"
 		}
 #line 515 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_TWO:
-#line 1441 "Resources.c"
+#line 1442 "Resources.c"
 		{
 			const gchar* _tmp5_ = NULL;
 			gchar* _tmp6_ = NULL;
@@ -1480,11 +1481,11 @@ gchar* resources_rating_progress (Rating rating) {
 			result = _tmp6_;
 #line 523 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1453 "Resources.c"
+#line 1454 "Resources.c"
 		}
 #line 515 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_THREE:
-#line 1457 "Resources.c"
+#line 1458 "Resources.c"
 		{
 			const gchar* _tmp7_ = NULL;
 			gchar* _tmp8_ = NULL;
@@ -1496,11 +1497,11 @@ gchar* resources_rating_progress (Rating rating) {
 			result = _tmp8_;
 #line 525 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1469 "Resources.c"
+#line 1470 "Resources.c"
 		}
 #line 515 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FOUR:
-#line 1473 "Resources.c"
+#line 1474 "Resources.c"
 		{
 			const gchar* _tmp9_ = NULL;
 			gchar* _tmp10_ = NULL;
@@ -1512,11 +1513,11 @@ gchar* resources_rating_progress (Rating rating) {
 			result = _tmp10_;
 #line 527 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1485 "Resources.c"
+#line 1486 "Resources.c"
 		}
 #line 515 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FIVE:
-#line 1489 "Resources.c"
+#line 1490 "Resources.c"
 		{
 			const gchar* _tmp11_ = NULL;
 			gchar* _tmp12_ = NULL;
@@ -1528,7 +1529,7 @@ gchar* resources_rating_progress (Rating rating) {
 			result = _tmp12_;
 #line 529 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1501 "Resources.c"
+#line 1502 "Resources.c"
 		}
 		default:
 		{
@@ -1539,7 +1540,7 @@ gchar* resources_rating_progress (Rating rating) {
 			result = _tmp13_;
 #line 531 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1512 "Resources.c"
+#line 1513 "Resources.c"
 		}
 	}
 }
@@ -1554,7 +1555,7 @@ gchar* resources_get_stars (Rating rating) {
 	switch (_tmp0_) {
 #line 538 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_ONE:
-#line 1527 "Resources.c"
+#line 1528 "Resources.c"
 		{
 			gchar* _tmp1_ = NULL;
 #line 540 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1563,11 +1564,11 @@ gchar* resources_get_stars (Rating rating) {
 			result = _tmp1_;
 #line 540 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1536 "Resources.c"
+#line 1537 "Resources.c"
 		}
 #line 538 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_TWO:
-#line 1540 "Resources.c"
+#line 1541 "Resources.c"
 		{
 			gchar* _tmp2_ = NULL;
 #line 542 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1576,11 +1577,11 @@ gchar* resources_get_stars (Rating rating) {
 			result = _tmp2_;
 #line 542 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1549 "Resources.c"
+#line 1550 "Resources.c"
 		}
 #line 538 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_THREE:
-#line 1553 "Resources.c"
+#line 1554 "Resources.c"
 		{
 			gchar* _tmp3_ = NULL;
 #line 544 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1589,11 +1590,11 @@ gchar* resources_get_stars (Rating rating) {
 			result = _tmp3_;
 #line 544 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1562 "Resources.c"
+#line 1563 "Resources.c"
 		}
 #line 538 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FOUR:
-#line 1566 "Resources.c"
+#line 1567 "Resources.c"
 		{
 			gchar* _tmp4_ = NULL;
 #line 546 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1602,11 +1603,11 @@ gchar* resources_get_stars (Rating rating) {
 			result = _tmp4_;
 #line 546 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1575 "Resources.c"
+#line 1576 "Resources.c"
 		}
 #line 538 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FIVE:
-#line 1579 "Resources.c"
+#line 1580 "Resources.c"
 		{
 			gchar* _tmp5_ = NULL;
 #line 548 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -1615,7 +1616,7 @@ gchar* resources_get_stars (Rating rating) {
 			result = _tmp5_;
 #line 548 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1588 "Resources.c"
+#line 1589 "Resources.c"
 		}
 		default:
 		{
@@ -1626,7 +1627,7 @@ gchar* resources_get_stars (Rating rating) {
 			result = _tmp6_;
 #line 550 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1599 "Resources.c"
+#line 1600 "Resources.c"
 		}
 	}
 }
@@ -1641,7 +1642,7 @@ GdkPixbuf* resources_get_rating_trinket (Rating rating, gint scale) {
 	switch (_tmp0_) {
 #line 555 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_REJECTED:
-#line 1614 "Resources.c"
+#line 1615 "Resources.c"
 		{
 			gint _tmp1_ = 0;
 			GdkPixbuf* _tmp2_ = NULL;
@@ -1653,11 +1654,11 @@ GdkPixbuf* resources_get_rating_trinket (Rating rating, gint scale) {
 			result = _tmp2_;
 #line 557 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1626 "Resources.c"
+#line 1627 "Resources.c"
 		}
 #line 555 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_ONE:
-#line 1630 "Resources.c"
+#line 1631 "Resources.c"
 		{
 			gint _tmp3_ = 0;
 			GdkPixbuf* _tmp4_ = NULL;
@@ -1669,11 +1670,11 @@ GdkPixbuf* resources_get_rating_trinket (Rating rating, gint scale) {
 			result = _tmp4_;
 #line 560 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1642 "Resources.c"
+#line 1643 "Resources.c"
 		}
 #line 555 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_TWO:
-#line 1646 "Resources.c"
+#line 1647 "Resources.c"
 		{
 			gint _tmp5_ = 0;
 			GdkPixbuf* _tmp6_ = NULL;
@@ -1685,11 +1686,11 @@ GdkPixbuf* resources_get_rating_trinket (Rating rating, gint scale) {
 			result = _tmp6_;
 #line 562 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1658 "Resources.c"
+#line 1659 "Resources.c"
 		}
 #line 555 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_THREE:
-#line 1662 "Resources.c"
+#line 1663 "Resources.c"
 		{
 			gint _tmp7_ = 0;
 			GdkPixbuf* _tmp8_ = NULL;
@@ -1701,11 +1702,11 @@ GdkPixbuf* resources_get_rating_trinket (Rating rating, gint scale) {
 			result = _tmp8_;
 #line 564 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1674 "Resources.c"
+#line 1675 "Resources.c"
 		}
 #line 555 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FOUR:
-#line 1678 "Resources.c"
+#line 1679 "Resources.c"
 		{
 			gint _tmp9_ = 0;
 			GdkPixbuf* _tmp10_ = NULL;
@@ -1717,11 +1718,11 @@ GdkPixbuf* resources_get_rating_trinket (Rating rating, gint scale) {
 			result = _tmp10_;
 #line 566 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1690 "Resources.c"
+#line 1691 "Resources.c"
 		}
 #line 555 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FIVE:
-#line 1694 "Resources.c"
+#line 1695 "Resources.c"
 		{
 			gint _tmp11_ = 0;
 			GdkPixbuf* _tmp12_ = NULL;
@@ -1733,7 +1734,7 @@ GdkPixbuf* resources_get_rating_trinket (Rating rating, gint scale) {
 			result = _tmp12_;
 #line 568 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1706 "Resources.c"
+#line 1707 "Resources.c"
 		}
 		default:
 		{
@@ -1741,7 +1742,7 @@ GdkPixbuf* resources_get_rating_trinket (Rating rating, gint scale) {
 			result = NULL;
 #line 570 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1714 "Resources.c"
+#line 1715 "Resources.c"
 		}
 	}
 }
@@ -2377,7 +2378,7 @@ void resources_generate_rating_strings (void) {
 	_g_free0 (label_base);
 #line 574 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (menu_base);
-#line 2350 "Resources.c"
+#line 2351 "Resources.c"
 }
 
 
@@ -2399,14 +2400,14 @@ gchar* resources_jump_to_file_failed (GError* err) {
 	result = _tmp3_;
 #line 685 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2372 "Resources.c"
+#line 2373 "Resources.c"
 }
 
 
 static void _dim_pixbuf_resources_add_stock_icon_modify (GdkPixbuf* pixbuf, gpointer self) {
 #line 726 "/home/jens/Source/shotwell/src/Resources.vala"
 	dim_pixbuf (pixbuf);
-#line 2379 "Resources.c"
+#line 2380 "Resources.c"
 }
 
 
@@ -2614,7 +2615,7 @@ void resources_init (void) {
 	resources_generate_rating_strings ();
 #line 707 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (icons_dir);
-#line 2587 "Resources.c"
+#line 2588 "Resources.c"
 }
 
 
@@ -2644,22 +2645,21 @@ void resources_fetch_lc_time_format (void) {
 	const gchar* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
 	const gchar* _tmp7_ = NULL;
-	const gchar* _tmp9_ = NULL;
-	gchar* _tmp10_ = NULL;
-	const gchar* _tmp11_ = NULL;
-	gchar* _tmp12_ = NULL;
-	const gchar* _tmp13_ = NULL;
-	gchar* _tmp14_ = NULL;
-	const gchar* _tmp15_ = NULL;
-	gchar* _tmp16_ = NULL;
-	const gchar* _tmp17_ = NULL;
-	gchar* _tmp18_ = NULL;
-	const gchar* _tmp19_ = NULL;
-	gchar* _tmp20_ = NULL;
-	const gchar* _tmp21_ = NULL;
-	gchar* _tmp22_ = NULL;
-	const gchar* _tmp23_ = NULL;
-	const gchar* _tmp25_ = NULL;
+	gchar* _tmp9_ = NULL;
+	const gchar* _tmp10_ = NULL;
+	gchar* _tmp11_ = NULL;
+	const gchar* _tmp12_ = NULL;
+	gchar* _tmp13_ = NULL;
+	const gchar* _tmp14_ = NULL;
+	gchar* _tmp15_ = NULL;
+	const gchar* _tmp16_ = NULL;
+	gchar* _tmp17_ = NULL;
+	const gchar* _tmp18_ = NULL;
+	gchar* _tmp19_ = NULL;
+	const gchar* _tmp20_ = NULL;
+	gchar* _tmp21_ = NULL;
+	const gchar* _tmp22_ = NULL;
+	const gchar* _tmp24_ = NULL;
 #line 756 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = g_getenv ("LANGUAGE");
 #line 756 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -2699,84 +2699,82 @@ void resources_fetch_lc_time_format (void) {
 #line 2669 "Resources.c"
 	}
 #line 773 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp9_ = _ ("%-I:%M %p");
-#line 773 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp10_ = g_strdup (_tmp9_);
+	_tmp9_ = g_strdup ("%X");
 #line 773 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_HH_MM_FORMAT_STRING);
 #line 773 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_HH_MM_FORMAT_STRING = _tmp10_;
+	resources_HH_MM_FORMAT_STRING = _tmp9_;
 #line 778 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp11_ = _ ("%-I:%M:%S %p");
+	_tmp10_ = nl_langinfo (T_FMT);
 #line 778 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp12_ = g_strdup (_tmp11_);
+	_tmp11_ = g_strdup (_tmp10_);
 #line 778 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_HH_MM_SS_FORMAT_STRING);
 #line 778 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_HH_MM_SS_FORMAT_STRING = _tmp12_;
+	resources_HH_MM_SS_FORMAT_STRING = _tmp11_;
 #line 782 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp13_ = _ ("%a %b %d, %Y");
+	_tmp12_ = _ ("%a %b %d, %Y");
 #line 782 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp14_ = g_strdup (_tmp13_);
+	_tmp13_ = g_strdup (_tmp12_);
 #line 782 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_LONG_DATE_FORMAT_STRING);
 #line 782 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_LONG_DATE_FORMAT_STRING = _tmp14_;
+	resources_LONG_DATE_FORMAT_STRING = _tmp13_;
 #line 787 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp15_ = C_ ("MultidayFormat", "%a %b %d");
+	_tmp14_ = C_ ("MultidayFormat", "%a %b %d");
 #line 787 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp16_ = g_strdup (_tmp15_);
+	_tmp15_ = g_strdup (_tmp14_);
 #line 787 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_START_MULTIDAY_DATE_FORMAT_STRING);
 #line 787 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_START_MULTIDAY_DATE_FORMAT_STRING = _tmp16_;
+	resources_START_MULTIDAY_DATE_FORMAT_STRING = _tmp15_;
 #line 792 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp17_ = C_ ("MultidayFormat", "%d, %Y");
+	_tmp16_ = C_ ("MultidayFormat", "%d, %Y");
 #line 792 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp18_ = g_strdup (_tmp17_);
+	_tmp17_ = g_strdup (_tmp16_);
 #line 792 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_END_MULTIDAY_DATE_FORMAT_STRING);
 #line 792 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_END_MULTIDAY_DATE_FORMAT_STRING = _tmp18_;
+	resources_END_MULTIDAY_DATE_FORMAT_STRING = _tmp17_;
 #line 797 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp19_ = C_ ("MultimonthFormat", "%a %b %d");
+	_tmp18_ = C_ ("MultimonthFormat", "%a %b %d");
 #line 797 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp20_ = g_strdup (_tmp19_);
+	_tmp19_ = g_strdup (_tmp18_);
 #line 797 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_START_MULTIMONTH_DATE_FORMAT_STRING);
 #line 797 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_START_MULTIMONTH_DATE_FORMAT_STRING = _tmp20_;
+	resources_START_MULTIMONTH_DATE_FORMAT_STRING = _tmp19_;
 #line 802 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp21_ = C_ ("MultimonthFormat", "%a %b %d, %Y");
+	_tmp20_ = C_ ("MultimonthFormat", "%a %b %d, %Y");
 #line 802 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp22_ = g_strdup (_tmp21_);
+	_tmp21_ = g_strdup (_tmp20_);
 #line 802 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_END_MULTIMONTH_DATE_FORMAT_STRING);
 #line 802 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_END_MULTIMONTH_DATE_FORMAT_STRING = _tmp22_;
+	resources_END_MULTIMONTH_DATE_FORMAT_STRING = _tmp21_;
 #line 805 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp23_ = old_messages;
+	_tmp22_ = old_messages;
 #line 805 "/home/jens/Source/shotwell/src/Resources.vala"
-	if (_tmp23_ != NULL) {
-#line 2731 "Resources.c"
-		const gchar* _tmp24_ = NULL;
+	if (_tmp22_ != NULL) {
+#line 2729 "Resources.c"
+		const gchar* _tmp23_ = NULL;
 #line 806 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp24_ = old_messages;
+		_tmp23_ = old_messages;
 #line 806 "/home/jens/Source/shotwell/src/Resources.vala"
-		setlocale (LC_MESSAGES, _tmp24_);
-#line 2737 "Resources.c"
+		setlocale (LC_MESSAGES, _tmp23_);
+#line 2735 "Resources.c"
 	}
 #line 809 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp25_ = old_language;
+	_tmp24_ = old_language;
 #line 809 "/home/jens/Source/shotwell/src/Resources.vala"
-	if (_tmp25_ != NULL) {
-#line 2743 "Resources.c"
-		const gchar* _tmp26_ = NULL;
+	if (_tmp24_ != NULL) {
+#line 2741 "Resources.c"
+		const gchar* _tmp25_ = NULL;
 #line 810 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp26_ = old_language;
+		_tmp25_ = old_language;
 #line 810 "/home/jens/Source/shotwell/src/Resources.vala"
-		g_setenv ("LANGUAGE", _tmp26_, TRUE);
-#line 2749 "Resources.c"
+		g_setenv ("LANGUAGE", _tmp25_, TRUE);
+#line 2747 "Resources.c"
 	}
 #line 753 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (lc_time);
@@ -2784,7 +2782,7 @@ void resources_fetch_lc_time_format (void) {
 	_g_free0 (old_messages);
 #line 753 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (old_language);
-#line 2757 "Resources.c"
+#line 2755 "Resources.c"
 }
 
 
@@ -2803,7 +2801,7 @@ gchar* resources_get_hh_mm_format_string (void) {
 	if (_tmp0_ == NULL) {
 #line 820 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2776 "Resources.c"
+#line 2774 "Resources.c"
 	}
 #line 823 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_HH_MM_FORMAT_STRING;
@@ -2813,7 +2811,7 @@ gchar* resources_get_hh_mm_format_string (void) {
 	result = _tmp2_;
 #line 823 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2786 "Resources.c"
+#line 2784 "Resources.c"
 }
 
 
@@ -2828,7 +2826,7 @@ gchar* resources_get_hh_mm_ss_format_string (void) {
 	if (_tmp0_ == NULL) {
 #line 828 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2801 "Resources.c"
+#line 2799 "Resources.c"
 	}
 #line 831 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_HH_MM_SS_FORMAT_STRING;
@@ -2838,7 +2836,7 @@ gchar* resources_get_hh_mm_ss_format_string (void) {
 	result = _tmp2_;
 #line 831 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2811 "Resources.c"
+#line 2809 "Resources.c"
 }
 
 
@@ -2853,7 +2851,7 @@ gchar* resources_get_long_date_format_string (void) {
 	if (_tmp0_ == NULL) {
 #line 836 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2826 "Resources.c"
+#line 2824 "Resources.c"
 	}
 #line 839 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_LONG_DATE_FORMAT_STRING;
@@ -2863,7 +2861,7 @@ gchar* resources_get_long_date_format_string (void) {
 	result = _tmp2_;
 #line 839 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2836 "Resources.c"
+#line 2834 "Resources.c"
 }
 
 
@@ -2878,7 +2876,7 @@ gchar* resources_get_start_multiday_span_format_string (void) {
 	if (_tmp0_ == NULL) {
 #line 844 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2851 "Resources.c"
+#line 2849 "Resources.c"
 	}
 #line 847 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_START_MULTIDAY_DATE_FORMAT_STRING;
@@ -2888,7 +2886,7 @@ gchar* resources_get_start_multiday_span_format_string (void) {
 	result = _tmp2_;
 #line 847 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2861 "Resources.c"
+#line 2859 "Resources.c"
 }
 
 
@@ -2903,7 +2901,7 @@ gchar* resources_get_end_multiday_span_format_string (void) {
 	if (_tmp0_ == NULL) {
 #line 852 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2876 "Resources.c"
+#line 2874 "Resources.c"
 	}
 #line 855 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_END_MULTIDAY_DATE_FORMAT_STRING;
@@ -2913,7 +2911,7 @@ gchar* resources_get_end_multiday_span_format_string (void) {
 	result = _tmp2_;
 #line 855 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2886 "Resources.c"
+#line 2884 "Resources.c"
 }
 
 
@@ -2928,7 +2926,7 @@ gchar* resources_get_start_multimonth_span_format_string (void) {
 	if (_tmp0_ == NULL) {
 #line 860 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2901 "Resources.c"
+#line 2899 "Resources.c"
 	}
 #line 863 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_START_MULTIMONTH_DATE_FORMAT_STRING;
@@ -2938,7 +2936,7 @@ gchar* resources_get_start_multimonth_span_format_string (void) {
 	result = _tmp2_;
 #line 863 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2911 "Resources.c"
+#line 2909 "Resources.c"
 }
 
 
@@ -2953,7 +2951,7 @@ gchar* resources_get_end_multimonth_span_format_string (void) {
 	if (_tmp0_ == NULL) {
 #line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2926 "Resources.c"
+#line 2924 "Resources.c"
 	}
 #line 871 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_END_MULTIMONTH_DATE_FORMAT_STRING;
@@ -2963,7 +2961,7 @@ gchar* resources_get_end_multimonth_span_format_string (void) {
 	result = _tmp2_;
 #line 871 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2936 "Resources.c"
+#line 2934 "Resources.c"
 }
 
 
@@ -3000,14 +2998,14 @@ GFile* resources_get_ui (const gchar* filename) {
 	result = _tmp6_;
 #line 875 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2973 "Resources.c"
+#line 2971 "Resources.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 891 "/home/jens/Source/shotwell/src/Resources.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 2980 "Resources.c"
+#line 2978 "Resources.c"
 }
 
 
@@ -3021,7 +3019,7 @@ GdkPixbuf* resources_get_noninterpretable_badge_pixbuf (void) {
 	_tmp0_ = resources_noninterpretable_badge_pixbuf;
 #line 882 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ == NULL) {
-#line 2994 "Resources.c"
+#line 2992 "Resources.c"
 		{
 			GdkPixbuf* _tmp1_ = NULL;
 			GFile* _tmp2_ = NULL;
@@ -3067,7 +3065,7 @@ GdkPixbuf* resources_get_noninterpretable_badge_pixbuf (void) {
 			_tmp1_ = _tmp11_;
 #line 884 "/home/jens/Source/shotwell/src/Resources.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3040 "Resources.c"
+#line 3038 "Resources.c"
 				goto __catch416_g_error;
 			}
 #line 884 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3080,7 +3078,7 @@ GdkPixbuf* resources_get_noninterpretable_badge_pixbuf (void) {
 			resources_noninterpretable_badge_pixbuf = _tmp12_;
 #line 883 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_object_unref0 (_tmp1_);
-#line 3053 "Resources.c"
+#line 3051 "Resources.c"
 		}
 		goto __finally416;
 		__catch416_g_error:
@@ -3098,7 +3096,7 @@ GdkPixbuf* resources_get_noninterpretable_badge_pixbuf (void) {
 "e: %s", _tmp13_);
 #line 883 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_error_free0 (err);
-#line 3070 "Resources.c"
+#line 3068 "Resources.c"
 		}
 		__finally416:
 #line 883 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3109,7 +3107,7 @@ GdkPixbuf* resources_get_noninterpretable_badge_pixbuf (void) {
 			g_clear_error (&_inner_error_);
 #line 883 "/home/jens/Source/shotwell/src/Resources.vala"
 			return NULL;
-#line 3081 "Resources.c"
+#line 3079 "Resources.c"
 		}
 	}
 #line 891 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3120,7 +3118,7 @@ GdkPixbuf* resources_get_noninterpretable_badge_pixbuf (void) {
 	result = _tmp15_;
 #line 891 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 3092 "Resources.c"
+#line 3090 "Resources.c"
 }
 
 
@@ -3165,7 +3163,7 @@ GtkIconTheme* resources_get_icon_theme_engine (void) {
 	result = icon_theme;
 #line 898 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 3137 "Resources.c"
+#line 3135 "Resources.c"
 }
 
 
@@ -3196,7 +3194,7 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 	_tmp0_ = resources_scaled_icon_cache;
 #line 904 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ != NULL) {
-#line 3168 "Resources.c"
+#line 3166 "Resources.c"
 		gchar* scaled_name = NULL;
 		const gchar* _tmp1_ = NULL;
 		gint _tmp2_ = 0;
@@ -3220,7 +3218,7 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 		_tmp6_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp5_);
 #line 906 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (_tmp6_) {
-#line 3192 "Resources.c"
+#line 3190 "Resources.c"
 			GeeHashMap* _tmp7_ = NULL;
 			const gchar* _tmp8_ = NULL;
 			gpointer _tmp9_ = NULL;
@@ -3236,17 +3234,17 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 			_g_free0 (scaled_name);
 #line 907 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 3208 "Resources.c"
+#line 3206 "Resources.c"
 		}
 #line 904 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_free0 (scaled_name);
-#line 3212 "Resources.c"
+#line 3210 "Resources.c"
 	}
 #line 912 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp10_ = resources_icon_cache;
 #line 912 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp10_ == NULL) {
-#line 3218 "Resources.c"
+#line 3216 "Resources.c"
 		GeeHashMap* _tmp11_ = NULL;
 #line 913 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp11_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, GDK_TYPE_PIXBUF, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -3254,7 +3252,7 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 		_g_object_unref0 (resources_icon_cache);
 #line 913 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_icon_cache = _tmp11_;
-#line 3226 "Resources.c"
+#line 3224 "Resources.c"
 	}
 #line 916 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp12_ = resources_icon_cache;
@@ -3268,7 +3266,7 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 	_tmp15_ = pixbuf;
 #line 917 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp15_ == NULL) {
-#line 3240 "Resources.c"
+#line 3238 "Resources.c"
 		const gchar* _tmp16_ = NULL;
 		GdkPixbuf* _tmp17_ = NULL;
 		GdkPixbuf* _tmp18_ = NULL;
@@ -3293,7 +3291,7 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 			_g_object_unref0 (pixbuf);
 #line 920 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 3265 "Resources.c"
+#line 3263 "Resources.c"
 		}
 #line 922 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp19_ = resources_icon_cache;
@@ -3303,7 +3301,7 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 		_tmp21_ = pixbuf;
 #line 922 "/home/jens/Source/shotwell/src/Resources.vala"
 		gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp20_, _tmp21_);
-#line 3275 "Resources.c"
+#line 3273 "Resources.c"
 	}
 #line 925 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp22_ = scale;
@@ -3313,7 +3311,7 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 		result = pixbuf;
 #line 926 "/home/jens/Source/shotwell/src/Resources.vala"
 		return result;
-#line 3285 "Resources.c"
+#line 3283 "Resources.c"
 	}
 #line 928 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp23_ = pixbuf;
@@ -3327,7 +3325,7 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 	_tmp26_ = resources_scaled_icon_cache;
 #line 930 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp26_ == NULL) {
-#line 3299 "Resources.c"
+#line 3297 "Resources.c"
 		GeeHashMap* _tmp27_ = NULL;
 #line 931 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp27_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, GDK_TYPE_PIXBUF, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -3335,7 +3333,7 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 		_g_object_unref0 (resources_scaled_icon_cache);
 #line 931 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_scaled_icon_cache = _tmp27_;
-#line 3307 "Resources.c"
+#line 3305 "Resources.c"
 	}
 #line 933 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp28_ = resources_scaled_icon_cache;
@@ -3359,7 +3357,7 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 	_g_object_unref0 (pixbuf);
 #line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 3331 "Resources.c"
+#line 3329 "Resources.c"
 }
 
 
@@ -3391,7 +3389,7 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 	icons_dir = _tmp3_;
 #line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 	pixbuf = NULL;
-#line 3363 "Resources.c"
+#line 3361 "Resources.c"
 	{
 		GdkPixbuf* _tmp4_ = NULL;
 		const gchar* _tmp5_ = NULL;
@@ -3424,7 +3422,7 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 		_tmp4_ = _tmp11_;
 #line 943 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3396 "Resources.c"
+#line 3394 "Resources.c"
 			goto __catch417_g_error;
 		}
 #line 943 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3437,7 +3435,7 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 		pixbuf = _tmp12_;
 #line 942 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (_tmp4_);
-#line 3409 "Resources.c"
+#line 3407 "Resources.c"
 	}
 	goto __finally417;
 	__catch417_g_error:
@@ -3460,7 +3458,7 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 		g_critical ("Resources.vala:945: Unable to load icon %s: %s", _tmp13_, _tmp15_);
 #line 942 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_error_free0 (err);
-#line 3432 "Resources.c"
+#line 3430 "Resources.c"
 	}
 	__finally417:
 #line 942 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3475,7 +3473,7 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 		g_clear_error (&_inner_error_);
 #line 942 "/home/jens/Source/shotwell/src/Resources.vala"
 		return NULL;
-#line 3447 "Resources.c"
+#line 3445 "Resources.c"
 	}
 #line 948 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp16_ = pixbuf;
@@ -3489,13 +3487,13 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 		_g_object_unref0 (icons_dir);
 #line 949 "/home/jens/Source/shotwell/src/Resources.vala"
 		return result;
-#line 3461 "Resources.c"
+#line 3459 "Resources.c"
 	}
 #line 951 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp18_ = scale;
 #line 951 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp18_ > 0) {
-#line 3467 "Resources.c"
+#line 3465 "Resources.c"
 		GdkPixbuf* _tmp19_ = NULL;
 		gint _tmp20_ = 0;
 		GdkPixbuf* _tmp21_ = NULL;
@@ -3509,7 +3507,7 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 		_g_object_unref0 (_tmp17_);
 #line 951 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp17_ = _tmp21_;
-#line 3481 "Resources.c"
+#line 3479 "Resources.c"
 	} else {
 		GdkPixbuf* _tmp22_ = NULL;
 		GdkPixbuf* _tmp23_ = NULL;
@@ -3521,7 +3519,7 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 		_g_object_unref0 (_tmp17_);
 #line 951 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp17_ = _tmp23_;
-#line 3493 "Resources.c"
+#line 3491 "Resources.c"
 	}
 #line 951 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp17_;
@@ -3531,7 +3529,7 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 	_g_object_unref0 (icons_dir);
 #line 951 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 3503 "Resources.c"
+#line 3501 "Resources.c"
 }
 
 
@@ -3549,7 +3547,7 @@ void resources_add_stock_icon (GFile* file, const gchar* stock_id) {
 	g_return_if_fail (stock_id != NULL);
 #line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	pixbuf = NULL;
-#line 3521 "Resources.c"
+#line 3519 "Resources.c"
 	{
 		GdkPixbuf* _tmp0_ = NULL;
 		GFile* _tmp1_ = NULL;
@@ -3574,7 +3572,7 @@ void resources_add_stock_icon (GFile* file, const gchar* stock_id) {
 		_tmp0_ = _tmp5_;
 #line 957 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3546 "Resources.c"
+#line 3544 "Resources.c"
 			goto __catch418_g_error;
 		}
 #line 957 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3587,7 +3585,7 @@ void resources_add_stock_icon (GFile* file, const gchar* stock_id) {
 		pixbuf = _tmp6_;
 #line 956 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (_tmp0_);
-#line 3559 "Resources.c"
+#line 3557 "Resources.c"
 	}
 	goto __finally418;
 	__catch418_g_error:
@@ -3610,7 +3608,7 @@ void resources_add_stock_icon (GFile* file, const gchar* stock_id) {
 		g_critical ("Resources.vala:959: Unable to load stock icon %s: %s", _tmp7_, _tmp9_);
 #line 956 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_error_free0 (err);
-#line 3582 "Resources.c"
+#line 3580 "Resources.c"
 	}
 	__finally418:
 #line 956 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3623,7 +3621,7 @@ void resources_add_stock_icon (GFile* file, const gchar* stock_id) {
 		g_clear_error (&_inner_error_);
 #line 956 "/home/jens/Source/shotwell/src/Resources.vala"
 		return;
-#line 3595 "Resources.c"
+#line 3593 "Resources.c"
 	}
 #line 962 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp10_ = pixbuf;
@@ -3641,7 +3639,7 @@ void resources_add_stock_icon (GFile* file, const gchar* stock_id) {
 	_gtk_icon_set_unref0 (icon_set);
 #line 954 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (pixbuf);
-#line 3613 "Resources.c"
+#line 3611 "Resources.c"
 }
 
 
@@ -3706,7 +3704,7 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 	_tmp12_ = info;
 #line 975 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp12_ == NULL) {
-#line 3678 "Resources.c"
+#line 3676 "Resources.c"
 		const gchar* _tmp13_ = NULL;
 #line 976 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp13_ = stock_id;
@@ -3718,7 +3716,7 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 		_g_object_unref0 (icon_theme);
 #line 977 "/home/jens/Source/shotwell/src/Resources.vala"
 		return;
-#line 3690 "Resources.c"
+#line 3688 "Resources.c"
 	}
 	{
 		GdkPixbuf* pix = NULL;
@@ -3740,7 +3738,7 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 		pix = _tmp15_;
 #line 981 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3712 "Resources.c"
+#line 3710 "Resources.c"
 			goto __catch419_g_error;
 		}
 #line 982 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3749,7 +3747,7 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 		_tmp16__target = modify_target;
 #line 982 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (_tmp16_ != NULL) {
-#line 3721 "Resources.c"
+#line 3719 "Resources.c"
 			ResourcesAddStockIconModify _tmp17_ = NULL;
 			void* _tmp17__target = NULL;
 			GdkPixbuf* _tmp18_ = NULL;
@@ -3761,7 +3759,7 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 			_tmp18_ = pix;
 #line 983 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp17_ (_tmp18_, _tmp17__target);
-#line 3733 "Resources.c"
+#line 3731 "Resources.c"
 		}
 #line 985 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp19_ = pix;
@@ -3781,7 +3779,7 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 		_gtk_icon_set_unref0 (icon_set);
 #line 980 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (pix);
-#line 3753 "Resources.c"
+#line 3751 "Resources.c"
 	}
 	goto __finally419;
 	__catch419_g_error:
@@ -3801,7 +3799,7 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 		g_debug ("Resources.vala:988: %s", _tmp25_);
 #line 980 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_error_free0 (err);
-#line 3773 "Resources.c"
+#line 3771 "Resources.c"
 	}
 	__finally419:
 #line 980 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3816,13 +3814,13 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 		g_clear_error (&_inner_error_);
 #line 980 "/home/jens/Source/shotwell/src/Resources.vala"
 		return;
-#line 3788 "Resources.c"
+#line 3786 "Resources.c"
 	}
 #line 968 "/home/jens/Source/shotwell/src/Resources.vala"
 	_gtk_icon_info_free0 (info);
 #line 968 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (icon_theme);
-#line 3794 "Resources.c"
+#line 3792 "Resources.c"
 }
 
 
@@ -3870,7 +3868,7 @@ gchar* resources_get_help_path (void) {
 	_tmp9_ = g_file_query_exists (_tmp8_, NULL);
 #line 1003 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp9_) {
-#line 3842 "Resources.c"
+#line 3840 "Resources.c"
 		gchar* help_path = NULL;
 		GFile* _tmp10_ = NULL;
 		gchar* _tmp11_ = NULL;
@@ -3890,7 +3888,7 @@ gchar* resources_get_help_path (void) {
 		_tmp13_ = g_str_has_suffix (_tmp12_, "/");
 #line 1008 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (!_tmp13_) {
-#line 3862 "Resources.c"
+#line 3860 "Resources.c"
 			const gchar* _tmp14_ = NULL;
 			gchar* _tmp15_ = NULL;
 #line 1009 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3901,7 +3899,7 @@ gchar* resources_get_help_path (void) {
 			_g_free0 (help_path);
 #line 1009 "/home/jens/Source/shotwell/src/Resources.vala"
 			help_path = _tmp15_;
-#line 3873 "Resources.c"
+#line 3871 "Resources.c"
 		}
 #line 1012 "/home/jens/Source/shotwell/src/Resources.vala"
 		result = help_path;
@@ -3911,7 +3909,7 @@ gchar* resources_get_help_path (void) {
 		_g_object_unref0 (help_dir);
 #line 1012 "/home/jens/Source/shotwell/src/Resources.vala"
 		return result;
-#line 3883 "Resources.c"
+#line 3881 "Resources.c"
 	}
 #line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = NULL;
@@ -3921,7 +3919,7 @@ gchar* resources_get_help_path (void) {
 	_g_object_unref0 (help_dir);
 #line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 3893 "Resources.c"
+#line 3891 "Resources.c"
 }
 
 
@@ -3941,7 +3939,7 @@ void resources_launch_help (GdkScreen* screen, const gchar* anchor, GError** err
 	_tmp1_ = help_path;
 #line 1024 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp1_ != NULL) {
-#line 3913 "Resources.c"
+#line 3911 "Resources.c"
 		const gchar* _tmp2_ = NULL;
 		gchar** argv = NULL;
 		gchar** _tmp6_ = NULL;
@@ -3977,7 +3975,7 @@ void resources_launch_help (GdkScreen* screen, const gchar* anchor, GError** err
 		_tmp2_ = anchor;
 #line 1028 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (_tmp2_ != NULL) {
-#line 3949 "Resources.c"
+#line 3947 "Resources.c"
 			const gchar* _tmp3_ = NULL;
 			const gchar* _tmp4_ = NULL;
 			gchar* _tmp5_ = NULL;
@@ -3991,7 +3989,7 @@ void resources_launch_help (GdkScreen* screen, const gchar* anchor, GError** err
 			_g_free0 (help_path);
 #line 1029 "/home/jens/Source/shotwell/src/Resources.vala"
 			help_path = _tmp5_;
-#line 3963 "Resources.c"
+#line 3961 "Resources.c"
 		}
 #line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp6_ = g_new0 (gchar*, 3 + 1);
@@ -4071,7 +4069,7 @@ void resources_launch_help (GdkScreen* screen, const gchar* anchor, GError** err
 			_g_free0 (help_path);
 #line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
 			return;
-#line 4043 "Resources.c"
+#line 4041 "Resources.c"
 		}
 #line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (_tmp16_) {
@@ -4081,7 +4079,7 @@ void resources_launch_help (GdkScreen* screen, const gchar* anchor, GError** err
 			_g_free0 (help_path);
 #line 1040 "/home/jens/Source/shotwell/src/Resources.vala"
 			return;
-#line 4053 "Resources.c"
+#line 4051 "Resources.c"
 		}
 #line 1043 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp25_ = argv;
@@ -4093,13 +4091,13 @@ void resources_launch_help (GdkScreen* screen, const gchar* anchor, GError** err
 		g_warning ("Resources.vala:1043: Unable to launch %s", _tmp26_);
 #line 1024 "/home/jens/Source/shotwell/src/Resources.vala"
 		argv = (_vala_array_free (argv, argv_length1, (GDestroyNotify) g_free), NULL);
-#line 4065 "Resources.c"
+#line 4063 "Resources.c"
 	}
 #line 1047 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp27_ = anchor;
 #line 1047 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp27_ != NULL) {
-#line 4071 "Resources.c"
+#line 4069 "Resources.c"
 		GdkScreen* _tmp28_ = NULL;
 		const gchar* _tmp29_ = NULL;
 		gchar* _tmp30_ = NULL;
@@ -4124,7 +4122,7 @@ void resources_launch_help (GdkScreen* screen, const gchar* anchor, GError** err
 			_g_free0 (help_path);
 #line 1048 "/home/jens/Source/shotwell/src/Resources.vala"
 			return;
-#line 4096 "Resources.c"
+#line 4094 "Resources.c"
 		}
 	} else {
 		GdkScreen* _tmp32_ = NULL;
@@ -4140,12 +4138,12 @@ void resources_launch_help (GdkScreen* screen, const gchar* anchor, GError** err
 			_g_free0 (help_path);
 #line 1050 "/home/jens/Source/shotwell/src/Resources.vala"
 			return;
-#line 4112 "Resources.c"
+#line 4110 "Resources.c"
 		}
 	}
 #line 1021 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (help_path);
-#line 4117 "Resources.c"
+#line 4115 "Resources.c"
 }
 
 
@@ -4187,7 +4185,7 @@ gchar* resources_to_css_color (GdkRGBA* color) {
 	result = _tmp6_;
 #line 1059 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 4159 "Resources.c"
+#line 4157 "Resources.c"
 }
 
 
@@ -4213,7 +4211,7 @@ void resources_style_widget (GtkWidget* widget, const gchar* stylesheet) {
 	_tmp0_ = resources_providers;
 #line 1067 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ == NULL) {
-#line 4185 "Resources.c"
+#line 4183 "Resources.c"
 		GeeHashMap* _tmp1_ = NULL;
 #line 1068 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp1_ = gee_hash_map_new (gtk_widget_get_type (), (GBoxedCopyFunc) g_object_ref, g_object_unref, GTK_TYPE_CSS_PROVIDER, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -4221,7 +4219,7 @@ void resources_style_widget (GtkWidget* widget, const gchar* stylesheet) {
 		_g_object_unref0 (resources_providers);
 #line 1068 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_providers = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_MAP, GeeMap);
-#line 4193 "Resources.c"
+#line 4191 "Resources.c"
 	}
 #line 1070 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = resources_providers;
@@ -4231,7 +4229,7 @@ void resources_style_widget (GtkWidget* widget, const gchar* stylesheet) {
 	_tmp4_ = gee_map_has_key (_tmp2_, _tmp3_);
 #line 1070 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp4_) {
-#line 4203 "Resources.c"
+#line 4201 "Resources.c"
 		GtkWidget* _tmp5_ = NULL;
 		GtkStyleContext* _tmp6_ = NULL;
 		GeeMap* _tmp7_ = NULL;
@@ -4254,13 +4252,13 @@ void resources_style_widget (GtkWidget* widget, const gchar* stylesheet) {
 		gtk_style_context_remove_provider (_tmp6_, G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, GTK_TYPE_STYLE_PROVIDER, GtkStyleProvider));
 #line 1071 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (_tmp10_);
-#line 4226 "Resources.c"
+#line 4224 "Resources.c"
 	}
 #line 1073 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp11_ = gtk_css_provider_new ();
 #line 1073 "/home/jens/Source/shotwell/src/Resources.vala"
 	styler = _tmp11_;
-#line 4232 "Resources.c"
+#line 4230 "Resources.c"
 	{
 		GtkCssProvider* _tmp12_ = NULL;
 		const gchar* _tmp13_ = NULL;
@@ -4272,7 +4270,7 @@ void resources_style_widget (GtkWidget* widget, const gchar* stylesheet) {
 		gtk_css_provider_load_from_data (_tmp12_, _tmp13_, (gssize) RESOURCES_ALL_DATA, &_inner_error_);
 #line 1076 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4244 "Resources.c"
+#line 4242 "Resources.c"
 			goto __catch420_g_error;
 		}
 	}
@@ -4301,7 +4299,7 @@ void resources_style_widget (GtkWidget* widget, const gchar* stylesheet) {
 		_g_object_unref0 (styler);
 #line 1082 "/home/jens/Source/shotwell/src/Resources.vala"
 		return;
-#line 4273 "Resources.c"
+#line 4271 "Resources.c"
 	}
 	__finally420:
 #line 1075 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -4314,7 +4312,7 @@ void resources_style_widget (GtkWidget* widget, const gchar* stylesheet) {
 		g_clear_error (&_inner_error_);
 #line 1075 "/home/jens/Source/shotwell/src/Resources.vala"
 		return;
-#line 4286 "Resources.c"
+#line 4284 "Resources.c"
 	}
 #line 1085 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp17_ = widget;
@@ -4334,7 +4332,7 @@ void resources_style_widget (GtkWidget* widget, const gchar* stylesheet) {
 	gee_map_set (_tmp20_, _tmp21_, _tmp22_);
 #line 1066 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (styler);
-#line 4306 "Resources.c"
+#line 4304 "Resources.c"
 }
 
 

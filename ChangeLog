@@ -1,6 +1,217 @@
+commit 79dc5aab2b6eeb63654d593c841a7e477686eb77
+Author: Jens Georg <mail@jensge.org>
+Date:   Mon Aug 29 21:08:14 2016 +0200
+
+    Prepare 0.23.6
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+
+commit 2b188c92f3863879680bd87dadd4306afe92853e
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Aug 28 23:12:18 2016 +0200
+
+    Revert accidental Gtk.Alignment changes
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Dialogs.vala
+
+commit e622ff00005d2f8208a634e610f46b8dad19e340
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Aug 28 14:18:48 2016 +0200
+
+    Updated Polish translation
+
+M	po/pl.po
+
+commit 015e91e2d630619589ba80a5a45dd6d485f6cdcb
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Aug 27 15:15:37 2016 +0200
+
+    Make thm a recognized extension for JPEG
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=759246
+
+M	src/Dialogs.vala
+M	src/photos/JfifSupport.vala
+
+commit 50988f92f8d4021b6245598f7cb55a16f928226c
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Aug 26 23:24:18 2016 +0200
+
+    import: Improve messages on empty camera
+
+    Tell the user that the camera is considered empty instead of stating
+    "Starting
+    import" forever.
+
+    Also, improve wording on no files to import because "hide already
+    imported" is
+    active and no new files are available
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=718796
+
+M	src/camera/ImportPage.vala
+
+commit 901d0440b6f4b4f04ef9e888893e0999ec52e890
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Aug 26 22:23:50 2016 +0200
+
+    Fix rename tags/saved searches
+
+    So that it is possible to right-click anywhere in the row and have the
+    text entry activated correctly instead of just working when clicking
+    on the
+    text itself.
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=731480
+
+M	src/sidebar/Tree.vala
+
+commit ceffbe7129a91114611e134f666897669c0b3bcd
+Author: Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Date:	Thu Aug 25 21:00:02 2016 +0300
+
+    Update Latvian translation
+
+M	po/lv.po
+
+commit c3f68006d0211f88deff3a07afd13e72e3334030
+Author: Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Date:	Wed Aug 24 22:05:31 2016 +0300
+
+    Update Latvian translation
+
+M	po/lv.po
+
+commit 937a2e1f326d4afed9f48b39cbdee4c196a01c0c
+Author: Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Date:	Wed Aug 24 21:43:38 2016 +0300
+
+    Update Latvian translation
+
+M	po/lv.po
+
+commit 52f070abda1afda26c8c269e61a89fbb20fec879
+Author: Christian Kirbach <Christian.Kirbach@gmail.com>
+Date:	Tue Aug 23 18:49:13 2016 +0000
+
+    Updated German translation
+
+M	help/de/de.po
+
+commit 28cd09c496da5c85804d68de16bc45869cf61eda
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Aug 23 20:05:44 2016 +0200
+
+    Remove langinfo.vapi
+
+    Was already contained in Posix vapi, missed that
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	Makefile.am
+M	shotwell.am
+M	src/Printing.vala
+M	src/Resources.vala
+D	vapi/langinfo.vapi
+
+commit 6ee5fcb96b1c799eebc09a65b9b30b37612bfdc1
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Aug 19 08:54:37 2016 +0200
+
+    Remove LConv in favor of langinfo
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	Makefile.am
+M	shotwell.am
+M	src/Printing.vala
+D	vapi/LConv.vapi
+
+commit 45dfd3402677d91d9efaea99f4fb6eb7a630c299
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Aug 16 21:02:34 2016 +0200
+
+    Sort out locale-dependent times
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=716533
+
+M	Makefile.am
+M	shotwell.am
+M	src/Resources.vala
+A	vapi/langinfo.vapi
+
+commit 5ab55d5b1b00a1879f19c68ba8831fed92793894
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Aug 16 12:43:12 2016 +0200
+
+    debian: Update
+
+     - New Changelog
+     - Remove librest requirement
+     - Recommend desktop-file-utils
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	debian/changelog
+M	debian/control
+
+commit c531cf7afba01fb0ad1cabdd3fc1cc6f7a994a6e
+Author: Balázs Úr <urbalazs@gmail.com>
+Date:	Sat Aug 20 11:45:30 2016 +0000
+
+    Updated Hungarian translation
+
+M	help/hu/hu.po
+
+commit 44456ead0265e3cbd07916ae730e7a76b33070e0
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Thu Aug 18 20:06:06 2016 +0000
+
+    Updated German translation
+
+M	help/de/de.po
+
+commit 150ceadb6bc68b2d19e646ba43bdcf916fa4325c
+Author: Balázs Meskó <meskobalazs@gmail.com>
+Date:	Wed Aug 17 15:25:08 2016 +0000
+
+    Updated Hungarian translation
+
+M	po/hu.po
+
+commit 4950ba1bff31cca61740de4d0e3321d4c880591b
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Tue Aug 16 09:35:41 2016 +0200
+
+    Updated Polish translation
+
+M	po/pl.po
+
+commit dde70c9f059d5a3f023effaa49e0a461d5b0efe3
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Aug 15 20:49:58 2016 +0200
+
+    Post-release version bump
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
 commit 1abdf94cb09efcb66b6d9ecfe27533234ce43117
 Author: Jens Georg <mail@jensge.org>
-Date:   Mon Aug 15 20:06:08 2016 +0200
+Date:	Mon Aug 15 20:06:08 2016 +0200
 
     Prepare 0.23.5
 

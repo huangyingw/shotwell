@@ -6,7 +6,25 @@
         <desc>Remove photos from the library, or delete them from your computer entirely.</desc>
         
         <link type="next" xref="search"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2009, 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014-2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014, 2106</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Removing and deleting photos</title>
 
@@ -14,7 +32,7 @@
 <media type="image" src="figures/trash_process.png">Delete process</media>
 <p>This diagram shows how a photo, when deleted, is first put into Shotwell's trash. If you delete it from Shotwell's trash, it is put into your computer's trash. If you delete it from your computer's trash the photo is finally and irretrievably deleted from your computer.</p>
 <section id="delete-remove">
-	<title>Fotos werden aus der Bibliothek entfernt</title>
+	<title>Fotos werden aus Bibliothek entfernt</title>
     <p>Select the photos to remove and choose <guiseq><gui>Edit</gui><gui>Move to Trash</gui></guiseq>.
     (You can also press the <key>Delete</key> key.)
     The photos will be moved from your library to Shotwell's Trash.</p>
@@ -33,10 +51,10 @@
     
 <section id="delete-trash">
 	<title>Löschen oder Leeren des Papierkorbs</title>
-    <p>When you delete files from the Trash folder or empty the Trash folder, you will be given the following choices:</p>
+    <p>Wenn Sie Dateien aus dem Papierkorb-Ordner löschen oder den Papierkorb-Ordner leeren, haben Sie folgende Möglichkeiten:</p>
     <terms>
-    <item><title>Nur entfernen</title><p>Remove photos from the library but leave the photos in their location on the computer.</p></item>
-    <item><title>Datei löschen</title><p>Remove photos from the library and delete them from the computer.</p></item>
+    <item><title>Nur entfernen</title><p>Dadurch werden die Dateien aus der Bibliothek entfernt, aber die eigentlichen Fotos verbleiben an deren Speicherorten auf Ihrem Rechner.</p></item>
+    <item><title>Datei löschen</title><p>Dadurch werden die Dateien sowohl aus der Bibliothek entfernt als auch auf dem Rechner gelöscht.</p></item>
     <item><title>Abbrechen</title><p>Nichts tun.</p></item>
     </terms>    
 </section>
