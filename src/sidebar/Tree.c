@@ -6356,12 +6356,15 @@ static gboolean sidebar_tree_rename_in_place (SidebarTree* self) {
 #line 6357 "Tree.c"
 		GtkTreePath* _tmp5_ = NULL;
 		GtkTreeViewColumn* _tmp6_ = NULL;
+		GtkCellRendererText* _tmp7_ = NULL;
 #line 1012 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_tmp5_ = cursor_path;
 #line 1012 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_tmp6_ = cursor_column;
 #line 1012 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
-		gtk_tree_view_set_cursor (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), _tmp5_, _tmp6_, TRUE);
+		_tmp7_ = self->priv->text_renderer;
+#line 1012 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
+		gtk_tree_view_set_cursor_on_cell (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), _tmp5_, _tmp6_, G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_cell_renderer_get_type (), GtkCellRenderer), TRUE);
 #line 1014 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		result = TRUE;
 #line 1014 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
@@ -6370,7 +6373,7 @@ static gboolean sidebar_tree_rename_in_place (SidebarTree* self) {
 		_gtk_tree_path_free0 (cursor_path);
 #line 1014 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return result;
-#line 6374 "Tree.c"
+#line 6377 "Tree.c"
 	}
 #line 1017 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	result = FALSE;
@@ -6380,7 +6383,7 @@ static gboolean sidebar_tree_rename_in_place (SidebarTree* self) {
 	_gtk_tree_path_free0 (cursor_path);
 #line 1017 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return result;
-#line 6384 "Tree.c"
+#line 6387 "Tree.c"
 }
 
 
@@ -6413,7 +6416,7 @@ gboolean sidebar_tree_scroll_to_entry (SidebarTree* self, SidebarEntry* entry) {
 		_g_object_unref0 (wrapper);
 #line 1023 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return result;
-#line 6417 "Tree.c"
+#line 6420 "Tree.c"
 	}
 #line 1025 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp3_ = wrapper;
@@ -6431,7 +6434,7 @@ gboolean sidebar_tree_scroll_to_entry (SidebarTree* self, SidebarEntry* entry) {
 	_g_object_unref0 (wrapper);
 #line 1027 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return result;
-#line 6435 "Tree.c"
+#line 6438 "Tree.c"
 }
 
 
@@ -6454,7 +6457,7 @@ static void sidebar_tree_real_drag_data_get (GtkWidget* base, GdkDragContext* co
 	_tmp0_ = self->priv->internal_drag_source_entry;
 #line 1034 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	if (_tmp0_ != NULL) {
-#line 6458 "Tree.c"
+#line 6461 "Tree.c"
 		SidebarSelectableEntry* selectable = NULL;
 		SidebarEntry* _tmp1_ = NULL;
 		SidebarSelectableEntry* _tmp2_ = NULL;
@@ -6469,7 +6472,7 @@ static void sidebar_tree_real_drag_data_get (GtkWidget* base, GdkDragContext* co
 		_tmp3_ = selectable;
 #line 1037 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		if (_tmp3_ == NULL) {
-#line 6473 "Tree.c"
+#line 6476 "Tree.c"
 			SidebarEntry* _tmp4_ = NULL;
 			SidebarInternalDragSourceEntry* _tmp5_ = NULL;
 #line 1038 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
@@ -6480,17 +6483,17 @@ static void sidebar_tree_real_drag_data_get (GtkWidget* base, GdkDragContext* co
 			_g_object_unref0 (drag_source);
 #line 1038 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			drag_source = _tmp5_;
-#line 6484 "Tree.c"
+#line 6487 "Tree.c"
 		}
 #line 1034 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_g_object_unref0 (selectable);
-#line 6488 "Tree.c"
+#line 6491 "Tree.c"
 	}
 #line 1042 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp6_ = drag_source;
 #line 1042 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	if (_tmp6_ == NULL) {
-#line 6494 "Tree.c"
+#line 6497 "Tree.c"
 		GtkTreePath* selected_path = NULL;
 		GtkTreePath* _tmp7_ = NULL;
 		GtkTreePath* _tmp8_ = NULL;
@@ -6516,7 +6519,7 @@ static void sidebar_tree_real_drag_data_get (GtkWidget* base, GdkDragContext* co
 			_g_object_unref0 (drag_source);
 #line 1045 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			return;
-#line 6520 "Tree.c"
+#line 6523 "Tree.c"
 		}
 #line 1047 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_tmp9_ = selected_path;
@@ -6536,7 +6539,7 @@ static void sidebar_tree_real_drag_data_get (GtkWidget* base, GdkDragContext* co
 			_g_object_unref0 (drag_source);
 #line 1049 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			return;
-#line 6540 "Tree.c"
+#line 6543 "Tree.c"
 		}
 #line 1051 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_tmp12_ = wrapper;
@@ -6560,13 +6563,13 @@ static void sidebar_tree_real_drag_data_get (GtkWidget* base, GdkDragContext* co
 			_g_object_unref0 (drag_source);
 #line 1053 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			return;
-#line 6564 "Tree.c"
+#line 6567 "Tree.c"
 		}
 #line 1042 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_g_object_unref0 (wrapper);
 #line 1042 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_gtk_tree_path_free0 (selected_path);
-#line 6570 "Tree.c"
+#line 6573 "Tree.c"
 	}
 #line 1056 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp16_ = drag_source;
@@ -6576,7 +6579,7 @@ static void sidebar_tree_real_drag_data_get (GtkWidget* base, GdkDragContext* co
 	sidebar_internal_drag_source_entry_prepare_selection_data (_tmp16_, _tmp17_);
 #line 1030 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_g_object_unref0 (drag_source);
-#line 6580 "Tree.c"
+#line 6583 "Tree.c"
 }
 
 
@@ -6629,7 +6632,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 	pos = _tmp3_;
 #line 1064 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	if (!_tmp4_) {
-#line 6633 "Tree.c"
+#line 6636 "Tree.c"
 		GdkDragContext* _tmp5_ = NULL;
 		GtkWidget* _tmp6_ = NULL;
 #line 1066 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
@@ -6638,7 +6641,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 		_tmp6_ = gtk_drag_get_source_widget (_tmp5_);
 #line 1066 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		if (_tmp6_ == NULL) {
-#line 6642 "Tree.c"
+#line 6645 "Tree.c"
 			SidebarTreeExternalDropHandler _tmp7_ = NULL;
 			void* _tmp7__target = NULL;
 			GdkDragContext* _tmp8_ = NULL;
@@ -6659,7 +6662,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 			_tmp11_ = time;
 #line 1067 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			_tmp7_ (_tmp8_, NULL, _tmp9_, _tmp10_, _tmp11_, _tmp7__target);
-#line 6663 "Tree.c"
+#line 6666 "Tree.c"
 		} else {
 			GdkDragContext* _tmp12_ = NULL;
 			guint _tmp13_ = 0U;
@@ -6669,13 +6672,13 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 			_tmp13_ = time;
 #line 1069 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			gtk_drag_finish (_tmp12_, FALSE, FALSE, (guint32) _tmp13_);
-#line 6673 "Tree.c"
+#line 6676 "Tree.c"
 		}
 #line 1071 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_gtk_tree_path_free0 (path);
 #line 1071 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return;
-#line 6679 "Tree.c"
+#line 6682 "Tree.c"
 	}
 #line 1075 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp14_ = path;
@@ -6689,7 +6692,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 	_tmp17_ = gtk_drag_get_source_widget (_tmp16_);
 #line 1078 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	if (_tmp17_ == NULL) {
-#line 6693 "Tree.c"
+#line 6696 "Tree.c"
 		SidebarEntry* _tmp18_ = NULL;
 		SidebarTreeEntryWrapper* _tmp19_ = NULL;
 		SidebarTreeExternalDropHandler _tmp22_ = NULL;
@@ -6702,7 +6705,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 		_tmp19_ = wrapper;
 #line 1079 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		if (_tmp19_ != NULL) {
-#line 6706 "Tree.c"
+#line 6709 "Tree.c"
 			SidebarTreeEntryWrapper* _tmp20_ = NULL;
 			SidebarEntry* _tmp21_ = NULL;
 #line 1079 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
@@ -6711,11 +6714,11 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 			_tmp21_ = _tmp20_->entry;
 #line 1079 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			_tmp18_ = _tmp21_;
-#line 6715 "Tree.c"
+#line 6718 "Tree.c"
 		} else {
 #line 1079 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			_tmp18_ = NULL;
-#line 6719 "Tree.c"
+#line 6722 "Tree.c"
 		}
 #line 1079 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_tmp22_ = self->priv->drop_handler;
@@ -6737,13 +6740,13 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 		_gtk_tree_path_free0 (path);
 #line 1082 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return;
-#line 6741 "Tree.c"
+#line 6744 "Tree.c"
 	}
 #line 1086 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp27_ = wrapper;
 #line 1086 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	if (_tmp27_ == NULL) {
-#line 6747 "Tree.c"
+#line 6750 "Tree.c"
 		GdkDragContext* _tmp28_ = NULL;
 		guint _tmp29_ = 0U;
 #line 1087 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
@@ -6758,7 +6761,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 		_gtk_tree_path_free0 (path);
 #line 1089 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return;
-#line 6762 "Tree.c"
+#line 6765 "Tree.c"
 	}
 #line 1092 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp30_ = wrapper;
@@ -6772,7 +6775,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 	_tmp33_ = targetable;
 #line 1093 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	if (_tmp33_ == NULL) {
-#line 6776 "Tree.c"
+#line 6779 "Tree.c"
 		GdkDragContext* _tmp34_ = NULL;
 		guint _tmp35_ = 0U;
 #line 1094 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
@@ -6789,7 +6792,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 		_gtk_tree_path_free0 (path);
 #line 1096 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return;
-#line 6793 "Tree.c"
+#line 6796 "Tree.c"
 	}
 #line 1099 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	success = FALSE;
@@ -6807,7 +6810,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 	_g_free0 (_tmp39_);
 #line 1101 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	if (_tmp40_) {
-#line 6811 "Tree.c"
+#line 6814 "Tree.c"
 		SidebarInternalDropTargetEntry* _tmp41_ = NULL;
 		GtkSelectionData* _tmp42_ = NULL;
 		gboolean _tmp43_ = FALSE;
@@ -6819,7 +6822,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 		_tmp43_ = sidebar_internal_drop_target_entry_internal_drop_received_arbitrary (_tmp41_, _tmp42_);
 #line 1102 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		success = _tmp43_;
-#line 6823 "Tree.c"
+#line 6826 "Tree.c"
 	} else {
 		GeeList* media = NULL;
 		GtkSelectionData* _tmp44_ = NULL;
@@ -6845,7 +6848,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 		_tmp50_ = media;
 #line 1106 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		if (_tmp50_ != NULL) {
-#line 6849 "Tree.c"
+#line 6852 "Tree.c"
 			GeeList* _tmp51_ = NULL;
 			gint _tmp52_ = 0;
 			gint _tmp53_ = 0;
@@ -6857,15 +6860,15 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 			_tmp53_ = _tmp52_;
 #line 1106 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			_tmp49_ = _tmp53_ > 0;
-#line 6861 "Tree.c"
+#line 6864 "Tree.c"
 		} else {
 #line 1106 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			_tmp49_ = FALSE;
-#line 6865 "Tree.c"
+#line 6868 "Tree.c"
 		}
 #line 1106 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		if (_tmp49_) {
-#line 6869 "Tree.c"
+#line 6872 "Tree.c"
 			SidebarInternalDropTargetEntry* _tmp54_ = NULL;
 			GeeList* _tmp55_ = NULL;
 			gboolean _tmp56_ = FALSE;
@@ -6877,11 +6880,11 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 			_tmp56_ = sidebar_internal_drop_target_entry_internal_drop_received (_tmp54_, _tmp55_);
 #line 1107 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			success = _tmp56_;
-#line 6881 "Tree.c"
+#line 6884 "Tree.c"
 		}
 #line 1101 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_g_object_unref0 (media);
-#line 6885 "Tree.c"
+#line 6888 "Tree.c"
 	}
 #line 1110 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp57_ = context;
@@ -6897,7 +6900,7 @@ static void sidebar_tree_real_drag_data_received (GtkWidget* base, GdkDragContex
 	_g_object_unref0 (wrapper);
 #line 1059 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_gtk_tree_path_free0 (path);
-#line 6901 "Tree.c"
+#line 6904 "Tree.c"
 }
 
 
@@ -6956,37 +6959,37 @@ static gboolean sidebar_tree_real_drag_motion (GtkWidget* base, GdkDragContext* 
 	if (!_tmp10_) {
 #line 1122 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_tmp9_ = TRUE;
-#line 6960 "Tree.c"
+#line 6963 "Tree.c"
 	} else {
 		GtkTreeViewDropPosition _tmp11_ = 0;
 #line 1122 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_tmp11_ = pos;
 #line 1122 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_tmp9_ = _tmp11_ == GTK_TREE_VIEW_DROP_BEFORE;
-#line 6967 "Tree.c"
+#line 6970 "Tree.c"
 	}
 #line 1122 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	if (_tmp9_) {
-#line 6971 "Tree.c"
+#line 6974 "Tree.c"
 		GtkTreePath* _tmp12_ = NULL;
 #line 1123 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_tmp12_ = path;
 #line 1123 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		gtk_tree_view_set_drag_dest_row (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), _tmp12_, GTK_TREE_VIEW_DROP_INTO_OR_BEFORE);
-#line 6977 "Tree.c"
+#line 6980 "Tree.c"
 	} else {
 		GtkTreeViewDropPosition _tmp13_ = 0;
 #line 1124 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_tmp13_ = pos;
 #line 1124 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		if (_tmp13_ == GTK_TREE_VIEW_DROP_AFTER) {
-#line 6984 "Tree.c"
+#line 6987 "Tree.c"
 			GtkTreePath* _tmp14_ = NULL;
 #line 1125 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			_tmp14_ = path;
 #line 1125 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			gtk_tree_view_set_drag_dest_row (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), _tmp14_, GTK_TREE_VIEW_DROP_INTO_OR_AFTER);
-#line 6990 "Tree.c"
+#line 6993 "Tree.c"
 		}
 	}
 #line 1127 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
@@ -7005,7 +7008,7 @@ static gboolean sidebar_tree_real_drag_motion (GtkWidget* base, GdkDragContext* 
 	_gtk_tree_path_free0 (path);
 #line 1129 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return result;
-#line 7009 "Tree.c"
+#line 7012 "Tree.c"
 }
 
 
@@ -7037,7 +7040,7 @@ static gboolean sidebar_tree_can_rename_path (SidebarTree* self, GtkTreePath* pa
 		result = FALSE;
 #line 1135 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return result;
-#line 7041 "Tree.c"
+#line 7044 "Tree.c"
 	}
 #line 1137 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp1_ = path;
@@ -7055,7 +7058,7 @@ static gboolean sidebar_tree_can_rename_path (SidebarTree* self, GtkTreePath* pa
 		_g_object_unref0 (wrapper);
 #line 1139 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return result;
-#line 7059 "Tree.c"
+#line 7062 "Tree.c"
 	}
 #line 1141 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp4_ = wrapper;
@@ -7077,7 +7080,7 @@ static gboolean sidebar_tree_can_rename_path (SidebarTree* self, GtkTreePath* pa
 		_g_object_unref0 (wrapper);
 #line 1143 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return result;
-#line 7081 "Tree.c"
+#line 7084 "Tree.c"
 	}
 #line 1145 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp8_ = wrapper;
@@ -7093,7 +7096,7 @@ static gboolean sidebar_tree_can_rename_path (SidebarTree* self, GtkTreePath* pa
 		_g_object_unref0 (wrapper);
 #line 1146 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return result;
-#line 7097 "Tree.c"
+#line 7100 "Tree.c"
 	}
 #line 1148 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp10_ = gtk_tree_view_get_selection (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView));
@@ -7109,7 +7112,7 @@ static gboolean sidebar_tree_can_rename_path (SidebarTree* self, GtkTreePath* pa
 	_g_object_unref0 (wrapper);
 #line 1150 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return result;
-#line 7113 "Tree.c"
+#line 7116 "Tree.c"
 }
 
 
@@ -7145,7 +7148,7 @@ static gboolean sidebar_tree_destroy_path (SidebarTree* self, GtkTreePath* path)
 		_g_object_unref0 (wrapper);
 #line 1156 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return result;
-#line 7149 "Tree.c"
+#line 7152 "Tree.c"
 	}
 #line 1158 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp3_ = wrapper;
@@ -7167,7 +7170,7 @@ static gboolean sidebar_tree_destroy_path (SidebarTree* self, GtkTreePath* path)
 		_g_object_unref0 (wrapper);
 #line 1160 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		return result;
-#line 7171 "Tree.c"
+#line 7174 "Tree.c"
 	}
 #line 1162 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp7_ = destroyable;
@@ -7181,14 +7184,14 @@ static gboolean sidebar_tree_destroy_path (SidebarTree* self, GtkTreePath* path)
 	_g_object_unref0 (wrapper);
 #line 1164 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return result;
-#line 7185 "Tree.c"
+#line 7188 "Tree.c"
 }
 
 
 static void _sidebar_tree_on_editing_done_gtk_cell_editable_editing_done (GtkCellEditable* _sender, gpointer self) {
 #line 1170 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	sidebar_tree_on_editing_done ((SidebarTree*) self);
-#line 7192 "Tree.c"
+#line 7195 "Tree.c"
 }
 
 
@@ -7197,7 +7200,7 @@ static gboolean _sidebar_tree_on_editing_focus_out_gtk_widget_focus_out_event (G
 	result = sidebar_tree_on_editing_focus_out ((SidebarTree*) self, event);
 #line 1171 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return result;
-#line 7201 "Tree.c"
+#line 7204 "Tree.c"
 }
 
 
@@ -7213,7 +7216,7 @@ static void sidebar_tree_on_editing_started (SidebarTree* self, GtkCellEditable*
 	_tmp0_ = editable;
 #line 1168 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, gtk_entry_get_type ())) {
-#line 7217 "Tree.c"
+#line 7220 "Tree.c"
 		GtkCellEditable* _tmp1_ = NULL;
 		GtkEntry* _tmp2_ = NULL;
 		GtkEntry* _tmp3_ = NULL;
@@ -7239,7 +7242,7 @@ static void sidebar_tree_on_editing_started (SidebarTree* self, GtkCellEditable*
 		_tmp5_ = self->priv->text_entry;
 #line 1172 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		g_object_set (_tmp5_, "editable", TRUE, NULL);
-#line 7243 "Tree.c"
+#line 7246 "Tree.c"
 	}
 }
 
@@ -7268,7 +7271,7 @@ static void sidebar_tree_on_editing_canceled (SidebarTree* self) {
 	g_signal_parse_name ("focus-out-event", gtk_widget_get_type (), &_tmp4_, NULL, FALSE);
 #line 1180 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp4_, 0, NULL, (GCallback) _sidebar_tree_on_editing_focus_out_gtk_widget_focus_out_event, self);
-#line 7272 "Tree.c"
+#line 7275 "Tree.c"
 }
 
 
@@ -7306,7 +7309,7 @@ static void sidebar_tree_on_editing_done (SidebarTree* self) {
 	_tmp5_ = wrapper;
 #line 1187 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	if (_tmp5_ != NULL) {
-#line 7310 "Tree.c"
+#line 7313 "Tree.c"
 		SidebarRenameableEntry* renameable = NULL;
 		SidebarTreeEntryWrapper* _tmp6_ = NULL;
 		SidebarEntry* _tmp7_ = NULL;
@@ -7324,7 +7327,7 @@ static void sidebar_tree_on_editing_done (SidebarTree* self) {
 		_tmp9_ = renameable;
 #line 1189 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		if (_tmp9_ != NULL) {
-#line 7328 "Tree.c"
+#line 7331 "Tree.c"
 			SidebarRenameableEntry* _tmp10_ = NULL;
 			GtkEntry* _tmp11_ = NULL;
 			const gchar* _tmp12_ = NULL;
@@ -7336,11 +7339,11 @@ static void sidebar_tree_on_editing_done (SidebarTree* self) {
 			_tmp12_ = gtk_entry_get_text (_tmp11_);
 #line 1190 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 			sidebar_renameable_entry_rename (_tmp10_, _tmp12_);
-#line 7340 "Tree.c"
+#line 7343 "Tree.c"
 		}
 #line 1187 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		_g_object_unref0 (renameable);
-#line 7344 "Tree.c"
+#line 7347 "Tree.c"
 	}
 #line 1193 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_tmp13_ = self->priv->text_entry;
@@ -7356,7 +7359,7 @@ static void sidebar_tree_on_editing_done (SidebarTree* self) {
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp16_, 0, NULL, (GCallback) _sidebar_tree_on_editing_focus_out_gtk_widget_focus_out_event, self);
 #line 1183 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_g_object_unref0 (wrapper);
-#line 7360 "Tree.c"
+#line 7363 "Tree.c"
 }
 
 
@@ -7370,7 +7373,7 @@ static gboolean sidebar_tree_on_editing_focus_out (SidebarTree* self, GdkEventFo
 	result = FALSE;
 #line 1201 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return result;
-#line 7374 "Tree.c"
+#line 7377 "Tree.c"
 }
 
 
@@ -7387,7 +7390,7 @@ static void sidebar_tree_on_new_search (SidebarTree* self) {
 	saved_search_dialog_show (_tmp1_);
 #line 1205 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_saved_search_dialog_unref0 (_tmp1_);
-#line 7391 "Tree.c"
+#line 7394 "Tree.c"
 }
 
 
@@ -7430,7 +7433,7 @@ static void sidebar_tree_on_new_tag (SidebarTree* self) {
 	_g_object_unref0 (_tmp4_);
 #line 1208 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	_g_object_unref0 (creation_command);
-#line 7434 "Tree.c"
+#line 7437 "Tree.c"
 }
 
 
@@ -7449,19 +7452,19 @@ static void g_cclosure_user_marshal_VOID__OBJECT_BOOLEAN (GClosure * closure, GV
 		data1 = closure->data;
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 7453 "Tree.c"
+#line 7456 "Tree.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		data2 = closure->data;
-#line 7459 "Tree.c"
+#line 7462 "Tree.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	callback = (GMarshalFunc_VOID__OBJECT_BOOLEAN) (marshal_data ? marshal_data : cc->callback);
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	callback (data1, g_value_get_object (param_values + 1), g_value_get_boolean (param_values + 2), data2);
-#line 7465 "Tree.c"
+#line 7468 "Tree.c"
 }
 
 
@@ -7480,19 +7483,19 @@ static void g_cclosure_user_marshal_VOID__OBJECT_OBJECT (GClosure * closure, GVa
 		data1 = closure->data;
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 7484 "Tree.c"
+#line 7487 "Tree.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		data2 = closure->data;
-#line 7490 "Tree.c"
+#line 7493 "Tree.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	callback = (GMarshalFunc_VOID__OBJECT_OBJECT) (marshal_data ? marshal_data : cc->callback);
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	callback (data1, g_value_get_object (param_values + 1), g_value_get_object (param_values + 2), data2);
-#line 7496 "Tree.c"
+#line 7499 "Tree.c"
 }
 
 
@@ -7531,14 +7534,14 @@ static SidebarTreeEntryWrapper* sidebar_tree_entry_wrapper_construct (GType obje
 	self->row = _tmp4_;
 #line 19 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return self;
-#line 7535 "Tree.c"
+#line 7538 "Tree.c"
 }
 
 
 static SidebarTreeEntryWrapper* sidebar_tree_entry_wrapper_new (GtkTreeModel* model, SidebarEntry* entry, GtkTreePath* path) {
 #line 19 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return sidebar_tree_entry_wrapper_construct (SIDEBAR_TREE_TYPE_ENTRY_WRAPPER, model, entry, path);
-#line 7542 "Tree.c"
+#line 7545 "Tree.c"
 }
 
 
@@ -7556,7 +7559,7 @@ static GtkTreePath* sidebar_tree_entry_wrapper_get_path (SidebarTreeEntryWrapper
 	result = _tmp1_;
 #line 25 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return result;
-#line 7560 "Tree.c"
+#line 7563 "Tree.c"
 }
 
 
@@ -7596,7 +7599,7 @@ static void sidebar_tree_entry_wrapper_get_iter (SidebarTreeEntryWrapper* self, 
 	*result = iter;
 #line 33 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return;
-#line 7600 "Tree.c"
+#line 7603 "Tree.c"
 }
 
 
@@ -7605,7 +7608,7 @@ static void sidebar_tree_entry_wrapper_class_init (SidebarTreeEntryWrapperClass 
 	sidebar_tree_entry_wrapper_parent_class = g_type_class_peek_parent (klass);
 #line 15 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	G_OBJECT_CLASS (klass)->finalize = sidebar_tree_entry_wrapper_finalize;
-#line 7609 "Tree.c"
+#line 7612 "Tree.c"
 }
 
 
@@ -7623,7 +7626,7 @@ static void sidebar_tree_entry_wrapper_finalize (GObject* obj) {
 	_gtk_tree_row_reference_free0 (self->row);
 #line 15 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	G_OBJECT_CLASS (sidebar_tree_entry_wrapper_parent_class)->finalize (obj);
-#line 7627 "Tree.c"
+#line 7630 "Tree.c"
 }
 
 
@@ -7665,14 +7668,14 @@ static SidebarTreeRootWrapper* sidebar_tree_root_wrapper_construct (GType object
 	self->root_position = _tmp3_;
 #line 40 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return self;
-#line 7669 "Tree.c"
+#line 7672 "Tree.c"
 }
 
 
 static SidebarTreeRootWrapper* sidebar_tree_root_wrapper_new (GtkTreeModel* model, SidebarEntry* entry, GtkTreePath* path, gint root_position) {
 #line 40 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	return sidebar_tree_root_wrapper_construct (SIDEBAR_TREE_TYPE_ROOT_WRAPPER, model, entry, path, root_position);
-#line 7676 "Tree.c"
+#line 7679 "Tree.c"
 }
 
 
@@ -7681,7 +7684,7 @@ static void sidebar_tree_root_wrapper_class_init (SidebarTreeRootWrapperClass * 
 	sidebar_tree_root_wrapper_parent_class = g_type_class_peek_parent (klass);
 #line 37 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	G_OBJECT_CLASS (klass)->finalize = sidebar_tree_root_wrapper_finalize;
-#line 7685 "Tree.c"
+#line 7688 "Tree.c"
 }
 
 
@@ -7695,7 +7698,7 @@ static void sidebar_tree_root_wrapper_finalize (GObject* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SIDEBAR_TREE_TYPE_ROOT_WRAPPER, SidebarTreeRootWrapper);
 #line 37 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	G_OBJECT_CLASS (sidebar_tree_root_wrapper_parent_class)->finalize (obj);
-#line 7699 "Tree.c"
+#line 7702 "Tree.c"
 }
 
 
@@ -7746,7 +7749,7 @@ static void sidebar_tree_class_init (SidebarTreeClass * klass) {
 	g_signal_new ("page_created", SIDEBAR_TYPE_TREE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__OBJECT_OBJECT, G_TYPE_NONE, 2, SIDEBAR_TYPE_PAGE_REPRESENTATIVE, TYPE_PAGE);
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	g_signal_new ("destroying_page", SIDEBAR_TYPE_TREE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__OBJECT_OBJECT, G_TYPE_NONE, 2, SIDEBAR_TYPE_PAGE_REPRESENTATIVE, TYPE_PAGE);
-#line 7750 "Tree.c"
+#line 7753 "Tree.c"
 }
 
 
@@ -7793,7 +7796,7 @@ static void sidebar_tree_instance_init (SidebarTree * self) {
 	self->priv->internal_drag_source_entry = NULL;
 #line 77 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	self->priv->old_path_ref = NULL;
-#line 7797 "Tree.c"
+#line 7800 "Tree.c"
 }
 
 
@@ -7837,7 +7840,7 @@ static void sidebar_tree_finalize (GObject* obj) {
 	_gtk_tree_row_reference_free0 (self->priv->old_path_ref);
 #line 7 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	G_OBJECT_CLASS (sidebar_tree_parent_class)->finalize (obj);
-#line 7841 "Tree.c"
+#line 7844 "Tree.c"
 }
 
 

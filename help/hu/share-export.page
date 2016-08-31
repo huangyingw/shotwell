@@ -6,16 +6,25 @@
         <desc>Másolja ki fényképeit a Shotwellből, hogy máshol is használhassa azokat.</desc>
         
         <link type="next" xref="share-print"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Úr Balázs</mal:name>
+      <mal:email>urbalazs at gmail dot hu</mal:email>
+      <mal:years>2015, 2016.</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Fényképek exportálása</title>
 
 <p>A fényképek exportálásához fogd és vidd módszerrel húzza ki a fényképeket a Shotwellből egy fájlkezelő ablakba vagy az asztalra. Az új fájlok a gyűjteményében lévők teljes méretű másolatai lesznek.</p>
 
-<p>
-Alternatively, select a set of photos and choose the <guiseq><gui>File</gui><gui>Export...</gui></guiseq> command or press <keyseq><key>Shift</key><key>Ctrl</key><key>E</key></keyseq>, which exports photos while letting you fine-tune the size and dimensions of your photo files.
-A window will appear allowing you to make several choices:
-</p>
+<p>Ennek alternatívájaként válassza ki fényképek egy csoportját, és válassza a <guiseq><gui>Fájl</gui><gui>Exportálás…</gui></guiseq> menüpontot, vagy nyomja meg a <keyseq><key>Shift</key><key>Ctrl</key><key>E</key></keyseq> kombinációt. Ezzel a fényképeket úgy exportálhatja, hogy közben a fájlok méretét és felbontását finomhangolhatja. A megjelenő ablakban több dolgot is kiválaszthat:</p>
 
 <list>
 <item><p>A formátumot az exportáláshoz.</p>

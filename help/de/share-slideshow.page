@@ -6,7 +6,25 @@
         <desc>Eine Bildvorführung Ihrer Fotos ansehen</desc>
         
         <link type="next" xref="share-export"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2009, 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014-2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014, 2106</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Bildvorführungen</title>
 
@@ -17,6 +35,6 @@
     <list>
     <item><p>Die Darstellungsdauer eines Bildes: 1 - 30 Sekunden</p></item>
     <item><p>Sie können verschiedene Übergangseffekte wählen.</p></item>
-    <item><p>Die Zeit für jeden Übergangseffekt: 0,1 - 1,0 Sekunden</p></item>
+    <item><p>Die Zeitdauer für jeden Übergangseffekt: 0,1 - 1 Sekunde</p></item>
     </list>
 </page>

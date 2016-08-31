@@ -3,21 +3,28 @@
 
     <info>
         <link type="guide" xref="index#share"/>
-        <desc>Click <guiseq><gui>File</gui><gui>Print...</gui></guiseq>. For more printing options, select the <gui>Page Setup</gui> tab in the <gui>Print</gui> dialog.</desc>
+        <desc>Kattintson a <guiseq><gui>Fájl</gui><gui>Nyomtatás…</gui></guiseq> menüpontra. További nyomtatási beállításokért válassza a <gui>Nyomtatás</gui> ablak <gui>Oldalbeállítás</gui> lapját.</desc>
         
         <link type="next" xref="share-upload"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Úr Balázs</mal:name>
+      <mal:email>urbalazs at gmail dot hu</mal:email>
+      <mal:years>2015, 2016.</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Nyomtatás</title>
 
-    <p>To print a photo, select it and choose <guiseq><gui>File</gui><gui>Print...</gui></guiseq>.</p>
+    <p>Fénykép nyomtatásához válassza ki azt, majd a <guiseq><gui>Fájl</gui><gui>Nyomtatás…</gui></guiseq> menüpontot.</p>
      
-    <p>
-    Shotwell can also print multiple images in one page; to do this, select multiple images, 
-    choose <guiseq><gui>File</gui><gui>Print...</gui></guiseq>, and in the <gui>Print</gui> dialog,
-    choose the <gui>Image Settings</gui> tab. In <gui>Image Settings</gui>, choose one of the 
-    multiple-image-per-page options under <gui>Autosize</gui>.
-    </p>
+    <p>A Shotwell képes több képet is egy oldalra nyomtatni, ehhez válasszon ki több képet, majd a <guiseq><gui>Fájl</gui><gui>Nyomtatás…</gui></guiseq> menüpontot, ezután a <gui>Nyomtatás</gui> ablakban válassza a <gui>Képbeállítások</gui> lapot. A <gui>Képbeállítások</gui> alatt válassza az egyik „több kép oldalanként” lehetőséget az <gui>Automatikus méret</gui> alatt.</p>
 
     <p>Ha szeretne megadni formázási, papírméret, és tájolási beállításokat, akkor nyomtatás előtt válassza a <gui>Nyomtatás</gui> ablak <gui>Oldalbeállítás</gui> lapját.</p>
 </page>

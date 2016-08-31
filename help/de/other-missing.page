@@ -3,16 +3,34 @@
 
     <info>
         <link type="guide" xref="index#other"/>
-        <desc>If Shotwell can't find a photo in your library, it marks it as missing.</desc>
+        <desc>Falls Shotwell ein Foto in Ihrer Bibliothek nicht finden kann, wird dieses als fehlend markiert.</desc>
         
         <link type="next" xref="other-multiple"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Mario Blättermann</mal:name>
+      <mal:email>mario.blaettermann@gmail.com</mal:email>
+      <mal:years>2009, 2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Benjamin Steinwender</mal:name>
+      <mal:email>b@stbe.at</mal:email>
+      <mal:years>2014-2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Christian Kirbach</mal:name>
+      <mal:email>christian.kirbach@gmail.com</mal:email>
+      <mal:years>2014, 2106</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Fehlende Fotos</title>
 
-<p>Each time Shotwell starts up, it scans your photo library to verify that all photo files still exist on your hard drive. If Shotwell finds that any photo files are missing, it will not display them in the normal Photos, Events and Tags views, but will instead show them in a separate Missing Files view which will appear in the sidebar.</p>
+<p>Bei jedem Programmstart liest Shotwell Ihre Fotobibliothek neu ein, um sicherzustellen, dass alle Fotodateien auf Ihrem Datenträger noch vorhanden sind. Falls festgestellt wird, dass Fotodateien fehlen, werden diese nicht in den gewöhnlichen Foto-, Ereignis- und Stichwortansichten angezeigt, sondern in einer separaten Ansicht für fehlende Dateien in der Seitenleiste dargestellt.</p>
 
-<p>If you no longer want the missing files to be part of your Shotwell collection (perhaps because you deleted them), go to the Missing Files view, select the photos and then click <gui>Remove From Library</gui>.</p>
+<p>Falls Sie die nicht mehr benötigten Dateien aus der Shotwell-Sammlung entfernen wollen (weil Sie beispielsweise die Dateien bewusst gelöscht haben), wählen Sie diese Fotos in der Ansicht für fehlende Dateien in der Seitenleiste aus und klicken Sie auf <gui>Aus der Bibliothek entfernen</gui>.</p>
 
 <p>If you have photos on a removable disk, such as a CD or USB flash drive, and <link xref="index#import">import</link> them into Shotwell <em>without</em> copying the photos to your computer, they will show up as missing files if you then disconnect the removable disk. See <link xref="import-file"/> to learn how to copy files from removable disks onto your computer.</p>
 

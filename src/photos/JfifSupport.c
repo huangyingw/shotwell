@@ -1127,9 +1127,10 @@ static void jfif_file_format_properties_class_init (JfifFileFormatPropertiesClas
 	gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-	gchar** _tmp3_ = NULL;
-	gchar* _tmp4_ = NULL;
-	gchar** _tmp5_ = NULL;
+	gchar* _tmp3_ = NULL;
+	gchar** _tmp4_ = NULL;
+	gchar* _tmp5_ = NULL;
+	gchar** _tmp6_ = NULL;
 #line 52 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	jfif_file_format_properties_parent_class = g_type_class_peek_parent (klass);
 #line 52 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
@@ -1155,28 +1156,32 @@ static void jfif_file_format_properties_class_init (JfifFileFormatPropertiesClas
 #line 53 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_tmp2_ = g_strdup ("jpe");
 #line 53 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
-	_tmp3_ = g_new0 (gchar*, 3 + 1);
+	_tmp3_ = g_strdup ("thm");
 #line 53 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
-	_tmp3_[0] = _tmp0_;
+	_tmp4_ = g_new0 (gchar*, 4 + 1);
 #line 53 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
-	_tmp3_[1] = _tmp1_;
+	_tmp4_[0] = _tmp0_;
 #line 53 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
-	_tmp3_[2] = _tmp2_;
+	_tmp4_[1] = _tmp1_;
 #line 53 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
-	jfif_file_format_properties_KNOWN_EXTENSIONS = _tmp3_;
+	_tmp4_[2] = _tmp2_;
 #line 53 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
-	jfif_file_format_properties_KNOWN_EXTENSIONS_length1 = 3;
+	_tmp4_[3] = _tmp3_;
+#line 53 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
+	jfif_file_format_properties_KNOWN_EXTENSIONS = _tmp4_;
+#line 53 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
+	jfif_file_format_properties_KNOWN_EXTENSIONS_length1 = 4;
 #line 57 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
-	_tmp4_ = g_strdup ("image/jpeg");
+	_tmp5_ = g_strdup ("image/jpeg");
 #line 57 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
-	_tmp5_ = g_new0 (gchar*, 1 + 1);
+	_tmp6_ = g_new0 (gchar*, 1 + 1);
 #line 57 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
-	_tmp5_[0] = _tmp4_;
+	_tmp6_[0] = _tmp5_;
 #line 57 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
-	jfif_file_format_properties_KNOWN_MIME_TYPES = _tmp5_;
+	jfif_file_format_properties_KNOWN_MIME_TYPES = _tmp6_;
 #line 57 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	jfif_file_format_properties_KNOWN_MIME_TYPES_length1 = 1;
-#line 1180 "JfifSupport.c"
+#line 1185 "JfifSupport.c"
 }
 
 
@@ -1190,7 +1195,7 @@ static void jfif_file_format_properties_finalize (PhotoFileFormatProperties* obj
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_JFIF_FILE_FORMAT_PROPERTIES, JfifFileFormatProperties);
 #line 52 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	PHOTO_FILE_FORMAT_PROPERTIES_CLASS (jfif_file_format_properties_parent_class)->finalize (obj);
-#line 1194 "JfifSupport.c"
+#line 1199 "JfifSupport.c"
 }
 
 
@@ -1220,21 +1225,21 @@ JfifSniffer* jfif_sniffer_construct (GType object_type, GFile* file, PhotoFileSn
 	self = (JfifSniffer*) gdk_sniffer_construct (object_type, _tmp0_, _tmp1_);
 #line 101 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return self;
-#line 1224 "JfifSupport.c"
+#line 1229 "JfifSupport.c"
 }
 
 
 JfifSniffer* jfif_sniffer_new (GFile* file, PhotoFileSnifferOptions options) {
 #line 101 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return jfif_sniffer_construct (TYPE_JFIF_SNIFFER, file, options);
-#line 1231 "JfifSupport.c"
+#line 1236 "JfifSupport.c"
 }
 
 
 static gpointer _detected_photo_information_ref0 (gpointer self) {
 #line 116 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return self ? detected_photo_information_ref (self) : NULL;
-#line 1238 "JfifSupport.c"
+#line 1243 "JfifSupport.c"
 }
 
 
@@ -1270,7 +1275,7 @@ static DetectedPhotoInformation* jfif_sniffer_real_sniff (PhotoFileSniffer* base
 		g_propagate_error (error, _inner_error_);
 #line 109 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return NULL;
-#line 1274 "JfifSupport.c"
+#line 1279 "JfifSupport.c"
 	}
 #line 109 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	if (!_tmp0_) {
@@ -1280,11 +1285,11 @@ static DetectedPhotoInformation* jfif_sniffer_real_sniff (PhotoFileSniffer* base
 		if (is_corrupted) {
 #line 110 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 			*is_corrupted = _vala_is_corrupted;
-#line 1284 "JfifSupport.c"
+#line 1289 "JfifSupport.c"
 		}
 #line 110 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return result;
-#line 1288 "JfifSupport.c"
+#line 1293 "JfifSupport.c"
 	}
 #line 112 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_tmp4_ = PHOTO_FILE_SNIFFER_CLASS (jfif_sniffer_parent_class)->sniff (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_GDK_SNIFFER, GdkSniffer), TYPE_PHOTO_FILE_SNIFFER, PhotoFileSniffer), &_tmp3_, &_inner_error_);
@@ -1298,7 +1303,7 @@ static DetectedPhotoInformation* jfif_sniffer_real_sniff (PhotoFileSniffer* base
 		g_propagate_error (error, _inner_error_);
 #line 112 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return NULL;
-#line 1302 "JfifSupport.c"
+#line 1307 "JfifSupport.c"
 	}
 #line 113 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_tmp5_ = detected;
@@ -1312,11 +1317,11 @@ static DetectedPhotoInformation* jfif_sniffer_real_sniff (PhotoFileSniffer* base
 		if (is_corrupted) {
 #line 114 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 			*is_corrupted = _vala_is_corrupted;
-#line 1316 "JfifSupport.c"
+#line 1321 "JfifSupport.c"
 		}
 #line 114 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return result;
-#line 1320 "JfifSupport.c"
+#line 1325 "JfifSupport.c"
 	}
 #line 116 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_tmp7_ = detected;
@@ -1324,17 +1329,17 @@ static DetectedPhotoInformation* jfif_sniffer_real_sniff (PhotoFileSniffer* base
 	_tmp8_ = _tmp7_->file_format;
 #line 116 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	if (_tmp8_ == PHOTO_FILE_FORMAT_JFIF) {
-#line 1328 "JfifSupport.c"
+#line 1333 "JfifSupport.c"
 		DetectedPhotoInformation* _tmp9_ = NULL;
 #line 116 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		_tmp9_ = detected;
 #line 116 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		_tmp6_ = _tmp9_;
-#line 1334 "JfifSupport.c"
+#line 1339 "JfifSupport.c"
 	} else {
 #line 116 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		_tmp6_ = NULL;
-#line 1338 "JfifSupport.c"
+#line 1343 "JfifSupport.c"
 	}
 #line 116 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_tmp10_ = _detected_photo_information_ref0 (_tmp6_);
@@ -1346,11 +1351,11 @@ static DetectedPhotoInformation* jfif_sniffer_real_sniff (PhotoFileSniffer* base
 	if (is_corrupted) {
 #line 116 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		*is_corrupted = _vala_is_corrupted;
-#line 1350 "JfifSupport.c"
+#line 1355 "JfifSupport.c"
 	}
 #line 116 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return result;
-#line 1354 "JfifSupport.c"
+#line 1359 "JfifSupport.c"
 }
 
 
@@ -1359,7 +1364,7 @@ static void jfif_sniffer_class_init (JfifSnifferClass * klass) {
 	jfif_sniffer_parent_class = g_type_class_peek_parent (klass);
 #line 100 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	((PhotoFileSnifferClass *) klass)->sniff = jfif_sniffer_real_sniff;
-#line 1363 "JfifSupport.c"
+#line 1368 "JfifSupport.c"
 }
 
 
@@ -1390,21 +1395,21 @@ JfifReader* jfif_reader_construct (GType object_type, const gchar* filepath) {
 	self = (JfifReader*) gdk_reader_construct (object_type, _tmp0_, PHOTO_FILE_FORMAT_JFIF);
 #line 121 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return self;
-#line 1394 "JfifSupport.c"
+#line 1399 "JfifSupport.c"
 }
 
 
 JfifReader* jfif_reader_new (const gchar* filepath) {
 #line 121 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return jfif_reader_construct (TYPE_JFIF_READER, filepath);
-#line 1401 "JfifSupport.c"
+#line 1406 "JfifSupport.c"
 }
 
 
 static void jfif_reader_class_init (JfifReaderClass * klass) {
 #line 120 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	jfif_reader_parent_class = g_type_class_peek_parent (klass);
-#line 1408 "JfifSupport.c"
+#line 1413 "JfifSupport.c"
 }
 
 
@@ -1435,14 +1440,14 @@ JfifWriter* jfif_writer_construct (GType object_type, const gchar* filepath) {
 	self = (JfifWriter*) photo_file_writer_construct (object_type, _tmp0_, PHOTO_FILE_FORMAT_JFIF);
 #line 127 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return self;
-#line 1439 "JfifSupport.c"
+#line 1444 "JfifSupport.c"
 }
 
 
 JfifWriter* jfif_writer_new (const gchar* filepath) {
 #line 127 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return jfif_writer_construct (TYPE_JFIF_WRITER, filepath);
-#line 1446 "JfifSupport.c"
+#line 1451 "JfifSupport.c"
 }
 
 
@@ -1483,7 +1488,7 @@ static void jfif_writer_real_write (PhotoFileWriter* base, GdkPixbuf* pixbuf, Jp
 		g_propagate_error (error, _inner_error_);
 #line 132 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return;
-#line 1487 "JfifSupport.c"
+#line 1492 "JfifSupport.c"
 	}
 }
 
@@ -1493,7 +1498,7 @@ static void jfif_writer_class_init (JfifWriterClass * klass) {
 	jfif_writer_parent_class = g_type_class_peek_parent (klass);
 #line 126 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	((PhotoFileWriterClass *) klass)->write = jfif_writer_real_write;
-#line 1497 "JfifSupport.c"
+#line 1502 "JfifSupport.c"
 }
 
 
@@ -1524,14 +1529,14 @@ JfifMetadataWriter* jfif_metadata_writer_construct (GType object_type, const gch
 	self = (JfifMetadataWriter*) photo_file_metadata_writer_construct (object_type, _tmp0_, PHOTO_FILE_FORMAT_JFIF);
 #line 137 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return self;
-#line 1528 "JfifSupport.c"
+#line 1533 "JfifSupport.c"
 }
 
 
 JfifMetadataWriter* jfif_metadata_writer_new (const gchar* filepath) {
 #line 137 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return jfif_metadata_writer_construct (TYPE_JFIF_METADATA_WRITER, filepath);
-#line 1535 "JfifSupport.c"
+#line 1540 "JfifSupport.c"
 }
 
 
@@ -1561,7 +1566,7 @@ static void jfif_metadata_writer_real_write_metadata (PhotoFileMetadataWriter* b
 		g_propagate_error (error, _inner_error_);
 #line 142 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return;
-#line 1565 "JfifSupport.c"
+#line 1570 "JfifSupport.c"
 	}
 }
 
@@ -1571,7 +1576,7 @@ static void jfif_metadata_writer_class_init (JfifMetadataWriterClass * klass) {
 	jfif_metadata_writer_parent_class = g_type_class_peek_parent (klass);
 #line 136 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	((PhotoFileMetadataWriterClass *) klass)->write_metadata = jfif_metadata_writer_real_write_metadata;
-#line 1575 "JfifSupport.c"
+#line 1580 "JfifSupport.c"
 }
 
 
@@ -1597,7 +1602,7 @@ guint8 jpeg_marker_get_byte (JpegMarker self) {
 	result = (guint8) self;
 #line 160 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return result;
-#line 1601 "JfifSupport.c"
+#line 1606 "JfifSupport.c"
 }
 
 
@@ -1619,7 +1624,7 @@ gint jpeg_quality_get_pct (JpegQuality self) {
 	result = (gint) self;
 #line 171 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return result;
-#line 1623 "JfifSupport.c"
+#line 1628 "JfifSupport.c"
 }
 
 
@@ -1632,7 +1637,7 @@ gchar* jpeg_quality_get_pct_text (JpegQuality self) {
 	result = _tmp0_;
 #line 175 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return result;
-#line 1636 "JfifSupport.c"
+#line 1641 "JfifSupport.c"
 }
 
 
@@ -1659,13 +1664,13 @@ JpegQuality* jpeg_quality_get_all (int* result_length1) {
 	if (result_length1) {
 #line 179 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		*result_length1 = _tmp1__length1;
-#line 1663 "JfifSupport.c"
+#line 1668 "JfifSupport.c"
 	}
 #line 179 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	result = _tmp1_;
 #line 179 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return result;
-#line 1669 "JfifSupport.c"
+#line 1674 "JfifSupport.c"
 }
 
 
@@ -1675,7 +1680,7 @@ gchar* jpeg_quality_to_string (JpegQuality self) {
 	switch (self) {
 #line 183 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		case JPEG_QUALITY_LOW:
-#line 1679 "JfifSupport.c"
+#line 1684 "JfifSupport.c"
 		{
 			const gchar* _tmp0_ = NULL;
 			gchar* _tmp1_ = NULL;
@@ -1687,11 +1692,11 @@ gchar* jpeg_quality_to_string (JpegQuality self) {
 			result = _tmp1_;
 #line 185 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 			return result;
-#line 1691 "JfifSupport.c"
+#line 1696 "JfifSupport.c"
 		}
 #line 183 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		case JPEG_QUALITY_MEDIUM:
-#line 1695 "JfifSupport.c"
+#line 1700 "JfifSupport.c"
 		{
 			const gchar* _tmp2_ = NULL;
 			gchar* _tmp3_ = NULL;
@@ -1703,11 +1708,11 @@ gchar* jpeg_quality_to_string (JpegQuality self) {
 			result = _tmp3_;
 #line 188 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 			return result;
-#line 1707 "JfifSupport.c"
+#line 1712 "JfifSupport.c"
 		}
 #line 183 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		case JPEG_QUALITY_HIGH:
-#line 1711 "JfifSupport.c"
+#line 1716 "JfifSupport.c"
 		{
 			const gchar* _tmp4_ = NULL;
 			gchar* _tmp5_ = NULL;
@@ -1719,11 +1724,11 @@ gchar* jpeg_quality_to_string (JpegQuality self) {
 			result = _tmp5_;
 #line 191 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 			return result;
-#line 1723 "JfifSupport.c"
+#line 1728 "JfifSupport.c"
 		}
 #line 183 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		case JPEG_QUALITY_MAXIMUM:
-#line 1727 "JfifSupport.c"
+#line 1732 "JfifSupport.c"
 		{
 			const gchar* _tmp6_ = NULL;
 			gchar* _tmp7_ = NULL;
@@ -1735,12 +1740,12 @@ gchar* jpeg_quality_to_string (JpegQuality self) {
 			result = _tmp7_;
 #line 194 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 			return result;
-#line 1739 "JfifSupport.c"
+#line 1744 "JfifSupport.c"
 		}
 		default:
 #line 183 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		break;
-#line 1744 "JfifSupport.c"
+#line 1749 "JfifSupport.c"
 	}
 #line 197 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	g_warn_if_reached ();
@@ -1748,7 +1753,7 @@ gchar* jpeg_quality_to_string (JpegQuality self) {
 	result = NULL;
 #line 199 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return result;
-#line 1752 "JfifSupport.c"
+#line 1757 "JfifSupport.c"
 }
 
 
@@ -1791,7 +1796,7 @@ gboolean jpeg_is_jpeg (GFile* file, GError** error) {
 		g_propagate_error (error, _inner_error_);
 #line 204 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return FALSE;
-#line 1795 "JfifSupport.c"
+#line 1800 "JfifSupport.c"
 	}
 #line 207 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_tmp2_ = fins;
@@ -1809,23 +1814,23 @@ gboolean jpeg_is_jpeg (GFile* file, GError** error) {
 		_g_object_unref0 (fins);
 #line 207 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return FALSE;
-#line 1813 "JfifSupport.c"
+#line 1818 "JfifSupport.c"
 	}
 #line 210 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_tmp6_ = marker;
 #line 210 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	if (_tmp6_ == JPEG_MARKER_SOI) {
-#line 1819 "JfifSupport.c"
+#line 1824 "JfifSupport.c"
 		gint _tmp7_ = 0;
 #line 210 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		_tmp7_ = segment_length;
 #line 210 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		_tmp5_ = _tmp7_ == 0;
-#line 1825 "JfifSupport.c"
+#line 1830 "JfifSupport.c"
 	} else {
 #line 210 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		_tmp5_ = FALSE;
-#line 1829 "JfifSupport.c"
+#line 1834 "JfifSupport.c"
 	}
 #line 210 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	result = _tmp5_;
@@ -1833,7 +1838,7 @@ gboolean jpeg_is_jpeg (GFile* file, GError** error) {
 	_g_object_unref0 (fins);
 #line 210 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return result;
-#line 1837 "JfifSupport.c"
+#line 1842 "JfifSupport.c"
 }
 
 
@@ -1886,7 +1891,7 @@ gint jpeg_read_marker (GFileInputStream* fins, JpegMarker* marker, GError** erro
 		_g_object_unref0 (dins);
 #line 219 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return 0;
-#line 1890 "JfifSupport.c"
+#line 1895 "JfifSupport.c"
 	}
 #line 219 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	if (_tmp3_ != JPEG_MARKER_PREFIX) {
@@ -1898,11 +1903,11 @@ gint jpeg_read_marker (GFileInputStream* fins, JpegMarker* marker, GError** erro
 		if (marker) {
 #line 220 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 			*marker = _vala_marker;
-#line 1902 "JfifSupport.c"
+#line 1907 "JfifSupport.c"
 		}
 #line 220 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return result;
-#line 1906 "JfifSupport.c"
+#line 1911 "JfifSupport.c"
 	}
 #line 222 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_tmp7_ = dins;
@@ -1918,7 +1923,7 @@ gint jpeg_read_marker (GFileInputStream* fins, JpegMarker* marker, GError** erro
 		_g_object_unref0 (dins);
 #line 222 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return 0;
-#line 1922 "JfifSupport.c"
+#line 1927 "JfifSupport.c"
 	}
 #line 222 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_vala_marker = (JpegMarker) _tmp6_;
@@ -1928,14 +1933,14 @@ gint jpeg_read_marker (GFileInputStream* fins, JpegMarker* marker, GError** erro
 	if (_tmp10_ == JPEG_MARKER_SOI) {
 #line 223 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		_tmp9_ = TRUE;
-#line 1932 "JfifSupport.c"
+#line 1937 "JfifSupport.c"
 	} else {
 		JpegMarker _tmp11_ = 0;
 #line 223 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		_tmp11_ = _vala_marker;
 #line 223 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		_tmp9_ = _tmp11_ == JPEG_MARKER_EOI;
-#line 1939 "JfifSupport.c"
+#line 1944 "JfifSupport.c"
 	}
 #line 223 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	if (_tmp9_) {
@@ -1947,11 +1952,11 @@ gint jpeg_read_marker (GFileInputStream* fins, JpegMarker* marker, GError** erro
 		if (marker) {
 #line 225 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 			*marker = _vala_marker;
-#line 1951 "JfifSupport.c"
+#line 1956 "JfifSupport.c"
 		}
 #line 225 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return result;
-#line 1955 "JfifSupport.c"
+#line 1960 "JfifSupport.c"
 	}
 #line 228 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_tmp12_ = dins;
@@ -1967,13 +1972,13 @@ gint jpeg_read_marker (GFileInputStream* fins, JpegMarker* marker, GError** erro
 		_g_object_unref0 (dins);
 #line 228 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return 0;
-#line 1971 "JfifSupport.c"
+#line 1976 "JfifSupport.c"
 	}
 #line 229 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_tmp14_ = length;
 #line 229 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	if (((gint) _tmp14_) < 2) {
-#line 1977 "JfifSupport.c"
+#line 1982 "JfifSupport.c"
 		guint16 _tmp15_ = 0U;
 		GFileInputStream* _tmp16_ = NULL;
 		gint64 _tmp17_ = 0LL;
@@ -1993,11 +1998,11 @@ gint jpeg_read_marker (GFileInputStream* fins, JpegMarker* marker, GError** erro
 		if (marker) {
 #line 232 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 			*marker = _vala_marker;
-#line 1997 "JfifSupport.c"
+#line 2002 "JfifSupport.c"
 		}
 #line 232 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		return result;
-#line 2001 "JfifSupport.c"
+#line 2006 "JfifSupport.c"
 	}
 #line 236 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	_tmp18_ = length;
@@ -2009,11 +2014,11 @@ gint jpeg_read_marker (GFileInputStream* fins, JpegMarker* marker, GError** erro
 	if (marker) {
 #line 236 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 		*marker = _vala_marker;
-#line 2013 "JfifSupport.c"
+#line 2018 "JfifSupport.c"
 	}
 #line 236 "/home/jens/Source/shotwell/src/photos/JfifSupport.vala"
 	return result;
-#line 2017 "JfifSupport.c"
+#line 2022 "JfifSupport.c"
 }
 
 

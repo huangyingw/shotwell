@@ -6,7 +6,19 @@
         <desc>Értékelje a fényképeket 1 és 5 csillag között. Elutasíthatja a rossz fényképeket, elrejtve azokat szem elől.</desc>
         
         <link type="next" xref="delete"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Úr Balázs</mal:name>
+      <mal:email>urbalazs at gmail dot hu</mal:email>
+      <mal:years>2015, 2016.</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Értékelések</title>
 <p>You can assign each photo a rating from 1-5 stars, or may alternatively rate it as Rejected, in which case Shotwell will hide the photo by default.</p>

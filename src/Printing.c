@@ -16,7 +16,7 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
-#include <locale.h>
+#include <langinfo.h>
 #include <gee.h>
 #include <gio/gio.h>
 #include <cairo.h>
@@ -3525,21 +3525,19 @@ static void custom_print_tab_on_entry_insert_text (CustomPrintTab* self, GtkEdit
 	GtkEntry* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	gint _tmp3_ = 0;
-	gchar* decimal_point = NULL;
-	struct lconv* _tmp7_ = NULL;
-	const gchar* _tmp8_ = NULL;
-	gchar* _tmp9_ = NULL;
+	const gchar* decimal_point = NULL;
+	const gchar* _tmp7_ = NULL;
 	gboolean contains_decimal_point = FALSE;
-	GtkEntry* _tmp10_ = NULL;
-	const gchar* _tmp11_ = NULL;
-	const gchar* _tmp12_ = NULL;
-	gboolean _tmp13_ = FALSE;
+	GtkEntry* _tmp8_ = NULL;
+	const gchar* _tmp9_ = NULL;
+	const gchar* _tmp10_ = NULL;
+	gboolean _tmp11_ = FALSE;
 	gchar* new_text = NULL;
-	gchar* _tmp14_ = NULL;
-	const gchar* _tmp44_ = NULL;
-	gint _tmp45_ = 0;
-	gint _tmp46_ = 0;
-	GtkEntry* _tmp52_ = NULL;
+	gchar* _tmp12_ = NULL;
+	const gchar* _tmp42_ = NULL;
+	gint _tmp43_ = 0;
+	gint _tmp44_ = 0;
+	GtkEntry* _tmp50_ = NULL;
 #line 503 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
 #line 503 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -3560,7 +3558,7 @@ static void custom_print_tab_on_entry_insert_text (CustomPrintTab* self, GtkEdit
 		_g_object_unref0 (sender);
 #line 509 "/home/jens/Source/shotwell/src/Printing.vala"
 		return;
-#line 3564 "Printing.c"
+#line 3562 "Printing.c"
 	}
 #line 511 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->is_text_insertion_in_progress = TRUE;
@@ -3568,7 +3566,7 @@ static void custom_print_tab_on_entry_insert_text (CustomPrintTab* self, GtkEdit
 	_tmp3_ = length;
 #line 513 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp3_ == -1) {
-#line 3572 "Printing.c"
+#line 3570 "Printing.c"
 		const gchar* _tmp4_ = NULL;
 		gint _tmp5_ = 0;
 		gint _tmp6_ = 0;
@@ -3580,218 +3578,212 @@ static void custom_print_tab_on_entry_insert_text (CustomPrintTab* self, GtkEdit
 		_tmp6_ = _tmp5_;
 #line 514 "/home/jens/Source/shotwell/src/Printing.vala"
 		length = (gint) _tmp6_;
-#line 3584 "Printing.c"
+#line 3582 "Printing.c"
 	}
 #line 516 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp7_ = localeconv ();
+	_tmp7_ = nl_langinfo (RADIXCHAR);
 #line 516 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp8_ = _tmp7_->decimal_point;
-#line 516 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp9_ = g_strdup (_tmp8_);
-#line 516 "/home/jens/Source/shotwell/src/Printing.vala"
-	decimal_point = _tmp9_;
-#line 517 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp10_ = sender;
-#line 517 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp11_ = gtk_entry_get_text (_tmp10_);
-#line 517 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp12_ = decimal_point;
-#line 517 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp13_ = string_contains (_tmp11_, _tmp12_);
-#line 517 "/home/jens/Source/shotwell/src/Printing.vala"
-	contains_decimal_point = _tmp13_;
-#line 519 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp14_ = g_strdup ("");
-#line 519 "/home/jens/Source/shotwell/src/Printing.vala"
-	new_text = _tmp14_;
-#line 3608 "Printing.c"
+	decimal_point = _tmp7_;
+#line 518 "/home/jens/Source/shotwell/src/Printing.vala"
+	_tmp8_ = sender;
+#line 518 "/home/jens/Source/shotwell/src/Printing.vala"
+	_tmp9_ = gtk_entry_get_text (_tmp8_);
+#line 518 "/home/jens/Source/shotwell/src/Printing.vala"
+	_tmp10_ = decimal_point;
+#line 518 "/home/jens/Source/shotwell/src/Printing.vala"
+	_tmp11_ = string_contains (_tmp9_, _tmp10_);
+#line 518 "/home/jens/Source/shotwell/src/Printing.vala"
+	contains_decimal_point = _tmp11_;
+#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
+	_tmp12_ = g_strdup ("");
+#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
+	new_text = _tmp12_;
+#line 3602 "Printing.c"
 	{
 		gint ctr = 0;
-#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
 		ctr = 0;
-#line 3613 "Printing.c"
+#line 3607 "Printing.c"
 		{
-			gboolean _tmp15_ = FALSE;
-#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
-			_tmp15_ = TRUE;
-#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
+			gboolean _tmp13_ = FALSE;
+#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
+			_tmp13_ = TRUE;
+#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
 			while (TRUE) {
-#line 3620 "Printing.c"
-				gint _tmp17_ = 0;
+#line 3614 "Printing.c"
+				gint _tmp15_ = 0;
+				gint _tmp16_ = 0;
+				const gchar* _tmp17_ = NULL;
 				gint _tmp18_ = 0;
-				const gchar* _tmp19_ = NULL;
-				gint _tmp20_ = 0;
-				gchar _tmp21_ = '\0';
-				gboolean _tmp22_ = FALSE;
-#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
-				if (!_tmp15_) {
+				gchar _tmp19_ = '\0';
+				gboolean _tmp20_ = FALSE;
+#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
+				if (!_tmp13_) {
+#line 3623 "Printing.c"
+					gint _tmp14_ = 0;
+#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
+					_tmp14_ = ctr;
+#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
+					ctr = _tmp14_ + 1;
 #line 3629 "Printing.c"
-					gint _tmp16_ = 0;
-#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
-					_tmp16_ = ctr;
-#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
-					ctr = _tmp16_ + 1;
-#line 3635 "Printing.c"
 				}
-#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp15_ = FALSE;
-#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp17_ = ctr;
-#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp18_ = length;
-#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
-				if (!(_tmp17_ < _tmp18_)) {
-#line 520 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp13_ = FALSE;
+#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp15_ = ctr;
+#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp16_ = length;
+#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
+				if (!(_tmp15_ < _tmp16_)) {
+#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
 					break;
-#line 3647 "Printing.c"
+#line 3641 "Printing.c"
 				}
-#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp19_ = text;
-#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp20_ = ctr;
-#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp21_ = string_get (_tmp19_, (glong) _tmp20_);
-#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp22_ = g_ascii_isdigit (_tmp21_);
-#line 521 "/home/jens/Source/shotwell/src/Printing.vala"
-				if (_tmp22_) {
-#line 3659 "Printing.c"
-					const gchar* _tmp23_ = NULL;
-					const gchar* _tmp24_ = NULL;
-					gint _tmp25_ = 0;
-					gchar _tmp26_ = '\0';
+#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp17_ = text;
+#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp18_ = ctr;
+#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp19_ = string_get (_tmp17_, (glong) _tmp18_);
+#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp20_ = g_ascii_isdigit (_tmp19_);
+#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
+				if (_tmp20_) {
+#line 3653 "Printing.c"
+					const gchar* _tmp21_ = NULL;
+					const gchar* _tmp22_ = NULL;
+					gint _tmp23_ = 0;
+					gchar _tmp24_ = '\0';
+					gchar* _tmp25_ = NULL;
+					gchar* _tmp26_ = NULL;
 					gchar* _tmp27_ = NULL;
-					gchar* _tmp28_ = NULL;
-					gchar* _tmp29_ = NULL;
-#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
-					_tmp23_ = new_text;
-#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
-					_tmp24_ = text;
-#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
-					_tmp25_ = ctr;
-#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
-					_tmp26_ = string_get (_tmp24_, (glong) _tmp25_);
-#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
-					_tmp27_ = g_strdup_printf ("%c", (gchar) _tmp26_);
-#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
-					_tmp28_ = _tmp27_;
-#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
-					_tmp29_ = g_strconcat (_tmp23_, _tmp28_, NULL);
-#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
+					_tmp21_ = new_text;
+#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
+					_tmp22_ = text;
+#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
+					_tmp23_ = ctr;
+#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
+					_tmp24_ = string_get (_tmp22_, (glong) _tmp23_);
+#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
+					_tmp25_ = g_strdup_printf ("%c", (gchar) _tmp24_);
+#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
+					_tmp26_ = _tmp25_;
+#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
+					_tmp27_ = g_strconcat (_tmp21_, _tmp26_, NULL);
+#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
 					_g_free0 (new_text);
-#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
-					new_text = _tmp29_;
-#line 522 "/home/jens/Source/shotwell/src/Printing.vala"
-					_g_free0 (_tmp28_);
-#line 3687 "Printing.c"
+#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
+					new_text = _tmp27_;
+#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
+					_g_free0 (_tmp26_);
+#line 3681 "Printing.c"
 				} else {
-					gboolean _tmp30_ = FALSE;
-					gboolean _tmp31_ = FALSE;
-#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
-					_tmp31_ = contains_decimal_point;
-#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
-					if (!_tmp31_) {
-#line 3695 "Printing.c"
-						const gchar* _tmp32_ = NULL;
-						gint _tmp33_ = 0;
+					gboolean _tmp28_ = FALSE;
+					gboolean _tmp29_ = FALSE;
+#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
+					_tmp29_ = contains_decimal_point;
+#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
+					if (!_tmp29_) {
+#line 3689 "Printing.c"
+						const gchar* _tmp30_ = NULL;
+						gint _tmp31_ = 0;
+						gchar _tmp32_ = '\0';
+						const gchar* _tmp33_ = NULL;
 						gchar _tmp34_ = '\0';
-						const gchar* _tmp35_ = NULL;
-						gchar _tmp36_ = '\0';
-#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp32_ = text;
-#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp33_ = ctr;
-#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp34_ = string_get (_tmp32_, (glong) _tmp33_);
-#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp35_ = decimal_point;
-#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp36_ = string_get (_tmp35_, (glong) 0);
-#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp30_ = _tmp34_ == _tmp36_;
-#line 3713 "Printing.c"
+#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp30_ = text;
+#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp31_ = ctr;
+#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp32_ = string_get (_tmp30_, (glong) _tmp31_);
+#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp33_ = decimal_point;
+#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp34_ = string_get (_tmp33_, (glong) 0);
+#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp28_ = _tmp32_ == _tmp34_;
+#line 3707 "Printing.c"
 					} else {
-#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp30_ = FALSE;
-#line 3717 "Printing.c"
+#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp28_ = FALSE;
+#line 3711 "Printing.c"
 					}
-#line 523 "/home/jens/Source/shotwell/src/Printing.vala"
-					if (_tmp30_) {
-#line 3721 "Printing.c"
-						const gchar* _tmp37_ = NULL;
-						const gchar* _tmp38_ = NULL;
-						gint _tmp39_ = 0;
-						gchar _tmp40_ = '\0';
+#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
+					if (_tmp28_) {
+#line 3715 "Printing.c"
+						const gchar* _tmp35_ = NULL;
+						const gchar* _tmp36_ = NULL;
+						gint _tmp37_ = 0;
+						gchar _tmp38_ = '\0';
+						gchar* _tmp39_ = NULL;
+						gchar* _tmp40_ = NULL;
 						gchar* _tmp41_ = NULL;
-						gchar* _tmp42_ = NULL;
-						gchar* _tmp43_ = NULL;
-#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp37_ = new_text;
-#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp38_ = text;
-#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp39_ = ctr;
-#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp40_ = string_get (_tmp38_, (glong) _tmp39_);
-#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp41_ = g_strdup_printf ("%c", (gchar) _tmp40_);
-#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp42_ = _tmp41_;
-#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
-						_tmp43_ = g_strconcat (_tmp37_, _tmp42_, NULL);
-#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 525 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp35_ = new_text;
+#line 525 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp36_ = text;
+#line 525 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp37_ = ctr;
+#line 525 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp38_ = string_get (_tmp36_, (glong) _tmp37_);
+#line 525 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp39_ = g_strdup_printf ("%c", (gchar) _tmp38_);
+#line 525 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp40_ = _tmp39_;
+#line 525 "/home/jens/Source/shotwell/src/Printing.vala"
+						_tmp41_ = g_strconcat (_tmp35_, _tmp40_, NULL);
+#line 525 "/home/jens/Source/shotwell/src/Printing.vala"
 						_g_free0 (new_text);
-#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
-						new_text = _tmp43_;
-#line 524 "/home/jens/Source/shotwell/src/Printing.vala"
-						_g_free0 (_tmp42_);
-#line 3749 "Printing.c"
+#line 525 "/home/jens/Source/shotwell/src/Printing.vala"
+						new_text = _tmp41_;
+#line 525 "/home/jens/Source/shotwell/src/Printing.vala"
+						_g_free0 (_tmp40_);
+#line 3743 "Printing.c"
 					}
 				}
 			}
 		}
 	}
-#line 528 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp44_ = new_text;
-#line 528 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp45_ = strlen (_tmp44_);
-#line 528 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp46_ = _tmp45_;
-#line 528 "/home/jens/Source/shotwell/src/Printing.vala"
-	if (_tmp46_ > 0) {
-#line 3763 "Printing.c"
-		GtkEntry* _tmp47_ = NULL;
-		const gchar* _tmp48_ = NULL;
-		const gchar* _tmp49_ = NULL;
-		gint _tmp50_ = 0;
-		gint _tmp51_ = 0;
 #line 529 "/home/jens/Source/shotwell/src/Printing.vala"
-		_tmp47_ = sender;
+	_tmp42_ = new_text;
 #line 529 "/home/jens/Source/shotwell/src/Printing.vala"
-		_tmp48_ = new_text;
+	_tmp43_ = strlen (_tmp42_);
 #line 529 "/home/jens/Source/shotwell/src/Printing.vala"
-		_tmp49_ = new_text;
+	_tmp44_ = _tmp43_;
 #line 529 "/home/jens/Source/shotwell/src/Printing.vala"
-		_tmp50_ = strlen (_tmp49_);
-#line 529 "/home/jens/Source/shotwell/src/Printing.vala"
-		_tmp51_ = _tmp50_;
-#line 529 "/home/jens/Source/shotwell/src/Printing.vala"
-		gtk_editable_insert_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp47_, GTK_TYPE_EDITABLE, GtkEditable), _tmp48_, (gint) _tmp51_, position);
-#line 3781 "Printing.c"
+	if (_tmp44_ > 0) {
+#line 3757 "Printing.c"
+		GtkEntry* _tmp45_ = NULL;
+		const gchar* _tmp46_ = NULL;
+		const gchar* _tmp47_ = NULL;
+		gint _tmp48_ = 0;
+		gint _tmp49_ = 0;
+#line 530 "/home/jens/Source/shotwell/src/Printing.vala"
+		_tmp45_ = sender;
+#line 530 "/home/jens/Source/shotwell/src/Printing.vala"
+		_tmp46_ = new_text;
+#line 530 "/home/jens/Source/shotwell/src/Printing.vala"
+		_tmp47_ = new_text;
+#line 530 "/home/jens/Source/shotwell/src/Printing.vala"
+		_tmp48_ = strlen (_tmp47_);
+#line 530 "/home/jens/Source/shotwell/src/Printing.vala"
+		_tmp49_ = _tmp48_;
+#line 530 "/home/jens/Source/shotwell/src/Printing.vala"
+		gtk_editable_insert_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp45_, GTK_TYPE_EDITABLE, GtkEditable), _tmp46_, (gint) _tmp49_, position);
+#line 3775 "Printing.c"
 	}
-#line 531 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp52_ = sender;
-#line 531 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_signal_stop_emission_by_name (_tmp52_, "insert-text");
-#line 533 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 532 "/home/jens/Source/shotwell/src/Printing.vala"
+	_tmp50_ = sender;
+#line 532 "/home/jens/Source/shotwell/src/Printing.vala"
+	g_signal_stop_emission_by_name (_tmp50_, "insert-text");
+#line 534 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->is_text_insertion_in_progress = FALSE;
 #line 503 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (new_text);
 #line 503 "/home/jens/Source/shotwell/src/Printing.vala"
-	_g_free0 (decimal_point);
-#line 503 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (sender);
-#line 3795 "Printing.c"
+#line 3787 "Printing.c"
 }
 
 
@@ -3851,65 +3843,65 @@ static void custom_print_tab_sync_state_from_job (CustomPrintTab* self, PrintJob
 	PrintSettings* _tmp63_ = NULL;
 	gchar* _tmp64_ = NULL;
 	gchar* _tmp65_ = NULL;
-#line 536 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 536 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_JOB (job));
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = job;
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = print_job_get_local_settings (_tmp0_);
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = _tmp1_;
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_get_content_width (_tmp2_, &_tmp3_);
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp4_ = _tmp3_.unit;
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = job;
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6_ = print_job_get_local_settings (_tmp5_);
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp7_ = _tmp6_;
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_get_content_height (_tmp7_, &_tmp8_);
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp9_ = _tmp8_.unit;
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_assert (_tmp4_ == _tmp9_, "job.get_local_settings().get_content_width().unit ==             job.get_local_settings().get_content_height().unit");
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp7_);
-#line 537 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 538 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp2_);
-#line 540 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp10_ = job;
-#line 540 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp11_ = print_job_get_local_settings (_tmp10_);
-#line 540 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp12_ = _tmp11_;
-#line 540 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_get_content_width (_tmp12_, &_tmp13_);
-#line 540 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp14_ = _tmp13_;
-#line 540 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp12_);
-#line 540 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
 	constrained_width = _tmp14_;
-#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp15_ = job;
-#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp16_ = print_job_get_local_settings (_tmp15_);
-#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp17_ = _tmp16_;
-#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp18_ = print_settings_is_match_aspect_ratio_enabled (_tmp17_);
-#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp19_ = _tmp18_;
-#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp17_);
-#line 541 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp19_) {
-#line 3913 "Printing.c"
+#line 3905 "Printing.c"
 		PrintJob* _tmp20_ = NULL;
 		PrintSettings* _tmp21_ = NULL;
 		PrintSettings* _tmp22_ = NULL;
@@ -3922,143 +3914,143 @@ static void custom_print_tab_sync_state_from_job (CustomPrintTab* self, PrintJob
 		PrintSettings* _tmp29_ = NULL;
 		Measurement _tmp30_ = {0};
 		MeasurementUnit _tmp31_ = 0;
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp20_ = job;
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp21_ = print_job_get_local_settings (_tmp20_);
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp22_ = _tmp21_;
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		print_settings_get_content_height (_tmp22_, &_tmp23_);
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp24_ = _tmp23_.value;
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp25_ = job;
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp26_ = print_job_get_source_aspect_ratio (_tmp25_);
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp27_ = job;
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp28_ = print_job_get_local_settings (_tmp27_);
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp29_ = _tmp28_;
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		print_settings_get_content_height (_tmp29_, &_tmp30_);
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp31_ = _tmp30_.unit;
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		measurement_init (&constrained_width, _tmp24_ * _tmp26_, _tmp31_);
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_print_settings_unref0 (_tmp29_);
-#line 542 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 543 "/home/jens/Source/shotwell/src/Printing.vala"
 		_print_settings_unref0 (_tmp22_);
-#line 3956 "Printing.c"
+#line 3948 "Printing.c"
 	}
-#line 544 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 545 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp32_ = constrained_width;
-#line 544 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 545 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_set_content_width (self, &_tmp32_);
-#line 545 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp33_ = job;
-#line 545 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp34_ = print_job_get_local_settings (_tmp33_);
-#line 545 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp35_ = _tmp34_;
-#line 545 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_get_content_height (_tmp35_, &_tmp36_);
-#line 545 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_set_content_height (self, &_tmp36_);
-#line 545 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp35_);
-#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp37_ = job;
-#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp38_ = print_job_get_local_settings (_tmp37_);
-#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp39_ = _tmp38_;
-#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp40_ = print_settings_get_content_layout (_tmp39_);
-#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_set_content_layout (self, _tmp40_);
-#line 546 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp39_);
-#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp41_ = job;
-#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp42_ = print_job_get_local_settings (_tmp41_);
-#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp43_ = _tmp42_;
-#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp44_ = print_settings_get_content_ppi (_tmp43_);
-#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_set_content_ppi (self, _tmp44_);
-#line 547 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp43_);
-#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp45_ = job;
-#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp46_ = print_job_get_local_settings (_tmp45_);
-#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp47_ = _tmp46_;
-#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp48_ = print_settings_get_image_per_page_selection (_tmp47_);
-#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_set_image_per_page_selection (self, _tmp48_);
-#line 548 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp47_);
-#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp49_ = job;
-#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp50_ = print_job_get_local_settings (_tmp49_);
-#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp51_ = _tmp50_;
-#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp52_ = print_settings_get_size_selection (_tmp51_);
-#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_set_size_selection (self, _tmp52_);
-#line 549 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp51_);
-#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp53_ = job;
-#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp54_ = print_job_get_local_settings (_tmp53_);
-#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp55_ = _tmp54_;
-#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp56_ = print_settings_is_match_aspect_ratio_enabled (_tmp55_);
-#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_set_match_aspect_ratio_enabled (self, _tmp56_);
-#line 550 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp55_);
-#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp57_ = job;
-#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp58_ = print_job_get_local_settings (_tmp57_);
-#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp59_ = _tmp58_;
-#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp60_ = print_settings_is_print_titles_enabled (_tmp59_);
-#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_set_print_titles_enabled (self, _tmp60_);
-#line 551 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp59_);
-#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 553 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp61_ = job;
-#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 553 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp62_ = print_job_get_local_settings (_tmp61_);
-#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 553 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp63_ = _tmp62_;
-#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 553 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp64_ = print_settings_get_print_titles_font (_tmp63_);
-#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 553 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp65_ = _tmp64_;
-#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 553 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_set_print_titles_font (self, _tmp65_);
-#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 553 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (_tmp65_);
-#line 552 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 553 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp63_);
-#line 4062 "Printing.c"
+#line 4054 "Printing.c"
 }
 
 
@@ -4068,67 +4060,67 @@ static void custom_print_tab_on_radio_group_click (CustomPrintTab* self, GtkButt
 	GtkRadioButton* _tmp1_ = NULL;
 	GtkRadioButton* _tmp2_ = NULL;
 	GtkRadioButton* _tmp3_ = NULL;
-#line 555 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 556 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 555 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 556 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (GTK_IS_BUTTON (b));
-#line 556 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 557 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = b;
-#line 556 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 557 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_radio_button_get_type (), GtkRadioButton));
-#line 556 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 557 "/home/jens/Source/shotwell/src/Printing.vala"
 	sender = _tmp1_;
-#line 558 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp2_ = sender;
-#line 558 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp3_ = self->priv->standard_size_radio;
-#line 558 "/home/jens/Source/shotwell/src/Printing.vala"
-	if (_tmp2_ == _tmp3_) {
-#line 4088 "Printing.c"
-		GtkComboBox* _tmp4_ = NULL;
 #line 559 "/home/jens/Source/shotwell/src/Printing.vala"
+	_tmp2_ = sender;
+#line 559 "/home/jens/Source/shotwell/src/Printing.vala"
+	_tmp3_ = self->priv->standard_size_radio;
+#line 559 "/home/jens/Source/shotwell/src/Printing.vala"
+	if (_tmp2_ == _tmp3_) {
+#line 4080 "Printing.c"
+		GtkComboBox* _tmp4_ = NULL;
+#line 560 "/home/jens/Source/shotwell/src/Printing.vala"
 		custom_print_tab_set_content_layout_control_state (self, CONTENT_LAYOUT_STANDARD_SIZE);
-#line 560 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 561 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp4_ = self->priv->standard_sizes_combo;
-#line 560 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 561 "/home/jens/Source/shotwell/src/Printing.vala"
 		gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget));
-#line 4096 "Printing.c"
+#line 4088 "Printing.c"
 	} else {
 		GtkRadioButton* _tmp5_ = NULL;
 		GtkRadioButton* _tmp6_ = NULL;
-#line 561 "/home/jens/Source/shotwell/src/Printing.vala"
-		_tmp5_ = sender;
-#line 561 "/home/jens/Source/shotwell/src/Printing.vala"
-		_tmp6_ = self->priv->custom_size_radio;
-#line 561 "/home/jens/Source/shotwell/src/Printing.vala"
-		if (_tmp5_ == _tmp6_) {
-#line 4106 "Printing.c"
-			GtkEntry* _tmp7_ = NULL;
 #line 562 "/home/jens/Source/shotwell/src/Printing.vala"
+		_tmp5_ = sender;
+#line 562 "/home/jens/Source/shotwell/src/Printing.vala"
+		_tmp6_ = self->priv->custom_size_radio;
+#line 562 "/home/jens/Source/shotwell/src/Printing.vala"
+		if (_tmp5_ == _tmp6_) {
+#line 4098 "Printing.c"
+			GtkEntry* _tmp7_ = NULL;
+#line 563 "/home/jens/Source/shotwell/src/Printing.vala"
 			custom_print_tab_set_content_layout_control_state (self, CONTENT_LAYOUT_CUSTOM_SIZE);
-#line 563 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 564 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp7_ = self->priv->custom_height_entry;
-#line 563 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 564 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget));
-#line 4114 "Printing.c"
+#line 4106 "Printing.c"
 		} else {
 			GtkRadioButton* _tmp8_ = NULL;
 			GtkRadioButton* _tmp9_ = NULL;
-#line 564 "/home/jens/Source/shotwell/src/Printing.vala"
-			_tmp8_ = sender;
-#line 564 "/home/jens/Source/shotwell/src/Printing.vala"
-			_tmp9_ = self->priv->image_per_page_radio;
-#line 564 "/home/jens/Source/shotwell/src/Printing.vala"
-			if (_tmp8_ == _tmp9_) {
 #line 565 "/home/jens/Source/shotwell/src/Printing.vala"
+			_tmp8_ = sender;
+#line 565 "/home/jens/Source/shotwell/src/Printing.vala"
+			_tmp9_ = self->priv->image_per_page_radio;
+#line 565 "/home/jens/Source/shotwell/src/Printing.vala"
+			if (_tmp8_ == _tmp9_) {
+#line 566 "/home/jens/Source/shotwell/src/Printing.vala"
 				custom_print_tab_set_content_layout_control_state (self, CONTENT_LAYOUT_IMAGE_PER_PAGE);
-#line 4126 "Printing.c"
+#line 4118 "Printing.c"
 			}
 		}
 	}
-#line 555 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 556 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (sender);
-#line 4132 "Printing.c"
+#line 4124 "Printing.c"
 }
 
 
@@ -4143,51 +4135,51 @@ static void custom_print_tab_on_units_combo_changed (CustomPrintTab* self) {
 	MeasurementUnit _tmp7_ = 0;
 	gchar* _tmp8_ = NULL;
 	gchar* _tmp9_ = NULL;
-#line 569 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 570 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 570 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 571 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->custom_height_entry;
-#line 570 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 571 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = self->priv->local_content_height;
-#line 570 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 571 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = custom_print_tab_get_user_unit_choice (self);
-#line 570 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 571 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = custom_print_tab_format_measurement_as (self, &_tmp1_, _tmp2_);
-#line 570 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 571 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp4_ = _tmp3_;
-#line 570 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 571 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_entry_set_text (_tmp0_, _tmp4_);
-#line 570 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 571 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (_tmp4_);
-#line 572 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 573 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = self->priv->custom_width_entry;
-#line 572 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 573 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6_ = self->priv->local_content_width;
-#line 572 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 573 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp7_ = custom_print_tab_get_user_unit_choice (self);
-#line 572 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 573 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp8_ = custom_print_tab_format_measurement_as (self, &_tmp6_, _tmp7_);
-#line 572 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 573 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp9_ = _tmp8_;
-#line 572 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 573 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_entry_set_text (_tmp5_, _tmp9_);
-#line 572 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 573 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (_tmp9_);
-#line 4177 "Printing.c"
+#line 4169 "Printing.c"
 }
 
 
 static void custom_print_tab_set_content_layout_control_state (CustomPrintTab* self, ContentLayout layout) {
 	ContentLayout _tmp0_ = 0;
-#line 576 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 577 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 577 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 578 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = layout;
-#line 577 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 578 "/home/jens/Source/shotwell/src/Printing.vala"
 	switch (_tmp0_) {
-#line 577 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 578 "/home/jens/Source/shotwell/src/Printing.vala"
 		case CONTENT_LAYOUT_STANDARD_SIZE:
-#line 4191 "Printing.c"
+#line 4183 "Printing.c"
 		{
 			GtkComboBox* _tmp1_ = NULL;
 			GtkComboBoxText* _tmp2_ = NULL;
@@ -4195,37 +4187,37 @@ static void custom_print_tab_set_content_layout_control_state (CustomPrintTab* s
 			GtkEntry* _tmp4_ = NULL;
 			GtkCheckButton* _tmp5_ = NULL;
 			GtkComboBox* _tmp6_ = NULL;
-#line 579 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 580 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp1_ = self->priv->standard_sizes_combo;
-#line 579 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 580 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 580 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 581 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp2_ = self->priv->units_combo;
-#line 580 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 581 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 581 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 582 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp3_ = self->priv->custom_width_entry;
-#line 581 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 582 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 582 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 583 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp4_ = self->priv->custom_height_entry;
-#line 582 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 583 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 583 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 584 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp5_ = self->priv->aspect_ratio_check;
-#line 583 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 584 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 584 "/home/jens/Source/shotwell/src/Printing.vala"
-			_tmp6_ = self->priv->image_per_page_combo;
-#line 584 "/home/jens/Source/shotwell/src/Printing.vala"
-			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget), FALSE);
 #line 585 "/home/jens/Source/shotwell/src/Printing.vala"
+			_tmp6_ = self->priv->image_per_page_combo;
+#line 585 "/home/jens/Source/shotwell/src/Printing.vala"
+			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 586 "/home/jens/Source/shotwell/src/Printing.vala"
 			break;
-#line 4225 "Printing.c"
+#line 4217 "Printing.c"
 		}
-#line 577 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 578 "/home/jens/Source/shotwell/src/Printing.vala"
 		case CONTENT_LAYOUT_CUSTOM_SIZE:
-#line 4229 "Printing.c"
+#line 4221 "Printing.c"
 		{
 			GtkComboBox* _tmp7_ = NULL;
 			GtkComboBoxText* _tmp8_ = NULL;
@@ -4233,37 +4225,37 @@ static void custom_print_tab_set_content_layout_control_state (CustomPrintTab* s
 			GtkEntry* _tmp10_ = NULL;
 			GtkCheckButton* _tmp11_ = NULL;
 			GtkComboBox* _tmp12_ = NULL;
-#line 588 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 589 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp7_ = self->priv->standard_sizes_combo;
-#line 588 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 589 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 589 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 590 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp8_ = self->priv->units_combo;
-#line 589 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 590 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 590 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 591 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp9_ = self->priv->custom_width_entry;
-#line 590 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 591 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 591 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 592 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp10_ = self->priv->custom_height_entry;
-#line 591 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 592 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 592 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 593 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp11_ = self->priv->aspect_ratio_check;
-#line 592 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 593 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 593 "/home/jens/Source/shotwell/src/Printing.vala"
-			_tmp12_ = self->priv->image_per_page_combo;
-#line 593 "/home/jens/Source/shotwell/src/Printing.vala"
-			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget), FALSE);
 #line 594 "/home/jens/Source/shotwell/src/Printing.vala"
+			_tmp12_ = self->priv->image_per_page_combo;
+#line 594 "/home/jens/Source/shotwell/src/Printing.vala"
+			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 595 "/home/jens/Source/shotwell/src/Printing.vala"
 			break;
-#line 4263 "Printing.c"
+#line 4255 "Printing.c"
 		}
-#line 577 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 578 "/home/jens/Source/shotwell/src/Printing.vala"
 		case CONTENT_LAYOUT_IMAGE_PER_PAGE:
-#line 4267 "Printing.c"
+#line 4259 "Printing.c"
 		{
 			GtkComboBox* _tmp13_ = NULL;
 			GtkComboBoxText* _tmp14_ = NULL;
@@ -4271,39 +4263,39 @@ static void custom_print_tab_set_content_layout_control_state (CustomPrintTab* s
 			GtkEntry* _tmp16_ = NULL;
 			GtkCheckButton* _tmp17_ = NULL;
 			GtkComboBox* _tmp18_ = NULL;
-#line 597 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 598 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp13_ = self->priv->standard_sizes_combo;
-#line 597 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 598 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 598 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 599 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp14_ = self->priv->units_combo;
-#line 598 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 599 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 599 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 600 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp15_ = self->priv->custom_width_entry;
-#line 599 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 600 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 600 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 601 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp16_ = self->priv->custom_height_entry;
-#line 600 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 601 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 601 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 602 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp17_ = self->priv->aspect_ratio_check;
-#line 601 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 602 "/home/jens/Source/shotwell/src/Printing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 602 "/home/jens/Source/shotwell/src/Printing.vala"
-			_tmp18_ = self->priv->image_per_page_combo;
-#line 602 "/home/jens/Source/shotwell/src/Printing.vala"
-			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_widget_get_type (), GtkWidget), TRUE);
 #line 603 "/home/jens/Source/shotwell/src/Printing.vala"
+			_tmp18_ = self->priv->image_per_page_combo;
+#line 603 "/home/jens/Source/shotwell/src/Printing.vala"
+			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_widget_get_type (), GtkWidget), TRUE);
+#line 604 "/home/jens/Source/shotwell/src/Printing.vala"
 			break;
-#line 4301 "Printing.c"
+#line 4293 "Printing.c"
 		}
 		default:
 		{
-#line 606 "/home/jens/Source/shotwell/src/Printing.vala"
-			g_error ("Printing.vala:606: unknown ContentLayout enumeration value");
-#line 4307 "Printing.c"
+#line 607 "/home/jens/Source/shotwell/src/Printing.vala"
+			g_error ("Printing.vala:607: unknown ContentLayout enumeration value");
+#line 4299 "Printing.c"
 		}
 	}
 }
@@ -4318,95 +4310,95 @@ static gboolean custom_print_tab_standard_sizes_combo_separator_func (GtkTreeMod
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
 	gboolean _tmp5_ = FALSE;
-#line 610 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 611 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (GTK_IS_TREE_MODEL (model), FALSE);
-#line 610 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 611 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (iter != NULL, FALSE);
-#line 613 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 614 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = model;
-#line 613 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 614 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = *iter;
-#line 613 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 614 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_tree_model_get_value (_tmp0_, &_tmp1_, 0, &_tmp2_);
-#line 613 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 614 "/home/jens/Source/shotwell/src/Printing.vala"
 	G_IS_VALUE (&val) ? (g_value_unset (&val), NULL) : NULL;
-#line 613 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 614 "/home/jens/Source/shotwell/src/Printing.vala"
 	val = _tmp2_;
-#line 615 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 616 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = g_value_dup_string (&val);
-#line 615 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 616 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp4_ = _tmp3_;
-#line 615 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 616 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = g_strcmp0 (_tmp4_, "-") == 0;
-#line 615 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 616 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (_tmp4_);
-#line 615 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 616 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp5_;
-#line 615 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 616 "/home/jens/Source/shotwell/src/Printing.vala"
 	G_IS_VALUE (&val) ? (g_value_unset (&val), NULL) : NULL;
-#line 615 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 616 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 4350 "Printing.c"
+#line 4342 "Printing.c"
 }
 
 
 static void custom_print_tab_set_content_layout (CustomPrintTab* self, ContentLayout content_layout) {
 	ContentLayout _tmp0_ = 0;
 	ContentLayout _tmp1_ = 0;
-#line 618 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 619 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 619 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 620 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = content_layout;
-#line 619 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 620 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_set_content_layout_control_state (self, _tmp0_);
-#line 620 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 621 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = content_layout;
-#line 620 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 621 "/home/jens/Source/shotwell/src/Printing.vala"
 	switch (_tmp1_) {
-#line 620 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 621 "/home/jens/Source/shotwell/src/Printing.vala"
 		case CONTENT_LAYOUT_STANDARD_SIZE:
-#line 4369 "Printing.c"
+#line 4361 "Printing.c"
 		{
 			GtkRadioButton* _tmp2_ = NULL;
-#line 622 "/home/jens/Source/shotwell/src/Printing.vala"
-			_tmp2_ = self->priv->standard_size_radio;
-#line 622 "/home/jens/Source/shotwell/src/Printing.vala"
-			gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
 #line 623 "/home/jens/Source/shotwell/src/Printing.vala"
+			_tmp2_ = self->priv->standard_size_radio;
+#line 623 "/home/jens/Source/shotwell/src/Printing.vala"
+			gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
+#line 624 "/home/jens/Source/shotwell/src/Printing.vala"
 			break;
-#line 4378 "Printing.c"
+#line 4370 "Printing.c"
 		}
-#line 620 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 621 "/home/jens/Source/shotwell/src/Printing.vala"
 		case CONTENT_LAYOUT_CUSTOM_SIZE:
-#line 4382 "Printing.c"
+#line 4374 "Printing.c"
 		{
 			GtkRadioButton* _tmp3_ = NULL;
-#line 626 "/home/jens/Source/shotwell/src/Printing.vala"
-			_tmp3_ = self->priv->custom_size_radio;
-#line 626 "/home/jens/Source/shotwell/src/Printing.vala"
-			gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
 #line 627 "/home/jens/Source/shotwell/src/Printing.vala"
+			_tmp3_ = self->priv->custom_size_radio;
+#line 627 "/home/jens/Source/shotwell/src/Printing.vala"
+			gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
+#line 628 "/home/jens/Source/shotwell/src/Printing.vala"
 			break;
-#line 4391 "Printing.c"
+#line 4383 "Printing.c"
 		}
-#line 620 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 621 "/home/jens/Source/shotwell/src/Printing.vala"
 		case CONTENT_LAYOUT_IMAGE_PER_PAGE:
-#line 4395 "Printing.c"
+#line 4387 "Printing.c"
 		{
 			GtkRadioButton* _tmp4_ = NULL;
-#line 630 "/home/jens/Source/shotwell/src/Printing.vala"
-			_tmp4_ = self->priv->image_per_page_radio;
-#line 630 "/home/jens/Source/shotwell/src/Printing.vala"
-			gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
 #line 631 "/home/jens/Source/shotwell/src/Printing.vala"
+			_tmp4_ = self->priv->image_per_page_radio;
+#line 631 "/home/jens/Source/shotwell/src/Printing.vala"
+			gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
+#line 632 "/home/jens/Source/shotwell/src/Printing.vala"
 			break;
-#line 4404 "Printing.c"
+#line 4396 "Printing.c"
 		}
 		default:
 		{
-#line 634 "/home/jens/Source/shotwell/src/Printing.vala"
-			g_error ("Printing.vala:634: unknown ContentLayout enumeration value");
-#line 4410 "Printing.c"
+#line 635 "/home/jens/Source/shotwell/src/Printing.vala"
+			g_error ("Printing.vala:635: unknown ContentLayout enumeration value");
+#line 4402 "Printing.c"
 		}
 	}
 }
@@ -4420,48 +4412,48 @@ static ContentLayout custom_print_tab_get_content_layout (CustomPrintTab* self) 
 	gboolean _tmp3_ = FALSE;
 	GtkRadioButton* _tmp4_ = NULL;
 	gboolean _tmp5_ = FALSE;
-#line 638 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 639 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_CUSTOM_PRINT_TAB (self), 0);
-#line 639 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 640 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->standard_size_radio;
-#line 639 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 640 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 639 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 640 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp1_) {
-#line 640 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 641 "/home/jens/Source/shotwell/src/Printing.vala"
 		result = CONTENT_LAYOUT_STANDARD_SIZE;
-#line 640 "/home/jens/Source/shotwell/src/Printing.vala"
-		return result;
-#line 4436 "Printing.c"
-	}
 #line 641 "/home/jens/Source/shotwell/src/Printing.vala"
+		return result;
+#line 4428 "Printing.c"
+	}
+#line 642 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = self->priv->custom_size_radio;
-#line 641 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 642 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 641 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 642 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp3_) {
-#line 642 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 643 "/home/jens/Source/shotwell/src/Printing.vala"
 		result = CONTENT_LAYOUT_CUSTOM_SIZE;
-#line 642 "/home/jens/Source/shotwell/src/Printing.vala"
-		return result;
-#line 4448 "Printing.c"
-	}
 #line 643 "/home/jens/Source/shotwell/src/Printing.vala"
+		return result;
+#line 4440 "Printing.c"
+	}
+#line 644 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp4_ = self->priv->image_per_page_radio;
-#line 643 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 644 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 643 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 644 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp5_) {
-#line 644 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 645 "/home/jens/Source/shotwell/src/Printing.vala"
 		result = CONTENT_LAYOUT_IMAGE_PER_PAGE;
-#line 644 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 645 "/home/jens/Source/shotwell/src/Printing.vala"
 		return result;
-#line 4460 "Printing.c"
+#line 4452 "Printing.c"
 	}
-#line 646 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_error ("Printing.vala:646: inconsistent content layout radio button group stat" \
+#line 647 "/home/jens/Source/shotwell/src/Printing.vala"
+	g_error ("Printing.vala:647: inconsistent content layout radio button group stat" \
 "e");
-#line 4464 "Printing.c"
+#line 4456 "Printing.c"
 }
 
 
@@ -4475,21 +4467,21 @@ static void custom_print_tab_set_content_width (CustomPrintTab* self, Measuremen
 	Measurement _tmp15_ = {0};
 	gchar* _tmp16_ = NULL;
 	gchar* _tmp17_ = NULL;
-#line 649 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 650 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 649 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 650 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (content_width != NULL);
-#line 650 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 651 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = *content_width;
-#line 650 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 651 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _tmp0_.unit;
-#line 650 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 651 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = self->priv->local_content_height;
-#line 650 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 651 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = _tmp2_.unit;
-#line 650 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 651 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp1_ != _tmp3_) {
-#line 4492 "Printing.c"
+#line 4484 "Printing.c"
 		Measurement _tmp4_ = {0};
 		MeasurementUnit _tmp5_ = 0;
 		Measurement _tmp6_ = {0};
@@ -4499,65 +4491,65 @@ static void custom_print_tab_set_content_width (CustomPrintTab* self, Measuremen
 		Measurement _tmp10_ = {0};
 		gchar* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
-#line 651 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 652 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp4_ = *content_width;
-#line 651 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 652 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp5_ = _tmp4_.unit;
-#line 651 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 652 "/home/jens/Source/shotwell/src/Printing.vala"
 		custom_print_tab_set_user_unit_choice (self, _tmp5_);
-#line 652 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 653 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp6_ = *content_width;
-#line 652 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 653 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp7_ = _tmp6_.unit;
-#line 652 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 653 "/home/jens/Source/shotwell/src/Printing.vala"
 		measurement_convert_to (&self->priv->local_content_height, _tmp7_, &_tmp8_);
-#line 652 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 653 "/home/jens/Source/shotwell/src/Printing.vala"
 		self->priv->local_content_height = _tmp8_;
-#line 653 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 654 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp9_ = self->priv->custom_height_entry;
-#line 653 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 654 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp10_ = self->priv->local_content_height;
-#line 653 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 654 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp11_ = custom_print_tab_format_measurement (self, &_tmp10_);
-#line 653 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 654 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp12_ = _tmp11_;
-#line 653 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 654 "/home/jens/Source/shotwell/src/Printing.vala"
 		gtk_entry_set_text (_tmp9_, _tmp12_);
-#line 653 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 654 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_free0 (_tmp12_);
-#line 4528 "Printing.c"
+#line 4520 "Printing.c"
 	}
-#line 655 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 656 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp13_ = *content_width;
-#line 655 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 656 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->local_content_width = _tmp13_;
-#line 656 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 657 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp14_ = self->priv->custom_width_entry;
-#line 656 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 657 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp15_ = *content_width;
-#line 656 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 657 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp16_ = custom_print_tab_format_measurement (self, &_tmp15_);
-#line 656 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 657 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp17_ = _tmp16_;
-#line 656 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 657 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_entry_set_text (_tmp14_, _tmp17_);
-#line 656 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 657 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (_tmp17_);
-#line 4546 "Printing.c"
+#line 4538 "Printing.c"
 }
 
 
 static void custom_print_tab_get_content_width (CustomPrintTab* self, Measurement* result) {
 	Measurement _tmp0_ = {0};
-#line 659 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 660 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 660 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 661 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->local_content_width;
-#line 660 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 661 "/home/jens/Source/shotwell/src/Printing.vala"
 	*result = _tmp0_;
-#line 660 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 661 "/home/jens/Source/shotwell/src/Printing.vala"
 	return;
-#line 4560 "Printing.c"
+#line 4552 "Printing.c"
 }
 
 
@@ -4571,21 +4563,21 @@ static void custom_print_tab_set_content_height (CustomPrintTab* self, Measureme
 	Measurement _tmp15_ = {0};
 	gchar* _tmp16_ = NULL;
 	gchar* _tmp17_ = NULL;
-#line 663 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 664 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 663 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 664 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (content_height != NULL);
-#line 664 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 665 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = *content_height;
-#line 664 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 665 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _tmp0_.unit;
-#line 664 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 665 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = self->priv->local_content_width;
-#line 664 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 665 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = _tmp2_.unit;
-#line 664 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 665 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp1_ != _tmp3_) {
-#line 4588 "Printing.c"
+#line 4580 "Printing.c"
 		Measurement _tmp4_ = {0};
 		MeasurementUnit _tmp5_ = 0;
 		Measurement _tmp6_ = {0};
@@ -4595,65 +4587,65 @@ static void custom_print_tab_set_content_height (CustomPrintTab* self, Measureme
 		Measurement _tmp10_ = {0};
 		gchar* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
-#line 665 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 666 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp4_ = *content_height;
-#line 665 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 666 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp5_ = _tmp4_.unit;
-#line 665 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 666 "/home/jens/Source/shotwell/src/Printing.vala"
 		custom_print_tab_set_user_unit_choice (self, _tmp5_);
-#line 666 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 667 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp6_ = *content_height;
-#line 666 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 667 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp7_ = _tmp6_.unit;
-#line 666 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 667 "/home/jens/Source/shotwell/src/Printing.vala"
 		measurement_convert_to (&self->priv->local_content_width, _tmp7_, &_tmp8_);
-#line 666 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 667 "/home/jens/Source/shotwell/src/Printing.vala"
 		self->priv->local_content_width = _tmp8_;
-#line 667 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 668 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp9_ = self->priv->custom_width_entry;
-#line 667 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 668 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp10_ = self->priv->local_content_width;
-#line 667 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 668 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp11_ = custom_print_tab_format_measurement (self, &_tmp10_);
-#line 667 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 668 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp12_ = _tmp11_;
-#line 667 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 668 "/home/jens/Source/shotwell/src/Printing.vala"
 		gtk_entry_set_text (_tmp9_, _tmp12_);
-#line 667 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 668 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_free0 (_tmp12_);
-#line 4624 "Printing.c"
+#line 4616 "Printing.c"
 	}
-#line 669 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 670 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp13_ = *content_height;
-#line 669 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 670 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->local_content_height = _tmp13_;
-#line 670 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 671 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp14_ = self->priv->custom_height_entry;
-#line 670 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 671 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp15_ = *content_height;
-#line 670 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 671 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp16_ = custom_print_tab_format_measurement (self, &_tmp15_);
-#line 670 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 671 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp17_ = _tmp16_;
-#line 670 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 671 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_entry_set_text (_tmp14_, _tmp17_);
-#line 670 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 671 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (_tmp17_);
-#line 4642 "Printing.c"
+#line 4634 "Printing.c"
 }
 
 
 static void custom_print_tab_get_content_height (CustomPrintTab* self, Measurement* result) {
 	Measurement _tmp0_ = {0};
-#line 673 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 674 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 674 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 675 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->local_content_height;
-#line 674 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 675 "/home/jens/Source/shotwell/src/Printing.vala"
 	*result = _tmp0_;
-#line 674 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 675 "/home/jens/Source/shotwell/src/Printing.vala"
 	return;
-#line 4656 "Printing.c"
+#line 4648 "Printing.c"
 }
 
 
@@ -4664,57 +4656,57 @@ static void custom_print_tab_set_content_ppi (CustomPrintTab* self, gint content
 	gint _tmp3_ = 0;
 	gchar* _tmp4_ = NULL;
 	gchar* _tmp5_ = NULL;
-#line 677 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 678 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 678 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 679 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = content_ppi;
-#line 678 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 679 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = CLAMP (_tmp0_, PRINT_SETTINGS_MIN_CONTENT_PPI, PRINT_SETTINGS_MAX_CONTENT_PPI);
-#line 678 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 679 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->local_content_ppi = _tmp1_;
-#line 681 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 682 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = self->priv->ppi_entry;
-#line 681 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 682 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = self->priv->local_content_ppi;
-#line 681 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 682 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp4_ = g_strdup_printf ("%d", _tmp3_);
-#line 681 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 682 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = _tmp4_;
-#line 681 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 682 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_entry_set_text (_tmp2_, _tmp5_);
-#line 681 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 682 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (_tmp5_);
-#line 4687 "Printing.c"
+#line 4679 "Printing.c"
 }
 
 
 static gint custom_print_tab_get_content_ppi (CustomPrintTab* self) {
 	gint result = 0;
 	gint _tmp0_ = 0;
-#line 684 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 685 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_CUSTOM_PRINT_TAB (self), 0);
-#line 685 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 686 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->local_content_ppi;
-#line 685 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 686 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp0_;
-#line 685 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 686 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 4702 "Printing.c"
+#line 4694 "Printing.c"
 }
 
 
 static void custom_print_tab_set_image_per_page_selection (CustomPrintTab* self, gint image_per_page) {
 	GtkComboBox* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 688 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 689 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 689 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 690 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->image_per_page_combo;
-#line 689 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 690 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = image_per_page;
-#line 689 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 690 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_combo_box_set_active (_tmp0_, _tmp1_);
-#line 4717 "Printing.c"
+#line 4709 "Printing.c"
 }
 
 
@@ -4722,32 +4714,32 @@ static gint custom_print_tab_get_image_per_page_selection (CustomPrintTab* self)
 	gint result = 0;
 	GtkComboBox* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 692 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 693 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_CUSTOM_PRINT_TAB (self), 0);
-#line 693 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 694 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->image_per_page_combo;
-#line 693 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 694 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = gtk_combo_box_get_active (_tmp0_);
-#line 693 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 694 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp1_;
-#line 693 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 694 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 4735 "Printing.c"
+#line 4727 "Printing.c"
 }
 
 
 static void custom_print_tab_set_size_selection (CustomPrintTab* self, gint size_selection) {
 	GtkComboBox* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 696 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 697 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 697 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 698 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->standard_sizes_combo;
-#line 697 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 698 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = size_selection;
-#line 697 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 698 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_combo_box_set_active (_tmp0_, _tmp1_);
-#line 4750 "Printing.c"
+#line 4742 "Printing.c"
 }
 
 
@@ -4755,64 +4747,64 @@ static gint custom_print_tab_get_size_selection (CustomPrintTab* self) {
 	gint result = 0;
 	GtkComboBox* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 700 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 701 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_CUSTOM_PRINT_TAB (self), 0);
-#line 701 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 702 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->standard_sizes_combo;
-#line 701 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 702 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = gtk_combo_box_get_active (_tmp0_);
-#line 701 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 702 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp1_;
-#line 701 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 702 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 4768 "Printing.c"
+#line 4760 "Printing.c"
 }
 
 
 static void custom_print_tab_set_match_aspect_ratio_enabled (CustomPrintTab* self, gboolean enable_state) {
 	GtkCheckButton* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 704 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 705 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 705 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 706 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->aspect_ratio_check;
-#line 705 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 706 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = enable_state;
-#line 705 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 706 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_button_get_type (), GtkToggleButton), _tmp1_);
-#line 4783 "Printing.c"
+#line 4775 "Printing.c"
 }
 
 
 static void custom_print_tab_set_print_titles_enabled (CustomPrintTab* self, gboolean print_titles) {
 	GtkCheckButton* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 708 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 709 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 709 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 710 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->title_print_check;
-#line 709 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 710 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = print_titles;
-#line 709 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 710 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_button_get_type (), GtkToggleButton), _tmp1_);
-#line 4798 "Printing.c"
+#line 4790 "Printing.c"
 }
 
 
 static void custom_print_tab_set_print_titles_font (CustomPrintTab* self, const gchar* fontname) {
 	GtkFontButton* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 712 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 713 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_CUSTOM_PRINT_TAB (self));
-#line 712 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 713 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (fontname != NULL);
-#line 713 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 714 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->title_print_font;
-#line 713 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 714 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = fontname;
-#line 713 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 714 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_font_button_set_font_name (_tmp0_, _tmp1_);
-#line 4815 "Printing.c"
+#line 4807 "Printing.c"
 }
 
 
@@ -4820,17 +4812,17 @@ static gboolean custom_print_tab_is_match_aspect_ratio_enabled (CustomPrintTab* 
 	gboolean result = FALSE;
 	GtkCheckButton* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 717 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 718 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_CUSTOM_PRINT_TAB (self), FALSE);
-#line 718 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 719 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->aspect_ratio_check;
-#line 718 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 719 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 718 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 719 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp1_;
-#line 718 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 719 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 4833 "Printing.c"
+#line 4825 "Printing.c"
 }
 
 
@@ -4838,17 +4830,17 @@ static gboolean custom_print_tab_is_print_titles_enabled (CustomPrintTab* self) 
 	gboolean result = FALSE;
 	GtkCheckButton* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 721 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 722 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_CUSTOM_PRINT_TAB (self), FALSE);
-#line 722 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 723 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->title_print_check;
-#line 722 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 723 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 722 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 723 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp1_;
-#line 722 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 723 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 4851 "Printing.c"
+#line 4843 "Printing.c"
 }
 
 
@@ -4857,19 +4849,19 @@ static gchar* custom_print_tab_get_print_titles_font (CustomPrintTab* self) {
 	GtkFontButton* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 725 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 726 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_CUSTOM_PRINT_TAB (self), NULL);
-#line 726 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 727 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->title_print_font;
-#line 726 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 727 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = gtk_font_button_get_font_name (_tmp0_);
-#line 726 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 727 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 726 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 727 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp2_;
-#line 726 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 727 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 4872 "Printing.c"
+#line 4864 "Printing.c"
 }
 
 
@@ -4877,17 +4869,17 @@ PrintJob* custom_print_tab_get_source_job (CustomPrintTab* self) {
 	PrintJob* result = NULL;
 	PrintJob* _tmp0_ = NULL;
 	PrintJob* _tmp1_ = NULL;
-#line 729 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 730 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_CUSTOM_PRINT_TAB (self), NULL);
-#line 730 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 731 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->source_job;
-#line 730 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 731 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 730 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 731 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp1_;
-#line 730 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 731 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 4890 "Printing.c"
+#line 4882 "Printing.c"
 }
 
 
@@ -4905,57 +4897,57 @@ PrintSettings* custom_print_tab_get_local_settings (CustomPrintTab* self) {
 	gboolean _tmp8_ = FALSE;
 	gchar* _tmp9_ = NULL;
 	gchar* _tmp10_ = NULL;
-#line 733 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 734 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_CUSTOM_PRINT_TAB (self), NULL);
-#line 734 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 735 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = print_settings_new ();
-#line 734 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 735 "/home/jens/Source/shotwell/src/Printing.vala"
 	_result_ = _tmp0_;
-#line 736 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 737 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_get_content_width (self, &_tmp1_);
-#line 736 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 737 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_set_content_width (_result_, &_tmp1_);
-#line 737 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 738 "/home/jens/Source/shotwell/src/Printing.vala"
 	custom_print_tab_get_content_height (self, &_tmp2_);
-#line 737 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 738 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_set_content_height (_result_, &_tmp2_);
-#line 738 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 739 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = custom_print_tab_get_content_layout (self);
-#line 738 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 739 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_set_content_layout (_result_, _tmp3_);
-#line 739 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 740 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp4_ = custom_print_tab_get_content_ppi (self);
-#line 739 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 740 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_set_content_ppi (_result_, _tmp4_);
-#line 740 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 741 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = custom_print_tab_get_image_per_page_selection (self);
-#line 740 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 741 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_set_image_per_page_selection (_result_, _tmp5_);
-#line 741 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 742 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6_ = custom_print_tab_get_size_selection (self);
-#line 741 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 742 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_set_size_selection (_result_, _tmp6_);
-#line 742 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 743 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp7_ = custom_print_tab_is_match_aspect_ratio_enabled (self);
-#line 742 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 743 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_set_match_aspect_ratio_enabled (_result_, _tmp7_);
-#line 743 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 744 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp8_ = custom_print_tab_is_print_titles_enabled (self);
-#line 743 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 744 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_set_print_titles_enabled (_result_, _tmp8_);
-#line 744 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 745 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp9_ = custom_print_tab_get_print_titles_font (self);
-#line 744 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 745 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp10_ = _tmp9_;
-#line 744 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 745 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_set_print_titles_font (_result_, _tmp10_);
-#line 744 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 745 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (_tmp10_);
-#line 746 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 747 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _result_;
-#line 746 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 747 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 4958 "Printing.c"
+#line 4950 "Printing.c"
 }
 
 
@@ -4966,7 +4958,7 @@ static void custom_print_tab_class_init (CustomPrintTabClass * klass) {
 	g_type_class_add_private (klass, sizeof (CustomPrintTabPrivate));
 #line 268 "/home/jens/Source/shotwell/src/Printing.vala"
 	G_OBJECT_CLASS (klass)->finalize = custom_print_tab_finalize;
-#line 4969 "Printing.c"
+#line 4961 "Printing.c"
 }
 
 
@@ -5003,7 +4995,7 @@ static void custom_print_tab_instance_init (CustomPrintTab * self) {
 	measurement_init (&self->priv->local_content_height, 5.0, MEASUREMENT_UNIT_INCHES);
 #line 288 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->is_text_insertion_in_progress = FALSE;
-#line 5006 "Printing.c"
+#line 4998 "Printing.c"
 }
 
 
@@ -5041,7 +5033,7 @@ static void custom_print_tab_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->source_job);
 #line 268 "/home/jens/Source/shotwell/src/Printing.vala"
 	G_OBJECT_CLASS (custom_print_tab_parent_class)->finalize (obj);
-#line 5044 "Printing.c"
+#line 5036 "Printing.c"
 }
 
 
@@ -5072,68 +5064,68 @@ PrintJob* print_job_construct (GType object_type, GeeCollection* to_print) {
 	gdouble _tmp9_ = 0.0;
 	gdouble _tmp10_ = 0.0;
 	gdouble _tmp11_ = 0.0;
-#line 754 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 755 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (GEE_IS_COLLECTION (to_print), NULL);
-#line 754 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 755 "/home/jens/Source/shotwell/src/Printing.vala"
 	self = (PrintJob*) g_object_new (object_type, NULL);
-#line 755 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 756 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = print_manager_get_instance ();
-#line 755 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 756 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _tmp0_;
-#line 755 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 756 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = print_manager_get_global_settings (_tmp1_);
-#line 755 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 756 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (self->priv->settings);
-#line 755 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 756 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->settings = _tmp2_;
-#line 755 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 756 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_manager_unref0 (_tmp1_);
-#line 756 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 757 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = self->priv->photos;
-#line 756 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 757 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp4_ = to_print;
-#line 756 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 757 "/home/jens/Source/shotwell/src/Printing.vala"
 	gee_array_list_add_all (_tmp3_, _tmp4_);
-#line 758 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 759 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_print_operation_set_embed_page_setup (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_print_operation_get_type (), GtkPrintOperation), TRUE);
-#line 759 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 760 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = self->priv->photos;
-#line 759 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 760 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), 0);
-#line 759 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 760 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp7_ = (Photo*) _tmp6_;
-#line 759 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 760 "/home/jens/Source/shotwell/src/Printing.vala"
 	media_source_get_dimensions (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_MEDIA_SOURCE, MediaSource), PHOTO_EXCEPTION_NONE, &_tmp8_);
-#line 759 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 760 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp9_ = dimensions_get_aspect_ratio (&_tmp8_);
-#line 759 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 760 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp10_ = _tmp9_;
-#line 759 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 760 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (_tmp7_);
-#line 759 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 760 "/home/jens/Source/shotwell/src/Printing.vala"
 	photo_aspect_ratio = _tmp10_;
-#line 760 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 761 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp11_ = photo_aspect_ratio;
-#line 760 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 761 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp11_ < 1.0) {
-#line 5119 "Printing.c"
+#line 5111 "Printing.c"
 		gdouble _tmp12_ = 0.0;
-#line 761 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 762 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp12_ = photo_aspect_ratio;
-#line 761 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 762 "/home/jens/Source/shotwell/src/Printing.vala"
 		photo_aspect_ratio = 1.0 / _tmp12_;
-#line 5125 "Printing.c"
+#line 5117 "Printing.c"
 	}
-#line 754 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 755 "/home/jens/Source/shotwell/src/Printing.vala"
 	return self;
-#line 5129 "Printing.c"
+#line 5121 "Printing.c"
 }
 
 
 PrintJob* print_job_new (GeeCollection* to_print) {
-#line 754 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 755 "/home/jens/Source/shotwell/src/Printing.vala"
 	return print_job_construct (TYPE_PRINT_JOB, to_print);
-#line 5136 "Printing.c"
+#line 5128 "Printing.c"
 }
 
 
@@ -5141,17 +5133,17 @@ GeeList* print_job_get_photos (PrintJob* self) {
 	GeeList* result = NULL;
 	GeeArrayList* _tmp0_ = NULL;
 	GeeList* _tmp1_ = NULL;
-#line 764 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 765 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_PRINT_JOB (self), NULL);
-#line 765 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 766 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->photos;
-#line 765 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 766 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_LIST, GeeList));
-#line 765 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 766 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp1_;
-#line 765 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 766 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 5154 "Printing.c"
+#line 5146 "Printing.c"
 }
 
 
@@ -5159,17 +5151,17 @@ Photo* print_job_get_source_photo (PrintJob* self) {
 	Photo* result = NULL;
 	GeeArrayList* _tmp0_ = NULL;
 	gpointer _tmp1_ = NULL;
-#line 768 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 769 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_PRINT_JOB (self), NULL);
-#line 769 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 770 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->photos;
-#line 769 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 770 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), 0);
-#line 769 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 770 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = (Photo*) _tmp1_;
-#line 769 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 770 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 5172 "Printing.c"
+#line 5164 "Printing.c"
 }
 
 
@@ -5184,55 +5176,55 @@ gdouble print_job_get_source_aspect_ratio (PrintJob* self) {
 	gdouble _tmp5_ = 0.0;
 	gdouble _tmp6_ = 0.0;
 	gdouble _tmp7_ = 0.0;
-#line 772 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 773 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_PRINT_JOB (self), 0.0);
-#line 773 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->photos;
-#line 773 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), 0);
-#line 773 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = (Photo*) _tmp1_;
-#line 773 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
 	media_source_get_dimensions (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_MEDIA_SOURCE, MediaSource), PHOTO_EXCEPTION_NONE, &_tmp3_);
-#line 773 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp4_ = dimensions_get_aspect_ratio (&_tmp3_);
-#line 773 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = _tmp4_;
-#line 773 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (_tmp2_);
-#line 773 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
 	aspect_ratio = _tmp5_;
-#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 775 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp7_ = aspect_ratio;
-#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 775 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp7_ < 1.0) {
-#line 5209 "Printing.c"
+#line 5201 "Printing.c"
 		gdouble _tmp8_ = 0.0;
-#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 775 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp8_ = aspect_ratio;
-#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 775 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp6_ = 1.0 / _tmp8_;
-#line 5215 "Printing.c"
+#line 5207 "Printing.c"
 	} else {
 		gdouble _tmp9_ = 0.0;
-#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 775 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp9_ = aspect_ratio;
-#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 775 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp6_ = _tmp9_;
-#line 5222 "Printing.c"
+#line 5214 "Printing.c"
 	}
-#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 775 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp6_;
-#line 774 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 775 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 5228 "Printing.c"
+#line 5220 "Printing.c"
 }
 
 
 static gpointer _print_settings_ref0 (gpointer self) {
-#line 778 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 779 "/home/jens/Source/shotwell/src/Printing.vala"
 	return self ? print_settings_ref (self) : NULL;
-#line 5235 "Printing.c"
+#line 5227 "Printing.c"
 }
 
 
@@ -5240,73 +5232,73 @@ PrintSettings* print_job_get_local_settings (PrintJob* self) {
 	PrintSettings* result = NULL;
 	PrintSettings* _tmp0_ = NULL;
 	PrintSettings* _tmp1_ = NULL;
-#line 777 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 778 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_PRINT_JOB (self), NULL);
-#line 778 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 779 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->settings;
-#line 778 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 779 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _print_settings_ref0 (_tmp0_);
-#line 778 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 779 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp1_;
-#line 778 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 779 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 5253 "Printing.c"
+#line 5245 "Printing.c"
 }
 
 
 void print_job_set_local_settings (PrintJob* self, PrintSettings* settings) {
 	PrintSettings* _tmp0_ = NULL;
 	PrintSettings* _tmp1_ = NULL;
-#line 781 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 782 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_JOB (self));
-#line 781 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 782 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_SETTINGS (settings));
-#line 782 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 783 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = settings;
-#line 782 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 783 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _print_settings_ref0 (_tmp0_);
-#line 782 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 783 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (self->priv->settings);
-#line 782 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 783 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->settings = _tmp1_;
-#line 5272 "Printing.c"
+#line 5264 "Printing.c"
 }
 
 
 static void print_job_class_init (PrintJobClass * klass) {
-#line 750 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 751 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_job_parent_class = g_type_class_peek_parent (klass);
-#line 750 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 751 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_type_class_add_private (klass, sizeof (PrintJobPrivate));
-#line 750 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 751 "/home/jens/Source/shotwell/src/Printing.vala"
 	G_OBJECT_CLASS (klass)->finalize = print_job_finalize;
-#line 5283 "Printing.c"
+#line 5275 "Printing.c"
 }
 
 
 static void print_job_instance_init (PrintJob * self) {
 	GeeArrayList* _tmp0_ = NULL;
-#line 750 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 751 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv = PRINT_JOB_GET_PRIVATE (self);
-#line 752 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 753 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = gee_array_list_new (TYPE_PHOTO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 752 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 753 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->photos = _tmp0_;
-#line 5295 "Printing.c"
+#line 5287 "Printing.c"
 }
 
 
 static void print_job_finalize (GObject* obj) {
 	PrintJob * self;
-#line 750 "/home/jens/Source/shotwell/src/Printing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PRINT_JOB, PrintJob);
 #line 751 "/home/jens/Source/shotwell/src/Printing.vala"
-	_print_settings_unref0 (self->priv->settings);
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PRINT_JOB, PrintJob);
 #line 752 "/home/jens/Source/shotwell/src/Printing.vala"
+	_print_settings_unref0 (self->priv->settings);
+#line 753 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (self->priv->photos);
-#line 750 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 751 "/home/jens/Source/shotwell/src/Printing.vala"
 	G_OBJECT_CLASS (print_job_parent_class)->finalize (obj);
-#line 5309 "Printing.c"
+#line 5301 "Printing.c"
 }
 
 
@@ -5328,248 +5320,248 @@ StandardPrintSize* standard_print_size_construct (GType object_type, const gchar
 	gchar* _tmp1_ = NULL;
 	Measurement _tmp2_ = {0};
 	Measurement _tmp3_ = {0};
-#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 788 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 788 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (width != NULL, NULL);
-#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 788 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (height != NULL, NULL);
-#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 788 "/home/jens/Source/shotwell/src/Printing.vala"
 	self = (StandardPrintSize*) g_type_create_instance (object_type);
-#line 788 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 789 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = name;
-#line 788 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 789 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 788 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 789 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (self->name);
-#line 788 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 789 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->name = _tmp1_;
-#line 789 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 790 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = *width;
-#line 789 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 790 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->width = _tmp2_;
-#line 790 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 791 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = *height;
-#line 790 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 791 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->height = _tmp3_;
-#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 788 "/home/jens/Source/shotwell/src/Printing.vala"
 	return self;
-#line 5357 "Printing.c"
+#line 5349 "Printing.c"
 }
 
 
 StandardPrintSize* standard_print_size_new (const gchar* name, Measurement* width, Measurement* height) {
-#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 788 "/home/jens/Source/shotwell/src/Printing.vala"
 	return standard_print_size_construct (TYPE_STANDARD_PRINT_SIZE, name, width, height);
-#line 5364 "Printing.c"
+#line 5356 "Printing.c"
 }
 
 
 static void value_standard_print_size_init (GValue* value) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	value->data[0].v_pointer = NULL;
-#line 5371 "Printing.c"
+#line 5363 "Printing.c"
 }
 
 
 static void value_standard_print_size_free_value (GValue* value) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (value->data[0].v_pointer) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		standard_print_size_unref (value->data[0].v_pointer);
-#line 5380 "Printing.c"
+#line 5372 "Printing.c"
 	}
 }
 
 
 static void value_standard_print_size_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		dest_value->data[0].v_pointer = standard_print_size_ref (src_value->data[0].v_pointer);
-#line 5390 "Printing.c"
+#line 5382 "Printing.c"
 	} else {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 5394 "Printing.c"
+#line 5386 "Printing.c"
 	}
 }
 
 
 static gpointer value_standard_print_size_peek_pointer (const GValue* value) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	return value->data[0].v_pointer;
-#line 5402 "Printing.c"
+#line 5394 "Printing.c"
 }
 
 
 static gchar* value_standard_print_size_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (collect_values[0].v_pointer) {
-#line 5409 "Printing.c"
+#line 5401 "Printing.c"
 		StandardPrintSize* object;
 		object = collect_values[0].v_pointer;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 5416 "Printing.c"
+#line 5408 "Printing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 5420 "Printing.c"
+#line 5412 "Printing.c"
 		}
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = standard_print_size_ref (object);
-#line 5424 "Printing.c"
+#line 5416 "Printing.c"
 	} else {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = NULL;
-#line 5428 "Printing.c"
+#line 5420 "Printing.c"
 	}
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	return NULL;
-#line 5432 "Printing.c"
+#line 5424 "Printing.c"
 }
 
 
 static gchar* value_standard_print_size_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	StandardPrintSize** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (!object_p) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 5443 "Printing.c"
+#line 5435 "Printing.c"
 	}
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (!value->data[0].v_pointer) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		*object_p = NULL;
-#line 5449 "Printing.c"
+#line 5441 "Printing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 5453 "Printing.c"
+#line 5445 "Printing.c"
 	} else {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		*object_p = standard_print_size_ref (value->data[0].v_pointer);
-#line 5457 "Printing.c"
+#line 5449 "Printing.c"
 	}
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	return NULL;
-#line 5461 "Printing.c"
+#line 5453 "Printing.c"
 }
 
 
 GParamSpec* param_spec_standard_print_size (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecStandardPrintSize* spec;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_STANDARD_PRINT_SIZE), NULL);
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	return G_PARAM_SPEC (spec);
-#line 5475 "Printing.c"
+#line 5467 "Printing.c"
 }
 
 
 gpointer value_get_standard_print_size (const GValue* value) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_STANDARD_PRINT_SIZE), NULL);
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	return value->data[0].v_pointer;
-#line 5484 "Printing.c"
+#line 5476 "Printing.c"
 }
 
 
 void value_set_standard_print_size (GValue* value, gpointer v_object) {
 	StandardPrintSize* old;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_STANDARD_PRINT_SIZE));
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	old = value->data[0].v_pointer;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (v_object) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_STANDARD_PRINT_SIZE));
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = v_object;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		standard_print_size_ref (value->data[0].v_pointer);
-#line 5504 "Printing.c"
+#line 5496 "Printing.c"
 	} else {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = NULL;
-#line 5508 "Printing.c"
+#line 5500 "Printing.c"
 	}
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (old) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		standard_print_size_unref (old);
-#line 5514 "Printing.c"
+#line 5506 "Printing.c"
 	}
 }
 
 
 void value_take_standard_print_size (GValue* value, gpointer v_object) {
 	StandardPrintSize* old;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_STANDARD_PRINT_SIZE));
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	old = value->data[0].v_pointer;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (v_object) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_STANDARD_PRINT_SIZE));
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = v_object;
-#line 5533 "Printing.c"
+#line 5525 "Printing.c"
 	} else {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = NULL;
-#line 5537 "Printing.c"
+#line 5529 "Printing.c"
 	}
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (old) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		standard_print_size_unref (old);
-#line 5543 "Printing.c"
+#line 5535 "Printing.c"
 	}
 }
 
 
 static void standard_print_size_class_init (StandardPrintSizeClass * klass) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	standard_print_size_parent_class = g_type_class_peek_parent (klass);
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	((StandardPrintSizeClass *) klass)->finalize = standard_print_size_finalize;
-#line 5553 "Printing.c"
+#line 5545 "Printing.c"
 }
 
 
 static void standard_print_size_instance_init (StandardPrintSize * self) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->ref_count = 1;
-#line 5560 "Printing.c"
+#line 5552 "Printing.c"
 }
 
 
 static void standard_print_size_finalize (StandardPrintSize* obj) {
 	StandardPrintSize * self;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_STANDARD_PRINT_SIZE, StandardPrintSize);
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_signal_handlers_destroy (self);
-#line 793 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 794 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (self->name);
-#line 5572 "Printing.c"
+#line 5564 "Printing.c"
 }
 
 
@@ -5590,24 +5582,24 @@ GType standard_print_size_get_type (void) {
 gpointer standard_print_size_ref (gpointer instance) {
 	StandardPrintSize* self;
 	self = instance;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	return instance;
-#line 5597 "Printing.c"
+#line 5589 "Printing.c"
 }
 
 
 void standard_print_size_unref (gpointer instance) {
 	StandardPrintSize* self;
 	self = instance;
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		STANDARD_PRINT_SIZE_GET_CLASS (self)->finalize (self);
-#line 786 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 787 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 5610 "Printing.c"
+#line 5602 "Printing.c"
 	}
 }
 
@@ -5616,285 +5608,285 @@ static PrintManager* print_manager_construct (GType object_type) {
 	PrintManager* self = NULL;
 	GtkPageSetup* _tmp0_ = NULL;
 	PrintSettings* _tmp1_ = NULL;
-#line 809 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 810 "/home/jens/Source/shotwell/src/Printing.vala"
 	self = (PrintManager*) g_type_create_instance (object_type);
-#line 810 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 811 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = gtk_page_setup_new ();
-#line 810 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 811 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (self->priv->user_page_setup);
-#line 810 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 811 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->user_page_setup = _tmp0_;
-#line 811 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 812 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = print_settings_new ();
-#line 811 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 812 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (self->priv->settings);
-#line 811 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 812 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->settings = _tmp1_;
-#line 809 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 810 "/home/jens/Source/shotwell/src/Printing.vala"
 	return self;
-#line 5635 "Printing.c"
+#line 5627 "Printing.c"
 }
 
 
 static PrintManager* print_manager_new (void) {
-#line 809 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 810 "/home/jens/Source/shotwell/src/Printing.vala"
 	return print_manager_construct (TYPE_PRINT_MANAGER);
-#line 5642 "Printing.c"
+#line 5634 "Printing.c"
 }
 
 
 static void _vala_array_add278 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5653 "Printing.c"
+#line 5645 "Printing.c"
 	}
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5659 "Printing.c"
+#line 5651 "Printing.c"
 }
 
 
 static void _vala_array_add279 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5670 "Printing.c"
+#line 5662 "Printing.c"
 	}
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5676 "Printing.c"
+#line 5668 "Printing.c"
 }
 
 
 static void _vala_array_add280 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5687 "Printing.c"
+#line 5679 "Printing.c"
 	}
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5693 "Printing.c"
+#line 5685 "Printing.c"
 }
 
 
 static void _vala_array_add281 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5704 "Printing.c"
+#line 5696 "Printing.c"
 	}
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5710 "Printing.c"
+#line 5702 "Printing.c"
 }
 
 
 static void _vala_array_add282 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5721 "Printing.c"
+#line 5713 "Printing.c"
 	}
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5727 "Printing.c"
+#line 5719 "Printing.c"
 }
 
 
 static void _vala_array_add283 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5738 "Printing.c"
+#line 5730 "Printing.c"
 	}
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5744 "Printing.c"
+#line 5736 "Printing.c"
 }
 
 
 static void _vala_array_add284 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5755 "Printing.c"
+#line 5747 "Printing.c"
 	}
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5761 "Printing.c"
+#line 5753 "Printing.c"
 }
 
 
 static void _vala_array_add285 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 838 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 838 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 838 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5772 "Printing.c"
+#line 5764 "Printing.c"
 	}
-#line 838 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 838 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5778 "Printing.c"
+#line 5770 "Printing.c"
 }
 
 
 static void _vala_array_add286 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5789 "Printing.c"
+#line 5781 "Printing.c"
 	}
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5795 "Printing.c"
+#line 5787 "Printing.c"
 }
 
 
 static void _vala_array_add287 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5806 "Printing.c"
+#line 5798 "Printing.c"
 	}
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5812 "Printing.c"
+#line 5804 "Printing.c"
 }
 
 
 static void _vala_array_add288 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5823 "Printing.c"
+#line 5815 "Printing.c"
 	}
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5829 "Printing.c"
+#line 5821 "Printing.c"
 }
 
 
 static void _vala_array_add289 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5840 "Printing.c"
+#line 5832 "Printing.c"
 	}
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5846 "Printing.c"
+#line 5838 "Printing.c"
 }
 
 
 static void _vala_array_add290 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5857 "Printing.c"
+#line 5849 "Printing.c"
 	}
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5863 "Printing.c"
+#line 5855 "Printing.c"
 }
 
 
 static void _vala_array_add291 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5874 "Printing.c"
+#line 5866 "Printing.c"
 	}
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5880 "Printing.c"
+#line 5872 "Printing.c"
 }
 
 
 static void _vala_array_add292 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 		*array = g_renew (StandardPrintSize*, *array, (*size) + 1);
-#line 5891 "Printing.c"
+#line 5883 "Printing.c"
 	}
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[(*length)++] = value;
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	(*array)[*length] = NULL;
-#line 5897 "Printing.c"
+#line 5889 "Printing.c"
 }
 
 
@@ -5995,246 +5987,246 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 	StandardPrintSize* _tmp74_ = NULL;
 	StandardPrintSize** _tmp75_ = NULL;
 	gint _tmp75__length1 = 0;
-#line 814 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 815 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_PRINT_MANAGER (self), NULL);
-#line 815 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 816 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = g_new0 (StandardPrintSize*, 0 + 1);
-#line 815 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 816 "/home/jens/Source/shotwell/src/Printing.vala"
 	_result_ = _tmp0_;
-#line 815 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 816 "/home/jens/Source/shotwell/src/Printing.vala"
 	_result__length1 = 0;
-#line 815 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 816 "/home/jens/Source/shotwell/src/Printing.vala"
 	__result__size_ = _result__length1;
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _result_;
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1__length1 = _result__length1;
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = _ ("Wallet (2 x 3 in.)");
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp3_, (gdouble) 3, MEASUREMENT_UNIT_INCHES);
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp4_, (gdouble) 2, MEASUREMENT_UNIT_INCHES);
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = standard_print_size_new (_tmp2_, &_tmp3_, &_tmp4_);
-#line 817 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add278 (&_result_, &_result__length1, &__result__size_, _tmp5_);
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6_ = _result_;
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6__length1 = _result__length1;
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp7_ = _ ("Notecard (3 x 5 in.)");
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp8_, (gdouble) 5, MEASUREMENT_UNIT_INCHES);
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp9_, (gdouble) 3, MEASUREMENT_UNIT_INCHES);
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp10_ = standard_print_size_new (_tmp7_, &_tmp8_, &_tmp9_);
-#line 820 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add279 (&_result_, &_result__length1, &__result__size_, _tmp10_);
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp11_ = _result_;
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp11__length1 = _result__length1;
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp12_ = _ ("4 x 6 in.");
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp13_, (gdouble) 6, MEASUREMENT_UNIT_INCHES);
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp14_, (gdouble) 4, MEASUREMENT_UNIT_INCHES);
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp15_ = standard_print_size_new (_tmp12_, &_tmp13_, &_tmp14_);
-#line 823 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add280 (&_result_, &_result__length1, &__result__size_, _tmp15_);
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp16_ = _result_;
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp16__length1 = _result__length1;
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp17_ = _ ("5 x 7 in.");
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp18_, (gdouble) 7, MEASUREMENT_UNIT_INCHES);
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp19_, (gdouble) 5, MEASUREMENT_UNIT_INCHES);
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp20_ = standard_print_size_new (_tmp17_, &_tmp18_, &_tmp19_);
-#line 826 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add281 (&_result_, &_result__length1, &__result__size_, _tmp20_);
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp21_ = _result_;
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp21__length1 = _result__length1;
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp22_ = _ ("8 x 10 in.");
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp23_, (gdouble) 10, MEASUREMENT_UNIT_INCHES);
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp24_, (gdouble) 8, MEASUREMENT_UNIT_INCHES);
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp25_ = standard_print_size_new (_tmp22_, &_tmp23_, &_tmp24_);
-#line 829 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add282 (&_result_, &_result__length1, &__result__size_, _tmp25_);
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp26_ = _result_;
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp26__length1 = _result__length1;
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp27_ = _ ("11 x 14 in.");
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp28_, (gdouble) 14, MEASUREMENT_UNIT_INCHES);
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp29_, (gdouble) 11, MEASUREMENT_UNIT_INCHES);
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp30_ = standard_print_size_new (_tmp27_, &_tmp28_, &_tmp29_);
-#line 832 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add283 (&_result_, &_result__length1, &__result__size_, _tmp30_);
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp31_ = _result_;
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp31__length1 = _result__length1;
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp32_ = _ ("16 x 20 in.");
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp33_, (gdouble) 20, MEASUREMENT_UNIT_INCHES);
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp34_, (gdouble) 16, MEASUREMENT_UNIT_INCHES);
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp35_ = standard_print_size_new (_tmp32_, &_tmp33_, &_tmp34_);
-#line 835 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add284 (&_result_, &_result__length1, &__result__size_, _tmp35_);
-#line 838 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp36_ = _result_;
-#line 838 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp36__length1 = _result__length1;
-#line 838 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp37_, (gdouble) 0, MEASUREMENT_UNIT_INCHES);
-#line 838 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp38_, (gdouble) 0, MEASUREMENT_UNIT_INCHES);
-#line 838 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp39_ = standard_print_size_new ("-", &_tmp37_, &_tmp38_);
-#line 838 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add285 (&_result_, &_result__length1, &__result__size_, _tmp39_);
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp40_ = _result_;
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp40__length1 = _result__length1;
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp41_ = _ ("Metric Wallet (9 x 13 cm)");
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp42_, (gdouble) 13, MEASUREMENT_UNIT_CENTIMETERS);
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp43_, (gdouble) 9, MEASUREMENT_UNIT_CENTIMETERS);
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp44_ = standard_print_size_new (_tmp41_, &_tmp42_, &_tmp43_);
-#line 841 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add286 (&_result_, &_result__length1, &__result__size_, _tmp44_);
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp45_ = _result_;
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp45__length1 = _result__length1;
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp46_ = _ ("Postcard (10 x 15 cm)");
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp47_, (gdouble) 15, MEASUREMENT_UNIT_CENTIMETERS);
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp48_, (gdouble) 10, MEASUREMENT_UNIT_CENTIMETERS);
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp49_ = standard_print_size_new (_tmp46_, &_tmp47_, &_tmp48_);
-#line 844 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add287 (&_result_, &_result__length1, &__result__size_, _tmp49_);
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp50_ = _result_;
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp50__length1 = _result__length1;
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp51_ = _ ("13 x 18 cm");
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp52_, (gdouble) 18, MEASUREMENT_UNIT_CENTIMETERS);
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp53_, (gdouble) 13, MEASUREMENT_UNIT_CENTIMETERS);
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp54_ = standard_print_size_new (_tmp51_, &_tmp52_, &_tmp53_);
-#line 847 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add288 (&_result_, &_result__length1, &__result__size_, _tmp54_);
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp55_ = _result_;
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp55__length1 = _result__length1;
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp56_ = _ ("18 x 24 cm");
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp57_, (gdouble) 24, MEASUREMENT_UNIT_CENTIMETERS);
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp58_, (gdouble) 18, MEASUREMENT_UNIT_CENTIMETERS);
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp59_ = standard_print_size_new (_tmp56_, &_tmp57_, &_tmp58_);
-#line 850 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add289 (&_result_, &_result__length1, &__result__size_, _tmp59_);
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp60_ = _result_;
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp60__length1 = _result__length1;
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp61_ = _ ("20 x 30 cm");
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp62_, (gdouble) 30, MEASUREMENT_UNIT_CENTIMETERS);
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp63_, (gdouble) 20, MEASUREMENT_UNIT_CENTIMETERS);
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp64_ = standard_print_size_new (_tmp61_, &_tmp62_, &_tmp63_);
-#line 853 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add290 (&_result_, &_result__length1, &__result__size_, _tmp64_);
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp65_ = _result_;
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp65__length1 = _result__length1;
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp66_ = _ ("24 x 40 cm");
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp67_, (gdouble) 40, MEASUREMENT_UNIT_CENTIMETERS);
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp68_, (gdouble) 24, MEASUREMENT_UNIT_CENTIMETERS);
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp69_ = standard_print_size_new (_tmp66_, &_tmp67_, &_tmp68_);
-#line 856 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add291 (&_result_, &_result__length1, &__result__size_, _tmp69_);
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp70_ = _result_;
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp70__length1 = _result__length1;
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp71_ = _ ("30 x 40 cm");
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp72_, (gdouble) 40, MEASUREMENT_UNIT_CENTIMETERS);
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp73_, (gdouble) 30, MEASUREMENT_UNIT_CENTIMETERS);
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp74_ = standard_print_size_new (_tmp71_, &_tmp72_, &_tmp73_);
-#line 859 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	_vala_array_add292 (&_result_, &_result__length1, &__result__size_, _tmp74_);
-#line 863 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 864 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp75_ = _result_;
-#line 863 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 864 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp75__length1 = _result__length1;
-#line 863 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 864 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (result_length1) {
-#line 863 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 864 "/home/jens/Source/shotwell/src/Printing.vala"
 		*result_length1 = _tmp75__length1;
-#line 6224 "Printing.c"
+#line 6216 "Printing.c"
 	}
-#line 863 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 864 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp75_;
-#line 863 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 864 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 6230 "Printing.c"
+#line 6222 "Printing.c"
 }
 
 
 static gpointer _print_manager_ref0 (gpointer self) {
-#line 870 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 871 "/home/jens/Source/shotwell/src/Printing.vala"
 	return self ? print_manager_ref (self) : NULL;
-#line 6237 "Printing.c"
+#line 6229 "Printing.c"
 }
 
 
@@ -6243,59 +6235,59 @@ PrintManager* print_manager_get_instance (void) {
 	PrintManager* _tmp0_ = NULL;
 	PrintManager* _tmp2_ = NULL;
 	PrintManager* _tmp3_ = NULL;
-#line 867 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 868 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = print_manager_instance;
-#line 867 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 868 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp0_ == NULL) {
-#line 6250 "Printing.c"
+#line 6242 "Printing.c"
 		PrintManager* _tmp1_ = NULL;
-#line 868 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 869 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp1_ = print_manager_new ();
-#line 868 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 869 "/home/jens/Source/shotwell/src/Printing.vala"
 		_print_manager_unref0 (print_manager_instance);
-#line 868 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 869 "/home/jens/Source/shotwell/src/Printing.vala"
 		print_manager_instance = _tmp1_;
-#line 6258 "Printing.c"
+#line 6250 "Printing.c"
 	}
-#line 870 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 871 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = print_manager_instance;
-#line 870 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 871 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = _print_manager_ref0 (_tmp2_);
-#line 870 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 871 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp3_;
-#line 870 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 871 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 6268 "Printing.c"
+#line 6260 "Printing.c"
 }
 
 
 static void _print_manager_on_begin_print_gtk_print_operation_begin_print (GtkPrintOperation* _sender, GtkPrintContext* context, gpointer self) {
-#line 880 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 881 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_manager_on_begin_print ((PrintManager*) self, _sender, context);
-#line 6275 "Printing.c"
+#line 6267 "Printing.c"
 }
 
 
 static void _print_manager_on_draw_page_gtk_print_operation_draw_page (GtkPrintOperation* _sender, GtkPrintContext* context, gint page_nr, gpointer self) {
-#line 881 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 882 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_manager_on_draw_page ((PrintManager*) self, _sender, context, page_nr);
-#line 6282 "Printing.c"
+#line 6274 "Printing.c"
 }
 
 
 static GObject* _print_manager_on_create_custom_widget_gtk_print_operation_create_custom_widget (GtkPrintOperation* _sender, gpointer self) {
 	GObject* result;
 	result = print_manager_on_create_custom_widget ((PrintManager*) self, _sender);
-#line 882 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 883 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 6291 "Printing.c"
+#line 6283 "Printing.c"
 }
 
 
 static void _print_manager_on_status_changed_gtk_print_operation_status_changed (GtkPrintOperation* _sender, gpointer self) {
-#line 883 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 884 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_manager_on_status_changed ((PrintManager*) self, _sender);
-#line 6298 "Printing.c"
+#line 6290 "Printing.c"
 }
 
 
@@ -6323,122 +6315,122 @@ void print_manager_spool_photo (PrintManager* self, GeeCollection* to_print) {
 	AppWindow* _tmp27_ = NULL;
 	const gchar* _tmp28_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 873 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 874 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_MANAGER (self));
-#line 873 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 874 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (GEE_IS_COLLECTION (to_print));
-#line 874 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 875 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = to_print;
-#line 874 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 875 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = print_job_new (_tmp0_);
-#line 874 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 875 "/home/jens/Source/shotwell/src/Printing.vala"
 	job = _tmp1_;
-#line 875 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp2_ = _ ("Image Settings");
-#line 875 "/home/jens/Source/shotwell/src/Printing.vala"
-	gtk_print_operation_set_custom_tab_label (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), _tmp2_);
 #line 876 "/home/jens/Source/shotwell/src/Printing.vala"
-	gtk_print_operation_set_unit (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), GTK_UNIT_INCH);
+	_tmp2_ = _ ("Image Settings");
+#line 876 "/home/jens/Source/shotwell/src/Printing.vala"
+	gtk_print_operation_set_custom_tab_label (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), _tmp2_);
 #line 877 "/home/jens/Source/shotwell/src/Printing.vala"
+	gtk_print_operation_set_unit (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), GTK_UNIT_INCH);
+#line 878 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_print_operation_set_n_pages (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), 1);
-#line 878 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 879 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = print_job_get_source_photo (job);
-#line 878 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 879 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp4_ = _tmp3_;
-#line 878 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 879 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_DATA_OBJECT, DataObject));
-#line 878 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 879 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6_ = _tmp5_;
-#line 878 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 879 "/home/jens/Source/shotwell/src/Printing.vala"
 	gtk_print_operation_set_job_name (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), _tmp6_);
-#line 878 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 879 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (_tmp6_);
-#line 878 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 879 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (_tmp4_);
-#line 879 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp7_ = self->priv->user_page_setup;
-#line 879 "/home/jens/Source/shotwell/src/Printing.vala"
-	gtk_print_operation_set_default_page_setup (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), _tmp7_);
 #line 880 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), "begin-print", (GCallback) _print_manager_on_begin_print_gtk_print_operation_begin_print, self);
+	_tmp7_ = self->priv->user_page_setup;
+#line 880 "/home/jens/Source/shotwell/src/Printing.vala"
+	gtk_print_operation_set_default_page_setup (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), _tmp7_);
 #line 881 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), "draw-page", (GCallback) _print_manager_on_draw_page_gtk_print_operation_draw_page, self);
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), "begin-print", (GCallback) _print_manager_on_begin_print_gtk_print_operation_begin_print, self);
 #line 882 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), "create-custom-widget", (GCallback) _print_manager_on_create_custom_widget_gtk_print_operation_create_custom_widget, self);
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), "draw-page", (GCallback) _print_manager_on_draw_page_gtk_print_operation_draw_page, self);
 #line 883 "/home/jens/Source/shotwell/src/Printing.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), "create-custom-widget", (GCallback) _print_manager_on_create_custom_widget_gtk_print_operation_create_custom_widget, self);
+#line 884 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), "status-changed", (GCallback) _print_manager_on_status_changed_gtk_print_operation_status_changed, self);
-#line 885 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 886 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp8_ = app_window_get_instance ();
-#line 885 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 886 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp9_ = _tmp8_;
-#line 885 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 886 "/home/jens/Source/shotwell/src/Printing.vala"
 	page_window_set_busy_cursor (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_PAGE_WINDOW, PageWindow));
-#line 885 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 886 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (_tmp9_);
-#line 887 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp10_ = g_cancellable_new ();
-#line 887 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (self->priv->cancellable);
-#line 887 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->cancellable = _tmp10_;
-#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 889 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp11_ = app_window_get_instance ();
-#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 889 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp12_ = _tmp11_;
-#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 889 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp13_ = _ ("Printing...");
-#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 889 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp14_ = self->priv->cancellable;
-#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 889 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp15_ = progress_dialog_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_window_get_type (), GtkWindow), _tmp13_, _tmp14_);
-#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 889 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_object_ref_sink (_tmp15_);
-#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 889 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (self->priv->progress_dialog);
-#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 889 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->progress_dialog = _tmp15_;
-#line 888 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 889 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (_tmp12_);
-#line 890 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 891 "/home/jens/Source/shotwell/src/Printing.vala"
 	err_msg = NULL;
-#line 6404 "Printing.c"
+#line 6396 "Printing.c"
 	{
 		GtkPrintOperationResult _result_ = 0;
 		AppWindow* _tmp16_ = NULL;
 		AppWindow* _tmp17_ = NULL;
 		GtkPrintOperationResult _tmp18_ = 0;
 		GtkPrintOperationResult _tmp19_ = 0;
-#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 893 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp16_ = app_window_get_instance ();
-#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 893 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp17_ = _tmp16_;
-#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 893 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp18_ = gtk_print_operation_run (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation), GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_window_get_type (), GtkWindow), &_inner_error_);
-#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 893 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp19_ = _tmp18_;
-#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 893 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_object_unref0 (_tmp17_);
-#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 893 "/home/jens/Source/shotwell/src/Printing.vala"
 		_result_ = _tmp19_;
-#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 893 "/home/jens/Source/shotwell/src/Printing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6425 "Printing.c"
+#line 6417 "Printing.c"
 			goto __catch457_g_error;
 		}
-#line 894 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 895 "/home/jens/Source/shotwell/src/Printing.vala"
 		if (_result_ == GTK_PRINT_OPERATION_RESULT_APPLY) {
-#line 6430 "Printing.c"
+#line 6422 "Printing.c"
 			GtkPageSetup* _tmp20_ = NULL;
 			GtkPageSetup* _tmp21_ = NULL;
-#line 895 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 896 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp20_ = gtk_print_operation_get_default_page_setup (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation));
-#line 895 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 896 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp21_ = _g_object_ref0 (_tmp20_);
-#line 895 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 896 "/home/jens/Source/shotwell/src/Printing.vala"
 			_g_object_unref0 (self->priv->user_page_setup);
-#line 895 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 896 "/home/jens/Source/shotwell/src/Printing.vala"
 			self->priv->user_page_setup = _tmp21_;
-#line 6441 "Printing.c"
+#line 6433 "Printing.c"
 		}
 	}
 	goto __finally457;
@@ -6448,89 +6440,89 @@ void print_manager_spool_photo (PrintManager* self, GeeCollection* to_print) {
 		GError* _tmp22_ = NULL;
 		const gchar* _tmp23_ = NULL;
 		gchar* _tmp24_ = NULL;
-#line 891 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
 		e = _inner_error_;
-#line 891 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
 		_inner_error_ = NULL;
-#line 897 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 898 "/home/jens/Source/shotwell/src/Printing.vala"
 		gtk_print_operation_cancel (G_TYPE_CHECK_INSTANCE_CAST (job, gtk_print_operation_get_type (), GtkPrintOperation));
-#line 898 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 899 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp22_ = e;
-#line 898 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 899 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp23_ = _tmp22_->message;
-#line 898 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 899 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp24_ = g_strdup (_tmp23_);
-#line 898 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 899 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_free0 (err_msg);
-#line 898 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 899 "/home/jens/Source/shotwell/src/Printing.vala"
 		err_msg = _tmp24_;
-#line 891 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_error_free0 (e);
-#line 6469 "Printing.c"
+#line 6461 "Printing.c"
 	}
 	__finally457:
-#line 891 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 891 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_free0 (err_msg);
-#line 891 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_object_unref0 (job);
-#line 891 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 891 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_clear_error (&_inner_error_);
-#line 891 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 892 "/home/jens/Source/shotwell/src/Printing.vala"
 		return;
-#line 6484 "Printing.c"
+#line 6476 "Printing.c"
 	}
-#line 901 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 902 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp25_ = self->priv->progress_dialog;
-#line 901 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 902 "/home/jens/Source/shotwell/src/Printing.vala"
 	progress_dialog_close (_tmp25_);
-#line 902 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 903 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (self->priv->progress_dialog);
-#line 902 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 903 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->progress_dialog = NULL;
-#line 903 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 904 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (self->priv->cancellable);
-#line 903 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 904 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->cancellable = NULL;
-#line 905 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 906 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp26_ = app_window_get_instance ();
-#line 905 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 906 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp27_ = _tmp26_;
-#line 905 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 906 "/home/jens/Source/shotwell/src/Printing.vala"
 	page_window_set_normal_cursor (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, TYPE_PAGE_WINDOW, PageWindow));
-#line 905 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 906 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (_tmp27_);
-#line 907 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 908 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp28_ = err_msg;
-#line 907 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 908 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp28_ != NULL) {
-#line 6510 "Printing.c"
+#line 6502 "Printing.c"
 		const gchar* _tmp29_ = NULL;
 		const gchar* _tmp30_ = NULL;
 		gchar* _tmp31_ = NULL;
 		gchar* _tmp32_ = NULL;
-#line 908 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 909 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp29_ = _ ("Unable to print photo:\n\n%s");
-#line 908 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 909 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp30_ = err_msg;
-#line 908 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 909 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp31_ = g_strdup_printf (_tmp29_, _tmp30_);
-#line 908 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 909 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp32_ = _tmp31_;
-#line 908 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 909 "/home/jens/Source/shotwell/src/Printing.vala"
 		app_window_error_message (_tmp32_, NULL);
-#line 908 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 909 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_free0 (_tmp32_);
-#line 6527 "Printing.c"
+#line 6519 "Printing.c"
 	}
-#line 873 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 874 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (err_msg);
-#line 873 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 874 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (job);
-#line 6533 "Printing.c"
+#line 6525 "Printing.c"
 }
 
 
@@ -6548,74 +6540,74 @@ static void print_manager_on_begin_print (PrintManager* self, GtkPrintOperation*
 	PrintSettings* _tmp11_ = NULL;
 	ContentLayout _tmp12_ = 0;
 	gboolean _tmp13_ = FALSE;
-#line 911 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_return_if_fail (IS_PRINT_MANAGER (self));
-#line 911 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_return_if_fail (GTK_IS_PRINT_OPERATION (emitting_object));
-#line 911 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_return_if_fail (GTK_IS_PRINT_CONTEXT (job_context));
 #line 912 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_debug ("Printing.vala:912: on_begin_print");
-#line 914 "/home/jens/Source/shotwell/src/Printing.vala"
+	g_return_if_fail (IS_PRINT_MANAGER (self));
+#line 912 "/home/jens/Source/shotwell/src/Printing.vala"
+	g_return_if_fail (GTK_IS_PRINT_OPERATION (emitting_object));
+#line 912 "/home/jens/Source/shotwell/src/Printing.vala"
+	g_return_if_fail (GTK_IS_PRINT_CONTEXT (job_context));
+#line 913 "/home/jens/Source/shotwell/src/Printing.vala"
+	g_debug ("Printing.vala:913: on_begin_print");
+#line 915 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = emitting_object;
-#line 914 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 915 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_PRINT_JOB, PrintJob));
-#line 914 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 915 "/home/jens/Source/shotwell/src/Printing.vala"
 	job = _tmp1_;
-#line 917 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 918 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = self->priv->cancellable;
-#line 917 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 918 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp3_ != NULL) {
-#line 6569 "Printing.c"
+#line 6561 "Printing.c"
 		GCancellable* _tmp4_ = NULL;
 		gboolean _tmp5_ = FALSE;
-#line 917 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 918 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp4_ = self->priv->cancellable;
-#line 917 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 918 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp5_ = g_cancellable_is_cancelled (_tmp4_);
-#line 917 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 918 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp2_ = _tmp5_;
-#line 6578 "Printing.c"
+#line 6570 "Printing.c"
 	} else {
-#line 917 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 918 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp2_ = FALSE;
-#line 6582 "Printing.c"
+#line 6574 "Printing.c"
 	}
-#line 917 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 918 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp2_) {
-#line 6586 "Printing.c"
+#line 6578 "Printing.c"
 		PrintJob* _tmp6_ = NULL;
-#line 918 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 919 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp6_ = job;
-#line 918 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 919 "/home/jens/Source/shotwell/src/Printing.vala"
 		gtk_print_operation_cancel (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_print_operation_get_type (), GtkPrintOperation));
-#line 920 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 921 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_object_unref0 (job);
-#line 920 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 921 "/home/jens/Source/shotwell/src/Printing.vala"
 		return;
-#line 6596 "Printing.c"
+#line 6588 "Printing.c"
 	}
-#line 923 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 924 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp7_ = job;
-#line 923 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 924 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp8_ = print_job_get_photos (_tmp7_);
-#line 923 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 924 "/home/jens/Source/shotwell/src/Printing.vala"
 	photos = _tmp8_;
-#line 924 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp9_ = job;
-#line 924 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp10_ = print_job_get_local_settings (_tmp9_);
-#line 924 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp11_ = _tmp10_;
-#line 924 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp12_ = print_settings_get_content_layout (_tmp11_);
-#line 924 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp13_ = _tmp12_ == CONTENT_LAYOUT_IMAGE_PER_PAGE;
-#line 924 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp11_);
-#line 924 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp13_) {
-#line 6618 "Printing.c"
+#line 6610 "Printing.c"
 		PrintLayout layout = 0;
 		PrintJob* _tmp14_ = NULL;
 		PrintSettings* _tmp15_ = NULL;
@@ -6629,61 +6621,61 @@ static void print_manager_on_begin_print (PrintManager* self, GtkPrintOperation*
 		PrintLayout _tmp23_ = 0;
 		gint _tmp24_ = 0;
 		gdouble _tmp25_ = 0.0;
-#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp14_ = job;
-#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp15_ = print_job_get_local_settings (_tmp14_);
-#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp16_ = _tmp15_;
-#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp17_ = print_settings_get_image_per_page_selection (_tmp16_);
-#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp18_ = (PrintLayout) _tmp17_;
-#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
 		_print_settings_unref0 (_tmp16_);
-#line 925 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
 		layout = _tmp18_;
-#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 927 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp19_ = job;
-#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 927 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp20_ = photos;
-#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 927 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp21_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 927 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp22_ = _tmp21_;
-#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 927 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp23_ = layout;
-#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 927 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp24_ = print_layout_get_per_page (_tmp23_);
-#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 927 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp25_ = ceil (((gdouble) _tmp22_) / ((gdouble) _tmp24_));
-#line 926 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 927 "/home/jens/Source/shotwell/src/Printing.vala"
 		gtk_print_operation_set_n_pages (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_print_operation_get_type (), GtkPrintOperation), (gint) _tmp25_);
-#line 6662 "Printing.c"
+#line 6654 "Printing.c"
 	} else {
 		PrintJob* _tmp26_ = NULL;
 		GeeList* _tmp27_ = NULL;
 		gint _tmp28_ = 0;
 		gint _tmp29_ = 0;
-#line 928 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 929 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp26_ = job;
-#line 928 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 929 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp27_ = photos;
-#line 928 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 929 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp28_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 928 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 929 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp29_ = _tmp28_;
-#line 928 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 929 "/home/jens/Source/shotwell/src/Printing.vala"
 		gtk_print_operation_set_n_pages (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_print_operation_get_type (), GtkPrintOperation), _tmp29_);
-#line 6678 "Printing.c"
+#line 6670 "Printing.c"
 	}
-#line 931 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 932 "/home/jens/Source/shotwell/src/Printing.vala"
 	spin_event_loop ();
-#line 911 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 912 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (photos);
-#line 911 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 912 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (job);
-#line 6686 "Printing.c"
+#line 6678 "Printing.c"
 }
 
 
@@ -6691,43 +6683,43 @@ static void print_manager_on_status_changed (PrintManager* self, GtkPrintOperati
 	GtkPrintOperation* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	ProgressDialog* _tmp2_ = NULL;
-#line 934 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 935 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_MANAGER (self));
-#line 934 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 935 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (GTK_IS_PRINT_OPERATION (job));
-#line 935 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 936 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = job;
-#line 935 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 936 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = gtk_print_operation_get_status_string (_tmp0_);
-#line 935 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_debug ("Printing.vala:935: on_status_changed: %s", _tmp1_);
-#line 937 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 936 "/home/jens/Source/shotwell/src/Printing.vala"
+	g_debug ("Printing.vala:936: on_status_changed: %s", _tmp1_);
+#line 938 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = self->priv->progress_dialog;
-#line 937 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 938 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp2_ != NULL) {
-#line 6708 "Printing.c"
+#line 6700 "Printing.c"
 		ProgressDialog* _tmp3_ = NULL;
 		GtkPrintOperation* _tmp4_ = NULL;
 		const gchar* _tmp5_ = NULL;
-#line 938 "/home/jens/Source/shotwell/src/Printing.vala"
-		_tmp3_ = self->priv->progress_dialog;
-#line 938 "/home/jens/Source/shotwell/src/Printing.vala"
-		_tmp4_ = job;
-#line 938 "/home/jens/Source/shotwell/src/Printing.vala"
-		_tmp5_ = gtk_print_operation_get_status_string (_tmp4_);
-#line 938 "/home/jens/Source/shotwell/src/Printing.vala"
-		progress_dialog_set_status (_tmp3_, _tmp5_);
 #line 939 "/home/jens/Source/shotwell/src/Printing.vala"
+		_tmp3_ = self->priv->progress_dialog;
+#line 939 "/home/jens/Source/shotwell/src/Printing.vala"
+		_tmp4_ = job;
+#line 939 "/home/jens/Source/shotwell/src/Printing.vala"
+		_tmp5_ = gtk_print_operation_get_status_string (_tmp4_);
+#line 939 "/home/jens/Source/shotwell/src/Printing.vala"
+		progress_dialog_set_status (_tmp3_, _tmp5_);
+#line 940 "/home/jens/Source/shotwell/src/Printing.vala"
 		spin_event_loop ();
-#line 6722 "Printing.c"
+#line 6714 "Printing.c"
 	}
 }
 
 
 static gpointer _cairo_reference0 (gpointer self) {
-#line 964 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 965 "/home/jens/Source/shotwell/src/Printing.vala"
 	return self ? cairo_reference (self) : NULL;
-#line 6730 "Printing.c"
+#line 6722 "Printing.c"
 }
 
 
@@ -6772,138 +6764,138 @@ static void print_manager_on_draw_page (PrintManager* self, GtkPrintOperation* e
 	ContentLayout _tmp31_ = 0;
 	ContentLayout _tmp32_ = 0;
 	ContentLayout _tmp33_ = 0;
-#line 943 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 944 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_MANAGER (self));
-#line 943 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 944 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (GTK_IS_PRINT_OPERATION (emitting_object));
-#line 943 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 944 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (GTK_IS_PRINT_CONTEXT (job_context));
-#line 945 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_debug ("Printing.vala:945: on_draw_page");
-#line 947 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 946 "/home/jens/Source/shotwell/src/Printing.vala"
+	g_debug ("Printing.vala:946: on_draw_page");
+#line 948 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = emitting_object;
-#line 947 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 948 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_PRINT_JOB, PrintJob));
-#line 947 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 948 "/home/jens/Source/shotwell/src/Printing.vala"
 	job = _tmp1_;
-#line 950 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 951 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = self->priv->cancellable;
-#line 950 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 951 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp3_ != NULL) {
-#line 6793 "Printing.c"
+#line 6785 "Printing.c"
 		GCancellable* _tmp4_ = NULL;
 		gboolean _tmp5_ = FALSE;
-#line 950 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 951 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp4_ = self->priv->cancellable;
-#line 950 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 951 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp5_ = g_cancellable_is_cancelled (_tmp4_);
-#line 950 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 951 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp2_ = _tmp5_;
-#line 6802 "Printing.c"
+#line 6794 "Printing.c"
 	} else {
-#line 950 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 951 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp2_ = FALSE;
-#line 6806 "Printing.c"
+#line 6798 "Printing.c"
 	}
-#line 950 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 951 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (_tmp2_) {
-#line 6810 "Printing.c"
+#line 6802 "Printing.c"
 		PrintJob* _tmp6_ = NULL;
-#line 951 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 952 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp6_ = job;
-#line 951 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 952 "/home/jens/Source/shotwell/src/Printing.vala"
 		gtk_print_operation_cancel (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_print_operation_get_type (), GtkPrintOperation));
-#line 953 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 954 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_object_unref0 (job);
-#line 953 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 954 "/home/jens/Source/shotwell/src/Printing.vala"
 		return;
-#line 6820 "Printing.c"
+#line 6812 "Printing.c"
 	}
-#line 956 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 957 "/home/jens/Source/shotwell/src/Printing.vala"
 	spin_event_loop ();
-#line 958 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 959 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp7_ = job_context;
-#line 958 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 959 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp8_ = gtk_print_context_get_page_setup (_tmp7_);
-#line 958 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 959 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp9_ = _g_object_ref0 (_tmp8_);
-#line 958 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 959 "/home/jens/Source/shotwell/src/Printing.vala"
 	page_setup = _tmp9_;
-#line 959 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 960 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp10_ = page_setup;
-#line 959 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 960 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp11_ = gtk_page_setup_get_page_width (_tmp10_, GTK_UNIT_INCH);
-#line 959 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 960 "/home/jens/Source/shotwell/src/Printing.vala"
 	page_width = _tmp11_;
-#line 960 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 961 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp12_ = page_setup;
-#line 960 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 961 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp13_ = gtk_page_setup_get_page_height (_tmp12_, GTK_UNIT_INCH);
-#line 960 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 961 "/home/jens/Source/shotwell/src/Printing.vala"
 	page_height = _tmp13_;
-#line 962 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 963 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp14_ = job;
-#line 962 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 963 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp15_ = print_job_get_local_settings (_tmp14_);
-#line 962 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 963 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp16_ = _tmp15_;
-#line 962 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 963 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp17_ = print_settings_get_content_ppi (_tmp16_);
-#line 962 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 963 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp18_ = (gdouble) _tmp17_;
-#line 962 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 963 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp16_);
-#line 962 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 963 "/home/jens/Source/shotwell/src/Printing.vala"
 	dpi = _tmp18_;
-#line 963 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 964 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp19_ = dpi;
-#line 963 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 964 "/home/jens/Source/shotwell/src/Printing.vala"
 	inv_dpi = 1.0 / _tmp19_;
-#line 964 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 965 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp20_ = job_context;
-#line 964 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 965 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp21_ = gtk_print_context_get_cairo_context (_tmp20_);
-#line 964 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 965 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp22_ = _cairo_reference0 (_tmp21_);
-#line 964 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 965 "/home/jens/Source/shotwell/src/Printing.vala"
 	dc = _tmp22_;
-#line 965 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 966 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp23_ = dc;
-#line 965 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 966 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp24_ = inv_dpi;
-#line 965 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 966 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp25_ = inv_dpi;
-#line 965 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 966 "/home/jens/Source/shotwell/src/Printing.vala"
 	cairo_scale (_tmp23_, _tmp24_, _tmp25_);
-#line 966 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 967 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp26_ = job;
-#line 966 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 967 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp27_ = print_job_get_photos (_tmp26_);
-#line 966 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 967 "/home/jens/Source/shotwell/src/Printing.vala"
 	photos = _tmp27_;
-#line 968 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp28_ = job;
-#line 968 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp29_ = print_job_get_local_settings (_tmp28_);
-#line 968 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp30_ = _tmp29_;
-#line 968 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp31_ = print_settings_get_content_layout (_tmp30_);
-#line 968 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp32_ = _tmp31_;
-#line 968 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp30_);
-#line 968 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
 	content_layout = _tmp32_;
-#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 970 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp33_ = content_layout;
-#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 970 "/home/jens/Source/shotwell/src/Printing.vala"
 	switch (_tmp33_) {
-#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 970 "/home/jens/Source/shotwell/src/Printing.vala"
 		case CONTENT_LAYOUT_STANDARD_SIZE:
-#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 970 "/home/jens/Source/shotwell/src/Printing.vala"
 		case CONTENT_LAYOUT_CUSTOM_SIZE:
-#line 6906 "Printing.c"
+#line 6898 "Printing.c"
 		{
 			gdouble canvas_width = 0.0;
 			gdouble canvas_height = 0.0;
@@ -6913,11 +6905,11 @@ static void print_manager_on_draw_page (PrintManager* self, GtkPrintOperation* e
 			gint _tmp70_ = 0;
 			gint _tmp71_ = 0;
 			ProgressDialog* _tmp117_ = NULL;
-#line 973 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp34_ = content_layout;
-#line 973 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
 			if (_tmp34_ == CONTENT_LAYOUT_STANDARD_SIZE) {
-#line 6920 "Printing.c"
+#line 6912 "Printing.c"
 				gint _tmp35_ = 0;
 				StandardPrintSize** _tmp36_ = NULL;
 				StandardPrintSize** _tmp37_ = NULL;
@@ -6940,59 +6932,59 @@ static void print_manager_on_draw_page (PrintManager* self, GtkPrintOperation* e
 				StandardPrintSize* _tmp52_ = NULL;
 				Measurement _tmp53_ = {0};
 				gdouble _tmp54_ = 0.0;
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp36_ = print_manager_get_standard_sizes (self, &_tmp35_);
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp37_ = _tmp36_;
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp37__length1 = _tmp35_;
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp38_ = job;
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp39_ = print_job_get_local_settings (_tmp38_);
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp40_ = _tmp39_;
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp41_ = print_settings_get_size_selection (_tmp40_);
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp42_ = _tmp37_[_tmp41_];
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				measurement_convert_to (&_tmp42_->width, MEASUREMENT_UNIT_INCHES, &_tmp43_);
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp44_ = _tmp43_.value;
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				canvas_width = _tmp44_;
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				_print_settings_unref0 (_tmp40_);
-#line 974 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 975 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp37_ = (_vala_array_free (_tmp37_, _tmp37__length1, (GDestroyNotify) standard_print_size_unref), NULL);
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp46_ = print_manager_get_standard_sizes (self, &_tmp45_);
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp47_ = _tmp46_;
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp47__length1 = _tmp45_;
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp48_ = job;
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp49_ = print_job_get_local_settings (_tmp48_);
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp50_ = _tmp49_;
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp51_ = print_settings_get_size_selection (_tmp50_);
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp52_ = _tmp47_[_tmp51_];
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				measurement_convert_to (&_tmp52_->height, MEASUREMENT_UNIT_INCHES, &_tmp53_);
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp54_ = _tmp53_.value;
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				canvas_height = _tmp54_;
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				_print_settings_unref0 (_tmp50_);
-#line 976 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 977 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp47_ = (_vala_array_free (_tmp47_, _tmp47__length1, (GDestroyNotify) standard_print_size_unref), NULL);
-#line 6995 "Printing.c"
+#line 6987 "Printing.c"
 			} else {
 				ContentLayout _tmp55_ = 0;
 				PrintJob* _tmp56_ = NULL;
@@ -7007,55 +6999,55 @@ static void print_manager_on_draw_page (PrintManager* self, GtkPrintOperation* e
 				Measurement _tmp65_ = {0};
 				Measurement _tmp66_ = {0};
 				gdouble _tmp67_ = 0.0;
-#line 979 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 980 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp55_ = content_layout;
-#line 979 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 980 "/home/jens/Source/shotwell/src/Printing.vala"
 				_vala_assert (_tmp55_ == CONTENT_LAYOUT_CUSTOM_SIZE, "content_layout == ContentLayout.CUSTOM_SIZE");
-#line 980 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 981 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp56_ = job;
-#line 980 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 981 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp57_ = print_job_get_local_settings (_tmp56_);
-#line 980 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 981 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp58_ = _tmp57_;
-#line 980 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 981 "/home/jens/Source/shotwell/src/Printing.vala"
 				print_settings_get_content_width (_tmp58_, &_tmp59_);
-#line 980 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 981 "/home/jens/Source/shotwell/src/Printing.vala"
 				measurement_convert_to (&_tmp59_, MEASUREMENT_UNIT_INCHES, &_tmp60_);
-#line 980 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 981 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp61_ = _tmp60_.value;
-#line 980 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 981 "/home/jens/Source/shotwell/src/Printing.vala"
 				canvas_width = _tmp61_;
-#line 980 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 981 "/home/jens/Source/shotwell/src/Printing.vala"
 				_print_settings_unref0 (_tmp58_);
-#line 982 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 983 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp62_ = job;
-#line 982 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 983 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp63_ = print_job_get_local_settings (_tmp62_);
-#line 982 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 983 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp64_ = _tmp63_;
-#line 982 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 983 "/home/jens/Source/shotwell/src/Printing.vala"
 				print_settings_get_content_height (_tmp64_, &_tmp65_);
-#line 982 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 983 "/home/jens/Source/shotwell/src/Printing.vala"
 				measurement_convert_to (&_tmp65_, MEASUREMENT_UNIT_INCHES, &_tmp66_);
-#line 982 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 983 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp67_ = _tmp66_.value;
-#line 982 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 983 "/home/jens/Source/shotwell/src/Printing.vala"
 				canvas_height = _tmp67_;
-#line 982 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 983 "/home/jens/Source/shotwell/src/Printing.vala"
 				_print_settings_unref0 (_tmp64_);
-#line 7046 "Printing.c"
+#line 7038 "Printing.c"
 			}
-#line 986 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp68_ = page_num;
-#line 986 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp69_ = photos;
-#line 986 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp70_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp69_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 986 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp71_ = _tmp70_;
-#line 986 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
 			if (_tmp68_ < _tmp71_) {
-#line 7058 "Printing.c"
+#line 7050 "Printing.c"
 				Dimensions photo_dimensions = {0};
 				GeeList* _tmp72_ = NULL;
 				gint _tmp73_ = 0;
@@ -7093,112 +7085,112 @@ static void print_manager_on_draw_page (PrintManager* self, GtkPrintOperation* e
 				PrintSettings* _tmp104_ = NULL;
 				gboolean _tmp105_ = FALSE;
 				gboolean _tmp106_ = FALSE;
-#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 988 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp72_ = photos;
-#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 988 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp73_ = page_num;
-#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 988 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp74_ = gee_list_get (_tmp72_, _tmp73_);
-#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 988 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp75_ = (Photo*) _tmp74_;
-#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 988 "/home/jens/Source/shotwell/src/Printing.vala"
 				media_source_get_dimensions (G_TYPE_CHECK_INSTANCE_CAST (_tmp75_, TYPE_MEDIA_SOURCE, MediaSource), PHOTO_EXCEPTION_NONE, &_tmp76_);
-#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 988 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp77_ = _tmp76_;
-#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 988 "/home/jens/Source/shotwell/src/Printing.vala"
 				_g_object_unref0 (_tmp75_);
-#line 987 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 988 "/home/jens/Source/shotwell/src/Printing.vala"
 				photo_dimensions = _tmp77_;
-#line 988 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 989 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp78_ = dimensions_get_aspect_ratio (&photo_dimensions);
-#line 988 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 989 "/home/jens/Source/shotwell/src/Printing.vala"
 				photo_aspect_ratio = _tmp78_;
-#line 989 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 990 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp79_ = canvas_width;
-#line 989 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 990 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp80_ = canvas_height;
-#line 989 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 990 "/home/jens/Source/shotwell/src/Printing.vala"
 				canvas_aspect_ratio = ((gdouble) _tmp79_) / _tmp80_;
-#line 990 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 991 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp81_ = canvas_aspect_ratio;
-#line 990 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 991 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp82_ = floor (_tmp81_);
-#line 990 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 991 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp83_ = photo_aspect_ratio;
-#line 990 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 991 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp84_ = floor (_tmp83_);
-#line 990 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 991 "/home/jens/Source/shotwell/src/Printing.vala"
 				if (_tmp82_ != _tmp84_) {
-#line 7132 "Printing.c"
+#line 7124 "Printing.c"
 					gdouble canvas_tmp = 0.0;
 					gdouble _tmp85_ = 0.0;
 					gdouble _tmp86_ = 0.0;
 					gdouble _tmp87_ = 0.0;
-#line 991 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 992 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp85_ = canvas_width;
-#line 991 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 992 "/home/jens/Source/shotwell/src/Printing.vala"
 					canvas_tmp = _tmp85_;
-#line 992 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 993 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp86_ = canvas_height;
-#line 992 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 993 "/home/jens/Source/shotwell/src/Printing.vala"
 					canvas_width = _tmp86_;
-#line 993 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 994 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp87_ = canvas_tmp;
-#line 993 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 994 "/home/jens/Source/shotwell/src/Printing.vala"
 					canvas_height = _tmp87_;
-#line 7149 "Printing.c"
+#line 7141 "Printing.c"
 				}
-#line 996 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 997 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp88_ = page_width;
-#line 996 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 997 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp89_ = canvas_width;
-#line 996 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 997 "/home/jens/Source/shotwell/src/Printing.vala"
 				dx = (_tmp88_ - _tmp89_) / 2.0;
-#line 997 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp90_ = page_height;
-#line 997 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp91_ = canvas_height;
-#line 997 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
 				dy = (_tmp90_ - _tmp91_) / 2.0;
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp92_ = photos;
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp93_ = page_num;
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp94_ = gee_list_get (_tmp92_, _tmp93_);
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp95_ = (Photo*) _tmp94_;
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp96_ = dx;
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp97_ = dy;
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp98_ = canvas_width;
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp99_ = canvas_height;
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp100_ = job;
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp101_ = job_context;
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				print_manager_fit_image_to_canvas (self, _tmp95_, _tmp96_, _tmp97_, _tmp98_, _tmp99_, TRUE, _tmp100_, _tmp101_);
-#line 998 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 999 "/home/jens/Source/shotwell/src/Printing.vala"
 				_g_object_unref0 (_tmp95_);
-#line 1000 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp102_ = job;
-#line 1000 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp103_ = print_job_get_local_settings (_tmp102_);
-#line 1000 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp104_ = _tmp103_;
-#line 1000 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp105_ = print_settings_is_print_titles_enabled (_tmp104_);
-#line 1000 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp106_ = _tmp105_;
-#line 1000 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
 				_print_settings_unref0 (_tmp104_);
-#line 1000 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
 				if (_tmp106_) {
-#line 7201 "Printing.c"
+#line 7193 "Printing.c"
 					gdouble _tmp107_ = 0.0;
 					gdouble _tmp108_ = 0.0;
 					GeeList* _tmp109_ = NULL;
@@ -7209,66 +7201,66 @@ static void print_manager_on_draw_page (PrintManager* self, GtkPrintOperation* e
 					gchar* _tmp114_ = NULL;
 					PrintJob* _tmp115_ = NULL;
 					GtkPrintContext* _tmp116_ = NULL;
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp107_ = page_width;
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp108_ = page_height;
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp109_ = photos;
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp110_ = page_num;
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp111_ = gee_list_get (_tmp109_, _tmp110_);
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp112_ = (Photo*) _tmp111_;
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp113_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp112_, TYPE_DATA_OBJECT, DataObject));
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp114_ = _tmp113_;
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp115_ = job;
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp116_ = job_context;
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					print_manager_add_title_to_canvas (self, _tmp107_ / 2, _tmp108_, _tmp114_, _tmp115_, _tmp116_);
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_g_free0 (_tmp114_);
-#line 1001 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Printing.vala"
 					_g_object_unref0 (_tmp112_);
-#line 7238 "Printing.c"
+#line 7230 "Printing.c"
 				}
 			}
-#line 1006 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1007 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp117_ = self->priv->progress_dialog;
-#line 1006 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1007 "/home/jens/Source/shotwell/src/Printing.vala"
 			if (_tmp117_ != NULL) {
-#line 7245 "Printing.c"
+#line 7237 "Printing.c"
 				ProgressDialog* _tmp118_ = NULL;
 				gint _tmp119_ = 0;
 				GeeList* _tmp120_ = NULL;
 				gint _tmp121_ = 0;
 				gint _tmp122_ = 0;
-#line 1007 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp118_ = self->priv->progress_dialog;
-#line 1007 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp119_ = page_num;
-#line 1007 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp120_ = photos;
-#line 1007 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp121_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp120_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1007 "/home/jens/Source/shotwell/src/Printing.vala"
-				_tmp122_ = _tmp121_;
-#line 1007 "/home/jens/Source/shotwell/src/Printing.vala"
-				progress_dialog_monitor (_tmp118_, (guint64) _tmp119_, (guint64) _tmp122_, TRUE);
-#line 7263 "Printing.c"
-			}
 #line 1008 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp118_ = self->priv->progress_dialog;
+#line 1008 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp119_ = page_num;
+#line 1008 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp120_ = photos;
+#line 1008 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp121_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp120_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 1008 "/home/jens/Source/shotwell/src/Printing.vala"
+				_tmp122_ = _tmp121_;
+#line 1008 "/home/jens/Source/shotwell/src/Printing.vala"
+				progress_dialog_monitor (_tmp118_, (guint64) _tmp119_, (guint64) _tmp122_, TRUE);
+#line 7255 "Printing.c"
+			}
+#line 1009 "/home/jens/Source/shotwell/src/Printing.vala"
 			break;
-#line 7267 "Printing.c"
+#line 7259 "Printing.c"
 		}
-#line 969 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 970 "/home/jens/Source/shotwell/src/Printing.vala"
 		case CONTENT_LAYOUT_IMAGE_PER_PAGE:
-#line 7271 "Printing.c"
+#line 7263 "Printing.c"
 		{
 			PrintLayout layout = 0;
 			PrintJob* _tmp123_ = NULL;
@@ -7294,105 +7286,105 @@ static void print_manager_on_draw_page (PrintManager* self, GtkPrintOperation* e
 			gdouble _tmp138_ = 0.0;
 			gint _tmp139_ = 0;
 			gint _tmp140_ = 0;
-#line 1011 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1012 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp123_ = job;
-#line 1011 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1012 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp124_ = print_job_get_local_settings (_tmp123_);
-#line 1011 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1012 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp125_ = _tmp124_;
-#line 1011 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1012 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp126_ = print_settings_get_image_per_page_selection (_tmp125_);
-#line 1011 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1012 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp127_ = (PrintLayout) _tmp126_;
-#line 1011 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1012 "/home/jens/Source/shotwell/src/Printing.vala"
 			_print_settings_unref0 (_tmp125_);
-#line 1011 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1012 "/home/jens/Source/shotwell/src/Printing.vala"
 			layout = _tmp127_;
-#line 1012 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp128_ = layout;
-#line 1012 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp129_ = print_layout_get_x (_tmp128_);
-#line 1012 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Printing.vala"
 			nx = _tmp129_;
-#line 1013 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1014 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp130_ = layout;
-#line 1013 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1014 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp131_ = print_layout_get_y (_tmp130_);
-#line 1013 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1014 "/home/jens/Source/shotwell/src/Printing.vala"
 			ny = _tmp131_;
-#line 1014 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1015 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp132_ = page_num;
-#line 1014 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1015 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp133_ = layout;
-#line 1014 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1015 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp134_ = print_layout_get_per_page (_tmp133_);
-#line 1014 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1015 "/home/jens/Source/shotwell/src/Printing.vala"
 			start = _tmp132_ * _tmp134_;
-#line 1015 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp135_ = page_width;
-#line 1015 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp136_ = nx;
-#line 1015 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp137_ = nx;
-#line 1015 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Printing.vala"
 			canvas_width = ((gdouble) (_tmp135_ - (PRINT_MANAGER_IMAGE_DISTANCE * (_tmp136_ - 1)))) / _tmp137_;
-#line 1016 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp138_ = page_height;
-#line 1016 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp139_ = ny;
-#line 1016 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp140_ = ny;
-#line 1016 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
 			canvas_height = ((gdouble) (_tmp138_ - (PRINT_MANAGER_IMAGE_DISTANCE * (_tmp139_ - 1)))) / _tmp140_;
-#line 7347 "Printing.c"
+#line 7339 "Printing.c"
 			{
 				gint y = 0;
-#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
 				y = 0;
-#line 7352 "Printing.c"
+#line 7344 "Printing.c"
 				{
 					gboolean _tmp141_ = FALSE;
-#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
 					_tmp141_ = TRUE;
-#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
 					while (TRUE) {
-#line 7359 "Printing.c"
+#line 7351 "Printing.c"
 						gint _tmp143_ = 0;
 						gint _tmp144_ = 0;
-#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
 						if (!_tmp141_) {
-#line 7364 "Printing.c"
+#line 7356 "Printing.c"
 							gint _tmp142_ = 0;
-#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
 							_tmp142_ = y;
-#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
 							y = _tmp142_ + 1;
-#line 7370 "Printing.c"
+#line 7362 "Printing.c"
 						}
-#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
 						_tmp141_ = FALSE;
-#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
 						_tmp143_ = y;
-#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
 						_tmp144_ = ny;
-#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
 						if (!(_tmp143_ < _tmp144_)) {
-#line 1017 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
 							break;
-#line 7382 "Printing.c"
+#line 7374 "Printing.c"
 						}
 						{
 							gint x = 0;
-#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
 							x = 0;
-#line 7388 "Printing.c"
+#line 7380 "Printing.c"
 							{
 								gboolean _tmp145_ = FALSE;
-#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
 								_tmp145_ = TRUE;
-#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
 								while (TRUE) {
-#line 7395 "Printing.c"
+#line 7387 "Printing.c"
 									gint _tmp147_ = 0;
 									gint _tmp148_ = 0;
 									gint i = 0;
@@ -7405,49 +7397,49 @@ static void print_manager_on_draw_page (PrintManager* self, GtkPrintOperation* e
 									gint _tmp155_ = 0;
 									gint _tmp156_ = 0;
 									ProgressDialog* _tmp190_ = NULL;
-#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
 									if (!_tmp145_) {
-#line 7410 "Printing.c"
+#line 7402 "Printing.c"
 										gint _tmp146_ = 0;
-#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp146_ = x;
-#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
 										x = _tmp146_ + 1;
-#line 7416 "Printing.c"
+#line 7408 "Printing.c"
 									}
-#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp145_ = FALSE;
-#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp147_ = x;
-#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp148_ = nx;
-#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
 									if (!(_tmp147_ < _tmp148_)) {
-#line 1018 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
 										break;
-#line 7428 "Printing.c"
+#line 7420 "Printing.c"
 									}
-#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1020 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp149_ = start;
-#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1020 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp150_ = y;
-#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1020 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp151_ = nx;
-#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1020 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp152_ = x;
-#line 1019 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1020 "/home/jens/Source/shotwell/src/Printing.vala"
 									i = (_tmp149_ + (_tmp150_ * _tmp151_)) + _tmp152_;
-#line 1020 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1021 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp153_ = i;
-#line 1020 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1021 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp154_ = photos;
-#line 1020 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1021 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp155_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp154_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1020 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1021 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp156_ = _tmp155_;
-#line 1020 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1021 "/home/jens/Source/shotwell/src/Printing.vala"
 									if (_tmp153_ < _tmp156_) {
-#line 7450 "Printing.c"
+#line 7442 "Printing.c"
 										gdouble dx = 0.0;
 										gint _tmp157_ = 0;
 										gdouble _tmp158_ = 0.0;
@@ -7471,61 +7463,61 @@ static void print_manager_on_draw_page (PrintManager* self, GtkPrintOperation* e
 										PrintSettings* _tmp175_ = NULL;
 										gboolean _tmp176_ = FALSE;
 										gboolean _tmp177_ = FALSE;
-#line 1021 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp157_ = x;
-#line 1021 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp158_ = canvas_width;
-#line 1021 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp159_ = x;
-#line 1021 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Printing.vala"
 										dx = (_tmp157_ * _tmp158_) + (_tmp159_ * PRINT_MANAGER_IMAGE_DISTANCE);
-#line 1022 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp160_ = y;
-#line 1022 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp161_ = canvas_height;
-#line 1022 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp162_ = y;
-#line 1022 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
 										dy = (_tmp160_ * _tmp161_) + (_tmp162_ * PRINT_MANAGER_IMAGE_DISTANCE);
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp163_ = photos;
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp164_ = i;
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp165_ = gee_list_get (_tmp163_, _tmp164_);
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp166_ = (Photo*) _tmp165_;
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp167_ = dx;
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp168_ = dy;
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp169_ = canvas_width;
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp170_ = canvas_height;
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp171_ = job;
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp172_ = job_context;
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										print_manager_fit_image_to_canvas (self, _tmp166_, _tmp167_, _tmp168_, _tmp169_, _tmp170_, FALSE, _tmp171_, _tmp172_);
-#line 1023 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1024 "/home/jens/Source/shotwell/src/Printing.vala"
 										_g_object_unref0 (_tmp166_);
-#line 1025 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp173_ = job;
-#line 1025 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp174_ = print_job_get_local_settings (_tmp173_);
-#line 1025 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp175_ = _tmp174_;
-#line 1025 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp176_ = print_settings_is_print_titles_enabled (_tmp175_);
-#line 1025 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp177_ = _tmp176_;
-#line 1025 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
 										_print_settings_unref0 (_tmp175_);
-#line 1025 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
 										if (_tmp177_) {
-#line 7528 "Printing.c"
+#line 7520 "Printing.c"
 											gdouble _tmp178_ = 0.0;
 											gdouble _tmp179_ = 0.0;
 											gdouble _tmp180_ = 0.0;
@@ -7538,62 +7530,62 @@ static void print_manager_on_draw_page (PrintManager* self, GtkPrintOperation* e
 											gchar* _tmp187_ = NULL;
 											PrintJob* _tmp188_ = NULL;
 											GtkPrintContext* _tmp189_ = NULL;
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp178_ = dx;
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp179_ = canvas_width;
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp180_ = dy;
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp181_ = canvas_height;
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp182_ = photos;
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp183_ = i;
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp184_ = gee_list_get (_tmp182_, _tmp183_);
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp185_ = (Photo*) _tmp184_;
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp186_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp185_, TYPE_DATA_OBJECT, DataObject));
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp187_ = _tmp186_;
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp188_ = job;
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_tmp189_ = job_context;
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											print_manager_add_title_to_canvas (self, _tmp178_ + (_tmp179_ / 2), _tmp180_ + _tmp181_, _tmp187_, _tmp188_, _tmp189_);
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_g_free0 (_tmp187_);
-#line 1026 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Printing.vala"
 											_g_object_unref0 (_tmp185_);
-#line 7571 "Printing.c"
+#line 7563 "Printing.c"
 										}
 									}
-#line 1031 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Printing.vala"
 									_tmp190_ = self->priv->progress_dialog;
-#line 1031 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Printing.vala"
 									if (_tmp190_ != NULL) {
-#line 7578 "Printing.c"
+#line 7570 "Printing.c"
 										ProgressDialog* _tmp191_ = NULL;
 										gint _tmp192_ = 0;
 										GeeList* _tmp193_ = NULL;
 										gint _tmp194_ = 0;
 										gint _tmp195_ = 0;
-#line 1032 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1033 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp191_ = self->priv->progress_dialog;
-#line 1032 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1033 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp192_ = i;
-#line 1032 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1033 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp193_ = photos;
-#line 1032 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1033 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp194_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp193_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1032 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1033 "/home/jens/Source/shotwell/src/Printing.vala"
 										_tmp195_ = _tmp194_;
-#line 1032 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1033 "/home/jens/Source/shotwell/src/Printing.vala"
 										progress_dialog_monitor (_tmp191_, (guint64) _tmp192_, (guint64) _tmp195_, TRUE);
-#line 7596 "Printing.c"
+#line 7588 "Printing.c"
 									}
 								}
 							}
@@ -7601,33 +7593,33 @@ static void print_manager_on_draw_page (PrintManager* self, GtkPrintOperation* e
 					}
 				}
 			}
-#line 1035 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1036 "/home/jens/Source/shotwell/src/Printing.vala"
 			break;
-#line 7606 "Printing.c"
+#line 7598 "Printing.c"
 		}
 		default:
 		{
-#line 1038 "/home/jens/Source/shotwell/src/Printing.vala"
-			g_error ("Printing.vala:1038: unknown or unsupported layout mode");
-#line 7612 "Printing.c"
+#line 1039 "/home/jens/Source/shotwell/src/Printing.vala"
+			g_error ("Printing.vala:1039: unknown or unsupported layout mode");
+#line 7604 "Printing.c"
 		}
 	}
-#line 943 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 944 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (photos);
-#line 943 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 944 "/home/jens/Source/shotwell/src/Printing.vala"
 	_cairo_destroy0 (dc);
-#line 943 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 944 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (page_setup);
-#line 943 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 944 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (job);
-#line 7623 "Printing.c"
+#line 7615 "Printing.c"
 }
 
 
 static void _print_manager_on_custom_widget_apply_gtk_print_operation_custom_widget_apply (GtkPrintOperation* _sender, GtkWidget* widget, gpointer self) {
-#line 1044 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1045 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_manager_on_custom_widget_apply ((PrintManager*) self, widget);
-#line 7630 "Printing.c"
+#line 7622 "Printing.c"
 }
 
 
@@ -7637,31 +7629,31 @@ static GObject* print_manager_on_create_custom_widget (PrintManager* self, GtkPr
 	CustomPrintTab* _tmp1_ = NULL;
 	GtkPrintOperation* _tmp2_ = NULL;
 	CustomPrintTab* _tmp3_ = NULL;
-#line 1042 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1043 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_PRINT_MANAGER (self), NULL);
-#line 1042 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1043 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (GTK_IS_PRINT_OPERATION (emitting_object), NULL);
-#line 1043 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1044 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = emitting_object;
-#line 1043 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1044 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = custom_print_tab_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_PRINT_JOB, PrintJob));
-#line 1043 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1044 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_object_ref_sink (_tmp1_);
-#line 1043 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1044 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (self->priv->custom_tab);
-#line 1043 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1044 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->custom_tab = _tmp1_;
-#line 1044 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1045 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = emitting_object;
-#line 1044 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1045 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_PRINT_JOB, PrintJob), gtk_print_operation_get_type (), GtkPrintOperation), "custom-widget-apply", (GCallback) _print_manager_on_custom_widget_apply_gtk_print_operation_custom_widget_apply, self);
-#line 1045 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1046 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = self->priv->custom_tab;
-#line 1045 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1046 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, G_TYPE_OBJECT, GObject);
-#line 1045 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1046 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 7664 "Printing.c"
+#line 7656 "Printing.c"
 }
 
 
@@ -7675,41 +7667,41 @@ static void print_manager_on_custom_widget_apply (PrintManager* self, GtkWidget*
 	PrintSettings* _tmp5_ = NULL;
 	PrintSettings* _tmp6_ = NULL;
 	PrintSettings* _tmp7_ = NULL;
-#line 1048 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1049 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_MANAGER (self));
-#line 1048 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1049 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (GTK_IS_WIDGET (custom_widget));
-#line 1049 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1050 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = custom_widget;
-#line 1049 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1050 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_CUSTOM_PRINT_TAB, CustomPrintTab));
-#line 1049 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1050 "/home/jens/Source/shotwell/src/Printing.vala"
 	tab = _tmp1_;
-#line 1050 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1051 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = custom_print_tab_get_source_job (tab);
-#line 1050 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1051 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = _tmp2_;
-#line 1050 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1051 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp4_ = custom_print_tab_get_local_settings (tab);
-#line 1050 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1051 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = _tmp4_;
-#line 1050 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1051 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_job_set_local_settings (_tmp3_, _tmp5_);
-#line 1050 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1051 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp5_);
-#line 1050 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1051 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (_tmp3_);
-#line 1051 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1052 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6_ = custom_print_tab_get_local_settings (tab);
-#line 1051 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1052 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp7_ = _tmp6_;
-#line 1051 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1052 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_manager_set_global_settings (self, _tmp7_);
-#line 1051 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1052 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp7_);
-#line 1048 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1049 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (tab);
-#line 7712 "Printing.c"
+#line 7704 "Printing.c"
 }
 
 
@@ -7756,61 +7748,61 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 	gint _tmp41_ = 0;
 	cairo_t* _tmp96_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1054 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_MANAGER (self));
-#line 1054 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PHOTO (photo));
-#line 1054 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_JOB (job));
-#line 1054 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (GTK_IS_PRINT_CONTEXT (job_context));
-#line 1055 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1056 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = job_context;
-#line 1055 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1056 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = gtk_print_context_get_cairo_context (_tmp0_);
-#line 1055 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1056 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = _cairo_reference0 (_tmp1_);
-#line 1055 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1056 "/home/jens/Source/shotwell/src/Printing.vala"
 	dc = _tmp2_;
-#line 1056 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1057 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = photo;
-#line 1056 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1057 "/home/jens/Source/shotwell/src/Printing.vala"
 	media_source_get_dimensions (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_MEDIA_SOURCE, MediaSource), PHOTO_EXCEPTION_NONE, &_tmp4_);
-#line 1056 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1057 "/home/jens/Source/shotwell/src/Printing.vala"
 	photo_dimensions = _tmp4_;
-#line 1057 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1058 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = dimensions_get_aspect_ratio (&photo_dimensions);
-#line 1057 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1058 "/home/jens/Source/shotwell/src/Printing.vala"
 	photo_aspect_ratio = _tmp5_;
-#line 1058 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1059 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6_ = canvas_width;
-#line 1058 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1059 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp7_ = canvas_height;
-#line 1058 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1059 "/home/jens/Source/shotwell/src/Printing.vala"
 	canvas_aspect_ratio = ((gdouble) _tmp6_) / _tmp7_;
-#line 1060 "/home/jens/Source/shotwell/src/Printing.vala"
-	target_width = 0.0;
 #line 1061 "/home/jens/Source/shotwell/src/Printing.vala"
+	target_width = 0.0;
+#line 1062 "/home/jens/Source/shotwell/src/Printing.vala"
 	target_height = 0.0;
-#line 1062 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp8_ = job;
-#line 1062 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp9_ = print_job_get_local_settings (_tmp8_);
-#line 1062 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp10_ = _tmp9_;
-#line 1062 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp11_ = print_settings_get_content_ppi (_tmp10_);
-#line 1062 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp12_ = (gdouble) _tmp11_;
-#line 1062 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp10_);
-#line 1062 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Printing.vala"
 	dpi = _tmp12_;
-#line 1064 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1065 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp13_ = crop;
-#line 1064 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1065 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (!_tmp13_) {
-#line 7813 "Printing.c"
+#line 7805 "Printing.c"
 		gdouble _tmp14_ = 0.0;
 		gdouble _tmp15_ = 0.0;
 		gdouble _tmp22_ = 0.0;
@@ -7819,133 +7811,133 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 		gdouble _tmp25_ = 0.0;
 		gdouble _tmp26_ = 0.0;
 		gdouble _tmp27_ = 0.0;
-#line 1065 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1066 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp14_ = canvas_aspect_ratio;
-#line 1065 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1066 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp15_ = photo_aspect_ratio;
-#line 1065 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1066 "/home/jens/Source/shotwell/src/Printing.vala"
 		if (_tmp14_ < _tmp15_) {
-#line 7828 "Printing.c"
+#line 7820 "Printing.c"
 			gdouble _tmp16_ = 0.0;
 			gdouble _tmp17_ = 0.0;
 			gdouble _tmp18_ = 0.0;
-#line 1066 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1067 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp16_ = canvas_width;
-#line 1066 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1067 "/home/jens/Source/shotwell/src/Printing.vala"
 			target_width = _tmp16_;
-#line 1067 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1068 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp17_ = target_width;
-#line 1067 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1068 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp18_ = photo_aspect_ratio;
-#line 1067 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1068 "/home/jens/Source/shotwell/src/Printing.vala"
 			target_height = _tmp17_ * (1.0 / _tmp18_);
-#line 7842 "Printing.c"
+#line 7834 "Printing.c"
 		} else {
 			gdouble _tmp19_ = 0.0;
 			gdouble _tmp20_ = 0.0;
 			gdouble _tmp21_ = 0.0;
-#line 1069 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1070 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp19_ = canvas_height;
-#line 1069 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1070 "/home/jens/Source/shotwell/src/Printing.vala"
 			target_height = _tmp19_;
-#line 1070 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1071 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp20_ = target_height;
-#line 1070 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1071 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp21_ = photo_aspect_ratio;
-#line 1070 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1071 "/home/jens/Source/shotwell/src/Printing.vala"
 			target_width = _tmp20_ * _tmp21_;
-#line 7857 "Printing.c"
+#line 7849 "Printing.c"
 		}
-#line 1072 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1073 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp22_ = x;
-#line 1072 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1073 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp23_ = canvas_width;
-#line 1072 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1073 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp24_ = target_width;
-#line 1072 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1073 "/home/jens/Source/shotwell/src/Printing.vala"
 		x = _tmp22_ + ((_tmp23_ - _tmp24_) / 2.0);
-#line 1073 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1074 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp25_ = y;
-#line 1073 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1074 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp26_ = canvas_height;
-#line 1073 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1074 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp27_ = target_height;
-#line 1073 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1074 "/home/jens/Source/shotwell/src/Printing.vala"
 		y = _tmp25_ + ((_tmp26_ - _tmp27_) / 2.0);
-#line 7875 "Printing.c"
+#line 7867 "Printing.c"
 	}
-#line 1076 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1077 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp28_ = dpi;
-#line 1076 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1077 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp29_ = x;
-#line 1076 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1077 "/home/jens/Source/shotwell/src/Printing.vala"
 	x_offset = _tmp28_ * _tmp29_;
-#line 1077 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1078 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp30_ = dpi;
-#line 1077 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1078 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp31_ = y;
-#line 1077 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1078 "/home/jens/Source/shotwell/src/Printing.vala"
 	y_offset = _tmp30_ * _tmp31_;
-#line 1078 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1079 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp32_ = dc;
-#line 1078 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1079 "/home/jens/Source/shotwell/src/Printing.vala"
 	cairo_save (_tmp32_);
-#line 1079 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp33_ = dc;
-#line 1079 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp34_ = x_offset;
-#line 1079 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp35_ = y_offset;
-#line 1079 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Printing.vala"
 	cairo_translate (_tmp33_, _tmp34_, _tmp35_);
-#line 1081 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1082 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp36_ = dpi;
-#line 1081 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1082 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp37_ = canvas_width;
-#line 1081 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1082 "/home/jens/Source/shotwell/src/Printing.vala"
 	w = (gint) (_tmp36_ * _tmp37_);
-#line 1082 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1083 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp38_ = dpi;
-#line 1082 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1083 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp39_ = canvas_height;
-#line 1082 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1083 "/home/jens/Source/shotwell/src/Printing.vala"
 	h = (gint) (_tmp38_ * _tmp39_);
-#line 1083 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1084 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp40_ = w;
-#line 1083 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1084 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp41_ = h;
-#line 1083 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1084 "/home/jens/Source/shotwell/src/Printing.vala"
 	dimensions_init (&viewport, _tmp40_, _tmp41_);
-#line 7919 "Printing.c"
+#line 7911 "Printing.c"
 	{
 		gboolean _tmp42_ = FALSE;
 		gboolean _tmp43_ = FALSE;
 		cairo_t* _tmp89_ = NULL;
-#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp43_ = crop;
-#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
 		if (_tmp43_) {
-#line 7928 "Printing.c"
+#line 7920 "Printing.c"
 			gdouble _tmp44_ = 0.0;
 			gdouble _tmp45_ = 0.0;
 			gboolean _tmp46_ = FALSE;
-#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp44_ = canvas_aspect_ratio;
-#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp45_ = photo_aspect_ratio;
-#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp46_ = print_manager_are_approximately_equal (self, _tmp44_, _tmp45_);
-#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp42_ = !_tmp46_;
-#line 7940 "Printing.c"
+#line 7932 "Printing.c"
 		} else {
-#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp42_ = FALSE;
-#line 7944 "Printing.c"
+#line 7936 "Printing.c"
 		}
-#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
 		if (_tmp42_) {
-#line 7948 "Printing.c"
+#line 7940 "Printing.c"
 			Scaling pixbuf_scaling = {0};
 			Dimensions _tmp47_ = {0};
 			Scaling _tmp48_ = {0};
@@ -7975,121 +7967,121 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 			GdkPixbuf* _tmp77_ = NULL;
 			cairo_t* _tmp78_ = NULL;
 			GdkPixbuf* _tmp79_ = NULL;
-#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1088 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp47_ = viewport;
-#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1088 "/home/jens/Source/shotwell/src/Printing.vala"
 			scaling_to_fill_viewport (&_tmp47_, &_tmp48_);
-#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1088 "/home/jens/Source/shotwell/src/Printing.vala"
 			pixbuf_scaling = _tmp48_;
-#line 1088 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1089 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp49_ = photo;
-#line 1088 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1089 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp50_ = pixbuf_scaling;
-#line 1088 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1089 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp51_ = photo_source_get_pixbuf (G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, TYPE_PHOTO_SOURCE, PhotoSource), &_tmp50_, &_inner_error_);
-#line 1088 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1089 "/home/jens/Source/shotwell/src/Printing.vala"
 			photo_pixbuf = _tmp51_;
-#line 1088 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1089 "/home/jens/Source/shotwell/src/Printing.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7994 "Printing.c"
+#line 7986 "Printing.c"
 				goto __catch458_g_error;
 			}
-#line 1089 "/home/jens/Source/shotwell/src/Printing.vala"
-			_tmp52_ = photo_pixbuf;
-#line 1089 "/home/jens/Source/shotwell/src/Printing.vala"
-			dimensions_for_pixbuf (_tmp52_, &_tmp53_);
-#line 1089 "/home/jens/Source/shotwell/src/Printing.vala"
-			scaled_photo_dimensions = _tmp53_;
 #line 1090 "/home/jens/Source/shotwell/src/Printing.vala"
-			shave_vertical = 0;
+			_tmp52_ = photo_pixbuf;
+#line 1090 "/home/jens/Source/shotwell/src/Printing.vala"
+			dimensions_for_pixbuf (_tmp52_, &_tmp53_);
+#line 1090 "/home/jens/Source/shotwell/src/Printing.vala"
+			scaled_photo_dimensions = _tmp53_;
 #line 1091 "/home/jens/Source/shotwell/src/Printing.vala"
+			shave_vertical = 0;
+#line 1092 "/home/jens/Source/shotwell/src/Printing.vala"
 			shave_horizontal = 0;
-#line 1092 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1093 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp54_ = canvas_aspect_ratio;
-#line 1092 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1093 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp55_ = photo_aspect_ratio;
-#line 1092 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1093 "/home/jens/Source/shotwell/src/Printing.vala"
 			if (_tmp54_ < _tmp55_) {
-#line 8013 "Printing.c"
+#line 8005 "Printing.c"
 				Dimensions _tmp56_ = {0};
 				gint _tmp57_ = 0;
 				Dimensions _tmp58_ = {0};
 				gint _tmp59_ = 0;
 				gdouble _tmp60_ = 0.0;
-#line 1093 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1094 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp56_ = scaled_photo_dimensions;
-#line 1093 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1094 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp57_ = _tmp56_.width;
-#line 1093 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1094 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp58_ = scaled_photo_dimensions;
-#line 1093 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1094 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp59_ = _tmp58_.height;
-#line 1093 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1094 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp60_ = canvas_aspect_ratio;
-#line 1093 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1094 "/home/jens/Source/shotwell/src/Printing.vala"
 				shave_vertical = (gint) ((_tmp57_ - (_tmp59_ * _tmp60_)) / 2.0);
-#line 8031 "Printing.c"
+#line 8023 "Printing.c"
 			} else {
 				Dimensions _tmp61_ = {0};
 				gint _tmp62_ = 0;
 				Dimensions _tmp63_ = {0};
 				gint _tmp64_ = 0;
 				gdouble _tmp65_ = 0.0;
-#line 1095 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1096 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp61_ = scaled_photo_dimensions;
-#line 1095 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1096 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp62_ = _tmp61_.height;
-#line 1095 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1096 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp63_ = scaled_photo_dimensions;
-#line 1095 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1096 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp64_ = _tmp63_.width;
-#line 1095 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1096 "/home/jens/Source/shotwell/src/Printing.vala"
 				_tmp65_ = canvas_aspect_ratio;
-#line 1095 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1096 "/home/jens/Source/shotwell/src/Printing.vala"
 				shave_horizontal = (gint) ((_tmp62_ - (_tmp64_ * (1.0 / _tmp65_))) / 2.0);
-#line 8050 "Printing.c"
+#line 8042 "Printing.c"
 			}
-#line 1097 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1098 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp66_ = photo_pixbuf;
-#line 1097 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1098 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp67_ = shave_vertical;
-#line 1097 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1098 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp68_ = shave_horizontal;
-#line 1097 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1098 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp69_ = scaled_photo_dimensions;
-#line 1097 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1098 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp70_ = _tmp69_.width;
-#line 1097 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1098 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp71_ = shave_vertical;
-#line 1097 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1098 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp72_ = scaled_photo_dimensions;
-#line 1097 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1098 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp73_ = _tmp72_.height;
-#line 1097 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1098 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp74_ = shave_horizontal;
-#line 1097 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1098 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp75_ = gdk_pixbuf_new_subpixbuf (_tmp66_, _tmp67_, _tmp68_, _tmp70_ - (2 * _tmp71_), _tmp73_ - (2 * _tmp74_));
-#line 1097 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1098 "/home/jens/Source/shotwell/src/Printing.vala"
 			shaved_pixbuf = _tmp75_;
-#line 1099 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1100 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp76_ = shaved_pixbuf;
-#line 1099 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1100 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp77_ = scaling_perform_on_pixbuf (&pixbuf_scaling, _tmp76_, GDK_INTERP_HYPER, TRUE);
-#line 1099 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1100 "/home/jens/Source/shotwell/src/Printing.vala"
 			_g_object_unref0 (photo_pixbuf);
-#line 1099 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1100 "/home/jens/Source/shotwell/src/Printing.vala"
 			photo_pixbuf = _tmp77_;
-#line 1100 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1101 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp78_ = dc;
-#line 1100 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1101 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp79_ = photo_pixbuf;
-#line 1100 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1101 "/home/jens/Source/shotwell/src/Printing.vala"
 			gdk_cairo_set_source_pixbuf (_tmp78_, _tmp79_, 0.0, 0.0);
-#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
 			_g_object_unref0 (shaved_pixbuf);
-#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
 			_g_object_unref0 (photo_pixbuf);
-#line 8092 "Printing.c"
+#line 8084 "Printing.c"
 		} else {
 			Scaling pixbuf_scaling = {0};
 			Dimensions _tmp80_ = {0};
@@ -8102,48 +8094,48 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 			GdkPixbuf* _tmp86_ = NULL;
 			cairo_t* _tmp87_ = NULL;
 			GdkPixbuf* _tmp88_ = NULL;
-#line 1102 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1103 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp80_ = viewport;
-#line 1102 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1103 "/home/jens/Source/shotwell/src/Printing.vala"
 			scaling_for_viewport (&_tmp80_, TRUE, &_tmp81_);
-#line 1102 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1103 "/home/jens/Source/shotwell/src/Printing.vala"
 			pixbuf_scaling = _tmp81_;
-#line 1103 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1104 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp82_ = photo;
-#line 1103 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1104 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp83_ = pixbuf_scaling;
-#line 1103 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1104 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp84_ = photo_source_get_pixbuf (G_TYPE_CHECK_INSTANCE_CAST (_tmp82_, TYPE_PHOTO_SOURCE, PhotoSource), &_tmp83_, &_inner_error_);
-#line 1103 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1104 "/home/jens/Source/shotwell/src/Printing.vala"
 			photo_pixbuf = _tmp84_;
-#line 1103 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1104 "/home/jens/Source/shotwell/src/Printing.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 8121 "Printing.c"
+#line 8113 "Printing.c"
 				goto __catch458_g_error;
 			}
-#line 1104 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1105 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp85_ = photo_pixbuf;
-#line 1104 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1105 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp86_ = scaling_perform_on_pixbuf (&pixbuf_scaling, _tmp85_, GDK_INTERP_HYPER, TRUE);
-#line 1104 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1105 "/home/jens/Source/shotwell/src/Printing.vala"
 			_g_object_unref0 (photo_pixbuf);
-#line 1104 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1105 "/home/jens/Source/shotwell/src/Printing.vala"
 			photo_pixbuf = _tmp86_;
-#line 1105 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1106 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp87_ = dc;
-#line 1105 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1106 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp88_ = photo_pixbuf;
-#line 1105 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1106 "/home/jens/Source/shotwell/src/Printing.vala"
 			gdk_cairo_set_source_pixbuf (_tmp87_, _tmp88_, 0.0, 0.0);
-#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Printing.vala"
 			_g_object_unref0 (photo_pixbuf);
-#line 8140 "Printing.c"
+#line 8132 "Printing.c"
 		}
-#line 1107 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1108 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp89_ = dc;
-#line 1107 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1108 "/home/jens/Source/shotwell/src/Printing.vala"
 		cairo_paint (_tmp89_);
-#line 8146 "Printing.c"
+#line 8138 "Printing.c"
 	}
 	goto __finally458;
 	__catch458_g_error:
@@ -8155,59 +8147,59 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 		const gchar* _tmp93_ = NULL;
 		gchar* _tmp94_ = NULL;
 		gchar* _tmp95_ = NULL;
-#line 1085 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
 		e = _inner_error_;
-#line 1085 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
 		_inner_error_ = NULL;
-#line 1110 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1111 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp90_ = job;
-#line 1110 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1111 "/home/jens/Source/shotwell/src/Printing.vala"
 		gtk_print_operation_cancel (G_TYPE_CHECK_INSTANCE_CAST (_tmp90_, gtk_print_operation_get_type (), GtkPrintOperation));
-#line 1111 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1112 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp91_ = _ ("Unable to print photo:\n\n%s");
-#line 1111 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1112 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp92_ = e;
-#line 1111 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1112 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp93_ = _tmp92_->message;
-#line 1111 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1112 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp94_ = g_strdup_printf (_tmp91_, _tmp93_);
-#line 1111 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1112 "/home/jens/Source/shotwell/src/Printing.vala"
 		_tmp95_ = _tmp94_;
-#line 1111 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1112 "/home/jens/Source/shotwell/src/Printing.vala"
 		app_window_error_message (_tmp95_, NULL);
-#line 1111 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1112 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_free0 (_tmp95_);
-#line 1085 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
 		_g_error_free0 (e);
-#line 8182 "Printing.c"
+#line 8174 "Printing.c"
 	}
 	__finally458:
-#line 1085 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1085 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
 		_cairo_destroy0 (dc);
-#line 1085 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1085 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_clear_error (&_inner_error_);
-#line 1085 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
 		return;
-#line 8195 "Printing.c"
+#line 8187 "Printing.c"
 	}
-#line 1113 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1114 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp96_ = dc;
-#line 1113 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1114 "/home/jens/Source/shotwell/src/Printing.vala"
 	cairo_restore (_tmp96_);
-#line 1054 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Printing.vala"
 	_cairo_destroy0 (dc);
-#line 8203 "Printing.c"
+#line 8195 "Printing.c"
 }
 
 
 static void _vala_PangoFontDescription_free (PangoFontDescription* self) {
-#line 1116 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_boxed_free (pango_font_description_get_type (), self);
-#line 8210 "Printing.c"
+#line 8202 "Printing.c"
 }
 
 
@@ -8244,115 +8236,115 @@ static void print_manager_add_title_to_canvas (PrintManager* self, gdouble x, gd
 	gdouble _tmp21_ = 0.0;
 	gdouble ty = 0.0;
 	gdouble _tmp22_ = 0.0;
-#line 1116 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_MANAGER (self));
-#line 1116 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (title != NULL);
-#line 1116 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_JOB (job));
-#line 1116 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (GTK_IS_PRINT_CONTEXT (job_context));
-#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1118 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = job_context;
-#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1118 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = gtk_print_context_get_cairo_context (_tmp0_);
-#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1118 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = _cairo_reference0 (_tmp1_);
-#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1118 "/home/jens/Source/shotwell/src/Printing.vala"
 	dc = _tmp2_;
-#line 1118 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp3_ = job;
-#line 1118 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp4_ = print_job_get_local_settings (_tmp3_);
-#line 1118 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = _tmp4_;
-#line 1118 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6_ = print_settings_get_content_ppi (_tmp5_);
-#line 1118 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp7_ = (gdouble) _tmp6_;
-#line 1118 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp5_);
-#line 1118 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
 	dpi = _tmp7_;
-#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp8_ = job;
-#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp9_ = print_job_get_local_settings (_tmp8_);
-#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp10_ = _tmp9_;
-#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp11_ = print_settings_get_print_titles_font (_tmp10_);
-#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp12_ = _tmp11_;
-#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp13_ = pango_font_description_from_string (_tmp12_);
-#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp14_ = _tmp13_;
-#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_free0 (_tmp12_);
-#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (_tmp10_);
-#line 1119 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
 	title_font_description = _tmp14_;
-#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1121 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp15_ = pango_cairo_create_layout (dc);
-#line 1120 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1121 "/home/jens/Source/shotwell/src/Printing.vala"
 	title_layout = _tmp15_;
-#line 1121 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp16_ = pango_layout_get_context (title_layout);
-#line 1121 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp17_ = _g_object_ref0 (_tmp16_);
-#line 1121 "/home/jens/Source/shotwell/src/Printing.vala"
-	context = _tmp17_;
 #line 1122 "/home/jens/Source/shotwell/src/Printing.vala"
-	pango_cairo_context_set_resolution (context, dpi);
+	_tmp16_ = pango_layout_get_context (title_layout);
+#line 1122 "/home/jens/Source/shotwell/src/Printing.vala"
+	_tmp17_ = _g_object_ref0 (_tmp16_);
+#line 1122 "/home/jens/Source/shotwell/src/Printing.vala"
+	context = _tmp17_;
 #line 1123 "/home/jens/Source/shotwell/src/Printing.vala"
+	pango_cairo_context_set_resolution (context, dpi);
+#line 1124 "/home/jens/Source/shotwell/src/Printing.vala"
 	pango_layout_set_font_description (title_layout, title_font_description);
-#line 1124 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1125 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp18_ = title;
-#line 1124 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1125 "/home/jens/Source/shotwell/src/Printing.vala"
 	pango_layout_set_text (title_layout, _tmp18_, -1);
-#line 1126 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1127 "/home/jens/Source/shotwell/src/Printing.vala"
 	pango_layout_get_pixel_size (title_layout, &_tmp19_, &_tmp20_);
-#line 1126 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1127 "/home/jens/Source/shotwell/src/Printing.vala"
 	title_width = _tmp19_;
-#line 1126 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1127 "/home/jens/Source/shotwell/src/Printing.vala"
 	title_height = _tmp20_;
-#line 1127 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1128 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp21_ = x;
-#line 1127 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1128 "/home/jens/Source/shotwell/src/Printing.vala"
 	tx = (dpi * _tmp21_) - (title_width / 2);
-#line 1128 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1129 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp22_ = y;
-#line 1128 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1129 "/home/jens/Source/shotwell/src/Printing.vala"
 	ty = (dpi * _tmp22_) - title_height;
-#line 1131 "/home/jens/Source/shotwell/src/Printing.vala"
-	cairo_rectangle (dc, tx - 10, ty + 2, (gdouble) (title_width + 20), (gdouble) title_height);
 #line 1132 "/home/jens/Source/shotwell/src/Printing.vala"
-	cairo_set_source_rgba (dc, (gdouble) 1, (gdouble) 1, (gdouble) 1, (gdouble) 1);
+	cairo_rectangle (dc, tx - 10, ty + 2, (gdouble) (title_width + 20), (gdouble) title_height);
 #line 1133 "/home/jens/Source/shotwell/src/Printing.vala"
-	cairo_set_line_width (dc, (gdouble) 2);
+	cairo_set_source_rgba (dc, (gdouble) 1, (gdouble) 1, (gdouble) 1, (gdouble) 1);
 #line 1134 "/home/jens/Source/shotwell/src/Printing.vala"
-	cairo_stroke_preserve (dc);
+	cairo_set_line_width (dc, (gdouble) 2);
 #line 1135 "/home/jens/Source/shotwell/src/Printing.vala"
-	cairo_set_source_rgba (dc, (gdouble) 1, (gdouble) 1, (gdouble) 1, 0.5);
+	cairo_stroke_preserve (dc);
 #line 1136 "/home/jens/Source/shotwell/src/Printing.vala"
-	cairo_fill (dc);
+	cairo_set_source_rgba (dc, (gdouble) 1, (gdouble) 1, (gdouble) 1, 0.5);
 #line 1137 "/home/jens/Source/shotwell/src/Printing.vala"
+	cairo_fill (dc);
+#line 1138 "/home/jens/Source/shotwell/src/Printing.vala"
 	cairo_set_source_rgba (dc, (gdouble) 0, (gdouble) 0, (gdouble) 0, (gdouble) 1);
-#line 1139 "/home/jens/Source/shotwell/src/Printing.vala"
-	cairo_move_to (dc, tx, ty + 2);
 #line 1140 "/home/jens/Source/shotwell/src/Printing.vala"
+	cairo_move_to (dc, tx, ty + 2);
+#line 1141 "/home/jens/Source/shotwell/src/Printing.vala"
 	pango_cairo_show_layout (dc, title_layout);
-#line 1116 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (context);
-#line 1116 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (title_layout);
-#line 1116 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
 	__vala_PangoFontDescription_free0 (title_font_description);
-#line 1116 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Printing.vala"
 	_cairo_destroy0 (dc);
-#line 8355 "Printing.c"
+#line 8347 "Printing.c"
 }
 
 
@@ -8362,21 +8354,21 @@ static gboolean print_manager_are_approximately_equal (PrintManager* self, gdoub
 	gdouble _tmp0_ = 0.0;
 	gdouble _tmp1_ = 0.0;
 	gdouble _tmp2_ = 0.0;
-#line 1143 "/home/jens/Source/shotwell/src/Printing.vala"
-	g_return_val_if_fail (IS_PRINT_MANAGER (self), FALSE);
 #line 1144 "/home/jens/Source/shotwell/src/Printing.vala"
+	g_return_val_if_fail (IS_PRINT_MANAGER (self), FALSE);
+#line 1145 "/home/jens/Source/shotwell/src/Printing.vala"
 	accept_err = 0.005;
-#line 1145 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1146 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = val1;
-#line 1145 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1146 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = val2;
-#line 1145 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1146 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = fabs (_tmp0_ - _tmp1_);
-#line 1145 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1146 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp2_ <= accept_err;
-#line 1145 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1146 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 8379 "Printing.c"
+#line 8371 "Printing.c"
 }
 
 
@@ -8384,17 +8376,17 @@ PrintSettings* print_manager_get_global_settings (PrintManager* self) {
 	PrintSettings* result = NULL;
 	PrintSettings* _tmp0_ = NULL;
 	PrintSettings* _tmp1_ = NULL;
-#line 1148 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1149 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (IS_PRINT_MANAGER (self), NULL);
-#line 1149 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1150 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = self->priv->settings;
-#line 1149 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1150 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _print_settings_ref0 (_tmp0_);
-#line 1149 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1150 "/home/jens/Source/shotwell/src/Printing.vala"
 	result = _tmp1_;
-#line 1149 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1150 "/home/jens/Source/shotwell/src/Printing.vala"
 	return result;
-#line 8397 "Printing.c"
+#line 8389 "Printing.c"
 }
 
 
@@ -8402,247 +8394,247 @@ void print_manager_set_global_settings (PrintManager* self, PrintSettings* setti
 	PrintSettings* _tmp0_ = NULL;
 	PrintSettings* _tmp1_ = NULL;
 	PrintSettings* _tmp2_ = NULL;
-#line 1152 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1153 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_MANAGER (self));
-#line 1152 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1153 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (IS_PRINT_SETTINGS (settings));
-#line 1153 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1154 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp0_ = settings;
-#line 1153 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1154 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1_ = _print_settings_ref0 (_tmp0_);
-#line 1153 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1154 "/home/jens/Source/shotwell/src/Printing.vala"
 	_print_settings_unref0 (self->priv->settings);
-#line 1153 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1154 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->settings = _tmp1_;
-#line 1154 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1155 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp2_ = settings;
-#line 1154 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 1155 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_settings_save (_tmp2_);
-#line 8421 "Printing.c"
+#line 8413 "Printing.c"
 }
 
 
 static void value_print_manager_init (GValue* value) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	value->data[0].v_pointer = NULL;
-#line 8428 "Printing.c"
+#line 8420 "Printing.c"
 }
 
 
 static void value_print_manager_free_value (GValue* value) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (value->data[0].v_pointer) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		print_manager_unref (value->data[0].v_pointer);
-#line 8437 "Printing.c"
+#line 8429 "Printing.c"
 	}
 }
 
 
 static void value_print_manager_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		dest_value->data[0].v_pointer = print_manager_ref (src_value->data[0].v_pointer);
-#line 8447 "Printing.c"
+#line 8439 "Printing.c"
 	} else {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 8451 "Printing.c"
+#line 8443 "Printing.c"
 	}
 }
 
 
 static gpointer value_print_manager_peek_pointer (const GValue* value) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	return value->data[0].v_pointer;
-#line 8459 "Printing.c"
+#line 8451 "Printing.c"
 }
 
 
 static gchar* value_print_manager_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (collect_values[0].v_pointer) {
-#line 8466 "Printing.c"
+#line 8458 "Printing.c"
 		PrintManager* object;
 		object = collect_values[0].v_pointer;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 8473 "Printing.c"
+#line 8465 "Printing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 8477 "Printing.c"
+#line 8469 "Printing.c"
 		}
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = print_manager_ref (object);
-#line 8481 "Printing.c"
+#line 8473 "Printing.c"
 	} else {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8485 "Printing.c"
+#line 8477 "Printing.c"
 	}
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	return NULL;
-#line 8489 "Printing.c"
+#line 8481 "Printing.c"
 }
 
 
 static gchar* value_print_manager_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PrintManager** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (!object_p) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 8500 "Printing.c"
+#line 8492 "Printing.c"
 	}
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (!value->data[0].v_pointer) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		*object_p = NULL;
-#line 8506 "Printing.c"
+#line 8498 "Printing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 8510 "Printing.c"
+#line 8502 "Printing.c"
 	} else {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		*object_p = print_manager_ref (value->data[0].v_pointer);
-#line 8514 "Printing.c"
+#line 8506 "Printing.c"
 	}
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	return NULL;
-#line 8518 "Printing.c"
+#line 8510 "Printing.c"
 }
 
 
 GParamSpec* param_spec_print_manager (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecPrintManager* spec;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_PRINT_MANAGER), NULL);
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	return G_PARAM_SPEC (spec);
-#line 8532 "Printing.c"
+#line 8524 "Printing.c"
 }
 
 
 gpointer value_get_print_manager (const GValue* value) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PRINT_MANAGER), NULL);
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	return value->data[0].v_pointer;
-#line 8541 "Printing.c"
+#line 8533 "Printing.c"
 }
 
 
 void value_set_print_manager (GValue* value, gpointer v_object) {
 	PrintManager* old;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PRINT_MANAGER));
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	old = value->data[0].v_pointer;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (v_object) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PRINT_MANAGER));
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = v_object;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		print_manager_ref (value->data[0].v_pointer);
-#line 8561 "Printing.c"
+#line 8553 "Printing.c"
 	} else {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8565 "Printing.c"
+#line 8557 "Printing.c"
 	}
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (old) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		print_manager_unref (old);
-#line 8571 "Printing.c"
+#line 8563 "Printing.c"
 	}
 }
 
 
 void value_take_print_manager (GValue* value, gpointer v_object) {
 	PrintManager* old;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PRINT_MANAGER));
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	old = value->data[0].v_pointer;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (v_object) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PRINT_MANAGER));
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = v_object;
-#line 8590 "Printing.c"
+#line 8582 "Printing.c"
 	} else {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8594 "Printing.c"
+#line 8586 "Printing.c"
 	}
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (old) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		print_manager_unref (old);
-#line 8600 "Printing.c"
+#line 8592 "Printing.c"
 	}
 }
 
 
 static void print_manager_class_init (PrintManagerClass * klass) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	print_manager_parent_class = g_type_class_peek_parent (klass);
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	((PrintManagerClass *) klass)->finalize = print_manager_finalize;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_type_class_add_private (klass, sizeof (PrintManagerPrivate));
-#line 8612 "Printing.c"
+#line 8604 "Printing.c"
 }
 
 
 static void print_manager_instance_init (PrintManager * self) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv = PRINT_MANAGER_GET_PRIVATE (self);
-#line 806 "/home/jens/Source/shotwell/src/Printing.vala"
-	self->priv->progress_dialog = NULL;
 #line 807 "/home/jens/Source/shotwell/src/Printing.vala"
+	self->priv->progress_dialog = NULL;
+#line 808 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->priv->cancellable = NULL;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	self->ref_count = 1;
-#line 8625 "Printing.c"
+#line 8617 "Printing.c"
 }
 
 
 static void print_manager_finalize (PrintManager* obj) {
 	PrintManager * self;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PRINT_MANAGER, PrintManager);
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_signal_handlers_destroy (self);
-#line 803 "/home/jens/Source/shotwell/src/Printing.vala"
-	_print_settings_unref0 (self->priv->settings);
 #line 804 "/home/jens/Source/shotwell/src/Printing.vala"
-	_g_object_unref0 (self->priv->user_page_setup);
+	_print_settings_unref0 (self->priv->settings);
 #line 805 "/home/jens/Source/shotwell/src/Printing.vala"
-	_g_object_unref0 (self->priv->custom_tab);
+	_g_object_unref0 (self->priv->user_page_setup);
 #line 806 "/home/jens/Source/shotwell/src/Printing.vala"
-	_g_object_unref0 (self->priv->progress_dialog);
+	_g_object_unref0 (self->priv->custom_tab);
 #line 807 "/home/jens/Source/shotwell/src/Printing.vala"
+	_g_object_unref0 (self->priv->progress_dialog);
+#line 808 "/home/jens/Source/shotwell/src/Printing.vala"
 	_g_object_unref0 (self->priv->cancellable);
-#line 8645 "Printing.c"
+#line 8637 "Printing.c"
 }
 
 
@@ -8663,24 +8655,24 @@ GType print_manager_get_type (void) {
 gpointer print_manager_ref (gpointer instance) {
 	PrintManager* self;
 	self = instance;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	return instance;
-#line 8670 "Printing.c"
+#line 8662 "Printing.c"
 }
 
 
 void print_manager_unref (gpointer instance) {
 	PrintManager* self;
 	self = instance;
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		PRINT_MANAGER_GET_CLASS (self)->finalize (self);
-#line 798 "/home/jens/Source/shotwell/src/Printing.vala"
+#line 799 "/home/jens/Source/shotwell/src/Printing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 8683 "Printing.c"
+#line 8675 "Printing.c"
 	}
 }
 

@@ -6,7 +6,19 @@
         <desc>Fényképek és videók keresése a gyűjteményben különböző feltételek szerint.</desc>
         
         <link type="next" xref="tag"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Kelemen Gábor</mal:name>
+      <mal:email>kelemeng at gnome dot hu</mal:email>
+      <mal:years>2014.</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Úr Balázs</mal:name>
+      <mal:email>urbalazs at gmail dot hu</mal:email>
+      <mal:years>2015, 2016.</mal:years>
+    </mal:credit>
+  </info>
 
     <title>Keresés</title>
     
@@ -25,11 +37,7 @@
         <title>Mentett keresés</title>
             <p>A mentett keresés megmarad a Shotwell indítások között, és frissítve lesz, amikor fényképeket és videókat adnak hozzá vagy távolítanak el a Shotwell gyűjteményből.</p>
             
-            <p>
-                Create a new saved search with <guiseq><gui>Edit</gui><gui>New Saved Search...</gui></guiseq> or by hitting
-                <keyseq><key>Ctrl</key><key>S</key></keyseq>. The dialog box allows you to enter a name for the
-                search and select whether you want to meet Any, All, or None of the criteria in the following rows.
-            </p>
+            <p>Új mentett keresés a <guiseq><gui>Szerkesztés</gui><gui>Új mentett keresés…</gui></guiseq> menüponttal, vagy a <keyseq><key>Ctrl</key><key>S</key></keyseq> lenyomásával hozható létre. Az ablak lehetővé teszi a keresés nevének megadását, és annak kiválasztását, hogy a következő sorban lévő bármely, az összes vagy egyik keresési feltételre se illeszkedjen.</p>
             
             <p>
                 Each row represents a search criterion.  Use the <gui>+</gui> button to add more rows, and the
