@@ -1,6 +1,67 @@
+commit 5890d3a28c65c6cd1b5f045553db189b4dd515b8
+Author: Jens Georg <mail@jensge.org>
+Date:   Mon Aug 29 21:34:31 2016 +0200
+
+    Prepare 0.23.7
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+M	configure.ac
+M	debian/changelog
+
+commit ac1a7e199a839938afd995b619a8e6390e0f18a1
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sat Sep 10 19:14:36 2016 +0200
+
+    Updated Polish translation
+
+M	po/pl.po
+
+commit 5877c476006587906d1ea8e08b0ce9a873da02da
+Author: Marek Černocký <marek@manet.cz>
+Date:	Sun Sep 4 10:45:58 2016 +0200
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit 8d4610d44b4a3e8caf161ef7dd2b35a70ffa5712
+Author: Marek Černocký <marek@manet.cz>
+Date:	Sun Sep 4 10:42:50 2016 +0200
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit da24ba3195f6a8bf0953c5126a96aa27aa553239
+Author: Мирослав Николић <miroslavnikolic@rocketmail.com>
+Date:	Sat Sep 3 17:28:59 2016 +0200
+
+    Updated Serbian translation
+
+M	po/sr.po
+M	po/sr@latin.po
+
+commit 54b9a8f3393b5dba6572ad97d8b9e307d24ad2e8
+Author: Boram Kim <boramism@gmail.com>
+Date:	Sat Sep 3 12:59:02 2016 +0000
+
+    Updated Korean translation
+
+M	po/ko.po
+
+commit 4b627b459d511e94f75150e5f573efea25643308
+Author: Balázs Úr <urbalazs@gmail.com>
+Date:	Mon Aug 29 21:36:26 2016 +0000
+
+    Updated Hungarian translation
+
+M	po/hu.po
+
 commit 79dc5aab2b6eeb63654d593c841a7e477686eb77
 Author: Jens Georg <mail@jensge.org>
-Date:   Mon Aug 29 21:08:14 2016 +0200
+Date:	Mon Aug 29 21:08:14 2016 +0200
 
     Prepare 0.23.6
 
