@@ -1,6 +1,58 @@
+commit 2d300134b66139f3dc18577bedf83266a3e0b13c
+Author: Jens Georg <mail@jensge.org>
+Date:   Sun Sep 18 20:02:34 2016 +0200
+
+    Fix leak while scrolling
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/core/DataObject.vala
+
+commit 14b8ae055f24b81b802ec83fcd2487c03a17630f
+Author: Bernd Homuth <dev@hmt.im>
+Date:	Mon Sep 19 15:00:09 2016 +0000
+
+    Updated German translation
+    (cherry picked from commit 728b17e779c2c27941ecfa74037beb1025f85fe6)
+
+M	po/de.po
+
+commit 611ccd55e58b40ab6a4a718a154ea0d001d8e433
+Author: Marek Černocký <marek@manet.cz>
+Date:	Mon Sep 19 08:50:33 2016 +0200
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit c569aec6cd42816b39c81c0da65c5e8790915bd5
+Author: Christian Kirbach <Christian.Kirbach@gmail.com>
+Date:	Sun Sep 18 19:11:29 2016 +0000
+
+    Updated German translation
+    (cherry picked from commit 0f346cc9cc410ede68f8b8d6abe113792f87a3e1)
+
+M	po/de.po
+
+commit 998f2217574d2afbbe54cd17e473eb6b511adc1b
+Author: Daniel Mustieles <daniel.mustieles@gmail.com>
+Date:	Tue Sep 13 20:25:15 2016 +0200
+
+    Updated Spanish translation
+
+M	po/es.po
+
+commit 15e7e747cddb9f38631a3f8f658d7201c3c7969a
+Author: Marek Černocký <marek@manet.cz>
+Date:	Tue Sep 13 11:17:45 2016 +0200
+
+    Updated Czech translation
+
+M	help/cs/cs.po
+
 commit 5890d3a28c65c6cd1b5f045553db189b4dd515b8
 Author: Jens Georg <mail@jensge.org>
-Date:   Mon Aug 29 21:34:31 2016 +0200
+Date:	Mon Aug 29 21:34:31 2016 +0200
 
     Prepare 0.23.7
 

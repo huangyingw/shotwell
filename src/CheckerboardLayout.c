@@ -532,7 +532,7 @@ static void checkerboard_item_set_subtitle_visible (CheckerboardItem* self, gboo
 void checkerboard_item_set_is_cursor (CheckerboardItem* self, gboolean is_cursor);
 gboolean checkerboard_item_get_is_cusor (CheckerboardItem* self);
 static void checkerboard_item_real_notify_membership_changed (DataObject* base, DataCollection* collection);
-GValue* data_object_get_collection_property (DataObject* self, const gchar* name, GValue* def);
+void data_object_get_collection_property (DataObject* self, const gchar* name, GValue* def, GValue* result);
 static void _vala_GValue_free (GValue* self);
 gboolean dimensions_has_area (Dimensions *self);
 void data_object_notify_membership_changed (DataObject* self, DataCollection* collection);
@@ -2473,15 +2473,15 @@ static void checkerboard_item_real_notify_membership_changed (DataObject* base, 
 	CheckerboardItem * self;
 	gboolean title_visible = FALSE;
 	GValue* _tmp0_ = NULL;
-	GValue* _tmp1_ = NULL;
+	GValue _tmp1_ = {0};
 	gboolean _tmp2_ = FALSE;
 	gboolean comment_visible = FALSE;
 	GValue* _tmp3_ = NULL;
-	GValue* _tmp4_ = NULL;
+	GValue _tmp4_ = {0};
 	gboolean _tmp5_ = FALSE;
 	gboolean subtitle_visible = FALSE;
 	GValue* _tmp6_ = NULL;
-	GValue* _tmp7_ = NULL;
+	GValue _tmp7_ = {0};
 	gboolean _tmp8_ = FALSE;
 	gboolean altered = FALSE;
 	gboolean _tmp9_ = FALSE;
@@ -2504,9 +2504,9 @@ static void checkerboard_item_real_notify_membership_changed (DataObject* base, 
 #line 344 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
 	g_value_set_boolean (_tmp0_, TRUE);
 #line 344 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
-	_tmp1_ = data_object_get_collection_property (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), CHECKERBOARD_ITEM_PROP_SHOW_TITLES, _tmp0_);
+	data_object_get_collection_property (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), CHECKERBOARD_ITEM_PROP_SHOW_TITLES, _tmp0_, &_tmp1_);
 #line 344 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
-	_tmp2_ = g_value_get_boolean (_tmp1_);
+	_tmp2_ = g_value_get_boolean (&_tmp1_);
 #line 344 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
 	__vala_GValue_free0 (_tmp0_);
 #line 344 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
@@ -2518,9 +2518,9 @@ static void checkerboard_item_real_notify_membership_changed (DataObject* base, 
 #line 345 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
 	g_value_set_boolean (_tmp3_, TRUE);
 #line 345 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
-	_tmp4_ = data_object_get_collection_property (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), CHECKERBOARD_ITEM_PROP_SHOW_COMMENTS, _tmp3_);
+	data_object_get_collection_property (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), CHECKERBOARD_ITEM_PROP_SHOW_COMMENTS, _tmp3_, &_tmp4_);
 #line 345 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
-	_tmp5_ = g_value_get_boolean (_tmp4_);
+	_tmp5_ = g_value_get_boolean (&_tmp4_);
 #line 345 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
 	__vala_GValue_free0 (_tmp3_);
 #line 345 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
@@ -2532,9 +2532,9 @@ static void checkerboard_item_real_notify_membership_changed (DataObject* base, 
 #line 346 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
 	g_value_set_boolean (_tmp6_, FALSE);
 #line 346 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
-	_tmp7_ = data_object_get_collection_property (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), CHECKERBOARD_ITEM_PROP_SHOW_SUBTITLES, _tmp6_);
+	data_object_get_collection_property (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), CHECKERBOARD_ITEM_PROP_SHOW_SUBTITLES, _tmp6_, &_tmp7_);
 #line 346 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
-	_tmp8_ = g_value_get_boolean (_tmp7_);
+	_tmp8_ = g_value_get_boolean (&_tmp7_);
 #line 346 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"
 	__vala_GValue_free0 (_tmp6_);
 #line 346 "/home/jens/Source/shotwell/src/CheckerboardLayout.vala"

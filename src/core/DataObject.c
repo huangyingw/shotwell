@@ -132,8 +132,7 @@ void data_object_internal_set_ordinal (DataObject* self, gint64 ordinal);
 void data_object_internal_clear_membership (DataObject* self);
 gint64 data_object_internal_get_ordinal (DataObject* self);
 gint64 data_object_get_object_id (DataObject* self);
-GValue* data_object_get_collection_property (DataObject* self, const gchar* name, GValue* def);
-static GValue* _g_value_dup (GValue* self);
+void data_object_get_collection_property (DataObject* self, const gchar* name, GValue* def, GValue* result);
 GValue* data_collection_get_property (DataCollection* self, const gchar* name);
 static void _vala_GValue_free (GValue* self);
 void data_object_set_collection_property (DataObject* self, const gchar* name, GValue* val, ValueEqualFunc value_equals, void* value_equals_target);
@@ -153,7 +152,7 @@ DataObject* data_object_construct (GType object_type, gint64 object_id) {
 	_tmp1_ = object_id;
 #line 39 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	if (_tmp1_ == DATA_OBJECT_INVALID_OBJECT_ID) {
-#line 157 "DataObject.c"
+#line 156 "DataObject.c"
 		gint64 _tmp2_ = 0LL;
 #line 39 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		_tmp2_ = data_object_object_id_generator;
@@ -161,20 +160,20 @@ DataObject* data_object_construct (GType object_type, gint64 object_id) {
 		data_object_object_id_generator = _tmp2_ + 1;
 #line 39 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		_tmp0_ = _tmp2_;
-#line 165 "DataObject.c"
+#line 164 "DataObject.c"
 	} else {
 		gint64 _tmp3_ = 0LL;
 #line 39 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		_tmp3_ = object_id;
 #line 39 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		_tmp0_ = _tmp3_;
-#line 172 "DataObject.c"
+#line 171 "DataObject.c"
 	}
 #line 39 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	self->priv->object_id = _tmp0_;
 #line 38 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	return self;
-#line 178 "DataObject.c"
+#line 177 "DataObject.c"
 }
 
 
@@ -186,7 +185,7 @@ static void data_object_real_notify_altered (DataObject* self, Alteration* alter
 	_tmp0_ = self->priv->member_of;
 #line 43 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	if (_tmp0_ != NULL) {
-#line 190 "DataObject.c"
+#line 189 "DataObject.c"
 		DataCollection* _tmp1_ = NULL;
 		Alteration* _tmp2_ = NULL;
 #line 44 "/home/jens/Source/shotwell/src/core/DataObject.vala"
@@ -195,7 +194,7 @@ static void data_object_real_notify_altered (DataObject* self, Alteration* alter
 		_tmp2_ = alteration;
 #line 44 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		data_collection_internal_notify_altered (_tmp1_, self, _tmp2_);
-#line 199 "DataObject.c"
+#line 198 "DataObject.c"
 	}
 }
 
@@ -205,14 +204,14 @@ void data_object_notify_altered (DataObject* self, Alteration* alteration) {
 	g_return_if_fail (IS_DATA_OBJECT (self));
 #line 42 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	DATA_OBJECT_GET_CLASS (self)->notify_altered (self, alteration);
-#line 209 "DataObject.c"
+#line 208 "DataObject.c"
 }
 
 
 static void data_object_real_notify_membership_changed (DataObject* self, DataCollection* collection) {
 #line 56 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	g_return_if_fail ((collection == NULL) || IS_DATA_COLLECTION (collection));
-#line 216 "DataObject.c"
+#line 215 "DataObject.c"
 }
 
 
@@ -221,7 +220,7 @@ void data_object_notify_membership_changed (DataObject* self, DataCollection* co
 	g_return_if_fail (IS_DATA_OBJECT (self));
 #line 56 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	DATA_OBJECT_GET_CLASS (self)->notify_membership_changed (self, collection);
-#line 225 "DataObject.c"
+#line 224 "DataObject.c"
 }
 
 
@@ -230,7 +229,7 @@ static void data_object_real_notify_collection_property_set (DataObject* self, c
 	g_return_if_fail (name != NULL);
 #line 61 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	g_return_if_fail (val != NULL);
-#line 234 "DataObject.c"
+#line 233 "DataObject.c"
 }
 
 
@@ -239,14 +238,14 @@ void data_object_notify_collection_property_set (DataObject* self, const gchar* 
 	g_return_if_fail (IS_DATA_OBJECT (self));
 #line 61 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	DATA_OBJECT_GET_CLASS (self)->notify_collection_property_set (self, name, old, val);
-#line 243 "DataObject.c"
+#line 242 "DataObject.c"
 }
 
 
 static void data_object_real_notify_collection_property_cleared (DataObject* self, const gchar* name) {
 #line 66 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	g_return_if_fail (name != NULL);
-#line 250 "DataObject.c"
+#line 249 "DataObject.c"
 }
 
 
@@ -255,7 +254,7 @@ void data_object_notify_collection_property_cleared (DataObject* self, const gch
 	g_return_if_fail (IS_DATA_OBJECT (self));
 #line 66 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	DATA_OBJECT_GET_CLASS (self)->notify_collection_property_cleared (self, name);
-#line 259 "DataObject.c"
+#line 258 "DataObject.c"
 }
 
 
@@ -264,7 +263,7 @@ static gchar* data_object_real_get_name (DataObject* self) {
 	g_critical ("Type `%s' does not implement abstract method `data_object_get_name'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
 #line 69 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	return NULL;
-#line 268 "DataObject.c"
+#line 267 "DataObject.c"
 }
 
 
@@ -273,7 +272,7 @@ gchar* data_object_get_name (DataObject* self) {
 	g_return_val_if_fail (IS_DATA_OBJECT (self), NULL);
 #line 69 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	return DATA_OBJECT_GET_CLASS (self)->get_name (self);
-#line 277 "DataObject.c"
+#line 276 "DataObject.c"
 }
 
 
@@ -282,7 +281,7 @@ static gchar* data_object_real_to_string (DataObject* self) {
 	g_critical ("Type `%s' does not implement abstract method `data_object_to_string'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
 #line 71 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	return NULL;
-#line 286 "DataObject.c"
+#line 285 "DataObject.c"
 }
 
 
@@ -291,14 +290,14 @@ gchar* data_object_to_string (DataObject* self) {
 	g_return_val_if_fail (IS_DATA_OBJECT (self), NULL);
 #line 71 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	return DATA_OBJECT_GET_CLASS (self)->to_string (self);
-#line 295 "DataObject.c"
+#line 294 "DataObject.c"
 }
 
 
 static gpointer _data_collection_ref0 (gpointer self) {
 #line 74 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	return self ? data_collection_ref (self) : NULL;
-#line 302 "DataObject.c"
+#line 301 "DataObject.c"
 }
 
 
@@ -316,7 +315,7 @@ DataCollection* data_object_get_membership (DataObject* self) {
 	result = _tmp1_;
 #line 74 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	return result;
-#line 320 "DataObject.c"
+#line 319 "DataObject.c"
 }
 
 
@@ -331,7 +330,7 @@ gboolean data_object_has_membership (DataObject* self) {
 	result = _tmp0_ != NULL;
 #line 78 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	return result;
-#line 335 "DataObject.c"
+#line 334 "DataObject.c"
 }
 
 
@@ -360,7 +359,7 @@ void data_object_internal_set_membership (DataObject* self, DataCollection* coll
 	_tmp3_ = ordinal;
 #line 87 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	self->priv->ordinal = _tmp3_;
-#line 364 "DataObject.c"
+#line 363 "DataObject.c"
 }
 
 
@@ -377,7 +376,7 @@ void data_object_internal_set_ordinal (DataObject* self, gint64 ordinal) {
 	_tmp1_ = ordinal;
 #line 99 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	self->priv->ordinal = _tmp1_;
-#line 381 "DataObject.c"
+#line 380 "DataObject.c"
 }
 
 
@@ -390,7 +389,7 @@ void data_object_internal_clear_membership (DataObject* self) {
 	self->priv->member_of = NULL;
 #line 106 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	self->priv->ordinal = DATA_COLLECTION_INVALID_OBJECT_ORDINAL;
-#line 394 "DataObject.c"
+#line 393 "DataObject.c"
 }
 
 
@@ -405,7 +404,7 @@ inline gint64 data_object_internal_get_ordinal (DataObject* self) {
 	result = _tmp0_;
 #line 111 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	return result;
-#line 409 "DataObject.c"
+#line 408 "DataObject.c"
 }
 
 
@@ -420,21 +419,7 @@ inline gint64 data_object_get_object_id (DataObject* self) {
 	result = _tmp0_;
 #line 115 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	return result;
-#line 424 "DataObject.c"
-}
-
-
-static GValue* _g_value_dup (GValue* self) {
-#line 120 "/home/jens/Source/shotwell/src/core/DataObject.vala"
-	return g_boxed_copy (G_TYPE_VALUE, self);
-#line 431 "DataObject.c"
-}
-
-
-static gpointer __g_value_dup0 (gpointer self) {
-#line 120 "/home/jens/Source/shotwell/src/core/DataObject.vala"
-	return self ? _g_value_dup (self) : NULL;
-#line 438 "DataObject.c"
+#line 423 "DataObject.c"
 }
 
 
@@ -443,12 +428,11 @@ static void _vala_GValue_free (GValue* self) {
 	g_value_unset (self);
 #line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	g_free (self);
-#line 447 "DataObject.c"
+#line 432 "DataObject.c"
 }
 
 
-GValue* data_object_get_collection_property (DataObject* self, const gchar* name, GValue* def) {
-	GValue* result = NULL;
+void data_object_get_collection_property (DataObject* self, const gchar* name, GValue* def, GValue* result) {
 	DataCollection* _tmp0_ = NULL;
 	GValue* _result_ = NULL;
 	DataCollection* _tmp3_ = NULL;
@@ -456,27 +440,37 @@ GValue* data_object_get_collection_property (DataObject* self, const gchar* name
 	GValue* _tmp5_ = NULL;
 	GValue* _tmp6_ = NULL;
 	GValue* _tmp7_ = NULL;
-	GValue* _tmp10_ = NULL;
+	GValue _tmp10_ = {0};
 #line 118 "/home/jens/Source/shotwell/src/core/DataObject.vala"
-	g_return_val_if_fail (IS_DATA_OBJECT (self), NULL);
+	g_return_if_fail (IS_DATA_OBJECT (self));
 #line 118 "/home/jens/Source/shotwell/src/core/DataObject.vala"
-	g_return_val_if_fail (name != NULL, NULL);
+	g_return_if_fail (name != NULL);
 #line 119 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	_tmp0_ = self->priv->member_of;
 #line 119 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	if (_tmp0_ == NULL) {
-#line 469 "DataObject.c"
+#line 453 "DataObject.c"
 		GValue* _tmp1_ = NULL;
-		GValue* _tmp2_ = NULL;
+		GValue _tmp2_ = {0};
 #line 120 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		_tmp1_ = def;
 #line 120 "/home/jens/Source/shotwell/src/core/DataObject.vala"
-		_tmp2_ = __g_value_dup0 (_tmp1_);
+		if (G_IS_VALUE (_tmp1_)) {
 #line 120 "/home/jens/Source/shotwell/src/core/DataObject.vala"
-		result = _tmp2_;
+			g_value_init (&_tmp2_, G_VALUE_TYPE (_tmp1_));
 #line 120 "/home/jens/Source/shotwell/src/core/DataObject.vala"
-		return result;
-#line 480 "DataObject.c"
+			g_value_copy (_tmp1_, &_tmp2_);
+#line 464 "DataObject.c"
+		} else {
+#line 120 "/home/jens/Source/shotwell/src/core/DataObject.vala"
+			_tmp2_ = *_tmp1_;
+#line 468 "DataObject.c"
+		}
+#line 120 "/home/jens/Source/shotwell/src/core/DataObject.vala"
+		*result = _tmp2_;
+#line 120 "/home/jens/Source/shotwell/src/core/DataObject.vala"
+		return;
+#line 474 "DataObject.c"
 	}
 #line 122 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	_tmp3_ = self->priv->member_of;
@@ -490,30 +484,40 @@ GValue* data_object_get_collection_property (DataObject* self, const gchar* name
 	_tmp7_ = _result_;
 #line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	if (_tmp7_ != NULL) {
-#line 494 "DataObject.c"
+#line 488 "DataObject.c"
 		GValue* _tmp8_ = NULL;
 #line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		_tmp8_ = _result_;
 #line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		_tmp6_ = _tmp8_;
-#line 500 "DataObject.c"
+#line 494 "DataObject.c"
 	} else {
 		GValue* _tmp9_ = NULL;
 #line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		_tmp9_ = def;
 #line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		_tmp6_ = _tmp9_;
-#line 507 "DataObject.c"
+#line 501 "DataObject.c"
 	}
 #line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
-	_tmp10_ = __g_value_dup0 (_tmp6_);
+	if (G_IS_VALUE (_tmp6_)) {
 #line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
-	result = _tmp10_;
+		g_value_init (&_tmp10_, G_VALUE_TYPE (_tmp6_));
+#line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
+		g_value_copy (_tmp6_, &_tmp10_);
+#line 509 "DataObject.c"
+	} else {
+#line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
+		_tmp10_ = *_tmp6_;
+#line 513 "DataObject.c"
+	}
+#line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
+	*result = _tmp10_;
 #line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	__vala_GValue_free0 (_result_);
 #line 124 "/home/jens/Source/shotwell/src/core/DataObject.vala"
-	return result;
-#line 517 "DataObject.c"
+	return;
+#line 521 "DataObject.c"
 }
 
 
@@ -529,7 +533,7 @@ void data_object_set_collection_property (DataObject* self, const gchar* name, G
 	_tmp0_ = self->priv->member_of;
 #line 128 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	if (_tmp0_ != NULL) {
-#line 533 "DataObject.c"
+#line 537 "DataObject.c"
 		DataCollection* _tmp1_ = NULL;
 		const gchar* _tmp2_ = NULL;
 		GValue _tmp3_ = {0};
@@ -547,7 +551,7 @@ void data_object_set_collection_property (DataObject* self, const gchar* name, G
 		_tmp4__target = value_equals_target;
 #line 129 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		data_collection_set_property (_tmp1_, _tmp2_, &_tmp3_, _tmp4_, _tmp4__target);
-#line 551 "DataObject.c"
+#line 555 "DataObject.c"
 	}
 }
 
@@ -562,7 +566,7 @@ void data_object_clear_collection_property (DataObject* self, const gchar* name)
 	_tmp0_ = self->priv->member_of;
 #line 133 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	if (_tmp0_ != NULL) {
-#line 566 "DataObject.c"
+#line 570 "DataObject.c"
 		DataCollection* _tmp1_ = NULL;
 		const gchar* _tmp2_ = NULL;
 #line 134 "/home/jens/Source/shotwell/src/core/DataObject.vala"
@@ -571,7 +575,7 @@ void data_object_clear_collection_property (DataObject* self, const gchar* name)
 		_tmp2_ = name;
 #line 134 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 		data_collection_clear_property (_tmp1_, _tmp2_);
-#line 575 "DataObject.c"
+#line 579 "DataObject.c"
 	}
 }
 
@@ -595,7 +599,7 @@ static void data_object_class_init (DataObjectClass * klass) {
 	((DataObjectClass *) klass)->to_string = data_object_real_to_string;
 #line 21 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	G_OBJECT_CLASS (klass)->finalize = data_object_finalize;
-#line 599 "DataObject.c"
+#line 603 "DataObject.c"
 }
 
 
@@ -608,7 +612,7 @@ static void data_object_instance_init (DataObject * self) {
 	self->priv->member_of = NULL;
 #line 34 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	self->priv->ordinal = DATA_COLLECTION_INVALID_OBJECT_ORDINAL;
-#line 612 "DataObject.c"
+#line 616 "DataObject.c"
 }
 
 
@@ -620,7 +624,7 @@ static void data_object_finalize (GObject* obj) {
 	_data_collection_unref0 (self->priv->member_of);
 #line 21 "/home/jens/Source/shotwell/src/core/DataObject.vala"
 	G_OBJECT_CLASS (data_object_parent_class)->finalize (obj);
-#line 624 "DataObject.c"
+#line 628 "DataObject.c"
 }
 
 

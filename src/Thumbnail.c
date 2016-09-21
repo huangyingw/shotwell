@@ -570,7 +570,7 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale);
 #define RESOURCES_ICON_FLAGGED_TRINKET "flag-trinket.png"
 #define RESOURCES_DEFAULT_ICON_SCALE 24
 static GdkPixbuf* thumbnail_real_get_bottom_left_trinket (CheckerboardItem* base, gint scale);
-GValue* data_object_get_collection_property (DataObject* self, const gchar* name, GValue* def);
+void data_object_get_collection_property (DataObject* self, const gchar* name, GValue* def, GValue* result);
 static void _vala_GValue_free (GValue* self);
 GdkPixbuf* resources_get_rating_trinket (Rating rating, gint scale);
 gint thumbnail_cache_size_get_scale (ThumbnailCacheSize self);
@@ -2500,7 +2500,7 @@ static GdkPixbuf* thumbnail_real_get_bottom_left_trinket (CheckerboardItem* base
 	Rating _tmp1_ = 0;
 	gboolean show_ratings = FALSE;
 	GValue* _tmp2_ = NULL;
-	GValue* _tmp3_ = NULL;
+	GValue _tmp3_ = {0};
 	gboolean _tmp4_ = FALSE;
 	GdkPixbuf* _tmp5_ = NULL;
 	gboolean _tmp6_ = FALSE;
@@ -2520,9 +2520,9 @@ static GdkPixbuf* thumbnail_real_get_bottom_left_trinket (CheckerboardItem* base
 #line 396 "/home/jens/Source/shotwell/src/Thumbnail.vala"
 	g_value_set_boolean (_tmp2_, FALSE);
 #line 396 "/home/jens/Source/shotwell/src/Thumbnail.vala"
-	_tmp3_ = data_object_get_collection_property (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), THUMBNAIL_PROP_SHOW_RATINGS, _tmp2_);
+	data_object_get_collection_property (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), THUMBNAIL_PROP_SHOW_RATINGS, _tmp2_, &_tmp3_);
 #line 396 "/home/jens/Source/shotwell/src/Thumbnail.vala"
-	_tmp4_ = g_value_get_boolean (_tmp3_);
+	_tmp4_ = g_value_get_boolean (&_tmp3_);
 #line 396 "/home/jens/Source/shotwell/src/Thumbnail.vala"
 	__vala_GValue_free0 (_tmp2_);
 #line 396 "/home/jens/Source/shotwell/src/Thumbnail.vala"
