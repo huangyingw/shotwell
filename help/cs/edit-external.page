@@ -12,12 +12,7 @@
 
     <p>K dodatečným úpravám fotografie můžete chtít použít externí editor. Pokud máte nainstalovány GIMP a UFRaw, jsou zvoleny jako výchozí externí editory pro úpravy fotografií respektive surových fotografií. Pokud nainstalovány nejsou, musíte si upřednostňované editory zvolit pomocí <guiseq><gui>Upravit</gui> <gui>Předvolby</gui></guiseq> a výběrem v rozbalovacím seznamu nainstalovaných aplikací.</p>
 
-    <p>
-        Once your editors have been set, select a photo and choose <guiseq><gui>Photos</gui>
-        <gui>Open With External Editor</gui></guiseq> to open the photo with the external editor.
-        Likewise, if the original photo is a RAW file, select <guiseq><gui>Photos</gui><gui>Open 
-        With RAW Editor</gui></guiseq> to edit the RAW file directly with the set RAW editor.
-    </p>
+    <p>Když máte editor nastavený, vyberte fotografii a zvolte <guiseq><gui>Fotografie</gui> <gui>Otevřít v externím editoru</gui></guiseq> a fotografie se otevře v nastaveném editoru. Obdobně, pokud se jedná o surovou fotografii RAW, vyberte <guiseq><gui>Fotografie</gui> <gui>Otevřít v editoru RAW</gui></guiseq> pro otevření v nastaveném editoru RAW.</p>
 
     <p>Až dokončíte své úpravy a soubor uložíte, Shotwell si změn povšimne a fotografii aktualizuje. Pokud je fotografie externě upravená, můžete se zmáčknutím a podržením klávesy <key>Shift</key> při zobrazení v celém okně podívat na původní verzi fotografie místo té upravené.</p>
                             
