@@ -1,46 +1,51 @@
 shotwell (0.24.0-1) unstable; urgency=medium
 
   * New upstream release (Closes: #824164, #825788).
-    - Renew Patches.
-    - Remove upstream applied patches:
+    - Fix inconsistent licensing metadata in icons/rejected.svg
+      (Closes: #800902).
+    - Fix crashes when opening files with external editor
+      (Closes: #806248).
+    - Fix scrollbars disappearing when resizing main window
+      (Closes: #823835).
+    - Install private executables shotwell-settings-migrator and
+      shotwell-video-thumbnailer into /usr/lib/shotwell
+      (Closes: #833236).
+  * debian/control:
+    - Add itstool to Build-Depends.
+    - Bump debhelper B-D minimum version to 10.
+    - Bump libgee-0.8 B-D minimum version to 0.10.
+    - Switch Depends for shotwell binary package from dbus-x11 to
+      default-dbus-session-bus | dbus-session-bus (Closes: #836046).
+  * debian/copyright:
+    - Add Software Freedom Conservancy Inc.
+  * debian/manpages:
+    - Rename to debian/shotwell.manpages and use the
+      manpage supplied upstream.
+  * debian/patches:
+    - New 0600-remove_wrong_marco.patch to remove the wrong macro 'R'.
+    - Refresh patches.
+    - Drop patches applied upstream:
       + 0001-buildflags.patch
       + 0005-hardening.patch
       + 0500-Port-to-webkit2gtk-40.patch
       + 0501-Dont-pack-webview-into-a-scrolled-window.patch
       + 0502-Have-all-soup-sessions-validate-TLS-certificates.patch
       + 0503-facebook-Dont-disable-XSS-auditor.patch
-    - Close upstream applied bugs:
-      + Fix inconsistent licensing metadata in icons/rejected.svg
-        (Closes: #800902).
-      + Fix crash open files with external editor (Closes: #806248).
-      + Fix background color drawing & fix missing scroll bars in events
-        (Closes: #823835).
-      + Fix install shotwell-settings-migrator and
-        shotwell-video-thumbnailer in /usr/lib/shotwell(Closes: #833236).
-    - debian/copyright: Move copyright to Software Freedom Conservancy Inc.
-  * Rewrite rule at debian/watch.
   * debian/rules:
-    - To make build reproducible (Closes: #822948):
+    - Make build reproducible (Closes: #822948):
       + Fix date handling for non-English locales.
       + Fix files mode in temp-source tarball.
       Thanks to Alexis Bienvenüe <pado@passoire.fr>.
-    - Remove unwanted la files.
-  * New debian/shotwell-common.postrm to rebuild icon cache after
-    purge / remove with test that gtk-update-icon-cache exists
-    and is executable.
-  * debian/control:
-    - Add itstool to Build-Depends.
-    - Change minimal version of debhelper to 10.
-    - Change minimal version of libgee-0.8 to 0.10.
-    - Switch Depends from dbus-x11 to
-      default-dbus-session-bus | dbus-session-bus (Closes: #836046).
+    - Remove unwanted .la files.
+  * debian/shotwell-common.postrm:
+    - New script to rebuild icon cache after purge and remove with
+      a test that gtk-update-icon-cache exists and is executable.
   * debian/shotwell.install:
     - Remove missing apport/shotwell.py.
-  * Move debian/manpages to debian/shotwell.manpages and use the
-    upstream manpage.
-  * Remove man page from shotwell-common to prevent overlapping
-    file installation.
-  * New patches/0600-remove_wrong_marco.patch to remove the wrong macro 'R'.
+  * debian/shotwell-common.install:
+    - Remove now redundant installation of manpage.
+  * debian/watch:
+    - Rewrite regular expression.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 21 Sep 2016 22:31:48 +0200
 
