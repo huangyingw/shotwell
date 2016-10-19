@@ -3,7 +3,7 @@
 
     <info>
         <link type="guide" xref="index#edit"/>
-        <desc>Improve the composition of a photo by cutting out parts of it.</desc>
+        <desc>Verbessern Sie die Bildkomposition, indem Sie Teile davon herausschneiden.</desc>
         
         <link type="next" xref="edit-external"/>
     
@@ -26,38 +26,37 @@
     </mal:credit>
   </info>
 
-   <title>Bild wird zugeschnitten</title>
+   <title>Zuschneiden</title>
 
-    <p>To reduce the area of a photo and concentrate the viewer's attention on a smaller portion of it, use the Crop tool.
-    The crop tool is only available in full-window or fullscreen mode.</p>
+    <p>Um den sichtbaren Bereich eines Bildes zu verkleinern und so das Interesse des Betrachters auf einen kleineren Bereich zu lenken, verwenden Sie das Zuschneidewerkzeug. Dieses Werkzeug ist nur im Vollfenster- oder Vollbildmodus verfügbar.</p>
 
 <steps>
  <item>
-  <p>Double-click on a photo to enter full-window mode, then press the <gui>Crop</gui> button on the toolbar.</p>
+  <p>Klicken Sie doppelt auf ein Foto, um den Vollfenstermodus zu aktivieren und klicken Sie anschließend auf den <gui>Zuschneiden</gui>-Knopf in der Werkzeugleiste.</p>
  </item>
  <item>
-  <p>A white box, the crop rectangle, will appear over the photo. The lighter portion of the photo within the crop rectangle represents what the photo will look like when you crop it.</p>
+  <p>Ein weißer rechteckiger Zuschnittrahmen wird über das Foto gelegt. Der etwas hellere Bereich des Bildes innerhalb des Zuschnittrahmens repräsentiert das Foto, wie es nach dem Zuschneiden aussehen würde.</p>
  </item>
  <item>
-  <p>If you place your cursor in the middle of the box, you can move the box around. If you drag the edges of the box, you can adjust its size. As you move and adjust the crop box, you'll see four lines appear inside it, like a tic-tac-toe grid. These are <em>rule of thirds</em> lines.</p>
-  <p>You can also constrain the crop box to one of many common sizes. Choose a size from the drop-down list that suits your needs. If you press the flip button next to it, the orientation of the constraint will switch (from landscape to portrait).</p>
+  <p>Wenn Sie den Mauszeiger in der Mitte des Zuschnittrahmens platzieren, können Sie den gesamten Rahmen verschieben. Beim Ziehen der Rahmenecken mit der Maus wird dessen Größe verändert. Während Sie die Größe oder Lage des Zuschnittrahmens verändern, werden darin vier Linien wie in einem Tic-Tac-Toe-Spielfeld angezeigt. Diese entsprechen der <em>Drittelregel</em>.</p>
+  <p>Sie können den Zuschnittrahmen auf zahlreiche gängige Größen eingrenzen. Wählen Sie eine Größe aus der Auswahlliste, die Ihren Erfordernissen entspricht. Wenn Sie auf den Umdrehen-Knopf daneben klicken, wechselt die Ausrichtung der ausgewählten Form (von Quer- auf Hochformat).</p>
  </item>
  <item>
-  <p>When you're happy with your crop outline, apply it by pressing the <gui>Crop</gui> button. Shotwell will display the cropped photo.</p>
+  <p>Sobald Sie mit Größe und Bereich des Zuschnittrahmens zufrieden sind, klicken Sie auf den <gui>Zuschneiden</gui>-Knopf. Shotwell zeigt nun das zugeschnittene Bild an.</p>
  </item>
  <item>
-  <p>If you change your mind, press the <gui>Crop</gui> button again and fine-tune the crop.</p>
-  <p>If you press <gui>Cancel</gui> rather than <gui>Apply</gui>, Shotwell will return to the photo's previous crop dimensions.</p>
+  <p>Sollten Sie noch etwas ändern wollen, klicken Sie nochmals auf den <gui>Zuschneiden</gui>-Knopf und passen den Rahmen erneut an.</p>
+  <p>Wenn Sie auf <gui>Abbrechen</gui> statt auf <gui>Anwenden</gui> klicken, kehrt Shotwell zu den vorherigen Abmessungen zurück.</p>
  </item>
 </steps>
 
 <section>
  <title>Was ist die Drittelregel?</title>
  <p>Die <em>Drittelregel</em> hilft, ein Foto optisch ansprechend zu gestalten.</p>
- <p>Imagine that the scene is divided up into a 3x3 grid by two equally-spaced vertical lines and two equally-spaced horizontal lines. According to the rule, you're more likely to get a pleasing composition if you align major features (like the horizon, or a person's body) with one of the lines. Paying attention to the way features flow from one part of the grid to another can also help.</p>
- <p>Cropping a photo so that it conforms to the rule of thirds often results in a more visually appealing image.</p>
+ <p>Gehen wir davon aus, dass die Szene durch zwei horizontale und zwei vertikale Linien in ein 3x3-Raster mit gleichen Flächen unterteilt ist. Entsprechend der Drittelregel erhalten Sie sehr wahrscheinlich eine ansprechendere Bildkomposition, wenn Sie bestimmte Anhaltspunkte, wie den Horizont oder den Körper einer Person, an einer dieser Linien ausrichten. Außerdem kann es hilfreich sein, darauf zu achten, wie markante Bildteile von einem Bereich des Rasters in einen anderen übergehen.</p>
+ <p>Das Zuschneiden eines Fotos so, dass die Bildobjekte der Drittelregel folgen, führt oft zu einem optisch ansprechenderen Bild.</p>
  <media type="image" src="figures/crop_thirds.jpg">
-  <p>Cropping a photo, using the "rule of thirds" lines to improve the composition.</p>
+  <p>Schneiden Sie ein Foto mit den Hilfslinien der »Drittelregel« zu, um die Komposition zu verbessern.</p>
  </media>
 </section>
 </page>

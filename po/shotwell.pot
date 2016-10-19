@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: shotwell 0.24.0\n"
+"Project-Id-Version: shotwell 0.24.1\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=Shotwell&component=Internationalization\n"
-"POT-Creation-Date: 2016-09-20 20:49+0200\n"
+"POT-Creation-Date: 2016-10-16 22:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1170,7 +1170,7 @@ msgstr ""
 msgid "Visit the Shotwell home page"
 msgstr ""
 
-#: plugins/common/Resources.vala:31 src/AppWindow.vala:676
+#: plugins/common/Resources.vala:31 src/AppWindow.vala:679
 msgid "translator-credits"
 msgstr ""
 
@@ -2090,26 +2090,26 @@ msgstr ""
 msgid "Leave fullscreen"
 msgstr ""
 
-#: src/AppWindow.vala:496
+#: src/AppWindow.vala:499
 msgid "_Contents"
 msgstr ""
 
-#: src/AppWindow.vala:501
+#: src/AppWindow.vala:504
 msgid "_Frequently Asked Questions"
 msgstr ""
 
-#: src/AppWindow.vala:506
+#: src/AppWindow.vala:509
 msgid "_Report a Problem..."
 msgstr ""
 
-#: src/AppWindow.vala:605 src/AppWindow.vala:626 src/AppWindow.vala:643
+#: src/AppWindow.vala:608 src/AppWindow.vala:629 src/AppWindow.vala:646
 #: src/data_imports/DataImportsUI.vala:413 src/Dialogs.vala:20
 #: src/Dialogs.vala:28 src/Dialogs.vala:1425 src/Dialogs.vala:1448
 #: src/publishing/PublishingUI.vala:512 src/Resources.vala:157
 msgid "_Cancel"
 msgstr ""
 
-#: src/AppWindow.vala:653
+#: src/AppWindow.vala:656
 #, c-format
 msgid ""
 "A fatal error occurred when accessing Shotwell's library.  Shotwell cannot "
@@ -2118,21 +2118,21 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/AppWindow.vala:673
+#: src/AppWindow.vala:676
 msgid "Visit the Shotwell web site"
 msgstr ""
 
-#: src/AppWindow.vala:685
+#: src/AppWindow.vala:688
 #, c-format
 msgid "Unable to display help: %s"
 msgstr ""
 
-#: src/AppWindow.vala:693
+#: src/AppWindow.vala:696
 #, c-format
 msgid "Unable to navigate to bug database: %s"
 msgstr ""
 
-#: src/AppWindow.vala:701
+#: src/AppWindow.vala:704
 #, c-format
 msgid "Unable to display FAQ: %s"
 msgstr ""
@@ -2649,7 +2649,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/db/DatabaseTable.vala:88
+#: src/db/DatabaseTable.vala:92
 #, c-format
 msgid "Unable to restore photo database %s"
 msgstr ""
@@ -3909,7 +3909,7 @@ msgid "%B"
 msgstr ""
 
 #. if no name, pretty up the start time
-#: src/Event.vala:751
+#: src/Event.vala:753
 #, c-format
 msgid "Event %s"
 msgstr ""

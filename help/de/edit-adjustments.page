@@ -28,11 +28,11 @@
 
    <title>Farbanpassungen</title>
 
-<p>The <gui>Adjust</gui> button opens a floating window with a histogram and sliders to adjust a photo's exposure, saturation, tint, temperature, and shadows. The histogram also has sliders to reduce the upper and lower intensity thresholds of the photograph, expanding the contrast of the middle range.</p>
+<p>Der <gui>Anpassen</gui>-Knopf öffnet ein schwebendes Fenster mit einem Histogramm und Schiebereglern zum Verändern der Belichtung, Sättigung, Farbton, Farbtemperatur und Schatten. Das Histogramm verfügt außerdem über Schieberegler zum Anpassen der oberen und unteren Intensitäts-Schwellwerte des Fotos, wodurch der Mittenkontrast erweitert wird.</p>
 
-<p>The <gui>Enhance</gui> button adjusts the histogram and shadows sliders to improve the quality of a photo.</p>
+<p>Der <gui>Verbessern</gui>-Knopf passt das Histogramm und die Schatten-Schieberegler an, um die Qualität eines Fotos zu verbessern.</p>
 
-<p>When the photo's colors and contrast are to your liking, press <gui>OK</gui> to save the changes. <gui>Reset</gui> will return the image to its original state. <gui>Cancel</gui> discards all changes you've made.</p>
+<p>Wenn die Farben und der Kontrast des Fotos Ihren Vorstellungen entsprechen, klicken Sie auf <gui>OK</gui>, um die Änderungen zu speichern. Durch <gui>Zurücksetzen</gui> wird das Bild in seinen ursprünglichen Zustand zurückversetzt. <gui>Abbrechen</gui> verwirft alle von Ihnen vorgenommenen Änderungen.</p>
 
 <section>
  <title>Was bewirken die Farbregler?</title>
@@ -43,23 +43,23 @@
   </item>
   <item>
    <title>Sättigung</title>
-   <p>Changes how vivid colors look. If your photo looks gray and washed out, try increasing the saturation. If colors look too bold, try decreasing it.</p>
+   <p>Dadurch wird bestimmt, wie lebendig Farben wirken. Wenn Ihr Foto grau und ausgewaschen erscheint, sollten Sie die Sättigung erhöhen. Wenn sich Farben zu sehr in den Vordergrund setzen, sollten Sie versuchen, die Sättigung zu verringern.</p>
   </item>
   <item>
    <title>Farbton</title>
-   <p>This tints the photo with a color. It's useful for correcting photos taken with the wrong white balance setting, which typically have an unnatural color cast. For example, photos taken outdoors with the white balance set to "Tungsten" may have a blue cast.</p>
+   <p>Dies färbt das Foto mit einer Farbe ein. Es ist sinnvoll beim Korrigieren von Fotos mit falschen Weißabgleich-Einstellungen, die typischerweise unnatürliche Farbstiche hervorrufen. Beispielsweise werden im Freien mit der Einstellung »Glühlampenlicht« aufgenommene Fotos einen Blaustich aufweisen.</p>
   </item>
   <item>
    <title>Temperatur</title>
-   <p>Changes how "warm" or "cool" the picture looks. Use this to make cold, depressing scenes look more lively, for example.</p>
+   <p>Dadurch wird bestimmt, wie »warm« oder »kühl« das Bild aussieht. Sie können damit beispielsweise kühle, depressive Szenen lebendiger wirken lassen.</p>
   </item>
   <item>
    <title>Schatten</title>
-   <p>This makes shadowy areas appear lighter. Use this to make detail more visible if it's obscured by the darkness of a shadow.</p>
+   <p>Dadurch erscheinen Schattenbereiche heller. Sie können damit Strukturen hervorheben, die in einem Schattenbereich verdeckt sind.</p>
   </item>
   <item>
-   <title>Intensity Threshold (sliders on the histogram)</title>
-   <p>These sliders change how light the brightest white is and how dark the darkest black is. Use them to change the contrast of the photo. Photos which look washed out should particularly benefit from changing these settings.</p>
+   <title>Schwellwert der Intensität (Schieberegler im Histogramm)</title>
+   <p>Diese Schieberegler bestimmen, wie hell das hellste Weiß und wie dunkel das dunkelste Schwarz dargestellt werden. Sie können damit den Kontrast eines Fotos verändern. Insbesondere ausgewaschen erscheinende Bilder werden von diesen Einstellungen profitieren.</p>
   </item>
  </terms>
 </section>

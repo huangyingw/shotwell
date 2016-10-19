@@ -6,7 +6,19 @@
         <desc>Klicka knappen <gui>Rotera</gui> eller välj en av kommandona i <gui>Bild</gui>-menyn.</desc>
         
         <link type="next" xref="edit-straighten"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Josef Andersson</mal:name>
+      <mal:email>josef.andersson@fripost.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anders Jonsson</mal:name>
+      <mal:email>anders.jonsson@norsjovallen.se</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Rotera eller vänd en bild</title>
 

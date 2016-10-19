@@ -39,9 +39,8 @@ the <link type="guide" xref="other-raw">RAW</link> section.
 <p>Shotwell also supports video files in any format supported by the GStreamer media library on the system where
 Shotwell is running.  This typically includes the following formats among others:</p>
 <list>
-<item><p>Container formats: Ogg, QuickTime, MP4, AVI.</p></item>
-<item><p>Codecs: Theora, Quicktime, MPEG-4, Motion JPEG.  <em>Note that some operating systems may not include all
-codecs listed here due to legal or licensing restrictions.</em></p></item>
+<item><p>Containerformate: Ogg, QuickTime, MP4, AVI.</p></item>
+<item><p>Codecs: Theora, Quicktime, MPEG-4 und Motion JPEG. <em>Beachten Sie, dass einige Betriebssysteme aufgrund von gesetzlichen oder Lizenzbestimmungen eventuell nicht alle hier aufgeführten Codecs unterstützen.</em></p></item>
 </list>
 
 <p>Shotwell supports both photos and videos, but for simplicity, this documentation uses just the term "photos"

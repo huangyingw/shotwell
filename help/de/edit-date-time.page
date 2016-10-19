@@ -3,7 +3,7 @@
 
     <info>
         <link type="guide" xref="index#edit"/>
-        <desc>Change the date and time of photos if those details are incorrect.</desc>
+        <desc>Ändern Sie Datum und Zeit von Fotos, wenn diese nicht stimmen.</desc>
 
         <link type="next" xref="edit-enhance"/>
     
@@ -26,7 +26,7 @@
     </mal:credit>
   </info>
 
-	<title>Adjust the date and time of photos</title>
+	<title>Datum und Zeit von Fotos anpassen</title>
 
 <p>To adjust the date and time of photos, select the photos you would like to adjust, choose <guiseq><gui>Photos</gui><gui>Adjust Date and Time...</gui></guiseq> and select a new date and time.</p>
 

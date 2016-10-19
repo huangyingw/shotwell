@@ -6,7 +6,19 @@
         <desc>Mer om RAW-stöd i Shotwell.</desc>
         
         <link type="next" xref="running"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Josef Andersson</mal:name>
+      <mal:email>josef.andersson@fripost.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anders Jonsson</mal:name>
+      <mal:email>anders.jonsson@norsjovallen.se</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
    
     <title>RAW-stöd i Shotwell</title> 
     <p>En del kameror har förmågan att lagra data direkt från sensorn till en fil som innehåller extra färginformation, känt som ”RAW” eller ”Kamera-RAW”, och Shotwell stödjer även dessa filer.</p>

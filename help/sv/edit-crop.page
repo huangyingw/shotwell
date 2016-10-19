@@ -6,7 +6,19 @@
         <desc>Förbättra sammansättningen för en bild genom att klippa bort delar från den.</desc>
         
         <link type="next" xref="edit-external"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Josef Andersson</mal:name>
+      <mal:email>josef.andersson@fripost.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anders Jonsson</mal:name>
+      <mal:email>anders.jonsson@norsjovallen.se</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
 
    <title>Beskär</title>
 
@@ -24,7 +36,7 @@
   <p>Du kan också begränsa beskärningsrutan till en av många vanliga storlekar. Välj en storlek från rullgardinsmenyn som passar dig. Om du trycker vändknappen bredvid den kommer riktningen av begränsningen att växla (från landskap till porträtt).</p>
  </item>
  <item>
-  <p>When you're happy with your crop outline, apply it by pressing the <gui>Crop</gui> button. Shotwell will display the cropped photo.</p>
+  <p>Verkställ din beskärning när du är nöjd med den genom att trycka på knappen <gui>Beskär</gui>. Shotwell kommer att visa den beskurna bilden.</p>
  </item>
  <item>
   <p>Om du ändrar dig, tryck knappen <gui>Beskär</gui> igen och finjustera beskärningen.</p>

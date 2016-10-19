@@ -1,6 +1,171 @@
-commit 2d300134b66139f3dc18577bedf83266a3e0b13c
+commit c52724c3d00e0aecaf98402c83b51e0cd5c9a6be
 Author: Jens Georg <mail@jensge.org>
-Date:   Sun Sep 18 20:02:34 2016 +0200
+Date:   Sun Oct 16 22:32:17 2016 +0200
+
+    Prepare Shotwell 0.24.1
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+M	configure.ac
+M	debian/changelog
+
+commit 0be5c1be430cdc6b4ee7af0d0e52e10888b07a55
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Oct 16 22:20:14 2016 +0200
+
+    Enable SQL debugging through environment variable
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/db/DatabaseTable.vala
+
+commit f79f3dd46473655b17bcf52ca3a8fadcf58502a5
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Oct 9 18:42:17 2016 +0200
+
+    piwigo: Fix creation of new albums
+
+    Boolean is hard, to many states. Regression introduced by
+    9d2b698023366e95baddbb677118a50e27bd6e8e
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=772648
+
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+
+commit 42a2189a53163391f4776ba6e6c433d1aabbdf5e
+Author: Rico Tzschichholz <ricotz@ubuntu.com>
+Date:	Sat Oct 8 17:27:59 2016 +0200
+
+    photos: Fix build with vala git
+
+    Default values must be at least as accessible as the methods which
+    require
+    them.
+
+M	src/photos/PhotoMetadata.vala
+
+commit e8c60ee6ca74977bc28e1d5650f9c9d5c09e5e71
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Oct 3 22:12:01 2016 +0200
+
+    piwigo: Prevent a critical
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+
+commit 0dd5368e0b33c22e3fb196b2776d56988aca0572
+Author: Rico Tzschichholz <ricotz@ubuntu.com>
+Date:	Fri Sep 30 18:58:54 2016 +0200
+
+    Fix non-matching generic types of inferface implementations
+
+M	src/Tag.vala
+
+commit 15fb6e8945c27915d1d3b934f2a3ee81daaea63d
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Sep 28 23:32:01 2016 +0200
+
+    Remove warning about obsolete style property
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Resources.vala
+
+commit a9104c1cf1ab2c586f1639536a50823019d026eb
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Sep 28 23:11:32 2016 +0200
+
+    Fix focus handling of fullscreen viewer
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=771969
+
+M	src/AppWindow.vala
+
+commit 147b6c87a0a6be6fa0d0e7b93313a13679ba2614
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Sep 17 08:33:23 2016 +0200
+
+    Fix side-casting issues in generics handling
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/MediaDataRepresentation.vala
+M	src/MediaMonitor.vala
+M	src/PhotoPage.vala
+M	src/Tag.vala
+M	src/core/ContainerSourceCollection.vala
+M	src/core/ViewCollection.vala
+
+commit 7424c5ddadfaee627641cd884423a32fa5afc330
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Sep 21 21:00:47 2016 +0200
+
+    Add debug output of shotwell's current timezone
+
+    Support debugging of date/time related issues
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/main.vala
+
+commit 7c1872f9353b1c0c067c1599f74460571db35145
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Sep 21 20:56:07 2016 +0200
+
+    Add debug log when shifting events
+
+    This is to better be able to determine whether the event duplication
+    reported
+    in several bugs is happening due to event shifting
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Event.vala
+
+commit 230a0b28eb7b0a671ac549e85329beefddbc06eb
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Sun Sep 25 17:16:35 2016 +0000
+
+    Updated German translation
+
+M	help/de/de.po
+
+commit f4b68102e46f3fa896438db753b39f4b413107bb
+Author: Rafael Fontenelle <rafaelff@gnome.org>
+Date:	Fri Sep 23 00:32:10 2016 +0000
+
+    Updated Brazilian Portuguese translation
+
+M	po/pt_BR.po
+
+commit 3fca18c23cb133590be1b472cc4b22f8effc81a7
+Author: Anders Jonsson <anders.jonsson@norsjovallen.se>
+Date:	Wed Sep 21 11:30:53 2016 +0000
+
+    Updated Swedish translation
+
+M	help/sv/sv.po
+
+commit 332173cf4a3e7110afc2a42b127f9e8c37b33369
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Sep 20 21:02:10 2016 +0200
+
+    Prepare Shotwell 0.24
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+M	configure.ac
+
+commit 4b1dd6efebe919772914bffd8e6597e7780d378c
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Sep 18 20:02:34 2016 +0200
 
     Fix leak while scrolling
 
@@ -8,43 +173,33 @@ Date:   Sun Sep 18 20:02:34 2016 +0200
 
 M	src/core/DataObject.vala
 
-commit 14b8ae055f24b81b802ec83fcd2487c03a17630f
+commit 728b17e779c2c27941ecfa74037beb1025f85fe6
 Author: Bernd Homuth <dev@hmt.im>
 Date:	Mon Sep 19 15:00:09 2016 +0000
 
     Updated German translation
-    (cherry picked from commit 728b17e779c2c27941ecfa74037beb1025f85fe6)
 
 M	po/de.po
 
-commit 611ccd55e58b40ab6a4a718a154ea0d001d8e433
+commit 792debb70a038c4a4ae0ef7c68999aace045c516
 Author: Marek Černocký <marek@manet.cz>
-Date:	Mon Sep 19 08:50:33 2016 +0200
+Date:	Mon Sep 19 08:52:56 2016 +0200
 
     Updated Czech translation
 
 M	po/cs.po
 
-commit c569aec6cd42816b39c81c0da65c5e8790915bd5
+commit 0f346cc9cc410ede68f8b8d6abe113792f87a3e1
 Author: Christian Kirbach <Christian.Kirbach@gmail.com>
 Date:	Sun Sep 18 19:11:29 2016 +0000
 
     Updated German translation
-    (cherry picked from commit 0f346cc9cc410ede68f8b8d6abe113792f87a3e1)
 
 M	po/de.po
 
-commit 998f2217574d2afbbe54cd17e473eb6b511adc1b
-Author: Daniel Mustieles <daniel.mustieles@gmail.com>
-Date:	Tue Sep 13 20:25:15 2016 +0200
-
-    Updated Spanish translation
-
-M	po/es.po
-
-commit 15e7e747cddb9f38631a3f8f658d7201c3c7969a
+commit 5ffc5577fddd4bcfab878ec06df7b980afd0a3fc
 Author: Marek Černocký <marek@manet.cz>
-Date:	Tue Sep 13 11:17:45 2016 +0200
+Date:	Tue Sep 13 11:17:14 2016 +0200
 
     Updated Czech translation
 
@@ -14181,7 +14336,7 @@ Date:	Tue Oct 18 12:10:10 2011 -0700
     Updates NEWS, debian/changelog, and Makefile for the 0.11.5 release.
     Conflicts:
 
-	Makefile
+	    Makefile
 
 M	Makefile
 M	NEWS
@@ -14205,7 +14360,7 @@ Date:	Thu Oct 13 13:01:31 2011 -0700
     preparation for the Shotwell 0.11.4 release.
     Conflicts:
 
-	Makefile
+	    Makefile
 
 M	Makefile
 M	NEWS

@@ -6,16 +6,24 @@
         <desc>Ställ in din skrivbordsbakgrund till att använda en enstaka bild eller ett bildspel.</desc>
         
         <link type="next" xref="share-slideshow"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Josef Andersson</mal:name>
+      <mal:email>josef.andersson@fripost.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anders Jonsson</mal:name>
+      <mal:email>anders.jonsson@norsjovallen.se</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Ange en skrivbordsbakgrund eller ett bildspel.</title>
 
     <p>För att ange en bild som din skrivbordsbakgrund, markera bilden och välj sedan <guiseq><gui>Arkiv</gui><gui>Använd som skrivbordsbakgrund</gui></guiseq>.</p>
     
-    <p>You can also set your background to a slideshow of photos.  To do this, select the photos for
-    the slideshow and choose <guiseq><gui>File</gui><gui>Set as Desktop Slideshow...</gui></guiseq>.
-    Shotwell will prompt you for a slideshow delay, which can be any interval up to one day in length.
-    The background slideshow will proceed even when Shotwell is not running.
-    </p>
+    <p>Du kan också sätta din bakgrund till ett bildspel. För att göra detta, markera bilderna för bildspel och välj <guiseq><gui>Arkiv</gui><gui>Använd som bildspel för skrivbord…</gui></guiseq>. Shotwell kommer att fråga om bildspelsfördröjning, vilket kan vara vilket intervall som helst upp till en dags längd. Bildspelet i bakgrunden kommer att fortsätta även när Shotwell inte körs.</p>
     
 </page>
