@@ -6,16 +6,25 @@
         <desc>Kopiera bilder från Shotwell så att du kan använda dem på andra ställen.</desc>
         
         <link type="next" xref="share-print"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Josef Andersson</mal:name>
+      <mal:email>josef.andersson@fripost.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anders Jonsson</mal:name>
+      <mal:email>anders.jonsson@norsjovallen.se</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Exportera bilder</title>
 
 <p>För att exportera bilder från Shotwell via dra-och-släpp, dra bilderna från Shotwell till ett filhanterarfönster eller ditt skrivbord. De nya filerna kommer att vara kopior av bilderna i ditt bibliotek.</p>
 
-<p>
-Alternatively, select a set of photos and choose the <guiseq><gui>File</gui><gui>Export...</gui></guiseq> command or press <keyseq><key>Shift</key><key>Ctrl</key><key>E</key></keyseq>, which exports photos while letting you fine-tune the size and dimensions of your photo files.
-A window will appear allowing you to make several choices:
-</p>
+<p>Alternativt kan du markera några bilder och välja <guiseq><gui>Arkiv</gui><gui>Exportera…</gui></guiseq>-kommandot eller trycka <keyseq><key>Skift</key><key>Ctrl</key><key>E</key></keyseq> som exporterar bilderna under tiden du finjusterar storlek och dimensioner på dina bildfiler. Ett fönster visas och låter dig göra följande val:</p>
 
 <list>
 <item><p>Ett format för export.</p>

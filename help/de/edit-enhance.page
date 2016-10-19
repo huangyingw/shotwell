@@ -3,7 +3,7 @@
 
     <info>
         <link type="guide" xref="index#edit"/>
-        <desc>Let Shotwell improve the brightness and contrast of a photo automatically.</desc>
+        <desc>Lassen Sie die Helligkeit und den Kontrast eines Fotos durch Shotwell automatisch anpassen.</desc>
         
         <link type="seealso" xref="edit-adjustments"/>
         
@@ -30,5 +30,5 @@
 
    <title>Automatisch verbessern</title>
 
-    <p>Clicking on the <gui>Enhance</gui> button is a quick way to automatically adjust the brightness and contrast of your photo. It will often give you a photo that is correctly exposed. You can also use it as a starting point and then improve the adjustments by clicking on the <gui>Adjust</gui> button.</p>
+    <p>Ein Klick auf den <gui>Verbessern</gui>-Knopf ist eine schnelle Möglichkeit, die Helligkeit und den Kontrast eines Bildes automatisch anpassen zu lassen. Dadurch erhalten Sie in vielen Fällen bereits ein korrekt belichtetes Foto. Sie können dieses auch als Ausgangspunkt verwenden und weitere Anpassungen vornehmen, indem Sie auf den <gui>Anpassen</gui>-Knopf klicken.</p>
 </page>

@@ -3,7 +3,7 @@
 
     <info>
         <link type="guide" xref="index#edit"/>
-        <desc>Correct photos where people have red eyes because of the camera's flash.</desc>
+        <desc>Korrigieren Sie Fotos mit roten Augen, die durch den Kamerablitz verursacht wurden.</desc>
         
         <link type="next" xref="edit-rotate"/>
     
@@ -26,18 +26,18 @@
     </mal:credit>
   </info>
 
-	<title>Rote Augen werden entfernt</title>
+	<title>Rote Augen entfernen</title>
 
-    <p>Red-eye occurs when the camera's flash reflects off the pupil of someone's eye. To eliminate this in a photo, use the Red-eye tool.</p>
+    <p>Rote Augen erscheinen durch einen Reflex des Kamerablitzes auf der Netzhaut des Auges. Um dies in einem Foto zu korrigieren, verwenden Sie das Rote-Augen-Entfernungswerkzeug.</p>
     <steps>
      <item>
-      <p>Click <gui>Red-eye</gui>. A circle will appear on the photo.</p>
+      <p>Klicken Sie auf <gui>Rote Augen</gui>. Ein Kreis erscheint im Foto.</p>
      </item>
      <item>
-      <p>Drag the circle over the affected pupil, adjust its size with the slider control, and press <gui>Apply</gui>. The redness will be removed.</p>
+      <p>Ziehen Sie den Kreis über das betroffene Auge und passen Sie dessen Größe mit dem Schieberegler an. Klicken Sie dann auf <gui>Anwenden</gui> und die Rötung wird entfernt.</p>
      </item>
      <item>
-      <p>Repeat this process for all red pupils in your photo. Press <gui>Close</gui> when finished.</p>
+      <p>Wiederholen Sie diesen Vorgang für alle roten Augen in Ihrem Foto. Klicken Sie auf <gui>Schließen</gui>, wenn Sie fertig sind.</p>
      </item>
     </steps>
 </page>

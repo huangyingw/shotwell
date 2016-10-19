@@ -3,7 +3,7 @@
 
     <info>
         <link type="guide" xref="index#edit"/>
-        <desc>Shotwell is a non-destructive photo editor - it does not modify your original photos.</desc>
+        <desc>Shotwell ist ein zerstörungsfreier Fotoeditor – Ihre Originalbilder werden nicht verändert.</desc>
         
         <link type="next" xref="edit-date-time"/>
     
@@ -26,13 +26,12 @@
     </mal:credit>
   </info>
 
-	<title>What happens to the original when I edit a photo?</title>
+	<title>Was passiert mit dem Original, wenn ich ein Foto bearbeite?</title>
 
-<p>Shotwell is a non-destructive photo editor. It does not modify your original photographs. That is to say, if you crop a photo or adjust its colors, the photo file on disc remains untouched. Shotwell stores your edits in a database and applies them on the fly as necessary. This means you can undo any alterations you make to a photograph.</p>
+<p>Shotwell ist ein zerstörungsfreier Fotoeditor. Ihre Originalbilder werden nicht verändert. Wenn Sie beispielsweise ein Foto zuschneiden oder dessen Farben verändern, bleibt das eigentliche Bild auf dem Datenträger davon unberührt. Shotwell speichert Ihre Bearbeitungen in einer Datenbank und wendet diese erst an, wenn es erforderlich ist. Das bedeutet, dass Sie sämtliche von Ihnen an einem Foto vorgenommenen Änderungen rückgängig machen können.</p>
 
-<p>If you want to see what a photo looked like before your modifications, press the <key>Shift</key> key. The original photo will be displayed as long as you hold the key down.</p>
+<p>Wenn Sie sehen wollen, wie ein Foto vor Ihren Änderungen aussah, drücken Sie die <key>Umschalttaste</key>. Das Originalbild wird angezeigt, so lange Sie diese Taste gedrückt halten.</p>
 
-<p>Note that Shotwell can optionally write metadata (such as tags and titles) to photo files.
-For more information, see the section <link xref="other-files">Photo files</link>.</p>
+<p>Beachten Sie, dass Shotwell optional Metadaten, wie Stichwörter und Titel, in Fotodateien schreiben kann. Weitere Informationen finden Sie im Abschnitt <link xref="other-files">Fotodateien</link>.</p>
 
 </page>

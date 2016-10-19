@@ -6,7 +6,19 @@
         <desc>Gruppera bilder som tagits samtidigt. Lär dig att byta namn, sammanfoga och sortera händelser.</desc>
         
         <link type="next" xref="flag"/>
-    </info>
+    
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Josef Andersson</mal:name>
+      <mal:email>josef.andersson@fripost.org</mal:email>
+      <mal:years>2015</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Anders Jonsson</mal:name>
+      <mal:email>anders.jonsson@norsjovallen.se</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  </info>
 
 	<title>Händelser</title>
 
@@ -19,7 +31,7 @@
     <section>
     <title>Byta namn på händelser</title>
 
-    <p>To give an event a name rather than referring to it by its date, select the event, click <guiseq><gui>Events</gui><gui>Rename Event...</gui></guiseq> and enter a new name. Another way of renaming an event is to double-click its name in the sidebar; type a new name and then press <key>Enter</key>.</p>
+    <p>För att ge en händelse ett namn istället för att hänvisa till den med datum, markera händelsen, klicka <guiseq><gui>Redigera</gui><gui>Byt namn på händelse…</gui></guiseq> och ange ett nytt namn. Ett annat sätt att byta namn på en händelse är att dubbelklicka på dess namn i sidopanelen, skriva ett nytt namn och sedan trycka <key>Retur</key>.</p>
     </section>
 
     <section>
@@ -44,7 +56,7 @@
     <section>
     <title>Ändra bilden som representerar varje händelse.</title>
 
-    <p>If you select the <gui>Events</gui> item in the sidebar, you'll see a single photo which represents each event. This is called the key photo.</p>
+    <p>Om du väljer <gui>Händelser</gui> i sidopanelen kommer du att se en ensam bild som representerar var händelse. Det kallas nyckelbilden.</p>
 
     <p>Som standard använder Shotwell den första bilden i varje händelse som dess nyckelbild. För att använda en annan nyckelbild, markera bilden och välj <guiseq><gui>Bilder</gui><gui>Skapa nyckelbild för händelse</gui></guiseq>.</p>
     

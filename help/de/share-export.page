@@ -30,10 +30,7 @@
 
 <p>Um Fotos aus Shotwell mittels Ziehen-und-Ablegen zu exportieren, ziehen Sie die Fotos aus Shotwell in das Fenster einer Dateiverwaltung oder auf Ihre Arbeitsfläche. Die neuen Dateien entsprechen dann einer Kopie der Fotos Ihrer Bibliothek in Originalgröße.</p>
 
-<p>
-Alternatively, select a set of photos and choose the <guiseq><gui>File</gui><gui>Export...</gui></guiseq> command or press <keyseq><key>Shift</key><key>Ctrl</key><key>E</key></keyseq>, which exports photos while letting you fine-tune the size and dimensions of your photo files.
-A window will appear allowing you to make several choices:
-</p>
+<p>Alternativ wählen Sie eine Gruppe Fotos und wählen Sie <guiseq><gui>Datei</gui><gui>Exportieren</gui></guiseq> oder drücken Sie <keyseq><key>Umschalttaste</key><key>Strg</key><key>E</key></keyseq>, um Fotos zu exportieren und dabei die Größe und Abmessung der Fotodateien zu bestimmen. Daraufhin erscheint ein Fenster mit mehreren Wahlmöglichkeiten:</p>
 
 <list>
 <item><p>Ein Format für den Export.</p>

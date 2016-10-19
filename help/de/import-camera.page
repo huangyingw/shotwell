@@ -32,11 +32,10 @@
 
    <steps>
     <item>
-     <p>Connect the camera to your computer and switch it on.
-    Shotwell will detect it and list it in the sidebar.</p>
+     <p>Verbinden Sie die Kamera mit Ihrem Rechner und schalten Sie sie ein. Shotwell wird sie erkennen und in der Seitenleiste anzeigen.</p>
     </item>
     <item>
-     <p>Select the camera in the sidebar. Previews of each photo on the camera will be displayed.</p>
+     <p>Wählen Sie die Kamera in der Seitenleiste aus. Vorschaubilder werden für jedes der in der Kamera befindlichen Fotos angezeigt.</p>
     </item>
     <item>
      <p>If you like, you can choose a set of specific photos to import. To do this, hold down the <key>Ctrl</key> key and click to select individual photos. You can hold down <key>Shift</key> and click to select a range of photos too.</p>

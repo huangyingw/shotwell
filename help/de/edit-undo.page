@@ -30,10 +30,10 @@
 
 	<title>Änderungen rückgängig machen</title>
     
-    <p>Because Shotwell is a non-destructive photo editor, you can undo any alterations you make to a photograph.</p>
+    <p>Weil Shotwell ein zerstörungsfreier Foto-Editor ist, können Sie alle Bearbeitungsschritte an einem Foto zurücknehmen.</p>
     
-    <p>If you want to see what a photo looked like before your modifications, press the <key>Shift</key> key. The original photo will be displayed as long as you hold the key down.</p>
+    <p>Wenn Sie sehen wollen, wie ein Foto vor Ihren Änderungen aussah, drücken Sie die <key>Umschalttaste</key>. Das Originalbild wird angezeigt, so lange Sie diese Taste gedrückt halten.</p>
 
-    <p>To completely undo all the changes you've made to a photo, click <guiseq><gui>Photos</gui><gui>Revert to Original</gui></guiseq>. The only exception is that time and date adjustments will not be reverted.</p>
+    <p>Um alle von Ihnen an einem Foto vorgenommenen Änderungen zurückzunehmen, wählen Sie <guiseq><gui>Fotos</gui><gui>Zurück zum Original</gui></guiseq>. Als einzige Ausnahme werden Anpassungen von Datum und Zeit nicht zurückgenommen.</p>
 
 </page>

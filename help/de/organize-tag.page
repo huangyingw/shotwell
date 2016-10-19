@@ -42,9 +42,9 @@
 	</p>
     
     <list>
-		<item><p>Choose <guiseq><gui>Tags</gui><gui>Add Tags...</gui></guiseq>.</p></item>
+		<item><p>Wählen Sie <guiseq><gui>Stichworte</gui><gui>Stichworte hinzufügen …</gui></guiseq>.</p></item>
 		<item><p>Drücken Sie <keyseq><key>Strg</key><key>T</key></keyseq>.</p></item>
-		<item><p>Drag the selected photos and drop them on the desired tag.</p></item>
+		<item><p>Ziehen Sie die gewählten Fotos und legen Sie diese auf das gewünschte Stichwort ab.</p></item>
     </list>
      
     <p>
@@ -87,7 +87,7 @@
 	</p>
     
     <section id="hierarchaicaltags">
-        <title>Hierarchical Tags</title>
+        <title>Hierarchische Stichworte</title>
             <p>
 				Shotwell supports also hierarchial tags. You can 
 				rearrange your tags by drag and drop a tag onto another. 
