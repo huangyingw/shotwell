@@ -683,12 +683,12 @@ static void _direct_photo_page_on_save_as_gtk_action_callback (GtkAction* action
 static void _vala_array_add93 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void direct_photo_page_on_send_to (DirectPhotoPage* self);
 static void _direct_photo_page_on_send_to_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_SEND_TO_MENU _ ("Send _To...")
+#define RESOURCES_SEND_TO_MENU _ ("Send _To…")
 static void _vala_array_add94 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_PRINT_LABEL _ ("_Print")
 static void direct_photo_page_on_print (DirectPhotoPage* self);
 static void _direct_photo_page_on_print_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_PRINT_MENU _ ("_Print...")
+#define RESOURCES_PRINT_MENU _ ("_Print…")
 static void _vala_array_add95 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void _vala_array_add96 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void _vala_array_add97 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
@@ -726,13 +726,13 @@ static void _vala_array_add104 (GtkActionEntry** array, int* length, int* size, 
 void editing_host_page_on_enhance (EditingHostPage* self);
 static void _editing_host_page_on_enhance_gtk_action_callback (GtkAction* action, gpointer self);
 #define RESOURCES_ENHANCE_MENU _ ("_Enhance")
-#define RESOURCES_ENHANCE_TOOLTIP _ ("Automatically improve the photo's appearance")
+#define RESOURCES_ENHANCE_TOOLTIP _ ("Automatically improve the photo’s appearance")
 static void _vala_array_add105 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_CROP "shotwell-crop"
 void editing_host_page_toggle_crop (EditingHostPage* self);
 static void _editing_host_page_toggle_crop_gtk_action_callback (GtkAction* action, gpointer self);
 #define RESOURCES_CROP_MENU _ ("_Crop")
-#define RESOURCES_CROP_TOOLTIP _ ("Crop the photo's size")
+#define RESOURCES_CROP_TOOLTIP _ ("Crop the photo’s size")
 static void _vala_array_add106 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_REFRESH_LABEL _ ("_Refresh")
 void editing_host_page_toggle_straighten (EditingHostPage* self);
@@ -750,7 +750,7 @@ static void _vala_array_add108 (GtkActionEntry** array, int* length, int* size, 
 void editing_host_page_toggle_adjust (EditingHostPage* self);
 static void _editing_host_page_toggle_adjust_gtk_action_callback (GtkAction* action, gpointer self);
 #define RESOURCES_ADJUST_MENU _ ("_Adjust")
-#define RESOURCES_ADJUST_TOOLTIP _ ("Adjust the photo's color and tone")
+#define RESOURCES_ADJUST_TOOLTIP _ ("Adjust the photo’s color and tone")
 static void _vala_array_add109 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_REVERT_LABEL _ ("Revert to Original")
 void editing_host_page_on_revert (EditingHostPage* self);
@@ -759,7 +759,7 @@ static void _editing_host_page_on_revert_gtk_action_callback (GtkAction* action,
 static void _vala_array_add110 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 void editing_host_page_on_adjust_date_time (EditingHostPage* self);
 static void _editing_host_page_on_adjust_date_time_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_ADJUST_DATE_TIME_MENU _ ("_Adjust Date and Time...")
+#define RESOURCES_ADJUST_DATE_TIME_MENU _ ("_Adjust Date and Time…")
 static void _vala_array_add111 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 void editing_host_page_on_set_background (EditingHostPage* self);
 static void _editing_host_page_on_set_background_gtk_action_callback (GtkAction* action, gpointer self);
@@ -1931,7 +1931,7 @@ static GtkActionEntry* direct_photo_page_real_init_collect_action_entries (Page*
 #line 55 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	save_as = _tmp11_;
 #line 57 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_tmp12_ = _ ("Save _As...");
+	_tmp12_ = _ ("Save _As…");
 #line 57 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	save_as.label = _tmp12_;
 #line 58 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
@@ -4270,11 +4270,11 @@ static void direct_photo_page_save (DirectPhotoPage* self, GFile* dest, gint sca
 #line 467 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4273 "DirectPhotoPage.c"
-			goto __catch45_g_error;
+			goto __catch46_g_error;
 		}
 	}
-	goto __finally45;
-	__catch45_g_error:
+	goto __finally46;
+	__catch46_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp11_ = NULL;
@@ -4317,7 +4317,7 @@ static void direct_photo_page_save (DirectPhotoPage* self, GFile* dest, gint sca
 		return;
 #line 4319 "DirectPhotoPage.c"
 	}
-	__finally45:
+	__finally46:
 #line 466 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 466 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"

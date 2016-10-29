@@ -416,11 +416,11 @@ void publishing_glue_media_source_publishable_wrapper_clean_up (PublishingGlueMe
 #line 27 "/home/jens/Source/shotwell/src/publishing/APIGlue.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 419 "APIGlue.c"
-			goto __catch35_g_error;
+			goto __catch36_g_error;
 		}
 	}
-	goto __finally35;
-	__catch35_g_error:
+	goto __finally36;
+	__catch36_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp5_ = NULL;
@@ -444,7 +444,7 @@ void publishing_glue_media_source_publishable_wrapper_clean_up (PublishingGlueMe
 		_g_error_free0 (err);
 #line 446 "APIGlue.c"
 	}
-	__finally35:
+	__finally36:
 #line 26 "/home/jens/Source/shotwell/src/publishing/APIGlue.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 26 "/home/jens/Source/shotwell/src/publishing/APIGlue.vala"
@@ -692,11 +692,11 @@ GFile* publishing_glue_media_source_publishable_wrapper_serialize_for_publishing
 #line 60 "/home/jens/Source/shotwell/src/publishing/APIGlue.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 694 "APIGlue.c"
-				goto __catch36_g_error;
+				goto __catch37_g_error;
 			}
 		}
-		goto __finally36;
-		__catch36_g_error:
+		goto __finally37;
+		__catch37_g_error:
 		{
 			GError* err = NULL;
 			LibraryPhoto* _tmp25_ = NULL;
@@ -725,9 +725,9 @@ GFile* publishing_glue_media_source_publishable_wrapper_serialize_for_publishing
 #line 62 "/home/jens/Source/shotwell/src/publishing/APIGlue.vala"
 			_g_error_free0 (err);
 #line 727 "APIGlue.c"
-			goto __finally36;
+			goto __finally37;
 		}
-		__finally36:
+		__finally37:
 #line 57 "/home/jens/Source/shotwell/src/publishing/APIGlue.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 57 "/home/jens/Source/shotwell/src/publishing/APIGlue.vala"
@@ -882,11 +882,11 @@ GFile* publishing_glue_media_source_publishable_wrapper_serialize_for_publishing
 #line 80 "/home/jens/Source/shotwell/src/publishing/APIGlue.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 883 "APIGlue.c"
-					goto __catch37_g_error;
+					goto __catch38_g_error;
 				}
 			}
-			goto __finally37;
-			__catch37_g_error:
+			goto __finally38;
+			__catch38_g_error:
 			{
 				GError* err = NULL;
 				Video* _tmp56_ = NULL;
@@ -915,9 +915,9 @@ GFile* publishing_glue_media_source_publishable_wrapper_serialize_for_publishing
 #line 82 "/home/jens/Source/shotwell/src/publishing/APIGlue.vala"
 				_g_error_free0 (err);
 #line 916 "APIGlue.c"
-				goto __finally37;
+				goto __finally38;
 			}
-			__finally37:
+			__finally38:
 #line 79 "/home/jens/Source/shotwell/src/publishing/APIGlue.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 79 "/home/jens/Source/shotwell/src/publishing/APIGlue.vala"

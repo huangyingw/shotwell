@@ -1149,12 +1149,12 @@ GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length
 #define TRANSLATABLE "translatable"
 static void collection_page_on_print (CollectionPage* self);
 static void _collection_page_on_print_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_PRINT_MENU _ ("_Print...")
+#define RESOURCES_PRINT_MENU _ ("_Print…")
 static void _vala_array_add171 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_PUBLISH "applications-internet"
 static void collection_page_on_publish (CollectionPage* self);
 static void _collection_page_on_publish_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_PUBLISH_MENU _ ("Pu_blish...")
+#define RESOURCES_PUBLISH_MENU _ ("Pu_blish…")
 #define RESOURCES_PUBLISH_TOOLTIP _ ("Publish to various websites")
 static void _vala_array_add172 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_CLOCKWISE "object-rotate-right"
@@ -1183,7 +1183,7 @@ static void _vala_array_add176 (GtkActionEntry** array, int* length, int* size, 
 static void collection_page_on_enhance (CollectionPage* self);
 static void _collection_page_on_enhance_gtk_action_callback (GtkAction* action, gpointer self);
 #define RESOURCES_ENHANCE_MENU _ ("_Enhance")
-#define RESOURCES_ENHANCE_TOOLTIP _ ("Automatically improve the photo's appearance")
+#define RESOURCES_ENHANCE_TOOLTIP _ ("Automatically improve the photo’s appearance")
 static void _vala_array_add177 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 void collection_page_on_copy_adjustments (CollectionPage* self);
 static void _collection_page_on_copy_adjustments_gtk_action_callback (GtkAction* action, gpointer self);
@@ -1211,7 +1211,7 @@ static void _collection_page_on_duplicate_photo_gtk_action_callback (GtkAction* 
 static void _vala_array_add182 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void collection_page_on_adjust_date_time (CollectionPage* self);
 static void _collection_page_on_adjust_date_time_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_ADJUST_DATE_TIME_MENU _ ("_Adjust Date and Time...")
+#define RESOURCES_ADJUST_DATE_TIME_MENU _ ("_Adjust Date and Time…")
 static void _vala_array_add183 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_EDIT_LABEL _ ("_Edit")
 static void collection_page_on_external_edit (CollectionPage* self);
@@ -1268,7 +1268,7 @@ static gboolean collection_page_can_revert_selected (CollectionPage* self);
 gboolean photo_has_color_adjustments (Photo* self);
 gboolean pixel_transformation_bundle_has_copied_color_adjustments (void);
 GtkAction* page_get_action (Page* self, const gchar* name);
-#define RESOURCES_SET_BACKGROUND_SLIDESHOW_MENU _ ("Set as _Desktop Slideshow...")
+#define RESOURCES_SET_BACKGROUND_SLIDESHOW_MENU _ ("Set as _Desktop Slideshow…")
 gboolean data_view_is_selected (DataView* self);
 gboolean alteration_has_subject (Alteration* self, const gchar* subject);
 GType library_photo_get_type (void) G_GNUC_CONST;
@@ -4710,7 +4710,7 @@ static void collection_page_real_on_export (MediaPage* base) {
 #line 494 "/home/jens/Source/shotwell/src/CollectionPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4713 "CollectionPage.c"
-				goto __catch220_g_error;
+				goto __catch233_g_error;
 			}
 #line 497 "/home/jens/Source/shotwell/src/CollectionPage.vala"
 			_tmp76_ = app_window_get_instance ();
@@ -4722,8 +4722,8 @@ static void collection_page_real_on_export (MediaPage* base) {
 			_g_object_unref0 (_tmp77_);
 #line 4724 "CollectionPage.c"
 		}
-		goto __finally220;
-		__catch220_g_error:
+		goto __finally233;
+		__catch233_g_error:
 		{
 			GError* err = NULL;
 			AppWindow* _tmp78_ = NULL;
@@ -4749,7 +4749,7 @@ static void collection_page_real_on_export (MediaPage* base) {
 			_g_error_free0 (err);
 #line 4751 "CollectionPage.c"
 		}
-		__finally220:
+		__finally233:
 #line 492 "/home/jens/Source/shotwell/src/CollectionPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 492 "/home/jens/Source/shotwell/src/CollectionPage.vala"
@@ -6288,7 +6288,7 @@ static void collection_page_on_external_edit (CollectionPage* self) {
 #line 673 "/home/jens/Source/shotwell/src/CollectionPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6291 "CollectionPage.c"
-			goto __catch221_g_error;
+			goto __catch234_g_error;
 		}
 #line 674 "/home/jens/Source/shotwell/src/CollectionPage.vala"
 		_tmp13_ = app_window_get_instance ();
@@ -6300,8 +6300,8 @@ static void collection_page_on_external_edit (CollectionPage* self) {
 		_g_object_unref0 (_tmp14_);
 #line 6302 "CollectionPage.c"
 	}
-	goto __finally221;
-	__catch221_g_error:
+	goto __finally234;
+	__catch234_g_error:
 	{
 		GError* err = NULL;
 		AppWindow* _tmp15_ = NULL;
@@ -6330,7 +6330,7 @@ static void collection_page_on_external_edit (CollectionPage* self) {
 		_g_error_free0 (err);
 #line 6332 "CollectionPage.c"
 	}
-	__finally221:
+	__finally234:
 #line 671 "/home/jens/Source/shotwell/src/CollectionPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 671 "/home/jens/Source/shotwell/src/CollectionPage.vala"
@@ -6433,7 +6433,7 @@ static void collection_page_on_external_edit_raw (CollectionPage* self) {
 #line 691 "/home/jens/Source/shotwell/src/CollectionPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6436 "CollectionPage.c"
-			goto __catch222_g_error;
+			goto __catch235_g_error;
 		}
 #line 692 "/home/jens/Source/shotwell/src/CollectionPage.vala"
 		_tmp15_ = app_window_get_instance ();
@@ -6445,8 +6445,8 @@ static void collection_page_on_external_edit_raw (CollectionPage* self) {
 		_g_object_unref0 (_tmp16_);
 #line 6447 "CollectionPage.c"
 	}
-	goto __finally222;
-	__catch222_g_error:
+	goto __finally235;
+	__catch235_g_error:
 	{
 		GError* err = NULL;
 		AppWindow* _tmp17_ = NULL;
@@ -6480,7 +6480,7 @@ static void collection_page_on_external_edit_raw (CollectionPage* self) {
 		_g_error_free0 (err);
 #line 6482 "CollectionPage.c"
 	}
-	__finally222:
+	__finally235:
 #line 689 "/home/jens/Source/shotwell/src/CollectionPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 689 "/home/jens/Source/shotwell/src/CollectionPage.vala"

@@ -1894,11 +1894,11 @@ void plugins_init (GError** error) {
 #line 133 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1896 "Plugins.c"
-						goto __catch31_g_error;
+						goto __catch32_g_error;
 					}
 				}
-				goto __finally31;
-				__catch31_g_error:
+				goto __finally32;
+				__catch32_g_error:
 				{
 					GError* err = NULL;
 					GFile* _tmp13_ = NULL;
@@ -1928,7 +1928,7 @@ void plugins_init (GError** error) {
 					_g_error_free0 (err);
 #line 1929 "Plugins.c"
 				}
-				__finally31:
+				__finally32:
 #line 132 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 132 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
@@ -3691,7 +3691,7 @@ void plugins_search_for_plugins (GFile* dir, GError** error) {
 #line 316 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
 	_tmp2_ = _tmp1_;
 #line 316 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
-	g_debug ("Plugins.vala:316: Searching %s for plugins ...", _tmp2_);
+	g_debug ("Plugins.vala:316: Searching %s for plugins…", _tmp2_);
 #line 316 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
 	_g_free0 (_tmp2_);
 #line 320 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
@@ -3801,11 +3801,11 @@ void plugins_search_for_plugins (GFile* dir, GError** error) {
 #line 335 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3803 "Plugins.c"
-							goto __catch32_g_error;
+							goto __catch33_g_error;
 						}
 					}
-					goto __finally32;
-					__catch32_g_error:
+					goto __finally33;
+					__catch33_g_error:
 					{
 						GError* err = NULL;
 						GFile* _tmp18_ = NULL;
@@ -3835,7 +3835,7 @@ void plugins_search_for_plugins (GFile* dir, GError** error) {
 						_g_error_free0 (err);
 #line 3836 "Plugins.c"
 					}
-					__finally32:
+					__finally33:
 #line 334 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 334 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"

@@ -1810,11 +1810,11 @@ static void tags_header_setup_context_menu (TagsHeader* self) {
 #line 148 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1813 "Branch.c"
-			goto __catch51_g_error;
+			goto __catch52_g_error;
 		}
 	}
-	goto __finally51;
-	__catch51_g_error:
+	goto __finally52;
+	__catch52_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp11_ = NULL;
@@ -1859,7 +1859,7 @@ static void tags_header_setup_context_menu (TagsHeader* self) {
 		_g_error_free0 (err);
 #line 1861 "Branch.c"
 	}
-	__finally51:
+	__finally52:
 #line 147 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 147 "/home/jens/Source/shotwell/src/tags/Branch.vala"
@@ -2454,7 +2454,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 2457 "Branch.c"
-				goto __catch52_g_regex_error;
+				goto __catch53_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2479,7 +2479,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 2482 "Branch.c"
-				goto __catch52_g_regex_error;
+				goto __catch53_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -2505,8 +2505,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		return result;
 #line 2507 "Branch.c"
 	}
-	goto __finally52;
-	__catch52_g_regex_error:
+	goto __finally53;
+	__catch53_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -2519,7 +2519,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_error_free0 (e);
 #line 2521 "Branch.c"
 	}
-	__finally52:
+	__finally53:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"

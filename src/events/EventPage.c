@@ -836,9 +836,9 @@ static void _event_page_on_make_primary_gtk_action_callback (GtkAction* action, 
 static void _vala_array_add130 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void event_page_on_rename (EventPage* self);
 static void _event_page_on_rename_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_RENAME_EVENT_MENU _ ("Re_name Event...")
+#define RESOURCES_RENAME_EVENT_MENU _ ("Re_name Event…")
 static void _vala_array_add131 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_EDIT_EVENT_COMMENT_MENU _ ("Edit Event _Comment...")
+#define RESOURCES_EDIT_EVENT_COMMENT_MENU _ ("Edit Event _Comment…")
 void media_page_on_edit_comment (MediaPage* self);
 static void _media_page_on_edit_comment_gtk_action_callback (GtkAction* action, gpointer self);
 static void _vala_array_add132 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);

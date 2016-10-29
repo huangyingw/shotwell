@@ -759,11 +759,11 @@ FullscreenWindow* fullscreen_window_construct (GType object_type, Page* page) {
 #line 28 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 734 "AppWindow.c"
-			goto __catch211_g_error;
+			goto __catch224_g_error;
 		}
 	}
-	goto __finally211;
-	__catch211_g_error:
+	goto __finally224;
+	__catch224_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp5_ = NULL;
@@ -787,7 +787,7 @@ FullscreenWindow* fullscreen_window_construct (GType object_type, Page* page) {
 		_g_error_free0 (err);
 #line 761 "AppWindow.c"
 	}
-	__finally211:
+	__finally224:
 #line 27 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 27 "/home/jens/Source/shotwell/src/AppWindow.vala"
@@ -2717,11 +2717,11 @@ AppWindow* app_window_construct (GType object_type) {
 #line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2692 "AppWindow.c"
-			goto __catch212_g_error;
+			goto __catch225_g_error;
 		}
 	}
-	goto __finally212;
-	__catch212_g_error:
+	goto __finally225;
+	__catch225_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp28_ = NULL;
@@ -2737,7 +2737,7 @@ AppWindow* app_window_construct (GType object_type) {
 		_g_error_free0 (err);
 #line 2711 "AppWindow.c"
 	}
-	__finally212:
+	__finally225:
 #line 461 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 461 "/home/jens/Source/shotwell/src/AppWindow.vala"
@@ -2770,7 +2770,7 @@ AppWindow* app_window_construct (GType object_type) {
 #line 472 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2745 "AppWindow.c"
-			goto __catch213_g_error;
+			goto __catch226_g_error;
 		}
 #line 473 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp33_ = gdk_screen_get_default ();
@@ -2778,8 +2778,8 @@ AppWindow* app_window_construct (GType object_type) {
 		gtk_style_context_add_provider_for_screen (_tmp33_, G_TYPE_CHECK_INSTANCE_CAST (provider, GTK_TYPE_STYLE_PROVIDER, GtkStyleProvider), (guint) GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #line 2752 "AppWindow.c"
 	}
-	goto __finally213;
-	__catch213_g_error:
+	goto __finally226;
+	__catch226_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp34_ = NULL;
@@ -2798,7 +2798,7 @@ AppWindow* app_window_construct (GType object_type) {
 		_g_error_free0 (err);
 #line 2772 "AppWindow.c"
 	}
-	__finally213:
+	__finally226:
 #line 471 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 471 "/home/jens/Source/shotwell/src/AppWindow.vala"
@@ -3276,7 +3276,7 @@ static GtkActionEntry* app_window_create_common_actions (AppWindow* self, int* r
 #line 507 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	help_report_problem = _tmp18_;
 #line 509 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp19_ = _ ("_Report a Problem...");
+	_tmp19_ = _ ("_Report a Problem…");
 #line 509 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	help_report_problem.label = _tmp19_;
 #line 510 "/home/jens/Source/shotwell/src/AppWindow.vala"
@@ -3540,11 +3540,11 @@ GtkBuilder* app_window_create_builder (const gchar* glade_filename, void* user) 
 #line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3515 "AppWindow.c"
-			goto __catch214_g_error;
+			goto __catch227_g_error;
 		}
 	}
-	goto __finally214;
-	__catch214_g_error:
+	goto __finally227;
+	__catch227_g_error:
 	{
 		GError* _error_ = NULL;
 		GError* _tmp10_ = NULL;
@@ -3563,7 +3563,7 @@ GtkBuilder* app_window_create_builder (const gchar* glade_filename, void* user) 
 		_g_error_free0 (_error_);
 #line 3537 "AppWindow.c"
 	}
-	__finally214:
+	__finally227:
 #line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
@@ -4166,8 +4166,8 @@ void app_window_database_error (GError* err) {
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
 #line 656 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0_ = _ ("A fatal error occurred when accessing Shotwell's library.  Shotwell ca" \
-"nnot continue.\n" \
+	_tmp0_ = _ ("A fatal error occurred when accessing Shotwell’s library. Shotwell can" \
+"not continue.\n" \
 "\n" \
 "%s");
 #line 656 "/home/jens/Source/shotwell/src/AppWindow.vala"
@@ -4276,11 +4276,11 @@ static void app_window_on_help_contents (AppWindow* self) {
 #line 686 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4248 "AppWindow.c"
-			goto __catch215_g_error;
+			goto __catch228_g_error;
 		}
 	}
-	goto __finally215;
-	__catch215_g_error:
+	goto __finally228;
+	__catch228_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp1_ = NULL;
@@ -4310,7 +4310,7 @@ static void app_window_on_help_contents (AppWindow* self) {
 		_g_error_free0 (err);
 #line 4281 "AppWindow.c"
 	}
-	__finally215:
+	__finally228:
 #line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
@@ -4335,11 +4335,11 @@ static void app_window_on_help_report_problem (AppWindow* self) {
 #line 694 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4307 "AppWindow.c"
-			goto __catch216_g_error;
+			goto __catch229_g_error;
 		}
 	}
-	goto __finally216;
-	__catch216_g_error:
+	goto __finally229;
+	__catch229_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp0_ = NULL;
@@ -4369,7 +4369,7 @@ static void app_window_on_help_report_problem (AppWindow* self) {
 		_g_error_free0 (err);
 #line 4340 "AppWindow.c"
 	}
-	__finally216:
+	__finally229:
 #line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
@@ -4394,11 +4394,11 @@ static void app_window_on_help_faq (AppWindow* self) {
 #line 702 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4366 "AppWindow.c"
-			goto __catch217_g_error;
+			goto __catch230_g_error;
 		}
 	}
-	goto __finally217;
-	__catch217_g_error:
+	goto __finally230;
+	__catch230_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp0_ = NULL;
@@ -4428,7 +4428,7 @@ static void app_window_on_help_faq (AppWindow* self) {
 		_g_error_free0 (err);
 #line 4399 "AppWindow.c"
 	}
-	__finally217:
+	__finally230:
 #line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
@@ -4576,11 +4576,11 @@ void app_window_on_jump_to_file (AppWindow* self) {
 #line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4548 "AppWindow.c"
-			goto __catch218_g_error;
+			goto __catch231_g_error;
 		}
 	}
-	goto __finally218;
-	__catch218_g_error:
+	goto __finally231;
+	__catch231_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp21_ = NULL;
@@ -4604,7 +4604,7 @@ void app_window_on_jump_to_file (AppWindow* self) {
 		_g_error_free0 (err);
 #line 4575 "AppWindow.c"
 	}
-	__finally218:
+	__finally231:
 #line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
@@ -4674,7 +4674,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 4646 "AppWindow.c"
-				goto __catch219_g_regex_error;
+				goto __catch232_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4699,7 +4699,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 4671 "AppWindow.c"
-				goto __catch219_g_regex_error;
+				goto __catch232_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -4725,8 +4725,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		return result;
 #line 4696 "AppWindow.c"
 	}
-	goto __finally219;
-	__catch219_g_regex_error:
+	goto __finally232;
+	__catch232_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -4739,7 +4739,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_error_free0 (e);
 #line 4710 "AppWindow.c"
 	}
-	__finally219:
+	__finally232:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"

@@ -1087,7 +1087,7 @@ static void searches_header_setup_context_menu (SearchesHeader* self) {
 #line 76 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	new_search = _tmp2_;
 #line 77 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp3_ = _ ("Ne_w Saved Search...");
+	_tmp3_ = _ ("Ne_w Saved Search…");
 #line 77 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	new_search.label = _tmp3_;
 #line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
@@ -1130,11 +1130,11 @@ static void searches_header_setup_context_menu (SearchesHeader* self) {
 #line 85 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1133 "Branch.c"
-			goto __catch73_g_error;
+			goto __catch74_g_error;
 		}
 	}
-	goto __finally73;
-	__catch73_g_error:
+	goto __finally74;
+	__catch74_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp12_ = NULL;
@@ -1179,7 +1179,7 @@ static void searches_header_setup_context_menu (SearchesHeader* self) {
 		_g_error_free0 (err);
 #line 1181 "Branch.c"
 	}
-	__finally73:
+	__finally74:
 #line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"

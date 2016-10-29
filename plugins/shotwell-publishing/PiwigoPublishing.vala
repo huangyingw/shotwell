@@ -284,6 +284,30 @@ public class PiwigoPublisher : Spit.Publishing.Publisher, GLib.Object {
         host.set_dialog_default_widget(authentication_pane.get_default_widget());
     }
 
+    private void do_show_ssl_downgrade_pane (SessionLoginTransaction trans,
+                                             string url) {
+        var uri = new Soup.URI (url);
+        host.set_service_locked (false);
+        var ssl_pane = new SSLErrorPane (trans, uri.get_host ());
+        ssl_pane.proceed.connect (() => {
+            debug ("SSL: User wants us to retry with broken certificate");
+            this.session = new Session ();
+            this.session.set_insecure ();
+
+            string? persistent_url = get_persistent_url();
+            string? persistent_username = get_persistent_username();
+            string? persistent_password = get_persistent_password();
+            if (persistent_url != null && persistent_username != null && persistent_password != null)
+                do_network_login(persistent_url, persistent_username,
+                    persistent_password, get_remember_password());
+            else
+                do_show_authentication_pane();
+        });
+        host.install_dialog_pane (ssl_pane,
+                                  Spit.Publishing.PluginHost.ButtonMode.CLOSE);
+        host.set_dialog_default_widget (ssl_pane.get_default_widget ());
+    }
+
     /**
      * Event triggered when the login button in the authentication panel is
      * clicked.
@@ -335,8 +359,13 @@ public class PiwigoPublisher : Spit.Publishing.Publisher, GLib.Object {
         try {
             login_trans.execute();
         } catch (Spit.Publishing.PublishingError err) {
-            debug("ERROR: do_network_login");
-            do_show_error(err);
+            if (err is Spit.Publishing.PublishingError.SSL_FAILED) {
+                debug ("ERROR: SSL connection problems");
+                do_show_ssl_downgrade_pane (login_trans, url);
+            } else {
+                debug("ERROR: do_network_login");
+                do_show_error(err);
+            }
         }
     }
     
@@ -400,7 +429,6 @@ public class PiwigoPublisher : Spit.Publishing.Publisher, GLib.Object {
         debug("Setting endpoint URL to %s", endpoint_url);
         string pwg_id = get_pwg_id_from_transaction(txn);
         debug("Setting session pwg_id to %s", pwg_id);
-        session = new Session();
         session.set_pwg_id(pwg_id);
 
         do_fetch_session_status(endpoint_url, pwg_id);
@@ -744,7 +772,7 @@ public class PiwigoPublisher : Spit.Publishing.Publisher, GLib.Object {
         assert(category.is_local());
 
         host.set_service_locked(true);
-        host.install_static_message_pane(_("Creating album %s...").printf(category.name));
+        host.install_static_message_pane(_("Creating album %s…").printf(category.name));
 
         CategoriesAddTransaction creation_trans = new CategoriesAddTransaction(
             session, category.name.strip(), int.parse(category.uppercats), category.comment);
@@ -976,6 +1004,73 @@ internal class Uploader : Publishing.RESTSupport.BatchUploader {
 }
 
 // UI elements
+
+internal class SSLErrorPane : Spit.Publishing.DialogPane, Object {
+    private Gtk.Builder builder;
+    private Gtk.Widget content;
+
+    public signal void proceed ();
+
+    public SSLErrorPane (SessionLoginTransaction transaction,
+                         string host) {
+        try {
+            TlsCertificate cert;
+            this.builder = new Gtk.Builder ();
+            this.builder.add_from_resource (Resources.RESOURCE_PATH +
+                                            "/piwigo_ssl_failure_pane.ui");
+            this.content = this.builder.get_object ("content") as Gtk.Widget;
+            var label = this.builder.get_object ("main_text") as Gtk.Label;
+            // %s is the host name that we tried to connect to
+            label.set_text (_("This does not look like the real <b>%s</b>. Attackers might be trying to steal or alter information going to or from this site (for example, private messages, credit card information, or passwords).").printf (host));
+            label.use_markup = true;
+
+            label = this.builder.get_object ("ssl_errors") as Gtk.Label;
+            var text = transaction.detailed_error_from_tls_flags (out cert);
+            label.set_text (text);
+
+            var info = this.builder.get_object ("default") as Gtk.Button;
+            info.clicked.connect (() => {
+                var simple_cert = new Gcr.SimpleCertificate (cert.certificate.data);
+                var widget = new Gcr.CertificateWidget (simple_cert);
+
+                var dialog = new Gtk.Dialog ();
+                dialog.get_content_area ().add (widget);
+                dialog.add_button ("_OK", Gtk.ResponseType.OK);
+                dialog.set_default_response (Gtk.ResponseType.OK);
+                dialog.set_default_size (640, -1);
+                dialog.show_all ();
+                dialog.run ();
+                dialog.destroy ();
+            });
+
+            var proceed = this.builder.get_object ("proceed_button") as Gtk.Button;
+            proceed.clicked.connect (() => { this.proceed (); });
+
+            if (this.content.parent != null) {
+                this.content.parent.remove (this.content);
+            }
+        } catch (Error error) {
+            warning ("Failed to create ui file: %s", error.message);
+            assert_not_reached ();
+        }
+    }
+
+    public Spit.Publishing.DialogPane.GeometryOptions get_preferred_geometry () {
+        return Spit.Publishing.DialogPane.GeometryOptions.NONE;
+    }
+
+    public Gtk.Widget get_widget () {
+        return this.content;
+    }
+
+    public Gtk.Widget get_default_widget () {
+        return this.builder.get_object ("default") as Gtk.Widget;
+    }
+
+    public void on_pane_installed () { }
+
+    public void on_pane_uninstalled () { }
+}
 
 /**
  * The authentication pane used when asking service URL, user name and password
@@ -1227,10 +1322,10 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, Object {
     private SizeEntry[] create_sizes() {
         SizeEntry[] result = new SizeEntry[0];
 
-        result += new SizeEntry(500, _("500 x 375 pixels"));
-        result += new SizeEntry(1024, _("1024 x 768 pixels"));
-        result += new SizeEntry(2048, _("2048 x 1536 pixels"));
-        result += new SizeEntry(4096, _("4096 x 3072 pixels"));
+        result += new SizeEntry(500, _("500 × 375 pixels"));
+        result += new SizeEntry(1024, _("1024 × 768 pixels"));
+        result += new SizeEntry(2048, _("2048 × 1536 pixels"));
+        result += new SizeEntry(4096, _("4096 × 3072 pixels"));
         result += new SizeEntry(ORIGINAL_SIZE, _("Original size"));
 
         return result;
@@ -1586,6 +1681,14 @@ internal class SessionLoginTransaction : Transaction {
         add_argument("method", "pwg.session.login");
         add_argument("username", username);
         add_argument("password", password);
+    }
+
+    public SessionLoginTransaction.from_other (Session session, Transaction other) {
+        base.with_endpoint_url (session, other.get_endpoint_url ());
+
+        foreach (var argument in other.get_arguments ()) {
+            add_argument (argument.key, argument.value);
+        }
     }
 }
 

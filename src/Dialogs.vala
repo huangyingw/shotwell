@@ -13,8 +13,8 @@ public bool confirm_delete_tag(Tag tag) {
     if (count == 0)
         return true;
     string msg = ngettext(
-        "This will remove the tag \"%s\" from one photo.  Continue?",
-        "This will remove the tag \"%s\" from %d photos.  Continue?",
+        "This will remove the tag “%s” from one photo. Continue?",
+        "This will remove the tag “%s” from %d photos. Continue?",
         count).printf(tag.get_user_visible_name(), count);
     
     return AppWindow.negate_affirm_question(msg, _("_Cancel"), _("_Delete"),
@@ -22,7 +22,7 @@ public bool confirm_delete_tag(Tag tag) {
 }
 
 public bool confirm_delete_saved_search(SavedSearch search) {
-    string msg = _("This will remove the saved search \"%s\".  Continue?")
+    string msg = _("This will remove the saved search “%s”. Continue?")
         .printf(search.get_name());
     
     return AppWindow.negate_affirm_question(msg, _("_Cancel"), _("_Delete"),
@@ -66,15 +66,11 @@ public File? choose_file(string current_file_basename) {
     chooser.set_current_name(current_file_basename);
     chooser.set_local_only(false);
     
-    // The log handler reset should be removed once GTK 3.4 becomes widely available; 
-    // please see https://bugzilla.gnome.org/show_bug.cgi?id=662814 for details.
-    Log.set_handler("Gtk", LogLevelFlags.LEVEL_WARNING, suppress_warnings);
     File file = null;
     if (chooser.run() == Gtk.ResponseType.ACCEPT) {
         file = File.new_for_path(chooser.get_filename());
         current_export_dir = file.get_parent();
     }
-    Log.set_handler("Gtk", LogLevelFlags.LEVEL_WARNING, Log.default_handler);    
     chooser.destroy();
     
     return file;
@@ -113,7 +109,7 @@ public void open_external_editor_error_dialog(Error err, Photo photo) {
     if (err is IOError.PERMISSION_DENIED || err is FileError.PERM) {
          // Yes - display an alternate error message here.
          AppWindow.error_message(          
-            _("Shotwell couldn't create a file for editing this photo because you do not have permission to write to %s.").printf(photo.get_master_file().get_parent().get_path()));
+            _("Shotwell couldn’t create a file for editing this photo because you do not have permission to write to %s.").printf(photo.get_master_file().get_parent().get_path()));
     } else {
         // No - something else is wrong, display the error message 
         // the system gave us.
@@ -162,7 +158,7 @@ public class ExportDialog : Gtk.Dialog {
     private Gtk.ComboBoxText quality_combo;
     private Gtk.ComboBoxText constraint_combo;
     private Gtk.ComboBoxText format_combo;
-    private Gtk.CheckButton export_metadata;
+    private Gtk.Switch export_metadata;
     private Gee.ArrayList<string> format_options = new Gee.ArrayList<string>();
     private Gtk.Entry pixels_entry;
     private Gtk.Widget ok_button;
@@ -175,6 +171,15 @@ public class ExportDialog : Gtk.Dialog {
         
         this.title = title;
         resizable = false;
+
+        //get information about the export settings out of our config backend
+        Config.Facade config = Config.Facade.get_instance();
+        current_parameters.mode = config.get_export_export_format_mode(); //ExportFormatMode
+        current_parameters.specified_format = config.get_export_photo_file_format(); //PhotoFileFormat
+        current_parameters.quality = config.get_export_quality(); //quality
+        current_parameters.export_metadata = config.get_export_export_metadata(); //export metadata
+        current_constraint = config.get_export_constraint(); //constraint
+        current_scale = config.get_export_scale(); //scale
 
         quality_combo = new Gtk.ComboBoxText();
         int ctr = 0;
@@ -225,13 +230,15 @@ public class ExportDialog : Gtk.Dialog {
         add_label(_("_Pixels:"), 0, 3, pixels_entry);
         add_control(pixels_entry, 1, 3);
         
-        export_metadata = new Gtk.CheckButton.with_label(_("Export metadata"));
+        export_metadata = new Gtk.Switch ();
+        add_label(_("Export _metadata:"), 0, 4, export_metadata);
         add_control(export_metadata, 1, 4);
         export_metadata.active = true;
+        export_metadata.halign = Gtk.Align.START;
         
-        table.set_row_spacing(5);
-        table.set_column_spacing(5);
-        table.set_border_width(3);
+        table.set_row_spacing(6);
+        table.set_column_spacing(12);
+        table.set_border_width(18);
         
         ((Gtk.Box) get_content_area()).add(table);
         
@@ -343,6 +350,15 @@ public class ExportDialog : Gtk.Dialog {
                 if (current_parameters.specified_format == PhotoFileFormat.JFIF)
                     parameters.quality = current_parameters.quality = QUALITY_ARRAY[quality_combo.get_active()];
             }
+
+            //save current settings in config backend for reusing later
+            Config.Facade config = Config.Facade.get_instance();
+            config.set_export_export_format_mode(current_parameters.mode); //ExportFormatMode
+            config.set_export_photo_file_format(current_parameters.specified_format); //PhotoFileFormat
+            config.set_export_quality(current_parameters.quality); //quality
+            config.set_export_export_metadata(current_parameters.export_metadata); //export metadata
+            config.set_export_constraint(current_constraint); //constraint
+            config.set_export_scale(current_scale); //scale
         } else {
             scale = 0;
             constraint = ScaleConstraint.ORIGINAL;
@@ -354,24 +370,24 @@ public class ExportDialog : Gtk.Dialog {
     }
     
     private void add_label(string text, int x, int y, Gtk.Widget? widget = null) {
-        Gtk.Alignment left_aligned = new Gtk.Alignment(1, 0.5f, 0, 0);
-        
         Gtk.Label new_label = new Gtk.Label.with_mnemonic(text);
+        new_label.halign = Gtk.Align.END;
+        new_label.valign = Gtk.Align.CENTER;
         new_label.set_use_underline(true);
         
         if (widget != null)
             new_label.set_mnemonic_widget(widget);
         
-        left_aligned.add(new_label);
-        
-        table.attach(left_aligned, x, y, 1, 1);
+        table.attach(new_label, x, y, 1, 1);
     }
     
     private void add_control(Gtk.Widget widget, int x, int y) {
-        Gtk.Alignment left_aligned = new Gtk.Alignment(0, 0.5f, 1, 0);
-        left_aligned.add(widget);
+        widget.halign = Gtk.Align.FILL;
+        widget.valign = Gtk.Align.CENTER;
+        widget.hexpand = true;
+        widget.vexpand = true;
         
-        table.attach(left_aligned, x, y, 1, 1);
+        table.attach(widget, x, y, 1, 1);
     }
     
     private void on_constraint_changed() {
@@ -459,7 +475,7 @@ public class ExportDialog : Gtk.Dialog {
 
 namespace ImportUI {
 private const int REPORT_FAILURE_COUNT = 4;
-internal const string SAVE_RESULTS_BUTTON_NAME = _("Save Details...");
+internal const string SAVE_RESULTS_BUTTON_NAME = _("Save Details…");
 internal const string SAVE_RESULTS_FILE_CHOOSER_TITLE = _("Save Details");
 internal const int SAVE_RESULTS_RESPONSE_ID = 1024;
 
@@ -576,7 +592,7 @@ public string create_result_report_from_manifest(ImportManifest manifest) {
     // Files Not Imported Because They Weren't Recognized as Photos or Videos
     //
     if (manifest.skipped_files.size > 0) {
-        builder.append(_("Files Not Imported Because They Weren't Recognized as Photos or Videos:")
+        builder.append(_("Files Not Imported Because They Weren’t Recognized as Photos or Videos:")
             + "\n\n");
         
         foreach (BatchImportResult result in manifest.skipped_files) {
@@ -591,7 +607,7 @@ public string create_result_report_from_manifest(ImportManifest manifest) {
     // Photos/Videos Not Imported Because They Weren't in a Format Shotwell Understands
     //
     if (manifest.skipped_photos.size > 0) {
-        builder.append(_("Photos/Videos Not Imported Because They Weren't in a Format Shotwell Understands:")
+        builder.append(_("Photos/Videos Not Imported Because They Weren’t in a Format Shotwell Understands:")
             + "\n\n");
         
         foreach (BatchImportResult result in manifest.skipped_photos) {
@@ -606,11 +622,11 @@ public string create_result_report_from_manifest(ImportManifest manifest) {
     // Photos/Videos Not Imported Because Shotwell Couldn't Copy Them into its Library
     //
     if (manifest.write_failed.size > 0) {
-        builder.append(_("Photos/Videos Not Imported Because Shotwell Couldn't Copy Them into its Library:")
+        builder.append(_("Photos/Videos Not Imported Because Shotwell Couldn’t Copy Them into its Library:")
              + "\n\n");
         
         foreach (BatchImportResult result in manifest.write_failed) {
-            current_file_summary = (_("couldn't copy %s\n\tto %s")).printf(result.src_identifier,
+            current_file_summary = (_("couldn’t copy %s\n\tto %s")).printf(result.src_identifier,
             result.dest_identifier) + "\n\t" + _("error message:") + " " +
             result.errmsg + "\n\n";
 
@@ -1414,8 +1430,8 @@ public bool revert_editable_dialog(Gtk.Window owner, Gee.Collection<Photo> photo
            
     string headline = (count == 1) ? _("Revert External Edit?") : _("Revert External Edits?");
     string msg = ngettext(
-        "This will destroy all changes made to the external file.  Continue?",
-        "This will destroy all changes made to %d external files.  Continue?",
+        "This will destroy all changes made to the external file. Continue?",
+        "This will destroy all changes made to %d external files. Continue?",
         count).printf(count);
 
     string action = (count == 1) ? _("Re_vert External Edit") : _("Re_vert External Edits");
@@ -1439,8 +1455,8 @@ public bool remove_offline_dialog(Gtk.Window owner, int count) {
         return false;
     
     string msg = ngettext(
-        "This will remove the photo from the library.  Continue?",
-        "This will remove %d photos from the library.  Continue?",
+        "This will remove the photo from the library. Continue?",
+        "This will remove %d photos from the library. Continue?",
         count).printf(count);
     
     Gtk.MessageDialog dialog = new Gtk.MessageDialog(owner, Gtk.DialogFlags.MODAL,
@@ -2143,7 +2159,7 @@ public class WelcomeDialog : Gtk.Dialog {
         content.add(import_content);
         content.pack_start(instructions, false, false, 0);
 
-        hide_button = new Gtk.CheckButton.with_mnemonic(_("_Don't show this message again"));
+        hide_button = new Gtk.CheckButton.with_mnemonic(_("_Don’t show this message again"));
         hide_button.set_active(true);
         content.pack_start(hide_button, false, false, 6);
         
@@ -2716,16 +2732,16 @@ public void remove_from_app(Gee.Collection<MediaSource> sources, string dialog_t
     
     string? user_message = null;
     if ((!photos.is_empty) && (!videos.is_empty)) {
-        user_message = ngettext("This will remove the photo/video from your Shotwell library.  Would you also like to move the file to your desktop trash?\n\nThis action cannot be undone.",
-            "This will remove %d photos/videos from your Shotwell library.  Would you also like to move the files to your desktop trash?\n\nThis action cannot be undone.",
+        user_message = ngettext("This will remove the photo/video from your Shotwell library. Would you also like to move the file to your desktop trash?\n\nThis action cannot be undone.",
+            "This will remove %d photos/videos from your Shotwell library. Would you also like to move the files to your desktop trash?\n\nThis action cannot be undone.",
              sources.size).printf(sources.size);
     } else if (!videos.is_empty) {
-        user_message = ngettext("This will remove the video from your Shotwell library.  Would you also like to move the file to your desktop trash?\n\nThis action cannot be undone.",
-            "This will remove %d videos from your Shotwell library.  Would you also like to move the files to your desktop trash?\n\nThis action cannot be undone.",
+        user_message = ngettext("This will remove the video from your Shotwell library. Would you also like to move the file to your desktop trash?\n\nThis action cannot be undone.",
+            "This will remove %d videos from your Shotwell library. Would you also like to move the files to your desktop trash?\n\nThis action cannot be undone.",
              sources.size).printf(sources.size);
     } else {
-        user_message = ngettext("This will remove the photo from your Shotwell library.  Would you also like to move the file to your desktop trash?\n\nThis action cannot be undone.",
-            "This will remove %d photos from your Shotwell library.  Would you also like to move the files to your desktop trash?\n\nThis action cannot be undone.",
+        user_message = ngettext("This will remove the photo from your Shotwell library. Would you also like to move the file to your desktop trash?\n\nThis action cannot be undone.",
+            "This will remove %d photos from your Shotwell library. Would you also like to move the files to your desktop trash?\n\nThis action cannot be undone.",
              sources.size).printf(sources.size);
     }
     
@@ -2756,8 +2772,8 @@ public void remove_from_app(Gee.Collection<MediaSource> sources, string dialog_t
     int num_not_removed = not_removed_photos.size + not_removed_videos.size;
     if (delete_backing && num_not_removed > 0) {
         string not_deleted_message = 
-            ngettext("The photo or video cannot be moved to your desktop trash.  Delete this file?",
-                "%d photos/videos cannot be moved to your desktop trash.  Delete these files?",
+            ngettext("The photo or video cannot be moved to your desktop trash. Delete this file?",
+                "%d photos/videos cannot be moved to your desktop trash. Delete these files?",
                 num_not_removed).printf(num_not_removed);
         Gtk.ResponseType result_delete = remove_from_filesystem_dialog(AppWindow.get_instance(), 
             dialog_title, not_deleted_message);

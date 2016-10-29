@@ -305,7 +305,7 @@ GeeMap* resources_providers = NULL;
 #define RESOURCES_ZOOM_OUT_LABEL _ ("Zoom _Out")
 #define RESOURCES_ENHANCE_MENU _ ("_Enhance")
 #define RESOURCES_ENHANCE_LABEL _ ("Enhance")
-#define RESOURCES_ENHANCE_TOOLTIP _ ("Automatically improve the photo's appearance")
+#define RESOURCES_ENHANCE_TOOLTIP _ ("Automatically improve the photo’s appearance")
 #define RESOURCES_COPY_ADJUSTMENTS_MENU _ ("_Copy Color Adjustments")
 #define RESOURCES_COPY_ADJUSTMENTS_LABEL _ ("Copy Color Adjustments")
 #define RESOURCES_COPY_ADJUSTMENTS_TOOLTIP _ ("Copy the color adjustments applied to the photo")
@@ -314,7 +314,7 @@ GeeMap* resources_providers = NULL;
 #define RESOURCES_PASTE_ADJUSTMENTS_TOOLTIP _ ("Apply copied color adjustments to the selected photos")
 #define RESOURCES_CROP_MENU _ ("_Crop")
 #define RESOURCES_CROP_LABEL _ ("Crop")
-#define RESOURCES_CROP_TOOLTIP _ ("Crop the photo's size")
+#define RESOURCES_CROP_TOOLTIP _ ("Crop the photo’s size")
 #define RESOURCES_STRAIGHTEN_MENU _ ("_Straighten")
 #define RESOURCES_STRAIGHTEN_LABEL _ ("Straighten")
 #define RESOURCES_STRAIGHTEN_TOOLTIP _ ("Straighten the photo")
@@ -323,19 +323,19 @@ GeeMap* resources_providers = NULL;
 #define RESOURCES_RED_EYE_TOOLTIP _ ("Reduce or eliminate any red-eye effects in the photo")
 #define RESOURCES_ADJUST_MENU _ ("_Adjust")
 #define RESOURCES_ADJUST_LABEL _ ("Adjust")
-#define RESOURCES_ADJUST_TOOLTIP _ ("Adjust the photo's color and tone")
+#define RESOURCES_ADJUST_TOOLTIP _ ("Adjust the photo’s color and tone")
 #define RESOURCES_REVERT_MENU _ ("Re_vert to Original")
 #define RESOURCES_REVERT_LABEL _ ("Revert to Original")
 #define RESOURCES_REVERT_EDITABLE_MENU _ ("Revert External E_dits")
 #define RESOURCES_REVERT_EDITABLE_TOOLTIP _ ("Revert to the master photo")
 #define RESOURCES_SET_BACKGROUND_MENU _ ("Set as _Desktop Background")
 #define RESOURCES_SET_BACKGROUND_TOOLTIP _ ("Set selected image to be the new desktop background")
-#define RESOURCES_SET_BACKGROUND_SLIDESHOW_MENU _ ("Set as _Desktop Slideshow...")
+#define RESOURCES_SET_BACKGROUND_SLIDESHOW_MENU _ ("Set as _Desktop Slideshow…")
 #define RESOURCES_UNDO_MENU _ ("_Undo")
 #define RESOURCES_UNDO_LABEL _ ("Undo")
 #define RESOURCES_REDO_MENU _ ("_Redo")
 #define RESOURCES_REDO_LABEL _ ("Redo")
-#define RESOURCES_RENAME_EVENT_MENU _ ("Re_name Event...")
+#define RESOURCES_RENAME_EVENT_MENU _ ("Re_name Event…")
 #define RESOURCES_RENAME_EVENT_LABEL _ ("Rename Event")
 #define RESOURCES_MAKE_KEY_PHOTO_MENU _ ("Make _Key Photo for Event")
 #define RESOURCES_MAKE_KEY_PHOTO_LABEL _ ("Make Key Photo for Event")
@@ -371,35 +371,35 @@ GeeMap* resources_providers = NULL;
 #define RESOURCES_DISPLAY_UNRATED_OR_HIGHER_MENU _ ("_All Photos")
 #define RESOURCES_DISPLAY_UNRATED_OR_HIGHER_TOOLTIP _ ("Show all photos")
 #define RESOURCES_VIEW_RATINGS_MENU _ ("_Ratings")
-#define RESOURCES_VIEW_RATINGS_TOOLTIP _ ("Display each photo's rating")
+#define RESOURCES_VIEW_RATINGS_TOOLTIP _ ("Display each photo’s rating")
 #define RESOURCES_FILTER_PHOTOS_MENU _ ("_Filter Photos")
 #define RESOURCES_FILTER_PHOTOS_LABEL _ ("Filter Photos")
 #define RESOURCES_FILTER_PHOTOS_TOOLTIP _ ("Limit the number of photos displayed based on a filter")
 #define RESOURCES_DUPLICATE_PHOTO_MENU _ ("_Duplicate")
 #define RESOURCES_DUPLICATE_PHOTO_LABEL _ ("Duplicate")
 #define RESOURCES_DUPLICATE_PHOTO_TOOLTIP _ ("Make a duplicate of the photo")
-#define RESOURCES_EXPORT_MENU _ ("_Export...")
-#define RESOURCES_PRINT_MENU _ ("_Print...")
-#define RESOURCES_PUBLISH_MENU _ ("Pu_blish...")
+#define RESOURCES_EXPORT_MENU _ ("_Export…")
+#define RESOURCES_PRINT_MENU _ ("_Print…")
+#define RESOURCES_PUBLISH_MENU _ ("Pu_blish…")
 #define RESOURCES_PUBLISH_LABEL _ ("Publish")
 #define RESOURCES_PUBLISH_TOOLTIP _ ("Publish to various websites")
-#define RESOURCES_EDIT_TITLE_MENU _ ("Edit _Title...")
+#define RESOURCES_EDIT_TITLE_MENU _ ("Edit _Title…")
 #define RESOURCES_EDIT_TITLE_LABEL "Edit Title"
-#define RESOURCES_EDIT_COMMENT_MENU _ ("Edit _Comment...")
+#define RESOURCES_EDIT_COMMENT_MENU _ ("Edit _Comment…")
 #define RESOURCES_EDIT_COMMENT_LABEL _ ("Edit Comment")
-#define RESOURCES_EDIT_EVENT_COMMENT_MENU _ ("Edit Event _Comment...")
+#define RESOURCES_EDIT_EVENT_COMMENT_MENU _ ("Edit Event _Comment…")
 #define RESOURCES_EDIT_EVENT_COMMENT_LABEL _ ("Edit Event Comment")
-#define RESOURCES_ADJUST_DATE_TIME_MENU _ ("_Adjust Date and Time...")
+#define RESOURCES_ADJUST_DATE_TIME_MENU _ ("_Adjust Date and Time…")
 #define RESOURCES_ADJUST_DATE_TIME_LABEL _ ("Adjust Date and Time")
-#define RESOURCES_ADD_TAGS_MENU _ ("Add _Tags...")
-#define RESOURCES_ADD_TAGS_CONTEXT_MENU _ ("_Add Tags...")
+#define RESOURCES_ADD_TAGS_MENU _ ("Add _Tags…")
+#define RESOURCES_ADD_TAGS_CONTEXT_MENU _ ("_Add Tags…")
 #define RESOURCES_ADD_TAGS_TITLE "Add Tags"
 #define RESOURCES_PREFERENCES_MENU _ ("_Preferences")
 #define RESOURCES_EXTERNAL_EDIT_MENU _ ("Open With E_xternal Editor")
 #define RESOURCES_EXTERNAL_EDIT_RAW_MENU _ ("Open With RA_W Editor")
-#define RESOURCES_SEND_TO_MENU _ ("Send _To...")
-#define RESOURCES_SEND_TO_CONTEXT_MENU _ ("Send T_o...")
-#define RESOURCES_FIND_MENU _ ("_Find...")
+#define RESOURCES_SEND_TO_MENU _ ("Send _To…")
+#define RESOURCES_SEND_TO_CONTEXT_MENU _ ("Send T_o…")
+#define RESOURCES_FIND_MENU _ ("_Find…")
 #define RESOURCES_FIND_LABEL _ ("Find")
 #define RESOURCES_FIND_TOOLTIP _ ("Find an image by typing text that appears in its name or tags")
 #define RESOURCES_FLAG_MENU _ ("_Flag")
@@ -414,8 +414,8 @@ gchar* resources_delete_tag_label (const gchar* name);
 #define RESOURCES_NEW_CHILD_TAG_SIDEBAR_MENU _ ("_New")
 gchar* resources_rename_tag_menu (const gchar* name);
 gchar* resources_rename_tag_label (const gchar* old_name, const gchar* new_name);
-#define RESOURCES_RENAME_TAG_SIDEBAR_MENU _ ("_Rename...")
-#define RESOURCES_MODIFY_TAGS_MENU _ ("Modif_y Tags...")
+#define RESOURCES_RENAME_TAG_SIDEBAR_MENU _ ("_Rename…")
+#define RESOURCES_MODIFY_TAGS_MENU _ ("Modif_y Tags…")
 #define RESOURCES_MODIFY_TAGS_LABEL _ ("Modify Tags")
 gchar* resources_tag_photos_label (const gchar* name, gint count);
 gchar* resources_tag_photos_tooltip (const gchar* name, gint count);
@@ -426,8 +426,8 @@ gchar* resources_rename_search_exists_message (const gchar* name);
 #define RESOURCES_DEFAULT_SAVED_SEARCH_NAME _ ("Saved Search")
 #define RESOURCES_DELETE_SAVED_SEARCH_DIALOG_TITLE _ ("Delete Search")
 #define RESOURCES_DELETE_SEARCH_MENU _ ("_Delete")
-#define RESOURCES_EDIT_SEARCH_MENU _ ("_Edit...")
-#define RESOURCES_RENAME_SEARCH_MENU _ ("Re_name...")
+#define RESOURCES_EDIT_SEARCH_MENU _ ("_Edit…")
+#define RESOURCES_RENAME_SEARCH_MENU _ ("Re_name…")
 gchar* resources_rename_search_label (const gchar* old_name, const gchar* new_name);
 gchar* resources_delete_search_label (const gchar* name);
 GType rating_get_type (void) G_GNUC_CONST;
@@ -447,7 +447,7 @@ void resources_generate_rating_strings (void);
 #define RESOURCES_RESTORE_PHOTOS_MENU _ ("_Restore")
 #define RESOURCES_RESTORE_PHOTOS_TOOLTIP _ ("Move the selected photos back into the library")
 #define RESOURCES_JUMP_TO_FILE_MENU _ ("Show in File Mana_ger")
-#define RESOURCES_JUMP_TO_FILE_TOOLTIP _ ("Open the selected photo's directory in the file manager")
+#define RESOURCES_JUMP_TO_FILE_TOOLTIP _ ("Open the selected photo’s directory in the file manager")
 gchar* resources_jump_to_file_failed (GError* err);
 #define RESOURCES_REMOVE_FROM_LIBRARY_MENU _ ("R_emove From Library")
 #define RESOURCES_MOVE_TO_TRASH_MENU _ ("_Move to Trash")
@@ -539,7 +539,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 		gchar* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
 #line 340 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp1_ = _ ("Add Tag \"%s\"");
+		_tmp1_ = _ ("Add Tag “%s”");
 #line 340 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp2_ = names;
 #line 340 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -585,7 +585,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 			gchar* _tmp18_ = NULL;
 			gchar* _tmp19_ = NULL;
 #line 343 "/home/jens/Source/shotwell/src/Resources.vala"
-			_tmp9_ = _ ("Add Tags \"%s\" and \"%s\"");
+			_tmp9_ = _ ("Add Tags “%s” and “%s”");
 #line 343 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp10_ = names;
 #line 343 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -644,7 +644,7 @@ gchar* resources_delete_tag_menu (const gchar* name) {
 #line 352 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
 #line 353 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp0_ = _ ("_Delete Tag \"%s\"");
+	_tmp0_ = _ ("_Delete Tag “%s”");
 #line 353 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = name;
 #line 353 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -665,7 +665,7 @@ gchar* resources_delete_tag_label (const gchar* name) {
 #line 356 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
 #line 357 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp0_ = _ ("Delete Tag \"%s\"");
+	_tmp0_ = _ ("Delete Tag “%s”");
 #line 357 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = name;
 #line 357 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -686,7 +686,7 @@ gchar* resources_rename_tag_menu (const gchar* name) {
 #line 365 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
 #line 366 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp0_ = _ ("Re_name Tag \"%s\"...");
+	_tmp0_ = _ ("Re_name Tag “%s”…");
 #line 366 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = name;
 #line 366 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -710,7 +710,7 @@ gchar* resources_rename_tag_label (const gchar* old_name, const gchar* new_name)
 #line 369 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (new_name != NULL, NULL);
 #line 370 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp0_ = _ ("Rename Tag \"%s\" to \"%s\"");
+	_tmp0_ = _ ("Rename Tag “%s” to “%s”");
 #line 370 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = old_name;
 #line 370 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -740,14 +740,14 @@ gchar* resources_tag_photos_label (const gchar* name, gint count) {
 #line 713 "Resources.c"
 		const gchar* _tmp2_ = NULL;
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp2_ = _ ("Tag Photo as \"%s\"");
+		_tmp2_ = _ ("Tag Photo as “%s”");
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp2_;
 #line 719 "Resources.c"
 	} else {
 		const gchar* _tmp3_ = NULL;
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp3_ = _ ("Tag Photos as \"%s\"");
+		_tmp3_ = _ ("Tag Photos as “%s”");
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp3_;
 #line 726 "Resources.c"
@@ -779,14 +779,14 @@ gchar* resources_tag_photos_tooltip (const gchar* name, gint count) {
 #line 752 "Resources.c"
 		const gchar* _tmp2_ = NULL;
 #line 383 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp2_ = _ ("Tag the selected photo as \"%s\"");
+		_tmp2_ = _ ("Tag the selected photo as “%s”");
 #line 383 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp2_;
 #line 758 "Resources.c"
 	} else {
 		const gchar* _tmp3_ = NULL;
 #line 384 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp3_ = _ ("Tag the selected photos as \"%s\"");
+		_tmp3_ = _ ("Tag the selected photos as “%s”");
 #line 384 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp3_;
 #line 765 "Resources.c"
@@ -818,14 +818,14 @@ gchar* resources_untag_photos_menu (const gchar* name, gint count) {
 #line 791 "Resources.c"
 		const gchar* _tmp2_ = NULL;
 #line 388 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp2_ = _ ("Remove Tag \"%s\" From _Photo");
+		_tmp2_ = _ ("Remove Tag “%s” From _Photo");
 #line 388 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp2_;
 #line 797 "Resources.c"
 	} else {
 		const gchar* _tmp3_ = NULL;
 #line 389 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp3_ = _ ("Remove Tag \"%s\" From _Photos");
+		_tmp3_ = _ ("Remove Tag “%s” From _Photos");
 #line 389 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp3_;
 #line 804 "Resources.c"
@@ -857,14 +857,14 @@ gchar* resources_untag_photos_label (const gchar* name, gint count) {
 #line 830 "Resources.c"
 		const gchar* _tmp2_ = NULL;
 #line 393 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp2_ = _ ("Remove Tag \"%s\" From Photo");
+		_tmp2_ = _ ("Remove Tag “%s” From Photo");
 #line 393 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp2_;
 #line 836 "Resources.c"
 	} else {
 		const gchar* _tmp3_ = NULL;
 #line 394 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp3_ = _ ("Remove Tag \"%s\" From Photos");
+		_tmp3_ = _ ("Remove Tag “%s” From Photos");
 #line 394 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp3_;
 #line 843 "Resources.c"
@@ -889,7 +889,7 @@ gchar* resources_rename_tag_exists_message (const gchar* name) {
 #line 397 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
 #line 398 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp0_ = _ ("Unable to rename tag to \"%s\" because the tag already exists.");
+	_tmp0_ = _ ("Unable to rename tag to “%s” because the tag already exists.");
 #line 398 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = name;
 #line 398 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -910,7 +910,7 @@ gchar* resources_rename_search_exists_message (const gchar* name) {
 #line 401 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
 #line 402 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp0_ = _ ("Unable to rename search to \"%s\" because the search already exists.");
+	_tmp0_ = _ ("Unable to rename search to “%s” because the search already exists.");
 #line 402 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = name;
 #line 402 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -934,7 +934,7 @@ gchar* resources_rename_search_label (const gchar* old_name, const gchar* new_na
 #line 413 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (new_name != NULL, NULL);
 #line 414 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp0_ = _ ("Rename Search \"%s\" to \"%s\"");
+	_tmp0_ = _ ("Rename Search “%s” to “%s”");
 #line 414 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = old_name;
 #line 414 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -957,7 +957,7 @@ gchar* resources_delete_search_label (const gchar* name) {
 #line 417 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
 #line 418 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp0_ = _ ("Delete Search \"%s\"");
+	_tmp0_ = _ ("Delete Search “%s”");
 #line 418 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = name;
 #line 418 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3063,7 +3063,7 @@ GdkPixbuf* resources_get_noninterpretable_badge_pixbuf (void) {
 #line 884 "/home/jens/Source/shotwell/src/Resources.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3038 "Resources.c"
-				goto __catch416_g_error;
+				goto __catch429_g_error;
 			}
 #line 884 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp12_ = _tmp1_;
@@ -3077,8 +3077,8 @@ GdkPixbuf* resources_get_noninterpretable_badge_pixbuf (void) {
 			_g_object_unref0 (_tmp1_);
 #line 3051 "Resources.c"
 		}
-		goto __finally416;
-		__catch416_g_error:
+		goto __finally429;
+		__catch429_g_error:
 		{
 			GError* err = NULL;
 			const gchar* _tmp13_ = NULL;
@@ -3095,7 +3095,7 @@ GdkPixbuf* resources_get_noninterpretable_badge_pixbuf (void) {
 			_g_error_free0 (err);
 #line 3068 "Resources.c"
 		}
-		__finally416:
+		__finally429:
 #line 883 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 883 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3420,7 +3420,7 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 #line 943 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3394 "Resources.c"
-			goto __catch417_g_error;
+			goto __catch430_g_error;
 		}
 #line 943 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp12_ = _tmp4_;
@@ -3434,8 +3434,8 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 		_g_object_unref0 (_tmp4_);
 #line 3407 "Resources.c"
 	}
-	goto __finally417;
-	__catch417_g_error:
+	goto __finally430;
+	__catch430_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp13_ = NULL;
@@ -3457,7 +3457,7 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 		_g_error_free0 (err);
 #line 3430 "Resources.c"
 	}
-	__finally417:
+	__finally430:
 #line 942 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 942 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3570,7 +3570,7 @@ void resources_add_stock_icon (GFile* file, const gchar* stock_id) {
 #line 957 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3544 "Resources.c"
-			goto __catch418_g_error;
+			goto __catch431_g_error;
 		}
 #line 957 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp6_ = _tmp0_;
@@ -3584,8 +3584,8 @@ void resources_add_stock_icon (GFile* file, const gchar* stock_id) {
 		_g_object_unref0 (_tmp0_);
 #line 3557 "Resources.c"
 	}
-	goto __finally418;
-	__catch418_g_error:
+	goto __finally431;
+	__catch431_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp7_ = NULL;
@@ -3607,7 +3607,7 @@ void resources_add_stock_icon (GFile* file, const gchar* stock_id) {
 		_g_error_free0 (err);
 #line 3580 "Resources.c"
 	}
-	__finally418:
+	__finally431:
 #line 956 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 956 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -3736,7 +3736,7 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 #line 981 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3710 "Resources.c"
-			goto __catch419_g_error;
+			goto __catch432_g_error;
 		}
 #line 982 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp16_ = modify;
@@ -3778,8 +3778,8 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 		_g_object_unref0 (pix);
 #line 3751 "Resources.c"
 	}
-	goto __finally419;
-	__catch419_g_error:
+	goto __finally432;
+	__catch432_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp24_ = NULL;
@@ -3798,7 +3798,7 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 		_g_error_free0 (err);
 #line 3771 "Resources.c"
 	}
-	__finally419:
+	__finally432:
 #line 980 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 980 "/home/jens/Source/shotwell/src/Resources.vala"
@@ -4268,11 +4268,11 @@ void resources_style_widget (GtkWidget* widget, const gchar* stylesheet) {
 #line 1076 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4242 "Resources.c"
-			goto __catch420_g_error;
+			goto __catch433_g_error;
 		}
 	}
-	goto __finally420;
-	__catch420_g_error:
+	goto __finally433;
+	__catch433_g_error:
 	{
 		GError* e = NULL;
 		const gchar* _tmp14_ = NULL;
@@ -4298,7 +4298,7 @@ void resources_style_widget (GtkWidget* widget, const gchar* stylesheet) {
 		return;
 #line 4271 "Resources.c"
 	}
-	__finally420:
+	__finally433:
 #line 1075 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1075 "/home/jens/Source/shotwell/src/Resources.vala"

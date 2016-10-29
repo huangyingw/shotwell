@@ -1291,7 +1291,7 @@ static void sidebar_tree_setup_default_context_menu (SidebarTree* self) {
 #line 198 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	new_search = _tmp2_;
 #line 199 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
-	_tmp3_ = _ ("Ne_w Saved Search...");
+	_tmp3_ = _ ("Ne_w Saved Search…");
 #line 199 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	new_search.label = _tmp3_;
 #line 200 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
@@ -1317,7 +1317,7 @@ static void sidebar_tree_setup_default_context_menu (SidebarTree* self) {
 #line 202 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	new_tag = _tmp6_;
 #line 203 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
-	_tmp7_ = _ ("New _Tag...");
+	_tmp7_ = _ ("New _Tag…");
 #line 203 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	new_tag.label = _tmp7_;
 #line 204 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
@@ -1360,11 +1360,11 @@ static void sidebar_tree_setup_default_context_menu (SidebarTree* self) {
 #line 211 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1363 "Tree.c"
-			goto __catch48_g_error;
+			goto __catch49_g_error;
 		}
 	}
-	goto __finally48;
-	__catch48_g_error:
+	goto __finally49;
+	__catch49_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp16_ = NULL;
@@ -1409,7 +1409,7 @@ static void sidebar_tree_setup_default_context_menu (SidebarTree* self) {
 		_g_error_free0 (err);
 #line 1411 "Tree.c"
 	}
-	__finally48:
+	__finally49:
 #line 210 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 210 "/home/jens/Source/shotwell/src/sidebar/Tree.vala"

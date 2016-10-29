@@ -293,11 +293,11 @@ void transaction_controller_begin (TransactionController* self) {
 #line 69 "/home/jens/Source/shotwell/src/MediaInterfaces.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 296 "MediaInterfaces.c"
-					goto __catch560_g_error;
+					goto __catch573_g_error;
 				}
 			}
-			goto __finally560;
-			__catch560_g_error:
+			goto __finally573;
+			__catch573_g_error:
 			{
 				GError* err = NULL;
 				gint _tmp3_ = 0;
@@ -344,7 +344,7 @@ void transaction_controller_begin (TransactionController* self) {
 				_g_error_free0 (err);
 #line 346 "MediaInterfaces.c"
 			}
-			__finally560:
+			__finally573:
 #line 68 "/home/jens/Source/shotwell/src/MediaInterfaces.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 351 "MediaInterfaces.c"
@@ -365,7 +365,7 @@ void transaction_controller_begin (TransactionController* self) {
 #line 366 "MediaInterfaces.c"
 			}
 		}
-		__finally559:
+		__finally572:
 		{
 			gint _tmp11_ = 0;
 #line 64 "/home/jens/Source/shotwell/src/MediaInterfaces.vala"
@@ -453,11 +453,11 @@ void transaction_controller_commit (TransactionController* self) {
 #line 93 "/home/jens/Source/shotwell/src/MediaInterfaces.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 456 "MediaInterfaces.c"
-					goto __catch562_g_error;
+					goto __catch575_g_error;
 				}
 			}
-			goto __finally562;
-			__catch562_g_error:
+			goto __finally575;
+			__catch575_g_error:
 			{
 				GError* err = NULL;
 				GError* _tmp5_ = NULL;
@@ -499,7 +499,7 @@ void transaction_controller_commit (TransactionController* self) {
 				_g_error_free0 (err);
 #line 501 "MediaInterfaces.c"
 			}
-			__finally562:
+			__finally575:
 #line 92 "/home/jens/Source/shotwell/src/MediaInterfaces.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 506 "MediaInterfaces.c"
@@ -520,7 +520,7 @@ void transaction_controller_commit (TransactionController* self) {
 #line 521 "MediaInterfaces.c"
 			}
 		}
-		__finally561:
+		__finally574:
 		{
 			gint _tmp12_ = 0;
 #line 86 "/home/jens/Source/shotwell/src/MediaInterfaces.vala"
@@ -792,7 +792,7 @@ static void transaction_controller_finalize (TransactionController* obj) {
 			_vala_assert (_tmp1_ == 0, "count == 0");
 #line 794 "MediaInterfaces.c"
 		}
-		__finally558:
+		__finally571:
 		{
 			gint _tmp2_ = 0;
 #line 58 "/home/jens/Source/shotwell/src/MediaInterfaces.vala"

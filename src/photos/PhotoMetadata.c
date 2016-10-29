@@ -27,11 +27,11 @@
 #include <glib-object.h>
 #include <stdlib.h>
 #include <string.h>
+#include <gee.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gio/gio.h>
 #include <gexiv2/gexiv2.h>
 #include <libexif/exif-data.h>
-#include <gee.h>
 #include <libexif/exif-mem.h>
 #include <float.h>
 #include <math.h>
@@ -39,6 +39,45 @@
 
 
 #define TYPE_METADATA_DOMAIN (metadata_domain_get_type ())
+
+#define TYPE_KEYWORD_TRANSFORMER (keyword_transformer_get_type ())
+#define KEYWORD_TRANSFORMER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_KEYWORD_TRANSFORMER, KeywordTransformer))
+#define KEYWORD_TRANSFORMER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_KEYWORD_TRANSFORMER, KeywordTransformerClass))
+#define IS_KEYWORD_TRANSFORMER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_KEYWORD_TRANSFORMER))
+#define IS_KEYWORD_TRANSFORMER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_KEYWORD_TRANSFORMER))
+#define KEYWORD_TRANSFORMER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_KEYWORD_TRANSFORMER, KeywordTransformerClass))
+
+typedef struct _KeywordTransformer KeywordTransformer;
+typedef struct _KeywordTransformerClass KeywordTransformerClass;
+typedef struct _KeywordTransformerPrivate KeywordTransformerPrivate;
+typedef struct _ParamSpecKeywordTransformer ParamSpecKeywordTransformer;
+
+#define TYPE_NULL_KEYWORD_TRANSFORMER (null_keyword_transformer_get_type ())
+#define NULL_KEYWORD_TRANSFORMER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_NULL_KEYWORD_TRANSFORMER, NullKeywordTransformer))
+#define NULL_KEYWORD_TRANSFORMER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_NULL_KEYWORD_TRANSFORMER, NullKeywordTransformerClass))
+#define IS_NULL_KEYWORD_TRANSFORMER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_NULL_KEYWORD_TRANSFORMER))
+#define IS_NULL_KEYWORD_TRANSFORMER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_NULL_KEYWORD_TRANSFORMER))
+#define NULL_KEYWORD_TRANSFORMER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_NULL_KEYWORD_TRANSFORMER, NullKeywordTransformerClass))
+
+typedef struct _NullKeywordTransformer NullKeywordTransformer;
+typedef struct _NullKeywordTransformerClass NullKeywordTransformerClass;
+typedef struct _NullKeywordTransformerPrivate NullKeywordTransformerPrivate;
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
+
+#define TYPE_ACD_SEE_KEYWORD_TRANSFORMER (acd_see_keyword_transformer_get_type ())
+#define ACD_SEE_KEYWORD_TRANSFORMER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_ACD_SEE_KEYWORD_TRANSFORMER, ACDSeeKeywordTransformer))
+#define ACD_SEE_KEYWORD_TRANSFORMER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_ACD_SEE_KEYWORD_TRANSFORMER, ACDSeeKeywordTransformerClass))
+#define IS_ACD_SEE_KEYWORD_TRANSFORMER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_ACD_SEE_KEYWORD_TRANSFORMER))
+#define IS_ACD_SEE_KEYWORD_TRANSFORMER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_ACD_SEE_KEYWORD_TRANSFORMER))
+#define ACD_SEE_KEYWORD_TRANSFORMER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_ACD_SEE_KEYWORD_TRANSFORMER, ACDSeeKeywordTransformerClass))
+
+typedef struct _ACDSeeKeywordTransformer ACDSeeKeywordTransformer;
+typedef struct _ACDSeeKeywordTransformerClass ACDSeeKeywordTransformerClass;
+typedef struct _ACDSeeKeywordTransformerPrivate ACDSeeKeywordTransformerPrivate;
+#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
+#define _g_markup_parse_context_unref0(var) ((var == NULL) ? NULL : (var = (g_markup_parse_context_unref (var), NULL)))
+#define _g_free0(var) (var = (g_free (var), NULL))
+#define _g_string_free0(var) ((var == NULL) ? NULL : (var = (g_string_free (var, TRUE), NULL)))
 
 #define TYPE_HIERARCHICAL_KEYWORD_FIELD (hierarchical_keyword_field_get_type ())
 #define HIERARCHICAL_KEYWORD_FIELD(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_HIERARCHICAL_KEYWORD_FIELD, HierarchicalKeywordField))
@@ -50,7 +89,7 @@
 typedef struct _HierarchicalKeywordField HierarchicalKeywordField;
 typedef struct _HierarchicalKeywordFieldClass HierarchicalKeywordFieldClass;
 typedef struct _HierarchicalKeywordFieldPrivate HierarchicalKeywordFieldPrivate;
-#define _g_free0(var) (var = (g_free (var), NULL))
+#define _keyword_transformer_unref0(var) ((var == NULL) ? NULL : (var = (keyword_transformer_unref (var), NULL)))
 typedef struct _ParamSpecHierarchicalKeywordField ParamSpecHierarchicalKeywordField;
 
 #define TYPE_PHOTO_PREVIEW (photo_preview_get_type ())
@@ -66,8 +105,6 @@ typedef struct _PhotoPreviewPrivate PhotoPreviewPrivate;
 
 #define TYPE_DIMENSIONS (dimensions_get_type ())
 typedef struct _Dimensions Dimensions;
-#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
-#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
 typedef struct _ParamSpecPhotoPreview ParamSpecPhotoPreview;
 
 #define TYPE_MEDIA_METADATA (media_metadata_get_type ())
@@ -157,6 +194,48 @@ typedef enum  {
 	METADATA_DOMAIN_IPTC
 } MetadataDomain;
 
+struct _KeywordTransformer {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	KeywordTransformerPrivate * priv;
+};
+
+struct _KeywordTransformerClass {
+	GTypeClass parent_class;
+	void (*finalize) (KeywordTransformer *self);
+	GeeList* (*transform) (KeywordTransformer* self, const gchar* input, GError** error);
+};
+
+struct _ParamSpecKeywordTransformer {
+	GParamSpec parent_instance;
+};
+
+struct _NullKeywordTransformer {
+	KeywordTransformer parent_instance;
+	NullKeywordTransformerPrivate * priv;
+};
+
+struct _NullKeywordTransformerClass {
+	KeywordTransformerClass parent_class;
+};
+
+struct _ACDSeeKeywordTransformer {
+	KeywordTransformer parent_instance;
+	ACDSeeKeywordTransformerPrivate * priv;
+};
+
+struct _ACDSeeKeywordTransformerClass {
+	KeywordTransformerClass parent_class;
+};
+
+struct _ACDSeeKeywordTransformerPrivate {
+	GMarkupParser parser;
+	GError* error;
+	GeeArrayQueue* stack;
+	GeeArrayList* result;
+	gboolean assigned;
+};
+
 struct _HierarchicalKeywordField {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -165,6 +244,7 @@ struct _HierarchicalKeywordField {
 	gchar* path_separator;
 	gboolean wants_leading_separator;
 	gboolean is_writeable;
+	KeywordTransformer* transformer;
 };
 
 struct _HierarchicalKeywordFieldClass {
@@ -328,6 +408,9 @@ struct _PhotoMetadataInternalPhotoPreviewClass {
 };
 
 
+static gpointer keyword_transformer_parent_class = NULL;
+static gpointer null_keyword_transformer_parent_class = NULL;
+static gpointer acd_see_keyword_transformer_parent_class = NULL;
 static gpointer hierarchical_keyword_field_parent_class = NULL;
 static gpointer photo_preview_parent_class = NULL;
 static gpointer photo_metadata_parent_class = NULL;
@@ -360,6 +443,11 @@ static gint photo_metadata_STANDARD_TITLE_TAGS_length1;
 static gchar** photo_metadata_STANDARD_TITLE_TAGS = NULL;
 static gint photo_metadata_STANDARD_TITLE_TAGS_length1 = 0;
 static gint _photo_metadata_STANDARD_TITLE_TAGS_size_ = 0;
+static gchar** photo_metadata_COMMENT_TAGS;
+static gint photo_metadata_COMMENT_TAGS_length1;
+static gchar** photo_metadata_COMMENT_TAGS = NULL;
+static gint photo_metadata_COMMENT_TAGS_length1 = 0;
+static gint _photo_metadata_COMMENT_TAGS_size_ = 0;
 static gchar** photo_metadata_KEYWORD_TAGS;
 static gint photo_metadata_KEYWORD_TAGS_length1;
 static gchar** photo_metadata_KEYWORD_TAGS = NULL;
@@ -383,6 +471,44 @@ static gint _photo_metadata_RATING_TAGS_size_ = 0;
 static gpointer photo_metadata_internal_photo_preview_parent_class = NULL;
 
 GType metadata_domain_get_type (void) G_GNUC_CONST;
+gpointer keyword_transformer_ref (gpointer instance);
+void keyword_transformer_unref (gpointer instance);
+GParamSpec* param_spec_keyword_transformer (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void value_set_keyword_transformer (GValue* value, gpointer v_object);
+void value_take_keyword_transformer (GValue* value, gpointer v_object);
+gpointer value_get_keyword_transformer (const GValue* value);
+GType keyword_transformer_get_type (void) G_GNUC_CONST;
+enum  {
+	KEYWORD_TRANSFORMER_DUMMY_PROPERTY
+};
+GeeList* keyword_transformer_transform (KeywordTransformer* self, const gchar* input, GError** error);
+static GeeList* keyword_transformer_real_transform (KeywordTransformer* self, const gchar* input, GError** error);
+KeywordTransformer* keyword_transformer_construct (GType object_type);
+static void keyword_transformer_finalize (KeywordTransformer* obj);
+GType null_keyword_transformer_get_type (void) G_GNUC_CONST;
+enum  {
+	NULL_KEYWORD_TRANSFORMER_DUMMY_PROPERTY
+};
+static GeeList* null_keyword_transformer_real_transform (KeywordTransformer* base, const gchar* input, GError** error);
+NullKeywordTransformer* null_keyword_transformer_new (void);
+NullKeywordTransformer* null_keyword_transformer_construct (GType object_type);
+GType acd_see_keyword_transformer_get_type (void) G_GNUC_CONST;
+#define ACD_SEE_KEYWORD_TRANSFORMER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), TYPE_ACD_SEE_KEYWORD_TRANSFORMER, ACDSeeKeywordTransformerPrivate))
+enum  {
+	ACD_SEE_KEYWORD_TRANSFORMER_DUMMY_PROPERTY
+};
+ACDSeeKeywordTransformer* acd_see_keyword_transformer_new (void);
+ACDSeeKeywordTransformer* acd_see_keyword_transformer_construct (GType object_type);
+static void acd_see_keyword_transformer_on_start (ACDSeeKeywordTransformer* self, GMarkupParseContext* ctx, const gchar* name, gchar** attribute_names, gchar** attribute_values, GError** error);
+static void _acd_see_keyword_transformer_on_start_gmarkup_parser_start_element_func (GMarkupParseContext* context, const gchar* element_name, gchar** attribute_names, gchar** attribute_values, gpointer self, GError** error);
+static void acd_see_keyword_transformer_on_end (ACDSeeKeywordTransformer* self, GMarkupParseContext* ctx, const gchar* name, GError** error);
+static void _acd_see_keyword_transformer_on_end_gmarkup_parser_end_element_func (GMarkupParseContext* context, const gchar* element_name, gpointer self, GError** error);
+static void acd_see_keyword_transformer_on_text (ACDSeeKeywordTransformer* self, GMarkupParseContext* ctx, const gchar* text, GError** error);
+static void _acd_see_keyword_transformer_on_text_gmarkup_parser_text_func (GMarkupParseContext* context, const gchar* text, gsize text_len, gpointer self, GError** error);
+static void acd_see_keyword_transformer_on_error (ACDSeeKeywordTransformer* self, GMarkupParseContext* ctx, GError* _error_);
+static void _acd_see_keyword_transformer_on_error_gmarkup_parser_error_func (GMarkupParseContext* context, GError* _error_, gpointer self);
+static GeeList* acd_see_keyword_transformer_real_transform (KeywordTransformer* base, const gchar* input, GError** error);
+static void acd_see_keyword_transformer_finalize (KeywordTransformer* obj);
 gpointer hierarchical_keyword_field_ref (gpointer instance);
 void hierarchical_keyword_field_unref (gpointer instance);
 GParamSpec* param_spec_hierarchical_keyword_field (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -393,8 +519,8 @@ GType hierarchical_keyword_field_get_type (void) G_GNUC_CONST;
 enum  {
 	HIERARCHICAL_KEYWORD_FIELD_DUMMY_PROPERTY
 };
-HierarchicalKeywordField* hierarchical_keyword_field_new (const gchar* field_name, const gchar* path_separator, gboolean wants_leading_separator, gboolean is_writeable);
-HierarchicalKeywordField* hierarchical_keyword_field_construct (GType object_type, const gchar* field_name, const gchar* path_separator, gboolean wants_leading_separator, gboolean is_writeable);
+HierarchicalKeywordField* hierarchical_keyword_field_new (const gchar* field_name, const gchar* path_separator, gboolean wants_leading_separator, gboolean is_writeable, KeywordTransformer* transformer);
+HierarchicalKeywordField* hierarchical_keyword_field_construct (GType object_type, const gchar* field_name, const gchar* path_separator, gboolean wants_leading_separator, gboolean is_writeable, KeywordTransformer* transformer);
 static void hierarchical_keyword_field_finalize (HierarchicalKeywordField* obj);
 gpointer photo_preview_ref (gpointer instance);
 void photo_preview_unref (gpointer instance);
@@ -554,7 +680,7 @@ static gchar* photo_metadata_real_get_title (MediaMetadata* base);
 gboolean is_string_empty (const gchar* s);
 void photo_metadata_set_title (PhotoMetadata* self, const gchar* title, PhotoMetadataSetOption option);
 static gchar* photo_metadata_real_get_comment (MediaMetadata* base);
-void photo_metadata_set_comment (PhotoMetadata* self, const gchar* comment);
+void photo_metadata_set_comment (PhotoMetadata* self, const gchar* comment, PhotoMetadataSetOption option);
 GeeSet* photo_metadata_get_keywords (PhotoMetadata* self, GCompareDataFunc compare_func, void* compare_func_target, GDestroyNotify compare_func_target_destroy_notify);
 gchar* hierarchical_tag_utilities_make_flat_tag_safe (const gchar* in_tag);
 gpointer hierarchical_tag_index_ref (gpointer instance);
@@ -630,7 +756,787 @@ GType metadata_domain_get_type (void) {
 }
 
 
-HierarchicalKeywordField* hierarchical_keyword_field_construct (GType object_type, const gchar* field_name, const gchar* path_separator, gboolean wants_leading_separator, gboolean is_writeable) {
+static GeeList* keyword_transformer_real_transform (KeywordTransformer* self, const gchar* input, GError** error) {
+#line 32 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_critical ("Type `%s' does not implement abstract method `keyword_transformer_transform'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
+#line 32 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return NULL;
+#line 765 "PhotoMetadata.c"
+}
+
+
+GeeList* keyword_transformer_transform (KeywordTransformer* self, const gchar* input, GError** error) {
+#line 32 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_val_if_fail (IS_KEYWORD_TRANSFORMER (self), NULL);
+#line 32 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return KEYWORD_TRANSFORMER_GET_CLASS (self)->transform (self, input, error);
+#line 774 "PhotoMetadata.c"
+}
+
+
+KeywordTransformer* keyword_transformer_construct (GType object_type) {
+	KeywordTransformer* self = NULL;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self = (KeywordTransformer*) g_type_create_instance (object_type);
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return self;
+#line 784 "PhotoMetadata.c"
+}
+
+
+static void value_keyword_transformer_init (GValue* value) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	value->data[0].v_pointer = NULL;
+#line 791 "PhotoMetadata.c"
+}
+
+
+static void value_keyword_transformer_free_value (GValue* value) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (value->data[0].v_pointer) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		keyword_transformer_unref (value->data[0].v_pointer);
+#line 800 "PhotoMetadata.c"
+	}
+}
+
+
+static void value_keyword_transformer_copy_value (const GValue* src_value, GValue* dest_value) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (src_value->data[0].v_pointer) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		dest_value->data[0].v_pointer = keyword_transformer_ref (src_value->data[0].v_pointer);
+#line 810 "PhotoMetadata.c"
+	} else {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		dest_value->data[0].v_pointer = NULL;
+#line 814 "PhotoMetadata.c"
+	}
+}
+
+
+static gpointer value_keyword_transformer_peek_pointer (const GValue* value) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return value->data[0].v_pointer;
+#line 822 "PhotoMetadata.c"
+}
+
+
+static gchar* value_keyword_transformer_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (collect_values[0].v_pointer) {
+#line 829 "PhotoMetadata.c"
+		KeywordTransformer* object;
+		object = collect_values[0].v_pointer;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		if (object->parent_instance.g_class == NULL) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
+#line 836 "PhotoMetadata.c"
+		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
+#line 840 "PhotoMetadata.c"
+		}
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		value->data[0].v_pointer = keyword_transformer_ref (object);
+#line 844 "PhotoMetadata.c"
+	} else {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		value->data[0].v_pointer = NULL;
+#line 848 "PhotoMetadata.c"
+	}
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return NULL;
+#line 852 "PhotoMetadata.c"
+}
+
+
+static gchar* value_keyword_transformer_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
+	KeywordTransformer** object_p;
+	object_p = collect_values[0].v_pointer;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (!object_p) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
+#line 863 "PhotoMetadata.c"
+	}
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (!value->data[0].v_pointer) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		*object_p = NULL;
+#line 869 "PhotoMetadata.c"
+	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		*object_p = value->data[0].v_pointer;
+#line 873 "PhotoMetadata.c"
+	} else {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		*object_p = keyword_transformer_ref (value->data[0].v_pointer);
+#line 877 "PhotoMetadata.c"
+	}
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return NULL;
+#line 881 "PhotoMetadata.c"
+}
+
+
+GParamSpec* param_spec_keyword_transformer (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
+	ParamSpecKeywordTransformer* spec;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_val_if_fail (g_type_is_a (object_type, TYPE_KEYWORD_TRANSFORMER), NULL);
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	G_PARAM_SPEC (spec)->value_type = object_type;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return G_PARAM_SPEC (spec);
+#line 895 "PhotoMetadata.c"
+}
+
+
+gpointer value_get_keyword_transformer (const GValue* value) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_KEYWORD_TRANSFORMER), NULL);
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return value->data[0].v_pointer;
+#line 904 "PhotoMetadata.c"
+}
+
+
+void value_set_keyword_transformer (GValue* value, gpointer v_object) {
+	KeywordTransformer* old;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_KEYWORD_TRANSFORMER));
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	old = value->data[0].v_pointer;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (v_object) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_KEYWORD_TRANSFORMER));
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		value->data[0].v_pointer = v_object;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		keyword_transformer_ref (value->data[0].v_pointer);
+#line 924 "PhotoMetadata.c"
+	} else {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		value->data[0].v_pointer = NULL;
+#line 928 "PhotoMetadata.c"
+	}
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (old) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		keyword_transformer_unref (old);
+#line 934 "PhotoMetadata.c"
+	}
+}
+
+
+void value_take_keyword_transformer (GValue* value, gpointer v_object) {
+	KeywordTransformer* old;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_KEYWORD_TRANSFORMER));
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	old = value->data[0].v_pointer;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (v_object) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_KEYWORD_TRANSFORMER));
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		value->data[0].v_pointer = v_object;
+#line 953 "PhotoMetadata.c"
+	} else {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		value->data[0].v_pointer = NULL;
+#line 957 "PhotoMetadata.c"
+	}
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (old) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		keyword_transformer_unref (old);
+#line 963 "PhotoMetadata.c"
+	}
+}
+
+
+static void keyword_transformer_class_init (KeywordTransformerClass * klass) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	keyword_transformer_parent_class = g_type_class_peek_parent (klass);
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	((KeywordTransformerClass *) klass)->finalize = keyword_transformer_finalize;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	((KeywordTransformerClass *) klass)->transform = keyword_transformer_real_transform;
+#line 975 "PhotoMetadata.c"
+}
+
+
+static void keyword_transformer_instance_init (KeywordTransformer * self) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self->ref_count = 1;
+#line 982 "PhotoMetadata.c"
+}
+
+
+static void keyword_transformer_finalize (KeywordTransformer* obj) {
+	KeywordTransformer * self;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_KEYWORD_TRANSFORMER, KeywordTransformer);
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_signal_handlers_destroy (self);
+#line 992 "PhotoMetadata.c"
+}
+
+
+GType keyword_transformer_get_type (void) {
+	static volatile gsize keyword_transformer_type_id__volatile = 0;
+	if (g_once_init_enter (&keyword_transformer_type_id__volatile)) {
+		static const GTypeValueTable g_define_type_value_table = { value_keyword_transformer_init, value_keyword_transformer_free_value, value_keyword_transformer_copy_value, value_keyword_transformer_peek_pointer, "p", value_keyword_transformer_collect_value, "p", value_keyword_transformer_lcopy_value };
+		static const GTypeInfo g_define_type_info = { sizeof (KeywordTransformerClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) keyword_transformer_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (KeywordTransformer), 0, (GInstanceInitFunc) keyword_transformer_instance_init, &g_define_type_value_table };
+		static const GTypeFundamentalInfo g_define_type_fundamental_info = { (G_TYPE_FLAG_CLASSED | G_TYPE_FLAG_INSTANTIATABLE | G_TYPE_FLAG_DERIVABLE | G_TYPE_FLAG_DEEP_DERIVABLE) };
+		GType keyword_transformer_type_id;
+		keyword_transformer_type_id = g_type_register_fundamental (g_type_fundamental_next (), "KeywordTransformer", &g_define_type_info, &g_define_type_fundamental_info, G_TYPE_FLAG_ABSTRACT);
+		g_once_init_leave (&keyword_transformer_type_id__volatile, keyword_transformer_type_id);
+	}
+	return keyword_transformer_type_id__volatile;
+}
+
+
+gpointer keyword_transformer_ref (gpointer instance) {
+	KeywordTransformer* self;
+	self = instance;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_atomic_int_inc (&self->ref_count);
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return instance;
+#line 1017 "PhotoMetadata.c"
+}
+
+
+void keyword_transformer_unref (gpointer instance) {
+	KeywordTransformer* self;
+	self = instance;
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (g_atomic_int_dec_and_test (&self->ref_count)) {
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		KEYWORD_TRANSFORMER_GET_CLASS (self)->finalize (self);
+#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_type_free_instance ((GTypeInstance *) self);
+#line 1030 "PhotoMetadata.c"
+	}
+}
+
+
+static GeeList* null_keyword_transformer_real_transform (KeywordTransformer* base, const gchar* input, GError** error) {
+	NullKeywordTransformer * self;
+	GeeList* result = NULL;
+	GeeArrayList* _result_ = NULL;
+	GeeArrayList* _tmp0_ = NULL;
+	const gchar* _tmp1_ = NULL;
+#line 36 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_NULL_KEYWORD_TRANSFORMER, NullKeywordTransformer);
+#line 36 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_val_if_fail (input != NULL, NULL);
+#line 37 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp0_ = gee_array_list_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
+#line 37 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_result_ = _tmp0_;
+#line 38 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp1_ = input;
+#line 38 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_result_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp1_);
+#line 40 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	result = G_TYPE_CHECK_INSTANCE_CAST (_result_, GEE_TYPE_LIST, GeeList);
+#line 40 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return result;
+#line 1057 "PhotoMetadata.c"
+}
+
+
+NullKeywordTransformer* null_keyword_transformer_construct (GType object_type) {
+	NullKeywordTransformer* self = NULL;
+#line 35 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self = (NullKeywordTransformer*) keyword_transformer_construct (object_type);
+#line 35 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return self;
+#line 1067 "PhotoMetadata.c"
+}
+
+
+NullKeywordTransformer* null_keyword_transformer_new (void) {
+#line 35 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return null_keyword_transformer_construct (TYPE_NULL_KEYWORD_TRANSFORMER);
+#line 1074 "PhotoMetadata.c"
+}
+
+
+static void null_keyword_transformer_class_init (NullKeywordTransformerClass * klass) {
+#line 35 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	null_keyword_transformer_parent_class = g_type_class_peek_parent (klass);
+#line 35 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	((KeywordTransformerClass *) klass)->transform = null_keyword_transformer_real_transform;
+#line 1083 "PhotoMetadata.c"
+}
+
+
+static void null_keyword_transformer_instance_init (NullKeywordTransformer * self) {
+}
+
+
+GType null_keyword_transformer_get_type (void) {
+	static volatile gsize null_keyword_transformer_type_id__volatile = 0;
+	if (g_once_init_enter (&null_keyword_transformer_type_id__volatile)) {
+		static const GTypeInfo g_define_type_info = { sizeof (NullKeywordTransformerClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) null_keyword_transformer_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (NullKeywordTransformer), 0, (GInstanceInitFunc) null_keyword_transformer_instance_init, NULL };
+		GType null_keyword_transformer_type_id;
+		null_keyword_transformer_type_id = g_type_register_static (TYPE_KEYWORD_TRANSFORMER, "NullKeywordTransformer", &g_define_type_info, 0);
+		g_once_init_leave (&null_keyword_transformer_type_id__volatile, null_keyword_transformer_type_id);
+	}
+	return null_keyword_transformer_type_id__volatile;
+}
+
+
+static void _acd_see_keyword_transformer_on_start_gmarkup_parser_start_element_func (GMarkupParseContext* context, const gchar* element_name, gchar** attribute_names, gchar** attribute_values, gpointer self, GError** error) {
+#line 64 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	acd_see_keyword_transformer_on_start ((ACDSeeKeywordTransformer*) self, context, element_name, attribute_names, attribute_values, error);
+#line 1106 "PhotoMetadata.c"
+}
+
+
+static void _acd_see_keyword_transformer_on_end_gmarkup_parser_end_element_func (GMarkupParseContext* context, const gchar* element_name, gpointer self, GError** error) {
+#line 65 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	acd_see_keyword_transformer_on_end ((ACDSeeKeywordTransformer*) self, context, element_name, error);
+#line 1113 "PhotoMetadata.c"
+}
+
+
+static void _acd_see_keyword_transformer_on_text_gmarkup_parser_text_func (GMarkupParseContext* context, const gchar* text, gsize text_len, gpointer self, GError** error) {
+#line 66 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	acd_see_keyword_transformer_on_text ((ACDSeeKeywordTransformer*) self, context, text, error);
+#line 1120 "PhotoMetadata.c"
+}
+
+
+static void _acd_see_keyword_transformer_on_error_gmarkup_parser_error_func (GMarkupParseContext* context, GError* _error_, gpointer self) {
+#line 67 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	acd_see_keyword_transformer_on_error ((ACDSeeKeywordTransformer*) self, context, _error_);
+#line 1127 "PhotoMetadata.c"
+}
+
+
+ACDSeeKeywordTransformer* acd_see_keyword_transformer_construct (GType object_type) {
+	ACDSeeKeywordTransformer* self = NULL;
+	GeeArrayList* _tmp0_ = NULL;
+	GeeArrayQueue* _tmp1_ = NULL;
+#line 62 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self = (ACDSeeKeywordTransformer*) keyword_transformer_construct (object_type);
+#line 63 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	memset (&self->priv->parser, 0, sizeof (GMarkupParser));
+#line 64 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self->priv->parser.start_element = _acd_see_keyword_transformer_on_start_gmarkup_parser_start_element_func;
+#line 65 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self->priv->parser.end_element = _acd_see_keyword_transformer_on_end_gmarkup_parser_end_element_func;
+#line 66 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self->priv->parser.text = _acd_see_keyword_transformer_on_text_gmarkup_parser_text_func;
+#line 67 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self->priv->parser.error = _acd_see_keyword_transformer_on_error_gmarkup_parser_error_func;
+#line 68 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp0_ = gee_array_list_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
+#line 68 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_g_object_unref0 (self->priv->result);
+#line 68 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self->priv->result = _tmp0_;
+#line 69 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp1_ = gee_array_queue_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
+#line 69 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_g_object_unref0 (self->priv->stack);
+#line 69 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self->priv->stack = _tmp1_;
+#line 62 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return self;
+#line 1161 "PhotoMetadata.c"
+}
+
+
+ACDSeeKeywordTransformer* acd_see_keyword_transformer_new (void) {
+#line 62 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return acd_see_keyword_transformer_construct (TYPE_ACD_SEE_KEYWORD_TRANSFORMER);
+#line 1168 "PhotoMetadata.c"
+}
+
+
+static gpointer _g_object_ref0 (gpointer self) {
+#line 77 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return self ? g_object_ref (self) : NULL;
+#line 1175 "PhotoMetadata.c"
+}
+
+
+static GeeList* acd_see_keyword_transformer_real_transform (KeywordTransformer* base, const gchar* input, GError** error) {
+	ACDSeeKeywordTransformer * self;
+	GeeList* result = NULL;
+	GMarkupParseContext* ctx = NULL;
+	GMarkupParser _tmp0_ = {0};
+	GMarkupParseContext* _tmp1_ = NULL;
+	const gchar* _tmp2_ = NULL;
+	const gchar* _tmp3_ = NULL;
+	gint _tmp4_ = 0;
+	gint _tmp5_ = 0;
+	GeeArrayList* _tmp6_ = NULL;
+	GeeList* _tmp7_ = NULL;
+	GError * _inner_error_ = NULL;
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_ACD_SEE_KEYWORD_TRANSFORMER, ACDSeeKeywordTransformer);
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_val_if_fail (input != NULL, NULL);
+#line 73 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp0_ = self->priv->parser;
+#line 73 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp1_ = g_markup_parse_context_new (&_tmp0_, 0, self, NULL);
+#line 73 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	ctx = _tmp1_;
+#line 75 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp2_ = input;
+#line 75 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp3_ = input;
+#line 75 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp4_ = strlen (_tmp3_);
+#line 75 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp5_ = _tmp4_;
+#line 75 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_markup_parse_context_parse (ctx, _tmp2_, (gssize) _tmp5_, &_inner_error_);
+#line 75 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 75 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_propagate_error (error, _inner_error_);
+#line 75 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_g_markup_parse_context_unref0 (ctx);
+#line 75 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		return NULL;
+#line 1220 "PhotoMetadata.c"
+	}
+#line 77 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp6_ = self->priv->result;
+#line 77 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp7_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_LIST, GeeList));
+#line 77 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	result = _tmp7_;
+#line 77 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_g_markup_parse_context_unref0 (ctx);
+#line 77 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return result;
+#line 1232 "PhotoMetadata.c"
+}
+
+
+static void acd_see_keyword_transformer_on_start (ACDSeeKeywordTransformer* self, GMarkupParseContext* ctx, const gchar* name, gchar** attribute_names, gchar** attribute_values, GError** error) {
+	const gchar* _tmp0_ = NULL;
+	const gchar* _tmp1_ = NULL;
+	const gchar* _tmp2_ = NULL;
+	gchar** _tmp3_ = NULL;
+	gint _tmp3__length1 = 0;
+	gchar** _tmp4_ = NULL;
+	gint _tmp4__length1 = 0;
+	GError * _inner_error_ = NULL;
+#line 80 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (IS_ACD_SEE_KEYWORD_TRANSFORMER (self));
+#line 80 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (ctx != NULL);
+#line 80 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (name != NULL);
+#line 88 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self->priv->assigned = FALSE;
+#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp0_ = name;
+#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (g_strcmp0 (_tmp0_, "Categories") == 0) {
+#line 90 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		return;
+#line 1259 "PhotoMetadata.c"
+	}
+#line 93 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp1_ = name;
+#line 93 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (g_strcmp0 (_tmp1_, "Category") != 0) {
+#line 94 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		return;
+#line 1267 "PhotoMetadata.c"
+	}
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp2_ = name;
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp3_ = attribute_names;
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp3__length1 = _vala_array_length (attribute_names);
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp4_ = attribute_values;
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp4__length1 = _vala_array_length (attribute_values);
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_markup_collect_attributes (_tmp2_, _tmp3_, _tmp4_, &_inner_error_, G_MARKUP_COLLECT_BOOLEAN, "Assigned", &self->priv->assigned, G_MARKUP_COLLECT_INVALID);
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		if (_inner_error_->domain == G_MARKUP_ERROR) {
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			g_propagate_error (error, _inner_error_);
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			return;
+#line 1289 "PhotoMetadata.c"
+		} else {
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			g_clear_error (&_inner_error_);
+#line 97 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			return;
+#line 1297 "PhotoMetadata.c"
+		}
+	}
+}
+
+
+static void acd_see_keyword_transformer_on_end (ACDSeeKeywordTransformer* self, GMarkupParseContext* ctx, const gchar* name, GError** error) {
+	const gchar* _tmp0_ = NULL;
+#line 104 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (IS_ACD_SEE_KEYWORD_TRANSFORMER (self));
+#line 104 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (ctx != NULL);
+#line 104 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (name != NULL);
+#line 106 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp0_ = name;
+#line 106 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (g_strcmp0 (_tmp0_, "Category") == 0) {
+#line 1315 "PhotoMetadata.c"
+		GeeArrayQueue* _tmp1_ = NULL;
+		gpointer _tmp2_ = NULL;
+		gchar* _tmp3_ = NULL;
+#line 107 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp1_ = self->priv->stack;
+#line 107 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp2_ = gee_deque_poll_tail (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_DEQUE, GeeDeque));
+#line 107 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp3_ = (gchar*) _tmp2_;
+#line 107 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_g_free0 (_tmp3_);
+#line 1327 "PhotoMetadata.c"
+	}
+}
+
+
+static void acd_see_keyword_transformer_on_text (ACDSeeKeywordTransformer* self, GMarkupParseContext* ctx, const gchar* text, GError** error) {
+	const gchar* _tmp0_ = NULL;
+	GeeArrayQueue* _tmp1_ = NULL;
+	const gchar* _tmp2_ = NULL;
+	gboolean _tmp3_ = FALSE;
+#line 111 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (IS_ACD_SEE_KEYWORD_TRANSFORMER (self));
+#line 111 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (ctx != NULL);
+#line 111 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (text != NULL);
+#line 113 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp0_ = text;
+#line 113 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (g_strcmp0 (_tmp0_, "") == 0) {
+#line 114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		return;
+#line 1349 "PhotoMetadata.c"
+	}
+#line 117 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp1_ = self->priv->stack;
+#line 117 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp2_ = text;
+#line 117 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	gee_deque_offer_tail (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_DEQUE, GeeDeque), _tmp2_);
+#line 118 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp3_ = self->priv->assigned;
+#line 118 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	if (_tmp3_) {
+#line 1361 "PhotoMetadata.c"
+		GString* builder = NULL;
+		GString* _tmp4_ = NULL;
+		GString* _tmp13_ = NULL;
+		gssize _tmp14_ = 0L;
+		GeeArrayList* _tmp18_ = NULL;
+		GString* _tmp19_ = NULL;
+		const gchar* _tmp20_ = NULL;
+#line 119 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp4_ = g_string_new ("");
+#line 119 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		builder = _tmp4_;
+#line 1373 "PhotoMetadata.c"
+		{
+			GeeIterator* _f_it = NULL;
+			GeeArrayQueue* _tmp5_ = NULL;
+			GeeIterator* _tmp6_ = NULL;
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			_tmp5_ = self->priv->stack;
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			_tmp6_ = gee_abstract_collection_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection));
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			_f_it = _tmp6_;
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			while (TRUE) {
+#line 1386 "PhotoMetadata.c"
+				GeeIterator* _tmp7_ = NULL;
+				gboolean _tmp8_ = FALSE;
+				gchar* f = NULL;
+				GeeIterator* _tmp9_ = NULL;
+				gpointer _tmp10_ = NULL;
+				GString* _tmp11_ = NULL;
+				const gchar* _tmp12_ = NULL;
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				_tmp7_ = _f_it;
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				_tmp8_ = gee_iterator_next (_tmp7_);
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				if (!_tmp8_) {
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					break;
+#line 1402 "PhotoMetadata.c"
+				}
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				_tmp9_ = _f_it;
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				_tmp10_ = gee_iterator_get (_tmp9_);
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				f = (gchar*) _tmp10_;
+#line 121 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				_tmp11_ = builder;
+#line 121 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				_tmp12_ = f;
+#line 121 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				g_string_append_printf (_tmp11_, "%s|", _tmp12_);
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				_g_free0 (f);
+#line 1418 "PhotoMetadata.c"
+			}
+#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			_g_object_unref0 (_f_it);
+#line 1422 "PhotoMetadata.c"
+		}
+#line 123 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp13_ = builder;
+#line 123 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp14_ = _tmp13_->len;
+#line 123 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		if (_tmp14_ > ((gssize) 0)) {
+#line 1430 "PhotoMetadata.c"
+			GString* _tmp15_ = NULL;
+			GString* _tmp16_ = NULL;
+			gssize _tmp17_ = 0L;
+#line 124 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			_tmp15_ = builder;
+#line 124 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			_tmp16_ = builder;
+#line 124 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			_tmp17_ = _tmp16_->len;
+#line 124 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			g_string_truncate (_tmp15_, (gsize) (_tmp17_ - 1));
+#line 1442 "PhotoMetadata.c"
+		}
+#line 126 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp18_ = self->priv->result;
+#line 126 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp19_ = builder;
+#line 126 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp20_ = _tmp19_->str;
+#line 126 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp20_);
+#line 118 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_g_string_free0 (builder);
+#line 1454 "PhotoMetadata.c"
+	}
+}
+
+
+static gpointer _g_error_copy0 (gpointer self) {
+#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return self ? g_error_copy (self) : NULL;
+#line 1462 "PhotoMetadata.c"
+}
+
+
+static void acd_see_keyword_transformer_on_error (ACDSeeKeywordTransformer* self, GMarkupParseContext* ctx, GError* _error_) {
+	GError* _tmp0_ = NULL;
+	GError* _tmp1_ = NULL;
+#line 130 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (IS_ACD_SEE_KEYWORD_TRANSFORMER (self));
+#line 130 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_if_fail (ctx != NULL);
+#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp0_ = _error_;
+#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp1_ = _g_error_copy0 (_tmp0_);
+#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_g_error_free0 (self->priv->error);
+#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self->priv->error = _tmp1_;
+#line 1481 "PhotoMetadata.c"
+}
+
+
+static void acd_see_keyword_transformer_class_init (ACDSeeKeywordTransformerClass * klass) {
+#line 55 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	acd_see_keyword_transformer_parent_class = g_type_class_peek_parent (klass);
+#line 55 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	((KeywordTransformerClass *) klass)->finalize = acd_see_keyword_transformer_finalize;
+#line 55 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_type_class_add_private (klass, sizeof (ACDSeeKeywordTransformerPrivate));
+#line 55 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	((KeywordTransformerClass *) klass)->transform = acd_see_keyword_transformer_real_transform;
+#line 1494 "PhotoMetadata.c"
+}
+
+
+static void acd_see_keyword_transformer_instance_init (ACDSeeKeywordTransformer * self) {
+#line 55 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self->priv = ACD_SEE_KEYWORD_TRANSFORMER_GET_PRIVATE (self);
+#line 1501 "PhotoMetadata.c"
+}
+
+
+static void acd_see_keyword_transformer_finalize (KeywordTransformer* obj) {
+	ACDSeeKeywordTransformer * self;
+#line 55 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_ACD_SEE_KEYWORD_TRANSFORMER, ACDSeeKeywordTransformer);
+#line 57 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_g_error_free0 (self->priv->error);
+#line 58 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_g_object_unref0 (self->priv->stack);
+#line 59 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_g_object_unref0 (self->priv->result);
+#line 55 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	KEYWORD_TRANSFORMER_CLASS (acd_see_keyword_transformer_parent_class)->finalize (obj);
+#line 1517 "PhotoMetadata.c"
+}
+
+
+GType acd_see_keyword_transformer_get_type (void) {
+	static volatile gsize acd_see_keyword_transformer_type_id__volatile = 0;
+	if (g_once_init_enter (&acd_see_keyword_transformer_type_id__volatile)) {
+		static const GTypeInfo g_define_type_info = { sizeof (ACDSeeKeywordTransformerClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) acd_see_keyword_transformer_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (ACDSeeKeywordTransformer), 0, (GInstanceInitFunc) acd_see_keyword_transformer_instance_init, NULL };
+		GType acd_see_keyword_transformer_type_id;
+		acd_see_keyword_transformer_type_id = g_type_register_static (TYPE_KEYWORD_TRANSFORMER, "ACDSeeKeywordTransformer", &g_define_type_info, 0);
+		g_once_init_leave (&acd_see_keyword_transformer_type_id__volatile, acd_see_keyword_transformer_type_id);
+	}
+	return acd_see_keyword_transformer_type_id__volatile;
+}
+
+
+static gpointer _keyword_transformer_ref0 (gpointer self) {
+#line 154 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return self ? keyword_transformer_ref (self) : NULL;
+#line 1536 "PhotoMetadata.c"
+}
+
+
+HierarchicalKeywordField* hierarchical_keyword_field_construct (GType object_type, const gchar* field_name, const gchar* path_separator, gboolean wants_leading_separator, gboolean is_writeable, KeywordTransformer* transformer) {
 	HierarchicalKeywordField* self = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
@@ -638,256 +1544,270 @@ HierarchicalKeywordField* hierarchical_keyword_field_construct (GType object_typ
 	gchar* _tmp3_ = NULL;
 	gboolean _tmp4_ = FALSE;
 	gboolean _tmp5_ = FALSE;
-#line 37 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	KeywordTransformer* _tmp6_ = NULL;
+	KeywordTransformer* _tmp7_ = NULL;
+#line 144 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (field_name != NULL, NULL);
-#line 37 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 144 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (path_separator != NULL, NULL);
-#line 37 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 144 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	g_return_val_if_fail (IS_KEYWORD_TRANSFORMER (transformer), NULL);
+#line 144 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = (HierarchicalKeywordField*) g_type_create_instance (object_type);
-#line 39 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = field_name;
-#line 39 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 39 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->field_name);
-#line 39 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->field_name = _tmp1_;
-#line 40 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 151 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = path_separator;
-#line 40 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 151 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 40 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 151 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->path_separator);
-#line 40 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 151 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->path_separator = _tmp3_;
-#line 41 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 152 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = wants_leading_separator;
-#line 41 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 152 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->wants_leading_separator = _tmp4_;
-#line 42 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 153 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = is_writeable;
-#line 42 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 153 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->is_writeable = _tmp5_;
-#line 37 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp6_ = transformer;
+#line 154 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp7_ = _keyword_transformer_ref0 (_tmp6_);
+#line 154 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_keyword_transformer_unref0 (self->transformer);
+#line 154 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	self->transformer = _tmp7_;
+#line 144 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return self;
-#line 674 "PhotoMetadata.c"
+#line 1592 "PhotoMetadata.c"
 }
 
 
-HierarchicalKeywordField* hierarchical_keyword_field_new (const gchar* field_name, const gchar* path_separator, gboolean wants_leading_separator, gboolean is_writeable) {
-#line 37 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	return hierarchical_keyword_field_construct (TYPE_HIERARCHICAL_KEYWORD_FIELD, field_name, path_separator, wants_leading_separator, is_writeable);
-#line 681 "PhotoMetadata.c"
+HierarchicalKeywordField* hierarchical_keyword_field_new (const gchar* field_name, const gchar* path_separator, gboolean wants_leading_separator, gboolean is_writeable, KeywordTransformer* transformer) {
+#line 144 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	return hierarchical_keyword_field_construct (TYPE_HIERARCHICAL_KEYWORD_FIELD, field_name, path_separator, wants_leading_separator, is_writeable, transformer);
+#line 1599 "PhotoMetadata.c"
 }
 
 
 static void value_hierarchical_keyword_field_init (GValue* value) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	value->data[0].v_pointer = NULL;
-#line 688 "PhotoMetadata.c"
+#line 1606 "PhotoMetadata.c"
 }
 
 
 static void value_hierarchical_keyword_field_free_value (GValue* value) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (value->data[0].v_pointer) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		hierarchical_keyword_field_unref (value->data[0].v_pointer);
-#line 697 "PhotoMetadata.c"
+#line 1615 "PhotoMetadata.c"
 	}
 }
 
 
 static void value_hierarchical_keyword_field_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (src_value->data[0].v_pointer) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		dest_value->data[0].v_pointer = hierarchical_keyword_field_ref (src_value->data[0].v_pointer);
-#line 707 "PhotoMetadata.c"
+#line 1625 "PhotoMetadata.c"
 	} else {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 711 "PhotoMetadata.c"
+#line 1629 "PhotoMetadata.c"
 	}
 }
 
 
 static gpointer value_hierarchical_keyword_field_peek_pointer (const GValue* value) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return value->data[0].v_pointer;
-#line 719 "PhotoMetadata.c"
+#line 1637 "PhotoMetadata.c"
 }
 
 
 static gchar* value_hierarchical_keyword_field_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (collect_values[0].v_pointer) {
-#line 726 "PhotoMetadata.c"
+#line 1644 "PhotoMetadata.c"
 		HierarchicalKeywordField* object;
 		object = collect_values[0].v_pointer;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 733 "PhotoMetadata.c"
+#line 1651 "PhotoMetadata.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 737 "PhotoMetadata.c"
+#line 1655 "PhotoMetadata.c"
 		}
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = hierarchical_keyword_field_ref (object);
-#line 741 "PhotoMetadata.c"
+#line 1659 "PhotoMetadata.c"
 	} else {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = NULL;
-#line 745 "PhotoMetadata.c"
+#line 1663 "PhotoMetadata.c"
 	}
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return NULL;
-#line 749 "PhotoMetadata.c"
+#line 1667 "PhotoMetadata.c"
 }
 
 
 static gchar* value_hierarchical_keyword_field_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	HierarchicalKeywordField** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!object_p) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 760 "PhotoMetadata.c"
+#line 1678 "PhotoMetadata.c"
 	}
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!value->data[0].v_pointer) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*object_p = NULL;
-#line 766 "PhotoMetadata.c"
+#line 1684 "PhotoMetadata.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*object_p = value->data[0].v_pointer;
-#line 770 "PhotoMetadata.c"
+#line 1688 "PhotoMetadata.c"
 	} else {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*object_p = hierarchical_keyword_field_ref (value->data[0].v_pointer);
-#line 774 "PhotoMetadata.c"
+#line 1692 "PhotoMetadata.c"
 	}
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return NULL;
-#line 778 "PhotoMetadata.c"
+#line 1696 "PhotoMetadata.c"
 }
 
 
 GParamSpec* param_spec_hierarchical_keyword_field (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecHierarchicalKeywordField* spec;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_HIERARCHICAL_KEYWORD_FIELD), NULL);
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return G_PARAM_SPEC (spec);
-#line 792 "PhotoMetadata.c"
+#line 1710 "PhotoMetadata.c"
 }
 
 
 gpointer value_get_hierarchical_keyword_field (const GValue* value) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_HIERARCHICAL_KEYWORD_FIELD), NULL);
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return value->data[0].v_pointer;
-#line 801 "PhotoMetadata.c"
+#line 1719 "PhotoMetadata.c"
 }
 
 
 void value_set_hierarchical_keyword_field (GValue* value, gpointer v_object) {
 	HierarchicalKeywordField* old;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_HIERARCHICAL_KEYWORD_FIELD));
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	old = value->data[0].v_pointer;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (v_object) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_HIERARCHICAL_KEYWORD_FIELD));
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = v_object;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		hierarchical_keyword_field_ref (value->data[0].v_pointer);
-#line 821 "PhotoMetadata.c"
+#line 1739 "PhotoMetadata.c"
 	} else {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = NULL;
-#line 825 "PhotoMetadata.c"
+#line 1743 "PhotoMetadata.c"
 	}
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (old) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		hierarchical_keyword_field_unref (old);
-#line 831 "PhotoMetadata.c"
+#line 1749 "PhotoMetadata.c"
 	}
 }
 
 
 void value_take_hierarchical_keyword_field (GValue* value, gpointer v_object) {
 	HierarchicalKeywordField* old;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_HIERARCHICAL_KEYWORD_FIELD));
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	old = value->data[0].v_pointer;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (v_object) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_HIERARCHICAL_KEYWORD_FIELD));
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = v_object;
-#line 850 "PhotoMetadata.c"
+#line 1768 "PhotoMetadata.c"
 	} else {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = NULL;
-#line 854 "PhotoMetadata.c"
+#line 1772 "PhotoMetadata.c"
 	}
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (old) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		hierarchical_keyword_field_unref (old);
-#line 860 "PhotoMetadata.c"
+#line 1778 "PhotoMetadata.c"
 	}
 }
 
 
 static void hierarchical_keyword_field_class_init (HierarchicalKeywordFieldClass * klass) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	hierarchical_keyword_field_parent_class = g_type_class_peek_parent (klass);
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	((HierarchicalKeywordFieldClass *) klass)->finalize = hierarchical_keyword_field_finalize;
-#line 870 "PhotoMetadata.c"
+#line 1788 "PhotoMetadata.c"
 }
 
 
 static void hierarchical_keyword_field_instance_init (HierarchicalKeywordField * self) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->ref_count = 1;
-#line 877 "PhotoMetadata.c"
+#line 1795 "PhotoMetadata.c"
 }
 
 
 static void hierarchical_keyword_field_finalize (HierarchicalKeywordField* obj) {
 	HierarchicalKeywordField * self;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_HIERARCHICAL_KEYWORD_FIELD, HierarchicalKeywordField);
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_signal_handlers_destroy (self);
-#line 32 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 138 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->field_name);
-#line 33 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 139 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->path_separator);
-#line 891 "PhotoMetadata.c"
+#line 142 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_keyword_transformer_unref0 (self->transformer);
+#line 1811 "PhotoMetadata.c"
 }
 
 
@@ -908,24 +1828,24 @@ GType hierarchical_keyword_field_get_type (void) {
 gpointer hierarchical_keyword_field_ref (gpointer instance) {
 	HierarchicalKeywordField* self;
 	self = instance;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return instance;
-#line 916 "PhotoMetadata.c"
+#line 1836 "PhotoMetadata.c"
 }
 
 
 void hierarchical_keyword_field_unref (gpointer instance) {
 	HierarchicalKeywordField* self;
 	self = instance;
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		HIERARCHICAL_KEYWORD_FIELD_GET_CLASS (self)->finalize (self);
-#line 31 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 929 "PhotoMetadata.c"
+#line 1849 "PhotoMetadata.c"
 	}
 }
 
@@ -940,51 +1860,51 @@ PhotoPreview* photo_preview_construct (GType object_type, const gchar* name, Dim
 	gchar* _tmp5_ = NULL;
 	const gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
-#line 53 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 53 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (dimensions != NULL, NULL);
-#line 53 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (mime_type != NULL, NULL);
-#line 53 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (extension != NULL, NULL);
-#line 53 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = (PhotoPreview*) g_type_create_instance (object_type);
-#line 54 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = name;
-#line 54 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 54 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->priv->name);
-#line 54 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->name = _tmp1_;
-#line 55 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 167 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = *dimensions;
-#line 55 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 167 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->dimensions = _tmp2_;
-#line 56 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = size;
-#line 56 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->size = _tmp3_;
-#line 57 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 169 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = mime_type;
-#line 57 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 169 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = g_strdup (_tmp4_);
-#line 57 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 169 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->priv->mime_type);
-#line 57 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 169 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->mime_type = _tmp5_;
-#line 58 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 170 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = extension;
-#line 58 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 170 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7_ = g_strdup (_tmp6_);
-#line 58 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 170 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->priv->extension);
-#line 58 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 170 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->extension = _tmp7_;
-#line 53 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return self;
-#line 988 "PhotoMetadata.c"
+#line 1908 "PhotoMetadata.c"
 }
 
 
@@ -992,46 +1912,46 @@ gchar* photo_preview_get_name (PhotoPreview* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 61 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 173 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_PREVIEW (self), NULL);
-#line 62 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 174 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->name;
-#line 62 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 174 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 62 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 174 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_;
-#line 62 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 174 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 1006 "PhotoMetadata.c"
+#line 1926 "PhotoMetadata.c"
 }
 
 
 void photo_preview_get_pixel_dimensions (PhotoPreview* self, Dimensions* result) {
 	Dimensions _tmp0_ = {0};
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 177 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_PREVIEW (self));
-#line 66 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->dimensions;
-#line 66 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	*result = _tmp0_;
-#line 66 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return;
-#line 1020 "PhotoMetadata.c"
+#line 1940 "PhotoMetadata.c"
 }
 
 
 guint32 photo_preview_get_size (PhotoPreview* self) {
 	guint32 result = 0U;
 	guint32 _tmp0_ = 0U;
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 181 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_PREVIEW (self), 0U);
-#line 70 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 182 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->size;
-#line 70 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 182 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 70 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 182 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 1035 "PhotoMetadata.c"
+#line 1955 "PhotoMetadata.c"
 }
 
 
@@ -1039,17 +1959,17 @@ gchar* photo_preview_get_mime_type (PhotoPreview* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 73 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 185 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_PREVIEW (self), NULL);
-#line 74 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 186 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->mime_type;
-#line 74 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 186 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 74 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 186 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_;
-#line 74 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 186 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 1053 "PhotoMetadata.c"
+#line 1973 "PhotoMetadata.c"
 }
 
 
@@ -1057,42 +1977,42 @@ gchar* photo_preview_get_extension (PhotoPreview* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 77 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 189 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_PREVIEW (self), NULL);
-#line 78 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 190 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->extension;
-#line 78 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 190 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 78 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 190 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_;
-#line 78 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 190 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 1071 "PhotoMetadata.c"
+#line 1991 "PhotoMetadata.c"
 }
 
 
 static guint8* photo_preview_real_flatten (PhotoPreview* self, int* result_length1, GError** error) {
-#line 81 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 193 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_critical ("Type `%s' does not implement abstract method `photo_preview_flatten'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 81 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 193 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return NULL;
-#line 1080 "PhotoMetadata.c"
+#line 2000 "PhotoMetadata.c"
 }
 
 
 guint8* photo_preview_flatten (PhotoPreview* self, int* result_length1, GError** error) {
-#line 81 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 193 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_PREVIEW (self), NULL);
-#line 81 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 193 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return PHOTO_PREVIEW_GET_CLASS (self)->flatten (self, result_length1, error);
-#line 1089 "PhotoMetadata.c"
+#line 2009 "PhotoMetadata.c"
 }
 
 
 static guint8* _vala_array_dup4 (guint8* self, int length) {
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return g_memdup (self, length * sizeof (guint8));
-#line 1096 "PhotoMetadata.c"
+#line 2016 "PhotoMetadata.c"
 }
 
 
@@ -1104,21 +2024,21 @@ static GdkPixbuf* photo_preview_real_get_pixbuf (PhotoPreview* self, GError** er
 	gint flattened_length1 = 0;
 	gint _flattened_size_ = 0;
 	GError * _inner_error_ = NULL;
-#line 84 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_preview_flatten (self, &_tmp0_, &_inner_error_);
-#line 84 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	flattened = _tmp1_;
-#line 84 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	flattened_length1 = _tmp0_;
-#line 84 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_flattened_size_ = flattened_length1;
-#line 84 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 84 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_propagate_error (error, _inner_error_);
-#line 84 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return NULL;
-#line 1122 "PhotoMetadata.c"
+#line 2042 "PhotoMetadata.c"
 	}
 	{
 		GdkPixbuf* _tmp2_ = NULL;
@@ -1129,40 +2049,40 @@ static GdkPixbuf* photo_preview_real_get_pixbuf (PhotoPreview* self, GError** er
 		GdkPixbuf* _tmp6_ = NULL;
 		GdkPixbuf* _tmp7_ = NULL;
 		GdkPixbuf* _tmp8_ = NULL;
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = (flattened != NULL) ? _vala_array_dup4 (flattened, flattened_length1) : ((gpointer) flattened);
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3__length1 = flattened_length1;
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = (GMemoryInputStream*) g_memory_input_stream_new_from_data (_tmp3_, _tmp3__length1, NULL);
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = _tmp4_;
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = gdk_pixbuf_new_from_stream (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, g_input_stream_get_type (), GInputStream), NULL, &_inner_error_);
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = _tmp6_;
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_object_unref0 (_tmp5_);
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = _tmp7_;
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1151 "PhotoMetadata.c"
+#line 2071 "PhotoMetadata.c"
 			goto __catch23_g_error;
 		}
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp8_ = _tmp2_;
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = NULL;
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = _tmp8_;
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_object_unref0 (_tmp2_);
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		flattened = (g_free (flattened), NULL);
-#line 89 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 201 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 1166 "PhotoMetadata.c"
+#line 2086 "PhotoMetadata.c"
 	}
 	goto __finally23;
 	__catch23_g_error:
@@ -1171,265 +2091,265 @@ static GdkPixbuf* photo_preview_real_get_pixbuf (PhotoPreview* self, GError** er
 		const gchar* _tmp9_ = NULL;
 		GError* _tmp10_ = NULL;
 		const gchar* _tmp11_ = NULL;
-#line 88 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		err = _inner_error_;
-#line 88 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_inner_error_ = NULL;
-#line 92 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp9_ = self->priv->name;
-#line 92 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = err;
-#line 92 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp11_ = _tmp10_->message;
-#line 92 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-		g_warning ("PhotoMetadata.vala:92: Unable to decode thumbnail for %s: %s", _tmp9_, _tmp11_);
-#line 94 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_warning ("PhotoMetadata.vala:204: Unable to decode thumbnail for %s: %s", _tmp9_, _tmp11_);
+#line 206 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = NULL;
-#line 94 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 206 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_error_free0 (err);
-#line 94 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 206 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		flattened = (g_free (flattened), NULL);
-#line 94 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 206 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 1195 "PhotoMetadata.c"
+#line 2115 "PhotoMetadata.c"
 	}
 	__finally23:
-#line 88 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_propagate_error (error, _inner_error_);
-#line 88 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	flattened = (g_free (flattened), NULL);
-#line 88 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return NULL;
-#line 1204 "PhotoMetadata.c"
+#line 2124 "PhotoMetadata.c"
 }
 
 
 GdkPixbuf* photo_preview_get_pixbuf (PhotoPreview* self, GError** error) {
-#line 83 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 195 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_PREVIEW (self), NULL);
-#line 83 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 195 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return PHOTO_PREVIEW_GET_CLASS (self)->get_pixbuf (self, error);
-#line 1213 "PhotoMetadata.c"
+#line 2133 "PhotoMetadata.c"
 }
 
 
 static void value_photo_preview_init (GValue* value) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	value->data[0].v_pointer = NULL;
-#line 1220 "PhotoMetadata.c"
+#line 2140 "PhotoMetadata.c"
 }
 
 
 static void value_photo_preview_free_value (GValue* value) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (value->data[0].v_pointer) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_preview_unref (value->data[0].v_pointer);
-#line 1229 "PhotoMetadata.c"
+#line 2149 "PhotoMetadata.c"
 	}
 }
 
 
 static void value_photo_preview_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (src_value->data[0].v_pointer) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		dest_value->data[0].v_pointer = photo_preview_ref (src_value->data[0].v_pointer);
-#line 1239 "PhotoMetadata.c"
+#line 2159 "PhotoMetadata.c"
 	} else {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 1243 "PhotoMetadata.c"
+#line 2163 "PhotoMetadata.c"
 	}
 }
 
 
 static gpointer value_photo_preview_peek_pointer (const GValue* value) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return value->data[0].v_pointer;
-#line 1251 "PhotoMetadata.c"
+#line 2171 "PhotoMetadata.c"
 }
 
 
 static gchar* value_photo_preview_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (collect_values[0].v_pointer) {
-#line 1258 "PhotoMetadata.c"
+#line 2178 "PhotoMetadata.c"
 		PhotoPreview* object;
 		object = collect_values[0].v_pointer;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1265 "PhotoMetadata.c"
+#line 2185 "PhotoMetadata.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1269 "PhotoMetadata.c"
+#line 2189 "PhotoMetadata.c"
 		}
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = photo_preview_ref (object);
-#line 1273 "PhotoMetadata.c"
+#line 2193 "PhotoMetadata.c"
 	} else {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = NULL;
-#line 1277 "PhotoMetadata.c"
+#line 2197 "PhotoMetadata.c"
 	}
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return NULL;
-#line 1281 "PhotoMetadata.c"
+#line 2201 "PhotoMetadata.c"
 }
 
 
 static gchar* value_photo_preview_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PhotoPreview** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!object_p) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 1292 "PhotoMetadata.c"
+#line 2212 "PhotoMetadata.c"
 	}
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!value->data[0].v_pointer) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*object_p = NULL;
-#line 1298 "PhotoMetadata.c"
+#line 2218 "PhotoMetadata.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*object_p = value->data[0].v_pointer;
-#line 1302 "PhotoMetadata.c"
+#line 2222 "PhotoMetadata.c"
 	} else {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*object_p = photo_preview_ref (value->data[0].v_pointer);
-#line 1306 "PhotoMetadata.c"
+#line 2226 "PhotoMetadata.c"
 	}
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return NULL;
-#line 1310 "PhotoMetadata.c"
+#line 2230 "PhotoMetadata.c"
 }
 
 
 GParamSpec* param_spec_photo_preview (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecPhotoPreview* spec;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_PHOTO_PREVIEW), NULL);
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return G_PARAM_SPEC (spec);
-#line 1324 "PhotoMetadata.c"
+#line 2244 "PhotoMetadata.c"
 }
 
 
 gpointer value_get_photo_preview (const GValue* value) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PHOTO_PREVIEW), NULL);
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return value->data[0].v_pointer;
-#line 1333 "PhotoMetadata.c"
+#line 2253 "PhotoMetadata.c"
 }
 
 
 void value_set_photo_preview (GValue* value, gpointer v_object) {
 	PhotoPreview* old;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PHOTO_PREVIEW));
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	old = value->data[0].v_pointer;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (v_object) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PHOTO_PREVIEW));
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = v_object;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_preview_ref (value->data[0].v_pointer);
-#line 1353 "PhotoMetadata.c"
+#line 2273 "PhotoMetadata.c"
 	} else {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = NULL;
-#line 1357 "PhotoMetadata.c"
+#line 2277 "PhotoMetadata.c"
 	}
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (old) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_preview_unref (old);
-#line 1363 "PhotoMetadata.c"
+#line 2283 "PhotoMetadata.c"
 	}
 }
 
 
 void value_take_photo_preview (GValue* value, gpointer v_object) {
 	PhotoPreview* old;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PHOTO_PREVIEW));
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	old = value->data[0].v_pointer;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (v_object) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PHOTO_PREVIEW));
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = v_object;
-#line 1382 "PhotoMetadata.c"
+#line 2302 "PhotoMetadata.c"
 	} else {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value->data[0].v_pointer = NULL;
-#line 1386 "PhotoMetadata.c"
+#line 2306 "PhotoMetadata.c"
 	}
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (old) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_preview_unref (old);
-#line 1392 "PhotoMetadata.c"
+#line 2312 "PhotoMetadata.c"
 	}
 }
 
 
 static void photo_preview_class_init (PhotoPreviewClass * klass) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_preview_parent_class = g_type_class_peek_parent (klass);
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	((PhotoPreviewClass *) klass)->finalize = photo_preview_finalize;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_type_class_add_private (klass, sizeof (PhotoPreviewPrivate));
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	((PhotoPreviewClass *) klass)->flatten = photo_preview_real_flatten;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	((PhotoPreviewClass *) klass)->get_pixbuf = photo_preview_real_get_pixbuf;
-#line 1408 "PhotoMetadata.c"
+#line 2328 "PhotoMetadata.c"
 }
 
 
 static void photo_preview_instance_init (PhotoPreview * self) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv = PHOTO_PREVIEW_GET_PRIVATE (self);
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->ref_count = 1;
-#line 1417 "PhotoMetadata.c"
+#line 2337 "PhotoMetadata.c"
 }
 
 
 static void photo_preview_finalize (PhotoPreview* obj) {
 	PhotoPreview * self;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PHOTO_PREVIEW, PhotoPreview);
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_signal_handlers_destroy (self);
-#line 47 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 159 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->priv->name);
-#line 50 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 162 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->priv->mime_type);
-#line 51 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 163 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->priv->extension);
-#line 1433 "PhotoMetadata.c"
+#line 2353 "PhotoMetadata.c"
 }
 
 
@@ -1450,24 +2370,24 @@ GType photo_preview_get_type (void) {
 gpointer photo_preview_ref (gpointer instance) {
 	PhotoPreview* self;
 	self = instance;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return instance;
-#line 1458 "PhotoMetadata.c"
+#line 2378 "PhotoMetadata.c"
 }
 
 
 void photo_preview_unref (gpointer instance) {
 	PhotoPreview* self;
 	self = instance;
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		PHOTO_PREVIEW_GET_CLASS (self)->finalize (self);
-#line 46 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 1471 "PhotoMetadata.c"
+#line 2391 "PhotoMetadata.c"
 	}
 }
 
@@ -1486,18 +2406,18 @@ GType photo_metadata_set_option_get_type (void) {
 
 PhotoMetadata* photo_metadata_construct (GType object_type) {
 	PhotoMetadata* self = NULL;
-#line 139 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 251 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = (PhotoMetadata*) media_metadata_construct (object_type);
-#line 139 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 251 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return self;
-#line 1494 "PhotoMetadata.c"
+#line 2414 "PhotoMetadata.c"
 }
 
 
 PhotoMetadata* photo_metadata_new (void) {
-#line 139 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 251 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return photo_metadata_construct (TYPE_PHOTO_METADATA);
-#line 1501 "PhotoMetadata.c"
+#line 2421 "PhotoMetadata.c"
 }
 
 
@@ -1515,63 +2435,63 @@ static void photo_metadata_real_read_from_file (MediaMetadata* base, GFile* file
 	GFile* _tmp9_ = NULL;
 	gchar* _tmp10_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 142 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 254 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO_METADATA, PhotoMetadata);
-#line 142 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 254 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 143 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 255 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = gexiv2_metadata_new ();
-#line 143 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 255 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (self->priv->exiv2);
-#line 143 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 255 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->exiv2 = _tmp0_;
-#line 144 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 256 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_exif_data_unref0 (self->priv->exif);
-#line 144 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 256 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->exif = NULL;
-#line 146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = self->priv->exiv2;
-#line 146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = file;
-#line 146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = g_file_get_path (_tmp2_);
-#line 146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = _tmp3_;
-#line 146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	gexiv2_metadata_open_path (_tmp1_, _tmp4_, &_inner_error_);
-#line 146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_tmp4_);
-#line 146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_propagate_error (error, _inner_error_);
-#line 146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return;
-#line 1551 "PhotoMetadata.c"
+#line 2471 "PhotoMetadata.c"
 	}
-#line 147 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 259 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = file;
-#line 147 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 259 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = g_file_get_path (_tmp5_);
-#line 147 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 259 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7_ = _tmp6_;
-#line 147 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 259 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = exif_data_new_from_file (_tmp7_);
-#line 147 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 259 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_exif_data_unref0 (self->priv->exif);
-#line 147 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 259 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->exif = _tmp8_;
-#line 147 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 259 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_tmp7_);
-#line 148 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 260 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9_ = file;
-#line 148 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 260 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp10_ = g_file_get_basename (_tmp9_);
-#line 148 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 260 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->priv->source_name);
-#line 148 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 260 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->source_name = _tmp10_;
-#line 1575 "PhotoMetadata.c"
+#line 2495 "PhotoMetadata.c"
 }
 
 
@@ -1581,29 +2501,29 @@ void photo_metadata_write_to_file (PhotoMetadata* self, GFile* file, GError** er
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 151 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 151 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 152 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 264 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 152 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 264 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = file;
-#line 152 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 264 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = g_file_get_path (_tmp1_);
-#line 152 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 264 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = _tmp2_;
-#line 152 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 264 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	gexiv2_metadata_save_file (_tmp0_, _tmp3_, &_inner_error_);
-#line 152 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 264 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_tmp3_);
-#line 152 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 264 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 152 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 264 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_propagate_error (error, _inner_error_);
-#line 152 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 264 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return;
-#line 1607 "PhotoMetadata.c"
+#line 2527 "PhotoMetadata.c"
 	}
 }
 
@@ -1625,80 +2545,80 @@ void photo_metadata_read_from_buffer (PhotoMetadata* self, guint8* buffer, int b
 	gint _tmp11_ = 0;
 	gchar* _tmp12_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 155 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 267 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 156 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 268 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = length;
-#line 156 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 268 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp0_ <= 0) {
-#line 1635 "PhotoMetadata.c"
+#line 2555 "PhotoMetadata.c"
 		guint8* _tmp1_ = NULL;
 		gint _tmp1__length1 = 0;
-#line 157 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 269 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1_ = buffer;
-#line 157 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 269 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1__length1 = buffer_length1;
-#line 157 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 269 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		length = _tmp1__length1;
-#line 1644 "PhotoMetadata.c"
+#line 2564 "PhotoMetadata.c"
 	}
-#line 159 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 271 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = buffer;
-#line 159 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 271 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2__length1 = buffer_length1;
-#line 159 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 271 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = length;
-#line 159 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 271 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_assert (_tmp2__length1 >= _tmp3_, "buffer.length >= length");
-#line 161 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 273 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = gexiv2_metadata_new ();
-#line 161 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 273 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (self->priv->exiv2);
-#line 161 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 273 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->exiv2 = _tmp4_;
-#line 162 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 274 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_exif_data_unref0 (self->priv->exif);
-#line 162 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 274 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->exif = NULL;
-#line 164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = self->priv->exiv2;
-#line 164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = buffer;
-#line 164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6__length1 = buffer_length1;
-#line 164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7_ = length;
-#line 164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	gexiv2_metadata_open_buf (_tmp5_, _tmp6_, (glong) _tmp7_, &_inner_error_);
-#line 164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_propagate_error (error, _inner_error_);
-#line 164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return;
-#line 1680 "PhotoMetadata.c"
+#line 2600 "PhotoMetadata.c"
 	}
-#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = buffer;
-#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8__length1 = buffer_length1;
-#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9_ = length;
-#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp10_ = exif_data_new_from_data (_tmp8_, (gsize) _tmp9_);
-#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_exif_data_unref0 (self->priv->exif);
-#line 165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->exif = _tmp10_;
-#line 166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 278 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp11_ = length;
-#line 166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 278 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp12_ = g_strdup_printf ("<memory buffer %d bytes>", _tmp11_);
-#line 166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 278 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->priv->source_name);
-#line 166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 278 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->source_name = _tmp12_;
-#line 1702 "PhotoMetadata.c"
+#line 2622 "PhotoMetadata.c"
 }
 
 
@@ -1719,80 +2639,80 @@ void photo_metadata_read_from_app1_segment (PhotoMetadata* self, guint8* buffer,
 	gint _tmp11_ = 0;
 	gchar* _tmp12_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 169 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 281 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 170 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 282 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = length;
-#line 170 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 282 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp0_ <= 0) {
-#line 1729 "PhotoMetadata.c"
+#line 2649 "PhotoMetadata.c"
 		guint8* _tmp1_ = NULL;
 		gint _tmp1__length1 = 0;
-#line 171 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 283 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1_ = buffer;
-#line 171 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 283 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1__length1 = buffer_length1;
-#line 171 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 283 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		length = _tmp1__length1;
-#line 1738 "PhotoMetadata.c"
+#line 2658 "PhotoMetadata.c"
 	}
-#line 173 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = buffer;
-#line 173 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2__length1 = buffer_length1;
-#line 173 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = length;
-#line 173 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_assert (_tmp2__length1 >= _tmp3_, "buffer.length >= length");
-#line 175 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = gexiv2_metadata_new ();
-#line 175 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (self->priv->exiv2);
-#line 175 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->exiv2 = _tmp4_;
-#line 176 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 288 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_exif_data_unref0 (self->priv->exif);
-#line 176 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 288 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->exif = NULL;
-#line 178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = self->priv->exiv2;
-#line 178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = buffer;
-#line 178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6__length1 = buffer_length1;
-#line 178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7_ = length;
-#line 178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	gexiv2_metadata_from_app1_segment (_tmp5_, _tmp6_, (glong) _tmp7_, &_inner_error_);
-#line 178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_propagate_error (error, _inner_error_);
-#line 178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return;
-#line 1774 "PhotoMetadata.c"
+#line 2694 "PhotoMetadata.c"
 	}
-#line 179 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = buffer;
-#line 179 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8__length1 = buffer_length1;
-#line 179 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9_ = length;
-#line 179 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp10_ = exif_data_new_from_data (_tmp8_, (gsize) _tmp9_);
-#line 179 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_exif_data_unref0 (self->priv->exif);
-#line 179 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->exif = _tmp10_;
-#line 180 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 292 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp11_ = length;
-#line 180 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 292 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp12_ = g_strdup_printf ("<app1 segment %d bytes>", _tmp11_);
-#line 180 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 292 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->priv->source_name);
-#line 180 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 292 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->source_name = _tmp12_;
-#line 1796 "PhotoMetadata.c"
+#line 2716 "PhotoMetadata.c"
 }
 
 
@@ -1804,119 +2724,119 @@ MetadataDomain photo_metadata_get_tag_domain (const gchar* tag) {
 	gboolean _tmp3_ = FALSE;
 	const gchar* _tmp4_ = NULL;
 	gboolean _tmp5_ = FALSE;
-#line 183 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 295 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (tag != NULL, 0);
-#line 184 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 296 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tag;
-#line 184 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 296 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = gexiv2_metadata_is_exif_tag (_tmp0_);
-#line 184 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 296 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp1_) {
-#line 185 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 297 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = METADATA_DOMAIN_EXIF;
-#line 185 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 297 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 1820 "PhotoMetadata.c"
+#line 2740 "PhotoMetadata.c"
 	}
-#line 187 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 299 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = tag;
-#line 187 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 299 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = gexiv2_metadata_is_xmp_tag (_tmp2_);
-#line 187 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 299 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp3_) {
-#line 188 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 300 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = METADATA_DOMAIN_XMP;
-#line 188 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 300 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 1832 "PhotoMetadata.c"
+#line 2752 "PhotoMetadata.c"
 	}
-#line 190 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = tag;
-#line 190 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = gexiv2_metadata_is_iptc_tag (_tmp4_);
-#line 190 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp5_) {
-#line 191 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 303 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = METADATA_DOMAIN_IPTC;
-#line 191 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 303 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 1844 "PhotoMetadata.c"
+#line 2764 "PhotoMetadata.c"
 	}
-#line 193 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 305 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = METADATA_DOMAIN_UNKNOWN;
-#line 193 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 305 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 1850 "PhotoMetadata.c"
+#line 2770 "PhotoMetadata.c"
 }
 
 
 gboolean photo_metadata_has_domain (PhotoMetadata* self, MetadataDomain domain) {
 	gboolean result = FALSE;
 	MetadataDomain _tmp0_ = 0;
-#line 196 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 308 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 197 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = domain;
-#line 197 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	switch (_tmp0_) {
-#line 197 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_EXIF:
-#line 1865 "PhotoMetadata.c"
+#line 2785 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp1_ = NULL;
 			gboolean _tmp2_ = FALSE;
-#line 199 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 311 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = self->priv->exiv2;
-#line 199 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 311 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp2_ = gexiv2_metadata_has_exif (_tmp1_);
-#line 199 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 311 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			result = _tmp2_;
-#line 199 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 311 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return result;
-#line 1877 "PhotoMetadata.c"
+#line 2797 "PhotoMetadata.c"
 		}
-#line 197 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_XMP:
-#line 1881 "PhotoMetadata.c"
+#line 2801 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp3_ = NULL;
 			gboolean _tmp4_ = FALSE;
-#line 202 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 314 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp3_ = self->priv->exiv2;
-#line 202 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 314 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp4_ = gexiv2_metadata_has_xmp (_tmp3_);
-#line 202 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 314 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			result = _tmp4_;
-#line 202 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 314 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return result;
-#line 1893 "PhotoMetadata.c"
+#line 2813 "PhotoMetadata.c"
 		}
-#line 197 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_IPTC:
-#line 1897 "PhotoMetadata.c"
+#line 2817 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp5_ = NULL;
 			gboolean _tmp6_ = FALSE;
-#line 205 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 317 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp5_ = self->priv->exiv2;
-#line 205 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 317 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp6_ = gexiv2_metadata_has_iptc (_tmp5_);
-#line 205 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 317 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			result = _tmp6_;
-#line 205 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 317 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return result;
-#line 1909 "PhotoMetadata.c"
+#line 2829 "PhotoMetadata.c"
 		}
 		default:
-#line 197 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_UNKNOWN:
-#line 1914 "PhotoMetadata.c"
+#line 2834 "PhotoMetadata.c"
 		{
-#line 209 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			result = FALSE;
-#line 209 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return result;
-#line 1920 "PhotoMetadata.c"
+#line 2840 "PhotoMetadata.c"
 		}
 	}
 }
@@ -1925,115 +2845,115 @@ gboolean photo_metadata_has_domain (PhotoMetadata* self, MetadataDomain domain) 
 gboolean photo_metadata_has_exif (PhotoMetadata* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 213 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 325 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 214 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 326 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_has_domain (self, METADATA_DOMAIN_EXIF);
-#line 214 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 326 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 214 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 326 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 1937 "PhotoMetadata.c"
+#line 2857 "PhotoMetadata.c"
 }
 
 
 gboolean photo_metadata_has_xmp (PhotoMetadata* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 217 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 329 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 218 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 330 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_has_domain (self, METADATA_DOMAIN_XMP);
-#line 218 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 330 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 218 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 330 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 1952 "PhotoMetadata.c"
+#line 2872 "PhotoMetadata.c"
 }
 
 
 gboolean photo_metadata_has_iptc (PhotoMetadata* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 221 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 333 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 222 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 334 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_has_domain (self, METADATA_DOMAIN_IPTC);
-#line 222 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 334 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 222 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 334 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 1967 "PhotoMetadata.c"
+#line 2887 "PhotoMetadata.c"
 }
 
 
 gboolean photo_metadata_can_write_to_domain (PhotoMetadata* self, MetadataDomain domain) {
 	gboolean result = FALSE;
 	MetadataDomain _tmp0_ = 0;
-#line 225 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 337 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 226 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 338 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = domain;
-#line 226 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 338 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	switch (_tmp0_) {
-#line 226 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 338 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_EXIF:
-#line 1982 "PhotoMetadata.c"
+#line 2902 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp1_ = NULL;
 			gboolean _tmp2_ = FALSE;
-#line 228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 340 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = self->priv->exiv2;
-#line 228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 340 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp2_ = gexiv2_metadata_get_supports_exif (_tmp1_);
-#line 228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 340 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			result = _tmp2_;
-#line 228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 340 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return result;
-#line 1994 "PhotoMetadata.c"
+#line 2914 "PhotoMetadata.c"
 		}
-#line 226 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 338 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_XMP:
-#line 1998 "PhotoMetadata.c"
+#line 2918 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp3_ = NULL;
 			gboolean _tmp4_ = FALSE;
-#line 231 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 343 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp3_ = self->priv->exiv2;
-#line 231 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 343 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp4_ = gexiv2_metadata_get_supports_xmp (_tmp3_);
-#line 231 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 343 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			result = _tmp4_;
-#line 231 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 343 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return result;
-#line 2010 "PhotoMetadata.c"
+#line 2930 "PhotoMetadata.c"
 		}
-#line 226 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 338 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_IPTC:
-#line 2014 "PhotoMetadata.c"
+#line 2934 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp5_ = NULL;
 			gboolean _tmp6_ = FALSE;
-#line 234 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 346 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp5_ = self->priv->exiv2;
-#line 234 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 346 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp6_ = gexiv2_metadata_get_supports_iptc (_tmp5_);
-#line 234 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 346 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			result = _tmp6_;
-#line 234 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 346 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return result;
-#line 2026 "PhotoMetadata.c"
+#line 2946 "PhotoMetadata.c"
 		}
 		default:
-#line 226 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 338 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_UNKNOWN:
-#line 2031 "PhotoMetadata.c"
+#line 2951 "PhotoMetadata.c"
 		{
-#line 238 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			result = FALSE;
-#line 238 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			return result;
-#line 2037 "PhotoMetadata.c"
+#line 2957 "PhotoMetadata.c"
 		}
 	}
 }
@@ -2042,45 +2962,45 @@ gboolean photo_metadata_can_write_to_domain (PhotoMetadata* self, MetadataDomain
 gboolean photo_metadata_can_write_exif (PhotoMetadata* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 242 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 354 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 355 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_can_write_to_domain (self, METADATA_DOMAIN_EXIF);
-#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 355 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 355 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2054 "PhotoMetadata.c"
+#line 2974 "PhotoMetadata.c"
 }
 
 
 gboolean photo_metadata_can_write_xmp (PhotoMetadata* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 246 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 358 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 247 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 359 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_can_write_to_domain (self, METADATA_DOMAIN_XMP);
-#line 247 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 359 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 247 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 359 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2069 "PhotoMetadata.c"
+#line 2989 "PhotoMetadata.c"
 }
 
 
 gboolean photo_metadata_can_write_iptc (PhotoMetadata* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 250 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 362 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 251 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 363 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_can_write_to_domain (self, METADATA_DOMAIN_IPTC);
-#line 251 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 363 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 251 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 363 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2084 "PhotoMetadata.c"
+#line 3004 "PhotoMetadata.c"
 }
 
 
@@ -2089,21 +3009,21 @@ gboolean photo_metadata_has_tag (PhotoMetadata* self, const gchar* tag) {
 	GExiv2Metadata* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
-#line 254 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 366 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 254 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 366 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (tag != NULL, FALSE);
-#line 255 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 367 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 255 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 367 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = tag;
-#line 255 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 367 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = gexiv2_metadata_has_tag (_tmp0_, _tmp1_);
-#line 255 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 367 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp2_;
-#line 255 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 367 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2107 "PhotoMetadata.c"
+#line 3027 "PhotoMetadata.c"
 }
 
 
@@ -2111,69 +3031,69 @@ static GeeSet* photo_metadata_create_string_set (PhotoMetadata* self, GCompareDa
 	GeeSet* result = NULL;
 	GCompareDataFunc _tmp0_ = NULL;
 	void* _tmp0__target = NULL;
-#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 370 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 260 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = compare_func;
-#line 260 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__target = compare_func_target;
-#line 260 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp0_ == NULL) {
-#line 2123 "PhotoMetadata.c"
+#line 3043 "PhotoMetadata.c"
 		GeeHashSet* _tmp1_ = NULL;
-#line 261 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 373 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1_ = gee_hash_set_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 261 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 373 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_SET, GeeSet);
-#line 261 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 373 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		(compare_func_target_destroy_notify == NULL) ? NULL : (compare_func_target_destroy_notify (compare_func_target), NULL);
-#line 261 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 373 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		compare_func = NULL;
-#line 261 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 373 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		compare_func_target = NULL;
-#line 261 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 373 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		compare_func_target_destroy_notify = NULL;
-#line 261 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 373 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 2139 "PhotoMetadata.c"
+#line 3059 "PhotoMetadata.c"
 	} else {
 		GCompareDataFunc _tmp2_ = NULL;
 		void* _tmp2__target = NULL;
 		GDestroyNotify _tmp2__target_destroy_notify = NULL;
 		GeeTreeSet* _tmp3_ = NULL;
-#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 375 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = compare_func;
-#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 375 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2__target = compare_func_target;
-#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 375 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2__target_destroy_notify = compare_func_target_destroy_notify;
-#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 375 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		compare_func_target_destroy_notify = NULL;
-#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 375 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = gee_tree_set_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, _tmp2_, _tmp2__target, _tmp2__target_destroy_notify);
-#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 375 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_SET, GeeSet);
-#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 375 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		(compare_func_target_destroy_notify == NULL) ? NULL : (compare_func_target_destroy_notify (compare_func_target), NULL);
-#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 375 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		compare_func = NULL;
-#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 375 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		compare_func_target = NULL;
-#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 375 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		compare_func_target_destroy_notify = NULL;
-#line 263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 375 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 2167 "PhotoMetadata.c"
+#line 3087 "PhotoMetadata.c"
 	}
-#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 370 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	(compare_func_target_destroy_notify == NULL) ? NULL : (compare_func_target_destroy_notify (compare_func_target), NULL);
-#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 370 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func = NULL;
-#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 370 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func_target = NULL;
-#line 258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 370 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func_target_destroy_notify = NULL;
-#line 2177 "PhotoMetadata.c"
+#line 3097 "PhotoMetadata.c"
 }
 
 
@@ -2193,203 +3113,196 @@ GeeCollection* photo_metadata_get_tags (PhotoMetadata* self, MetadataDomain doma
 	GeeSet* _tmp14_ = NULL;
 	gchar** _tmp15_ = NULL;
 	gint _tmp15__length1 = 0;
-#line 266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 378 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 268 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 380 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	tags = NULL;
-#line 268 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 380 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	tags_length1 = 0;
-#line 268 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 380 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tags_size_ = tags_length1;
-#line 269 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 381 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = domain;
-#line 269 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 381 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	switch (_tmp0_) {
-#line 269 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 381 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_EXIF:
-#line 2211 "PhotoMetadata.c"
+#line 3131 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp1_ = NULL;
 			gchar** _tmp2_ = NULL;
 			gchar** _tmp3_ = NULL;
-#line 271 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 383 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = self->priv->exiv2;
-#line 271 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 383 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp3_ = _tmp2_ = gexiv2_metadata_get_exif_tags (_tmp1_);
-#line 271 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 383 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tags = (_vala_array_free (tags, tags_length1, (GDestroyNotify) g_free), NULL);
-#line 271 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 383 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tags = _tmp3_;
-#line 271 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 383 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tags_length1 = _vala_array_length (_tmp2_);
-#line 271 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 383 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tags_size_ = tags_length1;
-#line 272 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 384 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			break;
-#line 2230 "PhotoMetadata.c"
+#line 3150 "PhotoMetadata.c"
 		}
-#line 269 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 381 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_XMP:
-#line 2234 "PhotoMetadata.c"
+#line 3154 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp4_ = NULL;
 			gchar** _tmp5_ = NULL;
 			gchar** _tmp6_ = NULL;
-#line 275 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 387 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp4_ = self->priv->exiv2;
-#line 275 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 387 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp6_ = _tmp5_ = gexiv2_metadata_get_xmp_tags (_tmp4_);
-#line 275 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 387 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tags = (_vala_array_free (tags, tags_length1, (GDestroyNotify) g_free), NULL);
-#line 275 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 387 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tags = _tmp6_;
-#line 275 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 387 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tags_length1 = _vala_array_length (_tmp5_);
-#line 275 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 387 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tags_size_ = tags_length1;
-#line 276 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 388 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			break;
-#line 2253 "PhotoMetadata.c"
+#line 3173 "PhotoMetadata.c"
 		}
-#line 269 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 381 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_IPTC:
-#line 2257 "PhotoMetadata.c"
+#line 3177 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp7_ = NULL;
 			gchar** _tmp8_ = NULL;
 			gchar** _tmp9_ = NULL;
-#line 279 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 391 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp7_ = self->priv->exiv2;
-#line 279 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 391 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp9_ = _tmp8_ = gexiv2_metadata_get_iptc_tags (_tmp7_);
-#line 279 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 391 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tags = (_vala_array_free (tags, tags_length1, (GDestroyNotify) g_free), NULL);
-#line 279 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 391 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tags = _tmp9_;
-#line 279 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 391 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tags_length1 = _vala_array_length (_tmp8_);
-#line 279 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 391 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tags_size_ = tags_length1;
-#line 280 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 392 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			break;
-#line 2276 "PhotoMetadata.c"
+#line 3196 "PhotoMetadata.c"
 		}
 		default:
-#line 269 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 381 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		break;
-#line 2281 "PhotoMetadata.c"
+#line 3201 "PhotoMetadata.c"
 	}
-#line 283 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 395 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp11_ = tags;
-#line 283 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 395 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp11__length1 = tags_length1;
-#line 283 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 395 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp11_ == NULL) {
-#line 283 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 395 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = TRUE;
-#line 2291 "PhotoMetadata.c"
+#line 3211 "PhotoMetadata.c"
 	} else {
 		gchar** _tmp12_ = NULL;
 		gint _tmp12__length1 = 0;
-#line 283 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 395 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp12_ = tags;
-#line 283 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 395 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp12__length1 = tags_length1;
-#line 283 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 395 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = _tmp12__length1 == 0;
-#line 2301 "PhotoMetadata.c"
+#line 3221 "PhotoMetadata.c"
 	}
-#line 283 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 395 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp10_) {
-#line 284 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 396 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = NULL;
-#line 284 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 396 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tags = (_vala_array_free (tags, tags_length1, (GDestroyNotify) g_free), NULL);
-#line 284 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 396 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		(compare_func_target_destroy_notify == NULL) ? NULL : (compare_func_target_destroy_notify (compare_func_target), NULL);
-#line 284 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 396 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		compare_func = NULL;
-#line 284 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 396 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		compare_func_target = NULL;
-#line 284 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 396 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		compare_func_target_destroy_notify = NULL;
-#line 284 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 396 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 2319 "PhotoMetadata.c"
+#line 3239 "PhotoMetadata.c"
 	}
-#line 286 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 398 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp13_ = compare_func;
-#line 286 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 398 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp13__target = compare_func_target;
-#line 286 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 398 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp13__target_destroy_notify = compare_func_target_destroy_notify;
-#line 286 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 398 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func_target_destroy_notify = NULL;
-#line 286 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 398 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp14_ = photo_metadata_create_string_set (self, _tmp13_, _tmp13__target, _tmp13__target_destroy_notify);
-#line 286 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 398 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	collection = G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp15_ = tags;
-#line 287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp15__length1 = tags_length1;
-#line 2337 "PhotoMetadata.c"
+#line 3257 "PhotoMetadata.c"
 	{
 		gchar** tag_collection = NULL;
 		gint tag_collection_length1 = 0;
 		gint _tag_collection_size_ = 0;
 		gint tag_it = 0;
-#line 287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection = _tmp15_;
-#line 287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection_length1 = _tmp15__length1;
-#line 287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (tag_it = 0; tag_it < _tmp15__length1; tag_it = tag_it + 1) {
-#line 2349 "PhotoMetadata.c"
+#line 3269 "PhotoMetadata.c"
 			gchar* _tmp16_ = NULL;
 			gchar* tag = NULL;
-#line 287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp16_ = g_strdup (tag_collection[tag_it]);
-#line 287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tag = _tmp16_;
-#line 2356 "PhotoMetadata.c"
+#line 3276 "PhotoMetadata.c"
 			{
 				GeeCollection* _tmp17_ = NULL;
 				const gchar* _tmp18_ = NULL;
-#line 288 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 400 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp17_ = collection;
-#line 288 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 400 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp18_ = tag;
-#line 288 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 400 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				gee_collection_add (_tmp17_, _tmp18_);
-#line 287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (tag);
-#line 2368 "PhotoMetadata.c"
+#line 3288 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 402 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = collection;
-#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 402 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	tags = (_vala_array_free (tags, tags_length1, (GDestroyNotify) g_free), NULL);
-#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 402 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	(compare_func_target_destroy_notify == NULL) ? NULL : (compare_func_target_destroy_notify (compare_func_target), NULL);
-#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 402 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func = NULL;
-#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 402 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func_target = NULL;
-#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 402 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func_target_destroy_notify = NULL;
-#line 290 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 402 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2386 "PhotoMetadata.c"
-}
-
-
-static gpointer _g_object_ref0 (gpointer self) {
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	return self ? g_object_ref (self) : NULL;
-#line 2393 "PhotoMetadata.c"
+#line 3306 "PhotoMetadata.c"
 }
 
 
@@ -2417,180 +3330,180 @@ GeeCollection* photo_metadata_get_all_tags (PhotoMetadata* self, GCompareDataFun
 	gint _tmp28_ = 0;
 	gint _tmp29_ = 0;
 	GeeCollection* _tmp31_ = NULL;
-#line 293 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 405 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 295 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = compare_func;
-#line 295 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__target = compare_func_target;
-#line 295 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__target_destroy_notify = compare_func_target_destroy_notify;
-#line 295 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func_target_destroy_notify = NULL;
-#line 295 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_create_string_set (self, _tmp0_, _tmp0__target, _tmp0__target_destroy_notify);
-#line 295 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	all_tags = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 297 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 409 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = photo_metadata_get_tags (self, METADATA_DOMAIN_EXIF, NULL, NULL, NULL);
-#line 297 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 409 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	exif_tags = _tmp2_;
-#line 298 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 410 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = exif_tags;
-#line 298 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 410 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp4_ != NULL) {
-#line 2443 "PhotoMetadata.c"
+#line 3356 "PhotoMetadata.c"
 		GeeCollection* _tmp5_ = NULL;
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
-#line 298 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 410 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = exif_tags;
-#line 298 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 410 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = gee_collection_get_size (_tmp5_);
-#line 298 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 410 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = _tmp6_;
-#line 298 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 410 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = _tmp7_ > 0;
-#line 2455 "PhotoMetadata.c"
+#line 3368 "PhotoMetadata.c"
 	} else {
-#line 298 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 410 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = FALSE;
-#line 2459 "PhotoMetadata.c"
+#line 3372 "PhotoMetadata.c"
 	}
-#line 298 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 410 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp3_) {
-#line 2463 "PhotoMetadata.c"
+#line 3376 "PhotoMetadata.c"
 		GeeCollection* _tmp8_ = NULL;
 		GeeCollection* _tmp9_ = NULL;
-#line 299 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 411 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp8_ = all_tags;
-#line 299 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 411 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp9_ = exif_tags;
-#line 299 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 411 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		gee_collection_add_all (_tmp8_, _tmp9_);
-#line 2472 "PhotoMetadata.c"
+#line 3385 "PhotoMetadata.c"
 	}
-#line 301 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 413 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp10_ = photo_metadata_get_tags (self, METADATA_DOMAIN_XMP, NULL, NULL, NULL);
-#line 301 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 413 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	xmp_tags = _tmp10_;
-#line 302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp12_ = xmp_tags;
-#line 302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp12_ != NULL) {
-#line 2482 "PhotoMetadata.c"
+#line 3395 "PhotoMetadata.c"
 		GeeCollection* _tmp13_ = NULL;
 		gint _tmp14_ = 0;
 		gint _tmp15_ = 0;
-#line 302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp13_ = xmp_tags;
-#line 302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp14_ = gee_collection_get_size (_tmp13_);
-#line 302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp15_ = _tmp14_;
-#line 302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp11_ = _tmp15_ > 0;
-#line 2494 "PhotoMetadata.c"
+#line 3407 "PhotoMetadata.c"
 	} else {
-#line 302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp11_ = FALSE;
-#line 2498 "PhotoMetadata.c"
+#line 3411 "PhotoMetadata.c"
 	}
-#line 302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp11_) {
-#line 2502 "PhotoMetadata.c"
+#line 3415 "PhotoMetadata.c"
 		GeeCollection* _tmp16_ = NULL;
 		GeeCollection* _tmp17_ = NULL;
-#line 303 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 415 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp16_ = all_tags;
-#line 303 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 415 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp17_ = xmp_tags;
-#line 303 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 415 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		gee_collection_add_all (_tmp16_, _tmp17_);
-#line 2511 "PhotoMetadata.c"
+#line 3424 "PhotoMetadata.c"
 	}
-#line 305 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 417 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp18_ = photo_metadata_get_tags (self, METADATA_DOMAIN_IPTC, NULL, NULL, NULL);
-#line 305 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 417 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	iptc_tags = _tmp18_;
-#line 306 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp20_ = iptc_tags;
-#line 306 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp20_ != NULL) {
-#line 2521 "PhotoMetadata.c"
+#line 3434 "PhotoMetadata.c"
 		GeeCollection* _tmp21_ = NULL;
 		gint _tmp22_ = 0;
 		gint _tmp23_ = 0;
-#line 306 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp21_ = iptc_tags;
-#line 306 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp22_ = gee_collection_get_size (_tmp21_);
-#line 306 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp23_ = _tmp22_;
-#line 306 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp19_ = _tmp23_ > 0;
-#line 2533 "PhotoMetadata.c"
+#line 3446 "PhotoMetadata.c"
 	} else {
-#line 306 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp19_ = FALSE;
-#line 2537 "PhotoMetadata.c"
+#line 3450 "PhotoMetadata.c"
 	}
-#line 306 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp19_) {
-#line 2541 "PhotoMetadata.c"
+#line 3454 "PhotoMetadata.c"
 		GeeCollection* _tmp24_ = NULL;
 		GeeCollection* _tmp25_ = NULL;
-#line 307 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 419 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp24_ = all_tags;
-#line 307 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 419 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp25_ = iptc_tags;
-#line 307 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 419 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		gee_collection_add_all (_tmp24_, _tmp25_);
-#line 2550 "PhotoMetadata.c"
+#line 3463 "PhotoMetadata.c"
 	}
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp27_ = all_tags;
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp28_ = gee_collection_get_size (_tmp27_);
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp29_ = _tmp28_;
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp29_ > 0) {
-#line 2560 "PhotoMetadata.c"
+#line 3473 "PhotoMetadata.c"
 		GeeCollection* _tmp30_ = NULL;
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp30_ = all_tags;
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp26_ = _tmp30_;
-#line 2566 "PhotoMetadata.c"
+#line 3479 "PhotoMetadata.c"
 	} else {
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp26_ = NULL;
-#line 2570 "PhotoMetadata.c"
+#line 3483 "PhotoMetadata.c"
 	}
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp31_ = _g_object_ref0 (_tmp26_);
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp31_;
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (iptc_tags);
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (xmp_tags);
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (exif_tags);
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (all_tags);
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	(compare_func_target_destroy_notify == NULL) ? NULL : (compare_func_target_destroy_notify (compare_func_target), NULL);
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func = NULL;
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func_target = NULL;
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func_target_destroy_notify = NULL;
-#line 309 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2594 "PhotoMetadata.c"
+#line 3507 "PhotoMetadata.c"
 }
 
 
@@ -2599,21 +3512,21 @@ gchar* photo_metadata_get_tag_label (PhotoMetadata* self, const gchar* tag) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 312 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 424 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 312 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 424 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (tag != NULL, NULL);
-#line 313 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 425 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tag;
-#line 313 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 425 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = gexiv2_metadata_get_tag_label (_tmp0_);
-#line 313 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 425 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 313 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 425 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp2_;
-#line 313 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 425 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2617 "PhotoMetadata.c"
+#line 3530 "PhotoMetadata.c"
 }
 
 
@@ -2622,21 +3535,21 @@ gchar* photo_metadata_get_tag_description (PhotoMetadata* self, const gchar* tag
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 316 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 316 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (tag != NULL, NULL);
-#line 317 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tag;
-#line 317 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = gexiv2_metadata_get_tag_description (_tmp0_);
-#line 317 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 317 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp2_;
-#line 317 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2640 "PhotoMetadata.c"
+#line 3553 "PhotoMetadata.c"
 }
 
 
@@ -2649,31 +3562,31 @@ gchar* photo_metadata_get_string (PhotoMetadata* self, const gchar* tag, Prepare
 	PrepareInputTextOptions _tmp4_ = 0;
 	gchar* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
-#line 320 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 432 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 320 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 432 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (tag != NULL, NULL);
-#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = tag;
-#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = gexiv2_metadata_get_tag_string (_tmp0_, _tmp1_);
-#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = _tmp2_;
-#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = options;
-#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = prepare_input_text (_tmp3_, _tmp4_, DEFAULT_USER_TEXT_INPUT_LENGTH);
-#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = _tmp5_;
-#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_tmp3_);
-#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp6_;
-#line 321 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2677 "PhotoMetadata.c"
+#line 3590 "PhotoMetadata.c"
 }
 
 
@@ -2686,31 +3599,31 @@ gchar* photo_metadata_get_string_interpreted (PhotoMetadata* self, const gchar* 
 	PrepareInputTextOptions _tmp4_ = 0;
 	gchar* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
-#line 324 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 436 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 324 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 436 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (tag != NULL, NULL);
-#line 325 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 325 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = tag;
-#line 325 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = gexiv2_metadata_get_tag_interpreted_string (_tmp0_, _tmp1_);
-#line 325 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = _tmp2_;
-#line 325 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = options;
-#line 325 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = prepare_input_text (_tmp3_, _tmp4_, DEFAULT_USER_TEXT_INPUT_LENGTH);
-#line 325 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = _tmp5_;
-#line 325 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_tmp3_);
-#line 325 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp6_;
-#line 325 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2714 "PhotoMetadata.c"
+#line 3627 "PhotoMetadata.c"
 }
 
 
@@ -2718,68 +3631,68 @@ gchar* photo_metadata_get_first_string (PhotoMetadata* self, gchar** tags, int t
 	gchar* result = NULL;
 	gchar** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 328 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 440 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 329 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 441 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tags;
-#line 329 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 441 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = tags_length1;
-#line 2728 "PhotoMetadata.c"
+#line 3641 "PhotoMetadata.c"
 	{
 		gchar** tag_collection = NULL;
 		gint tag_collection_length1 = 0;
 		gint _tag_collection_size_ = 0;
 		gint tag_it = 0;
-#line 329 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 441 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection = _tmp0_;
-#line 329 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 441 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection_length1 = _tmp0__length1;
-#line 329 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 441 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (tag_it = 0; tag_it < _tmp0__length1; tag_it = tag_it + 1) {
-#line 2740 "PhotoMetadata.c"
+#line 3653 "PhotoMetadata.c"
 			gchar* _tmp1_ = NULL;
 			gchar* tag = NULL;
-#line 329 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 441 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = g_strdup (tag_collection[tag_it]);
-#line 329 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 441 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tag = _tmp1_;
-#line 2747 "PhotoMetadata.c"
+#line 3660 "PhotoMetadata.c"
 			{
 				gchar* value = NULL;
 				const gchar* _tmp2_ = NULL;
 				gchar* _tmp3_ = NULL;
 				const gchar* _tmp4_ = NULL;
-#line 330 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 442 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp2_ = tag;
-#line 330 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 442 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp3_ = photo_metadata_get_string (self, _tmp2_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 330 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 442 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				value = _tmp3_;
-#line 331 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 443 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp4_ = value;
-#line 331 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 443 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp4_ != NULL) {
-#line 332 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 444 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					result = value;
-#line 332 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 444 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_free0 (tag);
-#line 332 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 444 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					return result;
-#line 2769 "PhotoMetadata.c"
+#line 3682 "PhotoMetadata.c"
 				}
-#line 329 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 441 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (value);
-#line 329 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 441 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (tag);
-#line 2775 "PhotoMetadata.c"
+#line 3688 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 335 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 447 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = NULL;
-#line 335 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 447 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2783 "PhotoMetadata.c"
+#line 3696 "PhotoMetadata.c"
 }
 
 
@@ -2787,68 +3700,68 @@ gchar* photo_metadata_get_first_string_interpreted (PhotoMetadata* self, gchar**
 	gchar* result = NULL;
 	gchar** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 338 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 450 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 339 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tags;
-#line 339 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = tags_length1;
-#line 2797 "PhotoMetadata.c"
+#line 3710 "PhotoMetadata.c"
 	{
 		gchar** tag_collection = NULL;
 		gint tag_collection_length1 = 0;
 		gint _tag_collection_size_ = 0;
 		gint tag_it = 0;
-#line 339 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection = _tmp0_;
-#line 339 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection_length1 = _tmp0__length1;
-#line 339 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (tag_it = 0; tag_it < _tmp0__length1; tag_it = tag_it + 1) {
-#line 2809 "PhotoMetadata.c"
+#line 3722 "PhotoMetadata.c"
 			gchar* _tmp1_ = NULL;
 			gchar* tag = NULL;
-#line 339 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = g_strdup (tag_collection[tag_it]);
-#line 339 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tag = _tmp1_;
-#line 2816 "PhotoMetadata.c"
+#line 3729 "PhotoMetadata.c"
 			{
 				gchar* value = NULL;
 				const gchar* _tmp2_ = NULL;
 				gchar* _tmp3_ = NULL;
 				const gchar* _tmp4_ = NULL;
-#line 340 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 452 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp2_ = tag;
-#line 340 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 452 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp3_ = photo_metadata_get_string_interpreted (self, _tmp2_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 340 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 452 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				value = _tmp3_;
-#line 341 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 453 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp4_ = value;
-#line 341 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 453 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp4_ != NULL) {
-#line 342 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 454 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					result = value;
-#line 342 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 454 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_free0 (tag);
-#line 342 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 454 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					return result;
-#line 2838 "PhotoMetadata.c"
+#line 3751 "PhotoMetadata.c"
 				}
-#line 339 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (value);
-#line 339 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (tag);
-#line 2844 "PhotoMetadata.c"
+#line 3757 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 345 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 457 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = NULL;
-#line 345 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 457 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 2852 "PhotoMetadata.c"
+#line 3765 "PhotoMetadata.c"
 }
 
 
@@ -2875,180 +3788,180 @@ GeeList* photo_metadata_get_string_multiple (PhotoMetadata* self, const gchar* t
 	gint _tmp24_ = 0;
 	gint _tmp25_ = 0;
 	GeeList* _tmp27_ = NULL;
-#line 354 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 466 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 354 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 466 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (tag != NULL, NULL);
-#line 355 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 467 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 355 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 467 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = tag;
-#line 355 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 467 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = _tmp2_ = gexiv2_metadata_get_tag_multiple (_tmp0_, _tmp1_);
-#line 355 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 467 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	values = _tmp3_;
-#line 355 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 467 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	values_length1 = _vala_array_length (_tmp2_);
-#line 355 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 467 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_values_size_ = values_length1;
-#line 356 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = values;
-#line 356 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5__length1 = values_length1;
-#line 356 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp5_ == NULL) {
-#line 356 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = TRUE;
-#line 2903 "PhotoMetadata.c"
+#line 3816 "PhotoMetadata.c"
 	} else {
 		gchar** _tmp6_ = NULL;
 		gint _tmp6__length1 = 0;
-#line 356 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = values;
-#line 356 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6__length1 = values_length1;
-#line 356 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = _tmp6__length1 == 0;
-#line 2913 "PhotoMetadata.c"
+#line 3826 "PhotoMetadata.c"
 	}
-#line 356 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp4_) {
-#line 357 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 469 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = NULL;
-#line 357 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 469 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		values = (_vala_array_free (values, values_length1, (GDestroyNotify) g_free), NULL);
-#line 357 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 469 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 2923 "PhotoMetadata.c"
+#line 3836 "PhotoMetadata.c"
 	}
-#line 359 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 471 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7_ = gee_array_list_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
-#line 359 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 471 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	list = G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_LIST, GeeList);
-#line 361 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 473 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = gee_hash_set_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 361 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 473 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	collection = _tmp8_;
-#line 362 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9_ = values;
-#line 362 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9__length1 = values_length1;
-#line 2937 "PhotoMetadata.c"
+#line 3850 "PhotoMetadata.c"
 	{
 		gchar** value_collection = NULL;
 		gint value_collection_length1 = 0;
 		gint _value_collection_size_ = 0;
 		gint value_it = 0;
-#line 362 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value_collection = _tmp9_;
-#line 362 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		value_collection_length1 = _tmp9__length1;
-#line 362 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (value_it = 0; value_it < _tmp9__length1; value_it = value_it + 1) {
-#line 2949 "PhotoMetadata.c"
+#line 3862 "PhotoMetadata.c"
 			gchar* _tmp10_ = NULL;
 			gchar* value = NULL;
-#line 362 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp10_ = g_strdup (value_collection[value_it]);
-#line 362 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			value = _tmp10_;
-#line 2956 "PhotoMetadata.c"
+#line 3869 "PhotoMetadata.c"
 			{
 				gchar* prepped = NULL;
 				const gchar* _tmp11_ = NULL;
 				gchar* _tmp12_ = NULL;
 				gboolean _tmp13_ = FALSE;
 				const gchar* _tmp14_ = NULL;
-#line 363 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 475 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp11_ = value;
-#line 363 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 475 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp12_ = prepare_input_text (_tmp11_, PHOTO_METADATA_PREPARE_STRING_OPTIONS, DEFAULT_USER_TEXT_INPUT_LENGTH);
-#line 363 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 475 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				prepped = _tmp12_;
-#line 366 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 478 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp14_ = prepped;
-#line 366 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 478 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp14_ != NULL) {
-#line 2973 "PhotoMetadata.c"
+#line 3886 "PhotoMetadata.c"
 					GeeHashSet* _tmp15_ = NULL;
 					const gchar* _tmp16_ = NULL;
 					gboolean _tmp17_ = FALSE;
-#line 366 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 478 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp15_ = collection;
-#line 366 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 478 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp16_ = prepped;
-#line 366 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 478 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp17_ = gee_abstract_collection_contains (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp16_);
-#line 366 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 478 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp13_ = !_tmp17_;
-#line 2985 "PhotoMetadata.c"
+#line 3898 "PhotoMetadata.c"
 				} else {
-#line 366 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 478 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp13_ = FALSE;
-#line 2989 "PhotoMetadata.c"
+#line 3902 "PhotoMetadata.c"
 				}
-#line 366 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 478 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp13_) {
-#line 2993 "PhotoMetadata.c"
+#line 3906 "PhotoMetadata.c"
 					GeeList* _tmp18_ = NULL;
 					const gchar* _tmp19_ = NULL;
 					GeeHashSet* _tmp20_ = NULL;
 					const gchar* _tmp21_ = NULL;
-#line 367 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 479 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp18_ = list;
-#line 367 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 479 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp19_ = prepped;
-#line 367 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 479 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, GEE_TYPE_COLLECTION, GeeCollection), _tmp19_);
-#line 368 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 480 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp20_ = collection;
-#line 368 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 480 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp21_ = prepped;
-#line 368 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 480 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp21_);
-#line 3010 "PhotoMetadata.c"
+#line 3923 "PhotoMetadata.c"
 				}
-#line 362 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (prepped);
-#line 362 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (value);
-#line 3016 "PhotoMetadata.c"
+#line 3929 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp23_ = list;
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp24_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp25_ = _tmp24_;
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp25_ > 0) {
-#line 3028 "PhotoMetadata.c"
+#line 3941 "PhotoMetadata.c"
 		GeeList* _tmp26_ = NULL;
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp26_ = list;
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp22_ = _tmp26_;
-#line 3034 "PhotoMetadata.c"
+#line 3947 "PhotoMetadata.c"
 	} else {
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp22_ = NULL;
-#line 3038 "PhotoMetadata.c"
+#line 3951 "PhotoMetadata.c"
 	}
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp27_ = _g_object_ref0 (_tmp22_);
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp27_;
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (collection);
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (list);
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	values = (_vala_array_free (values, values_length1, (GDestroyNotify) g_free), NULL);
-#line 372 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 3052 "PhotoMetadata.c"
+#line 3965 "PhotoMetadata.c"
 }
 
 
@@ -3056,89 +3969,89 @@ GeeList* photo_metadata_get_first_string_multiple (PhotoMetadata* self, gchar** 
 	GeeList* result = NULL;
 	gchar** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 381 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 493 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 382 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 494 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tags;
-#line 382 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 494 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = tags_length1;
-#line 3066 "PhotoMetadata.c"
+#line 3979 "PhotoMetadata.c"
 	{
 		gchar** tag_collection = NULL;
 		gint tag_collection_length1 = 0;
 		gint _tag_collection_size_ = 0;
 		gint tag_it = 0;
-#line 382 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 494 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection = _tmp0_;
-#line 382 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 494 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection_length1 = _tmp0__length1;
-#line 382 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 494 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (tag_it = 0; tag_it < _tmp0__length1; tag_it = tag_it + 1) {
-#line 3078 "PhotoMetadata.c"
+#line 3991 "PhotoMetadata.c"
 			gchar* _tmp1_ = NULL;
 			gchar* tag = NULL;
-#line 382 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 494 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = g_strdup (tag_collection[tag_it]);
-#line 382 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 494 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tag = _tmp1_;
-#line 3085 "PhotoMetadata.c"
+#line 3998 "PhotoMetadata.c"
 			{
 				GeeList* values = NULL;
 				const gchar* _tmp2_ = NULL;
 				GeeList* _tmp3_ = NULL;
 				gboolean _tmp4_ = FALSE;
 				GeeList* _tmp5_ = NULL;
-#line 383 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 495 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp2_ = tag;
-#line 383 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 495 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp3_ = photo_metadata_get_string_multiple (self, _tmp2_);
-#line 383 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 495 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				values = _tmp3_;
-#line 384 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 496 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp5_ = values;
-#line 384 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 496 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp5_ != NULL) {
-#line 3102 "PhotoMetadata.c"
+#line 4015 "PhotoMetadata.c"
 					GeeList* _tmp6_ = NULL;
 					gint _tmp7_ = 0;
 					gint _tmp8_ = 0;
-#line 384 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 496 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp6_ = values;
-#line 384 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 496 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp7_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 384 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 496 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp8_ = _tmp7_;
-#line 384 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 496 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp4_ = _tmp8_ > 0;
-#line 3114 "PhotoMetadata.c"
+#line 4027 "PhotoMetadata.c"
 				} else {
-#line 384 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 496 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp4_ = FALSE;
-#line 3118 "PhotoMetadata.c"
+#line 4031 "PhotoMetadata.c"
 				}
-#line 384 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 496 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp4_) {
-#line 385 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 497 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					result = values;
-#line 385 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 497 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_free0 (tag);
-#line 385 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 497 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					return result;
-#line 3128 "PhotoMetadata.c"
+#line 4041 "PhotoMetadata.c"
 				}
-#line 382 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 494 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_object_unref0 (values);
-#line 382 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 494 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (tag);
-#line 3134 "PhotoMetadata.c"
+#line 4047 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 388 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 500 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = NULL;
-#line 388 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 500 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 3142 "PhotoMetadata.c"
+#line 4055 "PhotoMetadata.c"
 }
 
 
@@ -3152,67 +4065,67 @@ void photo_metadata_set_string (PhotoMetadata* self, const gchar* tag, const gch
 	const gchar* _tmp7_ = NULL;
 	const gchar* _tmp8_ = NULL;
 	gboolean _tmp9_ = FALSE;
-#line 391 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 503 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 391 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 503 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (tag != NULL);
-#line 391 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 503 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (value != NULL);
-#line 392 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 504 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = value;
-#line 392 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 504 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = options;
-#line 392 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 504 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = prepare_input_text (_tmp0_, _tmp1_, DEFAULT_USER_TEXT_INPUT_LENGTH);
-#line 392 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 504 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	prepped = _tmp2_;
-#line 393 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 505 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = prepped;
-#line 393 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 505 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp3_ == NULL) {
-#line 3174 "PhotoMetadata.c"
+#line 4087 "PhotoMetadata.c"
 		const gchar* _tmp4_ = NULL;
 		const gchar* _tmp5_ = NULL;
-#line 394 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 506 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = tag;
-#line 394 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 506 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = value;
-#line 394 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-		g_warning ("PhotoMetadata.vala:394: Not setting tag %s to string %s: invalid UTF-8", _tmp4_, _tmp5_);
-#line 396 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 506 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_warning ("PhotoMetadata.vala:506: Not setting tag %s to string %s: invalid UTF-8", _tmp4_, _tmp5_);
+#line 508 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (prepped);
-#line 396 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 508 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return;
-#line 3187 "PhotoMetadata.c"
+#line 4100 "PhotoMetadata.c"
 	}
-#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 511 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = self->priv->exiv2;
-#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 511 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7_ = tag;
-#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 511 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = prepped;
-#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 511 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9_ = gexiv2_metadata_set_tag_string (_tmp6_, _tmp7_, _tmp8_);
-#line 399 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 511 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp9_) {
-#line 3199 "PhotoMetadata.c"
+#line 4112 "PhotoMetadata.c"
 		const gchar* _tmp10_ = NULL;
 		const gchar* _tmp11_ = NULL;
 		const gchar* _tmp12_ = NULL;
-#line 400 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = tag;
-#line 400 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp11_ = value;
-#line 400 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp12_ = self->priv->source_name;
-#line 400 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-		g_warning ("PhotoMetadata.vala:400: Unable to set tag %s to string %s from source " \
+#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_warning ("PhotoMetadata.vala:512: Unable to set tag %s to string %s from source " \
 "%s", _tmp10_, _tmp11_, _tmp12_);
-#line 3211 "PhotoMetadata.c"
+#line 4124 "PhotoMetadata.c"
 	}
-#line 391 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 503 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (prepped);
-#line 3215 "PhotoMetadata.c"
+#line 4128 "PhotoMetadata.c"
 }
 
 
@@ -3223,118 +4136,118 @@ static void photo_metadata_set_all_generic (PhotoMetadata* self, gchar** tags, i
 	gboolean _tmp9_ = FALSE;
 	gboolean _tmp10_ = FALSE;
 	PhotoMetadataSetOption _tmp11_ = 0;
-#line 405 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 517 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 406 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	written = FALSE;
-#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tags;
-#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = tags_length1;
-#line 3234 "PhotoMetadata.c"
+#line 4147 "PhotoMetadata.c"
 	{
 		gchar** tag_collection = NULL;
 		gint tag_collection_length1 = 0;
 		gint _tag_collection_size_ = 0;
 		gint tag_it = 0;
-#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection = _tmp0_;
-#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection_length1 = _tmp0__length1;
-#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (tag_it = 0; tag_it < _tmp0__length1; tag_it = tag_it + 1) {
-#line 3246 "PhotoMetadata.c"
+#line 4159 "PhotoMetadata.c"
 			gchar* _tmp1_ = NULL;
 			gchar* tag = NULL;
-#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = g_strdup (tag_collection[tag_it]);
-#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tag = _tmp1_;
-#line 3253 "PhotoMetadata.c"
+#line 4166 "PhotoMetadata.c"
 			{
 				gboolean _tmp2_ = FALSE;
 				PhotoMetadataSetOption _tmp3_ = 0;
-#line 408 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 520 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp3_ = option;
-#line 408 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 520 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp3_ == PHOTO_METADATA_SET_OPTION_ALL_DOMAINS) {
-#line 408 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 520 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp2_ = TRUE;
-#line 3263 "PhotoMetadata.c"
+#line 4176 "PhotoMetadata.c"
 				} else {
 					const gchar* _tmp4_ = NULL;
 					MetadataDomain _tmp5_ = 0;
 					gboolean _tmp6_ = FALSE;
-#line 408 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 520 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp4_ = tag;
-#line 408 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 520 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp5_ = photo_metadata_get_tag_domain (_tmp4_);
-#line 408 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 520 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp6_ = photo_metadata_has_domain (self, _tmp5_);
-#line 408 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 520 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp2_ = _tmp6_;
-#line 3276 "PhotoMetadata.c"
+#line 4189 "PhotoMetadata.c"
 				}
-#line 408 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 520 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp2_) {
-#line 3280 "PhotoMetadata.c"
+#line 4193 "PhotoMetadata.c"
 					PhotoMetadataSetGenericValue _tmp7_ = NULL;
 					void* _tmp7__target = NULL;
 					const gchar* _tmp8_ = NULL;
-#line 409 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 521 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp7_ = setter;
-#line 409 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 521 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp7__target = setter_target;
-#line 409 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 521 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp8_ = tag;
-#line 409 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 521 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp7_ (_tmp8_, _tmp7__target);
-#line 410 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 522 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					written = TRUE;
-#line 3294 "PhotoMetadata.c"
+#line 4207 "PhotoMetadata.c"
 				}
-#line 407 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (tag);
-#line 3298 "PhotoMetadata.c"
+#line 4211 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 526 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp11_ = option;
-#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 526 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp11_ == PHOTO_METADATA_SET_OPTION_AT_LEAST_DEFAULT_DOMAIN) {
-#line 3306 "PhotoMetadata.c"
+#line 4219 "PhotoMetadata.c"
 		gboolean _tmp12_ = FALSE;
-#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 526 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp12_ = written;
-#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 526 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = !_tmp12_;
-#line 3312 "PhotoMetadata.c"
+#line 4225 "PhotoMetadata.c"
 	} else {
-#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 526 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = FALSE;
-#line 3316 "PhotoMetadata.c"
+#line 4229 "PhotoMetadata.c"
 	}
-#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 526 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp10_) {
-#line 3320 "PhotoMetadata.c"
+#line 4233 "PhotoMetadata.c"
 		gchar** _tmp13_ = NULL;
 		gint _tmp13__length1 = 0;
-#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 526 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp13_ = tags;
-#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 526 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp13__length1 = tags_length1;
-#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 526 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp9_ = _tmp13__length1 > 0;
-#line 3329 "PhotoMetadata.c"
+#line 4242 "PhotoMetadata.c"
 	} else {
-#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 526 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp9_ = FALSE;
-#line 3333 "PhotoMetadata.c"
+#line 4246 "PhotoMetadata.c"
 	}
-#line 414 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 526 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp9_) {
-#line 3337 "PhotoMetadata.c"
+#line 4250 "PhotoMetadata.c"
 		MetadataDomain default_domain = 0;
 		gchar** _tmp14_ = NULL;
 		gint _tmp14__length1 = 0;
@@ -3345,41 +4258,41 @@ static void photo_metadata_set_all_generic (PhotoMetadata* self, gchar** tags, i
 		gchar** _tmp18_ = NULL;
 		gint _tmp18__length1 = 0;
 		const gchar* _tmp19_ = NULL;
-#line 415 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 527 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp14_ = tags;
-#line 415 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 527 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp14__length1 = tags_length1;
-#line 415 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 527 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp15_ = _tmp14_[0];
-#line 415 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 527 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp16_ = photo_metadata_get_tag_domain (_tmp15_);
-#line 415 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 527 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		default_domain = _tmp16_;
-#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp17_ = setter;
-#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp17__target = setter_target;
-#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp18_ = tags;
-#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp18__length1 = tags_length1;
-#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp19_ = _tmp18_[0];
-#line 418 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp17_ (_tmp19_, _tmp17__target);
-#line 3370 "PhotoMetadata.c"
+#line 4283 "PhotoMetadata.c"
 		{
 			gint ctr = 0;
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			ctr = 1;
-#line 3375 "PhotoMetadata.c"
+#line 4288 "PhotoMetadata.c"
 			{
 				gboolean _tmp20_ = FALSE;
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp20_ = TRUE;
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				while (TRUE) {
-#line 3382 "PhotoMetadata.c"
+#line 4295 "PhotoMetadata.c"
 					gint _tmp22_ = 0;
 					gchar** _tmp23_ = NULL;
 					gint _tmp23__length1 = 0;
@@ -3389,66 +4302,66 @@ static void photo_metadata_set_all_generic (PhotoMetadata* self, gchar** tags, i
 					const gchar* _tmp26_ = NULL;
 					MetadataDomain _tmp27_ = 0;
 					MetadataDomain _tmp28_ = 0;
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					if (!_tmp20_) {
-#line 3394 "PhotoMetadata.c"
+#line 4307 "PhotoMetadata.c"
 						gint _tmp21_ = 0;
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp21_ = ctr;
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						ctr = _tmp21_ + 1;
-#line 3400 "PhotoMetadata.c"
+#line 4313 "PhotoMetadata.c"
 					}
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp20_ = FALSE;
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp22_ = ctr;
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp23_ = tags;
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp23__length1 = tags_length1;
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					if (!(_tmp22_ < _tmp23__length1)) {
-#line 421 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 533 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						break;
-#line 3414 "PhotoMetadata.c"
+#line 4327 "PhotoMetadata.c"
 					}
-#line 422 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 534 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp24_ = tags;
-#line 422 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 534 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp24__length1 = tags_length1;
-#line 422 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 534 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp25_ = ctr;
-#line 422 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 534 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp26_ = _tmp24_[_tmp25_];
-#line 422 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 534 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp27_ = photo_metadata_get_tag_domain (_tmp26_);
-#line 422 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 534 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp28_ = default_domain;
-#line 422 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 534 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					if (_tmp27_ == _tmp28_) {
-#line 3430 "PhotoMetadata.c"
+#line 4343 "PhotoMetadata.c"
 						PhotoMetadataSetGenericValue _tmp29_ = NULL;
 						void* _tmp29__target = NULL;
 						gchar** _tmp30_ = NULL;
 						gint _tmp30__length1 = 0;
 						gint _tmp31_ = 0;
 						const gchar* _tmp32_ = NULL;
-#line 423 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 535 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp29_ = setter;
-#line 423 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 535 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp29__target = setter_target;
-#line 423 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 535 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp30_ = tags;
-#line 423 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 535 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp30__length1 = tags_length1;
-#line 423 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 535 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp31_ = ctr;
-#line 423 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 535 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp32_ = _tmp30_[_tmp31_];
-#line 423 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 535 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp29_ (_tmp32_, _tmp29__target);
-#line 3451 "PhotoMetadata.c"
+#line 4364 "PhotoMetadata.c"
 					}
 				}
 			}
@@ -3458,30 +4371,30 @@ static void photo_metadata_set_all_generic (PhotoMetadata* self, gchar** tags, i
 
 
 static Block1Data* block1_data_ref (Block1Data* _data1_) {
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_atomic_int_inc (&_data1_->_ref_count_);
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return _data1_;
-#line 3465 "PhotoMetadata.c"
+#line 4378 "PhotoMetadata.c"
 }
 
 
 static void block1_data_unref (void * _userdata_) {
 	Block1Data* _data1_;
 	_data1_ = (Block1Data*) _userdata_;
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (g_atomic_int_dec_and_test (&_data1_->_ref_count_)) {
-#line 3474 "PhotoMetadata.c"
+#line 4387 "PhotoMetadata.c"
 		PhotoMetadata* self;
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		self = _data1_->self;
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (_data1_->value);
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_media_metadata_unref0 (self);
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_slice_free (Block1Data, _data1_);
-#line 3484 "PhotoMetadata.c"
+#line 4397 "PhotoMetadata.c"
 	}
 }
 
@@ -3490,24 +4403,24 @@ static void __lambda5_ (Block1Data* _data1_, const gchar* tag) {
 	PhotoMetadata* self;
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 541 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = _data1_->self;
-#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 541 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (tag != NULL);
-#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 541 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tag;
-#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 541 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = _data1_->value;
-#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 541 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_string (self, _tmp0_, _tmp1_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 3503 "PhotoMetadata.c"
+#line 4416 "PhotoMetadata.c"
 }
 
 
 static void ___lambda5__photo_metadata_set_generic_value (const gchar* tag, gpointer self) {
-#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 541 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	__lambda5_ (self, tag);
-#line 3510 "PhotoMetadata.c"
+#line 4423 "PhotoMetadata.c"
 }
 
 
@@ -3518,71 +4431,71 @@ void photo_metadata_set_all_string (PhotoMetadata* self, gchar** tags, int tags_
 	gchar** _tmp2_ = NULL;
 	gint _tmp2__length1 = 0;
 	PhotoMetadataSetOption _tmp3_ = 0;
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (value != NULL);
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data1_ = g_slice_new0 (Block1Data);
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data1_->_ref_count_ = 1;
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data1_->self = media_metadata_ref (self);
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = value;
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_data1_->value);
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data1_->value = _tmp1_;
-#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 541 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = tags;
-#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 541 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2__length1 = tags_length1;
-#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 541 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = option;
-#line 429 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 541 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_all_generic (self, _tmp2_, _tmp2__length1, _tmp3_, ___lambda5__photo_metadata_set_generic_value, _data1_);
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	block1_data_unref (_data1_);
-#line 428 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 540 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data1_ = NULL;
-#line 3551 "PhotoMetadata.c"
+#line 4464 "PhotoMetadata.c"
 }
 
 
 static void _vala_array_add45 (gchar*** array, int* length, int* size, gchar* value) {
-#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if ((*length) == (*size)) {
-#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 3562 "PhotoMetadata.c"
+#line 4475 "PhotoMetadata.c"
 	}
-#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	(*array)[(*length)++] = value;
-#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	(*array)[*length] = NULL;
-#line 3568 "PhotoMetadata.c"
+#line 4481 "PhotoMetadata.c"
 }
 
 
 static void _vala_array_add46 (gchar*** array, int* length, int* size, gchar* value) {
-#line 449 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if ((*length) == (*size)) {
-#line 449 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 449 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 3579 "PhotoMetadata.c"
+#line 4492 "PhotoMetadata.c"
 	}
-#line 449 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	(*array)[(*length)++] = value;
-#line 449 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	(*array)[*length] = NULL;
-#line 3585 "PhotoMetadata.c"
+#line 4498 "PhotoMetadata.c"
 }
 
 
@@ -3600,34 +4513,34 @@ void photo_metadata_set_string_multiple (PhotoMetadata* self, const gchar* tag, 
 	gchar** _tmp19_ = NULL;
 	gint _tmp19__length1 = 0;
 	gboolean _tmp20_ = FALSE;
-#line 432 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 544 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 432 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 544 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (tag != NULL);
-#line 432 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 544 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (GEE_IS_COLLECTION (collection));
-#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 545 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = g_new0 (gchar*, 0 + 1);
-#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 545 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	values = _tmp0_;
-#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 545 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	values_length1 = 0;
-#line 433 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 545 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_values_size_ = values_length1;
-#line 3617 "PhotoMetadata.c"
+#line 4530 "PhotoMetadata.c"
 	{
 		GeeIterator* _value_it = NULL;
 		GeeCollection* _tmp1_ = NULL;
 		GeeIterator* _tmp2_ = NULL;
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1_ = collection;
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_value_it = _tmp2_;
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		while (TRUE) {
-#line 3630 "PhotoMetadata.c"
+#line 4543 "PhotoMetadata.c"
 			GeeIterator* _tmp3_ = NULL;
 			gboolean _tmp4_ = FALSE;
 			gchar* value = NULL;
@@ -3637,148 +4550,148 @@ void photo_metadata_set_string_multiple (PhotoMetadata* self, const gchar* tag, 
 			const gchar* _tmp7_ = NULL;
 			gchar* _tmp8_ = NULL;
 			const gchar* _tmp9_ = NULL;
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp3_ = _value_it;
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp4_ = gee_iterator_next (_tmp3_);
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			if (!_tmp4_) {
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				break;
-#line 3648 "PhotoMetadata.c"
+#line 4561 "PhotoMetadata.c"
 			}
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp5_ = _value_it;
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp6_ = gee_iterator_get (_tmp5_);
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			value = (gchar*) _tmp6_;
-#line 435 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 547 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp7_ = value;
-#line 435 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 547 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp8_ = prepare_input_text (_tmp7_, PHOTO_METADATA_PREPARE_STRING_OPTIONS, -1);
-#line 435 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 547 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			prepped = _tmp8_;
-#line 436 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 548 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp9_ = prepped;
-#line 436 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 548 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			if (_tmp9_ != NULL) {
-#line 3666 "PhotoMetadata.c"
+#line 4579 "PhotoMetadata.c"
 				gchar** _tmp10_ = NULL;
 				gint _tmp10__length1 = 0;
 				const gchar* _tmp11_ = NULL;
 				gchar* _tmp12_ = NULL;
-#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp10_ = values;
-#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp10__length1 = values_length1;
-#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp11_ = prepped;
-#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp12_ = g_strdup (_tmp11_);
-#line 437 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_vala_array_add45 (&values, &values_length1, &_values_size_, _tmp12_);
-#line 3681 "PhotoMetadata.c"
+#line 4594 "PhotoMetadata.c"
 			} else {
 				const gchar* _tmp13_ = NULL;
 				const gchar* _tmp14_ = NULL;
-#line 439 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 551 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp13_ = value;
-#line 439 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 551 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp14_ = tag;
-#line 439 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-				g_warning ("PhotoMetadata.vala:439: Unable to set string %s to %s: invalid UTF-8", _tmp13_, _tmp14_);
-#line 3691 "PhotoMetadata.c"
+#line 551 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				g_warning ("PhotoMetadata.vala:551: Unable to set string %s to %s: invalid UTF-8", _tmp13_, _tmp14_);
+#line 4604 "PhotoMetadata.c"
 			}
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_g_free0 (prepped);
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_g_free0 (value);
-#line 3697 "PhotoMetadata.c"
+#line 4610 "PhotoMetadata.c"
 		}
-#line 434 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 546 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_object_unref0 (_value_it);
-#line 3701 "PhotoMetadata.c"
+#line 4614 "PhotoMetadata.c"
 	}
-#line 442 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 554 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp15_ = values;
-#line 442 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 554 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp15__length1 = values_length1;
-#line 442 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 554 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp15__length1 == 0) {
-#line 443 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 555 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		values = (_vala_array_free (values, values_length1, (GDestroyNotify) g_free), NULL);
-#line 443 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 555 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return;
-#line 3713 "PhotoMetadata.c"
+#line 4626 "PhotoMetadata.c"
 	}
-#line 449 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp16_ = values;
-#line 449 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp16__length1 = values_length1;
-#line 449 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_array_add46 (&values, &values_length1, &_values_size_, NULL);
-#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 563 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp17_ = self->priv->exiv2;
-#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 563 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp18_ = tag;
-#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 563 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp19_ = values;
-#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 563 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp19__length1 = values_length1;
-#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 563 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp20_ = gexiv2_metadata_set_tag_multiple (_tmp17_, _tmp18_, _tmp19_);
-#line 451 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 563 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp20_) {
-#line 3733 "PhotoMetadata.c"
+#line 4646 "PhotoMetadata.c"
 		gchar** _tmp21_ = NULL;
 		gint _tmp21__length1 = 0;
 		const gchar* _tmp22_ = NULL;
 		const gchar* _tmp23_ = NULL;
-#line 452 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 564 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp21_ = values;
-#line 452 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 564 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp21__length1 = values_length1;
-#line 452 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 564 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp22_ = tag;
-#line 452 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 564 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp23_ = self->priv->source_name;
-#line 452 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-		g_warning ("PhotoMetadata.vala:452: Unable to set %d strings to tag %s from source" \
+#line 564 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_warning ("PhotoMetadata.vala:564: Unable to set %d strings to tag %s from source" \
 " %s", _tmp21__length1, _tmp22_, _tmp23_);
-#line 3748 "PhotoMetadata.c"
+#line 4661 "PhotoMetadata.c"
 	}
-#line 432 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 544 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	values = (_vala_array_free (values, values_length1, (GDestroyNotify) g_free), NULL);
-#line 3752 "PhotoMetadata.c"
+#line 4665 "PhotoMetadata.c"
 }
 
 
 static Block2Data* block2_data_ref (Block2Data* _data2_) {
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_atomic_int_inc (&_data2_->_ref_count_);
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return _data2_;
-#line 3761 "PhotoMetadata.c"
+#line 4674 "PhotoMetadata.c"
 }
 
 
 static void block2_data_unref (void * _userdata_) {
 	Block2Data* _data2_;
 	_data2_ = (Block2Data*) _userdata_;
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (g_atomic_int_dec_and_test (&_data2_->_ref_count_)) {
-#line 3770 "PhotoMetadata.c"
+#line 4683 "PhotoMetadata.c"
 		PhotoMetadata* self;
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		self = _data2_->self;
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_object_unref0 (_data2_->values);
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_media_metadata_unref0 (self);
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_slice_free (Block2Data, _data2_);
-#line 3780 "PhotoMetadata.c"
+#line 4693 "PhotoMetadata.c"
 	}
 }
 
@@ -3787,24 +4700,24 @@ static void __lambda6_ (Block2Data* _data2_, const gchar* tag) {
 	PhotoMetadata* self;
 	const gchar* _tmp0_ = NULL;
 	GeeCollection* _tmp1_ = NULL;
-#line 456 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 568 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = _data2_->self;
-#line 456 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 568 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (tag != NULL);
-#line 456 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 568 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tag;
-#line 456 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 568 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = _data2_->values;
-#line 456 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 568 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_string_multiple (self, _tmp0_, _tmp1_);
-#line 3799 "PhotoMetadata.c"
+#line 4712 "PhotoMetadata.c"
 }
 
 
 static void ___lambda6__photo_metadata_set_generic_value (const gchar* tag, gpointer self) {
-#line 456 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 568 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	__lambda6_ (self, tag);
-#line 3806 "PhotoMetadata.c"
+#line 4719 "PhotoMetadata.c"
 }
 
 
@@ -3815,37 +4728,37 @@ void photo_metadata_set_all_string_multiple (PhotoMetadata* self, gchar** tags, 
 	gchar** _tmp2_ = NULL;
 	gint _tmp2__length1 = 0;
 	PhotoMetadataSetOption _tmp3_ = 0;
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (GEE_IS_COLLECTION (values));
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data2_ = g_slice_new0 (Block2Data);
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data2_->_ref_count_ = 1;
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data2_->self = media_metadata_ref (self);
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = values;
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (_data2_->values);
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data2_->values = _tmp1_;
-#line 456 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 568 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = tags;
-#line 456 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 568 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2__length1 = tags_length1;
-#line 456 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 568 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = option;
-#line 456 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 568 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_all_generic (self, _tmp2_, _tmp2__length1, _tmp3_, ___lambda6__photo_metadata_set_generic_value, _data2_);
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	block2_data_unref (_data2_);
-#line 455 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 567 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data2_ = NULL;
-#line 3847 "PhotoMetadata.c"
+#line 4760 "PhotoMetadata.c"
 }
 
 
@@ -3857,49 +4770,49 @@ gboolean photo_metadata_get_long (PhotoMetadata* self, const gchar* tag, glong* 
 	GExiv2Metadata* _tmp2_ = NULL;
 	const gchar* _tmp3_ = NULL;
 	glong _tmp4_ = 0L;
-#line 459 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 571 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 459 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 571 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (tag != NULL, FALSE);
-#line 460 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 572 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tag;
-#line 460 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 572 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_has_tag (self, _tmp0_);
-#line 460 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 572 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp1_) {
-#line 461 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 573 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_vala_value = (glong) 0;
-#line 463 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 575 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = FALSE;
-#line 463 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 575 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (value) {
-#line 463 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 575 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			*value = _vala_value;
-#line 3877 "PhotoMetadata.c"
+#line 4790 "PhotoMetadata.c"
 		}
-#line 463 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 575 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 3881 "PhotoMetadata.c"
+#line 4794 "PhotoMetadata.c"
 	}
-#line 466 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = self->priv->exiv2;
-#line 466 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = tag;
-#line 466 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = gexiv2_metadata_get_tag_long (_tmp2_, _tmp3_);
-#line 466 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_value = _tmp4_;
-#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 580 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = TRUE;
-#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 580 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (value) {
-#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 580 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*value = _vala_value;
-#line 3897 "PhotoMetadata.c"
+#line 4810 "PhotoMetadata.c"
 	}
-#line 468 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 580 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 3901 "PhotoMetadata.c"
+#line 4814 "PhotoMetadata.c"
 }
 
 
@@ -3908,77 +4821,77 @@ gboolean photo_metadata_get_first_long (PhotoMetadata* self, gchar** tags, int t
 	gboolean result = FALSE;
 	gchar** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 471 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 583 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 472 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tags;
-#line 472 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = tags_length1;
-#line 3916 "PhotoMetadata.c"
+#line 4829 "PhotoMetadata.c"
 	{
 		gchar** tag_collection = NULL;
 		gint tag_collection_length1 = 0;
 		gint _tag_collection_size_ = 0;
 		gint tag_it = 0;
-#line 472 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection = _tmp0_;
-#line 472 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection_length1 = _tmp0__length1;
-#line 472 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (tag_it = 0; tag_it < _tmp0__length1; tag_it = tag_it + 1) {
-#line 3928 "PhotoMetadata.c"
+#line 4841 "PhotoMetadata.c"
 			gchar* _tmp1_ = NULL;
 			gchar* tag = NULL;
-#line 472 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = g_strdup (tag_collection[tag_it]);
-#line 472 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tag = _tmp1_;
-#line 3935 "PhotoMetadata.c"
+#line 4848 "PhotoMetadata.c"
 			{
 				const gchar* _tmp2_ = NULL;
 				glong _tmp3_ = 0L;
 				gboolean _tmp4_ = FALSE;
-#line 473 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 585 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp2_ = tag;
-#line 473 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 585 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp4_ = photo_metadata_get_long (self, _tmp2_, &_tmp3_);
-#line 473 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 585 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_vala_value = _tmp3_;
-#line 473 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 585 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp4_) {
-#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 586 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					result = TRUE;
-#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 586 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_free0 (tag);
-#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 586 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					if (value) {
-#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 586 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						*value = _vala_value;
-#line 3956 "PhotoMetadata.c"
+#line 4869 "PhotoMetadata.c"
 					}
-#line 474 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 586 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					return result;
-#line 3960 "PhotoMetadata.c"
+#line 4873 "PhotoMetadata.c"
 				}
-#line 472 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (tag);
-#line 3964 "PhotoMetadata.c"
+#line 4877 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 477 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 589 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_value = (glong) 0;
-#line 479 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 591 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = FALSE;
-#line 479 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 591 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (value) {
-#line 479 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 591 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*value = _vala_value;
-#line 3976 "PhotoMetadata.c"
+#line 4889 "PhotoMetadata.c"
 	}
-#line 479 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 591 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 3980 "PhotoMetadata.c"
+#line 4893 "PhotoMetadata.c"
 }
 
 
@@ -3987,61 +4900,61 @@ void photo_metadata_set_long (PhotoMetadata* self, const gchar* tag, glong value
 	const gchar* _tmp1_ = NULL;
 	glong _tmp2_ = 0L;
 	gboolean _tmp3_ = FALSE;
-#line 482 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 594 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 482 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 594 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (tag != NULL);
-#line 483 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 595 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 483 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 595 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = tag;
-#line 483 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 595 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = value;
-#line 483 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 595 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = gexiv2_metadata_set_tag_long (_tmp0_, _tmp1_, _tmp2_);
-#line 483 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 595 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp3_) {
-#line 4003 "PhotoMetadata.c"
+#line 4916 "PhotoMetadata.c"
 		const gchar* _tmp4_ = NULL;
 		glong _tmp5_ = 0L;
 		const gchar* _tmp6_ = NULL;
-#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 596 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = tag;
-#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 596 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = value;
-#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 596 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = self->priv->source_name;
-#line 484 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-		g_warning ("PhotoMetadata.vala:484: Unable to set tag %s to long %ld from source %" \
+#line 596 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_warning ("PhotoMetadata.vala:596: Unable to set tag %s to long %ld from source %" \
 "s", _tmp4_, _tmp5_, _tmp6_);
-#line 4015 "PhotoMetadata.c"
+#line 4928 "PhotoMetadata.c"
 	}
 }
 
 
 static Block3Data* block3_data_ref (Block3Data* _data3_) {
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_atomic_int_inc (&_data3_->_ref_count_);
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return _data3_;
-#line 4025 "PhotoMetadata.c"
+#line 4938 "PhotoMetadata.c"
 }
 
 
 static void block3_data_unref (void * _userdata_) {
 	Block3Data* _data3_;
 	_data3_ = (Block3Data*) _userdata_;
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (g_atomic_int_dec_and_test (&_data3_->_ref_count_)) {
-#line 4034 "PhotoMetadata.c"
+#line 4947 "PhotoMetadata.c"
 		PhotoMetadata* self;
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		self = _data3_->self;
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_media_metadata_unref0 (self);
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_slice_free (Block3Data, _data3_);
-#line 4042 "PhotoMetadata.c"
+#line 4955 "PhotoMetadata.c"
 	}
 }
 
@@ -4050,24 +4963,24 @@ static void __lambda7_ (Block3Data* _data3_, const gchar* tag) {
 	PhotoMetadata* self;
 	const gchar* _tmp0_ = NULL;
 	glong _tmp1_ = 0L;
-#line 488 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = _data3_->self;
-#line 488 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (tag != NULL);
-#line 488 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tag;
-#line 488 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = _data3_->value;
-#line 488 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_long (self, _tmp0_, _tmp1_);
-#line 4061 "PhotoMetadata.c"
+#line 4974 "PhotoMetadata.c"
 }
 
 
 static void ___lambda7__photo_metadata_set_generic_value (const gchar* tag, gpointer self) {
-#line 488 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	__lambda7_ (self, tag);
-#line 4068 "PhotoMetadata.c"
+#line 4981 "PhotoMetadata.c"
 }
 
 
@@ -4077,31 +4990,31 @@ void photo_metadata_set_all_long (PhotoMetadata* self, gchar** tags, int tags_le
 	gchar** _tmp1_ = NULL;
 	gint _tmp1__length1 = 0;
 	PhotoMetadataSetOption _tmp2_ = 0;
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data3_ = g_slice_new0 (Block3Data);
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data3_->_ref_count_ = 1;
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data3_->self = media_metadata_ref (self);
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = value;
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data3_->value = _tmp0_;
-#line 488 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = tags;
-#line 488 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1__length1 = tags_length1;
-#line 488 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = option;
-#line 488 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_all_generic (self, _tmp1_, _tmp1__length1, _tmp2_, ___lambda7__photo_metadata_set_generic_value, _data3_);
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	block3_data_unref (_data3_);
-#line 487 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data3_ = NULL;
-#line 4102 "PhotoMetadata.c"
+#line 5015 "PhotoMetadata.c"
 }
 
 
@@ -4116,35 +5029,35 @@ gboolean photo_metadata_get_rational (PhotoMetadata* self, const gchar* tag, Met
 	gint _tmp2_ = 0;
 	gint _tmp3_ = 0;
 	gboolean _tmp4_ = FALSE;
-#line 491 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 603 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 491 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 603 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (tag != NULL, FALSE);
-#line 493 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 605 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 493 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 605 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = tag;
-#line 493 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 605 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = gexiv2_metadata_get_exif_tag_rational (_tmp0_, _tmp1_, &_tmp2_, &_tmp3_);
-#line 493 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 605 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	numerator = _tmp2_;
-#line 493 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 605 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	denominator = _tmp3_;
-#line 493 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 605 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_result_ = _tmp4_;
-#line 495 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 607 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	metadata_rational_init (&_vala_rational, numerator, denominator);
-#line 497 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 609 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _result_;
-#line 497 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 609 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (rational) {
-#line 497 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 609 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*rational = _vala_rational;
-#line 4141 "PhotoMetadata.c"
+#line 5054 "PhotoMetadata.c"
 	}
-#line 497 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 609 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 4145 "PhotoMetadata.c"
+#line 5058 "PhotoMetadata.c"
 }
 
 
@@ -4153,77 +5066,77 @@ gboolean photo_metadata_get_first_rational (PhotoMetadata* self, gchar** tags, i
 	gboolean result = FALSE;
 	gchar** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 500 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 612 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 501 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 613 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tags;
-#line 501 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 613 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = tags_length1;
-#line 4160 "PhotoMetadata.c"
+#line 5073 "PhotoMetadata.c"
 	{
 		gchar** tag_collection = NULL;
 		gint tag_collection_length1 = 0;
 		gint _tag_collection_size_ = 0;
 		gint tag_it = 0;
-#line 501 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 613 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection = _tmp0_;
-#line 501 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 613 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection_length1 = _tmp0__length1;
-#line 501 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 613 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (tag_it = 0; tag_it < _tmp0__length1; tag_it = tag_it + 1) {
-#line 4172 "PhotoMetadata.c"
+#line 5085 "PhotoMetadata.c"
 			gchar* _tmp1_ = NULL;
 			gchar* tag = NULL;
-#line 501 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 613 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = g_strdup (tag_collection[tag_it]);
-#line 501 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 613 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tag = _tmp1_;
-#line 4179 "PhotoMetadata.c"
+#line 5092 "PhotoMetadata.c"
 			{
 				const gchar* _tmp2_ = NULL;
 				MetadataRational _tmp3_ = {0};
 				gboolean _tmp4_ = FALSE;
-#line 502 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 614 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp2_ = tag;
-#line 502 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 614 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp4_ = photo_metadata_get_rational (self, _tmp2_, &_tmp3_);
-#line 502 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 614 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_vala_rational = _tmp3_;
-#line 502 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 614 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp4_) {
-#line 503 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 615 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					result = TRUE;
-#line 503 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 615 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_free0 (tag);
-#line 503 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 615 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					if (rational) {
-#line 503 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 615 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						*rational = _vala_rational;
-#line 4200 "PhotoMetadata.c"
+#line 5113 "PhotoMetadata.c"
 					}
-#line 503 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 615 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					return result;
-#line 4204 "PhotoMetadata.c"
+#line 5117 "PhotoMetadata.c"
 				}
-#line 501 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 613 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (tag);
-#line 4208 "PhotoMetadata.c"
+#line 5121 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 506 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	metadata_rational_init (&_vala_rational, 0, 0);
-#line 508 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 620 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = FALSE;
-#line 508 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 620 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (rational) {
-#line 508 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 620 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*rational = _vala_rational;
-#line 4220 "PhotoMetadata.c"
+#line 5133 "PhotoMetadata.c"
 	}
-#line 508 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 620 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 4224 "PhotoMetadata.c"
+#line 5137 "PhotoMetadata.c"
 }
 
 
@@ -4235,74 +5148,74 @@ void photo_metadata_set_rational (PhotoMetadata* self, const gchar* tag, Metadat
 	MetadataRational _tmp4_ = {0};
 	gint _tmp5_ = 0;
 	gboolean _tmp6_ = FALSE;
-#line 511 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 623 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 511 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 623 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (tag != NULL);
-#line 511 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 623 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (rational != NULL);
-#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = tag;
-#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = *rational;
-#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = _tmp2_.numerator;
-#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = *rational;
-#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = _tmp4_.denominator;
-#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = gexiv2_metadata_set_exif_tag_rational (_tmp0_, _tmp1_, _tmp3_, _tmp5_);
-#line 512 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp6_) {
-#line 4258 "PhotoMetadata.c"
+#line 5171 "PhotoMetadata.c"
 		const gchar* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
 		const gchar* _tmp10_ = NULL;
-#line 513 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 625 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = tag;
-#line 513 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 625 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp8_ = metadata_rational_to_string (rational);
-#line 513 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 625 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp9_ = _tmp8_;
-#line 513 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 625 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = self->priv->source_name;
-#line 513 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-		g_warning ("PhotoMetadata.vala:513: Unable to set tag %s to rational %s from sourc" \
+#line 625 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_warning ("PhotoMetadata.vala:625: Unable to set tag %s to rational %s from sourc" \
 "e %s", _tmp7_, _tmp9_, _tmp10_);
-#line 513 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 625 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (_tmp9_);
-#line 4275 "PhotoMetadata.c"
+#line 5188 "PhotoMetadata.c"
 	}
 }
 
 
 static Block4Data* block4_data_ref (Block4Data* _data4_) {
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_atomic_int_inc (&_data4_->_ref_count_);
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return _data4_;
-#line 4285 "PhotoMetadata.c"
+#line 5198 "PhotoMetadata.c"
 }
 
 
 static void block4_data_unref (void * _userdata_) {
 	Block4Data* _data4_;
 	_data4_ = (Block4Data*) _userdata_;
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (g_atomic_int_dec_and_test (&_data4_->_ref_count_)) {
-#line 4294 "PhotoMetadata.c"
+#line 5207 "PhotoMetadata.c"
 		PhotoMetadata* self;
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		self = _data4_->self;
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_media_metadata_unref0 (self);
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_slice_free (Block4Data, _data4_);
-#line 4302 "PhotoMetadata.c"
+#line 5215 "PhotoMetadata.c"
 	}
 }
 
@@ -4311,24 +5224,24 @@ static void __lambda8_ (Block4Data* _data4_, const gchar* tag) {
 	PhotoMetadata* self;
 	const gchar* _tmp0_ = NULL;
 	MetadataRational _tmp1_ = {0};
-#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = _data4_->self;
-#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (tag != NULL);
-#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tag;
-#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = _data4_->rational;
-#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_rational (self, _tmp0_, &_tmp1_);
-#line 4321 "PhotoMetadata.c"
+#line 5234 "PhotoMetadata.c"
 }
 
 
 static void ___lambda8__photo_metadata_set_generic_value (const gchar* tag, gpointer self) {
-#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	__lambda8_ (self, tag);
-#line 4328 "PhotoMetadata.c"
+#line 5241 "PhotoMetadata.c"
 }
 
 
@@ -4338,33 +5251,33 @@ void photo_metadata_set_all_rational (PhotoMetadata* self, gchar** tags, int tag
 	gchar** _tmp1_ = NULL;
 	gint _tmp1__length1 = 0;
 	PhotoMetadataSetOption _tmp2_ = 0;
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (rational != NULL);
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data4_ = g_slice_new0 (Block4Data);
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data4_->_ref_count_ = 1;
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data4_->self = media_metadata_ref (self);
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = *rational;
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data4_->rational = _tmp0_;
-#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = tags;
-#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1__length1 = tags_length1;
-#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = option;
-#line 519 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_all_generic (self, _tmp1_, _tmp1__length1, _tmp2_, ___lambda8__photo_metadata_set_generic_value, _data4_);
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	block4_data_unref (_data4_);
-#line 518 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data4_ = NULL;
-#line 4364 "PhotoMetadata.c"
+#line 5277 "PhotoMetadata.c"
 }
 
 
@@ -4375,115 +5288,115 @@ MetadataDateTime* photo_metadata_get_date_time (PhotoMetadata* self, const gchar
 	gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 522 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 634 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 522 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 634 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (tag != NULL, NULL);
-#line 523 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 635 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tag;
-#line 523 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 635 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_string (self, _tmp0_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 523 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 635 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	value = _tmp1_;
-#line 524 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 636 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = value;
-#line 524 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 636 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp2_ == NULL) {
-#line 525 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 637 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = NULL;
-#line 525 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 637 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (value);
-#line 525 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 637 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 4395 "PhotoMetadata.c"
+#line 5308 "PhotoMetadata.c"
 	}
 	{
 		const gchar* _tmp3_ = NULL;
 		MetadataDomain _tmp4_ = 0;
-#line 528 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 640 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = tag;
-#line 528 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 640 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = photo_metadata_get_tag_domain (_tmp3_);
-#line 528 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 640 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		switch (_tmp4_) {
-#line 528 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 640 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			case METADATA_DOMAIN_XMP:
-#line 4408 "PhotoMetadata.c"
+#line 5321 "PhotoMetadata.c"
 			{
 				MetadataDateTime* _tmp5_ = NULL;
 				const gchar* _tmp6_ = NULL;
 				MetadataDateTime* _tmp7_ = NULL;
 				MetadataDateTime* _tmp8_ = NULL;
-#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 642 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp6_ = value;
-#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 642 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp7_ = metadata_date_time_new_from_xmp (_tmp6_, &_inner_error_);
-#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 642 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp5_ = _tmp7_;
-#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 642 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4422 "PhotoMetadata.c"
+#line 5335 "PhotoMetadata.c"
 					goto __catch24_g_error;
 				}
-#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 642 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp8_ = _tmp5_;
-#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 642 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp5_ = NULL;
-#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 642 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				result = _tmp8_;
-#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 642 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_metadata_date_time_unref0 (_tmp5_);
-#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 642 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (value);
-#line 530 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 642 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				return result;
-#line 4437 "PhotoMetadata.c"
+#line 5350 "PhotoMetadata.c"
 			}
-#line 528 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 640 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			case METADATA_DOMAIN_IPTC:
-#line 4441 "PhotoMetadata.c"
+#line 5354 "PhotoMetadata.c"
 			{
-#line 535 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 647 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				result = NULL;
-#line 535 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 647 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (value);
-#line 535 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 647 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				return result;
-#line 4449 "PhotoMetadata.c"
+#line 5362 "PhotoMetadata.c"
 			}
 			default:
-#line 528 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 640 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			case METADATA_DOMAIN_EXIF:
-#line 4454 "PhotoMetadata.c"
+#line 5367 "PhotoMetadata.c"
 			{
 				MetadataDateTime* _tmp9_ = NULL;
 				const gchar* _tmp10_ = NULL;
 				MetadataDateTime* _tmp11_ = NULL;
 				MetadataDateTime* _tmp12_ = NULL;
-#line 539 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp10_ = value;
-#line 539 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp11_ = metadata_date_time_new_from_exif (_tmp10_, &_inner_error_);
-#line 539 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp9_ = _tmp11_;
-#line 539 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4468 "PhotoMetadata.c"
+#line 5381 "PhotoMetadata.c"
 					goto __catch24_g_error;
 				}
-#line 539 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp12_ = _tmp9_;
-#line 539 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp9_ = NULL;
-#line 539 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				result = _tmp12_;
-#line 539 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_metadata_date_time_unref0 (_tmp9_);
-#line 539 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (value);
-#line 539 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				return result;
-#line 4483 "PhotoMetadata.c"
+#line 5396 "PhotoMetadata.c"
 			}
 		}
 	}
@@ -4495,40 +5408,40 @@ MetadataDateTime* photo_metadata_get_date_time (PhotoMetadata* self, const gchar
 		const gchar* _tmp14_ = NULL;
 		GError* _tmp15_ = NULL;
 		const gchar* _tmp16_ = NULL;
-#line 527 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		err = _inner_error_;
-#line 527 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_inner_error_ = NULL;
-#line 542 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 654 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp13_ = tag;
-#line 542 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 654 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp14_ = self->priv->source_name;
-#line 542 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 654 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp15_ = err;
-#line 542 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 654 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp16_ = _tmp15_->message;
-#line 542 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-		g_warning ("PhotoMetadata.vala:542: Unable to read date/time %s from source %s: %s", _tmp13_, _tmp14_, _tmp16_);
-#line 544 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 654 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		g_warning ("PhotoMetadata.vala:654: Unable to read date/time %s from source %s: %s", _tmp13_, _tmp14_, _tmp16_);
+#line 656 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = NULL;
-#line 544 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 656 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_error_free0 (err);
-#line 544 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 656 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (value);
-#line 544 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 656 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 4517 "PhotoMetadata.c"
+#line 5430 "PhotoMetadata.c"
 	}
 	__finally24:
-#line 527 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (value);
-#line 527 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 527 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_clear_error (&_inner_error_);
-#line 527 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return NULL;
-#line 4528 "PhotoMetadata.c"
+#line 5441 "PhotoMetadata.c"
 }
 
 
@@ -4536,197 +5449,197 @@ MetadataDateTime* photo_metadata_get_first_date_time (PhotoMetadata* self, gchar
 	MetadataDateTime* result = NULL;
 	gchar** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 548 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 660 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 661 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tags;
-#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 661 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = tags_length1;
-#line 4542 "PhotoMetadata.c"
+#line 5455 "PhotoMetadata.c"
 	{
 		gchar** tag_collection = NULL;
 		gint tag_collection_length1 = 0;
 		gint _tag_collection_size_ = 0;
 		gint tag_it = 0;
-#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 661 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection = _tmp0_;
-#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 661 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection_length1 = _tmp0__length1;
-#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 661 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (tag_it = 0; tag_it < _tmp0__length1; tag_it = tag_it + 1) {
-#line 4554 "PhotoMetadata.c"
+#line 5467 "PhotoMetadata.c"
 			gchar* _tmp1_ = NULL;
 			gchar* tag = NULL;
-#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 661 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = g_strdup (tag_collection[tag_it]);
-#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 661 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tag = _tmp1_;
-#line 4561 "PhotoMetadata.c"
+#line 5474 "PhotoMetadata.c"
 			{
 				MetadataDateTime* date_time = NULL;
 				const gchar* _tmp2_ = NULL;
 				MetadataDateTime* _tmp3_ = NULL;
 				MetadataDateTime* _tmp4_ = NULL;
-#line 550 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 662 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp2_ = tag;
-#line 550 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 662 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp3_ = photo_metadata_get_date_time (self, _tmp2_);
-#line 550 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 662 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				date_time = _tmp3_;
-#line 551 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 663 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp4_ = date_time;
-#line 551 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 663 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp4_ != NULL) {
-#line 552 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 664 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					result = date_time;
-#line 552 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 664 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_free0 (tag);
-#line 552 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 664 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					return result;
-#line 4583 "PhotoMetadata.c"
+#line 5496 "PhotoMetadata.c"
 				}
-#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 661 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_metadata_date_time_unref0 (date_time);
-#line 549 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 661 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (tag);
-#line 4589 "PhotoMetadata.c"
+#line 5502 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 555 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 667 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = NULL;
-#line 555 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 667 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 4597 "PhotoMetadata.c"
+#line 5510 "PhotoMetadata.c"
 }
 
 
 void photo_metadata_set_date_time (PhotoMetadata* self, const gchar* tag, MetadataDateTime* date_time) {
 	const gchar* _tmp0_ = NULL;
 	MetadataDomain _tmp1_ = 0;
-#line 558 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 670 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 558 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 670 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (tag != NULL);
-#line 558 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 670 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_METADATA_DATE_TIME (date_time));
-#line 559 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 671 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tag;
-#line 559 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 671 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_tag_domain (_tmp0_);
-#line 559 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 671 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	switch (_tmp1_) {
-#line 559 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 671 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_EXIF:
-#line 4618 "PhotoMetadata.c"
+#line 5531 "PhotoMetadata.c"
 		{
 			const gchar* _tmp2_ = NULL;
 			MetadataDateTime* _tmp3_ = NULL;
 			gchar* _tmp4_ = NULL;
 			gchar* _tmp5_ = NULL;
-#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 673 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp2_ = tag;
-#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 673 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp3_ = date_time;
-#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 673 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp4_ = metadata_date_time_get_exif_label (_tmp3_);
-#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 673 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp5_ = _tmp4_;
-#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 673 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			photo_metadata_set_string (self, _tmp2_, _tmp5_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 561 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 673 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_g_free0 (_tmp5_);
-#line 562 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 674 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			break;
-#line 4638 "PhotoMetadata.c"
+#line 5551 "PhotoMetadata.c"
 		}
-#line 559 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 671 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_XMP:
-#line 4642 "PhotoMetadata.c"
+#line 5555 "PhotoMetadata.c"
 		{
 			const gchar* _tmp6_ = NULL;
 			MetadataDateTime* _tmp7_ = NULL;
 			gchar* _tmp8_ = NULL;
 			gchar* _tmp9_ = NULL;
-#line 565 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 677 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp6_ = tag;
-#line 565 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 677 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp7_ = date_time;
-#line 565 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 677 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp8_ = metadata_date_time_get_xmp_label (_tmp7_);
-#line 565 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 677 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp9_ = _tmp8_;
-#line 565 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 677 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			photo_metadata_set_string (self, _tmp6_, _tmp9_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 565 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 677 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_g_free0 (_tmp9_);
-#line 566 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 678 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			break;
-#line 4662 "PhotoMetadata.c"
+#line 5575 "PhotoMetadata.c"
 		}
 		default:
-#line 559 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 671 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_IPTC:
-#line 4667 "PhotoMetadata.c"
+#line 5580 "PhotoMetadata.c"
 		{
 			const gchar* _tmp10_ = NULL;
 			const gchar* _tmp11_ = NULL;
 			const gchar* _tmp12_ = NULL;
 			MetadataDomain _tmp13_ = 0;
 			GEnumValue* _tmp14_;
-#line 571 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 683 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp10_ = tag;
-#line 571 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 683 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp11_ = self->priv->source_name;
-#line 571 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 683 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp12_ = tag;
-#line 571 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 683 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp13_ = photo_metadata_get_tag_domain (_tmp12_);
-#line 572 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 684 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp14_ = g_enum_get_value (g_type_class_ref (TYPE_METADATA_DOMAIN), _tmp13_);
-#line 571 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-			g_warning ("PhotoMetadata.vala:571: Cannot set date/time for %s from source %s: un" \
+#line 683 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+			g_warning ("PhotoMetadata.vala:683: Cannot set date/time for %s from source %s: un" \
 "supported metadata domain %s", _tmp10_, _tmp11_, (_tmp14_ != NULL) ? _tmp14_->value_name : NULL);
-#line 573 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 685 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			break;
-#line 4688 "PhotoMetadata.c"
+#line 5601 "PhotoMetadata.c"
 		}
 	}
 }
 
 
 static gpointer _metadata_date_time_ref0 (gpointer self) {
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return self ? metadata_date_time_ref (self) : NULL;
-#line 4697 "PhotoMetadata.c"
+#line 5610 "PhotoMetadata.c"
 }
 
 
 static Block5Data* block5_data_ref (Block5Data* _data5_) {
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_atomic_int_inc (&_data5_->_ref_count_);
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return _data5_;
-#line 4706 "PhotoMetadata.c"
+#line 5619 "PhotoMetadata.c"
 }
 
 
 static void block5_data_unref (void * _userdata_) {
 	Block5Data* _data5_;
 	_data5_ = (Block5Data*) _userdata_;
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (g_atomic_int_dec_and_test (&_data5_->_ref_count_)) {
-#line 4715 "PhotoMetadata.c"
+#line 5628 "PhotoMetadata.c"
 		PhotoMetadata* self;
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		self = _data5_->self;
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_metadata_date_time_unref0 (_data5_->date_time);
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_media_metadata_unref0 (self);
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		g_slice_free (Block5Data, _data5_);
-#line 4725 "PhotoMetadata.c"
+#line 5638 "PhotoMetadata.c"
 	}
 }
 
@@ -4735,24 +5648,24 @@ static void __lambda9_ (Block5Data* _data5_, const gchar* tag) {
 	PhotoMetadata* self;
 	const gchar* _tmp0_ = NULL;
 	MetadataDateTime* _tmp1_ = NULL;
-#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 690 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = _data5_->self;
-#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 690 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (tag != NULL);
-#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 690 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tag;
-#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 690 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = _data5_->date_time;
-#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 690 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_date_time (self, _tmp0_, _tmp1_);
-#line 4744 "PhotoMetadata.c"
+#line 5657 "PhotoMetadata.c"
 }
 
 
 static void ___lambda9__photo_metadata_set_generic_value (const gchar* tag, gpointer self) {
-#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 690 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	__lambda9_ (self, tag);
-#line 4751 "PhotoMetadata.c"
+#line 5664 "PhotoMetadata.c"
 }
 
 
@@ -4763,37 +5676,37 @@ void photo_metadata_set_all_date_time (PhotoMetadata* self, gchar** tags, int ta
 	gchar** _tmp2_ = NULL;
 	gint _tmp2__length1 = 0;
 	PhotoMetadataSetOption _tmp3_ = 0;
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_METADATA_DATE_TIME (date_time));
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data5_ = g_slice_new0 (Block5Data);
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data5_->_ref_count_ = 1;
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data5_->self = media_metadata_ref (self);
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = date_time;
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = _metadata_date_time_ref0 (_tmp0_);
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_metadata_date_time_unref0 (_data5_->date_time);
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data5_->date_time = _tmp1_;
-#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 690 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = tags;
-#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 690 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2__length1 = tags_length1;
-#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 690 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = option;
-#line 578 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 690 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_all_generic (self, _tmp2_, _tmp2__length1, _tmp3_, ___lambda9__photo_metadata_set_generic_value, _data5_);
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	block5_data_unref (_data5_);
-#line 577 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_data5_ = NULL;
-#line 4792 "PhotoMetadata.c"
+#line 5705 "PhotoMetadata.c"
 }
 
 
@@ -4821,93 +5734,93 @@ guint8* photo_metadata_flatten_exif (PhotoMetadata* self, gboolean include_previ
 	guint _tmp24_ = 0U;
 	guint8* _tmp25_ = NULL;
 	gint _tmp25__length1 = 0;
-#line 582 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 694 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 583 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 695 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exif;
-#line 583 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 695 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp0_ == NULL) {
-#line 4826 "PhotoMetadata.c"
+#line 5739 "PhotoMetadata.c"
 		guint8* _tmp1_ = NULL;
 		gint _tmp1__length1 = 0;
-#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 696 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1_ = NULL;
-#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 696 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1__length1 = 0;
-#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 696 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (result_length1) {
-#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 696 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			*result_length1 = _tmp1__length1;
-#line 4837 "PhotoMetadata.c"
+#line 5750 "PhotoMetadata.c"
 		}
-#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 696 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = _tmp1_;
-#line 584 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 696 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 4843 "PhotoMetadata.c"
+#line 5756 "PhotoMetadata.c"
 	}
-#line 588 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 700 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = self->priv->exif;
-#line 588 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 700 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = _tmp2_->data;
-#line 588 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 700 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	thumbnail = _tmp3_;
-#line 589 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 701 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = self->priv->exif;
-#line 589 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 701 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = _tmp4_->size;
-#line 589 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 701 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	thumbnail_size = _tmp5_;
-#line 590 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 702 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = include_preview;
-#line 590 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 702 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp6_) {
-#line 4861 "PhotoMetadata.c"
+#line 5774 "PhotoMetadata.c"
 		ExifData* _tmp7_ = NULL;
 		ExifData* _tmp8_ = NULL;
-#line 591 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 703 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = self->priv->exif;
-#line 591 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 703 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_->data = NULL;
-#line 592 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 704 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp8_ = self->priv->exif;
-#line 592 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 704 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp8_->size = (guint) 0;
-#line 4872 "PhotoMetadata.c"
+#line 5785 "PhotoMetadata.c"
 	}
-#line 595 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 707 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	flattened = NULL;
-#line 595 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 707 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	flattened_length1 = 0;
-#line 595 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 707 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_flattened_size_ = flattened_length1;
-#line 598 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 710 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	saved_data = NULL;
-#line 599 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 711 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	saved_size = (guint) 0;
-#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 712 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9_ = self->priv->exif;
-#line 600 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 712 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	exif_data_save_data (_tmp9_, &saved_data, &saved_size);
-#line 601 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp11_ = saved_size;
-#line 601 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp11_ > ((guint) 0)) {
-#line 4892 "PhotoMetadata.c"
+#line 5805 "PhotoMetadata.c"
 		guchar* _tmp12_ = NULL;
-#line 601 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp12_ = saved_data;
-#line 601 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = _tmp12_ != NULL;
-#line 4898 "PhotoMetadata.c"
+#line 5811 "PhotoMetadata.c"
 	} else {
-#line 601 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = FALSE;
-#line 4902 "PhotoMetadata.c"
+#line 5815 "PhotoMetadata.c"
 	}
-#line 601 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp10_) {
-#line 4906 "PhotoMetadata.c"
+#line 5819 "PhotoMetadata.c"
 		guint _tmp13_ = 0U;
 		guint8* _tmp14_ = NULL;
 		guint8* _tmp15_ = NULL;
@@ -4917,74 +5830,74 @@ guint8* photo_metadata_flatten_exif (PhotoMetadata* self, gboolean include_previ
 		ExifMem* _tmp18_ = NULL;
 		ExifMem* _tmp19_ = NULL;
 		guchar* _tmp20_ = NULL;
-#line 602 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 714 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp13_ = saved_size;
-#line 602 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 714 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp14_ = g_new0 (guint8, _tmp13_);
-#line 602 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 714 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		flattened = (g_free (flattened), NULL);
-#line 602 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 714 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		flattened = _tmp14_;
-#line 602 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 714 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		flattened_length1 = _tmp13_;
-#line 602 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 714 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_flattened_size_ = flattened_length1;
-#line 603 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 715 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp15_ = flattened;
-#line 603 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 715 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp15__length1 = flattened_length1;
-#line 603 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 715 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp16_ = saved_data;
-#line 603 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 715 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp17_ = saved_size;
-#line 603 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 715 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		memcpy (_tmp15_, _tmp16_, (gsize) _tmp17_);
-#line 605 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 717 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp18_ = exif_mem_new_default ();
-#line 605 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 717 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp19_ = _tmp18_;
-#line 605 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 717 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp20_ = saved_data;
-#line 605 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 717 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		exif_mem_free (_tmp19_, _tmp20_);
-#line 605 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 717 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_exif_mem_unref0 (_tmp19_);
-#line 4948 "PhotoMetadata.c"
+#line 5861 "PhotoMetadata.c"
 	}
-#line 609 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 721 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp21_ = self->priv->exif;
-#line 609 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 721 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp22_ = thumbnail;
-#line 609 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 721 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp21_->data = _tmp22_;
-#line 610 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 722 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp23_ = self->priv->exif;
-#line 610 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 722 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp24_ = thumbnail_size;
-#line 610 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 722 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp23_->size = _tmp24_;
-#line 612 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 724 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp25_ = flattened;
-#line 612 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 724 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp25__length1 = flattened_length1;
-#line 612 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 724 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (result_length1) {
-#line 612 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 724 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*result_length1 = _tmp25__length1;
-#line 4970 "PhotoMetadata.c"
+#line 5883 "PhotoMetadata.c"
 	}
-#line 612 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 724 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp25_;
-#line 612 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 724 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 4976 "PhotoMetadata.c"
+#line 5889 "PhotoMetadata.c"
 }
 
 
 static guint8* _vala_array_dup5 (guint8* self, int length) {
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return g_memdup (self, length * sizeof (guint8));
-#line 4983 "PhotoMetadata.c"
+#line 5896 "PhotoMetadata.c"
 }
 
 
@@ -5004,66 +5917,66 @@ guint8* photo_metadata_flatten_exif_preview (PhotoMetadata* self, int* result_le
 	gint _tmp6__length1 = 0;
 	guint8* _tmp7_ = NULL;
 	gint _tmp7__length1 = 0;
-#line 616 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 728 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = self->priv->exiv2;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = gexiv2_metadata_get_exif_thumbnail (_tmp1_, &_tmp2_, &_tmp3_);
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	buffer = (g_free (buffer), NULL);
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	buffer = _tmp2_;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	buffer_length1 = _tmp3_;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_buffer_size_ = buffer_length1;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp4_) {
-#line 5019 "PhotoMetadata.c"
+#line 5932 "PhotoMetadata.c"
 		guchar* _tmp5_ = NULL;
 		gint _tmp5__length1 = 0;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = buffer;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5__length1 = buffer_length1;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp0_ = _tmp5_;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp0__length1 = _tmp5__length1;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		__tmp0__size_ = _tmp0__length1;
-#line 5032 "PhotoMetadata.c"
+#line 5945 "PhotoMetadata.c"
 	} else {
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp0_ = NULL;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp0__length1 = 0;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		__tmp0__size_ = _tmp0__length1;
-#line 5040 "PhotoMetadata.c"
+#line 5953 "PhotoMetadata.c"
 	}
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = (_tmp0_ != NULL) ? _vala_array_dup5 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6__length1 = _tmp0__length1;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7_ = _tmp6_;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7__length1 = _tmp6__length1;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (result_length1) {
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*result_length1 = _tmp7__length1;
-#line 5054 "PhotoMetadata.c"
+#line 5967 "PhotoMetadata.c"
 	}
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp7_;
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	buffer = (g_free (buffer), NULL);
-#line 618 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 5062 "PhotoMetadata.c"
+#line 5975 "PhotoMetadata.c"
 }
 
 
@@ -5078,44 +5991,44 @@ guint photo_metadata_get_preview_count (PhotoMetadata* self) {
 	gint _tmp3_ = 0;
 	GExiv2PreviewProperties** _tmp4_ = NULL;
 	gint _tmp4__length1 = 0;
-#line 621 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 733 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), 0U);
-#line 622 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 734 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 622 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 734 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = _tmp1_ = gexiv2_metadata_get_preview_properties (_tmp0_);
-#line 622 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 734 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	props = _tmp2_;
-#line 622 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 734 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	props_length1 = _vala_array_length (_tmp1_);
-#line 622 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 734 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_props_size_ = props_length1;
-#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 736 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = props;
-#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 736 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4__length1 = props_length1;
-#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 736 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp4_ != NULL) {
-#line 5095 "PhotoMetadata.c"
+#line 6008 "PhotoMetadata.c"
 		GExiv2PreviewProperties** _tmp5_ = NULL;
 		gint _tmp5__length1 = 0;
-#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 736 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = props;
-#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 736 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5__length1 = props_length1;
-#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 736 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = _tmp5__length1;
-#line 5104 "PhotoMetadata.c"
+#line 6017 "PhotoMetadata.c"
 	} else {
-#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 736 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = 0;
-#line 5108 "PhotoMetadata.c"
+#line 6021 "PhotoMetadata.c"
 	}
-#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 736 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = (guint) _tmp3_;
-#line 624 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 736 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 5114 "PhotoMetadata.c"
+#line 6027 "PhotoMetadata.c"
 }
 
 
@@ -5137,112 +6050,112 @@ PhotoPreview* photo_metadata_get_preview (PhotoMetadata* self, guint number) {
 	guint _tmp10_ = 0U;
 	GExiv2PreviewProperties* _tmp11_ = NULL;
 	PhotoMetadataInternalPhotoPreview* _tmp12_ = NULL;
-#line 628 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 740 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 629 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 741 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 629 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 741 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = _tmp1_ = gexiv2_metadata_get_preview_properties (_tmp0_);
-#line 629 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 741 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	props = _tmp2_;
-#line 629 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 741 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	props_length1 = _vala_array_length (_tmp1_);
-#line 629 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 741 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_props_size_ = props_length1;
-#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 742 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = props;
-#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 742 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4__length1 = props_length1;
-#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 742 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp4_ == NULL) {
-#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 742 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = TRUE;
-#line 5156 "PhotoMetadata.c"
+#line 6069 "PhotoMetadata.c"
 	} else {
 		GExiv2PreviewProperties** _tmp5_ = NULL;
 		gint _tmp5__length1 = 0;
 		guint _tmp6_ = 0U;
-#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 742 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = props;
-#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 742 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5__length1 = props_length1;
-#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 742 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = number;
-#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 742 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = ((guint) _tmp5__length1) <= _tmp6_;
-#line 5169 "PhotoMetadata.c"
+#line 6082 "PhotoMetadata.c"
 	}
-#line 630 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 742 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp3_) {
-#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 743 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = NULL;
-#line 631 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 743 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 5177 "PhotoMetadata.c"
+#line 6090 "PhotoMetadata.c"
 	}
-#line 633 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7_ = self->priv->source_name;
-#line 633 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = number;
-#line 633 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9_ = props;
-#line 633 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9__length1 = props_length1;
-#line 633 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp10_ = number;
-#line 633 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp11_ = _tmp9_[_tmp10_];
-#line 633 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp12_ = photo_metadata_internal_photo_preview_new (self, _tmp7_, _tmp8_, _tmp11_);
-#line 633 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_PHOTO_PREVIEW, PhotoPreview);
-#line 633 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 5197 "PhotoMetadata.c"
+#line 6110 "PhotoMetadata.c"
 }
 
 
 void photo_metadata_remove_exif_thumbnail (PhotoMetadata* self) {
 	GExiv2Metadata* _tmp0_ = NULL;
 	ExifData* _tmp1_ = NULL;
-#line 636 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 748 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 637 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 749 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 637 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 749 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	gexiv2_metadata_erase_exif_thumbnail (_tmp0_);
-#line 638 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 750 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = self->priv->exif;
-#line 638 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 750 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp1_ != NULL) {
-#line 5214 "PhotoMetadata.c"
+#line 6127 "PhotoMetadata.c"
 		ExifMem* _tmp2_ = NULL;
 		ExifMem* _tmp3_ = NULL;
 		ExifData* _tmp4_ = NULL;
 		guchar* _tmp5_ = NULL;
 		ExifData* _tmp6_ = NULL;
 		ExifData* _tmp7_ = NULL;
-#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 751 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = exif_mem_new_default ();
-#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 751 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = _tmp2_;
-#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 751 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = self->priv->exif;
-#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 751 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = _tmp4_->data;
-#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 751 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		exif_mem_free (_tmp3_, _tmp5_);
-#line 639 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 751 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_exif_mem_unref0 (_tmp3_);
-#line 640 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 752 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = self->priv->exif;
-#line 640 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 752 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_->data = NULL;
-#line 641 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 753 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = self->priv->exif;
-#line 641 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 753 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_->size = (guint) 0;
-#line 5241 "PhotoMetadata.c"
+#line 6154 "PhotoMetadata.c"
 	}
 }
 
@@ -5250,58 +6163,58 @@ void photo_metadata_remove_exif_thumbnail (PhotoMetadata* self) {
 void photo_metadata_remove_tag (PhotoMetadata* self, const gchar* tag) {
 	GExiv2Metadata* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 645 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 757 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 645 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 757 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (tag != NULL);
-#line 646 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 758 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 646 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 758 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = tag;
-#line 646 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 758 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	gexiv2_metadata_clear_tag (_tmp0_, _tmp1_);
-#line 5259 "PhotoMetadata.c"
+#line 6172 "PhotoMetadata.c"
 }
 
 
 void photo_metadata_remove_tags (PhotoMetadata* self, gchar** tags, int tags_length1) {
 	gchar** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 649 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 761 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 650 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 762 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = tags;
-#line 650 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 762 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = tags_length1;
-#line 5272 "PhotoMetadata.c"
+#line 6185 "PhotoMetadata.c"
 	{
 		gchar** tag_collection = NULL;
 		gint tag_collection_length1 = 0;
 		gint _tag_collection_size_ = 0;
 		gint tag_it = 0;
-#line 650 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 762 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection = _tmp0_;
-#line 650 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 762 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection_length1 = _tmp0__length1;
-#line 650 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 762 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (tag_it = 0; tag_it < _tmp0__length1; tag_it = tag_it + 1) {
-#line 5284 "PhotoMetadata.c"
+#line 6197 "PhotoMetadata.c"
 			gchar* _tmp1_ = NULL;
 			gchar* tag = NULL;
-#line 650 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 762 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = g_strdup (tag_collection[tag_it]);
-#line 650 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 762 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tag = _tmp1_;
-#line 5291 "PhotoMetadata.c"
+#line 6204 "PhotoMetadata.c"
 			{
 				const gchar* _tmp2_ = NULL;
-#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 763 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp2_ = tag;
-#line 651 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 763 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				photo_metadata_remove_tag (self, _tmp2_);
-#line 650 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 762 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (tag);
-#line 5300 "PhotoMetadata.c"
+#line 6213 "PhotoMetadata.c"
 			}
 		}
 	}
@@ -5310,68 +6223,68 @@ void photo_metadata_remove_tags (PhotoMetadata* self, gchar** tags, int tags_len
 
 void photo_metadata_clear_domain (PhotoMetadata* self, MetadataDomain domain) {
 	MetadataDomain _tmp0_ = 0;
-#line 654 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 766 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 655 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 767 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = domain;
-#line 655 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 767 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	switch (_tmp0_) {
-#line 655 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 767 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_EXIF:
-#line 5317 "PhotoMetadata.c"
+#line 6230 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp1_ = NULL;
-#line 657 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 769 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = self->priv->exiv2;
-#line 657 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 769 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			gexiv2_metadata_clear_exif (_tmp1_);
-#line 658 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 770 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			break;
-#line 5326 "PhotoMetadata.c"
+#line 6239 "PhotoMetadata.c"
 		}
-#line 655 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 767 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_XMP:
-#line 5330 "PhotoMetadata.c"
+#line 6243 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp2_ = NULL;
-#line 661 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 773 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp2_ = self->priv->exiv2;
-#line 661 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 773 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			gexiv2_metadata_clear_xmp (_tmp2_);
-#line 662 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 774 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			break;
-#line 5339 "PhotoMetadata.c"
+#line 6252 "PhotoMetadata.c"
 		}
-#line 655 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 767 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		case METADATA_DOMAIN_IPTC:
-#line 5343 "PhotoMetadata.c"
+#line 6256 "PhotoMetadata.c"
 		{
 			GExiv2Metadata* _tmp3_ = NULL;
-#line 665 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 777 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp3_ = self->priv->exiv2;
-#line 665 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 777 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			gexiv2_metadata_clear_iptc (_tmp3_);
-#line 666 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 778 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			break;
-#line 5352 "PhotoMetadata.c"
+#line 6265 "PhotoMetadata.c"
 		}
 		default:
-#line 655 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 767 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		break;
-#line 5357 "PhotoMetadata.c"
+#line 6270 "PhotoMetadata.c"
 	}
 }
 
 
 void photo_metadata_clear (PhotoMetadata* self) {
 	GExiv2Metadata* _tmp0_ = NULL;
-#line 670 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 782 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 671 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 783 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 671 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 783 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	gexiv2_metadata_clear (_tmp0_);
-#line 5370 "PhotoMetadata.c"
+#line 6283 "PhotoMetadata.c"
 }
 
 
@@ -5380,58 +6293,58 @@ MetadataDateTime* photo_metadata_get_modification_date_time (PhotoMetadata* self
 	gchar** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
 	MetadataDateTime* _tmp1_ = NULL;
-#line 680 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 793 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 681 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 794 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_DATE_TIME_TAGS;
-#line 681 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 794 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = photo_metadata_DATE_TIME_TAGS_length1;
-#line 681 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 794 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_first_date_time (self, _tmp0_, _tmp0__length1);
-#line 681 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 794 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_;
-#line 681 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 794 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 5391 "PhotoMetadata.c"
+#line 6304 "PhotoMetadata.c"
 }
 
 
 void photo_metadata_set_modification_date_time (PhotoMetadata* self, MetadataDateTime* date_time, PhotoMetadataSetOption option) {
 	MetadataDateTime* _tmp0_ = NULL;
-#line 684 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 797 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 684 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 797 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail ((date_time == NULL) || IS_METADATA_DATE_TIME (date_time));
-#line 686 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 799 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = date_time;
-#line 686 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 799 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp0_ != NULL) {
-#line 5405 "PhotoMetadata.c"
+#line 6318 "PhotoMetadata.c"
 		gchar** _tmp1_ = NULL;
 		gint _tmp1__length1 = 0;
 		MetadataDateTime* _tmp2_ = NULL;
 		PhotoMetadataSetOption _tmp3_ = 0;
-#line 687 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 800 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1_ = photo_metadata_DATE_TIME_TAGS;
-#line 687 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 800 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1__length1 = photo_metadata_DATE_TIME_TAGS_length1;
-#line 687 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 800 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = date_time;
-#line 687 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 800 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = option;
-#line 687 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 800 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_set_all_date_time (self, _tmp1_, _tmp1__length1, _tmp2_, _tmp3_);
-#line 5420 "PhotoMetadata.c"
+#line 6333 "PhotoMetadata.c"
 	} else {
 		gchar** _tmp4_ = NULL;
 		gint _tmp4__length1 = 0;
-#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 802 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = photo_metadata_DATE_TIME_TAGS;
-#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 802 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4__length1 = photo_metadata_DATE_TIME_TAGS_length1;
-#line 689 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 802 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_remove_tags (self, _tmp4_, _tmp4__length1);
-#line 5430 "PhotoMetadata.c"
+#line 6343 "PhotoMetadata.c"
 	}
 }
 
@@ -5441,58 +6354,58 @@ MetadataDateTime* photo_metadata_get_exposure_date_time (PhotoMetadata* self) {
 	gchar** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
 	MetadataDateTime* _tmp1_ = NULL;
-#line 701 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 814 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 702 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 815 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_EXPOSURE_DATE_TIME_TAGS;
-#line 702 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 815 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = photo_metadata_EXPOSURE_DATE_TIME_TAGS_length1;
-#line 702 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 815 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_first_date_time (self, _tmp0_, _tmp0__length1);
-#line 702 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 815 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_;
-#line 702 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 815 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 5452 "PhotoMetadata.c"
+#line 6365 "PhotoMetadata.c"
 }
 
 
 void photo_metadata_set_exposure_date_time (PhotoMetadata* self, MetadataDateTime* date_time, PhotoMetadataSetOption option) {
 	MetadataDateTime* _tmp0_ = NULL;
-#line 705 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 818 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 705 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 818 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail ((date_time == NULL) || IS_METADATA_DATE_TIME (date_time));
-#line 707 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 820 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = date_time;
-#line 707 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 820 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp0_ != NULL) {
-#line 5466 "PhotoMetadata.c"
+#line 6379 "PhotoMetadata.c"
 		gchar** _tmp1_ = NULL;
 		gint _tmp1__length1 = 0;
 		MetadataDateTime* _tmp2_ = NULL;
 		PhotoMetadataSetOption _tmp3_ = 0;
-#line 708 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 821 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1_ = photo_metadata_EXPOSURE_DATE_TIME_TAGS;
-#line 708 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 821 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1__length1 = photo_metadata_EXPOSURE_DATE_TIME_TAGS_length1;
-#line 708 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 821 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = date_time;
-#line 708 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 821 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = option;
-#line 708 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 821 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_set_all_date_time (self, _tmp1_, _tmp1__length1, _tmp2_, _tmp3_);
-#line 5481 "PhotoMetadata.c"
+#line 6394 "PhotoMetadata.c"
 	} else {
 		gchar** _tmp4_ = NULL;
 		gint _tmp4__length1 = 0;
-#line 710 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 823 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = photo_metadata_EXPOSURE_DATE_TIME_TAGS;
-#line 710 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 823 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4__length1 = photo_metadata_EXPOSURE_DATE_TIME_TAGS_length1;
-#line 710 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 823 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_remove_tags (self, _tmp4_, _tmp4__length1);
-#line 5491 "PhotoMetadata.c"
+#line 6404 "PhotoMetadata.c"
 	}
 }
 
@@ -5502,58 +6415,58 @@ MetadataDateTime* photo_metadata_get_digitized_date_time (PhotoMetadata* self) {
 	gchar** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
 	MetadataDateTime* _tmp1_ = NULL;
-#line 718 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 831 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 719 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 832 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_DIGITIZED_DATE_TIME_TAGS;
-#line 719 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 832 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = photo_metadata_DIGITIZED_DATE_TIME_TAGS_length1;
-#line 719 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 832 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_first_date_time (self, _tmp0_, _tmp0__length1);
-#line 719 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 832 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_;
-#line 719 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 832 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 5513 "PhotoMetadata.c"
+#line 6426 "PhotoMetadata.c"
 }
 
 
 void photo_metadata_set_digitized_date_time (PhotoMetadata* self, MetadataDateTime* date_time, PhotoMetadataSetOption option) {
 	MetadataDateTime* _tmp0_ = NULL;
-#line 722 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 835 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 722 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 835 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail ((date_time == NULL) || IS_METADATA_DATE_TIME (date_time));
-#line 724 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 837 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = date_time;
-#line 724 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 837 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp0_ != NULL) {
-#line 5527 "PhotoMetadata.c"
+#line 6440 "PhotoMetadata.c"
 		gchar** _tmp1_ = NULL;
 		gint _tmp1__length1 = 0;
 		MetadataDateTime* _tmp2_ = NULL;
 		PhotoMetadataSetOption _tmp3_ = 0;
-#line 725 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 838 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1_ = photo_metadata_DIGITIZED_DATE_TIME_TAGS;
-#line 725 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 838 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1__length1 = photo_metadata_DIGITIZED_DATE_TIME_TAGS_length1;
-#line 725 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 838 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = date_time;
-#line 725 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 838 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = option;
-#line 725 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 838 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_set_all_date_time (self, _tmp1_, _tmp1__length1, _tmp2_, _tmp3_);
-#line 5542 "PhotoMetadata.c"
+#line 6455 "PhotoMetadata.c"
 	} else {
 		gchar** _tmp4_ = NULL;
 		gint _tmp4__length1 = 0;
-#line 727 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 840 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = photo_metadata_DIGITIZED_DATE_TIME_TAGS;
-#line 727 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 840 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4__length1 = photo_metadata_DIGITIZED_DATE_TIME_TAGS_length1;
-#line 727 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 840 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_remove_tags (self, _tmp4_, _tmp4__length1);
-#line 5552 "PhotoMetadata.c"
+#line 6465 "PhotoMetadata.c"
 	}
 }
 
@@ -5564,38 +6477,38 @@ static MetadataDateTime* photo_metadata_real_get_creation_date_time (MediaMetada
 	MetadataDateTime* creation = NULL;
 	MetadataDateTime* _tmp0_ = NULL;
 	MetadataDateTime* _tmp1_ = NULL;
-#line 730 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 843 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO_METADATA, PhotoMetadata);
-#line 731 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 844 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_get_exposure_date_time (self);
-#line 731 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 844 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	creation = _tmp0_;
-#line 732 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 845 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = creation;
-#line 732 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 845 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp1_ == NULL) {
-#line 5573 "PhotoMetadata.c"
+#line 6486 "PhotoMetadata.c"
 		MetadataDateTime* _tmp2_ = NULL;
-#line 733 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 846 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = photo_metadata_get_digitized_date_time (self);
-#line 733 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 846 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_metadata_date_time_unref0 (creation);
-#line 733 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 846 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		creation = _tmp2_;
-#line 5581 "PhotoMetadata.c"
+#line 6494 "PhotoMetadata.c"
 	}
-#line 735 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 848 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = creation;
-#line 735 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 848 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 5587 "PhotoMetadata.c"
+#line 6500 "PhotoMetadata.c"
 }
 
 
 static gpointer _dimensions_dup0 (gpointer self) {
-#line 766 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 879 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return self ? dimensions_dup (self) : NULL;
-#line 5594 "PhotoMetadata.c"
+#line 6507 "PhotoMetadata.c"
 }
 
 
@@ -5605,31 +6518,31 @@ Dimensions* photo_metadata_get_pixel_dimensions (PhotoMetadata* self) {
 	gint _tmp0__length1 = 0;
 	gchar** _tmp1_ = NULL;
 	gint _tmp1__length1 = 0;
-#line 752 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 865 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 754 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 867 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_WIDTH_TAGS;
-#line 754 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 867 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = photo_metadata_WIDTH_TAGS_length1;
-#line 754 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 867 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_HEIGHT_TAGS;
-#line 754 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 867 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1__length1 = photo_metadata_HEIGHT_TAGS_length1;
-#line 754 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 867 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_assert (_tmp0__length1 == _tmp1__length1, "WIDTH_TAGS.length == HEIGHT_TAGS.length");
-#line 5616 "PhotoMetadata.c"
+#line 6529 "PhotoMetadata.c"
 	{
 		gint ctr = 0;
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		ctr = 0;
-#line 5621 "PhotoMetadata.c"
+#line 6534 "PhotoMetadata.c"
 		{
 			gboolean _tmp2_ = FALSE;
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp2_ = TRUE;
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			while (TRUE) {
-#line 5628 "PhotoMetadata.c"
+#line 6541 "PhotoMetadata.c"
 				gint _tmp4_ = 0;
 				gchar** _tmp5_ = NULL;
 				gint _tmp5__length1 = 0;
@@ -5651,99 +6564,99 @@ Dimensions* photo_metadata_get_pixel_dimensions (PhotoMetadata* self) {
 				glong _tmp17_ = 0L;
 				Dimensions _tmp18_ = {0};
 				Dimensions* _tmp19_ = NULL;
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (!_tmp2_) {
-#line 5652 "PhotoMetadata.c"
+#line 6565 "PhotoMetadata.c"
 					gint _tmp3_ = 0;
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp3_ = ctr;
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					ctr = _tmp3_ + 1;
-#line 5658 "PhotoMetadata.c"
+#line 6571 "PhotoMetadata.c"
 				}
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp2_ = FALSE;
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp4_ = ctr;
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp5_ = photo_metadata_WIDTH_TAGS;
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp5__length1 = photo_metadata_WIDTH_TAGS_length1;
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (!(_tmp4_ < _tmp5__length1)) {
-#line 755 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 868 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					break;
-#line 5672 "PhotoMetadata.c"
+#line 6585 "PhotoMetadata.c"
 				}
-#line 759 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 872 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp6_ = photo_metadata_WIDTH_TAGS;
-#line 759 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 872 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp6__length1 = photo_metadata_WIDTH_TAGS_length1;
-#line 759 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 872 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp7_ = ctr;
-#line 759 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 872 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp8_ = _tmp6_[_tmp7_];
-#line 759 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 872 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp10_ = photo_metadata_get_long (self, _tmp8_, &_tmp9_);
-#line 759 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 872 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				width = _tmp9_;
-#line 759 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 872 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (!_tmp10_) {
-#line 760 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 873 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					continue;
-#line 5690 "PhotoMetadata.c"
+#line 6603 "PhotoMetadata.c"
 				}
-#line 763 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp11_ = photo_metadata_HEIGHT_TAGS;
-#line 763 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp11__length1 = photo_metadata_HEIGHT_TAGS_length1;
-#line 763 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp12_ = ctr;
-#line 763 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp13_ = _tmp11_[_tmp12_];
-#line 763 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp15_ = photo_metadata_get_long (self, _tmp13_, &_tmp14_);
-#line 763 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				height = _tmp14_;
-#line 763 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (!_tmp15_) {
-#line 764 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 877 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					continue;
-#line 5708 "PhotoMetadata.c"
+#line 6621 "PhotoMetadata.c"
 				}
-#line 766 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 879 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp16_ = width;
-#line 766 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 879 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp17_ = height;
-#line 766 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 879 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				dimensions_init (&_tmp18_, (gint) _tmp16_, (gint) _tmp17_);
-#line 766 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 879 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp19_ = _dimensions_dup0 (&_tmp18_);
-#line 766 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 879 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				result = _tmp19_;
-#line 766 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 879 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				return result;
-#line 5722 "PhotoMetadata.c"
+#line 6635 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 769 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 882 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = NULL;
-#line 769 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 882 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 5730 "PhotoMetadata.c"
+#line 6643 "PhotoMetadata.c"
 }
 
 
 void photo_metadata_set_pixel_dimensions (PhotoMetadata* self, Dimensions* dim, PhotoMetadataSetOption option) {
 	Dimensions* _tmp0_ = NULL;
-#line 772 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 773 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 886 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = dim;
-#line 773 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 886 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp0_ != NULL) {
-#line 5742 "PhotoMetadata.c"
+#line 6655 "PhotoMetadata.c"
 		gchar** _tmp1_ = NULL;
 		gint _tmp1__length1 = 0;
 		Dimensions* _tmp2_ = NULL;
@@ -5754,49 +6667,49 @@ void photo_metadata_set_pixel_dimensions (PhotoMetadata* self, Dimensions* dim, 
 		Dimensions* _tmp6_ = NULL;
 		gint _tmp7_ = 0;
 		PhotoMetadataSetOption _tmp8_ = 0;
-#line 774 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 887 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1_ = photo_metadata_WIDTH_TAGS;
-#line 774 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 887 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp1__length1 = photo_metadata_WIDTH_TAGS_length1;
-#line 774 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 887 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = dim;
-#line 774 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 887 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = (*_tmp2_).width;
-#line 774 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 887 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = option;
-#line 774 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 887 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_set_all_long (self, _tmp1_, _tmp1__length1, (glong) _tmp3_, _tmp4_);
-#line 775 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 888 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = photo_metadata_HEIGHT_TAGS;
-#line 775 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 888 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5__length1 = photo_metadata_HEIGHT_TAGS_length1;
-#line 775 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 888 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = dim;
-#line 775 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 888 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = (*_tmp6_).height;
-#line 775 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 888 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp8_ = option;
-#line 775 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 888 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_set_all_long (self, _tmp5_, _tmp5__length1, (glong) _tmp7_, _tmp8_);
-#line 5777 "PhotoMetadata.c"
+#line 6690 "PhotoMetadata.c"
 	} else {
 		gchar** _tmp9_ = NULL;
 		gint _tmp9__length1 = 0;
 		gchar** _tmp10_ = NULL;
 		gint _tmp10__length1 = 0;
-#line 777 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 890 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp9_ = photo_metadata_WIDTH_TAGS;
-#line 777 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 890 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp9__length1 = photo_metadata_WIDTH_TAGS_length1;
-#line 777 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 890 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_remove_tags (self, _tmp9_, _tmp9__length1);
-#line 778 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 891 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = photo_metadata_HEIGHT_TAGS;
-#line 778 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 891 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10__length1 = photo_metadata_HEIGHT_TAGS_length1;
-#line 778 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 891 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_remove_tags (self, _tmp10_, _tmp10__length1);
-#line 5795 "PhotoMetadata.c"
+#line 6708 "PhotoMetadata.c"
 	}
 }
 
@@ -5820,7 +6733,7 @@ static gchar* string_strip (const gchar* self) {
 	result = _result_;
 #line 1210 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 5819 "PhotoMetadata.c"
+#line 6732 "PhotoMetadata.c"
 }
 
 
@@ -5840,7 +6753,7 @@ static gboolean string_contains (const gchar* self, const gchar* needle) {
 	result = _tmp1_ != NULL;
 #line 1377 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 5839 "PhotoMetadata.c"
+#line 6752 "PhotoMetadata.c"
 }
 
 
@@ -5863,226 +6776,226 @@ static gchar* photo_metadata_real_get_title (MediaMetadata* base) {
 	const gchar* _tmp21_ = NULL;
 	gboolean _tmp22_ = FALSE;
 	gchar* _tmp28_ = NULL;
-#line 811 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 925 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO_METADATA, PhotoMetadata);
-#line 819 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 933 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_has_tag (self, PHOTO_METADATA_IPHOTO_TITLE_TAG);
-#line 819 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 933 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp1_) {
-#line 5868 "PhotoMetadata.c"
+#line 6781 "PhotoMetadata.c"
 		GeeList* _tmp2_ = NULL;
-#line 820 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 934 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = photo_metadata_get_string_multiple (self, PHOTO_METADATA_IPHOTO_TITLE_TAG);
-#line 820 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 934 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_object_unref0 (_tmp0_);
-#line 820 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 934 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp0_ = _tmp2_;
-#line 5876 "PhotoMetadata.c"
+#line 6789 "PhotoMetadata.c"
 	} else {
 		gchar** _tmp3_ = NULL;
 		gint _tmp3__length1 = 0;
 		GeeList* _tmp4_ = NULL;
-#line 821 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 935 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = photo_metadata_STANDARD_TITLE_TAGS;
-#line 821 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 935 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3__length1 = photo_metadata_STANDARD_TITLE_TAGS_length1;
-#line 821 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 935 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = photo_metadata_get_first_string_multiple (self, _tmp3_, _tmp3__length1);
-#line 821 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 935 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_object_unref0 (_tmp0_);
-#line 821 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 935 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp0_ = _tmp4_;
-#line 5891 "PhotoMetadata.c"
+#line 6804 "PhotoMetadata.c"
 	}
-#line 819 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 933 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = _g_object_ref0 (_tmp0_);
-#line 819 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 933 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	titles = _tmp5_;
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = titles;
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp8_ != NULL) {
-#line 5901 "PhotoMetadata.c"
+#line 6814 "PhotoMetadata.c"
 		GeeList* _tmp9_ = NULL;
 		gint _tmp10_ = 0;
 		gint _tmp11_ = 0;
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp9_ = titles;
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp11_ = _tmp10_;
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = _tmp11_ > 0;
-#line 5913 "PhotoMetadata.c"
+#line 6826 "PhotoMetadata.c"
 	} else {
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = FALSE;
-#line 5917 "PhotoMetadata.c"
+#line 6830 "PhotoMetadata.c"
 	}
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp7_) {
-#line 5921 "PhotoMetadata.c"
+#line 6834 "PhotoMetadata.c"
 		GeeList* _tmp12_ = NULL;
 		gpointer _tmp13_ = NULL;
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp12_ = titles;
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp13_ = gee_list_get (_tmp12_, 0);
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (_tmp6_);
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = (gchar*) _tmp13_;
-#line 5932 "PhotoMetadata.c"
+#line 6845 "PhotoMetadata.c"
 	} else {
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (_tmp6_);
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = NULL;
-#line 5938 "PhotoMetadata.c"
+#line 6851 "PhotoMetadata.c"
 	}
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp14_ = g_strdup (_tmp6_);
-#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 940 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	title = _tmp14_;
-#line 829 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 943 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp15_ = title;
-#line 829 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 943 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp15_ != NULL) {
-#line 5948 "PhotoMetadata.c"
+#line 6861 "PhotoMetadata.c"
 		const gchar* _tmp16_ = NULL;
 		gchar* _tmp17_ = NULL;
-#line 830 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 944 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp16_ = title;
-#line 830 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 944 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp17_ = string_strip (_tmp16_);
-#line 830 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 944 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (title);
-#line 830 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 944 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		title = _tmp17_;
-#line 5959 "PhotoMetadata.c"
+#line 6872 "PhotoMetadata.c"
 	}
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp21_ = title;
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp22_ = is_string_empty (_tmp21_);
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp22_) {
-#line 5967 "PhotoMetadata.c"
+#line 6880 "PhotoMetadata.c"
 		const gchar* _tmp23_ = NULL;
 		gboolean _tmp24_ = FALSE;
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp23_ = title;
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp24_ = string_contains (_tmp23_, "\n");
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp20_ = !_tmp24_;
-#line 5976 "PhotoMetadata.c"
+#line 6889 "PhotoMetadata.c"
 	} else {
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp20_ = FALSE;
-#line 5980 "PhotoMetadata.c"
+#line 6893 "PhotoMetadata.c"
 	}
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp20_) {
-#line 5984 "PhotoMetadata.c"
+#line 6897 "PhotoMetadata.c"
 		const gchar* _tmp25_ = NULL;
 		gboolean _tmp26_ = FALSE;
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp25_ = title;
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp26_ = string_contains (_tmp25_, "\r");
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp19_ = !_tmp26_;
-#line 5993 "PhotoMetadata.c"
+#line 6906 "PhotoMetadata.c"
 	} else {
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp19_ = FALSE;
-#line 5997 "PhotoMetadata.c"
+#line 6910 "PhotoMetadata.c"
 	}
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp19_) {
-#line 6001 "PhotoMetadata.c"
+#line 6914 "PhotoMetadata.c"
 		const gchar* _tmp27_ = NULL;
-#line 834 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 948 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp27_ = title;
-#line 834 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 948 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp18_ = _tmp27_;
-#line 6007 "PhotoMetadata.c"
+#line 6920 "PhotoMetadata.c"
 	} else {
-#line 834 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 948 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp18_ = NULL;
-#line 6011 "PhotoMetadata.c"
+#line 6924 "PhotoMetadata.c"
 	}
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp28_ = g_strdup (_tmp18_);
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp28_;
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (title);
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_tmp6_);
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (titles);
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (_tmp0_);
-#line 833 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 6027 "PhotoMetadata.c"
+#line 6940 "PhotoMetadata.c"
 }
 
 
 void photo_metadata_set_title (PhotoMetadata* self, const gchar* title, PhotoMetadataSetOption option) {
 	const gchar* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 837 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 951 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 838 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 952 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = title;
-#line 838 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 952 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = is_string_empty (_tmp0_);
-#line 838 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 952 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp1_) {
-#line 6042 "PhotoMetadata.c"
+#line 6955 "PhotoMetadata.c"
 		gboolean _tmp2_ = FALSE;
-#line 839 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 953 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = photo_metadata_has_tag (self, PHOTO_METADATA_IPHOTO_TITLE_TAG);
-#line 839 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 953 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (_tmp2_) {
-#line 6048 "PhotoMetadata.c"
+#line 6961 "PhotoMetadata.c"
 			const gchar* _tmp3_ = NULL;
-#line 840 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 954 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp3_ = title;
-#line 840 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 954 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			photo_metadata_set_string (self, PHOTO_METADATA_IPHOTO_TITLE_TAG, _tmp3_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 6054 "PhotoMetadata.c"
+#line 6967 "PhotoMetadata.c"
 		} else {
 			gchar** _tmp4_ = NULL;
 			gint _tmp4__length1 = 0;
 			const gchar* _tmp5_ = NULL;
 			PhotoMetadataSetOption _tmp6_ = 0;
-#line 842 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 956 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp4_ = photo_metadata_STANDARD_TITLE_TAGS;
-#line 842 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 956 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp4__length1 = photo_metadata_STANDARD_TITLE_TAGS_length1;
-#line 842 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 956 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp5_ = title;
-#line 842 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 956 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp6_ = option;
-#line 842 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 956 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			photo_metadata_set_all_string (self, _tmp4_, _tmp4__length1, _tmp5_, _tmp6_);
-#line 6070 "PhotoMetadata.c"
+#line 6983 "PhotoMetadata.c"
 		}
 	} else {
 		gchar** _tmp7_ = NULL;
 		gint _tmp7__length1 = 0;
-#line 844 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = photo_metadata_STANDARD_TITLE_TAGS;
-#line 844 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7__length1 = photo_metadata_STANDARD_TITLE_TAGS_length1;
-#line 844 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_remove_tags (self, _tmp7_, _tmp7__length1);
-#line 6081 "PhotoMetadata.c"
+#line 6994 "PhotoMetadata.c"
 	}
 }
 
@@ -6090,41 +7003,62 @@ void photo_metadata_set_title (PhotoMetadata* self, const gchar* title, PhotoMet
 static gchar* photo_metadata_real_get_comment (MediaMetadata* base) {
 	PhotoMetadata * self;
 	gchar* result = NULL;
-	gchar* _tmp0_ = NULL;
-#line 848 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	gchar** _tmp0_ = NULL;
+	gint _tmp0__length1 = 0;
+	gchar* _tmp1_ = NULL;
+#line 967 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO_METADATA, PhotoMetadata);
-#line 849 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp0_ = photo_metadata_get_string_interpreted (self, "Exif.Photo.UserComment", PREPARE_INPUT_TEXT_OPTIONS_DEFAULT & (~PREPARE_INPUT_TEXT_OPTIONS_STRIP_CRLF));
-#line 849 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	result = _tmp0_;
-#line 849 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 968 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp0_ = photo_metadata_COMMENT_TAGS;
+#line 968 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp0__length1 = photo_metadata_COMMENT_TAGS_length1;
+#line 968 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp1_ = photo_metadata_get_first_string_interpreted (self, _tmp0_, _tmp0__length1);
+#line 968 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	result = _tmp1_;
+#line 968 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 6098 "PhotoMetadata.c"
+#line 7017 "PhotoMetadata.c"
 }
 
 
-void photo_metadata_set_comment (PhotoMetadata* self, const gchar* comment) {
+void photo_metadata_set_comment (PhotoMetadata* self, const gchar* comment, PhotoMetadataSetOption option) {
 	const gchar* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 852 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 971 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 853 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 973 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = comment;
-#line 853 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 973 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = is_string_empty (_tmp0_);
-#line 853 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 973 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp1_) {
-#line 6113 "PhotoMetadata.c"
-		const gchar* _tmp2_ = NULL;
-#line 854 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-		_tmp2_ = comment;
-#line 854 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-		photo_metadata_set_string (self, "Exif.Photo.UserComment", _tmp2_, PREPARE_INPUT_TEXT_OPTIONS_DEFAULT & (~PREPARE_INPUT_TEXT_OPTIONS_STRIP_CRLF));
-#line 6119 "PhotoMetadata.c"
+#line 7032 "PhotoMetadata.c"
+		gchar** _tmp2_ = NULL;
+		gint _tmp2__length1 = 0;
+		const gchar* _tmp3_ = NULL;
+		PhotoMetadataSetOption _tmp4_ = 0;
+#line 974 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp2_ = photo_metadata_COMMENT_TAGS;
+#line 974 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp2__length1 = photo_metadata_COMMENT_TAGS_length1;
+#line 974 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp3_ = comment;
+#line 974 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp4_ = option;
+#line 974 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		photo_metadata_set_all_string (self, _tmp2_, _tmp2__length1, _tmp3_, _tmp4_);
+#line 7047 "PhotoMetadata.c"
 	} else {
-#line 856 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-		photo_metadata_remove_tag (self, "Exif.Photo.UserComment");
-#line 6123 "PhotoMetadata.c"
+		gchar** _tmp5_ = NULL;
+		gint _tmp5__length1 = 0;
+#line 976 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp5_ = photo_metadata_COMMENT_TAGS;
+#line 976 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		_tmp5__length1 = photo_metadata_COMMENT_TAGS_length1;
+#line 976 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+		photo_metadata_remove_tags (self, _tmp5_, _tmp5__length1);
+#line 7057 "PhotoMetadata.c"
 	}
 }
 
@@ -6138,110 +7072,110 @@ GeeSet* photo_metadata_get_keywords (PhotoMetadata* self, GCompareDataFunc compa
 	gboolean _tmp23_ = FALSE;
 	GeeSet* _tmp24_ = NULL;
 	GeeSet* _tmp29_ = NULL;
-#line 872 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 996 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 873 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 997 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	keywords = NULL;
-#line 874 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 998 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_KEYWORD_TAGS;
-#line 874 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 998 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = photo_metadata_KEYWORD_TAGS_length1;
-#line 6145 "PhotoMetadata.c"
+#line 7079 "PhotoMetadata.c"
 	{
 		gchar** tag_collection = NULL;
 		gint tag_collection_length1 = 0;
 		gint _tag_collection_size_ = 0;
 		gint tag_it = 0;
-#line 874 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 998 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection = _tmp0_;
-#line 874 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 998 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		tag_collection_length1 = _tmp0__length1;
-#line 874 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 998 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (tag_it = 0; tag_it < _tmp0__length1; tag_it = tag_it + 1) {
-#line 6157 "PhotoMetadata.c"
+#line 7091 "PhotoMetadata.c"
 			gchar* _tmp1_ = NULL;
 			gchar* tag = NULL;
-#line 874 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 998 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = g_strdup (tag_collection[tag_it]);
-#line 874 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 998 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			tag = _tmp1_;
-#line 6164 "PhotoMetadata.c"
+#line 7098 "PhotoMetadata.c"
 			{
 				GeeCollection* values = NULL;
 				const gchar* _tmp2_ = NULL;
 				GeeList* _tmp3_ = NULL;
 				gboolean _tmp4_ = FALSE;
 				GeeCollection* _tmp5_ = NULL;
-#line 875 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 999 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp2_ = tag;
-#line 875 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 999 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp3_ = photo_metadata_get_string_multiple (self, _tmp2_);
-#line 875 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 999 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				values = G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1000 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp5_ = values;
-#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1000 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp5_ != NULL) {
-#line 6181 "PhotoMetadata.c"
+#line 7115 "PhotoMetadata.c"
 					GeeCollection* _tmp6_ = NULL;
 					gint _tmp7_ = 0;
 					gint _tmp8_ = 0;
-#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1000 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp6_ = values;
-#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1000 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp7_ = gee_collection_get_size (_tmp6_);
-#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1000 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp8_ = _tmp7_;
-#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1000 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp4_ = _tmp8_ > 0;
-#line 6193 "PhotoMetadata.c"
+#line 7127 "PhotoMetadata.c"
 				} else {
-#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1000 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp4_ = FALSE;
-#line 6197 "PhotoMetadata.c"
+#line 7131 "PhotoMetadata.c"
 				}
-#line 876 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1000 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp4_) {
-#line 6201 "PhotoMetadata.c"
+#line 7135 "PhotoMetadata.c"
 					GeeSet* _tmp9_ = NULL;
-#line 877 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1001 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp9_ = keywords;
-#line 877 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1001 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					if (_tmp9_ == NULL) {
-#line 6207 "PhotoMetadata.c"
+#line 7141 "PhotoMetadata.c"
 						GCompareDataFunc _tmp10_ = NULL;
 						void* _tmp10__target = NULL;
 						GDestroyNotify _tmp10__target_destroy_notify = NULL;
 						GeeSet* _tmp11_ = NULL;
-#line 878 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1002 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp10_ = compare_func;
-#line 878 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1002 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp10__target = compare_func_target;
-#line 878 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1002 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp10__target_destroy_notify = compare_func_target_destroy_notify;
-#line 878 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1002 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						compare_func_target_destroy_notify = NULL;
-#line 878 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1002 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp11_ = photo_metadata_create_string_set (self, _tmp10_, _tmp10__target, _tmp10__target_destroy_notify);
-#line 878 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1002 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_g_object_unref0 (keywords);
-#line 878 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1002 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						keywords = _tmp11_;
-#line 6226 "PhotoMetadata.c"
+#line 7160 "PhotoMetadata.c"
 					}
 					{
 						GeeIterator* _current_value_it = NULL;
 						GeeCollection* _tmp12_ = NULL;
 						GeeIterator* _tmp13_ = NULL;
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp12_ = values;
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp13_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_current_value_it = _tmp13_;
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						while (TRUE) {
-#line 6240 "PhotoMetadata.c"
+#line 7174 "PhotoMetadata.c"
 							GeeIterator* _tmp14_ = NULL;
 							gboolean _tmp15_ = FALSE;
 							gchar* current_value = NULL;
@@ -6251,111 +7185,111 @@ GeeSet* photo_metadata_get_keywords (PhotoMetadata* self, GCompareDataFunc compa
 							const gchar* _tmp19_ = NULL;
 							gchar* _tmp20_ = NULL;
 							gchar* _tmp21_ = NULL;
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp14_ = _current_value_it;
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp15_ = gee_iterator_next (_tmp14_);
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							if (!_tmp15_) {
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 								break;
-#line 6258 "PhotoMetadata.c"
+#line 7192 "PhotoMetadata.c"
 							}
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp16_ = _current_value_it;
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp17_ = gee_iterator_get (_tmp16_);
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							current_value = (gchar*) _tmp17_;
-#line 881 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1005 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp18_ = keywords;
-#line 881 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1005 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp19_ = current_value;
-#line 881 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1005 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp20_ = hierarchical_tag_utilities_make_flat_tag_safe (_tmp19_);
-#line 881 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1005 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp21_ = _tmp20_;
-#line 881 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1005 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, GEE_TYPE_COLLECTION, GeeCollection), _tmp21_);
-#line 881 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1005 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_g_free0 (_tmp21_);
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_g_free0 (current_value);
-#line 6280 "PhotoMetadata.c"
+#line 7214 "PhotoMetadata.c"
 						}
-#line 880 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1004 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_g_object_unref0 (_current_value_it);
-#line 6284 "PhotoMetadata.c"
+#line 7218 "PhotoMetadata.c"
 					}
 				}
-#line 874 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 998 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_object_unref0 (values);
-#line 874 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 998 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (tag);
-#line 6291 "PhotoMetadata.c"
+#line 7225 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp24_ = keywords;
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp24_ != NULL) {
-#line 6299 "PhotoMetadata.c"
+#line 7233 "PhotoMetadata.c"
 		GeeSet* _tmp25_ = NULL;
 		gint _tmp26_ = 0;
 		gint _tmp27_ = 0;
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp25_ = keywords;
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp26_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp27_ = _tmp26_;
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp23_ = _tmp27_ > 0;
-#line 6311 "PhotoMetadata.c"
+#line 7245 "PhotoMetadata.c"
 	} else {
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp23_ = FALSE;
-#line 6315 "PhotoMetadata.c"
+#line 7249 "PhotoMetadata.c"
 	}
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp23_) {
-#line 6319 "PhotoMetadata.c"
+#line 7253 "PhotoMetadata.c"
 		GeeSet* _tmp28_ = NULL;
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp28_ = keywords;
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp22_ = _tmp28_;
-#line 6325 "PhotoMetadata.c"
+#line 7259 "PhotoMetadata.c"
 	} else {
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp22_ = NULL;
-#line 6329 "PhotoMetadata.c"
+#line 7263 "PhotoMetadata.c"
 	}
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp29_ = _g_object_ref0 (_tmp22_);
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp29_;
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (keywords);
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	(compare_func_target_destroy_notify == NULL) ? NULL : (compare_func_target_destroy_notify (compare_func_target), NULL);
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func = NULL;
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func_target = NULL;
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	compare_func_target_destroy_notify = NULL;
-#line 885 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 6347 "PhotoMetadata.c"
+#line 7281 "PhotoMetadata.c"
 }
 
 
 static gpointer _hierarchical_keyword_field_ref0 (gpointer self) {
-#line 889 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return self ? hierarchical_keyword_field_ref (self) : NULL;
-#line 6354 "PhotoMetadata.c"
+#line 7288 "PhotoMetadata.c"
 }
 
 
@@ -6368,7 +7302,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 	g_return_val_if_fail (old != NULL, NULL);
 #line 1380 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	g_return_val_if_fail (replacement != NULL, NULL);
-#line 6367 "PhotoMetadata.c"
+#line 7301 "PhotoMetadata.c"
 	{
 		GRegex* regex = NULL;
 		const gchar* _tmp0_ = NULL;
@@ -6399,7 +7333,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 6398 "PhotoMetadata.c"
+#line 7332 "PhotoMetadata.c"
 				goto __catch25_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -6408,7 +7342,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 6407 "PhotoMetadata.c"
+#line 7341 "PhotoMetadata.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp6_ = regex;
@@ -6424,7 +7358,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 6423 "PhotoMetadata.c"
+#line 7357 "PhotoMetadata.c"
 				goto __catch25_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -6435,7 +7369,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 6434 "PhotoMetadata.c"
+#line 7368 "PhotoMetadata.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp9_ = _tmp5_;
@@ -6449,7 +7383,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 6448 "PhotoMetadata.c"
+#line 7382 "PhotoMetadata.c"
 	}
 	goto __finally25;
 	__catch25_g_regex_error:
@@ -6463,7 +7397,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_assert_not_reached ();
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_g_error_free0 (e);
-#line 6462 "PhotoMetadata.c"
+#line 7396 "PhotoMetadata.c"
 	}
 	__finally25:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -6474,7 +7408,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_clear_error (&_inner_error_);
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return NULL;
-#line 6473 "PhotoMetadata.c"
+#line 7407 "PhotoMetadata.c"
 	}
 }
 
@@ -6498,7 +7432,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 	_tmp3_ = end;
 #line 1296 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp3_ == NULL) {
-#line 6497 "PhotoMetadata.c"
+#line 7431 "PhotoMetadata.c"
 		glong _tmp4_ = 0L;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp4_ = maxlen;
@@ -6506,7 +7440,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = _tmp4_;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 6505 "PhotoMetadata.c"
+#line 7439 "PhotoMetadata.c"
 	} else {
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -6518,7 +7452,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = (glong) (_tmp5_ - _tmp6_);
 #line 1299 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 6517 "PhotoMetadata.c"
+#line 7451 "PhotoMetadata.c"
 	}
 }
 
@@ -6542,21 +7476,21 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	_tmp1_ = offset;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp1_ >= ((glong) 0)) {
-#line 6541 "PhotoMetadata.c"
+#line 7475 "PhotoMetadata.c"
 		glong _tmp2_ = 0L;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = len;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = _tmp2_ >= ((glong) 0);
-#line 6547 "PhotoMetadata.c"
+#line 7481 "PhotoMetadata.c"
 	} else {
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = FALSE;
-#line 6551 "PhotoMetadata.c"
+#line 7485 "PhotoMetadata.c"
 	}
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp0_) {
-#line 6555 "PhotoMetadata.c"
+#line 7489 "PhotoMetadata.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 		glong _tmp5_ = 0L;
@@ -6568,7 +7502,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp5_ = string_strnlen ((gchar*) self, _tmp3_ + _tmp4_);
 #line 1310 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = _tmp5_;
-#line 6567 "PhotoMetadata.c"
+#line 7501 "PhotoMetadata.c"
 	} else {
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
@@ -6578,13 +7512,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp7_ = _tmp6_;
 #line 1312 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = (glong) _tmp7_;
-#line 6577 "PhotoMetadata.c"
+#line 7511 "PhotoMetadata.c"
 	}
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp8_ = offset;
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp8_ < ((glong) 0)) {
-#line 6583 "PhotoMetadata.c"
+#line 7517 "PhotoMetadata.c"
 		glong _tmp9_ = 0L;
 		glong _tmp10_ = 0L;
 		glong _tmp11_ = 0L;
@@ -6598,7 +7532,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp11_ = offset;
 #line 1317 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp11_ >= ((glong) 0), NULL);
-#line 6597 "PhotoMetadata.c"
+#line 7531 "PhotoMetadata.c"
 	} else {
 		glong _tmp12_ = 0L;
 		glong _tmp13_ = 0L;
@@ -6608,13 +7542,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp13_ = string_length;
 #line 1319 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp12_ <= _tmp13_, NULL);
-#line 6607 "PhotoMetadata.c"
+#line 7541 "PhotoMetadata.c"
 	}
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp14_ = len;
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp14_ < ((glong) 0)) {
-#line 6613 "PhotoMetadata.c"
+#line 7547 "PhotoMetadata.c"
 		glong _tmp15_ = 0L;
 		glong _tmp16_ = 0L;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -6623,7 +7557,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp16_ = offset;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		len = _tmp15_ - _tmp16_;
-#line 6622 "PhotoMetadata.c"
+#line 7556 "PhotoMetadata.c"
 	}
 #line 1324 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp17_ = offset;
@@ -6643,7 +7577,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	result = _tmp22_;
 #line 1325 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 6642 "PhotoMetadata.c"
+#line 7576 "PhotoMetadata.c"
 }
 
 
@@ -6653,81 +7587,81 @@ static void photo_metadata_internal_set_hierarchical_keywords (PhotoMetadata* se
 	HierarchicalTagIndex* _tmp4_ = NULL;
 	HierarchicalKeywordField** _tmp5_ = NULL;
 	gint _tmp5__length1 = 0;
-#line 888 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1012 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 888 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1012 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail ((index == NULL) || IS_HIERARCHICAL_TAG_INDEX (index));
-#line 889 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_HIERARCHICAL_KEYWORD_TAGS;
-#line 889 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = photo_metadata_HIERARCHICAL_KEYWORD_TAGS_length1;
-#line 6660 "PhotoMetadata.c"
+#line 7594 "PhotoMetadata.c"
 	{
 		HierarchicalKeywordField** current_field_collection = NULL;
 		gint current_field_collection_length1 = 0;
 		gint _current_field_collection_size_ = 0;
 		gint current_field_it = 0;
-#line 889 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		current_field_collection = _tmp0_;
-#line 889 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		current_field_collection_length1 = _tmp0__length1;
-#line 889 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (current_field_it = 0; current_field_it < _tmp0__length1; current_field_it = current_field_it + 1) {
-#line 6672 "PhotoMetadata.c"
+#line 7606 "PhotoMetadata.c"
 			HierarchicalKeywordField* _tmp1_ = NULL;
 			HierarchicalKeywordField* current_field = NULL;
-#line 889 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = _hierarchical_keyword_field_ref0 (current_field_collection[current_field_it]);
-#line 889 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			current_field = _tmp1_;
-#line 6679 "PhotoMetadata.c"
+#line 7613 "PhotoMetadata.c"
 			{
 				HierarchicalKeywordField* _tmp2_ = NULL;
 				const gchar* _tmp3_ = NULL;
-#line 890 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1014 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp2_ = current_field;
-#line 890 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1014 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp3_ = _tmp2_->field_name;
-#line 890 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1014 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				photo_metadata_remove_tag (self, _tmp3_);
-#line 889 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_hierarchical_keyword_field_unref0 (current_field);
-#line 6691 "PhotoMetadata.c"
+#line 7625 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 892 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1016 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = index;
-#line 892 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1016 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp4_ == NULL) {
-#line 893 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1017 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return;
-#line 6701 "PhotoMetadata.c"
+#line 7635 "PhotoMetadata.c"
 	}
-#line 895 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1019 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = photo_metadata_HIERARCHICAL_KEYWORD_TAGS;
-#line 895 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1019 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5__length1 = photo_metadata_HIERARCHICAL_KEYWORD_TAGS_length1;
-#line 6707 "PhotoMetadata.c"
+#line 7641 "PhotoMetadata.c"
 	{
 		HierarchicalKeywordField** current_field_collection = NULL;
 		gint current_field_collection_length1 = 0;
 		gint _current_field_collection_size_ = 0;
 		gint current_field_it = 0;
-#line 895 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1019 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		current_field_collection = _tmp5_;
-#line 895 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1019 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		current_field_collection_length1 = _tmp5__length1;
-#line 895 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1019 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (current_field_it = 0; current_field_it < _tmp5__length1; current_field_it = current_field_it + 1) {
-#line 6719 "PhotoMetadata.c"
+#line 7653 "PhotoMetadata.c"
 			HierarchicalKeywordField* _tmp6_ = NULL;
 			HierarchicalKeywordField* current_field = NULL;
-#line 895 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1019 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp6_ = _hierarchical_keyword_field_ref0 (current_field_collection[current_field_it]);
-#line 895 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1019 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			current_field = _tmp6_;
-#line 6726 "PhotoMetadata.c"
+#line 7660 "PhotoMetadata.c"
 			{
 				HierarchicalKeywordField* _tmp7_ = NULL;
 				gboolean _tmp8_ = FALSE;
@@ -6736,23 +7670,23 @@ static void photo_metadata_internal_set_hierarchical_keywords (PhotoMetadata* se
 				HierarchicalKeywordField* _tmp29_ = NULL;
 				const gchar* _tmp30_ = NULL;
 				GeeSet* _tmp31_ = NULL;
-#line 896 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1020 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp7_ = current_field;
-#line 896 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1020 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp8_ = _tmp7_->is_writeable;
-#line 896 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1020 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (!_tmp8_) {
-#line 897 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1021 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_hierarchical_keyword_field_unref0 (current_field);
-#line 897 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1021 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					continue;
-#line 6745 "PhotoMetadata.c"
+#line 7679 "PhotoMetadata.c"
 				}
-#line 899 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1023 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp9_ = gee_tree_set_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
-#line 899 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1023 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				writeable_set = G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GEE_TYPE_SET, GeeSet);
-#line 6751 "PhotoMetadata.c"
+#line 7685 "PhotoMetadata.c"
 				{
 					GeeIterator* _current_path_it = NULL;
 					HierarchicalTagIndex* _tmp10_ = NULL;
@@ -6760,23 +7694,23 @@ static void photo_metadata_internal_set_hierarchical_keywords (PhotoMetadata* se
 					GeeCollection* _tmp12_ = NULL;
 					GeeIterator* _tmp13_ = NULL;
 					GeeIterator* _tmp14_ = NULL;
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp10_ = index;
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp11_ = hierarchical_tag_index_get_all_paths (_tmp10_);
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp12_ = _tmp11_;
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp13_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp14_ = _tmp13_;
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_object_unref0 (_tmp12_);
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_current_path_it = _tmp14_;
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					while (TRUE) {
-#line 6775 "PhotoMetadata.c"
+#line 7709 "PhotoMetadata.c"
 						GeeIterator* _tmp15_ = NULL;
 						gboolean _tmp16_ = FALSE;
 						gchar* current_path = NULL;
@@ -6791,80 +7725,80 @@ static void photo_metadata_internal_set_hierarchical_keywords (PhotoMetadata* se
 						gboolean _tmp24_ = FALSE;
 						GeeSet* _tmp27_ = NULL;
 						const gchar* _tmp28_ = NULL;
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp15_ = _current_path_it;
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp16_ = gee_iterator_next (_tmp15_);
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						if (!_tmp16_) {
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							break;
-#line 6798 "PhotoMetadata.c"
+#line 7732 "PhotoMetadata.c"
 						}
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp17_ = _current_path_it;
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp18_ = gee_iterator_get (_tmp17_);
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						current_path = (gchar*) _tmp18_;
-#line 902 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1026 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp19_ = current_path;
-#line 902 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1026 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp20_ = current_field;
-#line 902 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1026 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp21_ = _tmp20_->path_separator;
-#line 902 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1026 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp22_ = string_replace (_tmp19_, TAG_PATH_SEPARATOR_STRING, _tmp21_);
-#line 902 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1026 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						writeable_path = _tmp22_;
-#line 904 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1028 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp23_ = current_field;
-#line 904 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1028 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp24_ = _tmp23_->wants_leading_separator;
-#line 904 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1028 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						if (!_tmp24_) {
-#line 6822 "PhotoMetadata.c"
+#line 7756 "PhotoMetadata.c"
 							const gchar* _tmp25_ = NULL;
 							gchar* _tmp26_ = NULL;
-#line 905 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1029 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp25_ = writeable_path;
-#line 905 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1029 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp26_ = string_substring (_tmp25_, (glong) 1, (glong) -1);
-#line 905 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1029 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_g_free0 (writeable_path);
-#line 905 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1029 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							writeable_path = _tmp26_;
-#line 6833 "PhotoMetadata.c"
+#line 7767 "PhotoMetadata.c"
 						}
-#line 907 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1031 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp27_ = writeable_set;
-#line 907 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1031 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp28_ = writeable_path;
-#line 907 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1031 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, GEE_TYPE_COLLECTION, GeeCollection), _tmp28_);
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_g_free0 (writeable_path);
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_g_free0 (current_path);
-#line 6845 "PhotoMetadata.c"
+#line 7779 "PhotoMetadata.c"
 					}
-#line 901 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1025 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_object_unref0 (_current_path_it);
-#line 6849 "PhotoMetadata.c"
+#line 7783 "PhotoMetadata.c"
 				}
-#line 910 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1034 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp29_ = current_field;
-#line 910 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1034 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp30_ = _tmp29_->field_name;
-#line 910 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1034 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp31_ = writeable_set;
-#line 910 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1034 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				photo_metadata_set_string_multiple (self, _tmp30_, G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 895 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1019 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_object_unref0 (writeable_set);
-#line 895 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1019 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_hierarchical_keyword_field_unref0 (current_field);
-#line 6863 "PhotoMetadata.c"
+#line 7797 "PhotoMetadata.c"
 			}
 		}
 	}
@@ -6878,23 +7812,23 @@ void photo_metadata_set_keywords (PhotoMetadata* self, GeeCollection* keywords, 
 	GeeTreeSet* _tmp1_ = NULL;
 	GeeCollection* _tmp2_ = NULL;
 	GeeCollection* _tmp28_ = NULL;
-#line 914 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1038 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 914 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1038 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail ((keywords == NULL) || GEE_IS_COLLECTION (keywords));
-#line 915 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1039 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = hierarchical_tag_index_new ();
-#line 915 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1039 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	htag_index = _tmp0_;
-#line 916 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1040 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = gee_tree_set_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
-#line 916 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1040 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	flat_keywords = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_SET, GeeSet);
-#line 918 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1042 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = keywords;
-#line 918 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1042 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp2_ != NULL) {
-#line 6893 "PhotoMetadata.c"
+#line 7827 "PhotoMetadata.c"
 		GeeSet* _tmp24_ = NULL;
 		HierarchicalTagIndex* _tmp25_ = NULL;
 		GeeCollection* _tmp26_ = NULL;
@@ -6903,15 +7837,15 @@ void photo_metadata_set_keywords (PhotoMetadata* self, GeeCollection* keywords, 
 			GeeIterator* _keyword_it = NULL;
 			GeeCollection* _tmp3_ = NULL;
 			GeeIterator* _tmp4_ = NULL;
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp3_ = keywords;
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp4_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_keyword_it = _tmp4_;
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			while (TRUE) {
-#line 6910 "PhotoMetadata.c"
+#line 7844 "PhotoMetadata.c"
 				GeeIterator* _tmp5_ = NULL;
 				gboolean _tmp6_ = FALSE;
 				gchar* keyword = NULL;
@@ -6919,52 +7853,52 @@ void photo_metadata_set_keywords (PhotoMetadata* self, GeeCollection* keywords, 
 				gpointer _tmp8_ = NULL;
 				const gchar* _tmp9_ = NULL;
 				gboolean _tmp10_ = FALSE;
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp5_ = _keyword_it;
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp6_ = gee_iterator_next (_tmp5_);
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (!_tmp6_) {
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					break;
-#line 6926 "PhotoMetadata.c"
+#line 7860 "PhotoMetadata.c"
 				}
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp7_ = _keyword_it;
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp8_ = gee_iterator_get (_tmp7_);
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				keyword = (gchar*) _tmp8_;
-#line 920 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1044 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp9_ = keyword;
-#line 920 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1044 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp10_ = g_str_has_prefix (_tmp9_, TAG_PATH_SEPARATOR_STRING);
-#line 920 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1044 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp10_) {
-#line 6940 "PhotoMetadata.c"
+#line 7874 "PhotoMetadata.c"
 					GeeCollection* path_components = NULL;
 					const gchar* _tmp11_ = NULL;
 					GeeList* _tmp12_ = NULL;
-#line 921 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1045 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp11_ = keyword;
-#line 921 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1045 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp12_ = hierarchical_tag_utilities_enumerate_path_components (_tmp11_);
-#line 921 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1045 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					path_components = G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 6950 "PhotoMetadata.c"
+#line 7884 "PhotoMetadata.c"
 					{
 						GeeIterator* _component_it = NULL;
 						GeeCollection* _tmp13_ = NULL;
 						GeeIterator* _tmp14_ = NULL;
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp13_ = path_components;
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_tmp14_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_component_it = _tmp14_;
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						while (TRUE) {
-#line 6963 "PhotoMetadata.c"
+#line 7897 "PhotoMetadata.c"
 							GeeIterator* _tmp15_ = NULL;
 							gboolean _tmp16_ = FALSE;
 							gchar* component = NULL;
@@ -6973,117 +7907,117 @@ void photo_metadata_set_keywords (PhotoMetadata* self, GeeCollection* keywords, 
 							HierarchicalTagIndex* _tmp19_ = NULL;
 							const gchar* _tmp20_ = NULL;
 							const gchar* _tmp21_ = NULL;
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp15_ = _component_it;
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp16_ = gee_iterator_next (_tmp15_);
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							if (!_tmp16_) {
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 								break;
-#line 6980 "PhotoMetadata.c"
+#line 7914 "PhotoMetadata.c"
 							}
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp17_ = _component_it;
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp18_ = gee_iterator_get (_tmp17_);
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							component = (gchar*) _tmp18_;
-#line 924 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1048 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp19_ = htag_index;
-#line 924 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1048 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp20_ = component;
-#line 924 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1048 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_tmp21_ = keyword;
-#line 924 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1048 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							hierarchical_tag_index_add_path (_tmp19_, _tmp20_, _tmp21_);
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							_g_free0 (component);
-#line 6998 "PhotoMetadata.c"
+#line 7932 "PhotoMetadata.c"
 						}
-#line 923 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1047 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_g_object_unref0 (_component_it);
-#line 7002 "PhotoMetadata.c"
+#line 7936 "PhotoMetadata.c"
 					}
-#line 920 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1044 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_object_unref0 (path_components);
-#line 7006 "PhotoMetadata.c"
+#line 7940 "PhotoMetadata.c"
 				} else {
 					GeeSet* _tmp22_ = NULL;
 					const gchar* _tmp23_ = NULL;
-#line 926 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1050 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp22_ = flat_keywords;
-#line 926 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1050 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp23_ = keyword;
-#line 926 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1050 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, GEE_TYPE_COLLECTION, GeeCollection), _tmp23_);
-#line 7016 "PhotoMetadata.c"
+#line 7950 "PhotoMetadata.c"
 				}
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_free0 (keyword);
-#line 7020 "PhotoMetadata.c"
+#line 7954 "PhotoMetadata.c"
 			}
-#line 919 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_g_object_unref0 (_keyword_it);
-#line 7024 "PhotoMetadata.c"
+#line 7958 "PhotoMetadata.c"
 		}
-#line 930 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1054 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp24_ = flat_keywords;
-#line 930 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1054 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp25_ = htag_index;
-#line 930 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1054 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp26_ = hierarchical_tag_index_get_all_tags (_tmp25_);
-#line 930 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1054 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp27_ = _tmp26_;
-#line 930 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1054 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		gee_collection_add_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, GEE_TYPE_COLLECTION, GeeCollection), _tmp27_);
-#line 930 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1054 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_object_unref0 (_tmp27_);
-#line 7038 "PhotoMetadata.c"
+#line 7972 "PhotoMetadata.c"
 	}
-#line 933 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1057 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp28_ = keywords;
-#line 933 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1057 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp28_ != NULL) {
-#line 7044 "PhotoMetadata.c"
+#line 7978 "PhotoMetadata.c"
 		gchar** _tmp29_ = NULL;
 		gint _tmp29__length1 = 0;
 		GeeSet* _tmp30_ = NULL;
 		PhotoMetadataSetOption _tmp31_ = 0;
 		HierarchicalTagIndex* _tmp32_ = NULL;
-#line 934 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1058 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp29_ = photo_metadata_KEYWORD_TAGS;
-#line 934 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1058 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp29__length1 = photo_metadata_KEYWORD_TAGS_length1;
-#line 934 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1058 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp30_ = flat_keywords;
-#line 934 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1058 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp31_ = option;
-#line 934 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1058 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_set_all_string_multiple (self, _tmp29_, _tmp29__length1, G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, GEE_TYPE_COLLECTION, GeeCollection), _tmp31_);
-#line 935 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1059 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp32_ = htag_index;
-#line 935 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1059 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_internal_set_hierarchical_keywords (self, _tmp32_);
-#line 7064 "PhotoMetadata.c"
+#line 7998 "PhotoMetadata.c"
 	} else {
 		gchar** _tmp33_ = NULL;
 		gint _tmp33__length1 = 0;
-#line 937 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp33_ = photo_metadata_KEYWORD_TAGS;
-#line 937 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp33__length1 = photo_metadata_KEYWORD_TAGS_length1;
-#line 937 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_remove_tags (self, _tmp33_, _tmp33__length1);
-#line 938 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1062 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_internal_set_hierarchical_keywords (self, NULL);
-#line 7076 "PhotoMetadata.c"
+#line 8010 "PhotoMetadata.c"
 	}
-#line 914 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1038 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (flat_keywords);
-#line 914 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1038 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_hierarchical_tag_index_unref0 (htag_index);
-#line 7082 "PhotoMetadata.c"
+#line 8016 "PhotoMetadata.c"
 }
 
 
@@ -7091,32 +8025,32 @@ gboolean photo_metadata_has_hierarchical_keywords (PhotoMetadata* self) {
 	gboolean result = FALSE;
 	HierarchicalKeywordField** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 942 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1066 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 943 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1067 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_HIERARCHICAL_KEYWORD_TAGS;
-#line 943 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1067 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = photo_metadata_HIERARCHICAL_KEYWORD_TAGS_length1;
-#line 7096 "PhotoMetadata.c"
+#line 8030 "PhotoMetadata.c"
 	{
 		HierarchicalKeywordField** field_collection = NULL;
 		gint field_collection_length1 = 0;
 		gint _field_collection_size_ = 0;
 		gint field_it = 0;
-#line 943 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1067 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		field_collection = _tmp0_;
-#line 943 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1067 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		field_collection_length1 = _tmp0__length1;
-#line 943 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1067 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (field_it = 0; field_it < _tmp0__length1; field_it = field_it + 1) {
-#line 7108 "PhotoMetadata.c"
+#line 8042 "PhotoMetadata.c"
 			HierarchicalKeywordField* _tmp1_ = NULL;
 			HierarchicalKeywordField* field = NULL;
-#line 943 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1067 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp1_ = _hierarchical_keyword_field_ref0 (field_collection[field_it]);
-#line 943 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1067 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			field = _tmp1_;
-#line 7115 "PhotoMetadata.c"
+#line 8049 "PhotoMetadata.c"
 			{
 				GeeCollection* values = NULL;
 				HierarchicalKeywordField* _tmp2_ = NULL;
@@ -7124,61 +8058,61 @@ gboolean photo_metadata_has_hierarchical_keywords (PhotoMetadata* self) {
 				GeeList* _tmp4_ = NULL;
 				gboolean _tmp5_ = FALSE;
 				GeeCollection* _tmp6_ = NULL;
-#line 944 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1068 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp2_ = field;
-#line 944 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1068 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp3_ = _tmp2_->field_name;
-#line 944 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1068 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp4_ = photo_metadata_get_string_multiple (self, _tmp3_);
-#line 944 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1068 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				values = G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 946 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1070 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp6_ = values;
-#line 946 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1070 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp6_ != NULL) {
-#line 7135 "PhotoMetadata.c"
+#line 8069 "PhotoMetadata.c"
 					GeeCollection* _tmp7_ = NULL;
 					gint _tmp8_ = 0;
 					gint _tmp9_ = 0;
-#line 946 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1070 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp7_ = values;
-#line 946 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1070 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp8_ = gee_collection_get_size (_tmp7_);
-#line 946 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1070 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp9_ = _tmp8_;
-#line 946 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1070 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp5_ = _tmp9_ > 0;
-#line 7147 "PhotoMetadata.c"
+#line 8081 "PhotoMetadata.c"
 				} else {
-#line 946 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1070 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp5_ = FALSE;
-#line 7151 "PhotoMetadata.c"
+#line 8085 "PhotoMetadata.c"
 				}
-#line 946 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1070 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp5_) {
-#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1071 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					result = TRUE;
-#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1071 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_object_unref0 (values);
-#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1071 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_hierarchical_keyword_field_unref0 (field);
-#line 947 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1071 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					return result;
-#line 7163 "PhotoMetadata.c"
+#line 8097 "PhotoMetadata.c"
 				}
-#line 943 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1067 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_object_unref0 (values);
-#line 943 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1067 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_hierarchical_keyword_field_unref0 (field);
-#line 7169 "PhotoMetadata.c"
+#line 8103 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 950 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1074 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = FALSE;
-#line 950 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1074 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7177 "PhotoMetadata.c"
+#line 8111 "PhotoMetadata.c"
 }
 
 
@@ -7189,40 +8123,41 @@ GeeSet* photo_metadata_get_hierarchical_keywords (PhotoMetadata* self) {
 	GeeSet* _tmp1_ = NULL;
 	HierarchicalKeywordField** _tmp2_ = NULL;
 	gint _tmp2__length1 = 0;
-#line 953 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	GError * _inner_error_ = NULL;
+#line 1077 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 954 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1078 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_has_hierarchical_keywords (self);
-#line 954 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1078 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_assert (_tmp0_, "has_hierarchical_keywords()");
-#line 956 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1080 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_create_string_set (self, NULL, NULL, NULL);
-#line 956 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1080 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	h_keywords = _tmp1_;
-#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1082 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = photo_metadata_HIERARCHICAL_KEYWORD_TAGS;
-#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1082 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2__length1 = photo_metadata_HIERARCHICAL_KEYWORD_TAGS_length1;
-#line 7202 "PhotoMetadata.c"
+#line 8137 "PhotoMetadata.c"
 	{
 		HierarchicalKeywordField** field_collection = NULL;
 		gint field_collection_length1 = 0;
 		gint _field_collection_size_ = 0;
 		gint field_it = 0;
-#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1082 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		field_collection = _tmp2_;
-#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1082 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		field_collection_length1 = _tmp2__length1;
-#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1082 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		for (field_it = 0; field_it < _tmp2__length1; field_it = field_it + 1) {
-#line 7214 "PhotoMetadata.c"
+#line 8149 "PhotoMetadata.c"
 			HierarchicalKeywordField* _tmp3_ = NULL;
 			HierarchicalKeywordField* field = NULL;
-#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1082 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp3_ = _hierarchical_keyword_field_ref0 (field_collection[field_it]);
-#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1082 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			field = _tmp3_;
-#line 7221 "PhotoMetadata.c"
+#line 8156 "PhotoMetadata.c"
 			{
 				GeeCollection* values = NULL;
 				HierarchicalKeywordField* _tmp4_ = NULL;
@@ -7230,133 +8165,287 @@ GeeSet* photo_metadata_get_hierarchical_keywords (PhotoMetadata* self) {
 				GeeList* _tmp6_ = NULL;
 				gboolean _tmp7_ = FALSE;
 				GeeCollection* _tmp8_ = NULL;
-#line 959 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				GeeArrayList* transformed_values = NULL;
+				GeeArrayList* _tmp12_ = NULL;
+#line 1083 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp4_ = field;
-#line 959 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1083 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp5_ = _tmp4_->field_name;
-#line 959 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1083 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp6_ = photo_metadata_get_string_multiple (self, _tmp5_);
-#line 959 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1083 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				values = G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 961 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1085 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp8_ = values;
-#line 961 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1085 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp8_ == NULL) {
-#line 961 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1085 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp7_ = TRUE;
-#line 7243 "PhotoMetadata.c"
+#line 8180 "PhotoMetadata.c"
 				} else {
 					GeeCollection* _tmp9_ = NULL;
 					gint _tmp10_ = 0;
 					gint _tmp11_ = 0;
-#line 961 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1085 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp9_ = values;
-#line 961 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1085 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp10_ = gee_collection_get_size (_tmp9_);
-#line 961 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1085 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp11_ = _tmp10_;
-#line 961 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1085 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp7_ = _tmp11_ < 1;
-#line 7256 "PhotoMetadata.c"
+#line 8193 "PhotoMetadata.c"
 				}
-#line 961 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1085 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp7_) {
-#line 962 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1086 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_object_unref0 (values);
-#line 962 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1086 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_hierarchical_keyword_field_unref0 (field);
-#line 962 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1086 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					continue;
-#line 7266 "PhotoMetadata.c"
+#line 8203 "PhotoMetadata.c"
 				}
+#line 1088 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				_tmp12_ = gee_array_list_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
+#line 1088 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				transformed_values = _tmp12_;
+#line 8209 "PhotoMetadata.c"
 				{
 					GeeIterator* _current_value_it = NULL;
-					GeeCollection* _tmp12_ = NULL;
-					GeeIterator* _tmp13_ = NULL;
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-					_tmp12_ = values;
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-					_tmp13_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-					_current_value_it = _tmp13_;
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					GeeCollection* _tmp13_ = NULL;
+					GeeIterator* _tmp14_ = NULL;
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_tmp13_ = values;
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_tmp14_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, GEE_TYPE_ITERABLE, GeeIterable));
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_current_value_it = _tmp14_;
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					while (TRUE) {
-#line 7280 "PhotoMetadata.c"
-						GeeIterator* _tmp14_ = NULL;
-						gboolean _tmp15_ = FALSE;
+#line 8222 "PhotoMetadata.c"
+						GeeIterator* _tmp15_ = NULL;
+						gboolean _tmp16_ = FALSE;
 						gchar* current_value = NULL;
-						GeeIterator* _tmp16_ = NULL;
-						gpointer _tmp17_ = NULL;
-						gchar* canonicalized = NULL;
-						const gchar* _tmp18_ = NULL;
-						HierarchicalKeywordField* _tmp19_ = NULL;
-						const gchar* _tmp20_ = NULL;
-						gchar* _tmp21_ = NULL;
-						const gchar* _tmp22_ = NULL;
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						_tmp14_ = _current_value_it;
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						_tmp15_ = gee_iterator_next (_tmp14_);
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						if (!_tmp15_) {
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						GeeIterator* _tmp17_ = NULL;
+						gpointer _tmp18_ = NULL;
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp15_ = _current_value_it;
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp16_ = gee_iterator_next (_tmp15_);
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						if (!_tmp16_) {
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 							break;
-#line 7300 "PhotoMetadata.c"
+#line 8236 "PhotoMetadata.c"
 						}
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						_tmp16_ = _current_value_it;
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						_tmp17_ = gee_iterator_get (_tmp16_);
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						current_value = (gchar*) _tmp17_;
-#line 965 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						_tmp18_ = current_value;
-#line 965 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						_tmp19_ = field;
-#line 965 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						_tmp20_ = _tmp19_->path_separator;
-#line 965 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						_tmp21_ = hierarchical_tag_utilities_canonicalize (_tmp18_, _tmp20_);
-#line 965 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						canonicalized = _tmp21_;
-#line 968 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						_tmp22_ = canonicalized;
-#line 968 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						if (_tmp22_ != NULL) {
-#line 7322 "PhotoMetadata.c"
-							GeeSet* _tmp23_ = NULL;
-							const gchar* _tmp24_ = NULL;
-#line 969 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-							_tmp23_ = h_keywords;
-#line 969 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-							_tmp24_ = canonicalized;
-#line 969 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-							gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, GEE_TYPE_COLLECTION, GeeCollection), _tmp24_);
-#line 7331 "PhotoMetadata.c"
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp17_ = _current_value_it;
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp18_ = gee_iterator_get (_tmp17_);
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						current_value = (gchar*) _tmp18_;
+#line 8244 "PhotoMetadata.c"
+						{
+							GeeList* transformed = NULL;
+							HierarchicalKeywordField* _tmp19_ = NULL;
+							KeywordTransformer* _tmp20_ = NULL;
+							const gchar* _tmp21_ = NULL;
+							GeeList* _tmp22_ = NULL;
+							GeeArrayList* _tmp23_ = NULL;
+							GeeList* _tmp24_ = NULL;
+#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_tmp19_ = field;
+#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_tmp20_ = _tmp19_->transformer;
+#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_tmp21_ = current_value;
+#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_tmp22_ = keyword_transformer_transform (_tmp20_, _tmp21_, &_inner_error_);
+#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							transformed = _tmp22_;
+#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 8265 "PhotoMetadata.c"
+								goto __catch26_g_error;
+							}
+#line 1092 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_tmp23_ = transformed_values;
+#line 1092 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_tmp24_ = transformed;
+#line 1092 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							gee_array_list_add_all (_tmp23_, G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_g_object_unref0 (transformed);
+#line 8276 "PhotoMetadata.c"
 						}
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-						_g_free0 (canonicalized);
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						goto __finally26;
+						__catch26_g_error:
+						{
+							GError* _error_ = NULL;
+							const gchar* _tmp25_ = NULL;
+							GError* _tmp26_ = NULL;
+							const gchar* _tmp27_ = NULL;
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_error_ = _inner_error_;
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_inner_error_ = NULL;
+#line 1094 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_tmp25_ = current_value;
+#line 1094 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_tmp26_ = _error_;
+#line 1094 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_tmp27_ = _tmp26_->message;
+#line 1094 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							g_critical ("PhotoMetadata.vala:1094: Failed to transform tag value %s: %s", _tmp25_, _tmp27_);
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_g_error_free0 (_error_);
+#line 8299 "PhotoMetadata.c"
+						}
+						__finally26:
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_g_free0 (current_value);
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_g_object_unref0 (_current_value_it);
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_g_object_unref0 (transformed_values);
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_g_object_unref0 (values);
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_hierarchical_keyword_field_unref0 (field);
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_g_object_unref0 (h_keywords);
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							g_clear_error (&_inner_error_);
+#line 1090 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							return NULL;
+#line 8322 "PhotoMetadata.c"
+						}
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 						_g_free0 (current_value);
-#line 7337 "PhotoMetadata.c"
+#line 8326 "PhotoMetadata.c"
 					}
-#line 964 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1089 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_object_unref0 (_current_value_it);
-#line 7341 "PhotoMetadata.c"
+#line 8330 "PhotoMetadata.c"
 				}
-#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				{
+					GeeArrayList* _current_value_list = NULL;
+					GeeArrayList* _tmp28_ = NULL;
+					GeeArrayList* _tmp29_ = NULL;
+					gint _current_value_size = 0;
+					GeeArrayList* _tmp30_ = NULL;
+					gint _tmp31_ = 0;
+					gint _tmp32_ = 0;
+					gint _current_value_index = 0;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_tmp28_ = transformed_values;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_tmp29_ = _g_object_ref0 (_tmp28_);
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_current_value_list = _tmp29_;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_tmp30_ = _current_value_list;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_tmp31_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_tmp32_ = _tmp31_;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_current_value_size = _tmp32_;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_current_value_index = -1;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					while (TRUE) {
+#line 8359 "PhotoMetadata.c"
+						gint _tmp33_ = 0;
+						gint _tmp34_ = 0;
+						gint _tmp35_ = 0;
+						gchar* current_value = NULL;
+						GeeArrayList* _tmp36_ = NULL;
+						gint _tmp37_ = 0;
+						gpointer _tmp38_ = NULL;
+						gchar* canonicalized = NULL;
+						const gchar* _tmp39_ = NULL;
+						HierarchicalKeywordField* _tmp40_ = NULL;
+						const gchar* _tmp41_ = NULL;
+						gchar* _tmp42_ = NULL;
+						const gchar* _tmp43_ = NULL;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp33_ = _current_value_index;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_current_value_index = _tmp33_ + 1;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp34_ = _current_value_index;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp35_ = _current_value_size;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						if (!(_tmp34_ < _tmp35_)) {
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							break;
+#line 8385 "PhotoMetadata.c"
+						}
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp36_ = _current_value_list;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp37_ = _current_value_index;
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp38_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp37_);
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						current_value = (gchar*) _tmp38_;
+#line 1101 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp39_ = current_value;
+#line 1101 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp40_ = field;
+#line 1101 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp41_ = _tmp40_->path_separator;
+#line 1101 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp42_ = hierarchical_tag_utilities_canonicalize (_tmp39_, _tmp41_);
+#line 1101 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						canonicalized = _tmp42_;
+#line 1105 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_tmp43_ = canonicalized;
+#line 1105 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						if (_tmp43_ != NULL) {
+#line 8409 "PhotoMetadata.c"
+							GeeSet* _tmp44_ = NULL;
+							const gchar* _tmp45_ = NULL;
+#line 1106 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_tmp44_ = h_keywords;
+#line 1106 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							_tmp45_ = canonicalized;
+#line 1106 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+							gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp44_, GEE_TYPE_COLLECTION, GeeCollection), _tmp45_);
+#line 8418 "PhotoMetadata.c"
+						}
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_g_free0 (canonicalized);
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+						_g_free0 (current_value);
+#line 8424 "PhotoMetadata.c"
+					}
+#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+					_g_object_unref0 (_current_value_list);
+#line 8428 "PhotoMetadata.c"
+				}
+#line 1082 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+				_g_object_unref0 (transformed_values);
+#line 1082 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_g_object_unref0 (values);
-#line 958 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1082 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_hierarchical_keyword_field_unref0 (field);
-#line 7347 "PhotoMetadata.c"
+#line 8436 "PhotoMetadata.c"
 			}
 		}
 	}
-#line 973 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1110 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = h_keywords;
-#line 973 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1110 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7355 "PhotoMetadata.c"
+#line 8444 "PhotoMetadata.c"
 }
 
 
@@ -7364,17 +8453,17 @@ gboolean photo_metadata_has_orientation (PhotoMetadata* self) {
 	gboolean result = FALSE;
 	GExiv2Metadata* _tmp0_ = NULL;
 	GExiv2Orientation _tmp1_ = 0;
-#line 976 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1113 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 977 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 977 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = gexiv2_metadata_get_orientation (_tmp0_);
-#line 977 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_ == GEXIV2_ORIENTATION_UNSPECIFIED;
-#line 977 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7373 "PhotoMetadata.c"
+#line 8462 "PhotoMetadata.c"
 }
 
 
@@ -7386,58 +8475,58 @@ Orientation photo_metadata_get_orientation (PhotoMetadata* self) {
 	gboolean _tmp2_ = FALSE;
 	gboolean _tmp3_ = FALSE;
 	GExiv2Orientation _tmp4_ = 0;
-#line 981 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1118 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), 0);
-#line 984 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1121 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 984 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1121 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = gexiv2_metadata_get_orientation (_tmp0_);
-#line 984 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1121 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	orientation = _tmp1_;
-#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1122 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = orientation;
-#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1122 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp4_ == GEXIV2_ORIENTATION_UNSPECIFIED) {
-#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1122 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = TRUE;
-#line 7399 "PhotoMetadata.c"
+#line 8488 "PhotoMetadata.c"
 	} else {
 		GExiv2Orientation _tmp5_ = 0;
-#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1122 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = orientation;
-#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1122 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = _tmp5_ < ORIENTATION_MIN;
-#line 7406 "PhotoMetadata.c"
+#line 8495 "PhotoMetadata.c"
 	}
-#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1122 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp3_) {
-#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1122 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = TRUE;
-#line 7412 "PhotoMetadata.c"
+#line 8501 "PhotoMetadata.c"
 	} else {
 		GExiv2Orientation _tmp6_ = 0;
-#line 986 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1123 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = orientation;
-#line 986 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1123 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp2_ = _tmp6_ > ORIENTATION_MAX;
-#line 7419 "PhotoMetadata.c"
+#line 8508 "PhotoMetadata.c"
 	}
-#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1122 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp2_) {
-#line 987 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1124 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = ORIENTATION_TOP_LEFT;
-#line 987 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1124 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 7427 "PhotoMetadata.c"
+#line 8516 "PhotoMetadata.c"
 	} else {
 		GExiv2Orientation _tmp7_ = 0;
-#line 989 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1126 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = orientation;
-#line 989 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1126 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = (Orientation) _tmp7_;
-#line 989 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1126 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 7436 "PhotoMetadata.c"
+#line 8525 "PhotoMetadata.c"
 	}
 }
 
@@ -7445,15 +8534,15 @@ Orientation photo_metadata_get_orientation (PhotoMetadata* self) {
 void photo_metadata_set_orientation (PhotoMetadata* self, Orientation orientation) {
 	GExiv2Metadata* _tmp0_ = NULL;
 	Orientation _tmp1_ = 0;
-#line 992 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1129 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 994 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 994 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = orientation;
-#line 994 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	gexiv2_metadata_set_orientation (_tmp0_, (GExiv2Orientation) _tmp1_);
-#line 7452 "PhotoMetadata.c"
+#line 8541 "PhotoMetadata.c"
 }
 
 
@@ -7471,127 +8560,127 @@ gboolean photo_metadata_get_gps (PhotoMetadata* self, gdouble* longitude, gchar*
 	gboolean _tmp4_ = FALSE;
 	gchar* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
-#line 997 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1134 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 999 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->priv->exiv2;
-#line 999 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = gexiv2_metadata_get_gps_info (_tmp0_, &_tmp1_, &_tmp2_, &_tmp3_);
-#line 999 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_longitude = _tmp1_;
-#line 999 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_latitude = _tmp2_;
-#line 999 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_altitude = _tmp3_;
-#line 999 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp4_) {
-#line 1000 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (_vala_long_ref);
-#line 1000 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_vala_long_ref = NULL;
-#line 1001 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1138 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (_vala_lat_ref);
-#line 1001 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1138 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_vala_lat_ref = NULL;
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = FALSE;
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (longitude) {
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			*longitude = _vala_longitude;
-#line 7498 "PhotoMetadata.c"
+#line 8587 "PhotoMetadata.c"
 		}
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (long_ref) {
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			*long_ref = _vala_long_ref;
-#line 7504 "PhotoMetadata.c"
+#line 8593 "PhotoMetadata.c"
 		} else {
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_g_free0 (_vala_long_ref);
-#line 7508 "PhotoMetadata.c"
+#line 8597 "PhotoMetadata.c"
 		}
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (latitude) {
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			*latitude = _vala_latitude;
-#line 7514 "PhotoMetadata.c"
+#line 8603 "PhotoMetadata.c"
 		}
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (lat_ref) {
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			*lat_ref = _vala_lat_ref;
-#line 7520 "PhotoMetadata.c"
+#line 8609 "PhotoMetadata.c"
 		} else {
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_g_free0 (_vala_lat_ref);
-#line 7524 "PhotoMetadata.c"
+#line 8613 "PhotoMetadata.c"
 		}
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (altitude) {
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			*altitude = _vala_altitude;
-#line 7530 "PhotoMetadata.c"
+#line 8619 "PhotoMetadata.c"
 		}
-#line 1003 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 7534 "PhotoMetadata.c"
+#line 8623 "PhotoMetadata.c"
 	}
-#line 1006 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1143 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = photo_metadata_get_string (self, "Exif.GPSInfo.GPSLongitudeRef", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1006 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1143 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_vala_long_ref);
-#line 1006 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1143 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_long_ref = _tmp5_;
-#line 1007 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1144 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = photo_metadata_get_string (self, "Exif.GPSInfo.GPSLatitudeRef", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1007 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1144 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_vala_lat_ref);
-#line 1007 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1144 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_lat_ref = _tmp6_;
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = TRUE;
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (longitude) {
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*longitude = _vala_longitude;
-#line 7554 "PhotoMetadata.c"
+#line 8643 "PhotoMetadata.c"
 	}
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (long_ref) {
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*long_ref = _vala_long_ref;
-#line 7560 "PhotoMetadata.c"
+#line 8649 "PhotoMetadata.c"
 	} else {
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (_vala_long_ref);
-#line 7564 "PhotoMetadata.c"
+#line 8653 "PhotoMetadata.c"
 	}
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (latitude) {
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*latitude = _vala_latitude;
-#line 7570 "PhotoMetadata.c"
+#line 8659 "PhotoMetadata.c"
 	}
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (lat_ref) {
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*lat_ref = _vala_lat_ref;
-#line 7576 "PhotoMetadata.c"
+#line 8665 "PhotoMetadata.c"
 	} else {
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (_vala_lat_ref);
-#line 7580 "PhotoMetadata.c"
+#line 8669 "PhotoMetadata.c"
 	}
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (altitude) {
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*altitude = _vala_altitude;
-#line 7586 "PhotoMetadata.c"
+#line 8675 "PhotoMetadata.c"
 	}
-#line 1009 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7590 "PhotoMetadata.c"
+#line 8679 "PhotoMetadata.c"
 }
 
 
@@ -7600,23 +8689,23 @@ gboolean photo_metadata_get_exposure (PhotoMetadata* self, MetadataRational* exp
 	gboolean result = FALSE;
 	MetadataRational _tmp0_ = {0};
 	gboolean _tmp1_ = FALSE;
-#line 1012 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1149 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_rational (self, "Exif.Photo.ExposureTime", &_tmp0_);
-#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_exposure = _tmp0_;
-#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_;
-#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (exposure) {
-#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*exposure = _vala_exposure;
-#line 7611 "PhotoMetadata.c"
+#line 8700 "PhotoMetadata.c"
 	}
-#line 1013 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7615 "PhotoMetadata.c"
+#line 8704 "PhotoMetadata.c"
 }
 
 
@@ -7627,37 +8716,37 @@ gchar* photo_metadata_get_exposure_string (PhotoMetadata* self) {
 	gboolean _tmp1_ = FALSE;
 	gboolean _tmp2_ = FALSE;
 	gchar* _tmp3_ = NULL;
-#line 1016 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1153 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 1018 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1155 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_rational (self, "Exif.Photo.ExposureTime", &_tmp0_);
-#line 1018 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1155 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	exposure_time = _tmp0_;
-#line 1018 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1155 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp1_) {
-#line 1019 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1156 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = NULL;
-#line 1019 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1156 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 7638 "PhotoMetadata.c"
+#line 8727 "PhotoMetadata.c"
 	}
-#line 1021 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = metadata_rational_is_valid (&exposure_time);
-#line 1021 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp2_) {
-#line 1022 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1159 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = NULL;
-#line 1022 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1159 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 7648 "PhotoMetadata.c"
+#line 8737 "PhotoMetadata.c"
 	}
-#line 1024 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1161 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = photo_metadata_get_string_interpreted (self, "Exif.Photo.ExposureTime", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1024 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1161 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp3_;
-#line 1024 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1161 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7656 "PhotoMetadata.c"
+#line 8745 "PhotoMetadata.c"
 }
 
 
@@ -7670,70 +8759,70 @@ gboolean photo_metadata_get_iso (PhotoMetadata* self, glong* iso) {
 	gboolean _tmp2_ = FALSE;
 	gboolean _tmp3_ = FALSE;
 	glong _tmp4_ = 0L;
-#line 1027 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 1028 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_long (self, "Exif.Photo.ISOSpeedRatings", &_tmp0_);
-#line 1028 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_iso = _tmp0_;
-#line 1028 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1165 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	fetched_ok = _tmp1_;
-#line 1030 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1167 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = fetched_ok;
-#line 1030 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1167 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp2_ == FALSE) {
-#line 1031 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1168 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = FALSE;
-#line 1031 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1168 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (iso) {
-#line 1031 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1168 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			*iso = _vala_iso;
-#line 7687 "PhotoMetadata.c"
+#line 8776 "PhotoMetadata.c"
 		}
-#line 1031 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1168 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 7691 "PhotoMetadata.c"
+#line 8780 "PhotoMetadata.c"
 	}
-#line 1035 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1172 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = _vala_iso;
-#line 1035 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1172 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp4_ < ((glong) 6)) {
-#line 1035 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1172 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = TRUE;
-#line 7699 "PhotoMetadata.c"
+#line 8788 "PhotoMetadata.c"
 	} else {
 		glong _tmp5_ = 0L;
-#line 1035 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1172 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = _vala_iso;
-#line 1035 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1172 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = _tmp5_ > ((glong) 409600);
-#line 7706 "PhotoMetadata.c"
+#line 8795 "PhotoMetadata.c"
 	}
-#line 1035 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1172 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp3_) {
-#line 1036 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1173 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = FALSE;
-#line 1036 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1173 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		if (iso) {
-#line 1036 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1173 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			*iso = _vala_iso;
-#line 7716 "PhotoMetadata.c"
+#line 8805 "PhotoMetadata.c"
 		}
-#line 1036 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1173 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 7720 "PhotoMetadata.c"
+#line 8809 "PhotoMetadata.c"
 	}
-#line 1038 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1175 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = TRUE;
-#line 1038 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1175 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (iso) {
-#line 1038 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1175 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*iso = _vala_iso;
-#line 7728 "PhotoMetadata.c"
+#line 8817 "PhotoMetadata.c"
 	}
-#line 1038 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1175 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7732 "PhotoMetadata.c"
+#line 8821 "PhotoMetadata.c"
 }
 
 
@@ -7743,27 +8832,27 @@ gchar* photo_metadata_get_iso_string (PhotoMetadata* self) {
 	glong _tmp0_ = 0L;
 	gboolean _tmp1_ = FALSE;
 	gchar* _tmp2_ = NULL;
-#line 1041 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1178 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1180 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_iso (self, &_tmp0_);
-#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1180 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	iso = _tmp0_;
-#line 1043 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1180 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp1_) {
-#line 1044 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1181 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = NULL;
-#line 1044 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1181 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 7754 "PhotoMetadata.c"
+#line 8843 "PhotoMetadata.c"
 	}
-#line 1046 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1183 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = photo_metadata_get_string_interpreted (self, "Exif.Photo.ISOSpeedRatings", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1046 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1183 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp2_;
-#line 1046 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1183 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7762 "PhotoMetadata.c"
+#line 8851 "PhotoMetadata.c"
 }
 
 
@@ -7772,23 +8861,23 @@ gboolean photo_metadata_get_aperture (PhotoMetadata* self, MetadataRational* ape
 	gboolean result = FALSE;
 	MetadataRational _tmp0_ = {0};
 	gboolean _tmp1_ = FALSE;
-#line 1049 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1186 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 1050 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1187 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_rational (self, "Exif.Photo.FNumber", &_tmp0_);
-#line 1050 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1187 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_aperture = _tmp0_;
-#line 1050 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1187 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_;
-#line 1050 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1187 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (aperture) {
-#line 1050 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1187 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*aperture = _vala_aperture;
-#line 7783 "PhotoMetadata.c"
+#line 8872 "PhotoMetadata.c"
 	}
-#line 1050 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1187 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7787 "PhotoMetadata.c"
+#line 8876 "PhotoMetadata.c"
 }
 
 
@@ -7812,105 +8901,105 @@ gchar* photo_metadata_get_aperture_string (PhotoMetadata* self, gboolean pango_f
 	gchar* _tmp13_ = NULL;
 	gchar* _tmp14_ = NULL;
 	gchar* _tmp15_ = NULL;
-#line 1053 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1190 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 1055 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1192 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_aperture (self, &_tmp0_);
-#line 1055 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1192 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	aperture = _tmp0_;
-#line 1055 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1192 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (!_tmp1_) {
-#line 1056 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1193 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = NULL;
-#line 1056 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1193 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 7823 "PhotoMetadata.c"
+#line 8912 "PhotoMetadata.c"
 	}
-#line 1058 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1195 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = aperture;
-#line 1058 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1195 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = _tmp2_.numerator;
-#line 1058 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1195 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = aperture;
-#line 1058 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1195 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = _tmp4_.denominator;
-#line 1058 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1195 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	aperture_value = ((gdouble) _tmp3_) / ((gdouble) _tmp5_);
-#line 1059 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1196 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = aperture_value;
-#line 1059 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1196 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	aperture_value = ((gint) (_tmp6_ * 10.0)) / 10.0;
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = pango_formatted;
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp8_) {
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = "<i>f</i>/";
-#line 7845 "PhotoMetadata.c"
+#line 8934 "PhotoMetadata.c"
 	} else {
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = "f/";
-#line 7849 "PhotoMetadata.c"
+#line 8938 "PhotoMetadata.c"
 	}
-#line 1062 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1199 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp10_ = aperture_value;
-#line 1062 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1199 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (fmod (_tmp10_, 1) == ((gdouble) 0)) {
-#line 1062 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1199 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp9_ = "%.0f";
-#line 7857 "PhotoMetadata.c"
+#line 8946 "PhotoMetadata.c"
 	} else {
-#line 1062 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1199 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp9_ = "%.1f";
-#line 7861 "PhotoMetadata.c"
+#line 8950 "PhotoMetadata.c"
 	}
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp11_ = aperture_value;
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp12_ = g_strdup_printf (_tmp9_, _tmp11_);
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp13_ = _tmp12_;
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp14_ = g_strconcat (_tmp7_, _tmp13_, NULL);
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp15_ = _tmp14_;
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_tmp13_);
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp15_;
-#line 1061 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1198 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7879 "PhotoMetadata.c"
+#line 8968 "PhotoMetadata.c"
 }
 
 
 gchar* photo_metadata_get_camera_make (PhotoMetadata* self) {
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 1065 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1202 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 1066 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1203 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_get_string_interpreted (self, "Exif.Image.Make", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1066 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1203 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 1066 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1203 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7894 "PhotoMetadata.c"
+#line 8983 "PhotoMetadata.c"
 }
 
 
 gchar* photo_metadata_get_camera_model (PhotoMetadata* self) {
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 1069 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1206 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 1070 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1207 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_get_string_interpreted (self, "Exif.Image.Model", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1070 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1207 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 1070 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1207 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7909 "PhotoMetadata.c"
+#line 8998 "PhotoMetadata.c"
 }
 
 
@@ -7919,38 +9008,38 @@ gboolean photo_metadata_get_flash (PhotoMetadata* self, glong* flash) {
 	gboolean result = FALSE;
 	glong _tmp0_ = 0L;
 	gboolean _tmp1_ = FALSE;
-#line 1073 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1210 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 1075 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1212 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_long (self, "Exif.Photo.Flash", &_tmp0_);
-#line 1075 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1212 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_flash = _tmp0_;
-#line 1075 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1212 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_;
-#line 1075 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1212 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (flash) {
-#line 1075 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1212 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*flash = _vala_flash;
-#line 7930 "PhotoMetadata.c"
+#line 9019 "PhotoMetadata.c"
 	}
-#line 1075 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1212 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7934 "PhotoMetadata.c"
+#line 9023 "PhotoMetadata.c"
 }
 
 
 gchar* photo_metadata_get_flash_string (PhotoMetadata* self) {
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 1078 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1215 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 1080 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1217 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_get_string_interpreted (self, "Exif.Photo.Flash", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1080 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1217 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 1080 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1217 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7949 "PhotoMetadata.c"
+#line 9038 "PhotoMetadata.c"
 }
 
 
@@ -7959,38 +9048,38 @@ gboolean photo_metadata_get_focal_length (PhotoMetadata* self, MetadataRational*
 	gboolean result = FALSE;
 	MetadataRational _tmp0_ = {0};
 	gboolean _tmp1_ = FALSE;
-#line 1083 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1220 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), FALSE);
-#line 1084 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1221 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_rational (self, "Exif.Photo.FocalLength", &_tmp0_);
-#line 1084 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1221 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_focal_length = _tmp0_;
-#line 1084 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1221 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_;
-#line 1084 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1221 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (focal_length) {
-#line 1084 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1221 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*focal_length = _vala_focal_length;
-#line 7970 "PhotoMetadata.c"
+#line 9059 "PhotoMetadata.c"
 	}
-#line 1084 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1221 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7974 "PhotoMetadata.c"
+#line 9063 "PhotoMetadata.c"
 }
 
 
 gchar* photo_metadata_get_focal_length_string (PhotoMetadata* self) {
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 1087 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1224 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 1088 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1225 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_get_string_interpreted (self, "Exif.Photo.FocalLength", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1088 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1225 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 1088 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1225 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 7989 "PhotoMetadata.c"
+#line 9078 "PhotoMetadata.c"
 }
 
 
@@ -7999,49 +9088,49 @@ gchar* photo_metadata_get_artist (PhotoMetadata* self) {
 	gchar** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
 	gchar* _tmp1_ = NULL;
-#line 1096 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1234 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 1097 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1235 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_ARTIST_TAGS;
-#line 1097 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1235 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = photo_metadata_ARTIST_TAGS_length1;
-#line 1097 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1235 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_first_string_interpreted (self, _tmp0_, _tmp0__length1);
-#line 1097 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1235 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp1_;
-#line 1097 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1235 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 8010 "PhotoMetadata.c"
+#line 9099 "PhotoMetadata.c"
 }
 
 
 gchar* photo_metadata_get_copyright (PhotoMetadata* self) {
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 1100 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1238 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 1101 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1239 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_get_string_interpreted (self, "Exif.Image.Copyright", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1101 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1239 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 1101 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1239 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 8025 "PhotoMetadata.c"
+#line 9114 "PhotoMetadata.c"
 }
 
 
 gchar* photo_metadata_get_software (PhotoMetadata* self) {
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 1104 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1242 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 1105 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_get_string_interpreted (self, "Exif.Image.Software", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1105 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 1105 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 8040 "PhotoMetadata.c"
+#line 9129 "PhotoMetadata.c"
 }
 
 
@@ -8051,69 +9140,69 @@ void photo_metadata_set_software (PhotoMetadata* self, const gchar* software, co
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
 	gboolean _tmp4_ = FALSE;
-#line 1108 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1246 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 1108 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1246 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (software != NULL);
-#line 1108 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1246 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (version != NULL);
-#line 1110 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1248 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = software;
-#line 1110 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1248 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = version;
-#line 1110 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1248 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = g_strdup_printf ("%s %s", _tmp0_, _tmp1_);
-#line 1110 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1248 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = _tmp2_;
-#line 1110 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1248 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_string (self, "Exif.Image.Software", _tmp3_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1110 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1248 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_tmp3_);
-#line 1112 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1250 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = photo_metadata_has_iptc (self);
-#line 1112 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1250 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp4_) {
-#line 8072 "PhotoMetadata.c"
+#line 9161 "PhotoMetadata.c"
 		const gchar* _tmp5_ = NULL;
 		const gchar* _tmp6_ = NULL;
-#line 1113 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1251 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = software;
-#line 1113 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1251 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_set_string (self, "Iptc.Application2.Program", _tmp5_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1252 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = version;
-#line 1114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1252 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_set_string (self, "Iptc.Application2.ProgramVersion", _tmp6_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 8083 "PhotoMetadata.c"
+#line 9172 "PhotoMetadata.c"
 	}
 }
 
 
 void photo_metadata_remove_software (PhotoMetadata* self) {
-#line 1118 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1256 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 1119 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1257 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_remove_tag (self, "Exif.Image.Software");
-#line 1120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1258 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_remove_tag (self, "Iptc.Application2.Program");
-#line 1121 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1259 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_remove_tag (self, "Iptc.Application2.ProgramVersion");
-#line 8097 "PhotoMetadata.c"
+#line 9186 "PhotoMetadata.c"
 }
 
 
 gchar* photo_metadata_get_exposure_bias (PhotoMetadata* self) {
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 1124 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1262 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), NULL);
-#line 1125 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_get_string_interpreted (self, "Exif.Photo.ExposureBiasValue", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1125 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp0_;
-#line 1125 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1263 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 8112 "PhotoMetadata.c"
+#line 9201 "PhotoMetadata.c"
 }
 
 
@@ -8130,134 +9219,134 @@ Rating photo_metadata_get_rating (PhotoMetadata* self) {
 	const gchar* _tmp8_ = NULL;
 	gint _tmp9_ = 0;
 	Rating _tmp18_ = 0;
-#line 1135 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1274 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (self), 0);
-#line 1136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1275 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = photo_metadata_RATING_TAGS;
-#line 1136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1275 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0__length1 = photo_metadata_RATING_TAGS_length1;
-#line 1136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1275 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = photo_metadata_get_first_string (self, _tmp0_, _tmp0__length1);
-#line 1136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1275 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	rating_string = _tmp1_;
-#line 1137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1276 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = rating_string;
-#line 1137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1276 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp2_ != NULL) {
-#line 8143 "PhotoMetadata.c"
+#line 9232 "PhotoMetadata.c"
 		const gchar* _tmp3_ = NULL;
 		gint _tmp4_ = 0;
 		Rating _tmp5_ = 0;
-#line 1138 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp3_ = rating_string;
-#line 1138 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = atoi (_tmp3_);
-#line 1138 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp5_ = rating_unserialize (_tmp4_);
-#line 1138 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = _tmp5_;
-#line 1138 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (rating_string);
-#line 1138 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1277 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 8159 "PhotoMetadata.c"
+#line 9248 "PhotoMetadata.c"
 	}
-#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1279 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = photo_metadata_get_string (self, "Exif.Image.RatingPercent", PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1279 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (rating_string);
-#line 1140 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1279 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	rating_string = _tmp6_;
-#line 1141 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1280 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7_ = rating_string;
-#line 1141 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1280 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp7_ == NULL) {
-#line 1142 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1281 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		result = RATING_UNRATED;
-#line 1142 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1281 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (rating_string);
-#line 1142 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1281 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		return result;
-#line 8177 "PhotoMetadata.c"
+#line 9266 "PhotoMetadata.c"
 	}
-#line 1145 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1284 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = rating_string;
-#line 1145 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1284 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9_ = atoi (_tmp8_);
-#line 1145 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1284 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	int_percent_rating = _tmp9_;
-#line 8185 "PhotoMetadata.c"
+#line 9274 "PhotoMetadata.c"
 	{
 		gint i = 0;
-#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		i = 5;
-#line 8190 "PhotoMetadata.c"
+#line 9279 "PhotoMetadata.c"
 		{
 			gboolean _tmp10_ = FALSE;
-#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			_tmp10_ = TRUE;
-#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 			while (TRUE) {
-#line 8197 "PhotoMetadata.c"
+#line 9286 "PhotoMetadata.c"
 				gint _tmp12_ = 0;
 				gint _tmp13_ = 0;
 				gint _tmp14_ = 0;
 				gint _tmp15_ = 0;
-#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (!_tmp10_) {
-#line 8204 "PhotoMetadata.c"
+#line 9293 "PhotoMetadata.c"
 					gint _tmp11_ = 0;
-#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp11_ = i;
-#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					i = _tmp11_ - 1;
-#line 8210 "PhotoMetadata.c"
+#line 9299 "PhotoMetadata.c"
 				}
-#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp10_ = FALSE;
-#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp12_ = i;
-#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (!(_tmp12_ >= 0)) {
-#line 1146 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1285 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					break;
-#line 8220 "PhotoMetadata.c"
+#line 9309 "PhotoMetadata.c"
 				}
-#line 1147 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1286 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp13_ = int_percent_rating;
-#line 1147 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1286 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp14_ = i;
-#line 1147 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1286 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				_tmp15_ = RESOURCES_rating_thresholds[_tmp14_];
-#line 1147 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1286 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 				if (_tmp13_ >= _tmp15_) {
-#line 8230 "PhotoMetadata.c"
+#line 9319 "PhotoMetadata.c"
 					gint _tmp16_ = 0;
 					Rating _tmp17_ = 0;
-#line 1148 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp16_ = i;
-#line 1148 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_tmp17_ = rating_unserialize (_tmp16_);
-#line 1148 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					result = _tmp17_;
-#line 1148 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					_g_free0 (rating_string);
-#line 1148 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1287 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 					return result;
-#line 8243 "PhotoMetadata.c"
+#line 9332 "PhotoMetadata.c"
 				}
 			}
 		}
 	}
-#line 1150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1289 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp18_ = rating_unserialize (-1);
-#line 1150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1289 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp18_;
-#line 1150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1289 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (rating_string);
-#line 1150 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1289 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 8256 "PhotoMetadata.c"
+#line 9345 "PhotoMetadata.c"
 }
 
 
@@ -8272,79 +9361,79 @@ void photo_metadata_set_rating (PhotoMetadata* self, Rating rating) {
 	gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
 	gint _tmp8_ = 0;
-#line 1158 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1297 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_if_fail (IS_PHOTO_METADATA (self));
-#line 1159 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1298 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = rating;
-#line 1159 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1298 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = rating_serialize (_tmp0_);
-#line 1159 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1298 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	int_rating = _tmp1_;
-#line 1160 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1299 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = int_rating;
-#line 1160 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1299 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = g_strdup_printf ("%i", _tmp2_);
-#line 1160 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1299 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = _tmp3_;
-#line 1160 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1299 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_string (self, "Xmp.xmp.Rating", _tmp4_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1160 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1299 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_tmp4_);
-#line 1161 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1300 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = int_rating;
-#line 1161 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1300 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = g_strdup_printf ("%i", _tmp5_);
-#line 1161 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1300 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7_ = _tmp6_;
-#line 1161 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1300 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_set_string (self, "Exif.Image.Rating", _tmp7_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1161 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1300 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (_tmp7_);
-#line 1163 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = int_rating;
-#line 1163 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1302 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (0 <= _tmp8_) {
-#line 8303 "PhotoMetadata.c"
+#line 9392 "PhotoMetadata.c"
 		gint _tmp9_ = 0;
 		gint _tmp10_ = 0;
 		gchar* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
-#line 1164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1303 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp9_ = int_rating;
-#line 1164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1303 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp10_ = RESOURCES_rating_thresholds[_tmp9_];
-#line 1164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1303 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp11_ = g_strdup_printf ("%i", _tmp10_);
-#line 1164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1303 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp12_ = _tmp11_;
-#line 1164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1303 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_set_string (self, "Exif.Image.RatingPercent", _tmp12_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1164 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1303 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (_tmp12_);
-#line 8320 "PhotoMetadata.c"
+#line 9409 "PhotoMetadata.c"
 	} else {
 		gint _tmp13_ = 0;
 		gchar* _tmp14_ = NULL;
 		gchar* _tmp15_ = NULL;
-#line 1166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1305 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp13_ = int_rating;
-#line 1166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1305 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp14_ = g_strdup_printf ("%i", _tmp13_);
-#line 1166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1305 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp15_ = _tmp14_;
-#line 1166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1305 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		photo_metadata_set_string (self, "Exif.Image.RatingPercent", _tmp15_, PHOTO_METADATA_PREPARE_STRING_OPTIONS);
-#line 1166 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 1305 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_g_free0 (_tmp15_);
-#line 8335 "PhotoMetadata.c"
+#line 9424 "PhotoMetadata.c"
 	}
 }
 
 
 static gpointer _media_metadata_ref0 (gpointer self) {
-#line 123 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 235 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return self ? media_metadata_ref (self) : NULL;
-#line 8343 "PhotoMetadata.c"
+#line 9432 "PhotoMetadata.c"
 }
 
 
@@ -8365,67 +9454,67 @@ static PhotoMetadataInternalPhotoPreview* photo_metadata_internal_photo_preview_
 	PhotoMetadata* _tmp12_ = NULL;
 	PhotoMetadata* _tmp13_ = NULL;
 	guint _tmp14_ = 0U;
-#line 118 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 230 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (IS_PHOTO_METADATA (owner), NULL);
-#line 118 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 230 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 118 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 230 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_return_val_if_fail (GEXIV2_IS_PREVIEW_PROPERTIES (props), NULL);
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = name;
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = props;
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = gexiv2_preview_properties_get_width (_tmp1_);
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = props;
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp4_ = gexiv2_preview_properties_get_height (_tmp3_);
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	dimensions_init (&_tmp5_, (gint) _tmp2_, (gint) _tmp4_);
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp6_ = props;
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp7_ = gexiv2_preview_properties_get_size (_tmp6_);
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = props;
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9_ = gexiv2_preview_properties_get_mime_type (_tmp8_);
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp10_ = props;
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp11_ = gexiv2_preview_properties_get_extension (_tmp10_);
-#line 120 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 232 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = (PhotoMetadataInternalPhotoPreview*) photo_preview_construct (object_type, _tmp0_, &_tmp5_, _tmp7_, _tmp9_, _tmp11_);
-#line 123 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 235 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp12_ = owner;
-#line 123 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 235 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp13_ = _media_metadata_ref0 (_tmp12_);
-#line 123 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 235 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_media_metadata_unref0 (self->owner);
-#line 123 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 235 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->owner = _tmp13_;
-#line 124 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 236 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp14_ = number;
-#line 124 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 236 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->number = _tmp14_;
-#line 118 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 230 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return self;
-#line 8410 "PhotoMetadata.c"
+#line 9499 "PhotoMetadata.c"
 }
 
 
 static PhotoMetadataInternalPhotoPreview* photo_metadata_internal_photo_preview_new (PhotoMetadata* owner, const gchar* name, guint number, GExiv2PreviewProperties* props) {
-#line 118 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 230 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return photo_metadata_internal_photo_preview_construct (PHOTO_METADATA_TYPE_INTERNAL_PHOTO_PREVIEW, owner, name, number, props);
-#line 8417 "PhotoMetadata.c"
+#line 9506 "PhotoMetadata.c"
 }
 
 
 static guint8* _vala_array_dup6 (guint8* self, int length) {
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return g_memdup (self, length * sizeof (guint8));
-#line 8424 "PhotoMetadata.c"
+#line 9513 "PhotoMetadata.c"
 }
 
 
@@ -8458,100 +9547,100 @@ static guint8* photo_metadata_internal_photo_preview_real_flatten (PhotoPreview*
 	gint _tmp18__length1 = 0;
 	guint8* _tmp19_ = NULL;
 	gint _tmp19__length1 = 0;
-#line 127 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 239 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PHOTO_METADATA_TYPE_INTERNAL_PHOTO_PREVIEW, PhotoMetadataInternalPhotoPreview);
-#line 128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 240 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = self->owner;
-#line 128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 240 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = _tmp0_->priv->exiv2;
-#line 128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 240 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp3_ = _tmp2_ = gexiv2_metadata_get_preview_properties (_tmp1_);
-#line 128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 240 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	props = _tmp3_;
-#line 128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 240 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	props_length1 = _vala_array_length (_tmp2_);
-#line 128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 240 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_props_size_ = props_length1;
-#line 129 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 241 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5_ = props;
-#line 129 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 241 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp5__length1 = props_length1;
-#line 129 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 241 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (_tmp5_ != NULL) {
-#line 8477 "PhotoMetadata.c"
+#line 9566 "PhotoMetadata.c"
 		GExiv2PreviewProperties** _tmp6_ = NULL;
 		gint _tmp6__length1 = 0;
 		guint _tmp7_ = 0U;
-#line 129 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 241 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6_ = props;
-#line 129 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 241 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp6__length1 = props_length1;
-#line 129 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 241 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp7_ = self->number;
-#line 129 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 241 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = ((guint) _tmp6__length1) > _tmp7_;
-#line 8489 "PhotoMetadata.c"
+#line 9578 "PhotoMetadata.c"
 	} else {
-#line 129 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 241 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		_tmp4_ = FALSE;
-#line 8493 "PhotoMetadata.c"
+#line 9582 "PhotoMetadata.c"
 	}
-#line 129 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 241 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_vala_assert (_tmp4_, "props != null && props.length > number");
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp8_ = self->owner;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp9_ = _tmp8_->priv->exiv2;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp10_ = props;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp10__length1 = props_length1;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp11_ = self->number;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp12_ = _tmp10_[_tmp11_];
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp13_ = gexiv2_metadata_get_preview_image (_tmp9_, _tmp12_);
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp14_ = _tmp13_;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp16_ = gexiv2_preview_image_get_data (_tmp14_, &_tmp15_);
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp17_ = (_tmp16_ != NULL) ? _vala_array_dup6 (_tmp16_, _tmp15_) : ((gpointer) _tmp16_);
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp17__length1 = _tmp15_;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp18_ = _tmp17_;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp18__length1 = _tmp17__length1;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (_tmp14_);
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp19_ = _tmp18_;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp19__length1 = _tmp18__length1;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	if (result_length1) {
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 		*result_length1 = _tmp19__length1;
-#line 8533 "PhotoMetadata.c"
+#line 9622 "PhotoMetadata.c"
 	}
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	result = _tmp19_;
-#line 131 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 243 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	return result;
-#line 8539 "PhotoMetadata.c"
+#line 9628 "PhotoMetadata.c"
 }
 
 
 static void photo_metadata_internal_photo_preview_class_init (PhotoMetadataInternalPhotoPreviewClass * klass) {
-#line 114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 226 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_internal_photo_preview_parent_class = g_type_class_peek_parent (klass);
-#line 114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 226 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	((PhotoPreviewClass *) klass)->finalize = photo_metadata_internal_photo_preview_finalize;
-#line 114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 226 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	((PhotoPreviewClass *) klass)->flatten = photo_metadata_internal_photo_preview_real_flatten;
-#line 8550 "PhotoMetadata.c"
+#line 9639 "PhotoMetadata.c"
 }
 
 
@@ -8561,13 +9650,13 @@ static void photo_metadata_internal_photo_preview_instance_init (PhotoMetadataIn
 
 static void photo_metadata_internal_photo_preview_finalize (PhotoPreview* obj) {
 	PhotoMetadataInternalPhotoPreview * self;
-#line 114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 226 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PHOTO_METADATA_TYPE_INTERNAL_PHOTO_PREVIEW, PhotoMetadataInternalPhotoPreview);
-#line 115 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 227 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_media_metadata_unref0 (self->owner);
-#line 114 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 226 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	PHOTO_PREVIEW_CLASS (photo_metadata_internal_photo_preview_parent_class)->finalize (obj);
-#line 8566 "PhotoMetadata.c"
+#line 9655 "PhotoMetadata.c"
 }
 
 
@@ -8587,293 +9676,375 @@ static void photo_metadata_class_init (PhotoMetadataClass * klass) {
 	gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-	gchar** _tmp3_ = NULL;
-	gchar* _tmp4_ = NULL;
+	gchar* _tmp3_ = NULL;
+	gchar** _tmp4_ = NULL;
 	gchar* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
 	gchar* _tmp8_ = NULL;
 	gchar* _tmp9_ = NULL;
-	gchar** _tmp10_ = NULL;
-	gchar* _tmp11_ = NULL;
+	gchar* _tmp10_ = NULL;
+	gchar** _tmp11_ = NULL;
 	gchar* _tmp12_ = NULL;
-	gchar** _tmp13_ = NULL;
-	gchar* _tmp14_ = NULL;
+	gchar* _tmp13_ = NULL;
+	gchar** _tmp14_ = NULL;
 	gchar* _tmp15_ = NULL;
 	gchar* _tmp16_ = NULL;
 	gchar* _tmp17_ = NULL;
-	gchar** _tmp18_ = NULL;
-	gchar* _tmp19_ = NULL;
+	gchar* _tmp18_ = NULL;
+	gchar** _tmp19_ = NULL;
 	gchar* _tmp20_ = NULL;
 	gchar* _tmp21_ = NULL;
 	gchar* _tmp22_ = NULL;
-	gchar** _tmp23_ = NULL;
-	gchar* _tmp24_ = NULL;
+	gchar* _tmp23_ = NULL;
+	gchar** _tmp24_ = NULL;
 	gchar* _tmp25_ = NULL;
 	gchar* _tmp26_ = NULL;
 	gchar* _tmp27_ = NULL;
-	gchar** _tmp28_ = NULL;
+	gchar* _tmp28_ = NULL;
 	gchar* _tmp29_ = NULL;
-	gchar* _tmp30_ = NULL;
-	gchar** _tmp31_ = NULL;
-	HierarchicalKeywordField* _tmp32_ = NULL;
-	HierarchicalKeywordField* _tmp33_ = NULL;
-	HierarchicalKeywordField* _tmp34_ = NULL;
-	HierarchicalKeywordField** _tmp35_ = NULL;
+	gchar** _tmp30_ = NULL;
+	gchar* _tmp31_ = NULL;
+	gchar* _tmp32_ = NULL;
+	gchar** _tmp33_ = NULL;
+	gchar* _tmp34_ = NULL;
+	gchar* _tmp35_ = NULL;
 	gchar* _tmp36_ = NULL;
-	gchar* _tmp37_ = NULL;
-	gchar** _tmp38_ = NULL;
-	gchar* _tmp39_ = NULL;
-	gchar* _tmp40_ = NULL;
-	gchar* _tmp41_ = NULL;
-	gchar* _tmp42_ = NULL;
-	gchar** _tmp43_ = NULL;
-#line 99 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	gchar** _tmp37_ = NULL;
+	NullKeywordTransformer* _tmp38_ = NULL;
+	NullKeywordTransformer* _tmp39_ = NULL;
+	HierarchicalKeywordField* _tmp40_ = NULL;
+	NullKeywordTransformer* _tmp41_ = NULL;
+	NullKeywordTransformer* _tmp42_ = NULL;
+	HierarchicalKeywordField* _tmp43_ = NULL;
+	ACDSeeKeywordTransformer* _tmp44_ = NULL;
+	ACDSeeKeywordTransformer* _tmp45_ = NULL;
+	HierarchicalKeywordField* _tmp46_ = NULL;
+	NullKeywordTransformer* _tmp47_ = NULL;
+	NullKeywordTransformer* _tmp48_ = NULL;
+	HierarchicalKeywordField* _tmp49_ = NULL;
+	NullKeywordTransformer* _tmp50_ = NULL;
+	NullKeywordTransformer* _tmp51_ = NULL;
+	HierarchicalKeywordField* _tmp52_ = NULL;
+	HierarchicalKeywordField** _tmp53_ = NULL;
+	gchar* _tmp54_ = NULL;
+	gchar* _tmp55_ = NULL;
+	gchar* _tmp56_ = NULL;
+	gchar** _tmp57_ = NULL;
+	gchar* _tmp58_ = NULL;
+	gchar* _tmp59_ = NULL;
+	gchar* _tmp60_ = NULL;
+	gchar* _tmp61_ = NULL;
+	gchar* _tmp62_ = NULL;
+	gchar** _tmp63_ = NULL;
+#line 211 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_parent_class = g_type_class_peek_parent (klass);
-#line 99 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 211 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	((MediaMetadataClass *) klass)->finalize = photo_metadata_finalize;
-#line 99 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 211 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	g_type_class_add_private (klass, sizeof (PhotoMetadataPrivate));
-#line 99 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 211 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	((MediaMetadataClass *) klass)->read_from_file = photo_metadata_real_read_from_file;
-#line 99 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 211 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	((MediaMetadataClass *) klass)->get_creation_date_time = photo_metadata_real_get_creation_date_time;
-#line 99 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 211 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	((MediaMetadataClass *) klass)->get_title = photo_metadata_real_get_title;
-#line 99 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 211 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	((MediaMetadataClass *) klass)->get_comment = photo_metadata_real_get_comment;
-#line 674 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 786 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = g_strdup ("Exif.Image.DateTime");
-#line 674 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 786 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = g_strdup ("Xmp.tiff.DateTime");
-#line 674 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 786 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp2_ = g_strdup ("Xmp.xmp.ModifyDate");
-#line 674 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp3_ = g_new0 (gchar*, 3 + 1);
-#line 674 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp3_[0] = _tmp0_;
-#line 674 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp3_[1] = _tmp1_;
-#line 674 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp3_[2] = _tmp2_;
-#line 674 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_DATE_TIME_TAGS = _tmp3_;
-#line 674 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_DATE_TIME_TAGS_length1 = 3;
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp4_ = g_strdup ("Exif.Photo.DateTimeOriginal");
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp5_ = g_strdup ("Xmp.exif.DateTimeOriginal");
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp6_ = g_strdup ("Xmp.xmp.CreateDate");
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp7_ = g_strdup ("Exif.Photo.DateTimeDigitized");
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp8_ = g_strdup ("Xmp.exif.DateTimeDigitized");
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp9_ = g_strdup ("Exif.Image.DateTime");
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp10_ = g_new0 (gchar*, 6 + 1);
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp10_[0] = _tmp4_;
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp10_[1] = _tmp5_;
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp10_[2] = _tmp6_;
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp10_[3] = _tmp7_;
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp10_[4] = _tmp8_;
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp10_[5] = _tmp9_;
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_EXPOSURE_DATE_TIME_TAGS = _tmp10_;
-#line 692 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 786 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp3_ = g_strdup ("Xmp.acdsee.datetime");
+#line 786 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp4_ = g_new0 (gchar*, 4 + 1);
+#line 786 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp4_[0] = _tmp0_;
+#line 786 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp4_[1] = _tmp1_;
+#line 786 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp4_[2] = _tmp2_;
+#line 786 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp4_[3] = _tmp3_;
+#line 786 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_DATE_TIME_TAGS = _tmp4_;
+#line 786 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_DATE_TIME_TAGS_length1 = 4;
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp5_ = g_strdup ("Exif.Photo.DateTimeOriginal");
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp6_ = g_strdup ("Xmp.exif.DateTimeOriginal");
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp7_ = g_strdup ("Xmp.xmp.CreateDate");
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp8_ = g_strdup ("Exif.Photo.DateTimeDigitized");
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp9_ = g_strdup ("Xmp.exif.DateTimeDigitized");
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp10_ = g_strdup ("Exif.Image.DateTime");
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp11_ = g_new0 (gchar*, 6 + 1);
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp11_[0] = _tmp5_;
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp11_[1] = _tmp6_;
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp11_[2] = _tmp7_;
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp11_[3] = _tmp8_;
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp11_[4] = _tmp9_;
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp11_[5] = _tmp10_;
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_EXPOSURE_DATE_TIME_TAGS = _tmp11_;
+#line 805 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_EXPOSURE_DATE_TIME_TAGS_length1 = 6;
-#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp11_ = g_strdup ("Exif.Photo.DateTimeDigitized");
-#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp12_ = g_strdup ("Xmp.exif.DateTimeDigitized");
-#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp13_ = g_new0 (gchar*, 2 + 1);
-#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp13_[0] = _tmp11_;
-#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp13_[1] = _tmp12_;
-#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_DIGITIZED_DATE_TIME_TAGS = _tmp13_;
-#line 713 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp12_ = g_strdup ("Exif.Photo.DateTimeDigitized");
+#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp13_ = g_strdup ("Xmp.exif.DateTimeDigitized");
+#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp14_ = g_new0 (gchar*, 2 + 1);
+#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp14_[0] = _tmp12_;
+#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp14_[1] = _tmp13_;
+#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_DIGITIZED_DATE_TIME_TAGS = _tmp14_;
+#line 826 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_DIGITIZED_DATE_TIME_TAGS_length1 = 2;
-#line 738 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp14_ = g_strdup ("Exif.Photo.PixelXDimension");
-#line 738 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp15_ = g_strdup ("Xmp.exif.PixelXDimension");
-#line 738 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp16_ = g_strdup ("Xmp.tiff.ImageWidth");
-#line 738 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp17_ = g_strdup ("Xmp.exif.PixelXDimension");
-#line 738 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp18_ = g_new0 (gchar*, 4 + 1);
-#line 738 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp18_[0] = _tmp14_;
-#line 738 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp18_[1] = _tmp15_;
-#line 738 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp18_[2] = _tmp16_;
-#line 738 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp18_[3] = _tmp17_;
-#line 738 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_WIDTH_TAGS = _tmp18_;
-#line 738 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 851 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp15_ = g_strdup ("Exif.Photo.PixelXDimension");
+#line 851 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp16_ = g_strdup ("Xmp.exif.PixelXDimension");
+#line 851 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp17_ = g_strdup ("Xmp.tiff.ImageWidth");
+#line 851 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp18_ = g_strdup ("Xmp.exif.PixelXDimension");
+#line 851 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp19_ = g_new0 (gchar*, 4 + 1);
+#line 851 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp19_[0] = _tmp15_;
+#line 851 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp19_[1] = _tmp16_;
+#line 851 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp19_[2] = _tmp17_;
+#line 851 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp19_[3] = _tmp18_;
+#line 851 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_WIDTH_TAGS = _tmp19_;
+#line 851 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_WIDTH_TAGS_length1 = 4;
-#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp19_ = g_strdup ("Exif.Photo.PixelYDimension");
-#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp20_ = g_strdup ("Xmp.exif.PixelYDimension");
-#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp21_ = g_strdup ("Xmp.tiff.ImageHeight");
-#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp22_ = g_strdup ("Xmp.exif.PixelYDimension");
-#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp23_ = g_new0 (gchar*, 4 + 1);
-#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp23_[0] = _tmp19_;
-#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp23_[1] = _tmp20_;
-#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp23_[2] = _tmp21_;
-#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp23_[3] = _tmp22_;
-#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_HEIGHT_TAGS = _tmp23_;
-#line 745 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 858 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp20_ = g_strdup ("Exif.Photo.PixelYDimension");
+#line 858 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp21_ = g_strdup ("Xmp.exif.PixelYDimension");
+#line 858 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp22_ = g_strdup ("Xmp.tiff.ImageHeight");
+#line 858 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp23_ = g_strdup ("Xmp.exif.PixelYDimension");
+#line 858 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp24_ = g_new0 (gchar*, 4 + 1);
+#line 858 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp24_[0] = _tmp20_;
+#line 858 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp24_[1] = _tmp21_;
+#line 858 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp24_[2] = _tmp22_;
+#line 858 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp24_[3] = _tmp23_;
+#line 858 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_HEIGHT_TAGS = _tmp24_;
+#line 858 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	photo_metadata_HEIGHT_TAGS_length1 = 4;
-#line 804 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp24_ = g_strdup ("Iptc.Application2.Caption");
-#line 804 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp25_ = g_strdup ("Xmp.dc.title");
-#line 804 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp26_ = g_strdup ("Iptc.Application2.Headline");
-#line 804 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp27_ = g_strdup ("Xmp.photoshop.Headline");
-#line 804 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp28_ = g_new0 (gchar*, 4 + 1);
-#line 804 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp28_[0] = _tmp24_;
-#line 804 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp28_[1] = _tmp25_;
-#line 804 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp28_[2] = _tmp26_;
-#line 804 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp28_[3] = _tmp27_;
-#line 804 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_STANDARD_TITLE_TAGS = _tmp28_;
-#line 804 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_STANDARD_TITLE_TAGS_length1 = 4;
-#line 859 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp29_ = g_strdup ("Xmp.dc.subject");
-#line 859 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp30_ = g_strdup ("Iptc.Application2.Keywords");
-#line 859 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp31_ = g_new0 (gchar*, 2 + 1);
-#line 859 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp31_[0] = _tmp29_;
-#line 859 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp31_[1] = _tmp30_;
-#line 859 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_KEYWORD_TAGS = _tmp31_;
-#line 859 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_KEYWORD_TAGS_length1 = 2;
-#line 864 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp32_ = hierarchical_keyword_field_new ("Xmp.lr.hierarchicalSubject", "|", FALSE, FALSE);
-#line 864 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp33_ = hierarchical_keyword_field_new ("Xmp.digiKam.TagsList", "/", FALSE, TRUE);
-#line 864 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp34_ = hierarchical_keyword_field_new ("Xmp.MicrosoftPhoto.LastKeywordXMP", "/", FALSE, TRUE);
-#line 864 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp35_ = g_new0 (HierarchicalKeywordField*, 3 + 1);
-#line 864 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp35_[0] = _tmp32_;
-#line 864 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp35_[1] = _tmp33_;
-#line 864 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp35_[2] = _tmp34_;
-#line 864 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_HIERARCHICAL_KEYWORD_TAGS = _tmp35_;
-#line 864 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_HIERARCHICAL_KEYWORD_TAGS_length1 = 3;
-#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp36_ = g_strdup ("Exif.Image.Artist");
-#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp37_ = g_strdup ("Exif.Canon.OwnerName");
-#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp38_ = g_new0 (gchar*, 2 + 1);
-#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp38_[0] = _tmp36_;
-#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp38_[1] = _tmp37_;
-#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_ARTIST_TAGS = _tmp38_;
-#line 1091 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_ARTIST_TAGS_length1 = 2;
-#line 1128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp39_ = g_strdup ("Xmp.xmp.Rating");
-#line 1128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp40_ = g_strdup ("Iptc.Application2.Urgency");
-#line 1128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp41_ = g_strdup ("Xmp.photoshop.Urgency");
-#line 1128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp42_ = g_strdup ("Exif.Image.Rating");
-#line 1128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp43_ = g_new0 (gchar*, 4 + 1);
-#line 1128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp43_[0] = _tmp39_;
-#line 1128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp43_[1] = _tmp40_;
-#line 1128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp43_[2] = _tmp41_;
-#line 1128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	_tmp43_[3] = _tmp42_;
-#line 1128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_RATING_TAGS = _tmp43_;
-#line 1128 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
-	photo_metadata_RATING_TAGS_length1 = 4;
-#line 8837 "PhotoMetadata.c"
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp25_ = g_strdup ("Iptc.Application2.Caption");
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp26_ = g_strdup ("Xmp.dc.title");
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp27_ = g_strdup ("Iptc.Application2.Headline");
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp28_ = g_strdup ("Xmp.photoshop.Headline");
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp29_ = g_strdup ("Xmp.acdsee.caption");
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp30_ = g_new0 (gchar*, 5 + 1);
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp30_[0] = _tmp25_;
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp30_[1] = _tmp26_;
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp30_[2] = _tmp27_;
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp30_[3] = _tmp28_;
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp30_[4] = _tmp29_;
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_STANDARD_TITLE_TAGS = _tmp30_;
+#line 917 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_STANDARD_TITLE_TAGS_length1 = 5;
+#line 962 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp31_ = g_strdup ("Exif.Photo.UserComment");
+#line 962 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp32_ = g_strdup ("Xmp.acdsee.notes");
+#line 962 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp33_ = g_new0 (gchar*, 2 + 1);
+#line 962 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp33_[0] = _tmp31_;
+#line 962 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp33_[1] = _tmp32_;
+#line 962 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_COMMENT_TAGS = _tmp33_;
+#line 962 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_COMMENT_TAGS_length1 = 2;
+#line 979 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp34_ = g_strdup ("Xmp.dc.subject");
+#line 979 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp35_ = g_strdup ("Iptc.Application2.Keywords");
+#line 979 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp36_ = g_strdup ("Xmp.xmp.Label");
+#line 979 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp37_ = g_new0 (gchar*, 3 + 1);
+#line 979 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp37_[0] = _tmp34_;
+#line 979 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp37_[1] = _tmp35_;
+#line 979 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp37_[2] = _tmp36_;
+#line 979 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_KEYWORD_TAGS = _tmp37_;
+#line 979 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_KEYWORD_TAGS_length1 = 3;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp38_ = null_keyword_transformer_new ();
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp39_ = _tmp38_;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp40_ = hierarchical_keyword_field_new ("Xmp.lr.hierarchicalSubject", "|", FALSE, FALSE, G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, TYPE_KEYWORD_TRANSFORMER, KeywordTransformer));
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp41_ = null_keyword_transformer_new ();
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp42_ = _tmp41_;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp43_ = hierarchical_keyword_field_new ("Xmp.acdsee.keywords", "|", FALSE, FALSE, G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, TYPE_KEYWORD_TRANSFORMER, KeywordTransformer));
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp44_ = acd_see_keyword_transformer_new ();
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp45_ = _tmp44_;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp46_ = hierarchical_keyword_field_new ("Xmp.acdsee.categories", "|", FALSE, FALSE, G_TYPE_CHECK_INSTANCE_CAST (_tmp45_, TYPE_KEYWORD_TRANSFORMER, KeywordTransformer));
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp47_ = null_keyword_transformer_new ();
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp48_ = _tmp47_;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp49_ = hierarchical_keyword_field_new ("Xmp.digiKam.TagsList", "/", FALSE, TRUE, G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, TYPE_KEYWORD_TRANSFORMER, KeywordTransformer));
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp50_ = null_keyword_transformer_new ();
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp51_ = _tmp50_;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp52_ = hierarchical_keyword_field_new ("Xmp.MicrosoftPhoto.LastKeywordXMP", "/", FALSE, TRUE, G_TYPE_CHECK_INSTANCE_CAST (_tmp51_, TYPE_KEYWORD_TRANSFORMER, KeywordTransformer));
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp53_ = g_new0 (HierarchicalKeywordField*, 5 + 1);
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp53_[0] = _tmp40_;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp53_[1] = _tmp43_;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp53_[2] = _tmp46_;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp53_[3] = _tmp49_;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp53_[4] = _tmp52_;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_HIERARCHICAL_KEYWORD_TAGS = _tmp53_;
+#line 985 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_HIERARCHICAL_KEYWORD_TAGS_length1 = 5;
+#line 1228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp54_ = g_strdup ("Exif.Image.Artist");
+#line 1228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp55_ = g_strdup ("Exif.Canon.OwnerName");
+#line 1228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp56_ = g_strdup ("Xmp.acdsee.author");
+#line 1228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp57_ = g_new0 (gchar*, 3 + 1);
+#line 1228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp57_[0] = _tmp54_;
+#line 1228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp57_[1] = _tmp55_;
+#line 1228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp57_[2] = _tmp56_;
+#line 1228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_ARTIST_TAGS = _tmp57_;
+#line 1228 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_ARTIST_TAGS_length1 = 3;
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp58_ = g_strdup ("Xmp.xmp.Rating");
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp59_ = g_strdup ("Iptc.Application2.Urgency");
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp60_ = g_strdup ("Xmp.photoshop.Urgency");
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp61_ = g_strdup ("Exif.Image.Rating");
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp62_ = g_strdup ("Xmp.acdsee.rating");
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp63_ = g_new0 (gchar*, 5 + 1);
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp63_[0] = _tmp58_;
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp63_[1] = _tmp59_;
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp63_[2] = _tmp60_;
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp63_[3] = _tmp61_;
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	_tmp63_[4] = _tmp62_;
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_RATING_TAGS = _tmp63_;
+#line 1266 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+	photo_metadata_RATING_TAGS_length1 = 5;
+#line 10008 "PhotoMetadata.c"
 }
 
 
 static void photo_metadata_instance_init (PhotoMetadata * self) {
 	GExiv2Metadata* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 99 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 211 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv = PHOTO_METADATA_GET_PRIVATE (self);
-#line 135 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 247 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp0_ = gexiv2_metadata_new ();
-#line 135 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 247 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->exiv2 = _tmp0_;
-#line 136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 248 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->exif = NULL;
-#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 249 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_tmp1_ = g_strdup ("<uninitialized>");
-#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 249 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self->priv->source_name = _tmp1_;
-#line 8856 "PhotoMetadata.c"
+#line 10027 "PhotoMetadata.c"
 }
 
 
 static void photo_metadata_finalize (MediaMetadata* obj) {
 	PhotoMetadata * self;
-#line 99 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 211 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PHOTO_METADATA, PhotoMetadata);
-#line 135 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 247 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_object_unref0 (self->priv->exiv2);
-#line 136 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 248 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_exif_data_unref0 (self->priv->exif);
-#line 137 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 249 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	_g_free0 (self->priv->source_name);
-#line 99 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
+#line 211 "/home/jens/Source/shotwell/src/photos/PhotoMetadata.vala"
 	MEDIA_METADATA_CLASS (photo_metadata_parent_class)->finalize (obj);
-#line 8872 "PhotoMetadata.c"
+#line 10043 "PhotoMetadata.c"
 }
 
 

@@ -1677,7 +1677,7 @@ void editing_host_page_on_rotate_clockwise (EditingHostPage* self);
 static void _editing_host_page_on_rotate_clockwise_gtk_tool_button_clicked (GtkToolButton* _sender, gpointer self);
 #define RESOURCES_CROP "shotwell-crop"
 #define RESOURCES_CROP_LABEL _ ("Crop")
-#define RESOURCES_CROP_TOOLTIP _ ("Crop the photo's size")
+#define RESOURCES_CROP_TOOLTIP _ ("Crop the photo’s size")
 static void editing_host_page_on_crop_toggled (EditingHostPage* self);
 static void _editing_host_page_on_crop_toggled_gtk_toggle_tool_button_toggled (GtkToggleToolButton* _sender, gpointer self);
 #define RESOURCES_STRAIGHTEN "shotwell-straighten"
@@ -1692,12 +1692,12 @@ static void editing_host_page_on_redeye_toggled (EditingHostPage* self);
 static void _editing_host_page_on_redeye_toggled_gtk_toggle_tool_button_toggled (GtkToggleToolButton* _sender, gpointer self);
 #define RESOURCES_ADJUST "image-adjust"
 #define RESOURCES_ADJUST_LABEL _ ("Adjust")
-#define RESOURCES_ADJUST_TOOLTIP _ ("Adjust the photo's color and tone")
+#define RESOURCES_ADJUST_TOOLTIP _ ("Adjust the photo’s color and tone")
 static void editing_host_page_on_adjust_toggled (EditingHostPage* self);
 static void _editing_host_page_on_adjust_toggled_gtk_toggle_tool_button_toggled (GtkToggleToolButton* _sender, gpointer self);
 #define RESOURCES_ENHANCE_LABEL _ ("Enhance")
 #define RESOURCES_ENHANCE "shotwell-auto-enhance"
-#define RESOURCES_ENHANCE_TOOLTIP _ ("Automatically improve the photo's appearance")
+#define RESOURCES_ENHANCE_TOOLTIP _ ("Automatically improve the photo’s appearance")
 void editing_host_page_on_enhance (EditingHostPage* self);
 static void _editing_host_page_on_enhance_gtk_tool_button_clicked (GtkToolButton* _sender, gpointer self);
 GdkPixbuf* resources_load_icon (const gchar* name, gint scale);
@@ -2186,17 +2186,17 @@ GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length
 #define TRANSLATABLE "translatable"
 static void library_photo_page_on_export (LibraryPhotoPage* self);
 static void _library_photo_page_on_export_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_EXPORT_MENU _ ("_Export...")
+#define RESOURCES_EXPORT_MENU _ ("_Export…")
 static void _vala_array_add193 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_PRINT_LABEL _ ("_Print")
 static void library_photo_page_on_print (LibraryPhotoPage* self);
 static void _library_photo_page_on_print_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_PRINT_MENU _ ("_Print...")
+#define RESOURCES_PRINT_MENU _ ("_Print…")
 static void _vala_array_add194 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_PUBLISH "applications-internet"
 static void library_photo_page_on_publish (LibraryPhotoPage* self);
 static void _library_photo_page_on_publish_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_PUBLISH_MENU _ ("Pu_blish...")
+#define RESOURCES_PUBLISH_MENU _ ("Pu_blish…")
 #define RESOURCES_PUBLISH_TOOLTIP _ ("Publish to various websites")
 static void _vala_array_add195 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_REMOVE_LABEL _ ("_Remove")
@@ -2258,13 +2258,13 @@ static void _editing_host_page_on_revert_gtk_action_callback (GtkAction* action,
 #define RESOURCES_REVERT_MENU _ ("Re_vert to Original")
 static void _vala_array_add213 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void _editing_host_page_on_edit_title_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_EDIT_TITLE_MENU _ ("Edit _Title...")
+#define RESOURCES_EDIT_TITLE_MENU _ ("Edit _Title…")
 static void _vala_array_add214 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void _editing_host_page_on_edit_comment_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_EDIT_COMMENT_MENU _ ("Edit _Comment...")
+#define RESOURCES_EDIT_COMMENT_MENU _ ("Edit _Comment…")
 static void _vala_array_add215 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void _editing_host_page_on_adjust_date_time_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_ADJUST_DATE_TIME_MENU _ ("_Adjust Date and Time...")
+#define RESOURCES_ADJUST_DATE_TIME_MENU _ ("_Adjust Date and Time…")
 static void _vala_array_add216 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_EDIT_LABEL _ ("_Edit")
 static void library_photo_page_on_external_edit (LibraryPhotoPage* self);
@@ -2277,7 +2277,7 @@ static void _library_photo_page_on_external_edit_raw_gtk_action_callback (GtkAct
 static void _vala_array_add218 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void library_photo_page_on_send_to (LibraryPhotoPage* self);
 static void _library_photo_page_on_send_to_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_SEND_TO_MENU _ ("Send _To...")
+#define RESOURCES_SEND_TO_MENU _ ("Send _To…")
 static void _vala_array_add219 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void _editing_host_page_on_set_background_gtk_action_callback (GtkAction* action, gpointer self);
 #define RESOURCES_SET_BACKGROUND_MENU _ ("Set as _Desktop Background")
@@ -2336,19 +2336,19 @@ static void _editing_host_page_snap_zoom_to_max_gtk_action_callback (GtkAction* 
 static void _vala_array_add236 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void library_photo_page_on_add_tags (LibraryPhotoPage* self);
 static void _library_photo_page_on_add_tags_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_ADD_TAGS_MENU _ ("Add _Tags...")
+#define RESOURCES_ADD_TAGS_MENU _ ("Add _Tags…")
 static void _vala_array_add237 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void library_photo_page_on_modify_tags (LibraryPhotoPage* self);
 static void _library_photo_page_on_modify_tags_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_MODIFY_TAGS_MENU _ ("Modif_y Tags...")
+#define RESOURCES_MODIFY_TAGS_MENU _ ("Modif_y Tags…")
 static void _vala_array_add238 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void library_photo_page_on_slideshow (LibraryPhotoPage* self);
 static void _library_photo_page_on_slideshow_gtk_action_callback (GtkAction* action, gpointer self);
 static void _vala_array_add239 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void _vala_array_add240 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_SEND_TO_CONTEXT_MENU _ ("Send T_o...")
+#define RESOURCES_SEND_TO_CONTEXT_MENU _ ("Send T_o…")
 static void _vala_array_add241 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_ADD_TAGS_CONTEXT_MENU _ ("_Add Tags...")
+#define RESOURCES_ADD_TAGS_CONTEXT_MENU _ ("_Add Tags…")
 static void _vala_array_add242 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static GtkToggleActionEntry* library_photo_page_real_init_collect_toggle_action_entries (Page* base, int* result_length1);
 GtkToggleActionEntry* page_init_collect_toggle_action_entries (Page* self, int* result_length1);
@@ -2356,7 +2356,7 @@ static void library_photo_page_on_display_ratings (LibraryPhotoPage* self, GtkAc
 static void _library_photo_page_on_display_ratings_gtk_action_callback (GtkAction* action, gpointer self);
 gboolean configuration_facade_get_display_photo_ratings (ConfigurationFacade* self);
 #define RESOURCES_VIEW_RATINGS_MENU _ ("_Ratings")
-#define RESOURCES_VIEW_RATINGS_TOOLTIP _ ("Display each photo's rating")
+#define RESOURCES_VIEW_RATINGS_TOOLTIP _ ("Display each photo’s rating")
 static void _vala_array_add243 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value);
 static InjectionGroup** library_photo_page_real_init_collect_injection_groups (Page* base, int* result_length1);
 InjectionGroup** page_init_collect_injection_groups (Page* self, int* result_length1);
@@ -4108,7 +4108,7 @@ static void zoom_buffer_iso_source_fetch_job_real_execute (BackgroundJob* base) 
 #line 29 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4108 "PhotoPage.c"
-			goto __catch230_g_error;
+			goto __catch243_g_error;
 		}
 #line 29 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		_tmp4_ = _tmp0_;
@@ -4122,8 +4122,8 @@ static void zoom_buffer_iso_source_fetch_job_real_execute (BackgroundJob* base) 
 		_g_object_unref0 (_tmp0_);
 #line 4121 "PhotoPage.c"
 	}
-	goto __finally230;
-	__catch230_g_error:
+	goto __finally243;
+	__catch243_g_error:
 	{
 		GError* fetch_error = NULL;
 #line 28 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -4137,7 +4137,7 @@ static void zoom_buffer_iso_source_fetch_job_real_execute (BackgroundJob* base) 
 		_g_error_free0 (fetch_error);
 #line 4135 "PhotoPage.c"
 	}
-	__finally230:
+	__finally243:
 #line 28 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 28 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -7143,7 +7143,7 @@ static void editing_host_page_on_pixbuf_fetched (EditingHostPage* self, Photo* p
 #line 965 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 7141 "PhotoPage.c"
-					goto __catch231_g_error;
+					goto __catch244_g_error;
 				}
 #line 968 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 				_tmp23_ = tool_pixbuf;
@@ -7166,8 +7166,8 @@ static void editing_host_page_on_pixbuf_fetched (EditingHostPage* self, Photo* p
 				_g_object_unref0 (tool_pixbuf);
 #line 7163 "PhotoPage.c"
 			}
-			goto __finally231;
-			__catch231_g_error:
+			goto __finally244;
+			__catch244_g_error:
 			{
 				GError* err = NULL;
 				Photo* _tmp26_ = NULL;
@@ -7201,7 +7201,7 @@ static void editing_host_page_on_pixbuf_fetched (EditingHostPage* self, Photo* p
 				return;
 #line 7198 "PhotoPage.c"
 			}
-			__finally231:
+			__finally244:
 #line 963 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 963 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -8209,7 +8209,7 @@ void editing_host_page_set_photo_missing (EditingHostPage* self, gboolean missin
 #line 1132 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8207 "PhotoPage.c"
-				goto __catch232_g_error;
+				goto __catch245_g_error;
 			}
 #line 1134 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 			_tmp10_ = pixbuf;
@@ -8239,8 +8239,8 @@ void editing_host_page_set_photo_missing (EditingHostPage* self, gboolean missin
 			_g_object_unref0 (pixbuf);
 #line 8236 "PhotoPage.c"
 		}
-		goto __finally232;
-		__catch232_g_error:
+		goto __finally245;
+		__catch245_g_error:
 		{
 			GError* err = NULL;
 			GdkPixbuf* _tmp19_ = NULL;
@@ -8275,7 +8275,7 @@ void editing_host_page_set_photo_missing (EditingHostPage* self, gboolean missin
 			_g_error_free0 (err);
 #line 8272 "PhotoPage.c"
 		}
-		__finally232:
+		__finally245:
 #line 1131 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1131 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -8376,7 +8376,7 @@ static GdkPixbuf* editing_host_page_get_zoom_pixbuf (EditingHostPage* self, Phot
 #line 1157 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8374 "PhotoPage.c"
-				goto __catch233_g_error;
+				goto __catch246_g_error;
 			}
 #line 1157 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 			_tmp8_ = _tmp4_;
@@ -8390,8 +8390,8 @@ static GdkPixbuf* editing_host_page_get_zoom_pixbuf (EditingHostPage* self, Phot
 			_g_object_unref0 (_tmp4_);
 #line 8387 "PhotoPage.c"
 		}
-		goto __finally233;
-		__catch233_g_error:
+		goto __finally246;
+		__catch246_g_error:
 		{
 			GError* err = NULL;
 			GError* _tmp9_ = NULL;
@@ -8410,7 +8410,7 @@ static GdkPixbuf* editing_host_page_get_zoom_pixbuf (EditingHostPage* self, Phot
 			_g_error_free0 (err);
 #line 8407 "PhotoPage.c"
 		}
-		__finally233:
+		__finally246:
 #line 1156 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1156 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -8934,7 +8934,7 @@ static void editing_host_page_quick_update_pixbuf (EditingHostPage* self) {
 #line 1252 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8932 "PhotoPage.c"
-			goto __catch234_g_error;
+			goto __catch247_g_error;
 		}
 #line 1252 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		_tmp23_ = editing_host_page_get_photo (self);
@@ -8950,8 +8950,8 @@ static void editing_host_page_quick_update_pixbuf (EditingHostPage* self) {
 		_g_object_unref0 (_tmp17_);
 #line 8947 "PhotoPage.c"
 	}
-	goto __finally234;
-	__catch234_g_error:
+	goto __finally247;
+	__catch247_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp26_ = NULL;
@@ -8970,7 +8970,7 @@ static void editing_host_page_quick_update_pixbuf (EditingHostPage* self) {
 		_g_error_free0 (err);
 #line 8967 "PhotoPage.c"
 	}
-	__finally234:
+	__finally247:
 #line 1251 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1251 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -9077,7 +9077,7 @@ static gboolean editing_host_page_update_pixbuf (EditingHostPage* self) {
 #line 1279 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 9075 "PhotoPage.c"
-				goto __catch235_g_error;
+				goto __catch248_g_error;
 			}
 #line 1279 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 			_tmp12_ = _tmp6_;
@@ -9104,8 +9104,8 @@ static gboolean editing_host_page_update_pixbuf (EditingHostPage* self) {
 #line 9100 "PhotoPage.c"
 		}
 	}
-	goto __finally235;
-	__catch235_g_error:
+	goto __finally248;
+	__catch248_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp15_ = NULL;
@@ -9126,7 +9126,7 @@ static gboolean editing_host_page_update_pixbuf (EditingHostPage* self) {
 		_g_error_free0 (err);
 #line 9123 "PhotoPage.c"
 	}
-	__finally235:
+	__finally248:
 #line 1276 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1276 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -9837,7 +9837,7 @@ static void editing_host_page_swap_in_original (EditingHostPage* self) {
 #line 1393 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 9835 "PhotoPage.c"
-			goto __catch236_g_error;
+			goto __catch249_g_error;
 		}
 #line 1392 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		_tmp5_ = editing_host_page_get_photo (self);
@@ -9857,8 +9857,8 @@ static void editing_host_page_swap_in_original (EditingHostPage* self) {
 		_g_object_unref0 (_tmp0_);
 #line 9854 "PhotoPage.c"
 	}
-	goto __finally236;
-	__catch236_g_error:
+	goto __finally249;
+	__catch249_g_error:
 	{
 		GError* err = NULL;
 #line 1391 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -9873,7 +9873,7 @@ static void editing_host_page_swap_in_original (EditingHostPage* self) {
 		return;
 #line 9870 "PhotoPage.c"
 	}
-	__finally236:
+	__finally249:
 #line 1391 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1391 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -10053,7 +10053,7 @@ static void editing_host_page_activate_tool (EditingHostPage* self, EditingTools
 #line 1441 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 10051 "PhotoPage.c"
-			goto __catch237_g_error;
+			goto __catch250_g_error;
 		}
 #line 1441 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		_tmp15_ = _tmp7_;
@@ -10079,8 +10079,8 @@ static void editing_host_page_activate_tool (EditingHostPage* self, EditingTools
 		_g_object_unref0 (_tmp7_);
 #line 10076 "PhotoPage.c"
 	}
-	goto __finally237;
-	__catch237_g_error:
+	goto __finally250;
+	__catch250_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp18_ = NULL;
@@ -10115,7 +10115,7 @@ static void editing_host_page_activate_tool (EditingHostPage* self, EditingTools
 		return;
 #line 10112 "PhotoPage.c"
 	}
-	__finally237:
+	__finally250:
 #line 1439 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1439 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -20737,7 +20737,7 @@ static void library_photo_page_on_external_edit (LibraryPhotoPage* self) {
 #line 3174 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 20735 "PhotoPage.c"
-			goto __catch238_g_error;
+			goto __catch251_g_error;
 		}
 #line 3175 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		_tmp5_ = app_window_get_instance ();
@@ -20749,8 +20749,8 @@ static void library_photo_page_on_external_edit (LibraryPhotoPage* self) {
 		_g_object_unref0 (_tmp6_);
 #line 20746 "PhotoPage.c"
 	}
-	goto __finally238;
-	__catch238_g_error:
+	goto __finally251;
+	__catch251_g_error:
 	{
 		GError* err = NULL;
 		AppWindow* _tmp7_ = NULL;
@@ -20784,7 +20784,7 @@ static void library_photo_page_on_external_edit (LibraryPhotoPage* self) {
 		_g_error_free0 (err);
 #line 20781 "PhotoPage.c"
 	}
-	__finally238:
+	__finally251:
 #line 3172 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3172 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -20857,7 +20857,7 @@ static void library_photo_page_on_external_edit_raw (LibraryPhotoPage* self) {
 #line 3192 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 20855 "PhotoPage.c"
-			goto __catch239_g_error;
+			goto __catch252_g_error;
 		}
 #line 3193 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		_tmp9_ = app_window_get_instance ();
@@ -20869,8 +20869,8 @@ static void library_photo_page_on_external_edit_raw (LibraryPhotoPage* self) {
 		_g_object_unref0 (_tmp10_);
 #line 20866 "PhotoPage.c"
 	}
-	goto __finally239;
-	__catch239_g_error:
+	goto __finally252;
+	__catch252_g_error:
 	{
 		GError* err = NULL;
 		AppWindow* _tmp11_ = NULL;
@@ -20904,7 +20904,7 @@ static void library_photo_page_on_external_edit_raw (LibraryPhotoPage* self) {
 		_g_error_free0 (err);
 #line 20901 "PhotoPage.c"
 	}
-	__finally239:
+	__finally252:
 #line 3190 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3190 "/home/jens/Source/shotwell/src/PhotoPage.vala"
@@ -21108,11 +21108,11 @@ static void library_photo_page_on_export (LibraryPhotoPage* self) {
 #line 3225 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 21106 "PhotoPage.c"
-			goto __catch240_g_error;
+			goto __catch253_g_error;
 		}
 	}
-	goto __finally240;
-	__catch240_g_error:
+	goto __finally253;
+	__catch253_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp33_ = NULL;
@@ -21153,7 +21153,7 @@ static void library_photo_page_on_export (LibraryPhotoPage* self) {
 		_g_error_free0 (err);
 #line 21150 "PhotoPage.c"
 	}
-	__finally240:
+	__finally253:
 #line 3224 "/home/jens/Source/shotwell/src/PhotoPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3224 "/home/jens/Source/shotwell/src/PhotoPage.vala"

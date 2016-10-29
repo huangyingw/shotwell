@@ -38,6 +38,14 @@ typedef struct _ConfigurationFacadePrivate ConfigurationFacadePrivate;
 #define TYPE_DIMENSIONS (dimensions_get_type ())
 typedef struct _Dimensions Dimensions;
 
+#define TYPE_SCALE_CONSTRAINT (scale_constraint_get_type ())
+
+#define TYPE_EXPORT_FORMAT_MODE (export_format_mode_get_type ())
+
+#define TYPE_PHOTO_FILE_FORMAT (photo_file_format_get_type ())
+
+#define JPEG_TYPE_QUALITY (jpeg_quality_get_type ())
+
 #define TYPE_RAW_DEVELOPER (raw_developer_get_type ())
 
 #define TYPE_FUZZY_PROPERTY_STATE (fuzzy_property_state_get_type ())
@@ -79,6 +87,37 @@ struct _Dimensions {
 	gint width;
 	gint height;
 };
+
+typedef enum  {
+	SCALE_CONSTRAINT_ORIGINAL,
+	SCALE_CONSTRAINT_DIMENSIONS,
+	SCALE_CONSTRAINT_WIDTH,
+	SCALE_CONSTRAINT_HEIGHT,
+	SCALE_CONSTRAINT_FILL_VIEWPORT
+} ScaleConstraint;
+
+typedef enum  {
+	EXPORT_FORMAT_MODE_UNMODIFIED,
+	EXPORT_FORMAT_MODE_CURRENT,
+	EXPORT_FORMAT_MODE_SPECIFIED,
+	EXPORT_FORMAT_MODE_LAST
+} ExportFormatMode;
+
+typedef enum  {
+	PHOTO_FILE_FORMAT_JFIF,
+	PHOTO_FILE_FORMAT_RAW,
+	PHOTO_FILE_FORMAT_PNG,
+	PHOTO_FILE_FORMAT_TIFF,
+	PHOTO_FILE_FORMAT_BMP,
+	PHOTO_FILE_FORMAT_UNKNOWN
+} PhotoFileFormat;
+
+typedef enum  {
+	JPEG_QUALITY_LOW = 50,
+	JPEG_QUALITY_MEDIUM = 75,
+	JPEG_QUALITY_HIGH = 90,
+	JPEG_QUALITY_MAXIMUM = 100
+} JpegQuality;
 
 typedef enum  {
 	RAW_DEVELOPER_SHOTWELL = 0,
@@ -143,6 +182,18 @@ struct _ConfigurationFacadeClass {
 	void (*set_external_photo_app) (ConfigurationFacade* self, const gchar* external_photo_app);
 	gchar* (*get_external_raw_app) (ConfigurationFacade* self);
 	void (*set_external_raw_app) (ConfigurationFacade* self, const gchar* external_raw_app);
+	ScaleConstraint (*get_export_constraint) (ConfigurationFacade* self);
+	void (*set_export_constraint) (ConfigurationFacade* self, ScaleConstraint constraint);
+	ExportFormatMode (*get_export_export_format_mode) (ConfigurationFacade* self);
+	void (*set_export_export_format_mode) (ConfigurationFacade* self, ExportFormatMode export_format_mode);
+	gboolean (*get_export_export_metadata) (ConfigurationFacade* self);
+	void (*set_export_export_metadata) (ConfigurationFacade* self, gboolean export_metadata);
+	PhotoFileFormat (*get_export_photo_file_format) (ConfigurationFacade* self);
+	void (*set_export_photo_file_format) (ConfigurationFacade* self, PhotoFileFormat photo_file_format);
+	JpegQuality (*get_export_quality) (ConfigurationFacade* self);
+	void (*set_export_quality) (ConfigurationFacade* self, JpegQuality quality);
+	gint (*get_export_scale) (ConfigurationFacade* self);
+	void (*set_export_scale) (ConfigurationFacade* self, gint scale);
 	RawDeveloper (*get_default_raw_developer) (ConfigurationFacade* self);
 	void (*set_default_raw_developer) (ConfigurationFacade* self, RawDeveloper d);
 	gboolean (*get_hide_photos_already_imported) (ConfigurationFacade* self);
@@ -265,6 +316,12 @@ typedef enum  {
 	CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING,
 	CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY,
 	CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING,
+	CONFIGURABLE_PROPERTY_EXPORT_CONSTRAINT,
+	CONFIGURABLE_PROPERTY_EXPORT_EXPORT_FORMAT_MODE,
+	CONFIGURABLE_PROPERTY_EXPORT_EXPORT_METADATA,
+	CONFIGURABLE_PROPERTY_EXPORT_PHOTO_FILE_FORMAT,
+	CONFIGURABLE_PROPERTY_EXPORT_QUALITY,
+	CONFIGURABLE_PROPERTY_EXPORT_SCALE,
 	CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP,
 	CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP,
 	CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED,
@@ -316,6 +373,8 @@ struct _ConfigurationEngineIface {
 	gchar* (*get_name) (ConfigurationEngine* self);
 	gint (*get_int_property) (ConfigurationEngine* self, ConfigurableProperty p, GError** error);
 	void (*set_int_property) (ConfigurationEngine* self, ConfigurableProperty p, gint val, GError** error);
+	gint (*get_enum_property) (ConfigurationEngine* self, ConfigurableProperty p, GError** error);
+	void (*set_enum_property) (ConfigurationEngine* self, ConfigurableProperty p, gint val, GError** error);
 	gchar* (*get_string_property) (ConfigurationEngine* self, ConfigurableProperty p, GError** error);
 	void (*set_string_property) (ConfigurationEngine* self, ConfigurableProperty p, const gchar* val, GError** error);
 	gboolean (*get_bool_property) (ConfigurationEngine* self, ConfigurableProperty p, GError** error);
@@ -344,6 +403,10 @@ GType configuration_facade_get_type (void) G_GNUC_CONST;
 GType dimensions_get_type (void) G_GNUC_CONST;
 Dimensions* dimensions_dup (const Dimensions* self);
 void dimensions_free (Dimensions* self);
+GType scale_constraint_get_type (void) G_GNUC_CONST;
+GType export_format_mode_get_type (void) G_GNUC_CONST;
+GType photo_file_format_get_type (void) G_GNUC_CONST;
+GType jpeg_quality_get_type (void) G_GNUC_CONST;
 GType raw_developer_get_type (void) G_GNUC_CONST;
 GType fuzzy_property_state_get_type (void) G_GNUC_CONST;
 GType config_facade_get_type (void) G_GNUC_CONST;
@@ -406,7 +469,7 @@ void config_terminate (void);
 static void _config_facade_on_color_name_changed_configuration_facade_bg_color_name_changed (ConfigurationFacade* _sender, gpointer self) {
 #line 55 "/home/jens/Source/shotwell/src/config/Config.vala"
 	config_facade_on_color_name_changed ((ConfigFacade*) self);
-#line 410 "Config.c"
+#line 473 "Config.c"
 }
 
 
@@ -426,21 +489,21 @@ static ConfigFacade* config_facade_construct (GType object_type) {
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), "bg-color-name-changed", (GCallback) _config_facade_on_color_name_changed_configuration_facade_bg_color_name_changed, self, 0);
 #line 52 "/home/jens/Source/shotwell/src/config/Config.vala"
 	return self;
-#line 430 "Config.c"
+#line 493 "Config.c"
 }
 
 
 static ConfigFacade* config_facade_new (void) {
 #line 52 "/home/jens/Source/shotwell/src/config/Config.vala"
 	return config_facade_construct (CONFIG_TYPE_FACADE);
-#line 437 "Config.c"
+#line 500 "Config.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 62 "/home/jens/Source/shotwell/src/config/Config.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 444 "Config.c"
+#line 507 "Config.c"
 }
 
 
@@ -453,7 +516,7 @@ ConfigFacade* config_facade_get_instance (void) {
 	_tmp0_ = config_facade_instance;
 #line 59 "/home/jens/Source/shotwell/src/config/Config.vala"
 	if (_tmp0_ == NULL) {
-#line 457 "Config.c"
+#line 520 "Config.c"
 		ConfigFacade* _tmp1_ = NULL;
 #line 60 "/home/jens/Source/shotwell/src/config/Config.vala"
 		_tmp1_ = config_facade_new ();
@@ -461,7 +524,7 @@ ConfigFacade* config_facade_get_instance (void) {
 		_g_object_unref0 (config_facade_instance);
 #line 60 "/home/jens/Source/shotwell/src/config/Config.vala"
 		config_facade_instance = _tmp1_;
-#line 465 "Config.c"
+#line 528 "Config.c"
 	}
 #line 62 "/home/jens/Source/shotwell/src/config/Config.vala"
 	_tmp2_ = config_facade_instance;
@@ -471,7 +534,7 @@ ConfigFacade* config_facade_get_instance (void) {
 	result = _tmp3_;
 #line 62 "/home/jens/Source/shotwell/src/config/Config.vala"
 	return result;
-#line 475 "Config.c"
+#line 538 "Config.c"
 }
 
 
@@ -480,7 +543,7 @@ static void config_facade_on_color_name_changed (ConfigFacade* self) {
 	g_return_if_fail (CONFIG_IS_FACADE (self));
 #line 66 "/home/jens/Source/shotwell/src/config/Config.vala"
 	g_signal_emit_by_name (self, "colors-changed");
-#line 484 "Config.c"
+#line 547 "Config.c"
 }
 
 
@@ -497,7 +560,7 @@ static void config_facade_set_text_colors (ConfigFacade* self, GdkRGBA* bg_color
 	_tmp1_ = _tmp0_.red;
 #line 73 "/home/jens/Source/shotwell/src/config/Config.vala"
 	if (_tmp1_ > CONFIG_FACADE_BLACK_THRESHOLD) {
-#line 501 "Config.c"
+#line 564 "Config.c"
 		gchar* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
@@ -526,7 +589,7 @@ static void config_facade_set_text_colors (ConfigFacade* self, GdkRGBA* bg_color
 		_g_free0 (self->priv->border_color);
 #line 77 "/home/jens/Source/shotwell/src/config/Config.vala"
 		self->priv->border_color = _tmp5_;
-#line 530 "Config.c"
+#line 593 "Config.c"
 	} else {
 		gchar* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
@@ -556,7 +619,7 @@ static void config_facade_set_text_colors (ConfigFacade* self, GdkRGBA* bg_color
 		_g_free0 (self->priv->border_color);
 #line 82 "/home/jens/Source/shotwell/src/config/Config.vala"
 		self->priv->border_color = _tmp9_;
-#line 560 "Config.c"
+#line 623 "Config.c"
 	}
 }
 
@@ -581,7 +644,7 @@ static void config_facade_get_colors (ConfigFacade* self) {
 	_tmp2_ = is_color_parsable (_tmp1_);
 #line 89 "/home/jens/Source/shotwell/src/config/Config.vala"
 	if (!_tmp2_) {
-#line 585 "Config.c"
+#line 648 "Config.c"
 		gchar* _tmp3_ = NULL;
 #line 90 "/home/jens/Source/shotwell/src/config/Config.vala"
 		_tmp3_ = g_strdup (CONFIG_FACADE_DEFAULT_BG_COLOR);
@@ -589,7 +652,7 @@ static void config_facade_get_colors (ConfigFacade* self) {
 		_g_free0 (self->priv->bg_color);
 #line 90 "/home/jens/Source/shotwell/src/config/Config.vala"
 		self->priv->bg_color = _tmp3_;
-#line 593 "Config.c"
+#line 656 "Config.c"
 	}
 #line 92 "/home/jens/Source/shotwell/src/config/Config.vala"
 	_tmp4_ = self->priv->bg_color;
@@ -597,7 +660,7 @@ static void config_facade_get_colors (ConfigFacade* self) {
 	parse_color (_tmp4_, &_tmp5_);
 #line 92 "/home/jens/Source/shotwell/src/config/Config.vala"
 	config_facade_set_text_colors (self, &_tmp5_);
-#line 601 "Config.c"
+#line 664 "Config.c"
 }
 
 
@@ -616,7 +679,7 @@ void config_facade_get_bg_color (ConfigFacade* self, GdkRGBA* result) {
 	if (_tmp1_) {
 #line 97 "/home/jens/Source/shotwell/src/config/Config.vala"
 		config_facade_get_colors (self);
-#line 620 "Config.c"
+#line 683 "Config.c"
 	}
 #line 99 "/home/jens/Source/shotwell/src/config/Config.vala"
 	_tmp2_ = self->priv->bg_color;
@@ -626,7 +689,7 @@ void config_facade_get_bg_color (ConfigFacade* self, GdkRGBA* result) {
 	*result = _tmp3_;
 #line 99 "/home/jens/Source/shotwell/src/config/Config.vala"
 	return;
-#line 630 "Config.c"
+#line 693 "Config.c"
 }
 
 
@@ -638,7 +701,7 @@ void config_facade_get_selected_color (ConfigFacade* self, gboolean in_focus, Gd
 	_tmp0_ = in_focus;
 #line 103 "/home/jens/Source/shotwell/src/config/Config.vala"
 	if (_tmp0_) {
-#line 642 "Config.c"
+#line 705 "Config.c"
 		const gchar* _tmp1_ = NULL;
 		gboolean _tmp2_ = FALSE;
 		const gchar* _tmp3_ = NULL;
@@ -651,7 +714,7 @@ void config_facade_get_selected_color (ConfigFacade* self, gboolean in_focus, Gd
 		if (_tmp2_) {
 #line 105 "/home/jens/Source/shotwell/src/config/Config.vala"
 			config_facade_get_colors (self);
-#line 655 "Config.c"
+#line 718 "Config.c"
 		}
 #line 107 "/home/jens/Source/shotwell/src/config/Config.vala"
 		_tmp3_ = self->priv->selected_color;
@@ -661,7 +724,7 @@ void config_facade_get_selected_color (ConfigFacade* self, gboolean in_focus, Gd
 		*result = _tmp4_;
 #line 107 "/home/jens/Source/shotwell/src/config/Config.vala"
 		return;
-#line 665 "Config.c"
+#line 728 "Config.c"
 	} else {
 		const gchar* _tmp5_ = NULL;
 		gboolean _tmp6_ = FALSE;
@@ -675,7 +738,7 @@ void config_facade_get_selected_color (ConfigFacade* self, gboolean in_focus, Gd
 		if (_tmp6_) {
 #line 110 "/home/jens/Source/shotwell/src/config/Config.vala"
 			config_facade_get_colors (self);
-#line 679 "Config.c"
+#line 742 "Config.c"
 		}
 #line 112 "/home/jens/Source/shotwell/src/config/Config.vala"
 		_tmp7_ = self->priv->unfocused_selected_color;
@@ -685,7 +748,7 @@ void config_facade_get_selected_color (ConfigFacade* self, gboolean in_focus, Gd
 		*result = _tmp8_;
 #line 112 "/home/jens/Source/shotwell/src/config/Config.vala"
 		return;
-#line 689 "Config.c"
+#line 752 "Config.c"
 	}
 }
 
@@ -705,7 +768,7 @@ void config_facade_get_unselected_color (ConfigFacade* self, GdkRGBA* result) {
 	if (_tmp1_) {
 #line 118 "/home/jens/Source/shotwell/src/config/Config.vala"
 		config_facade_get_colors (self);
-#line 709 "Config.c"
+#line 772 "Config.c"
 	}
 #line 120 "/home/jens/Source/shotwell/src/config/Config.vala"
 	_tmp2_ = self->priv->unselected_color;
@@ -715,7 +778,7 @@ void config_facade_get_unselected_color (ConfigFacade* self, GdkRGBA* result) {
 	*result = _tmp3_;
 #line 120 "/home/jens/Source/shotwell/src/config/Config.vala"
 	return;
-#line 719 "Config.c"
+#line 782 "Config.c"
 }
 
 
@@ -734,7 +797,7 @@ void config_facade_get_border_color (ConfigFacade* self, GdkRGBA* result) {
 	if (_tmp1_) {
 #line 125 "/home/jens/Source/shotwell/src/config/Config.vala"
 		config_facade_get_colors (self);
-#line 738 "Config.c"
+#line 801 "Config.c"
 	}
 #line 127 "/home/jens/Source/shotwell/src/config/Config.vala"
 	_tmp2_ = self->priv->border_color;
@@ -744,7 +807,7 @@ void config_facade_get_border_color (ConfigFacade* self, GdkRGBA* result) {
 	*result = _tmp3_;
 #line 127 "/home/jens/Source/shotwell/src/config/Config.vala"
 	return;
-#line 748 "Config.c"
+#line 811 "Config.c"
 }
 
 
@@ -779,7 +842,7 @@ void config_facade_set_bg_color (ConfigFacade* self, GdkRGBA* color) {
 	_tmp4_ = *color;
 #line 136 "/home/jens/Source/shotwell/src/config/Config.vala"
 	config_facade_set_text_colors (self, &_tmp4_);
-#line 783 "Config.c"
+#line 846 "Config.c"
 }
 
 
@@ -791,7 +854,7 @@ void config_facade_commit_bg_color (ConfigFacade* self) {
 	_tmp0_ = self->priv->bg_color;
 #line 140 "/home/jens/Source/shotwell/src/config/Config.vala"
 	CONFIGURATION_FACADE_CLASS (config_facade_parent_class)->set_bg_color_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp0_);
-#line 795 "Config.c"
+#line 858 "Config.c"
 }
 
 
@@ -804,7 +867,7 @@ static void config_facade_class_init (ConfigFacadeClass * klass) {
 	G_OBJECT_CLASS (klass)->finalize = config_facade_finalize;
 #line 18 "/home/jens/Source/shotwell/src/config/Config.vala"
 	g_signal_new ("colors_changed", CONFIG_TYPE_FACADE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 808 "Config.c"
+#line 871 "Config.c"
 }
 
 
@@ -821,7 +884,7 @@ static void config_facade_instance_init (ConfigFacade * self) {
 	self->priv->unfocused_selected_color = NULL;
 #line 46 "/home/jens/Source/shotwell/src/config/Config.vala"
 	self->priv->border_color = NULL;
-#line 825 "Config.c"
+#line 888 "Config.c"
 }
 
 
@@ -841,7 +904,7 @@ static void config_facade_finalize (GObject* obj) {
 	_g_free0 (self->priv->border_color);
 #line 18 "/home/jens/Source/shotwell/src/config/Config.vala"
 	G_OBJECT_CLASS (config_facade_parent_class)->finalize (obj);
-#line 845 "Config.c"
+#line 908 "Config.c"
 }
 
 

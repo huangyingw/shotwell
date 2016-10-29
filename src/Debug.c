@@ -198,7 +198,7 @@ void debug_init (const gchar* app_version_prefix) {
 #line 42 "/home/jens/Source/shotwell/src/Debug.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 201 "Debug.c"
-					goto __catch421_g_error;
+					goto __catch434_g_error;
 				}
 #line 42 "/home/jens/Source/shotwell/src/Debug.vala"
 				if (!_tmp13_) {
@@ -225,8 +225,8 @@ void debug_init (const gchar* app_version_prefix) {
 				}
 			}
 		}
-		goto __finally421;
-		__catch421_g_error:
+		goto __finally434;
+		__catch434_g_error:
 		{
 			GError* err = NULL;
 			GError* _tmp20_ = NULL;
@@ -250,7 +250,7 @@ void debug_init (const gchar* app_version_prefix) {
 			_g_error_free0 (err);
 #line 252 "Debug.c"
 		}
-		__finally421:
+		__finally434:
 #line 40 "/home/jens/Source/shotwell/src/Debug.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 40 "/home/jens/Source/shotwell/src/Debug.vala"

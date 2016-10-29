@@ -136,7 +136,8 @@ static void database_table_prepare_db (const gchar* filename) {
 	const gchar* _tmp9_ = NULL;
 	const gchar* sql_debug = NULL;
 	const gchar* _tmp26_ = NULL;
-	const gchar* _tmp27_ = NULL;
+	gboolean _tmp27_ = FALSE;
+	const gchar* _tmp28_ = NULL;
 	GError * _inner_error_ = NULL;
 #line 32 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	g_return_if_fail (filename != NULL);
@@ -154,7 +155,7 @@ static void database_table_prepare_db (const gchar* filename) {
 	_tmp3_ = res;
 #line 36 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp3_ != SQLITE_OK) {
-#line 158 "DatabaseTable.c"
+#line 159 "DatabaseTable.c"
 		const gchar* _tmp4_ = NULL;
 		const gchar* _tmp5_ = NULL;
 		gint _tmp6_ = 0;
@@ -174,13 +175,13 @@ static void database_table_prepare_db (const gchar* filename) {
 		app_window_panic (_tmp8_);
 #line 37 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_g_free0 (_tmp8_);
-#line 178 "DatabaseTable.c"
+#line 179 "DatabaseTable.c"
 	}
 #line 41 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_tmp9_ = filename;
 #line 41 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (g_strcmp0 (_tmp9_, DB_IN_MEMORY_NAME) != 0) {
-#line 184 "DatabaseTable.c"
+#line 185 "DatabaseTable.c"
 		{
 			GFile* file_db = NULL;
 			const gchar* _tmp10_ = NULL;
@@ -206,7 +207,7 @@ static void database_table_prepare_db (const gchar* filename) {
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 44 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_g_object_unref0 (file_db);
-#line 210 "DatabaseTable.c"
+#line 211 "DatabaseTable.c"
 				goto __catch13_g_error;
 			}
 #line 45 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
@@ -215,7 +216,7 @@ static void database_table_prepare_db (const gchar* filename) {
 			_tmp15_ = g_file_info_get_attribute_boolean (_tmp14_, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE);
 #line 45 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			if (!_tmp15_) {
-#line 219 "DatabaseTable.c"
+#line 220 "DatabaseTable.c"
 				const gchar* _tmp16_ = NULL;
 				const gchar* _tmp17_ = NULL;
 				gchar* _tmp18_ = NULL;
@@ -232,13 +233,13 @@ static void database_table_prepare_db (const gchar* filename) {
 				app_window_panic (_tmp19_);
 #line 46 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_g_free0 (_tmp19_);
-#line 236 "DatabaseTable.c"
+#line 237 "DatabaseTable.c"
 			}
 #line 42 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			_g_object_unref0 (info);
 #line 42 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			_g_object_unref0 (file_db);
-#line 242 "DatabaseTable.c"
+#line 243 "DatabaseTable.c"
 		}
 		goto __finally13;
 		__catch13_g_error:
@@ -272,7 +273,7 @@ static void database_table_prepare_db (const gchar* filename) {
 			_g_free0 (_tmp25_);
 #line 42 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			_g_error_free0 (e);
-#line 276 "DatabaseTable.c"
+#line 277 "DatabaseTable.c"
 		}
 		__finally13:
 #line 42 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
@@ -283,7 +284,7 @@ static void database_table_prepare_db (const gchar* filename) {
 			g_clear_error (&_inner_error_);
 #line 42 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			return;
-#line 287 "DatabaseTable.c"
+#line 288 "DatabaseTable.c"
 		}
 	}
 #line 53 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
@@ -291,16 +292,30 @@ static void database_table_prepare_db (const gchar* filename) {
 #line 53 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	sql_debug = _tmp26_;
 #line 56 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
-	_tmp27_ = sql_debug;
+	_tmp28_ = sql_debug;
 #line 56 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
-	if (g_strcmp0 (_tmp27_, "") != 0) {
-#line 298 "DatabaseTable.c"
-		sqlite3* _tmp28_ = NULL;
+	if (_tmp28_ != NULL) {
+#line 299 "DatabaseTable.c"
+		const gchar* _tmp29_ = NULL;
+#line 56 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
+		_tmp29_ = sql_debug;
+#line 56 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
+		_tmp27_ = g_strcmp0 (_tmp29_, "") != 0;
+#line 305 "DatabaseTable.c"
+	} else {
+#line 56 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
+		_tmp27_ = FALSE;
+#line 309 "DatabaseTable.c"
+	}
+#line 56 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
+	if (_tmp27_) {
+#line 313 "DatabaseTable.c"
+		sqlite3* _tmp30_ = NULL;
 #line 57 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
-		_tmp28_ = database_table_db;
+		_tmp30_ = database_table_db;
 #line 57 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
-		sqlite3_trace (_tmp28_, _database_table_on_trace_sqlite_trace_callback, NULL);
-#line 304 "DatabaseTable.c"
+		sqlite3_trace (_tmp30_, _database_table_on_trace_sqlite_trace_callback, NULL);
+#line 319 "DatabaseTable.c"
 	}
 }
 
@@ -313,7 +328,7 @@ void database_table_on_trace (const gchar* message) {
 	_tmp0_ = message;
 #line 62 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	g_debug ("DatabaseTable.vala:62: SQLITE: %s", _tmp0_);
-#line 317 "DatabaseTable.c"
+#line 332 "DatabaseTable.c"
 }
 
 
@@ -346,7 +361,7 @@ static gint _sqlite3_exec (sqlite3* self, const gchar* sql, sqlite3_callback cal
 	ec = _tmp3_;
 #line 37 "/usr/share/vala-0.34/vapi/sqlite3.vapi"
 	if ((&_vala_errmsg) != NULL) {
-#line 350 "DatabaseTable.c"
+#line 365 "DatabaseTable.c"
 		const gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 #line 38 "/usr/share/vala-0.34/vapi/sqlite3.vapi"
@@ -357,7 +372,7 @@ static gint _sqlite3_exec (sqlite3* self, const gchar* sql, sqlite3_callback cal
 		_g_free0 (_vala_errmsg);
 #line 38 "/usr/share/vala-0.34/vapi/sqlite3.vapi"
 		_vala_errmsg = _tmp5_;
-#line 361 "DatabaseTable.c"
+#line 376 "DatabaseTable.c"
 	}
 #line 40 "/usr/share/vala-0.34/vapi/sqlite3.vapi"
 	_tmp6_ = sqlite_errmsg;
@@ -369,15 +384,15 @@ static gint _sqlite3_exec (sqlite3* self, const gchar* sql, sqlite3_callback cal
 	if (errmsg) {
 #line 41 "/usr/share/vala-0.34/vapi/sqlite3.vapi"
 		*errmsg = _vala_errmsg;
-#line 373 "DatabaseTable.c"
+#line 388 "DatabaseTable.c"
 	} else {
 #line 41 "/usr/share/vala-0.34/vapi/sqlite3.vapi"
 		_g_free0 (_vala_errmsg);
-#line 377 "DatabaseTable.c"
+#line 392 "DatabaseTable.c"
 	}
 #line 41 "/usr/share/vala-0.34/vapi/sqlite3.vapi"
 	return result;
-#line 381 "DatabaseTable.c"
+#line 396 "DatabaseTable.c"
 }
 
 
@@ -413,7 +428,7 @@ void database_table_init (const gchar* filename) {
 	_tmp4_ = res;
 #line 79 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp4_ != SQLITE_OK) {
-#line 417 "DatabaseTable.c"
+#line 432 "DatabaseTable.c"
 		gchar* backup_path = NULL;
 		const gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -427,7 +442,7 @@ void database_table_init (const gchar* filename) {
 		_tmp6_ = g_strconcat (_tmp5_, ".bak", NULL);
 #line 82 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		backup_path = _tmp6_;
-#line 431 "DatabaseTable.c"
+#line 446 "DatabaseTable.c"
 		{
 			GFile* src = NULL;
 			const gchar* _tmp7_ = NULL;
@@ -462,7 +477,7 @@ void database_table_init (const gchar* filename) {
 				_g_object_unref0 (dest);
 #line 87 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_g_object_unref0 (src);
-#line 466 "DatabaseTable.c"
+#line 481 "DatabaseTable.c"
 				goto __catch14_g_error;
 			}
 #line 90 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
@@ -473,7 +488,7 @@ void database_table_init (const gchar* filename) {
 			_g_object_unref0 (dest);
 #line 84 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			_g_object_unref0 (src);
-#line 477 "DatabaseTable.c"
+#line 492 "DatabaseTable.c"
 		}
 		goto __finally14;
 		__catch14_g_error:
@@ -504,7 +519,7 @@ void database_table_init (const gchar* filename) {
 			_g_free0 (_tmp18_);
 #line 84 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			_g_error_free0 (_error_);
-#line 508 "DatabaseTable.c"
+#line 523 "DatabaseTable.c"
 		}
 		__finally14:
 #line 84 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
@@ -519,11 +534,11 @@ void database_table_init (const gchar* filename) {
 			g_clear_error (&_inner_error_);
 #line 84 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			return;
-#line 523 "DatabaseTable.c"
+#line 538 "DatabaseTable.c"
 		}
 #line 79 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_g_free0 (backup_path);
-#line 527 "DatabaseTable.c"
+#line 542 "DatabaseTable.c"
 	}
 #line 98 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_tmp19_ = database_table_db;
@@ -535,17 +550,17 @@ void database_table_init (const gchar* filename) {
 	_tmp21_ = res;
 #line 99 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp21_ != SQLITE_OK) {
-#line 539 "DatabaseTable.c"
+#line 554 "DatabaseTable.c"
 		gint _tmp22_ = 0;
 #line 100 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp22_ = res;
 #line 100 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		database_table_warning ("Unable to disable synchronous mode", _tmp22_);
-#line 545 "DatabaseTable.c"
+#line 560 "DatabaseTable.c"
 	}
 #line 65 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 549 "DatabaseTable.c"
+#line 564 "DatabaseTable.c"
 }
 
 
@@ -554,7 +569,7 @@ void database_table_terminate (void) {
 	_sqlite3_close0 (database_table_db);
 #line 105 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	database_table_db = NULL;
-#line 558 "DatabaseTable.c"
+#line 573 "DatabaseTable.c"
 }
 
 
@@ -575,7 +590,7 @@ void database_table_fatal (const gchar* op, gint res) {
 	_tmp3_ = sqlite3_errmsg (_tmp2_);
 #line 110 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	g_error ("DatabaseTable.vala:110: %s: [%d] %s", _tmp0_, _tmp1_, _tmp3_);
-#line 579 "DatabaseTable.c"
+#line 594 "DatabaseTable.c"
 }
 
 
@@ -596,7 +611,7 @@ void database_table_warning (const gchar* op, gint res) {
 	_tmp3_ = sqlite3_errmsg (_tmp2_);
 #line 115 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	g_warning ("DatabaseTable.vala:115: %s: [%d] %s", _tmp0_, _tmp1_, _tmp3_);
-#line 600 "DatabaseTable.c"
+#line 615 "DatabaseTable.c"
 }
 
 
@@ -615,7 +630,7 @@ void database_table_set_table_name (DatabaseTable* self, const gchar* table_name
 	_g_free0 (self->table_name);
 #line 119 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	self->table_name = _tmp1_;
-#line 619 "DatabaseTable.c"
+#line 634 "DatabaseTable.c"
 }
 
 
@@ -652,13 +667,13 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 		case SQLITE_DONE:
 #line 127 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		case SQLITE_ROW:
-#line 656 "DatabaseTable.c"
+#line 671 "DatabaseTable.c"
 		{
 #line 131 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			_g_free0 (msg);
 #line 131 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			return;
-#line 662 "DatabaseTable.c"
+#line 677 "DatabaseTable.c"
 		}
 #line 127 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		case SQLITE_PERM:
@@ -680,7 +695,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 		case SQLITE_FORMAT:
 #line 127 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		case SQLITE_NOTADB:
-#line 684 "DatabaseTable.c"
+#line 699 "DatabaseTable.c"
 		{
 			const gchar* _tmp6_ = NULL;
 			GError* _tmp7_ = NULL;
@@ -698,7 +713,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				_g_free0 (msg);
 #line 143 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 702 "DatabaseTable.c"
+#line 717 "DatabaseTable.c"
 			} else {
 #line 143 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_g_free0 (msg);
@@ -708,12 +723,12 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				g_clear_error (&_inner_error_);
 #line 143 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 712 "DatabaseTable.c"
+#line 727 "DatabaseTable.c"
 			}
 		}
 #line 127 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		case SQLITE_NOMEM:
-#line 717 "DatabaseTable.c"
+#line 732 "DatabaseTable.c"
 		{
 			const gchar* _tmp8_ = NULL;
 			GError* _tmp9_ = NULL;
@@ -731,7 +746,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				_g_free0 (msg);
 #line 146 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 735 "DatabaseTable.c"
+#line 750 "DatabaseTable.c"
 			} else {
 #line 146 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_g_free0 (msg);
@@ -741,7 +756,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				g_clear_error (&_inner_error_);
 #line 146 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 745 "DatabaseTable.c"
+#line 760 "DatabaseTable.c"
 			}
 		}
 #line 127 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
@@ -750,7 +765,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 		case SQLITE_LOCKED:
 #line 127 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		case SQLITE_INTERRUPT:
-#line 754 "DatabaseTable.c"
+#line 769 "DatabaseTable.c"
 		{
 			const gchar* _tmp10_ = NULL;
 			GError* _tmp11_ = NULL;
@@ -768,7 +783,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				_g_free0 (msg);
 #line 151 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 772 "DatabaseTable.c"
+#line 787 "DatabaseTable.c"
 			} else {
 #line 151 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_g_free0 (msg);
@@ -778,7 +793,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				g_clear_error (&_inner_error_);
 #line 151 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 782 "DatabaseTable.c"
+#line 797 "DatabaseTable.c"
 			}
 		}
 #line 127 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
@@ -791,7 +806,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 		case SQLITE_CONSTRAINT:
 #line 127 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		case SQLITE_RANGE:
-#line 795 "DatabaseTable.c"
+#line 810 "DatabaseTable.c"
 		{
 			const gchar* _tmp12_ = NULL;
 			GError* _tmp13_ = NULL;
@@ -809,7 +824,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				_g_free0 (msg);
 #line 158 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 813 "DatabaseTable.c"
+#line 828 "DatabaseTable.c"
 			} else {
 #line 158 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_g_free0 (msg);
@@ -819,14 +834,14 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				g_clear_error (&_inner_error_);
 #line 158 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 823 "DatabaseTable.c"
+#line 838 "DatabaseTable.c"
 			}
 		}
 #line 127 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		case SQLITE_SCHEMA:
 #line 127 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		case SQLITE_MISMATCH:
-#line 830 "DatabaseTable.c"
+#line 845 "DatabaseTable.c"
 		{
 			const gchar* _tmp14_ = NULL;
 			GError* _tmp15_ = NULL;
@@ -844,7 +859,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				_g_free0 (msg);
 #line 162 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 848 "DatabaseTable.c"
+#line 863 "DatabaseTable.c"
 			} else {
 #line 162 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_g_free0 (msg);
@@ -854,7 +869,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				g_clear_error (&_inner_error_);
 #line 162 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 858 "DatabaseTable.c"
+#line 873 "DatabaseTable.c"
 			}
 		}
 		default:
@@ -864,7 +879,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 		case SQLITE_INTERNAL:
 #line 127 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		case SQLITE_MISUSE:
-#line 868 "DatabaseTable.c"
+#line 883 "DatabaseTable.c"
 		{
 			const gchar* _tmp16_ = NULL;
 			GError* _tmp17_ = NULL;
@@ -882,7 +897,7 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				_g_free0 (msg);
 #line 168 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 886 "DatabaseTable.c"
+#line 901 "DatabaseTable.c"
 			} else {
 #line 168 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_g_free0 (msg);
@@ -892,13 +907,13 @@ void database_table_throw_error (const gchar* method, gint res, GError** error) 
 				g_clear_error (&_inner_error_);
 #line 168 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 896 "DatabaseTable.c"
+#line 911 "DatabaseTable.c"
 			}
 		}
 	}
 #line 124 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_g_free0 (msg);
-#line 902 "DatabaseTable.c"
+#line 917 "DatabaseTable.c"
 }
 
 
@@ -971,21 +986,21 @@ gboolean database_table_exists_by_id (DatabaseTable* self, gint64 id) {
 	_tmp15_ = res;
 #line 181 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp15_ != SQLITE_ROW) {
-#line 975 "DatabaseTable.c"
+#line 990 "DatabaseTable.c"
 		gint _tmp16_ = 0;
 #line 181 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp16_ = res;
 #line 181 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp14_ = _tmp16_ != SQLITE_DONE;
-#line 981 "DatabaseTable.c"
+#line 996 "DatabaseTable.c"
 	} else {
 #line 181 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp14_ = FALSE;
-#line 985 "DatabaseTable.c"
+#line 1000 "DatabaseTable.c"
 	}
 #line 181 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp14_) {
-#line 989 "DatabaseTable.c"
+#line 1004 "DatabaseTable.c"
 		gint64 _tmp17_ = 0LL;
 		gchar* _tmp18_ = NULL;
 		gchar* _tmp19_ = NULL;
@@ -1013,7 +1028,7 @@ gboolean database_table_exists_by_id (DatabaseTable* self, gint64 id) {
 		_g_free0 (_tmp22_);
 #line 182 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_g_free0 (_tmp19_);
-#line 1017 "DatabaseTable.c"
+#line 1032 "DatabaseTable.c"
 	}
 #line 184 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_tmp24_ = res;
@@ -1023,7 +1038,7 @@ gboolean database_table_exists_by_id (DatabaseTable* self, gint64 id) {
 	_sqlite3_finalize0 (stmt);
 #line 184 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return result;
-#line 1027 "DatabaseTable.c"
+#line 1042 "DatabaseTable.c"
 }
 
 
@@ -1099,21 +1114,21 @@ gboolean database_table_select_by_id (DatabaseTable* self, gint64 id, const gcha
 	_tmp15_ = res;
 #line 197 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp15_ != SQLITE_ROW) {
-#line 1103 "DatabaseTable.c"
+#line 1118 "DatabaseTable.c"
 		gint _tmp16_ = 0;
 #line 197 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp16_ = res;
 #line 197 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp14_ = _tmp16_ != SQLITE_DONE;
-#line 1109 "DatabaseTable.c"
+#line 1124 "DatabaseTable.c"
 	} else {
 #line 197 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp14_ = FALSE;
-#line 1113 "DatabaseTable.c"
+#line 1128 "DatabaseTable.c"
 	}
 #line 197 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp14_) {
-#line 1117 "DatabaseTable.c"
+#line 1132 "DatabaseTable.c"
 		gint64 _tmp17_ = 0LL;
 		gchar* _tmp18_ = NULL;
 		gchar* _tmp19_ = NULL;
@@ -1144,7 +1159,7 @@ gboolean database_table_select_by_id (DatabaseTable* self, gint64 id, const gcha
 		_g_free0 (_tmp23_);
 #line 198 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_g_free0 (_tmp19_);
-#line 1148 "DatabaseTable.c"
+#line 1163 "DatabaseTable.c"
 	}
 #line 200 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_tmp25_ = res;
@@ -1156,15 +1171,15 @@ gboolean database_table_select_by_id (DatabaseTable* self, gint64 id, const gcha
 	if (stmt) {
 #line 200 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		*stmt = _vala_stmt;
-#line 1160 "DatabaseTable.c"
+#line 1175 "DatabaseTable.c"
 	} else {
 #line 200 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_sqlite3_finalize0 (_vala_stmt);
-#line 1164 "DatabaseTable.c"
+#line 1179 "DatabaseTable.c"
 	}
 #line 200 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return result;
-#line 1168 "DatabaseTable.c"
+#line 1183 "DatabaseTable.c"
 }
 
 
@@ -1224,11 +1239,11 @@ static void database_table_prepare_update_by_id (DatabaseTable* self, gint64 id,
 	if (stmt) {
 #line 204 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		*stmt = _vala_stmt;
-#line 1228 "DatabaseTable.c"
+#line 1243 "DatabaseTable.c"
 	} else {
 #line 204 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_sqlite3_finalize0 (_vala_stmt);
-#line 1232 "DatabaseTable.c"
+#line 1247 "DatabaseTable.c"
 	}
 }
 
@@ -1253,7 +1268,7 @@ static gboolean database_table_execute_update_by_id (DatabaseTable* self, sqlite
 	_tmp2_ = res;
 #line 216 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp2_ != SQLITE_DONE) {
-#line 1257 "DatabaseTable.c"
+#line 1272 "DatabaseTable.c"
 		gint _tmp3_ = 0;
 #line 217 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp3_ = res;
@@ -1263,13 +1278,13 @@ static gboolean database_table_execute_update_by_id (DatabaseTable* self, sqlite
 		result = FALSE;
 #line 219 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		return result;
-#line 1267 "DatabaseTable.c"
+#line 1282 "DatabaseTable.c"
 	}
 #line 222 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	result = TRUE;
 #line 222 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return result;
-#line 1273 "DatabaseTable.c"
+#line 1288 "DatabaseTable.c"
 }
 
 
@@ -1321,7 +1336,7 @@ gboolean database_table_update_text_by_id (DatabaseTable* self, gint64 id, const
 	_sqlite3_finalize0 (stmt);
 #line 232 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return result;
-#line 1325 "DatabaseTable.c"
+#line 1340 "DatabaseTable.c"
 }
 
 
@@ -1383,7 +1398,7 @@ void database_table_update_text_by_id_2 (DatabaseTable* self, gint64 id, const g
 	_tmp11_ = res;
 #line 243 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp11_ != SQLITE_DONE) {
-#line 1387 "DatabaseTable.c"
+#line 1402 "DatabaseTable.c"
 		const gchar* _tmp12_ = NULL;
 		const gchar* _tmp13_ = NULL;
 		gchar* _tmp14_ = NULL;
@@ -1413,7 +1428,7 @@ void database_table_update_text_by_id_2 (DatabaseTable* self, gint64 id, const g
 				_sqlite3_finalize0 (stmt);
 #line 244 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 1417 "DatabaseTable.c"
+#line 1432 "DatabaseTable.c"
 			} else {
 #line 244 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_sqlite3_finalize0 (stmt);
@@ -1423,13 +1438,13 @@ void database_table_update_text_by_id_2 (DatabaseTable* self, gint64 id, const g
 				g_clear_error (&_inner_error_);
 #line 244 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 1427 "DatabaseTable.c"
+#line 1442 "DatabaseTable.c"
 			}
 		}
 	}
 #line 235 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 1433 "DatabaseTable.c"
+#line 1448 "DatabaseTable.c"
 }
 
 
@@ -1473,7 +1488,7 @@ gboolean database_table_update_int_by_id (DatabaseTable* self, gint64 id, const 
 	_sqlite3_finalize0 (stmt);
 #line 254 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return result;
-#line 1477 "DatabaseTable.c"
+#line 1492 "DatabaseTable.c"
 }
 
 
@@ -1527,7 +1542,7 @@ void database_table_update_int_by_id_2 (DatabaseTable* self, gint64 id, const gc
 	_tmp9_ = res;
 #line 265 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp9_ != SQLITE_DONE) {
-#line 1531 "DatabaseTable.c"
+#line 1546 "DatabaseTable.c"
 		const gchar* _tmp10_ = NULL;
 		const gchar* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
@@ -1557,7 +1572,7 @@ void database_table_update_int_by_id_2 (DatabaseTable* self, gint64 id, const gc
 				_sqlite3_finalize0 (stmt);
 #line 266 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 1561 "DatabaseTable.c"
+#line 1576 "DatabaseTable.c"
 			} else {
 #line 266 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_sqlite3_finalize0 (stmt);
@@ -1567,13 +1582,13 @@ void database_table_update_int_by_id_2 (DatabaseTable* self, gint64 id, const gc
 				g_clear_error (&_inner_error_);
 #line 266 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 1571 "DatabaseTable.c"
+#line 1586 "DatabaseTable.c"
 			}
 		}
 	}
 #line 257 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 1577 "DatabaseTable.c"
+#line 1592 "DatabaseTable.c"
 }
 
 
@@ -1617,7 +1632,7 @@ gboolean database_table_update_int64_by_id (DatabaseTable* self, gint64 id, cons
 	_sqlite3_finalize0 (stmt);
 #line 276 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return result;
-#line 1621 "DatabaseTable.c"
+#line 1636 "DatabaseTable.c"
 }
 
 
@@ -1671,7 +1686,7 @@ void database_table_update_int64_by_id_2 (DatabaseTable* self, gint64 id, const 
 	_tmp9_ = res;
 #line 287 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp9_ != SQLITE_DONE) {
-#line 1675 "DatabaseTable.c"
+#line 1690 "DatabaseTable.c"
 		const gchar* _tmp10_ = NULL;
 		const gchar* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
@@ -1701,7 +1716,7 @@ void database_table_update_int64_by_id_2 (DatabaseTable* self, gint64 id, const 
 				_sqlite3_finalize0 (stmt);
 #line 288 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 1705 "DatabaseTable.c"
+#line 1720 "DatabaseTable.c"
 			} else {
 #line 288 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_sqlite3_finalize0 (stmt);
@@ -1711,13 +1726,13 @@ void database_table_update_int64_by_id_2 (DatabaseTable* self, gint64 id, const 
 				g_clear_error (&_inner_error_);
 #line 288 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 1715 "DatabaseTable.c"
+#line 1730 "DatabaseTable.c"
 			}
 		}
 	}
 #line 279 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 1721 "DatabaseTable.c"
+#line 1736 "DatabaseTable.c"
 }
 
 
@@ -1788,7 +1803,7 @@ void database_table_delete_by_id (DatabaseTable* self, gint64 id, GError** error
 	_tmp14_ = res;
 #line 300 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp14_ != SQLITE_DONE) {
-#line 1792 "DatabaseTable.c"
+#line 1807 "DatabaseTable.c"
 		const gchar* _tmp15_ = NULL;
 		gchar* _tmp16_ = NULL;
 		gchar* _tmp17_ = NULL;
@@ -1815,7 +1830,7 @@ void database_table_delete_by_id (DatabaseTable* self, gint64 id, GError** error
 				_sqlite3_finalize0 (stmt);
 #line 301 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 1819 "DatabaseTable.c"
+#line 1834 "DatabaseTable.c"
 			} else {
 #line 301 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_sqlite3_finalize0 (stmt);
@@ -1825,13 +1840,13 @@ void database_table_delete_by_id (DatabaseTable* self, gint64 id, GError** error
 				g_clear_error (&_inner_error_);
 #line 301 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 1829 "DatabaseTable.c"
+#line 1844 "DatabaseTable.c"
 			}
 		}
 	}
 #line 291 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 1835 "DatabaseTable.c"
+#line 1850 "DatabaseTable.c"
 }
 
 
@@ -1875,20 +1890,20 @@ gboolean database_table_has_column (const gchar* table_name, const gchar* column
 	_tmp7_ = res;
 #line 307 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_vala_assert (_tmp7_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1879 "DatabaseTable.c"
+#line 1894 "DatabaseTable.c"
 	{
 		gboolean _tmp8_ = FALSE;
 #line 309 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp8_ = TRUE;
 #line 309 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		while (TRUE) {
-#line 1886 "DatabaseTable.c"
+#line 1901 "DatabaseTable.c"
 			sqlite3_stmt* _tmp9_ = NULL;
 			gint _tmp10_ = 0;
 			gint _tmp11_ = 0;
 #line 309 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			if (!_tmp8_) {
-#line 1892 "DatabaseTable.c"
+#line 1907 "DatabaseTable.c"
 			}
 #line 309 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			_tmp8_ = FALSE;
@@ -1904,14 +1919,14 @@ gboolean database_table_has_column (const gchar* table_name, const gchar* column
 			if (_tmp11_ == SQLITE_DONE) {
 #line 312 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				break;
-#line 1908 "DatabaseTable.c"
+#line 1923 "DatabaseTable.c"
 			} else {
 				gint _tmp12_ = 0;
 #line 313 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				_tmp12_ = res;
 #line 313 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				if (_tmp12_ != SQLITE_ROW) {
-#line 1915 "DatabaseTable.c"
+#line 1930 "DatabaseTable.c"
 					const gchar* _tmp13_ = NULL;
 					gchar* _tmp14_ = NULL;
 					gchar* _tmp15_ = NULL;
@@ -1930,7 +1945,7 @@ gboolean database_table_has_column (const gchar* table_name, const gchar* column
 					_g_free0 (_tmp15_);
 #line 316 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 					break;
-#line 1934 "DatabaseTable.c"
+#line 1949 "DatabaseTable.c"
 				} else {
 					gchar* column = NULL;
 					sqlite3_stmt* _tmp17_ = NULL;
@@ -1950,7 +1965,7 @@ gboolean database_table_has_column (const gchar* table_name, const gchar* column
 					_tmp21_ = column;
 #line 319 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 					if (_tmp21_ != NULL) {
-#line 1954 "DatabaseTable.c"
+#line 1969 "DatabaseTable.c"
 						const gchar* _tmp22_ = NULL;
 						const gchar* _tmp23_ = NULL;
 #line 319 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
@@ -1959,11 +1974,11 @@ gboolean database_table_has_column (const gchar* table_name, const gchar* column
 						_tmp23_ = column_name;
 #line 319 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 						_tmp20_ = g_strcmp0 (_tmp22_, _tmp23_) == 0;
-#line 1963 "DatabaseTable.c"
+#line 1978 "DatabaseTable.c"
 					} else {
 #line 319 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 						_tmp20_ = FALSE;
-#line 1967 "DatabaseTable.c"
+#line 1982 "DatabaseTable.c"
 					}
 #line 319 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 					if (_tmp20_) {
@@ -1975,11 +1990,11 @@ gboolean database_table_has_column (const gchar* table_name, const gchar* column
 						_sqlite3_finalize0 (stmt);
 #line 320 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 						return result;
-#line 1979 "DatabaseTable.c"
+#line 1994 "DatabaseTable.c"
 					}
 #line 313 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 					_g_free0 (column);
-#line 1983 "DatabaseTable.c"
+#line 1998 "DatabaseTable.c"
 				}
 			}
 		}
@@ -1990,7 +2005,7 @@ gboolean database_table_has_column (const gchar* table_name, const gchar* column
 	_sqlite3_finalize0 (stmt);
 #line 324 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return result;
-#line 1994 "DatabaseTable.c"
+#line 2009 "DatabaseTable.c"
 }
 
 
@@ -2046,7 +2061,7 @@ gboolean database_table_has_table (const gchar* table_name) {
 	_sqlite3_finalize0 (stmt);
 #line 334 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return result;
-#line 2050 "DatabaseTable.c"
+#line 2065 "DatabaseTable.c"
 }
 
 
@@ -2111,7 +2126,7 @@ gboolean database_table_add_column (const gchar* table_name, const gchar* column
 	_tmp12_ = res;
 #line 344 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp12_ != SQLITE_DONE) {
-#line 2115 "DatabaseTable.c"
+#line 2130 "DatabaseTable.c"
 		const gchar* _tmp13_ = NULL;
 		const gchar* _tmp14_ = NULL;
 		const gchar* _tmp15_ = NULL;
@@ -2138,7 +2153,7 @@ gboolean database_table_add_column (const gchar* table_name, const gchar* column
 		_sqlite3_finalize0 (stmt);
 #line 348 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		return result;
-#line 2142 "DatabaseTable.c"
+#line 2157 "DatabaseTable.c"
 	}
 #line 351 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	result = TRUE;
@@ -2146,7 +2161,7 @@ gboolean database_table_add_column (const gchar* table_name, const gchar* column
 	_sqlite3_finalize0 (stmt);
 #line 351 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return result;
-#line 2150 "DatabaseTable.c"
+#line 2165 "DatabaseTable.c"
 }
 
 
@@ -2176,7 +2191,7 @@ gboolean database_table_ensure_column (const gchar* table_name, const gchar* col
 	if (!_tmp2_) {
 #line 359 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp0_ = TRUE;
-#line 2180 "DatabaseTable.c"
+#line 2195 "DatabaseTable.c"
 	} else {
 		const gchar* _tmp3_ = NULL;
 		const gchar* _tmp4_ = NULL;
@@ -2189,7 +2204,7 @@ gboolean database_table_ensure_column (const gchar* table_name, const gchar* col
 		_tmp5_ = database_table_has_column (_tmp3_, _tmp4_);
 #line 359 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp0_ = _tmp5_;
-#line 2193 "DatabaseTable.c"
+#line 2208 "DatabaseTable.c"
 	}
 #line 359 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp0_) {
@@ -2197,7 +2212,7 @@ gboolean database_table_ensure_column (const gchar* table_name, const gchar* col
 		result = TRUE;
 #line 360 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		return result;
-#line 2201 "DatabaseTable.c"
+#line 2216 "DatabaseTable.c"
 	}
 #line 362 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_tmp6_ = upgrade_msg;
@@ -2215,7 +2230,7 @@ gboolean database_table_ensure_column (const gchar* table_name, const gchar* col
 	result = _tmp10_;
 #line 364 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return result;
-#line 2219 "DatabaseTable.c"
+#line 2234 "DatabaseTable.c"
 }
 
 
@@ -2272,7 +2287,7 @@ gint database_table_get_row_count (DatabaseTable* self) {
 	_tmp10_ = res;
 #line 373 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp10_ != SQLITE_ROW) {
-#line 2276 "DatabaseTable.c"
+#line 2291 "DatabaseTable.c"
 		const gchar* _tmp11_ = NULL;
 		gint _tmp12_ = 0;
 		sqlite3* _tmp13_ = NULL;
@@ -2293,7 +2308,7 @@ gint database_table_get_row_count (DatabaseTable* self) {
 		_sqlite3_finalize0 (stmt);
 #line 376 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		return result;
-#line 2297 "DatabaseTable.c"
+#line 2312 "DatabaseTable.c"
 	}
 #line 379 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_tmp15_ = stmt;
@@ -2305,7 +2320,7 @@ gint database_table_get_row_count (DatabaseTable* self) {
 	_sqlite3_finalize0 (stmt);
 #line 379 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return result;
-#line 2309 "DatabaseTable.c"
+#line 2324 "DatabaseTable.c"
 }
 
 
@@ -2323,7 +2338,7 @@ void database_table_begin_transaction (void) {
 	if (_tmp0_ != 0) {
 #line 385 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		return;
-#line 2327 "DatabaseTable.c"
+#line 2342 "DatabaseTable.c"
 	}
 #line 387 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_tmp1_ = database_table_db;
@@ -2335,7 +2350,7 @@ void database_table_begin_transaction (void) {
 	_tmp3_ = res;
 #line 388 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 2339 "DatabaseTable.c"
+#line 2354 "DatabaseTable.c"
 }
 
 
@@ -2362,7 +2377,7 @@ void database_table_commit_transaction (GError** error) {
 	if (_tmp2_ != 0) {
 #line 395 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		return;
-#line 2366 "DatabaseTable.c"
+#line 2381 "DatabaseTable.c"
 	}
 #line 397 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_tmp3_ = database_table_db;
@@ -2374,7 +2389,7 @@ void database_table_commit_transaction (GError** error) {
 	_tmp5_ = res;
 #line 398 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (_tmp5_ != SQLITE_DONE) {
-#line 2378 "DatabaseTable.c"
+#line 2393 "DatabaseTable.c"
 		gint _tmp6_ = 0;
 #line 399 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		_tmp6_ = res;
@@ -2388,7 +2403,7 @@ void database_table_commit_transaction (GError** error) {
 				g_propagate_error (error, _inner_error_);
 #line 399 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 2392 "DatabaseTable.c"
+#line 2407 "DatabaseTable.c"
 			} else {
 #line 399 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2396,7 +2411,7 @@ void database_table_commit_transaction (GError** error) {
 				g_clear_error (&_inner_error_);
 #line 399 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 				return;
-#line 2400 "DatabaseTable.c"
+#line 2415 "DatabaseTable.c"
 			}
 		}
 	}
@@ -2409,14 +2424,14 @@ DatabaseTable* database_table_construct (GType object_type) {
 	self = (DatabaseTable*) g_type_create_instance (object_type);
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return self;
-#line 2413 "DatabaseTable.c"
+#line 2428 "DatabaseTable.c"
 }
 
 
 static void value_database_table_init (GValue* value) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	value->data[0].v_pointer = NULL;
-#line 2420 "DatabaseTable.c"
+#line 2435 "DatabaseTable.c"
 }
 
 
@@ -2425,7 +2440,7 @@ static void value_database_table_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		database_table_unref (value->data[0].v_pointer);
-#line 2429 "DatabaseTable.c"
+#line 2444 "DatabaseTable.c"
 	}
 }
 
@@ -2435,11 +2450,11 @@ static void value_database_table_copy_value (const GValue* src_value, GValue* de
 	if (src_value->data[0].v_pointer) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		dest_value->data[0].v_pointer = database_table_ref (src_value->data[0].v_pointer);
-#line 2439 "DatabaseTable.c"
+#line 2454 "DatabaseTable.c"
 	} else {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 2443 "DatabaseTable.c"
+#line 2458 "DatabaseTable.c"
 	}
 }
 
@@ -2447,37 +2462,37 @@ static void value_database_table_copy_value (const GValue* src_value, GValue* de
 static gpointer value_database_table_peek_pointer (const GValue* value) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return value->data[0].v_pointer;
-#line 2451 "DatabaseTable.c"
+#line 2466 "DatabaseTable.c"
 }
 
 
 static gchar* value_database_table_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (collect_values[0].v_pointer) {
-#line 2458 "DatabaseTable.c"
+#line 2473 "DatabaseTable.c"
 		DatabaseTable* object;
 		object = collect_values[0].v_pointer;
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2465 "DatabaseTable.c"
+#line 2480 "DatabaseTable.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2469 "DatabaseTable.c"
+#line 2484 "DatabaseTable.c"
 		}
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		value->data[0].v_pointer = database_table_ref (object);
-#line 2473 "DatabaseTable.c"
+#line 2488 "DatabaseTable.c"
 	} else {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		value->data[0].v_pointer = NULL;
-#line 2477 "DatabaseTable.c"
+#line 2492 "DatabaseTable.c"
 	}
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return NULL;
-#line 2481 "DatabaseTable.c"
+#line 2496 "DatabaseTable.c"
 }
 
 
@@ -2488,25 +2503,25 @@ static gchar* value_database_table_lcopy_value (const GValue* value, guint n_col
 	if (!object_p) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 2492 "DatabaseTable.c"
+#line 2507 "DatabaseTable.c"
 	}
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (!value->data[0].v_pointer) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		*object_p = NULL;
-#line 2498 "DatabaseTable.c"
+#line 2513 "DatabaseTable.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		*object_p = value->data[0].v_pointer;
-#line 2502 "DatabaseTable.c"
+#line 2517 "DatabaseTable.c"
 	} else {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		*object_p = database_table_ref (value->data[0].v_pointer);
-#line 2506 "DatabaseTable.c"
+#line 2521 "DatabaseTable.c"
 	}
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return NULL;
-#line 2510 "DatabaseTable.c"
+#line 2525 "DatabaseTable.c"
 }
 
 
@@ -2520,7 +2535,7 @@ GParamSpec* param_spec_database_table (const gchar* name, const gchar* nick, con
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return G_PARAM_SPEC (spec);
-#line 2524 "DatabaseTable.c"
+#line 2539 "DatabaseTable.c"
 }
 
 
@@ -2529,7 +2544,7 @@ gpointer value_get_database_table (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_DATABASE_TABLE), NULL);
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return value->data[0].v_pointer;
-#line 2533 "DatabaseTable.c"
+#line 2548 "DatabaseTable.c"
 }
 
 
@@ -2549,17 +2564,17 @@ void value_set_database_table (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		database_table_ref (value->data[0].v_pointer);
-#line 2553 "DatabaseTable.c"
+#line 2568 "DatabaseTable.c"
 	} else {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		value->data[0].v_pointer = NULL;
-#line 2557 "DatabaseTable.c"
+#line 2572 "DatabaseTable.c"
 	}
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (old) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		database_table_unref (old);
-#line 2563 "DatabaseTable.c"
+#line 2578 "DatabaseTable.c"
 	}
 }
 
@@ -2578,17 +2593,17 @@ void value_take_database_table (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		value->data[0].v_pointer = v_object;
-#line 2582 "DatabaseTable.c"
+#line 2597 "DatabaseTable.c"
 	} else {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		value->data[0].v_pointer = NULL;
-#line 2586 "DatabaseTable.c"
+#line 2601 "DatabaseTable.c"
 	}
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	if (old) {
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		database_table_unref (old);
-#line 2592 "DatabaseTable.c"
+#line 2607 "DatabaseTable.c"
 	}
 }
 
@@ -2598,7 +2613,7 @@ static void database_table_class_init (DatabaseTableClass * klass) {
 	database_table_parent_class = g_type_class_peek_parent (klass);
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	((DatabaseTableClass *) klass)->finalize = database_table_finalize;
-#line 2602 "DatabaseTable.c"
+#line 2617 "DatabaseTable.c"
 }
 
 
@@ -2607,7 +2622,7 @@ static void database_table_instance_init (DatabaseTable * self) {
 	self->table_name = NULL;
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	self->ref_count = 1;
-#line 2611 "DatabaseTable.c"
+#line 2626 "DatabaseTable.c"
 }
 
 
@@ -2619,7 +2634,7 @@ static void database_table_finalize (DatabaseTable* obj) {
 	g_signal_handlers_destroy (self);
 #line 30 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	_g_free0 (self->table_name);
-#line 2623 "DatabaseTable.c"
+#line 2638 "DatabaseTable.c"
 }
 
 
@@ -2644,7 +2659,7 @@ gpointer database_table_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 	return instance;
-#line 2648 "DatabaseTable.c"
+#line 2663 "DatabaseTable.c"
 }
 
 
@@ -2657,7 +2672,7 @@ void database_table_unref (gpointer instance) {
 		DATABASE_TABLE_GET_CLASS (self)->finalize (self);
 #line 16 "/home/jens/Source/shotwell/src/db/DatabaseTable.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 2661 "DatabaseTable.c"
+#line 2676 "DatabaseTable.c"
 	}
 }
 

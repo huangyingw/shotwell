@@ -45,6 +45,12 @@ public enum ConfigurableProperty {
     EVENT_PHOTOS_SORT_ASCENDING,
     EVENT_PHOTOS_SORT_BY,
     EVENTS_SORT_ASCENDING,
+    EXPORT_CONSTRAINT,
+    EXPORT_EXPORT_FORMAT_MODE,
+    EXPORT_EXPORT_METADATA,
+    EXPORT_PHOTO_FILE_FORMAT,
+    EXPORT_QUALITY,
+    EXPORT_SCALE,
     EXTERNAL_PHOTO_APP,
     EXTERNAL_RAW_APP,
     HIDE_PHOTOS_ALREADY_IMPORTED,
@@ -164,6 +170,24 @@ public enum ConfigurableProperty {
             case EVENTS_SORT_ASCENDING:
                 return "EVENTS_SORT_ASCENDING";
                 
+            case EXPORT_CONSTRAINT:
+                return "EXPORT_CONSTRAINT";
+
+            case EXPORT_EXPORT_FORMAT_MODE:
+                return "EXPORT_EXPORT_FORMAT_MODE";
+
+            case EXPORT_EXPORT_METADATA:
+                return "EXPORT_EXPORT_METADATA";
+
+            case EXPORT_PHOTO_FILE_FORMAT:
+                return "EXPORT_PHOTO_FILE_FORMAT";
+
+            case EXPORT_QUALITY:
+                return "EXPORT_QUALITY";
+
+            case EXPORT_SCALE:
+                return "EXPORT_SCALE";
+
             case EXTERNAL_PHOTO_APP:
                 return "EXTERNAL_PHOTO_APP";
                 
@@ -292,6 +316,9 @@ public interface ConfigurationEngine : GLib.Object {
     public abstract int get_int_property(ConfigurableProperty p) throws ConfigurationError;
     public abstract void set_int_property(ConfigurableProperty p, int val) throws ConfigurationError;
     
+    public abstract int get_enum_property(ConfigurableProperty p) throws ConfigurationError;
+    public abstract void set_enum_property(ConfigurableProperty p, int val) throws ConfigurationError;
+
     public abstract string get_string_property(ConfigurableProperty p) throws ConfigurationError;
     public abstract void set_string_property(ConfigurableProperty p, string val) throws ConfigurationError;
     
@@ -870,6 +897,123 @@ public abstract class ConfigurationFacade : Object {
         try {
             get_engine().set_string_property(ConfigurableProperty.EXTERNAL_RAW_APP,
                 external_raw_app);
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+            return;
+        }
+    }
+
+    //
+    // export dialog settings
+    //
+    public virtual ScaleConstraint get_export_constraint() {
+        try {
+            return (ScaleConstraint) get_engine().get_enum_property(ConfigurableProperty.EXPORT_CONSTRAINT);
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+
+            return 0;
+        }
+    }
+
+    public virtual void set_export_constraint(ScaleConstraint constraint) {
+        try {
+            get_engine().set_enum_property(ConfigurableProperty.EXPORT_CONSTRAINT, ( (int) constraint));
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+            return;
+        }
+    }
+
+    public virtual ExportFormatMode get_export_export_format_mode() {
+        try {
+            return (ExportFormatMode) get_engine().get_enum_property(ConfigurableProperty.EXPORT_EXPORT_FORMAT_MODE);
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+
+            return 0;
+        }
+    }
+
+    public virtual void set_export_export_format_mode(ExportFormatMode export_format_mode) {
+        try {
+            get_engine().set_enum_property(ConfigurableProperty.EXPORT_EXPORT_FORMAT_MODE, ( (int) export_format_mode ));
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+            return;
+        }
+    }
+
+    public virtual bool get_export_export_metadata() {
+        try {
+            return get_engine().get_bool_property(ConfigurableProperty.EXPORT_EXPORT_METADATA);
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+
+            return false;
+        }
+    }
+
+    public virtual void set_export_export_metadata(bool export_metadata) {
+        try {
+            get_engine().set_bool_property(ConfigurableProperty.EXPORT_EXPORT_METADATA, export_metadata);
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+            return;
+        }
+    }
+
+    public virtual PhotoFileFormat get_export_photo_file_format() {
+        try {
+            return PhotoFileFormat.unserialize( get_engine().get_enum_property(ConfigurableProperty.EXPORT_PHOTO_FILE_FORMAT) );
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+
+            return 0;
+        }
+    }
+
+    public virtual void set_export_photo_file_format(PhotoFileFormat photo_file_format) {
+        try {
+            get_engine().set_enum_property(ConfigurableProperty.EXPORT_PHOTO_FILE_FORMAT, photo_file_format.serialize());
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+            return;
+        }
+    }
+
+    public virtual Jpeg.Quality get_export_quality() {
+        try {
+            return (Jpeg.Quality) get_engine().get_enum_property(ConfigurableProperty.EXPORT_QUALITY);
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+
+            return 0;
+        }
+    }
+
+    public virtual void set_export_quality(Jpeg.Quality quality) {
+        try {
+            get_engine().set_enum_property(ConfigurableProperty.EXPORT_QUALITY, ( (int) quality ));
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+            return;
+        }
+    }
+
+    public virtual int get_export_scale() {
+        try {
+            return get_engine().get_int_property(ConfigurableProperty.EXPORT_SCALE);
+        } catch (ConfigurationError err) {
+            on_configuration_error(err);
+
+            return 0;
+        }
+    }
+
+    public virtual void set_export_scale(int scale) {
+        try {
+            get_engine().set_int_property(ConfigurableProperty.EXPORT_SCALE, scale);
         } catch (ConfigurationError err) {
             on_configuration_error(err);
             return;

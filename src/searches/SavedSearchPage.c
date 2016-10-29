@@ -825,8 +825,8 @@ SavedSearchDialog* saved_search_dialog_construct_edit_existing (GType object_typ
 void saved_search_dialog_show (SavedSearchDialog* self);
 static void saved_search_page_real_update_actions (Page* base, gint selected_count, gint count);
 void page_set_action_details (Page* self, const gchar* name, const gchar* label, const gchar* tooltip, gboolean sensitive);
-#define RESOURCES_RENAME_SEARCH_MENU _ ("Re_name...")
-#define RESOURCES_EDIT_SEARCH_MENU _ ("_Edit...")
+#define RESOURCES_RENAME_SEARCH_MENU _ ("Re_name…")
+#define RESOURCES_EDIT_SEARCH_MENU _ ("_Edit…")
 #define RESOURCES_DELETE_SEARCH_MENU _ ("_Delete")
 void page_update_actions (Page* self, gint selected_count, gint count);
 static void saved_search_page_finalize (GObject* obj);

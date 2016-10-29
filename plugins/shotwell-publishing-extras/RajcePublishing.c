@@ -1035,7 +1035,7 @@ static void rajce_service_real_get_info (SpitPluggable* base, SpitPluggableInfo*
 #line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*info).authors = _tmp0_;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp1_ = _ ("Copyright (C) 2013 rajce.net");
+	_tmp1_ = _ ("Copyright © 2013 rajce.net");
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = g_strdup (_tmp1_);
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
@@ -6664,7 +6664,7 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 #line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp55_ = self->priv->login_button;
 #line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp56_ = _ ("Login");
+		_tmp56_ = _ ("Log in");
 #line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_button_set_label (_tmp55_, _tmp56_);
 #line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"

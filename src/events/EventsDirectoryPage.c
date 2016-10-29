@@ -992,14 +992,14 @@ GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length
 #define TRANSLATABLE "translatable"
 static void events_directory_page_on_rename (EventsDirectoryPage* self);
 static void _events_directory_page_on_rename_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_RENAME_EVENT_MENU _ ("Re_name Event...")
+#define RESOURCES_RENAME_EVENT_MENU _ ("Re_name Event…")
 static void _vala_array_add126 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_MERGE_TOOLTIP _ ("Combine events into a single event")
 static void events_directory_page_on_merge (EventsDirectoryPage* self);
 static void _events_directory_page_on_merge_gtk_action_callback (GtkAction* action, gpointer self);
 #define RESOURCES_MERGE_MENU _ ("_Merge Events")
 static void _vala_array_add127 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_EDIT_COMMENT_MENU _ ("Edit _Comment...")
+#define RESOURCES_EDIT_COMMENT_MENU _ ("Edit _Comment…")
 void events_directory_page_on_edit_comment (EventsDirectoryPage* self);
 static void _events_directory_page_on_edit_comment_gtk_action_callback (GtkAction* action, gpointer self);
 static void _vala_array_add128 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);

@@ -3240,7 +3240,7 @@ void tag_init (ProgressMonitor monitor, void* monitor_target) {
 #line 393 "/home/jens/Source/shotwell/src/Tag.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 3243 "Tag.c"
-				goto __catch459_database_error;
+				goto __catch472_database_error;
 			}
 #line 393 "/home/jens/Source/shotwell/src/Tag.vala"
 			_g_object_unref0 (rows);
@@ -3264,8 +3264,8 @@ void tag_init (ProgressMonitor monitor, void* monitor_target) {
 		_g_object_unref0 (_tmp1_);
 #line 3266 "Tag.c"
 	}
-	goto __finally459;
-	__catch459_database_error:
+	goto __finally472;
+	__catch472_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
@@ -3281,7 +3281,7 @@ void tag_init (ProgressMonitor monitor, void* monitor_target) {
 		_g_error_free0 (err);
 #line 3283 "Tag.c"
 	}
-	__finally459:
+	__finally472:
 #line 392 "/home/jens/Source/shotwell/src/Tag.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 392 "/home/jens/Source/shotwell/src/Tag.vala"
@@ -3423,7 +3423,7 @@ void tag_init (ProgressMonitor monitor, void* monitor_target) {
 #line 418 "/home/jens/Source/shotwell/src/Tag.vala"
 							if (_inner_error_->domain == DATABASE_ERROR) {
 #line 3426 "Tag.c"
-								goto __catch460_database_error;
+								goto __catch473_database_error;
 							}
 #line 418 "/home/jens/Source/shotwell/src/Tag.vala"
 							_g_free0 (name);
@@ -3444,8 +3444,8 @@ void tag_init (ProgressMonitor monitor, void* monitor_target) {
 #line 3445 "Tag.c"
 						}
 					}
-					goto __finally460;
-					__catch460_database_error:
+					goto __finally473;
+					__catch473_database_error:
 					{
 						GError* err = NULL;
 						TagRow* _tmp30_ = NULL;
@@ -3470,7 +3470,7 @@ void tag_init (ProgressMonitor monitor, void* monitor_target) {
 						_g_error_free0 (err);
 #line 3472 "Tag.c"
 					}
-					__finally460:
+					__finally473:
 #line 417 "/home/jens/Source/shotwell/src/Tag.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 417 "/home/jens/Source/shotwell/src/Tag.vala"
@@ -4577,7 +4577,7 @@ Tag* tag_for_path (const gchar* name) {
 #line 563 "/home/jens/Source/shotwell/src/Tag.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 4580 "Tag.c"
-				goto __catch461_database_error;
+				goto __catch474_database_error;
 			}
 #line 563 "/home/jens/Source/shotwell/src/Tag.vala"
 			_g_object_unref0 (tag);
@@ -4599,8 +4599,8 @@ Tag* tag_for_path (const gchar* name) {
 		_tag_row_unref0 (_tmp8_);
 #line 4601 "Tag.c"
 	}
-	goto __finally461;
-	__catch461_database_error:
+	goto __finally474;
+	__catch474_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp15_ = NULL;
@@ -4616,7 +4616,7 @@ Tag* tag_for_path (const gchar* name) {
 		_g_error_free0 (err);
 #line 4618 "Tag.c"
 	}
-	__finally461:
+	__finally474:
 #line 562 "/home/jens/Source/shotwell/src/Tag.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 562 "/home/jens/Source/shotwell/src/Tag.vala"
@@ -5532,7 +5532,7 @@ static void tag_set_raw_flat_name (Tag* self, const gchar* name) {
 #line 678 "/home/jens/Source/shotwell/src/Tag.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 5535 "Tag.c"
-				goto __catch462_database_error;
+				goto __catch475_database_error;
 			}
 #line 678 "/home/jens/Source/shotwell/src/Tag.vala"
 			_g_free0 (prepped_name);
@@ -5545,8 +5545,8 @@ static void tag_set_raw_flat_name (Tag* self, const gchar* name) {
 #line 5546 "Tag.c"
 		}
 	}
-	goto __finally462;
-	__catch462_database_error:
+	goto __finally475;
+	__catch475_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp10_ = NULL;
@@ -5566,7 +5566,7 @@ static void tag_set_raw_flat_name (Tag* self, const gchar* name) {
 		return;
 #line 5568 "Tag.c"
 	}
-	__finally462:
+	__finally475:
 #line 677 "/home/jens/Source/shotwell/src/Tag.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 677 "/home/jens/Source/shotwell/src/Tag.vala"
@@ -5678,7 +5678,7 @@ static void tag_set_raw_path (Tag* self, const gchar* path, gboolean suppress_no
 #line 700 "/home/jens/Source/shotwell/src/Tag.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 5681 "Tag.c"
-				goto __catch463_database_error;
+				goto __catch476_database_error;
 			}
 #line 700 "/home/jens/Source/shotwell/src/Tag.vala"
 			_g_free0 (prepped_path);
@@ -5691,8 +5691,8 @@ static void tag_set_raw_path (Tag* self, const gchar* path, gboolean suppress_no
 #line 5692 "Tag.c"
 		}
 	}
-	goto __finally463;
-	__catch463_database_error:
+	goto __finally476;
+	__catch476_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp13_ = NULL;
@@ -5712,7 +5712,7 @@ static void tag_set_raw_path (Tag* self, const gchar* path, gboolean suppress_no
 		return;
 #line 5714 "Tag.c"
 	}
-	__finally463:
+	__finally476:
 #line 699 "/home/jens/Source/shotwell/src/Tag.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 699 "/home/jens/Source/shotwell/src/Tag.vala"
@@ -7069,7 +7069,7 @@ Tag* tag_reconstitute (gint64 object_id, TagRow* row) {
 #line 900 "/home/jens/Source/shotwell/src/Tag.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 7072 "Tag.c"
-				goto __catch464_database_error;
+				goto __catch477_database_error;
 			}
 #line 900 "/home/jens/Source/shotwell/src/Tag.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7085,8 +7085,8 @@ Tag* tag_reconstitute (gint64 object_id, TagRow* row) {
 		_tmp6_->tag_id = _tmp0_;
 #line 7087 "Tag.c"
 	}
-	goto __finally464;
-	__catch464_database_error:
+	goto __finally477;
+	__catch477_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
@@ -7102,7 +7102,7 @@ Tag* tag_reconstitute (gint64 object_id, TagRow* row) {
 		_g_error_free0 (err);
 #line 7104 "Tag.c"
 	}
-	__finally464:
+	__finally477:
 #line 899 "/home/jens/Source/shotwell/src/Tag.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 899 "/home/jens/Source/shotwell/src/Tag.vala"
@@ -9016,7 +9016,7 @@ static void tag_on_media_views_contents_altered (Tag* self, GeeIterable* added, 
 #line 1153 "/home/jens/Source/shotwell/src/Tag.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 9019 "Tag.c"
-				goto __catch465_database_error;
+				goto __catch478_database_error;
 			}
 #line 1153 "/home/jens/Source/shotwell/src/Tag.vala"
 			_g_object_unref0 (removed_sources);
@@ -9031,8 +9031,8 @@ static void tag_on_media_views_contents_altered (Tag* self, GeeIterable* added, 
 #line 9032 "Tag.c"
 		}
 	}
-	goto __finally465;
-	__catch465_database_error:
+	goto __finally478;
+	__catch478_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp57_ = NULL;
@@ -9048,7 +9048,7 @@ static void tag_on_media_views_contents_altered (Tag* self, GeeIterable* added, 
 		_g_error_free0 (err);
 #line 9050 "Tag.c"
 	}
-	__finally465:
+	__finally478:
 #line 1152 "/home/jens/Source/shotwell/src/Tag.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1152 "/home/jens/Source/shotwell/src/Tag.vala"
@@ -9260,7 +9260,7 @@ static void tag_real_destroy (DataSource* base) {
 #line 1194 "/home/jens/Source/shotwell/src/Tag.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 9263 "Tag.c"
-				goto __catch466_database_error;
+				goto __catch479_database_error;
 			}
 #line 1194 "/home/jens/Source/shotwell/src/Tag.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9271,8 +9271,8 @@ static void tag_real_destroy (DataSource* base) {
 #line 9272 "Tag.c"
 		}
 	}
-	goto __finally466;
-	__catch466_database_error:
+	goto __finally479;
+	__catch479_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp19_ = NULL;
@@ -9288,7 +9288,7 @@ static void tag_real_destroy (DataSource* base) {
 		_g_error_free0 (err);
 #line 9290 "Tag.c"
 	}
-	__finally466:
+	__finally479:
 #line 1193 "/home/jens/Source/shotwell/src/Tag.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1193 "/home/jens/Source/shotwell/src/Tag.vala"

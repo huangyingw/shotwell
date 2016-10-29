@@ -2853,7 +2853,7 @@ static gboolean media_monitor_on_flush_pending_updates (MediaMonitor* self) {
 #line 394 "/home/jens/Source/shotwell/src/MediaMonitor.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2856 "MediaMonitor.c"
-				goto __catch571_g_error;
+				goto __catch584_g_error;
 			}
 #line 395 "/home/jens/Source/shotwell/src/MediaMonitor.vala"
 			_tmp39_ = controller;
@@ -2861,8 +2861,8 @@ static gboolean media_monitor_on_flush_pending_updates (MediaMonitor* self) {
 			transaction_controller_commit (_tmp39_);
 #line 2863 "MediaMonitor.c"
 		}
-		goto __finally571;
-		__catch571_g_error:
+		goto __finally584;
+		__catch584_g_error:
 		{
 			GError* err = NULL;
 			GError* _tmp40_ = NULL;
@@ -2907,7 +2907,7 @@ static gboolean media_monitor_on_flush_pending_updates (MediaMonitor* self) {
 			_g_error_free0 (err);
 #line 2909 "MediaMonitor.c"
 		}
-		__finally571:
+		__finally584:
 #line 392 "/home/jens/Source/shotwell/src/MediaMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 392 "/home/jens/Source/shotwell/src/MediaMonitor.vala"

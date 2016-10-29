@@ -1638,7 +1638,7 @@ static void spit_data_imports_concrete_data_imports_host_real_post_error_message
 #line 147 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
 	g_return_if_fail (message != NULL);
 #line 148 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
-	_tmp0_ = _ ("Importing from %s can't continue because an error occurred:");
+	_tmp0_ = _ ("Importing from %s can’t continue because an error occurred:");
 #line 148 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
 	_tmp1_ = self->priv->active_importer;
 #line 148 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
@@ -2306,7 +2306,7 @@ static void spit_data_imports_welcome_data_imports_host_real_post_error_message 
 #line 293 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
 	g_return_if_fail (message != NULL);
 #line 294 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
-	_tmp0_ = _ ("Importing from %s can't continue because an error occurred:");
+	_tmp0_ = _ ("Importing from %s can’t continue because an error occurred:");
 #line 294 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
 	_tmp1_ = self->priv->active_importer;
 #line 294 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"

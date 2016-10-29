@@ -628,11 +628,11 @@ static DetectedPhotoInformation* gdk_sniffer_real_sniff (PhotoFileSniffer* base,
 #line 51 "/home/jens/Source/shotwell/src/photos/GdkSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 631 "GdkSupport.c"
-			goto __catch27_g_error;
+			goto __catch28_g_error;
 		}
 	}
-	goto __finally27;
-	__catch27_g_error:
+	goto __finally28;
+	__catch28_g_error:
 	{
 		GError* err = NULL;
 		DetectedPhotoInformation* _tmp11_ = NULL;
@@ -650,7 +650,7 @@ static DetectedPhotoInformation* gdk_sniffer_real_sniff (PhotoFileSniffer* base,
 		_g_error_free0 (err);
 #line 652 "GdkSupport.c"
 	}
-	__finally27:
+	__finally28:
 #line 50 "/home/jens/Source/shotwell/src/photos/GdkSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 50 "/home/jens/Source/shotwell/src/photos/GdkSupport.vala"
@@ -1084,11 +1084,11 @@ static DetectedPhotoInformation* gdk_sniffer_real_sniff (PhotoFileSniffer* base,
 #line 95 "/home/jens/Source/shotwell/src/photos/GdkSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1087 "GdkSupport.c"
-			goto __catch28_g_error;
+			goto __catch29_g_error;
 		}
 	}
-	goto __finally28;
-	__catch28_g_error:
+	goto __finally29;
+	__catch29_g_error:
 	{
 		GError* err = NULL;
 #line 94 "/home/jens/Source/shotwell/src/photos/GdkSupport.vala"
@@ -1099,7 +1099,7 @@ static DetectedPhotoInformation* gdk_sniffer_real_sniff (PhotoFileSniffer* base,
 		_g_error_free0 (err);
 #line 1101 "GdkSupport.c"
 	}
-	__finally28:
+	__finally29:
 #line 94 "/home/jens/Source/shotwell/src/photos/GdkSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 94 "/home/jens/Source/shotwell/src/photos/GdkSupport.vala"

@@ -1421,7 +1421,8 @@ typedef enum  {
 	PIXEL_TRANSFORMATION_TYPE_TEMPERATURE,
 	PIXEL_TRANSFORMATION_TYPE_TINT,
 	PIXEL_TRANSFORMATION_TYPE_SATURATION,
-	PIXEL_TRANSFORMATION_TYPE_EXPOSURE
+	PIXEL_TRANSFORMATION_TYPE_EXPOSURE,
+	PIXEL_TRANSFORMATION_TYPE_CONTRAST
 } PixelTransformationType;
 
 struct _EditingToolsRedeyeInstance {
@@ -2318,7 +2319,7 @@ PhotoFileMetadataWriter* photo_file_reader_create_metadata_writer (PhotoFileRead
 void library_monitor_blacklist_file (GFile* file, const gchar* reason);
 void library_monitor_unblacklist_file (GFile* file);
 void photo_set_comment_persistent (Photo* self, const gchar* comment, GError** error);
-void photo_metadata_set_comment (PhotoMetadata* self, const gchar* comment);
+void photo_metadata_set_comment (PhotoMetadata* self, const gchar* comment, PhotoMetadataSetOption option);
 static void photo_real_set_exposure_time (Dateable* base, time_t time);
 gboolean photo_table_set_exposure_time (PhotoTable* self, PhotoID* photo_id, time_t time);
 void photo_set_exposure_time_persistent (Photo* self, time_t time, GError** error);
@@ -2874,14 +2875,14 @@ GType backing_fetch_mode_get_type (void) {
 static gpointer _g_object_ref0 (gpointer self) {
 #line 41 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 2878 "Photo.c"
+#line 2879 "Photo.c"
 }
 
 
 static gpointer _thumbnails_ref0 (gpointer self) {
 #line 48 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? thumbnails_ref (self) : NULL;
-#line 2885 "Photo.c"
+#line 2886 "Photo.c"
 }
 
 
@@ -2969,14 +2970,14 @@ PhotoImportParams* photo_import_params_construct (GType object_type, GFile* file
 	self->thumbnails = _tmp13_;
 #line 38 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 2973 "Photo.c"
+#line 2974 "Photo.c"
 }
 
 
 PhotoImportParams* photo_import_params_new (GFile* file, GFile* final_associated_file, ImportID* import_id, PhotoFileSnifferOptions sniffer_options, const gchar* exif_md5, const gchar* thumbnail_md5, const gchar* full_md5, Thumbnails* thumbnails) {
 #line 38 "/home/jens/Source/shotwell/src/Photo.vala"
 	return photo_import_params_construct (TYPE_PHOTO_IMPORT_PARAMS, file, final_associated_file, import_id, sniffer_options, exif_md5, thumbnail_md5, full_md5, thumbnails);
-#line 2980 "Photo.c"
+#line 2981 "Photo.c"
 }
 
 
@@ -3023,21 +3024,21 @@ PhotoImportParams* photo_import_params_construct_create_placeholder (GType objec
 	self->thumbnails = NULL;
 #line 52 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 3027 "Photo.c"
+#line 3028 "Photo.c"
 }
 
 
 PhotoImportParams* photo_import_params_new_create_placeholder (GFile* file, ImportID* import_id) {
 #line 52 "/home/jens/Source/shotwell/src/Photo.vala"
 	return photo_import_params_construct_create_placeholder (TYPE_PHOTO_IMPORT_PARAMS, file, import_id);
-#line 3034 "Photo.c"
+#line 3035 "Photo.c"
 }
 
 
 static void value_photo_import_params_init (GValue* value) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	value->data[0].v_pointer = NULL;
-#line 3041 "Photo.c"
+#line 3042 "Photo.c"
 }
 
 
@@ -3046,7 +3047,7 @@ static void value_photo_import_params_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_import_params_unref (value->data[0].v_pointer);
-#line 3050 "Photo.c"
+#line 3051 "Photo.c"
 	}
 }
 
@@ -3056,11 +3057,11 @@ static void value_photo_import_params_copy_value (const GValue* src_value, GValu
 	if (src_value->data[0].v_pointer) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = photo_import_params_ref (src_value->data[0].v_pointer);
-#line 3060 "Photo.c"
+#line 3061 "Photo.c"
 	} else {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 3064 "Photo.c"
+#line 3065 "Photo.c"
 	}
 }
 
@@ -3068,37 +3069,37 @@ static void value_photo_import_params_copy_value (const GValue* src_value, GValu
 static gpointer value_photo_import_params_peek_pointer (const GValue* value) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 3072 "Photo.c"
+#line 3073 "Photo.c"
 }
 
 
 static gchar* value_photo_import_params_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (collect_values[0].v_pointer) {
-#line 3079 "Photo.c"
+#line 3080 "Photo.c"
 		PhotoImportParams* object;
 		object = collect_values[0].v_pointer;
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3086 "Photo.c"
+#line 3087 "Photo.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3090 "Photo.c"
+#line 3091 "Photo.c"
 		}
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = photo_import_params_ref (object);
-#line 3094 "Photo.c"
+#line 3095 "Photo.c"
 	} else {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 3098 "Photo.c"
+#line 3099 "Photo.c"
 	}
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 3102 "Photo.c"
+#line 3103 "Photo.c"
 }
 
 
@@ -3109,25 +3110,25 @@ static gchar* value_photo_import_params_lcopy_value (const GValue* value, guint 
 	if (!object_p) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 3113 "Photo.c"
+#line 3114 "Photo.c"
 	}
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!value->data[0].v_pointer) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = NULL;
-#line 3119 "Photo.c"
+#line 3120 "Photo.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = value->data[0].v_pointer;
-#line 3123 "Photo.c"
+#line 3124 "Photo.c"
 	} else {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = photo_import_params_ref (value->data[0].v_pointer);
-#line 3127 "Photo.c"
+#line 3128 "Photo.c"
 	}
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 3131 "Photo.c"
+#line 3132 "Photo.c"
 }
 
 
@@ -3141,7 +3142,7 @@ GParamSpec* param_spec_photo_import_params (const gchar* name, const gchar* nick
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	return G_PARAM_SPEC (spec);
-#line 3145 "Photo.c"
+#line 3146 "Photo.c"
 }
 
 
@@ -3150,7 +3151,7 @@ gpointer value_get_photo_import_params (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PHOTO_IMPORT_PARAMS), NULL);
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 3154 "Photo.c"
+#line 3155 "Photo.c"
 }
 
 
@@ -3170,17 +3171,17 @@ void value_set_photo_import_params (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_import_params_ref (value->data[0].v_pointer);
-#line 3174 "Photo.c"
+#line 3175 "Photo.c"
 	} else {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 3178 "Photo.c"
+#line 3179 "Photo.c"
 	}
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_import_params_unref (old);
-#line 3184 "Photo.c"
+#line 3185 "Photo.c"
 	}
 }
 
@@ -3199,17 +3200,17 @@ void value_take_photo_import_params (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = v_object;
-#line 3203 "Photo.c"
+#line 3204 "Photo.c"
 	} else {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 3207 "Photo.c"
+#line 3208 "Photo.c"
 	}
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_import_params_unref (old);
-#line 3213 "Photo.c"
+#line 3214 "Photo.c"
 	}
 }
 
@@ -3219,7 +3220,7 @@ static void photo_import_params_class_init (PhotoImportParamsClass * klass) {
 	photo_import_params_parent_class = g_type_class_peek_parent (klass);
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	((PhotoImportParamsClass *) klass)->finalize = photo_import_params_finalize;
-#line 3223 "Photo.c"
+#line 3224 "Photo.c"
 }
 
 
@@ -3235,7 +3236,7 @@ static void photo_import_params_instance_init (PhotoImportParams * self) {
 	self->keywords = NULL;
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->ref_count = 1;
-#line 3239 "Photo.c"
+#line 3240 "Photo.c"
 }
 
 
@@ -3261,7 +3262,7 @@ static void photo_import_params_finalize (PhotoImportParams* obj) {
 	_photo_row_unref0 (self->row);
 #line 36 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (self->keywords);
-#line 3265 "Photo.c"
+#line 3266 "Photo.c"
 }
 
 
@@ -3286,7 +3287,7 @@ gpointer photo_import_params_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 	return instance;
-#line 3290 "Photo.c"
+#line 3291 "Photo.c"
 }
 
 
@@ -3299,7 +3300,7 @@ void photo_import_params_unref (gpointer instance) {
 		PHOTO_IMPORT_PARAMS_GET_CLASS (self)->finalize (self);
 #line 21 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 3303 "Photo.c"
+#line 3304 "Photo.c"
 	}
 }
 
@@ -3310,7 +3311,7 @@ PhotoTransformationState* photo_transformation_state_construct (GType object_typ
 	self = (PhotoTransformationState*) g_object_new (object_type, NULL);
 #line 72 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 3314 "Photo.c"
+#line 3315 "Photo.c"
 }
 
 
@@ -3325,14 +3326,14 @@ gboolean photo_transformation_state_is_broken (PhotoTransformationState* self) {
 	result = _tmp0_;
 #line 76 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 3329 "Photo.c"
+#line 3330 "Photo.c"
 }
 
 
 static void photo_transformation_state_real_broken (PhotoTransformationState* self) {
 #line 69 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->priv->is_broke = TRUE;
-#line 3336 "Photo.c"
+#line 3337 "Photo.c"
 }
 
 
@@ -3347,7 +3348,7 @@ static void photo_transformation_state_class_init (PhotoTransformationStateClass
 	G_OBJECT_CLASS (klass)->finalize = photo_transformation_state_finalize;
 #line 63 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_new ("broken", TYPE_PHOTO_TRANSFORMATION_STATE, G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (PhotoTransformationStateClass, broken), NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 3351 "Photo.c"
+#line 3352 "Photo.c"
 }
 
 
@@ -3356,7 +3357,7 @@ static void photo_transformation_state_instance_init (PhotoTransformationState *
 	self->priv = PHOTO_TRANSFORMATION_STATE_GET_PRIVATE (self);
 #line 64 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->priv->is_broke = FALSE;
-#line 3360 "Photo.c"
+#line 3361 "Photo.c"
 }
 
 
@@ -3366,7 +3367,7 @@ static void photo_transformation_state_finalize (GObject* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PHOTO_TRANSFORMATION_STATE, PhotoTransformationState);
 #line 63 "/home/jens/Source/shotwell/src/Photo.vala"
 	G_OBJECT_CLASS (photo_transformation_state_parent_class)->finalize (obj);
-#line 3370 "Photo.c"
+#line 3371 "Photo.c"
 }
 
 
@@ -3388,7 +3389,7 @@ gboolean rating_can_increase (Rating self) {
 	result = self < RATING_FIVE;
 #line 90 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 3392 "Photo.c"
+#line 3393 "Photo.c"
 }
 
 
@@ -3398,7 +3399,7 @@ gboolean rating_can_decrease (Rating self) {
 	result = self > RATING_REJECTED;
 #line 94 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 3402 "Photo.c"
+#line 3403 "Photo.c"
 }
 
 
@@ -3409,17 +3410,17 @@ gboolean rating_is_valid (Rating self) {
 	if (self >= RATING_REJECTED) {
 #line 98 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self <= RATING_FIVE;
-#line 3413 "Photo.c"
+#line 3414 "Photo.c"
 	} else {
 #line 98 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = FALSE;
-#line 3417 "Photo.c"
+#line 3418 "Photo.c"
 	}
 #line 98 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp0_;
 #line 98 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 3423 "Photo.c"
+#line 3424 "Photo.c"
 }
 
 
@@ -3433,17 +3434,17 @@ Rating rating_increase (Rating self) {
 	if (_tmp1_) {
 #line 102 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self + 1;
-#line 3437 "Photo.c"
+#line 3438 "Photo.c"
 	} else {
 #line 102 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self;
-#line 3441 "Photo.c"
+#line 3442 "Photo.c"
 	}
 #line 102 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp0_;
 #line 102 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 3447 "Photo.c"
+#line 3448 "Photo.c"
 }
 
 
@@ -3457,17 +3458,17 @@ Rating rating_decrease (Rating self) {
 	if (_tmp1_) {
 #line 106 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self - 1;
-#line 3461 "Photo.c"
+#line 3462 "Photo.c"
 	} else {
 #line 106 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self;
-#line 3465 "Photo.c"
+#line 3466 "Photo.c"
 	}
 #line 106 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp0_;
 #line 106 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 3471 "Photo.c"
+#line 3472 "Photo.c"
 }
 
 
@@ -3477,73 +3478,73 @@ gint rating_serialize (Rating self) {
 	switch (self) {
 #line 110 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RATING_REJECTED:
-#line 3481 "Photo.c"
+#line 3482 "Photo.c"
 		{
 #line 112 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = -1;
 #line 112 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3487 "Photo.c"
+#line 3488 "Photo.c"
 		}
 #line 110 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RATING_UNRATED:
-#line 3491 "Photo.c"
+#line 3492 "Photo.c"
 		{
 #line 114 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = 0;
 #line 114 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3497 "Photo.c"
+#line 3498 "Photo.c"
 		}
 #line 110 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RATING_ONE:
-#line 3501 "Photo.c"
+#line 3502 "Photo.c"
 		{
 #line 116 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = 1;
 #line 116 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3507 "Photo.c"
+#line 3508 "Photo.c"
 		}
 #line 110 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RATING_TWO:
-#line 3511 "Photo.c"
+#line 3512 "Photo.c"
 		{
 #line 118 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = 2;
 #line 118 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3517 "Photo.c"
+#line 3518 "Photo.c"
 		}
 #line 110 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RATING_THREE:
-#line 3521 "Photo.c"
+#line 3522 "Photo.c"
 		{
 #line 120 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = 3;
 #line 120 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3527 "Photo.c"
+#line 3528 "Photo.c"
 		}
 #line 110 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RATING_FOUR:
-#line 3531 "Photo.c"
+#line 3532 "Photo.c"
 		{
 #line 122 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = 4;
 #line 122 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3537 "Photo.c"
+#line 3538 "Photo.c"
 		}
 #line 110 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RATING_FIVE:
-#line 3541 "Photo.c"
+#line 3542 "Photo.c"
 		{
 #line 124 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = 5;
 #line 124 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3547 "Photo.c"
+#line 3548 "Photo.c"
 		}
 		default:
 		{
@@ -3551,7 +3552,7 @@ gint rating_serialize (Rating self) {
 			result = 0;
 #line 126 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3555 "Photo.c"
+#line 3556 "Photo.c"
 		}
 	}
 }
@@ -3569,7 +3570,7 @@ Rating rating_unserialize (gint value) {
 		result = RATING_FIVE;
 #line 132 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 3573 "Photo.c"
+#line 3574 "Photo.c"
 	} else {
 		gint _tmp1_ = 0;
 #line 133 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -3580,7 +3581,7 @@ Rating rating_unserialize (gint value) {
 			result = RATING_REJECTED;
 #line 134 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3584 "Photo.c"
+#line 3585 "Photo.c"
 		}
 	}
 #line 136 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -3589,73 +3590,73 @@ Rating rating_unserialize (gint value) {
 	switch (_tmp2_) {
 #line 136 "/home/jens/Source/shotwell/src/Photo.vala"
 		case -1:
-#line 3593 "Photo.c"
+#line 3594 "Photo.c"
 		{
 #line 138 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = RATING_REJECTED;
 #line 138 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3599 "Photo.c"
+#line 3600 "Photo.c"
 		}
 #line 136 "/home/jens/Source/shotwell/src/Photo.vala"
 		case 0:
-#line 3603 "Photo.c"
+#line 3604 "Photo.c"
 		{
 #line 140 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = RATING_UNRATED;
 #line 140 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3609 "Photo.c"
+#line 3610 "Photo.c"
 		}
 #line 136 "/home/jens/Source/shotwell/src/Photo.vala"
 		case 1:
-#line 3613 "Photo.c"
+#line 3614 "Photo.c"
 		{
 #line 142 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = RATING_ONE;
 #line 142 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3619 "Photo.c"
+#line 3620 "Photo.c"
 		}
 #line 136 "/home/jens/Source/shotwell/src/Photo.vala"
 		case 2:
-#line 3623 "Photo.c"
+#line 3624 "Photo.c"
 		{
 #line 144 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = RATING_TWO;
 #line 144 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3629 "Photo.c"
+#line 3630 "Photo.c"
 		}
 #line 136 "/home/jens/Source/shotwell/src/Photo.vala"
 		case 3:
-#line 3633 "Photo.c"
+#line 3634 "Photo.c"
 		{
 #line 146 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = RATING_THREE;
 #line 146 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3639 "Photo.c"
+#line 3640 "Photo.c"
 		}
 #line 136 "/home/jens/Source/shotwell/src/Photo.vala"
 		case 4:
-#line 3643 "Photo.c"
+#line 3644 "Photo.c"
 		{
 #line 148 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = RATING_FOUR;
 #line 148 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3649 "Photo.c"
+#line 3650 "Photo.c"
 		}
 #line 136 "/home/jens/Source/shotwell/src/Photo.vala"
 		case 5:
-#line 3653 "Photo.c"
+#line 3654 "Photo.c"
 		{
 #line 150 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = RATING_FIVE;
 #line 150 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3659 "Photo.c"
+#line 3660 "Photo.c"
 		}
 		default:
 		{
@@ -3663,7 +3664,7 @@ Rating rating_unserialize (gint value) {
 			result = RATING_UNRATED;
 #line 152 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 3667 "Photo.c"
+#line 3668 "Photo.c"
 		}
 	}
 }
@@ -3690,7 +3691,7 @@ gboolean photo_exception_prohibits (PhotoException self, PhotoException exceptio
 	result = (self & _tmp0_) != 0;
 #line 228 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 3694 "Photo.c"
+#line 3695 "Photo.c"
 }
 
 
@@ -3703,7 +3704,7 @@ gboolean photo_exception_allows (PhotoException self, PhotoException exception) 
 	result = (self & _tmp0_) == 0;
 #line 232 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 3707 "Photo.c"
+#line 3708 "Photo.c"
 }
 
 
@@ -3722,14 +3723,14 @@ GType photo_exception_get_type (void) {
 static gpointer _photo_row_ref0 (gpointer self) {
 #line 400 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? photo_row_ref (self) : NULL;
-#line 3726 "Photo.c"
+#line 3727 "Photo.c"
 }
 
 
 static gpointer _backing_photo_row_ref0 (gpointer self) {
 #line 421 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? backing_photo_row_ref (self) : NULL;
-#line 3733 "Photo.c"
+#line 3734 "Photo.c"
 }
 
 
@@ -3846,7 +3847,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 	_tmp22_ = basename;
 #line 412 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp22_ != NULL) {
-#line 3850 "Photo.c"
+#line 3851 "Photo.c"
 		const gchar* _tmp23_ = NULL;
 		gchar* _tmp24_ = NULL;
 #line 413 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -3857,7 +3858,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 		_g_free0 (self->priv->file_title);
 #line 413 "/home/jens/Source/shotwell/src/Photo.vala"
 		self->priv->file_title = _tmp24_;
-#line 3861 "Photo.c"
+#line 3862 "Photo.c"
 	}
 #line 415 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp25_ = self->priv->file_title;
@@ -3865,7 +3866,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 	_tmp26_ = is_string_empty (_tmp25_);
 #line 415 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp26_) {
-#line 3869 "Photo.c"
+#line 3870 "Photo.c"
 		PhotoRow* _tmp27_ = NULL;
 		BackingPhotoRow* _tmp28_ = NULL;
 		const gchar* _tmp29_ = NULL;
@@ -3882,7 +3883,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 		_g_free0 (self->priv->file_title);
 #line 416 "/home/jens/Source/shotwell/src/Photo.vala"
 		self->priv->file_title = _tmp30_;
-#line 3886 "Photo.c"
+#line 3887 "Photo.c"
 	}
 #line 418 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp31_ = row;
@@ -3892,7 +3893,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 	_tmp33_ = _tmp32_.id;
 #line 418 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp33_ != BACKING_PHOTO_ID_INVALID) {
-#line 3896 "Photo.c"
+#line 3897 "Photo.c"
 		BackingPhotoRow* e = NULL;
 		PhotoRow* _tmp34_ = NULL;
 		BackingPhotoID _tmp35_ = {0};
@@ -3910,7 +3911,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 		_tmp37_ = e;
 #line 420 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp37_ != NULL) {
-#line 3914 "Photo.c"
+#line 3915 "Photo.c"
 			BackingPhotoRow* _tmp38_ = NULL;
 			BackingPhotoRow* _tmp39_ = NULL;
 			PhotoBackingReaders* _tmp40_ = NULL;
@@ -3943,7 +3944,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 			_photo_file_adapter_unref0 (_tmp40_->editable);
 #line 422 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp40_->editable = _tmp45_;
-#line 3947 "Photo.c"
+#line 3948 "Photo.c"
 		} else {
 			{
 				PhotoTable* _tmp46_ = NULL;
@@ -3963,8 +3964,8 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 425 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
-#line 3967 "Photo.c"
-						goto __catch243_database_error;
+#line 3968 "Photo.c"
+						goto __catch256_database_error;
 					}
 #line 425 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (e);
@@ -3976,11 +3977,11 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 					g_clear_error (&_inner_error_);
 #line 425 "/home/jens/Source/shotwell/src/Photo.vala"
 					return NULL;
-#line 3980 "Photo.c"
+#line 3981 "Photo.c"
 				}
 			}
-			goto __finally243;
-			__catch243_database_error:
+			goto __finally256;
+			__catch256_database_error:
 			{
 				GError* err = NULL;
 #line 424 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -3989,9 +3990,9 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 				_inner_error_ = NULL;
 #line 424 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_error_free0 (err);
-#line 3993 "Photo.c"
+#line 3994 "Photo.c"
 			}
-			__finally243:
+			__finally256:
 #line 424 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 424 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4004,15 +4005,15 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 				g_clear_error (&_inner_error_);
 #line 424 "/home/jens/Source/shotwell/src/Photo.vala"
 				return NULL;
-#line 4008 "Photo.c"
+#line 4009 "Photo.c"
 			}
 #line 432 "/home/jens/Source/shotwell/src/Photo.vala"
 			photo_internal_remove_all_transformations (self, FALSE);
-#line 4012 "Photo.c"
+#line 4013 "Photo.c"
 		}
 #line 418 "/home/jens/Source/shotwell/src/Photo.vala"
 		_backing_photo_row_unref0 (e);
-#line 4016 "Photo.c"
+#line 4017 "Photo.c"
 	}
 #line 436 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp49_ = row;
@@ -4022,7 +4023,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 	_tmp51_ = _tmp50_->file_format;
 #line 436 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp51_ == PHOTO_FILE_FORMAT_RAW) {
-#line 4026 "Photo.c"
+#line 4027 "Photo.c"
 		GeeHashMap* _tmp52_ = NULL;
 		gint _tmp53_ = 0;
 		RawDeveloper* _tmp54_ = NULL;
@@ -4034,7 +4035,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 		self->priv->developments = _tmp52_;
 #line 439 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp54_ = raw_developer_as_array (&_tmp53_);
-#line 4038 "Photo.c"
+#line 4039 "Photo.c"
 		{
 			RawDeveloper* d_collection = NULL;
 			gint d_collection_length1 = 0;
@@ -4046,11 +4047,11 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 			d_collection_length1 = _tmp53_;
 #line 439 "/home/jens/Source/shotwell/src/Photo.vala"
 			for (d_it = 0; d_it < _tmp53_; d_it = d_it + 1) {
-#line 4050 "Photo.c"
+#line 4051 "Photo.c"
 				RawDeveloper d = 0;
 #line 439 "/home/jens/Source/shotwell/src/Photo.vala"
 				d = d_collection[d_it];
-#line 4054 "Photo.c"
+#line 4055 "Photo.c"
 				{
 					BackingPhotoID id = {0};
 					PhotoRow* _tmp55_ = NULL;
@@ -4078,7 +4079,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 					_tmp60_ = _tmp59_.id;
 #line 441 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_tmp60_ != BACKING_PHOTO_ID_INVALID) {
-#line 4082 "Photo.c"
+#line 4083 "Photo.c"
 						BackingPhotoRow* bpr = NULL;
 						BackingPhotoID _tmp61_ = {0};
 						BackingPhotoRow* _tmp62_ = NULL;
@@ -4093,7 +4094,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 						_tmp63_ = bpr;
 #line 443 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp63_ != NULL) {
-#line 4097 "Photo.c"
+#line 4098 "Photo.c"
 							GeeHashMap* _tmp64_ = NULL;
 							RawDeveloper _tmp65_ = 0;
 							BackingPhotoRow* _tmp66_ = NULL;
@@ -4105,17 +4106,17 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 							_tmp66_ = bpr;
 #line 444 "/home/jens/Source/shotwell/src/Photo.vala"
 							gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp64_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) _tmp65_), _tmp66_);
-#line 4109 "Photo.c"
+#line 4110 "Photo.c"
 						}
 #line 441 "/home/jens/Source/shotwell/src/Photo.vala"
 						_backing_photo_row_unref0 (bpr);
-#line 4113 "Photo.c"
+#line 4114 "Photo.c"
 					}
 				}
 			}
 #line 439 "/home/jens/Source/shotwell/src/Photo.vala"
 			d_collection = (g_free (d_collection), NULL);
-#line 4119 "Photo.c"
+#line 4120 "Photo.c"
 		}
 	}
 #line 450 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4126,7 +4127,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 	_tmp70_ = _tmp69_->file_format;
 #line 450 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp70_ == PHOTO_FILE_FORMAT_RAW) {
-#line 4130 "Photo.c"
+#line 4131 "Photo.c"
 		GeeHashMap* _tmp71_ = NULL;
 		PhotoRow* _tmp72_ = NULL;
 		RawDeveloper _tmp73_ = 0;
@@ -4141,15 +4142,15 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 		_tmp74_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp71_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) _tmp73_));
 #line 450 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp67_ = _tmp74_;
-#line 4145 "Photo.c"
+#line 4146 "Photo.c"
 	} else {
 #line 450 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp67_ = FALSE;
-#line 4149 "Photo.c"
+#line 4150 "Photo.c"
 	}
 #line 450 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp67_) {
-#line 4153 "Photo.c"
+#line 4154 "Photo.c"
 		BackingPhotoRow* r = NULL;
 		GeeHashMap* _tmp75_ = NULL;
 		PhotoRow* _tmp76_ = NULL;
@@ -4189,7 +4190,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 		_tmp79_->developer = _tmp84_;
 #line 450 "/home/jens/Source/shotwell/src/Photo.vala"
 		_backing_photo_row_unref0 (r);
-#line 4193 "Photo.c"
+#line 4194 "Photo.c"
 	}
 #line 456 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp85_ = self->priv->readers;
@@ -4197,7 +4198,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 	_tmp86_ = _tmp85_->editable;
 #line 456 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp86_ != NULL) {
-#line 4201 "Photo.c"
+#line 4202 "Photo.c"
 		BackingPhotoRow* _tmp87_ = NULL;
 		BackingPhotoRow* _tmp88_ = NULL;
 #line 457 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4208,7 +4209,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 		_backing_photo_row_unref0 (self->backing_photo_row);
 #line 457 "/home/jens/Source/shotwell/src/Photo.vala"
 		self->backing_photo_row = _tmp88_;
-#line 4212 "Photo.c"
+#line 4213 "Photo.c"
 	} else {
 		PhotoRow* _tmp89_ = NULL;
 		BackingPhotoRow* _tmp90_ = NULL;
@@ -4221,7 +4222,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 		_tmp91_ = _tmp90_->file_format;
 #line 458 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp91_ != PHOTO_FILE_FORMAT_RAW) {
-#line 4225 "Photo.c"
+#line 4226 "Photo.c"
 			PhotoRow* _tmp92_ = NULL;
 			BackingPhotoRow* _tmp93_ = NULL;
 			BackingPhotoRow* _tmp94_ = NULL;
@@ -4235,7 +4236,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 			_backing_photo_row_unref0 (self->backing_photo_row);
 #line 459 "/home/jens/Source/shotwell/src/Photo.vala"
 			self->backing_photo_row = _tmp94_;
-#line 4239 "Photo.c"
+#line 4240 "Photo.c"
 		} else {
 			GeeHashMap* _tmp95_ = NULL;
 			PhotoRow* _tmp96_ = NULL;
@@ -4251,7 +4252,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 			_tmp98_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp95_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) _tmp97_));
 #line 463 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp98_) {
-#line 4255 "Photo.c"
+#line 4256 "Photo.c"
 				GeeHashMap* _tmp99_ = NULL;
 				PhotoRow* _tmp100_ = NULL;
 				RawDeveloper _tmp101_ = 0;
@@ -4268,7 +4269,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 				_backing_photo_row_unref0 (self->backing_photo_row);
 #line 464 "/home/jens/Source/shotwell/src/Photo.vala"
 				self->backing_photo_row = (BackingPhotoRow*) _tmp102_;
-#line 4272 "Photo.c"
+#line 4273 "Photo.c"
 			} else {
 				PhotoRow* _tmp103_ = NULL;
 				BackingPhotoRow* _tmp104_ = NULL;
@@ -4283,7 +4284,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 				_backing_photo_row_unref0 (self->backing_photo_row);
 #line 467 "/home/jens/Source/shotwell/src/Photo.vala"
 				self->backing_photo_row = _tmp105_;
-#line 4287 "Photo.c"
+#line 4288 "Photo.c"
 			}
 		}
 	}
@@ -4297,7 +4298,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 	_g_free0 (basename);
 #line 399 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 4301 "Photo.c"
+#line 4302 "Photo.c"
 }
 
 
@@ -4309,7 +4310,7 @@ void photo_init_photo (void) {
 	_g_object_unref0 (photo_source_pixbuf_cache);
 #line 475 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_source_pixbuf_cache = _tmp0_;
-#line 4313 "Photo.c"
+#line 4314 "Photo.c"
 }
 
 
@@ -4323,7 +4324,7 @@ void photo_terminate_photo (void) {
 	_tmp0_ = photo_discard_source_id;
 #line 481 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp0_ != ((guint) 0)) {
-#line 4327 "Photo.c"
+#line 4328 "Photo.c"
 		guint _tmp1_ = 0U;
 #line 482 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = photo_discard_source_id;
@@ -4331,7 +4332,7 @@ void photo_terminate_photo (void) {
 		g_source_remove (_tmp1_);
 #line 483 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_discard_source_id = (guint) 0;
-#line 4335 "Photo.c"
+#line 4336 "Photo.c"
 	}
 }
 
@@ -4349,7 +4350,7 @@ static void photo_real_notify_editable_replaced (Photo* self, GFile* old_file, G
 	_tmp1_ = new_file;
 #line 488 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (self, "editable-replaced", _tmp0_, _tmp1_);
-#line 4353 "Photo.c"
+#line 4354 "Photo.c"
 }
 
 
@@ -4358,14 +4359,14 @@ void photo_notify_editable_replaced (Photo* self, GFile* old_file, GFile* new_fi
 	g_return_if_fail (IS_PHOTO (self));
 #line 487 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_GET_CLASS (self)->notify_editable_replaced (self, old_file, new_file);
-#line 4362 "Photo.c"
+#line 4363 "Photo.c"
 }
 
 
 static void photo_real_notify_raw_development_modified (Photo* self) {
 #line 492 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (self, "raw-development-modified");
-#line 4369 "Photo.c"
+#line 4370 "Photo.c"
 }
 
 
@@ -4374,14 +4375,14 @@ void photo_notify_raw_development_modified (Photo* self) {
 	g_return_if_fail (IS_PHOTO (self));
 #line 491 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_GET_CLASS (self)->notify_raw_development_modified (self);
-#line 4378 "Photo.c"
+#line 4379 "Photo.c"
 }
 
 
 static void photo_real_notify_baseline_replaced (Photo* self) {
 #line 496 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (self, "baseline-replaced");
-#line 4385 "Photo.c"
+#line 4386 "Photo.c"
 }
 
 
@@ -4390,7 +4391,7 @@ void photo_notify_baseline_replaced (Photo* self) {
 	g_return_if_fail (IS_PHOTO (self));
 #line 495 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_GET_CLASS (self)->notify_baseline_replaced (self);
-#line 4394 "Photo.c"
+#line 4395 "Photo.c"
 }
 
 
@@ -4402,7 +4403,7 @@ static void photo_real_notify_master_reimported (Photo* self, PhotoMetadata* met
 	_tmp0_ = metadata;
 #line 500 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (self, "master-reimported", _tmp0_);
-#line 4406 "Photo.c"
+#line 4407 "Photo.c"
 }
 
 
@@ -4411,7 +4412,7 @@ void photo_notify_master_reimported (Photo* self, PhotoMetadata* metadata) {
 	g_return_if_fail (IS_PHOTO (self));
 #line 499 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_GET_CLASS (self)->notify_master_reimported (self, metadata);
-#line 4415 "Photo.c"
+#line 4416 "Photo.c"
 }
 
 
@@ -4423,7 +4424,7 @@ static void photo_real_notify_editable_reimported (Photo* self, PhotoMetadata* m
 	_tmp0_ = metadata;
 #line 504 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (self, "editable-reimported", _tmp0_);
-#line 4427 "Photo.c"
+#line 4428 "Photo.c"
 }
 
 
@@ -4432,7 +4433,7 @@ void photo_notify_editable_reimported (Photo* self, PhotoMetadata* metadata) {
 	g_return_if_fail (IS_PHOTO (self));
 #line 503 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_GET_CLASS (self)->notify_editable_reimported (self, metadata);
-#line 4436 "Photo.c"
+#line 4437 "Photo.c"
 }
 
 
@@ -4444,7 +4445,7 @@ static void photo_real_notify_source_reimported (Photo* self, PhotoMetadata* met
 	_tmp0_ = metadata;
 #line 508 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (self, "source-reimported", _tmp0_);
-#line 4448 "Photo.c"
+#line 4449 "Photo.c"
 }
 
 
@@ -4453,7 +4454,7 @@ void photo_notify_source_reimported (Photo* self, PhotoMetadata* metadata) {
 	g_return_if_fail (IS_PHOTO (self));
 #line 507 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_GET_CLASS (self)->notify_source_reimported (self, metadata);
-#line 4457 "Photo.c"
+#line 4458 "Photo.c"
 }
 
 
@@ -4465,7 +4466,7 @@ static void photo_real_notify_baseline_reimported (Photo* self, PhotoMetadata* m
 	_tmp0_ = metadata;
 #line 512 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (self, "baseline-reimported", _tmp0_);
-#line 4469 "Photo.c"
+#line 4470 "Photo.c"
 }
 
 
@@ -4474,7 +4475,7 @@ void photo_notify_baseline_reimported (Photo* self, PhotoMetadata* metadata) {
 	g_return_if_fail (IS_PHOTO (self));
 #line 511 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_GET_CLASS (self)->notify_baseline_reimported (self, metadata);
-#line 4478 "Photo.c"
+#line 4479 "Photo.c"
 }
 
 
@@ -4495,14 +4496,14 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 	ret = TRUE;
 #line 517 "/home/jens/Source/shotwell/src/Photo.vala"
 	file = NULL;
-#line 4499 "Photo.c"
+#line 4500 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 518 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 518 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 4506 "Photo.c"
+#line 4507 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -4512,7 +4513,7 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 			_tmp2_ = _tmp1_->editable;
 #line 519 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != NULL) {
-#line 4516 "Photo.c"
+#line 4517 "Photo.c"
 				PhotoBackingReaders* _tmp3_ = NULL;
 				PhotoFileReader* _tmp4_ = NULL;
 				GFile* _tmp5_ = NULL;
@@ -4526,17 +4527,17 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 				_g_object_unref0 (file);
 #line 520 "/home/jens/Source/shotwell/src/Photo.vala"
 				file = _tmp5_;
-#line 4530 "Photo.c"
+#line 4531 "Photo.c"
 			}
 		}
-		__finally244:
+		__finally257:
 		{
 			PhotoBackingReaders* _tmp6_ = NULL;
 #line 518 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp6_ = self->priv->readers;
 #line 518 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 4540 "Photo.c"
+#line 4541 "Photo.c"
 		}
 #line 518 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -4546,7 +4547,7 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 			_g_object_unref0 (file);
 #line 518 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 4550 "Photo.c"
+#line 4551 "Photo.c"
 		}
 	}
 #line 523 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4555,12 +4556,12 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 	_tmp7_ = photo_get_master_file_format (self);
 #line 525 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp7_ == PHOTO_FILE_FORMAT_RAW) {
-#line 4559 "Photo.c"
+#line 4560 "Photo.c"
 		gint _tmp8_ = 0;
 		RawDeveloper* _tmp9_ = NULL;
 #line 526 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp9_ = raw_developer_as_array (&_tmp8_);
-#line 4564 "Photo.c"
+#line 4565 "Photo.c"
 		{
 			RawDeveloper* d_collection = NULL;
 			gint d_collection_length1 = 0;
@@ -4572,30 +4573,30 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 			d_collection_length1 = _tmp8_;
 #line 526 "/home/jens/Source/shotwell/src/Photo.vala"
 			for (d_it = 0; d_it < _tmp8_; d_it = d_it + 1) {
-#line 4576 "Photo.c"
+#line 4577 "Photo.c"
 				RawDeveloper d = 0;
 #line 526 "/home/jens/Source/shotwell/src/Photo.vala"
 				d = d_collection[d_it];
-#line 4580 "Photo.c"
+#line 4581 "Photo.c"
 				{
 					RawDeveloper _tmp10_ = 0;
 #line 527 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp10_ = d;
 #line 527 "/home/jens/Source/shotwell/src/Photo.vala"
 					photo_delete_raw_development (self, _tmp10_);
-#line 4587 "Photo.c"
+#line 4588 "Photo.c"
 				}
 			}
 #line 526 "/home/jens/Source/shotwell/src/Photo.vala"
 			d_collection = (g_free (d_collection), NULL);
-#line 4592 "Photo.c"
+#line 4593 "Photo.c"
 		}
 	}
 #line 531 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp11_ = file;
 #line 531 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp11_ != NULL) {
-#line 4599 "Photo.c"
+#line 4600 "Photo.c"
 		{
 			gboolean _tmp12_ = FALSE;
 			GFile* _tmp13_ = NULL;
@@ -4608,15 +4609,15 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 			_tmp12_ = _tmp14_;
 #line 533 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4612 "Photo.c"
-				goto __catch245_g_error;
+#line 4613 "Photo.c"
+				goto __catch258_g_error;
 			}
 #line 533 "/home/jens/Source/shotwell/src/Photo.vala"
 			ret = _tmp12_;
-#line 4617 "Photo.c"
+#line 4618 "Photo.c"
 		}
-		goto __finally245;
-		__catch245_g_error:
+		goto __finally258;
+		__catch258_g_error:
 		{
 			GError* err = NULL;
 			GFile* _tmp15_ = NULL;
@@ -4654,9 +4655,9 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 			_g_free0 (_tmp17_);
 #line 532 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_error_free0 (err);
-#line 4658 "Photo.c"
+#line 4659 "Photo.c"
 		}
-		__finally245:
+		__finally258:
 #line 532 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 532 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4665,7 +4666,7 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 			_g_object_unref0 (file);
 #line 532 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 4669 "Photo.c"
+#line 4670 "Photo.c"
 		}
 	}
 #line 542 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4680,21 +4681,21 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 		_g_object_unref0 (file);
 #line 542 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 4684 "Photo.c"
+#line 4685 "Photo.c"
 	}
 #line 542 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp23_) {
-#line 4688 "Photo.c"
+#line 4689 "Photo.c"
 		gboolean _tmp25_ = FALSE;
 #line 542 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp25_ = ret;
 #line 542 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp22_ = _tmp25_;
-#line 4694 "Photo.c"
+#line 4695 "Photo.c"
 	} else {
 #line 542 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp22_ = FALSE;
-#line 4698 "Photo.c"
+#line 4699 "Photo.c"
 	}
 #line 542 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp22_;
@@ -4702,7 +4703,7 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 	_g_object_unref0 (file);
 #line 542 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 4706 "Photo.c"
+#line 4707 "Photo.c"
 }
 
 
@@ -4727,11 +4728,11 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 		result = NULL;
 #line 549 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 4731 "Photo.c"
+#line 4732 "Photo.c"
 	}
 #line 551 "/home/jens/Source/shotwell/src/Photo.vala"
 	backing_row = NULL;
-#line 4735 "Photo.c"
+#line 4736 "Photo.c"
 	{
 		BackingPhotoRow* _tmp2_ = NULL;
 		BackingPhotoTable* _tmp3_ = NULL;
@@ -4758,8 +4759,8 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 553 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 4762 "Photo.c"
-				goto __catch246_database_error;
+#line 4763 "Photo.c"
+				goto __catch259_database_error;
 			}
 #line 553 "/home/jens/Source/shotwell/src/Photo.vala"
 			_backing_photo_row_unref0 (backing_row);
@@ -4769,7 +4770,7 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 			g_clear_error (&_inner_error_);
 #line 553 "/home/jens/Source/shotwell/src/Photo.vala"
 			return NULL;
-#line 4773 "Photo.c"
+#line 4774 "Photo.c"
 		}
 #line 553 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp8_ = _tmp2_;
@@ -4781,10 +4782,10 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 		backing_row = _tmp8_;
 #line 552 "/home/jens/Source/shotwell/src/Photo.vala"
 		_backing_photo_row_unref0 (_tmp2_);
-#line 4785 "Photo.c"
+#line 4786 "Photo.c"
 	}
-	goto __finally246;
-	__catch246_database_error:
+	goto __finally259;
+	__catch259_database_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp9_ = NULL;
@@ -4809,9 +4810,9 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 		_g_free0 (_tmp10_);
 #line 552 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 4813 "Photo.c"
+#line 4814 "Photo.c"
 	}
-	__finally246:
+	__finally259:
 #line 552 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 552 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4822,13 +4823,13 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 		g_clear_error (&_inner_error_);
 #line 552 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 4826 "Photo.c"
+#line 4827 "Photo.c"
 	}
 #line 558 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp13_ = backing_row;
 #line 558 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp13_ == NULL) {
-#line 4832 "Photo.c"
+#line 4833 "Photo.c"
 		{
 			BackingPhotoTable* _tmp14_ = NULL;
 			BackingPhotoTable* _tmp15_ = NULL;
@@ -4847,8 +4848,8 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 560 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
-#line 4851 "Photo.c"
-					goto __catch247_database_error;
+#line 4852 "Photo.c"
+					goto __catch260_database_error;
 				}
 #line 560 "/home/jens/Source/shotwell/src/Photo.vala"
 				_backing_photo_row_unref0 (backing_row);
@@ -4858,11 +4859,11 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 				g_clear_error (&_inner_error_);
 #line 560 "/home/jens/Source/shotwell/src/Photo.vala"
 				return NULL;
-#line 4862 "Photo.c"
+#line 4863 "Photo.c"
 			}
 		}
-		goto __finally247;
-		__catch247_database_error:
+		goto __finally260;
+		__catch260_database_error:
 		{
 			GError* err = NULL;
 #line 559 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4871,9 +4872,9 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 			_inner_error_ = NULL;
 #line 559 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_error_free0 (err);
-#line 4875 "Photo.c"
+#line 4876 "Photo.c"
 		}
-		__finally247:
+		__finally260:
 #line 559 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 559 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4884,7 +4885,7 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 			g_clear_error (&_inner_error_);
 #line 559 "/home/jens/Source/shotwell/src/Photo.vala"
 			return NULL;
-#line 4888 "Photo.c"
+#line 4889 "Photo.c"
 		}
 #line 564 "/home/jens/Source/shotwell/src/Photo.vala"
 		result = NULL;
@@ -4892,13 +4893,13 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 		_backing_photo_row_unref0 (backing_row);
 #line 564 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 4896 "Photo.c"
+#line 4897 "Photo.c"
 	}
 #line 567 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = backing_row;
 #line 567 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 4902 "Photo.c"
+#line 4903 "Photo.c"
 }
 
 
@@ -4907,14 +4908,14 @@ gboolean photo_is_raw_developer_complete (Photo* self, RawDeveloper d) {
 	GError * _inner_error_ = NULL;
 #line 572 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
-#line 4911 "Photo.c"
+#line 4912 "Photo.c"
 	{
 		GeeHashMap* _tmp0_ = NULL;
 #line 573 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->developments;
 #line 573 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_developments);
-#line 4918 "Photo.c"
+#line 4919 "Photo.c"
 		{
 			gboolean _tmp1_ = FALSE;
 			GeeHashMap* _tmp2_ = NULL;
@@ -4928,7 +4929,7 @@ gboolean photo_is_raw_developer_complete (Photo* self, RawDeveloper d) {
 			_tmp4_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) _tmp3_));
 #line 574 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp4_) {
-#line 4932 "Photo.c"
+#line 4933 "Photo.c"
 				GeeHashMap* _tmp5_ = NULL;
 				RawDeveloper _tmp6_ = 0;
 				gpointer _tmp7_ = NULL;
@@ -4951,35 +4952,35 @@ gboolean photo_is_raw_developer_complete (Photo* self, RawDeveloper d) {
 				_tmp1_ = _tmp10_;
 #line 575 "/home/jens/Source/shotwell/src/Photo.vala"
 				_backing_photo_row_unref0 (_tmp8_);
-#line 4955 "Photo.c"
+#line 4956 "Photo.c"
 			} else {
 #line 574 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = FALSE;
-#line 4959 "Photo.c"
+#line 4960 "Photo.c"
 			}
 #line 574 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp1_;
-#line 4963 "Photo.c"
+#line 4964 "Photo.c"
 			{
 				GeeHashMap* _tmp11_ = NULL;
 #line 573 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp11_ = self->priv->developments;
 #line 573 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 4970 "Photo.c"
+#line 4971 "Photo.c"
 			}
 #line 574 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 4974 "Photo.c"
+#line 4975 "Photo.c"
 		}
-		__finally248:
+		__finally261:
 		{
 			GeeHashMap* _tmp12_ = NULL;
 #line 573 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp12_ = self->priv->developments;
 #line 573 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 4983 "Photo.c"
+#line 4984 "Photo.c"
 		}
 #line 573 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4987,7 +4988,7 @@ gboolean photo_is_raw_developer_complete (Photo* self, RawDeveloper d) {
 		g_clear_error (&_inner_error_);
 #line 573 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 4991 "Photo.c"
+#line 4992 "Photo.c"
 	}
 }
 
@@ -4998,14 +4999,14 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 	GError * _inner_error_ = NULL;
 #line 580 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
-#line 5002 "Photo.c"
+#line 5003 "Photo.c"
 	{
 		GeeHashMap* _tmp0_ = NULL;
 #line 581 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->developments;
 #line 581 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_developments);
-#line 5009 "Photo.c"
+#line 5010 "Photo.c"
 		{
 			GeeHashMap* _tmp1_ = NULL;
 			RawDeveloper _tmp2_ = 0;
@@ -5020,28 +5021,28 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 			if (_tmp3_) {
 #line 583 "/home/jens/Source/shotwell/src/Photo.vala"
 				result = TRUE;
-#line 5024 "Photo.c"
+#line 5025 "Photo.c"
 				{
 					GeeHashMap* _tmp4_ = NULL;
 #line 581 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp4_ = self->priv->developments;
 #line 581 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 5031 "Photo.c"
+#line 5032 "Photo.c"
 				}
 #line 583 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 5035 "Photo.c"
+#line 5036 "Photo.c"
 			}
 		}
-		__finally249:
+		__finally262:
 		{
 			GeeHashMap* _tmp5_ = NULL;
 #line 581 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->priv->developments;
 #line 581 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 5045 "Photo.c"
+#line 5046 "Photo.c"
 		}
 #line 581 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -5051,7 +5052,7 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 			g_clear_error (&_inner_error_);
 #line 581 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 5055 "Photo.c"
+#line 5056 "Photo.c"
 		}
 	}
 #line 586 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5060,27 +5061,27 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 	switch (_tmp6_) {
 #line 586 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RAW_DEVELOPER_SHOTWELL:
-#line 5064 "Photo.c"
+#line 5065 "Photo.c"
 		{
 #line 588 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = TRUE;
 #line 588 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 5070 "Photo.c"
+#line 5071 "Photo.c"
 		}
 #line 586 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RAW_DEVELOPER_CAMERA:
-#line 5074 "Photo.c"
+#line 5075 "Photo.c"
 		{
 #line 591 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = FALSE;
 #line 591 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 5080 "Photo.c"
+#line 5081 "Photo.c"
 		}
 #line 586 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RAW_DEVELOPER_EMBEDDED:
-#line 5084 "Photo.c"
+#line 5085 "Photo.c"
 		{
 			{
 				PhotoMetadata* meta = NULL;
@@ -5095,8 +5096,8 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 				meta = _tmp7_;
 #line 595 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 5099 "Photo.c"
-					goto __catch250_g_error;
+#line 5100 "Photo.c"
+					goto __catch263_g_error;
 				}
 #line 596 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp8_ = meta;
@@ -5108,7 +5109,7 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 				_tmp10_ = num_previews;
 #line 598 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp10_ > ((guint) 0)) {
-#line 5112 "Photo.c"
+#line 5113 "Photo.c"
 					PhotoPreview* prev = NULL;
 					PhotoMetadata* _tmp11_ = NULL;
 					guint _tmp12_ = 0U;
@@ -5144,7 +5145,7 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 						_media_metadata_unref0 (meta);
 #line 603 "/home/jens/Source/shotwell/src/Photo.vala"
 						return result;
-#line 5148 "Photo.c"
+#line 5149 "Photo.c"
 					}
 #line 605 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp15_ = prev;
@@ -5162,7 +5163,7 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 					_tmp21_ = _tmp20_.height;
 #line 608 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_tmp19_ > _tmp21_) {
-#line 5166 "Photo.c"
+#line 5167 "Photo.c"
 						Dimensions _tmp22_ = {0};
 						gint _tmp23_ = 0;
 #line 608 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5171,7 +5172,7 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 						_tmp23_ = _tmp22_.width;
 #line 608 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp17_ = _tmp23_;
-#line 5175 "Photo.c"
+#line 5176 "Photo.c"
 					} else {
 						Dimensions _tmp24_ = {0};
 						gint _tmp25_ = 0;
@@ -5181,7 +5182,7 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 						_tmp25_ = _tmp24_.height;
 #line 608 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp17_ = _tmp25_;
-#line 5185 "Photo.c"
+#line 5186 "Photo.c"
 					}
 #line 608 "/home/jens/Source/shotwell/src/Photo.vala"
 					preview_major_axis = _tmp17_;
@@ -5197,7 +5198,7 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 						_media_metadata_unref0 (meta);
 #line 610 "/home/jens/Source/shotwell/src/Photo.vala"
 						return result;
-#line 5201 "Photo.c"
+#line 5202 "Photo.c"
 					}
 #line 613 "/home/jens/Source/shotwell/src/Photo.vala"
 					result = TRUE;
@@ -5207,7 +5208,7 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 					_media_metadata_unref0 (meta);
 #line 613 "/home/jens/Source/shotwell/src/Photo.vala"
 					return result;
-#line 5211 "Photo.c"
+#line 5212 "Photo.c"
 				}
 #line 617 "/home/jens/Source/shotwell/src/Photo.vala"
 				result = FALSE;
@@ -5215,10 +5216,10 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 				_media_metadata_unref0 (meta);
 #line 617 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 5219 "Photo.c"
+#line 5220 "Photo.c"
 			}
-			goto __finally250;
-			__catch250_g_error:
+			goto __finally263;
+			__catch263_g_error:
 			{
 				GError* e = NULL;
 				GError* _tmp27_ = NULL;
@@ -5235,9 +5236,9 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 				g_debug ("Photo.vala:619: Error accessing embedded preview. Message: %s", _tmp28_);
 #line 594 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_error_free0 (e);
-#line 5239 "Photo.c"
+#line 5240 "Photo.c"
 			}
-			__finally250:
+			__finally263:
 #line 594 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 594 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5246,19 +5247,19 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 				g_clear_error (&_inner_error_);
 #line 594 "/home/jens/Source/shotwell/src/Photo.vala"
 				return FALSE;
-#line 5250 "Photo.c"
+#line 5251 "Photo.c"
 			}
 #line 621 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = FALSE;
 #line 621 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 5256 "Photo.c"
+#line 5257 "Photo.c"
 		}
 		default:
 		{
 #line 624 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_assert_not_reached ();
-#line 5262 "Photo.c"
+#line 5263 "Photo.c"
 		}
 	}
 }
@@ -5289,7 +5290,7 @@ void photo_add_backing_photo_for_development (Photo* self, RawDeveloper d, Backi
 		g_propagate_error (error, _inner_error_);
 #line 632 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 5293 "Photo.c"
+#line 5294 "Photo.c"
 	}
 	{
 		GeeHashMap* _tmp3_ = NULL;
@@ -5297,7 +5298,7 @@ void photo_add_backing_photo_for_development (Photo* self, RawDeveloper d, Backi
 		_tmp3_ = self->priv->developments;
 #line 633 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_developments);
-#line 5301 "Photo.c"
+#line 5302 "Photo.c"
 		{
 			GeeHashMap* _tmp4_ = NULL;
 			RawDeveloper _tmp5_ = 0;
@@ -5310,16 +5311,16 @@ void photo_add_backing_photo_for_development (Photo* self, RawDeveloper d, Backi
 			_tmp6_ = bpr;
 #line 634 "/home/jens/Source/shotwell/src/Photo.vala"
 			gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) _tmp5_), _tmp6_);
-#line 5314 "Photo.c"
+#line 5315 "Photo.c"
 		}
-		__finally251:
+		__finally264:
 		{
 			GeeHashMap* _tmp7_ = NULL;
 #line 633 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = self->priv->developments;
 #line 633 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 5323 "Photo.c"
+#line 5324 "Photo.c"
 		}
 #line 633 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -5327,7 +5328,7 @@ void photo_add_backing_photo_for_development (Photo* self, RawDeveloper d, Backi
 			g_propagate_error (error, _inner_error_);
 #line 633 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 5331 "Photo.c"
+#line 5332 "Photo.c"
 		}
 	}
 #line 636 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5338,7 +5339,7 @@ void photo_add_backing_photo_for_development (Photo* self, RawDeveloper d, Backi
 	data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp9_);
 #line 636 "/home/jens/Source/shotwell/src/Photo.vala"
 	_alteration_unref0 (_tmp9_);
-#line 5342 "Photo.c"
+#line 5343 "Photo.c"
 }
 
 
@@ -5411,7 +5412,7 @@ void photo_import_developed_backing_photo (PhotoRow* row, RawDeveloper d, Backin
 		_g_object_unref0 (file);
 #line 642 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 5415 "Photo.c"
+#line 5416 "Photo.c"
 	}
 #line 644 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp5_ = info;
@@ -5441,7 +5442,7 @@ void photo_import_developed_backing_photo (PhotoRow* row, RawDeveloper d, Backin
 		_g_object_unref0 (file);
 #line 648 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 5445 "Photo.c"
+#line 5446 "Photo.c"
 	}
 #line 650 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp10_ = interrogator;
@@ -5455,7 +5456,7 @@ void photo_import_developed_backing_photo (PhotoRow* row, RawDeveloper d, Backin
 	if (_tmp13_ == NULL) {
 #line 651 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp12_ = TRUE;
-#line 5459 "Photo.c"
+#line 5460 "Photo.c"
 	} else {
 		PhotoFileInterrogator* _tmp14_ = NULL;
 		gboolean _tmp15_ = FALSE;
@@ -5465,7 +5466,7 @@ void photo_import_developed_backing_photo (PhotoRow* row, RawDeveloper d, Backin
 		_tmp15_ = photo_file_interrogator_get_is_photo_corrupted (_tmp14_);
 #line 651 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp12_ = _tmp15_;
-#line 5469 "Photo.c"
+#line 5470 "Photo.c"
 	}
 #line 651 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp12_) {
@@ -5479,7 +5480,7 @@ void photo_import_developed_backing_photo (PhotoRow* row, RawDeveloper d, Backin
 		_g_object_unref0 (file);
 #line 654 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 5483 "Photo.c"
+#line 5484 "Photo.c"
 	}
 #line 657 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp16_ = bpr;
@@ -5511,7 +5512,7 @@ void photo_import_developed_backing_photo (PhotoRow* row, RawDeveloper d, Backin
 	_tmp27_ = _tmp26_->metadata;
 #line 660 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp27_ != NULL) {
-#line 5515 "Photo.c"
+#line 5516 "Photo.c"
 		DetectedPhotoInformation* _tmp28_ = NULL;
 		PhotoMetadata* _tmp29_ = NULL;
 		Orientation _tmp30_ = 0;
@@ -5523,11 +5524,11 @@ void photo_import_developed_backing_photo (PhotoRow* row, RawDeveloper d, Backin
 		_tmp30_ = photo_metadata_get_orientation (_tmp29_);
 #line 660 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp25_ = _tmp30_;
-#line 5527 "Photo.c"
+#line 5528 "Photo.c"
 	} else {
 #line 661 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp25_ = ORIENTATION_TOP_LEFT;
-#line 5531 "Photo.c"
+#line 5532 "Photo.c"
 	}
 #line 660 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp31_ = bpr;
@@ -5557,7 +5558,7 @@ void photo_import_developed_backing_photo (PhotoRow* row, RawDeveloper d, Backin
 		_g_object_unref0 (file);
 #line 664 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 5561 "Photo.c"
+#line 5562 "Photo.c"
 	}
 #line 665 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp35_ = photo_table_get_instance ();
@@ -5589,7 +5590,7 @@ void photo_import_developed_backing_photo (PhotoRow* row, RawDeveloper d, Backin
 		_g_object_unref0 (file);
 #line 665 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 5593 "Photo.c"
+#line 5594 "Photo.c"
 	}
 #line 639 "/home/jens/Source/shotwell/src/Photo.vala"
 	_detected_photo_information_unref0 (detected);
@@ -5599,7 +5600,7 @@ void photo_import_developed_backing_photo (PhotoRow* row, RawDeveloper d, Backin
 	_g_object_unref0 (info);
 #line 639 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (file);
-#line 5603 "Photo.c"
+#line 5604 "Photo.c"
 }
 
 
@@ -5620,7 +5621,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 	switch (_tmp0_) {
 #line 674 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RAW_DEVELOPER_SHOTWELL:
-#line 5624 "Photo.c"
+#line 5625 "Photo.c"
 		{
 			{
 				BackingPhotoRow* _tmp1_ = NULL;
@@ -5660,8 +5661,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				_tmp1_ = _tmp6_;
 #line 678 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 5664 "Photo.c"
-					goto __catch252_g_error;
+#line 5665 "Photo.c"
+					goto __catch265_g_error;
 				}
 #line 678 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp7_ = _tmp1_;
@@ -5673,14 +5674,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				bps = _tmp7_;
 #line 679 "/home/jens/Source/shotwell/src/Photo.vala"
 				pix = NULL;
-#line 5677 "Photo.c"
+#line 5678 "Photo.c"
 				{
 					PhotoBackingReaders* _tmp8_ = NULL;
 #line 680 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp8_ = self->priv->readers;
 #line 680 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 5684 "Photo.c"
+#line 5685 "Photo.c"
 					{
 						GdkPixbuf* _tmp9_ = NULL;
 						Scaling _tmp10_ = {0};
@@ -5694,8 +5695,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						_tmp9_ = _tmp11_;
 #line 685 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 5698 "Photo.c"
-							goto __finally253;
+#line 5699 "Photo.c"
+							goto __finally266;
 						}
 #line 685 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp12_ = _tmp9_;
@@ -5707,16 +5708,16 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						pix = _tmp12_;
 #line 680 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_object_unref0 (_tmp9_);
-#line 5711 "Photo.c"
+#line 5712 "Photo.c"
 					}
-					__finally253:
+					__finally266:
 					{
 						PhotoBackingReaders* _tmp13_ = NULL;
 #line 680 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp13_ = self->priv->readers;
 #line 680 "/home/jens/Source/shotwell/src/Photo.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 5720 "Photo.c"
+#line 5721 "Photo.c"
 					}
 #line 680 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -5724,8 +5725,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						_g_object_unref0 (pix);
 #line 680 "/home/jens/Source/shotwell/src/Photo.vala"
 						_backing_photo_row_unref0 (_tmp1_);
-#line 5728 "Photo.c"
-						goto __catch252_g_error;
+#line 5729 "Photo.c"
+						goto __catch265_g_error;
 					}
 				}
 #line 688 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5738,14 +5739,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_g_object_unref0 (pix);
 #line 690 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp1_);
-#line 5742 "Photo.c"
+#line 5743 "Photo.c"
 					{
 						gboolean _tmp15_ = FALSE;
 #line 714 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp15_ = wrote_img_to_disk;
 #line 714 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp15_) {
-#line 5749 "Photo.c"
+#line 5750 "Photo.c"
 							{
 								RawDeveloper _tmp16_ = 0;
 								BackingPhotoRow* _tmp17_ = NULL;
@@ -5757,15 +5758,15 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								photo_add_backing_photo_for_development (self, _tmp16_, _tmp17_, &_inner_error_);
 #line 717 "/home/jens/Source/shotwell/src/Photo.vala"
 								if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 5761 "Photo.c"
-									goto __catch254_g_error;
+#line 5762 "Photo.c"
+									goto __catch267_g_error;
 								}
 #line 719 "/home/jens/Source/shotwell/src/Photo.vala"
 								photo_notify_raw_development_modified (self);
-#line 5766 "Photo.c"
+#line 5767 "Photo.c"
 							}
-							goto __finally254;
-							__catch254_g_error:
+							goto __finally267;
+							__catch267_g_error:
 							{
 								GError* e = NULL;
 								GError* _tmp18_ = NULL;
@@ -5782,13 +5783,13 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								g_debug ("Photo.vala:721: Error adding backing photo as development. Message: %s", _tmp19_);
 #line 715 "/home/jens/Source/shotwell/src/Photo.vala"
 								_g_error_free0 (e);
-#line 5786 "Photo.c"
+#line 5787 "Photo.c"
 							}
-							__finally254:
+							__finally267:
 #line 715 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 5791 "Photo.c"
-								goto __catch252_g_error;
+#line 5792 "Photo.c"
+								goto __catch265_g_error;
 							}
 						}
 					}
@@ -5796,7 +5797,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_backing_photo_row_unref0 (bps);
 #line 690 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 5800 "Photo.c"
+#line 5801 "Photo.c"
 				}
 #line 694 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp20_ = bps;
@@ -5812,8 +5813,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_g_object_unref0 (pix);
 #line 694 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp1_);
-#line 5816 "Photo.c"
-					goto __catch252_g_error;
+#line 5817 "Photo.c"
+					goto __catch265_g_error;
 				}
 #line 695 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp23_ = writer;
@@ -5829,8 +5830,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_g_object_unref0 (pix);
 #line 695 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp1_);
-#line 5833 "Photo.c"
-					goto __catch252_g_error;
+#line 5834 "Photo.c"
+					goto __catch265_g_error;
 				}
 #line 703 "/home/jens/Source/shotwell/src/Photo.vala"
 				wrote_img_to_disk = TRUE;
@@ -5846,8 +5847,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_g_object_unref0 (pix);
 #line 708 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp1_);
-#line 5850 "Photo.c"
-					goto __catch252_g_error;
+#line 5851 "Photo.c"
+					goto __catch265_g_error;
 				}
 #line 709 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp26_ = bps;
@@ -5867,8 +5868,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_g_object_unref0 (pix);
 #line 709 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp1_);
-#line 5871 "Photo.c"
-					goto __catch252_g_error;
+#line 5872 "Photo.c"
+					goto __catch265_g_error;
 				}
 #line 710 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp29_ = mwriter;
@@ -5888,8 +5889,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_g_object_unref0 (pix);
 #line 710 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp1_);
-#line 5892 "Photo.c"
-					goto __catch252_g_error;
+#line 5893 "Photo.c"
+					goto __catch265_g_error;
 				}
 #line 676 "/home/jens/Source/shotwell/src/Photo.vala"
 				_photo_file_adapter_unref0 (mwriter);
@@ -5901,10 +5902,10 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				_g_object_unref0 (pix);
 #line 676 "/home/jens/Source/shotwell/src/Photo.vala"
 				_backing_photo_row_unref0 (_tmp1_);
-#line 5905 "Photo.c"
+#line 5906 "Photo.c"
 			}
-			goto __finally252;
-			__catch252_g_error:
+			goto __finally265;
+			__catch265_g_error:
 			{
 				GError* err = NULL;
 				GError* _tmp31_ = NULL;
@@ -5921,16 +5922,16 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				g_debug ("Photo.vala:712: Error developing photo: %s", _tmp32_);
 #line 676 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_error_free0 (err);
-#line 5925 "Photo.c"
+#line 5926 "Photo.c"
 			}
-			__finally252:
+			__finally265:
 			{
 				gboolean _tmp33_ = FALSE;
 #line 714 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp33_ = wrote_img_to_disk;
 #line 714 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp33_) {
-#line 5934 "Photo.c"
+#line 5935 "Photo.c"
 					{
 						RawDeveloper _tmp34_ = 0;
 						BackingPhotoRow* _tmp35_ = NULL;
@@ -5942,15 +5943,15 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						photo_add_backing_photo_for_development (self, _tmp34_, _tmp35_, &_inner_error_);
 #line 717 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 5946 "Photo.c"
-							goto __catch255_g_error;
+#line 5947 "Photo.c"
+							goto __catch268_g_error;
 						}
 #line 719 "/home/jens/Source/shotwell/src/Photo.vala"
 						photo_notify_raw_development_modified (self);
-#line 5951 "Photo.c"
+#line 5952 "Photo.c"
 					}
-					goto __finally255;
-					__catch255_g_error:
+					goto __finally268;
+					__catch268_g_error:
 					{
 						GError* e = NULL;
 						GError* _tmp36_ = NULL;
@@ -5967,9 +5968,9 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						g_debug ("Photo.vala:721: Error adding backing photo as development. Message: %s", _tmp37_);
 #line 715 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_error_free0 (e);
-#line 5971 "Photo.c"
+#line 5972 "Photo.c"
 					}
-					__finally255:
+					__finally268:
 #line 715 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 715 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5980,7 +5981,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						g_clear_error (&_inner_error_);
 #line 715 "/home/jens/Source/shotwell/src/Photo.vala"
 						return;
-#line 5984 "Photo.c"
+#line 5985 "Photo.c"
 					}
 				}
 			}
@@ -5994,23 +5995,23 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				g_clear_error (&_inner_error_);
 #line 676 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 5998 "Photo.c"
+#line 5999 "Photo.c"
 			}
 #line 727 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 6002 "Photo.c"
+#line 6003 "Photo.c"
 		}
 #line 674 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RAW_DEVELOPER_CAMERA:
-#line 6006 "Photo.c"
+#line 6007 "Photo.c"
 		{
 #line 731 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 6010 "Photo.c"
+#line 6011 "Photo.c"
 		}
 #line 674 "/home/jens/Source/shotwell/src/Photo.vala"
 		case RAW_DEVELOPER_EMBEDDED:
-#line 6014 "Photo.c"
+#line 6015 "Photo.c"
 		{
 			{
 				PhotoMetadata* meta = NULL;
@@ -6053,8 +6054,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				meta = _tmp38_;
 #line 736 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6057 "Photo.c"
-					goto __catch256_g_error;
+#line 6058 "Photo.c"
+					goto __catch269_g_error;
 				}
 #line 737 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp39_ = meta;
@@ -6068,14 +6069,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				if (_tmp41_ <= ((guint) 0)) {
 #line 739 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
-#line 6072 "Photo.c"
+#line 6073 "Photo.c"
 					{
 						gboolean _tmp42_ = FALSE;
 #line 768 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp42_ = wrote_img_to_disk;
 #line 768 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp42_) {
-#line 6079 "Photo.c"
+#line 6080 "Photo.c"
 							{
 								RawDeveloper _tmp43_ = 0;
 								BackingPhotoRow* _tmp44_ = NULL;
@@ -6087,15 +6088,15 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								photo_add_backing_photo_for_development (self, _tmp43_, _tmp44_, &_inner_error_);
 #line 771 "/home/jens/Source/shotwell/src/Photo.vala"
 								if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6091 "Photo.c"
-									goto __catch257_g_error;
+#line 6092 "Photo.c"
+									goto __catch270_g_error;
 								}
 #line 773 "/home/jens/Source/shotwell/src/Photo.vala"
 								photo_notify_raw_development_modified (self);
-#line 6096 "Photo.c"
+#line 6097 "Photo.c"
 							}
-							goto __finally257;
-							__catch257_g_error:
+							goto __finally270;
+							__catch270_g_error:
 							{
 								GError* e = NULL;
 								GError* _tmp45_ = NULL;
@@ -6112,13 +6113,13 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								g_debug ("Photo.vala:775: Error adding backing photo as development. Message: %s", _tmp46_);
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 								_g_error_free0 (e);
-#line 6116 "Photo.c"
+#line 6117 "Photo.c"
 							}
-							__finally257:
+							__finally270:
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6121 "Photo.c"
-								goto __catch256_g_error;
+#line 6122 "Photo.c"
+								goto __catch269_g_error;
 							}
 						}
 					}
@@ -6126,7 +6127,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_backing_photo_row_unref0 (bps);
 #line 739 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 6130 "Photo.c"
+#line 6131 "Photo.c"
 				}
 #line 740 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp47_ = meta;
@@ -6146,14 +6147,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_photo_preview_unref0 (prev);
 #line 743 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
-#line 6150 "Photo.c"
+#line 6151 "Photo.c"
 					{
 						gboolean _tmp51_ = FALSE;
 #line 768 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp51_ = wrote_img_to_disk;
 #line 768 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp51_) {
-#line 6157 "Photo.c"
+#line 6158 "Photo.c"
 							{
 								RawDeveloper _tmp52_ = 0;
 								BackingPhotoRow* _tmp53_ = NULL;
@@ -6165,15 +6166,15 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								photo_add_backing_photo_for_development (self, _tmp52_, _tmp53_, &_inner_error_);
 #line 771 "/home/jens/Source/shotwell/src/Photo.vala"
 								if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6169 "Photo.c"
-									goto __catch258_g_error;
+#line 6170 "Photo.c"
+									goto __catch271_g_error;
 								}
 #line 773 "/home/jens/Source/shotwell/src/Photo.vala"
 								photo_notify_raw_development_modified (self);
-#line 6174 "Photo.c"
+#line 6175 "Photo.c"
 							}
-							goto __finally258;
-							__catch258_g_error:
+							goto __finally271;
+							__catch271_g_error:
 							{
 								GError* e = NULL;
 								GError* _tmp54_ = NULL;
@@ -6190,13 +6191,13 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								g_debug ("Photo.vala:775: Error adding backing photo as development. Message: %s", _tmp55_);
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 								_g_error_free0 (e);
-#line 6194 "Photo.c"
+#line 6195 "Photo.c"
 							}
-							__finally258:
+							__finally271:
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6199 "Photo.c"
-								goto __catch256_g_error;
+#line 6200 "Photo.c"
+								goto __catch269_g_error;
 							}
 						}
 					}
@@ -6204,7 +6205,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_backing_photo_row_unref0 (bps);
 #line 743 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 6208 "Photo.c"
+#line 6209 "Photo.c"
 				}
 #line 746 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp56_ = prev;
@@ -6218,8 +6219,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_photo_preview_unref0 (prev);
 #line 746 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
-#line 6222 "Photo.c"
-					goto __catch256_g_error;
+#line 6223 "Photo.c"
+					goto __catch269_g_error;
 				}
 #line 747 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp58_ = pix;
@@ -6233,14 +6234,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_photo_preview_unref0 (prev);
 #line 749 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
-#line 6237 "Photo.c"
+#line 6238 "Photo.c"
 					{
 						gboolean _tmp59_ = FALSE;
 #line 768 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp59_ = wrote_img_to_disk;
 #line 768 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp59_) {
-#line 6244 "Photo.c"
+#line 6245 "Photo.c"
 							{
 								RawDeveloper _tmp60_ = 0;
 								BackingPhotoRow* _tmp61_ = NULL;
@@ -6252,15 +6253,15 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								photo_add_backing_photo_for_development (self, _tmp60_, _tmp61_, &_inner_error_);
 #line 771 "/home/jens/Source/shotwell/src/Photo.vala"
 								if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6256 "Photo.c"
-									goto __catch259_g_error;
+#line 6257 "Photo.c"
+									goto __catch272_g_error;
 								}
 #line 773 "/home/jens/Source/shotwell/src/Photo.vala"
 								photo_notify_raw_development_modified (self);
-#line 6261 "Photo.c"
+#line 6262 "Photo.c"
 							}
-							goto __finally259;
-							__catch259_g_error:
+							goto __finally272;
+							__catch272_g_error:
 							{
 								GError* e = NULL;
 								GError* _tmp62_ = NULL;
@@ -6277,13 +6278,13 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								g_debug ("Photo.vala:775: Error adding backing photo as development. Message: %s", _tmp63_);
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 								_g_error_free0 (e);
-#line 6281 "Photo.c"
+#line 6282 "Photo.c"
 							}
-							__finally259:
+							__finally272:
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6286 "Photo.c"
-								goto __catch256_g_error;
+#line 6287 "Photo.c"
+								goto __catch269_g_error;
 							}
 						}
 					}
@@ -6291,7 +6292,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_backing_photo_row_unref0 (bps);
 #line 749 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 6295 "Photo.c"
+#line 6296 "Photo.c"
 				}
 #line 753 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp65_ = d;
@@ -6313,8 +6314,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_photo_preview_unref0 (prev);
 #line 753 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
-#line 6317 "Photo.c"
-					goto __catch256_g_error;
+#line 6318 "Photo.c"
+					goto __catch269_g_error;
 				}
 #line 753 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp70_ = _tmp64_;
@@ -6342,8 +6343,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_photo_preview_unref0 (prev);
 #line 754 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
-#line 6346 "Photo.c"
-					goto __catch256_g_error;
+#line 6347 "Photo.c"
+					goto __catch269_g_error;
 				}
 #line 755 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp74_ = writer;
@@ -6363,8 +6364,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_photo_preview_unref0 (prev);
 #line 755 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
-#line 6367 "Photo.c"
-					goto __catch256_g_error;
+#line 6368 "Photo.c"
+					goto __catch269_g_error;
 				}
 #line 759 "/home/jens/Source/shotwell/src/Photo.vala"
 				wrote_img_to_disk = TRUE;
@@ -6388,8 +6389,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_photo_preview_unref0 (prev);
 #line 762 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
-#line 6392 "Photo.c"
-					goto __catch256_g_error;
+#line 6393 "Photo.c"
+					goto __catch269_g_error;
 				}
 #line 763 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp79_ = mwriter;
@@ -6411,8 +6412,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 					_photo_preview_unref0 (prev);
 #line 763 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
-#line 6415 "Photo.c"
-					goto __catch256_g_error;
+#line 6416 "Photo.c"
+					goto __catch269_g_error;
 				}
 #line 734 "/home/jens/Source/shotwell/src/Photo.vala"
 				_photo_file_adapter_unref0 (mwriter);
@@ -6426,10 +6427,10 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				_photo_preview_unref0 (prev);
 #line 734 "/home/jens/Source/shotwell/src/Photo.vala"
 				_media_metadata_unref0 (meta);
-#line 6430 "Photo.c"
+#line 6431 "Photo.c"
 			}
-			goto __finally256;
-			__catch256_g_error:
+			goto __finally269;
+			__catch269_g_error:
 			{
 				GError* e = NULL;
 				GError* _tmp81_ = NULL;
@@ -6446,14 +6447,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				g_debug ("Photo.vala:765: Error accessing embedded preview. Message: %s", _tmp82_);
 #line 766 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_error_free0 (e);
-#line 6450 "Photo.c"
+#line 6451 "Photo.c"
 				{
 					gboolean _tmp83_ = FALSE;
 #line 768 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp83_ = wrote_img_to_disk;
 #line 768 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_tmp83_) {
-#line 6457 "Photo.c"
+#line 6458 "Photo.c"
 						{
 							RawDeveloper _tmp84_ = 0;
 							BackingPhotoRow* _tmp85_ = NULL;
@@ -6465,15 +6466,15 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 							photo_add_backing_photo_for_development (self, _tmp84_, _tmp85_, &_inner_error_);
 #line 771 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6469 "Photo.c"
-								goto __catch260_g_error;
+#line 6470 "Photo.c"
+								goto __catch273_g_error;
 							}
 #line 773 "/home/jens/Source/shotwell/src/Photo.vala"
 							photo_notify_raw_development_modified (self);
-#line 6474 "Photo.c"
+#line 6475 "Photo.c"
 						}
-						goto __finally260;
-						__catch260_g_error:
+						goto __finally273;
+						__catch273_g_error:
 						{
 							GError* e = NULL;
 							GError* _tmp86_ = NULL;
@@ -6490,14 +6491,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 							g_debug ("Photo.vala:775: Error adding backing photo as development. Message: %s", _tmp87_);
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 							_g_error_free0 (e);
-#line 6494 "Photo.c"
+#line 6495 "Photo.c"
 						}
-						__finally260:
+						__finally273:
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 							_backing_photo_row_unref0 (bps);
-#line 6501 "Photo.c"
+#line 6502 "Photo.c"
 						}
 					}
 				}
@@ -6505,16 +6506,16 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				_backing_photo_row_unref0 (bps);
 #line 766 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 6509 "Photo.c"
+#line 6510 "Photo.c"
 			}
-			__finally256:
+			__finally269:
 			{
 				gboolean _tmp88_ = FALSE;
 #line 768 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp88_ = wrote_img_to_disk;
 #line 768 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp88_) {
-#line 6518 "Photo.c"
+#line 6519 "Photo.c"
 					{
 						RawDeveloper _tmp89_ = 0;
 						BackingPhotoRow* _tmp90_ = NULL;
@@ -6526,15 +6527,15 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						photo_add_backing_photo_for_development (self, _tmp89_, _tmp90_, &_inner_error_);
 #line 771 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6530 "Photo.c"
-							goto __catch261_g_error;
+#line 6531 "Photo.c"
+							goto __catch274_g_error;
 						}
 #line 773 "/home/jens/Source/shotwell/src/Photo.vala"
 						photo_notify_raw_development_modified (self);
-#line 6535 "Photo.c"
+#line 6536 "Photo.c"
 					}
-					goto __finally261;
-					__catch261_g_error:
+					goto __finally274;
+					__catch274_g_error:
 					{
 						GError* e = NULL;
 						GError* _tmp91_ = NULL;
@@ -6551,9 +6552,9 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						g_debug ("Photo.vala:775: Error adding backing photo as development. Message: %s", _tmp92_);
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_error_free0 (e);
-#line 6555 "Photo.c"
+#line 6556 "Photo.c"
 					}
-					__finally261:
+					__finally274:
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -6564,7 +6565,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						g_clear_error (&_inner_error_);
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 						return;
-#line 6568 "Photo.c"
+#line 6569 "Photo.c"
 					}
 				}
 			}
@@ -6578,22 +6579,22 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				g_clear_error (&_inner_error_);
 #line 734 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 6582 "Photo.c"
+#line 6583 "Photo.c"
 			}
 #line 780 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 6586 "Photo.c"
+#line 6587 "Photo.c"
 		}
 		default:
 		{
 #line 783 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_assert_not_reached ();
-#line 6592 "Photo.c"
+#line 6593 "Photo.c"
 		}
 	}
 #line 670 "/home/jens/Source/shotwell/src/Photo.vala"
 	_backing_photo_row_unref0 (bps);
-#line 6597 "Photo.c"
+#line 6598 "Photo.c"
 }
 
 
@@ -6601,14 +6602,14 @@ void photo_set_default_raw_developer (Photo* self, RawDeveloper d) {
 	GError * _inner_error_ = NULL;
 #line 788 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail (IS_PHOTO (self));
-#line 6605 "Photo.c"
+#line 6606 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 789 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 789 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 6612 "Photo.c"
+#line 6613 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			RawDeveloper _tmp2_ = 0;
@@ -6618,16 +6619,16 @@ void photo_set_default_raw_developer (Photo* self, RawDeveloper d) {
 			_tmp2_ = d;
 #line 790 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp1_->developer = _tmp2_;
-#line 6622 "Photo.c"
+#line 6623 "Photo.c"
 		}
-		__finally262:
+		__finally275:
 		{
 			PhotoRow* _tmp3_ = NULL;
 #line 789 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp3_ = self->row;
 #line 789 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 6631 "Photo.c"
+#line 6632 "Photo.c"
 		}
 #line 789 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -6637,7 +6638,7 @@ void photo_set_default_raw_developer (Photo* self, RawDeveloper d) {
 			g_clear_error (&_inner_error_);
 #line 789 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 6641 "Photo.c"
+#line 6642 "Photo.c"
 		}
 	}
 }
@@ -6659,29 +6660,29 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 	if (_tmp0_ != PHOTO_FILE_FORMAT_RAW) {
 #line 797 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 6663 "Photo.c"
+#line 6664 "Photo.c"
 	}
 #line 802 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = photo_is_raw_developer_available (self, RAW_DEVELOPER_CAMERA);
 #line 802 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_) {
-#line 6669 "Photo.c"
+#line 6670 "Photo.c"
 		RawDeveloper _tmp3_ = 0;
 #line 802 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp3_ = d;
 #line 802 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = _tmp3_ == RAW_DEVELOPER_EMBEDDED;
-#line 6675 "Photo.c"
+#line 6676 "Photo.c"
 	} else {
 #line 802 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = FALSE;
-#line 6679 "Photo.c"
+#line 6680 "Photo.c"
 	}
 #line 802 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_) {
 #line 803 "/home/jens/Source/shotwell/src/Photo.vala"
 		d = RAW_DEVELOPER_CAMERA;
-#line 6685 "Photo.c"
+#line 6686 "Photo.c"
 	}
 #line 807 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = photo_is_raw_developer_available (self, RAW_DEVELOPER_EMBEDDED);
@@ -6689,7 +6690,7 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 	if (!_tmp4_) {
 #line 808 "/home/jens/Source/shotwell/src/Photo.vala"
 		d = RAW_DEVELOPER_SHOTWELL;
-#line 6693 "Photo.c"
+#line 6694 "Photo.c"
 	}
 	{
 		GeeHashMap* _tmp5_ = NULL;
@@ -6697,7 +6698,7 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 		_tmp5_ = self->priv->developments;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_developments);
-#line 6701 "Photo.c"
+#line 6702 "Photo.c"
 		{
 			RawDeveloper stale_raw_developer = 0;
 			PhotoRow* _tmp6_ = NULL;
@@ -6734,13 +6735,13 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 			_tmp9_ = photo_is_raw_developer_complete (self, _tmp8_);
 #line 814 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (!_tmp9_) {
-#line 6738 "Photo.c"
+#line 6739 "Photo.c"
 				RawDeveloper _tmp10_ = 0;
 #line 815 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp10_ = d;
 #line 815 "/home/jens/Source/shotwell/src/Photo.vala"
 				photo_develop_photo (self, _tmp10_);
-#line 6744 "Photo.c"
+#line 6745 "Photo.c"
 				{
 					GdkPixbuf* _tmp11_ = NULL;
 					GdkPixbuf* _tmp12_ = NULL;
@@ -6752,12 +6753,12 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 					_g_object_unref0 (_tmp12_);
 #line 817 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6756 "Photo.c"
-						goto __catch264_g_error;
+#line 6757 "Photo.c"
+						goto __catch277_g_error;
 					}
 				}
-				goto __finally264;
-				__catch264_g_error:
+				goto __finally277;
+				__catch277_g_error:
 				{
 					GError* e = NULL;
 #line 816 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -6766,30 +6767,30 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 					_inner_error_ = NULL;
 #line 820 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_error_free0 (e);
-#line 6770 "Photo.c"
+#line 6771 "Photo.c"
 					{
 						GeeHashMap* _tmp13_ = NULL;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp13_ = self->priv->developments;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 6777 "Photo.c"
+#line 6778 "Photo.c"
 					}
 #line 820 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 6781 "Photo.c"
+#line 6782 "Photo.c"
 				}
-				__finally264:
+				__finally277:
 #line 816 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6786 "Photo.c"
+#line 6787 "Photo.c"
 					{
 						GeeHashMap* _tmp14_ = NULL;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp14_ = self->priv->developments;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 6793 "Photo.c"
+#line 6794 "Photo.c"
 					}
 #line 816 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6797,7 +6798,7 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 					g_clear_error (&_inner_error_);
 #line 816 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 6801 "Photo.c"
+#line 6802 "Photo.c"
 				}
 			}
 #line 823 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -6808,18 +6809,18 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 			_tmp17_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) _tmp16_));
 #line 823 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (!_tmp17_) {
-#line 6812 "Photo.c"
+#line 6813 "Photo.c"
 				{
 					GeeHashMap* _tmp18_ = NULL;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp18_ = self->priv->developments;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 6819 "Photo.c"
+#line 6820 "Photo.c"
 				}
 #line 824 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 6823 "Photo.c"
+#line 6824 "Photo.c"
 			}
 #line 827 "/home/jens/Source/shotwell/src/Photo.vala"
 			photo_revert_to_master (self, FALSE);
@@ -6861,7 +6862,7 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 			_tmp31_ = _tmp30_->original_orientation;
 #line 834 "/home/jens/Source/shotwell/src/Photo.vala"
 			photo_set_orientation (self, _tmp31_);
-#line 6865 "Photo.c"
+#line 6866 "Photo.c"
 			{
 				PhotoTable* _tmp32_ = NULL;
 				PhotoTable* _tmp33_ = NULL;
@@ -6887,12 +6888,12 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 				_database_table_unref0 (_tmp33_);
 #line 837 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6891 "Photo.c"
-					goto __catch265_g_error;
+#line 6892 "Photo.c"
+					goto __catch278_g_error;
 				}
 			}
-			goto __finally265;
-			__catch265_g_error:
+			goto __finally278;
+			__catch278_g_error:
 			{
 				GError* e = NULL;
 				GError* _tmp38_ = NULL;
@@ -6909,19 +6910,19 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 				g_warning ("Photo.vala:839: Error updating database: %s", _tmp39_);
 #line 836 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_error_free0 (e);
-#line 6913 "Photo.c"
+#line 6914 "Photo.c"
 			}
-			__finally265:
+			__finally278:
 #line 836 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6918 "Photo.c"
+#line 6919 "Photo.c"
 				{
 					GeeHashMap* _tmp40_ = NULL;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp40_ = self->priv->developments;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 6925 "Photo.c"
+#line 6926 "Photo.c"
 				}
 #line 836 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6929,13 +6930,13 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 				g_clear_error (&_inner_error_);
 #line 836 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 6933 "Photo.c"
+#line 6934 "Photo.c"
 			}
 #line 846 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp42_ = stale_raw_developer;
 #line 846 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp42_ != RAW_DEVELOPER_CAMERA) {
-#line 6939 "Photo.c"
+#line 6940 "Photo.c"
 				RawDeveloper _tmp43_ = 0;
 				PhotoRow* _tmp44_ = NULL;
 				RawDeveloper _tmp45_ = 0;
@@ -6947,31 +6948,31 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 				_tmp45_ = _tmp44_->developer;
 #line 847 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp41_ = _tmp43_ != _tmp45_;
-#line 6951 "Photo.c"
+#line 6952 "Photo.c"
 			} else {
 #line 846 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp41_ = FALSE;
-#line 6955 "Photo.c"
+#line 6956 "Photo.c"
 			}
 #line 846 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp41_) {
-#line 6959 "Photo.c"
+#line 6960 "Photo.c"
 				RawDeveloper _tmp46_ = 0;
 #line 850 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp46_ = stale_raw_developer;
 #line 850 "/home/jens/Source/shotwell/src/Photo.vala"
 				photo_delete_raw_development (self, _tmp46_);
-#line 6965 "Photo.c"
+#line 6966 "Photo.c"
 			}
 		}
-		__finally263:
+		__finally276:
 		{
 			GeeHashMap* _tmp47_ = NULL;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp47_ = self->priv->developments;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 6975 "Photo.c"
+#line 6976 "Photo.c"
 		}
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -6981,7 +6982,7 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 			g_clear_error (&_inner_error_);
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 6985 "Photo.c"
+#line 6986 "Photo.c"
 		}
 	}
 #line 857 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -6994,7 +6995,7 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 	_alteration_unref0 (_tmp49_);
 #line 858 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_discard_prefetched (self);
-#line 6998 "Photo.c"
+#line 6999 "Photo.c"
 }
 
 
@@ -7012,7 +7013,7 @@ RawDeveloper photo_get_raw_developer (Photo* self) {
 	result = _tmp1_;
 #line 862 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 7016 "Photo.c"
+#line 7017 "Photo.c"
 }
 
 
@@ -7024,14 +7025,14 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
 #line 868 "/home/jens/Source/shotwell/src/Photo.vala"
 	ret = FALSE;
-#line 7028 "Photo.c"
+#line 7029 "Photo.c"
 	{
 		GeeHashMap* _tmp0_ = NULL;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->developments;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_developments);
-#line 7035 "Photo.c"
+#line 7036 "Photo.c"
 		{
 			GeeHashMap* _tmp1_ = NULL;
 			RawDeveloper _tmp2_ = 0;
@@ -7060,18 +7061,18 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 			if (!_tmp3_) {
 #line 872 "/home/jens/Source/shotwell/src/Photo.vala"
 				result = FALSE;
-#line 7064 "Photo.c"
+#line 7065 "Photo.c"
 				{
 					GeeHashMap* _tmp4_ = NULL;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp4_ = self->priv->developments;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 7071 "Photo.c"
+#line 7072 "Photo.c"
 				}
 #line 872 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 7075 "Photo.c"
+#line 7076 "Photo.c"
 			}
 #line 876 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = data_object_to_string (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject));
@@ -7103,7 +7104,7 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 			_tmp14_ = _tmp13_->filepath;
 #line 878 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp14_ != NULL) {
-#line 7107 "Photo.c"
+#line 7108 "Photo.c"
 				GFile* f = NULL;
 				BackingPhotoRow* _tmp15_ = NULL;
 				const gchar* _tmp16_ = NULL;
@@ -7116,14 +7117,14 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 				_tmp17_ = g_file_new_for_path (_tmp16_);
 #line 879 "/home/jens/Source/shotwell/src/Photo.vala"
 				f = _tmp17_;
-#line 7120 "Photo.c"
+#line 7121 "Photo.c"
 				{
 					RawDeveloper _tmp18_ = 0;
 #line 881 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp18_ = d;
 #line 881 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_tmp18_ == RAW_DEVELOPER_CAMERA) {
-#line 7127 "Photo.c"
+#line 7128 "Photo.c"
 						GFile* _tmp19_ = NULL;
 #line 882 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp19_ = f;
@@ -7131,8 +7132,8 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 						g_file_trash (_tmp19_, NULL, &_inner_error_);
 #line 882 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7135 "Photo.c"
-							goto __catch267_g_error;
+#line 7136 "Photo.c"
+							goto __catch280_g_error;
 						}
 					} else {
 						GFile* _tmp20_ = NULL;
@@ -7142,13 +7143,13 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 						g_file_delete (_tmp20_, NULL, &_inner_error_);
 #line 884 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7146 "Photo.c"
-							goto __catch267_g_error;
+#line 7147 "Photo.c"
+							goto __catch280_g_error;
 						}
 					}
 				}
-				goto __finally267;
-				__catch267_g_error:
+				goto __finally280;
+				__catch280_g_error:
 				{
 					GError* e = NULL;
 					BackingPhotoRow* _tmp21_ = NULL;
@@ -7171,9 +7172,9 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 					g_warning ("Photo.vala:886: Unable to delete RAW development: %s error: %s", _tmp22_, _tmp24_);
 #line 880 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_error_free0 (e);
-#line 7175 "Photo.c"
+#line 7176 "Photo.c"
 				}
-				__finally267:
+				__finally280:
 #line 880 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 880 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7184,14 +7185,14 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 					_g_object_unref0 (f);
 #line 880 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (bpr);
-#line 7188 "Photo.c"
+#line 7189 "Photo.c"
 					{
 						GeeHashMap* _tmp25_ = NULL;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp25_ = self->priv->developments;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 7195 "Photo.c"
+#line 7196 "Photo.c"
 					}
 #line 880 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7199,11 +7200,11 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 					g_clear_error (&_inner_error_);
 #line 880 "/home/jens/Source/shotwell/src/Photo.vala"
 					return FALSE;
-#line 7203 "Photo.c"
+#line 7204 "Photo.c"
 				}
 #line 878 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (f);
-#line 7207 "Photo.c"
+#line 7208 "Photo.c"
 			}
 			{
 				PhotoTable* _tmp26_ = NULL;
@@ -7228,8 +7229,8 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 				_database_table_unref0 (_tmp27_);
 #line 892 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7232 "Photo.c"
-					goto __catch268_g_error;
+#line 7233 "Photo.c"
+					goto __catch281_g_error;
 				}
 #line 893 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp30_ = backing_photo_table_get_instance ();
@@ -7245,12 +7246,12 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 				_database_table_unref0 (_tmp31_);
 #line 893 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7249 "Photo.c"
-					goto __catch268_g_error;
+#line 7250 "Photo.c"
+					goto __catch281_g_error;
 				}
 			}
-			goto __finally268;
-			__catch268_g_error:
+			goto __finally281;
+			__catch281_g_error:
 			{
 				GError* e = NULL;
 				GError* _tmp34_ = NULL;
@@ -7267,23 +7268,23 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 				g_warning ("Photo.vala:895: Database error while deleting RAW development: %s", _tmp35_);
 #line 891 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_error_free0 (e);
-#line 7271 "Photo.c"
+#line 7272 "Photo.c"
 			}
-			__finally268:
+			__finally281:
 #line 891 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 891 "/home/jens/Source/shotwell/src/Photo.vala"
 				_backing_photo_row_unref0 (bpr);
 #line 891 "/home/jens/Source/shotwell/src/Photo.vala"
 				_backing_photo_row_unref0 (bpr);
-#line 7280 "Photo.c"
+#line 7281 "Photo.c"
 				{
 					GeeHashMap* _tmp36_ = NULL;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp36_ = self->priv->developments;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 7287 "Photo.c"
+#line 7288 "Photo.c"
 				}
 #line 891 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7291,7 +7292,7 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 				g_clear_error (&_inner_error_);
 #line 891 "/home/jens/Source/shotwell/src/Photo.vala"
 				return FALSE;
-#line 7295 "Photo.c"
+#line 7296 "Photo.c"
 			}
 #line 898 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp37_ = self->priv->developments;
@@ -7303,16 +7304,16 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 			ret = _tmp39_;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 			_backing_photo_row_unref0 (bpr);
-#line 7307 "Photo.c"
+#line 7308 "Photo.c"
 		}
-		__finally266:
+		__finally279:
 		{
 			GeeHashMap* _tmp40_ = NULL;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp40_ = self->priv->developments;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 7316 "Photo.c"
+#line 7317 "Photo.c"
 		}
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -7322,7 +7323,7 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 			g_clear_error (&_inner_error_);
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 7326 "Photo.c"
+#line 7327 "Photo.c"
 		}
 	}
 #line 901 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7331,7 +7332,7 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 	result = ret;
 #line 902 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 7335 "Photo.c"
+#line 7336 "Photo.c"
 }
 
 
@@ -7339,14 +7340,14 @@ void photo_redevelop_raw (Photo* self, RawDeveloper d) {
 	GError * _inner_error_ = NULL;
 #line 906 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail (IS_PHOTO (self));
-#line 7343 "Photo.c"
+#line 7344 "Photo.c"
 	{
 		GeeHashMap* _tmp0_ = NULL;
 #line 907 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->developments;
 #line 907 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_developments);
-#line 7350 "Photo.c"
+#line 7351 "Photo.c"
 		{
 			RawDeveloper _tmp1_ = 0;
 			RawDeveloper dev = 0;
@@ -7367,22 +7368,22 @@ void photo_redevelop_raw (Photo* self, RawDeveloper d) {
 			if (_tmp3_ == RAW_DEVELOPER_CAMERA) {
 #line 911 "/home/jens/Source/shotwell/src/Photo.vala"
 				dev = RAW_DEVELOPER_EMBEDDED;
-#line 7371 "Photo.c"
+#line 7372 "Photo.c"
 			}
 #line 913 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = dev;
 #line 913 "/home/jens/Source/shotwell/src/Photo.vala"
 			photo_set_raw_developer (self, _tmp4_);
-#line 7377 "Photo.c"
+#line 7378 "Photo.c"
 		}
-		__finally269:
+		__finally282:
 		{
 			GeeHashMap* _tmp5_ = NULL;
 #line 907 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->priv->developments;
 #line 907 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_developments);
-#line 7386 "Photo.c"
+#line 7387 "Photo.c"
 		}
 #line 907 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -7392,7 +7393,7 @@ void photo_redevelop_raw (Photo* self, RawDeveloper d) {
 			g_clear_error (&_inner_error_);
 #line 907 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 7396 "Photo.c"
+#line 7397 "Photo.c"
 		}
 	}
 }
@@ -7405,13 +7406,13 @@ static void _vala_array_add251 (BackingFileState*** array, int* length, int* siz
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 920 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (BackingFileState*, *array, (*size) + 1);
-#line 7409 "Photo.c"
+#line 7410 "Photo.c"
 	}
 #line 920 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 920 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 7415 "Photo.c"
+#line 7416 "Photo.c"
 }
 
 
@@ -7422,13 +7423,13 @@ static void _vala_array_add252 (BackingFileState*** array, int* length, int* siz
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 922 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (BackingFileState*, *array, (*size) + 1);
-#line 7426 "Photo.c"
+#line 7427 "Photo.c"
 	}
 #line 922 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 922 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 7432 "Photo.c"
+#line 7433 "Photo.c"
 }
 
 
@@ -7439,13 +7440,13 @@ static void _vala_array_add253 (BackingFileState*** array, int* length, int* siz
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 929 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (BackingFileState*, *array, (*size) + 1);
-#line 7443 "Photo.c"
+#line 7444 "Photo.c"
 	}
 #line 929 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 929 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 7449 "Photo.c"
+#line 7450 "Photo.c"
 }
 
 
@@ -7469,14 +7470,14 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 	backing_length1 = 0;
 #line 918 "/home/jens/Source/shotwell/src/Photo.vala"
 	_backing_size_ = backing_length1;
-#line 7473 "Photo.c"
+#line 7474 "Photo.c"
 	{
 		PhotoRow* _tmp1_ = NULL;
 #line 919 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = self->row;
 #line 919 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 7480 "Photo.c"
+#line 7481 "Photo.c"
 		{
 			BackingFileState** _tmp2_ = NULL;
 			gint _tmp2__length1 = 0;
@@ -7507,7 +7508,7 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 			_tmp8_ = photo_has_editable (self);
 #line 921 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp8_) {
-#line 7511 "Photo.c"
+#line 7512 "Photo.c"
 				BackingFileState** _tmp9_ = NULL;
 				gint _tmp9__length1 = 0;
 				BackingPhotoRow* _tmp10_ = NULL;
@@ -7522,13 +7523,13 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 				_tmp11_ = backing_file_state_new_from_photo_row (_tmp10_, NULL);
 #line 922 "/home/jens/Source/shotwell/src/Photo.vala"
 				_vala_array_add252 (&backing, &backing_length1, &_backing_size_, _tmp11_);
-#line 7526 "Photo.c"
+#line 7527 "Photo.c"
 			}
 #line 924 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp12_ = photo_is_developed (self);
 #line 924 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp12_) {
-#line 7532 "Photo.c"
+#line 7533 "Photo.c"
 				GeeCollection* dev_rows = NULL;
 				GeeCollection* _tmp13_ = NULL;
 				GeeCollection* _tmp14_ = NULL;
@@ -7540,7 +7541,7 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 				_tmp14_ = dev_rows;
 #line 926 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp14_ != NULL) {
-#line 7544 "Photo.c"
+#line 7545 "Photo.c"
 					{
 						GeeIterator* _r_it = NULL;
 						GeeCollection* _tmp15_ = NULL;
@@ -7553,7 +7554,7 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 						_r_it = _tmp16_;
 #line 927 "/home/jens/Source/shotwell/src/Photo.vala"
 						while (TRUE) {
-#line 7557 "Photo.c"
+#line 7558 "Photo.c"
 							GeeIterator* _tmp17_ = NULL;
 							gboolean _tmp18_ = FALSE;
 							BackingPhotoRow* r = NULL;
@@ -7573,7 +7574,7 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 							if (!_tmp18_) {
 #line 927 "/home/jens/Source/shotwell/src/Photo.vala"
 								break;
-#line 7577 "Photo.c"
+#line 7578 "Photo.c"
 							}
 #line 927 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp19_ = _r_it;
@@ -7599,26 +7600,26 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 							_vala_array_add253 (&backing, &backing_length1, &_backing_size_, _tmp25_);
 #line 927 "/home/jens/Source/shotwell/src/Photo.vala"
 							_backing_photo_row_unref0 (r);
-#line 7603 "Photo.c"
+#line 7604 "Photo.c"
 						}
 #line 927 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_object_unref0 (_r_it);
-#line 7607 "Photo.c"
+#line 7608 "Photo.c"
 					}
 				}
 #line 924 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (dev_rows);
-#line 7612 "Photo.c"
+#line 7613 "Photo.c"
 			}
 		}
-		__finally270:
+		__finally283:
 		{
 			PhotoRow* _tmp26_ = NULL;
 #line 919 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp26_ = self->row;
 #line 919 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 7622 "Photo.c"
+#line 7623 "Photo.c"
 		}
 #line 919 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -7630,7 +7631,7 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 			g_clear_error (&_inner_error_);
 #line 919 "/home/jens/Source/shotwell/src/Photo.vala"
 			return NULL;
-#line 7634 "Photo.c"
+#line 7635 "Photo.c"
 		}
 	}
 #line 935 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7641,13 +7642,13 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 	if (result_length1) {
 #line 935 "/home/jens/Source/shotwell/src/Photo.vala"
 		*result_length1 = _tmp27__length1;
-#line 7645 "Photo.c"
+#line 7646 "Photo.c"
 	}
 #line 935 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp27_;
 #line 935 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 7651 "Photo.c"
+#line 7652 "Photo.c"
 }
 
 
@@ -7662,7 +7663,7 @@ static PhotoFileReader* photo_get_backing_reader (Photo* self, BackingFetchMode 
 	switch (_tmp0_) {
 #line 939 "/home/jens/Source/shotwell/src/Photo.vala"
 		case BACKING_FETCH_MODE_MASTER:
-#line 7666 "Photo.c"
+#line 7667 "Photo.c"
 		{
 			PhotoFileReader* _tmp1_ = NULL;
 #line 941 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7671,11 +7672,11 @@ static PhotoFileReader* photo_get_backing_reader (Photo* self, BackingFetchMode 
 			result = _tmp1_;
 #line 941 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 7675 "Photo.c"
+#line 7676 "Photo.c"
 		}
 #line 939 "/home/jens/Source/shotwell/src/Photo.vala"
 		case BACKING_FETCH_MODE_BASELINE:
-#line 7679 "Photo.c"
+#line 7680 "Photo.c"
 		{
 			PhotoFileReader* _tmp2_ = NULL;
 #line 944 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7684,11 +7685,11 @@ static PhotoFileReader* photo_get_backing_reader (Photo* self, BackingFetchMode 
 			result = _tmp2_;
 #line 944 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 7688 "Photo.c"
+#line 7689 "Photo.c"
 		}
 #line 939 "/home/jens/Source/shotwell/src/Photo.vala"
 		case BACKING_FETCH_MODE_SOURCE:
-#line 7692 "Photo.c"
+#line 7693 "Photo.c"
 		{
 			PhotoFileReader* _tmp3_ = NULL;
 #line 947 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7697,18 +7698,18 @@ static PhotoFileReader* photo_get_backing_reader (Photo* self, BackingFetchMode 
 			result = _tmp3_;
 #line 947 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 7701 "Photo.c"
+#line 7702 "Photo.c"
 		}
 #line 939 "/home/jens/Source/shotwell/src/Photo.vala"
 		case BACKING_FETCH_MODE_UNMODIFIED:
-#line 7705 "Photo.c"
+#line 7706 "Photo.c"
 		{
 			PhotoFileFormat _tmp4_ = 0;
 #line 950 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = photo_get_master_file_format (self);
 #line 950 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp4_ == PHOTO_FILE_FORMAT_RAW) {
-#line 7712 "Photo.c"
+#line 7713 "Photo.c"
 				PhotoFileReader* _tmp5_ = NULL;
 #line 951 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp5_ = photo_get_raw_developer_reader (self);
@@ -7716,7 +7717,7 @@ static PhotoFileReader* photo_get_backing_reader (Photo* self, BackingFetchMode 
 				result = _tmp5_;
 #line 951 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 7720 "Photo.c"
+#line 7721 "Photo.c"
 			} else {
 				PhotoFileReader* _tmp6_ = NULL;
 #line 953 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7725,7 +7726,7 @@ static PhotoFileReader* photo_get_backing_reader (Photo* self, BackingFetchMode 
 				result = _tmp6_;
 #line 953 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 7729 "Photo.c"
+#line 7730 "Photo.c"
 			}
 		}
 		default:
@@ -7738,7 +7739,7 @@ static PhotoFileReader* photo_get_backing_reader (Photo* self, BackingFetchMode 
 			_tmp8_ = g_enum_get_value (g_type_class_ref (TYPE_BACKING_FETCH_MODE), _tmp7_);
 #line 956 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_error ("Photo.vala:956: Unknown backing fetch mode %s", (_tmp8_ != NULL) ? _tmp8_->value_name : NULL);
-#line 7742 "Photo.c"
+#line 7743 "Photo.c"
 		}
 	}
 }
@@ -7747,7 +7748,7 @@ static PhotoFileReader* photo_get_backing_reader (Photo* self, BackingFetchMode 
 static gpointer _photo_file_adapter_ref0 (gpointer self) {
 #line 962 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? photo_file_adapter_ref (self) : NULL;
-#line 7751 "Photo.c"
+#line 7752 "Photo.c"
 }
 
 
@@ -7756,14 +7757,14 @@ static PhotoFileReader* photo_get_master_reader (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 960 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 7760 "Photo.c"
+#line 7761 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 961 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 961 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 7767 "Photo.c"
+#line 7768 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -7776,27 +7777,27 @@ static PhotoFileReader* photo_get_master_reader (Photo* self) {
 			_tmp3_ = _photo_file_adapter_ref0 (_tmp2_);
 #line 962 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp3_;
-#line 7780 "Photo.c"
+#line 7781 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp4_ = NULL;
 #line 961 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->priv->readers;
 #line 961 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 7787 "Photo.c"
+#line 7788 "Photo.c"
 			}
 #line 962 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 7791 "Photo.c"
+#line 7792 "Photo.c"
 		}
-		__finally271:
+		__finally284:
 		{
 			PhotoBackingReaders* _tmp5_ = NULL;
 #line 961 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->priv->readers;
 #line 961 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 7800 "Photo.c"
+#line 7801 "Photo.c"
 		}
 #line 961 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7804,7 +7805,7 @@ static PhotoFileReader* photo_get_master_reader (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 961 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 7808 "Photo.c"
+#line 7809 "Photo.c"
 	}
 }
 
@@ -7814,14 +7815,14 @@ PhotoFileReader* photo_get_editable_reader (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 966 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 7818 "Photo.c"
+#line 7819 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 967 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 967 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 7825 "Photo.c"
+#line 7826 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -7834,27 +7835,27 @@ PhotoFileReader* photo_get_editable_reader (Photo* self) {
 			_tmp3_ = _photo_file_adapter_ref0 (_tmp2_);
 #line 968 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp3_;
-#line 7838 "Photo.c"
+#line 7839 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp4_ = NULL;
 #line 967 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->priv->readers;
 #line 967 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 7845 "Photo.c"
+#line 7846 "Photo.c"
 			}
 #line 968 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 7849 "Photo.c"
+#line 7850 "Photo.c"
 		}
-		__finally272:
+		__finally285:
 		{
 			PhotoBackingReaders* _tmp5_ = NULL;
 #line 967 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->priv->readers;
 #line 967 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 7858 "Photo.c"
+#line 7859 "Photo.c"
 		}
 #line 967 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7862,7 +7863,7 @@ PhotoFileReader* photo_get_editable_reader (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 967 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 7866 "Photo.c"
+#line 7867 "Photo.c"
 	}
 }
 
@@ -7872,14 +7873,14 @@ static PhotoFileReader* photo_get_baseline_reader (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 973 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 7876 "Photo.c"
+#line 7877 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 7883 "Photo.c"
+#line 7884 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -7894,7 +7895,7 @@ static PhotoFileReader* photo_get_baseline_reader (Photo* self) {
 			_tmp2_ = _tmp1_->editable;
 #line 975 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != NULL) {
-#line 7898 "Photo.c"
+#line 7899 "Photo.c"
 				PhotoBackingReaders* _tmp3_ = NULL;
 				PhotoFileReader* _tmp4_ = NULL;
 				PhotoFileReader* _tmp5_ = NULL;
@@ -7906,18 +7907,18 @@ static PhotoFileReader* photo_get_baseline_reader (Photo* self) {
 				_tmp5_ = _photo_file_adapter_ref0 (_tmp4_);
 #line 976 "/home/jens/Source/shotwell/src/Photo.vala"
 				result = _tmp5_;
-#line 7910 "Photo.c"
+#line 7911 "Photo.c"
 				{
 					PhotoBackingReaders* _tmp6_ = NULL;
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp6_ = self->priv->readers;
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 7917 "Photo.c"
+#line 7918 "Photo.c"
 				}
 #line 976 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 7921 "Photo.c"
+#line 7922 "Photo.c"
 			}
 #line 978 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = self->priv->readers;
@@ -7925,7 +7926,7 @@ static PhotoFileReader* photo_get_baseline_reader (Photo* self) {
 			_tmp8_ = _tmp7_->developer;
 #line 978 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp8_ != NULL) {
-#line 7929 "Photo.c"
+#line 7930 "Photo.c"
 				PhotoBackingReaders* _tmp9_ = NULL;
 				PhotoFileReader* _tmp10_ = NULL;
 				PhotoFileReader* _tmp11_ = NULL;
@@ -7937,18 +7938,18 @@ static PhotoFileReader* photo_get_baseline_reader (Photo* self) {
 				_tmp11_ = _photo_file_adapter_ref0 (_tmp10_);
 #line 979 "/home/jens/Source/shotwell/src/Photo.vala"
 				result = _tmp11_;
-#line 7941 "Photo.c"
+#line 7942 "Photo.c"
 				{
 					PhotoBackingReaders* _tmp12_ = NULL;
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp12_ = self->priv->readers;
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 7948 "Photo.c"
+#line 7949 "Photo.c"
 				}
 #line 979 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 7952 "Photo.c"
+#line 7953 "Photo.c"
 			}
 #line 981 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp13_ = self->priv->readers;
@@ -7958,27 +7959,27 @@ static PhotoFileReader* photo_get_baseline_reader (Photo* self) {
 			_tmp15_ = _photo_file_adapter_ref0 (_tmp14_);
 #line 981 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp15_;
-#line 7962 "Photo.c"
+#line 7963 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp16_ = NULL;
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp16_ = self->priv->readers;
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 7969 "Photo.c"
+#line 7970 "Photo.c"
 			}
 #line 981 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 7973 "Photo.c"
+#line 7974 "Photo.c"
 		}
-		__finally273:
+		__finally286:
 		{
 			PhotoBackingReaders* _tmp17_ = NULL;
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp17_ = self->priv->readers;
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 7982 "Photo.c"
+#line 7983 "Photo.c"
 		}
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7986,7 +7987,7 @@ static PhotoFileReader* photo_get_baseline_reader (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 7990 "Photo.c"
+#line 7991 "Photo.c"
 	}
 }
 
@@ -7996,14 +7997,14 @@ static PhotoFileReader* photo_get_source_reader (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 986 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 8000 "Photo.c"
+#line 8001 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 8007 "Photo.c"
+#line 8008 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -8018,7 +8019,7 @@ static PhotoFileReader* photo_get_source_reader (Photo* self) {
 			_tmp2_ = _tmp1_->editable;
 #line 988 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != NULL) {
-#line 8022 "Photo.c"
+#line 8023 "Photo.c"
 				PhotoBackingReaders* _tmp3_ = NULL;
 				PhotoFileReader* _tmp4_ = NULL;
 				PhotoFileReader* _tmp5_ = NULL;
@@ -8030,18 +8031,18 @@ static PhotoFileReader* photo_get_source_reader (Photo* self) {
 				_tmp5_ = _photo_file_adapter_ref0 (_tmp4_);
 #line 989 "/home/jens/Source/shotwell/src/Photo.vala"
 				result = _tmp5_;
-#line 8034 "Photo.c"
+#line 8035 "Photo.c"
 				{
 					PhotoBackingReaders* _tmp6_ = NULL;
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp6_ = self->priv->readers;
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8041 "Photo.c"
+#line 8042 "Photo.c"
 				}
 #line 989 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 8045 "Photo.c"
+#line 8046 "Photo.c"
 			}
 #line 991 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = self->priv->readers;
@@ -8049,7 +8050,7 @@ static PhotoFileReader* photo_get_source_reader (Photo* self) {
 			_tmp8_ = _tmp7_->developer;
 #line 991 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp8_ != NULL) {
-#line 8053 "Photo.c"
+#line 8054 "Photo.c"
 				PhotoBackingReaders* _tmp9_ = NULL;
 				PhotoFileReader* _tmp10_ = NULL;
 				PhotoFileReader* _tmp11_ = NULL;
@@ -8061,18 +8062,18 @@ static PhotoFileReader* photo_get_source_reader (Photo* self) {
 				_tmp11_ = _photo_file_adapter_ref0 (_tmp10_);
 #line 992 "/home/jens/Source/shotwell/src/Photo.vala"
 				result = _tmp11_;
-#line 8065 "Photo.c"
+#line 8066 "Photo.c"
 				{
 					PhotoBackingReaders* _tmp12_ = NULL;
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp12_ = self->priv->readers;
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8072 "Photo.c"
+#line 8073 "Photo.c"
 				}
 #line 992 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 8076 "Photo.c"
+#line 8077 "Photo.c"
 			}
 #line 994 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp13_ = self->priv->readers;
@@ -8082,27 +8083,27 @@ static PhotoFileReader* photo_get_source_reader (Photo* self) {
 			_tmp15_ = _photo_file_adapter_ref0 (_tmp14_);
 #line 994 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp15_;
-#line 8086 "Photo.c"
+#line 8087 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp16_ = NULL;
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp16_ = self->priv->readers;
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8093 "Photo.c"
+#line 8094 "Photo.c"
 			}
 #line 994 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 8097 "Photo.c"
+#line 8098 "Photo.c"
 		}
-		__finally274:
+		__finally287:
 		{
 			PhotoBackingReaders* _tmp17_ = NULL;
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp17_ = self->priv->readers;
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8106 "Photo.c"
+#line 8107 "Photo.c"
 		}
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8110,7 +8111,7 @@ static PhotoFileReader* photo_get_source_reader (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 8114 "Photo.c"
+#line 8115 "Photo.c"
 	}
 }
 
@@ -8120,14 +8121,14 @@ static PhotoFileReader* photo_get_raw_developer_reader (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 999 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 8124 "Photo.c"
+#line 8125 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 1000 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 1000 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 8131 "Photo.c"
+#line 8132 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -8140,27 +8141,27 @@ static PhotoFileReader* photo_get_raw_developer_reader (Photo* self) {
 			_tmp3_ = _photo_file_adapter_ref0 (_tmp2_);
 #line 1001 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp3_;
-#line 8144 "Photo.c"
+#line 8145 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp4_ = NULL;
 #line 1000 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->priv->readers;
 #line 1000 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8151 "Photo.c"
+#line 8152 "Photo.c"
 			}
 #line 1001 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 8155 "Photo.c"
+#line 8156 "Photo.c"
 		}
-		__finally275:
+		__finally288:
 		{
 			PhotoBackingReaders* _tmp5_ = NULL;
 #line 1000 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->priv->readers;
 #line 1000 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8164 "Photo.c"
+#line 8165 "Photo.c"
 		}
 #line 1000 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8168,7 +8169,7 @@ static PhotoFileReader* photo_get_raw_developer_reader (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1000 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 8172 "Photo.c"
+#line 8173 "Photo.c"
 	}
 }
 
@@ -8178,14 +8179,14 @@ gboolean photo_is_developed (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 1005 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
-#line 8182 "Photo.c"
+#line 8183 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 1006 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 1006 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 8189 "Photo.c"
+#line 8190 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -8195,27 +8196,27 @@ gboolean photo_is_developed (Photo* self) {
 			_tmp2_ = _tmp1_->developer;
 #line 1007 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_ != NULL;
-#line 8199 "Photo.c"
+#line 8200 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp3_ = NULL;
 #line 1006 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->priv->readers;
 #line 1006 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8206 "Photo.c"
+#line 8207 "Photo.c"
 			}
 #line 1007 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 8210 "Photo.c"
+#line 8211 "Photo.c"
 		}
-		__finally276:
+		__finally289:
 		{
 			PhotoBackingReaders* _tmp4_ = NULL;
 #line 1006 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->priv->readers;
 #line 1006 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8219 "Photo.c"
+#line 8220 "Photo.c"
 		}
 #line 1006 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8223,7 +8224,7 @@ gboolean photo_is_developed (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1006 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 8227 "Photo.c"
+#line 8228 "Photo.c"
 	}
 }
 
@@ -8233,14 +8234,14 @@ gboolean photo_has_editable (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 1011 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
-#line 8237 "Photo.c"
+#line 8238 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 1012 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 1012 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 8244 "Photo.c"
+#line 8245 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -8250,27 +8251,27 @@ gboolean photo_has_editable (Photo* self) {
 			_tmp2_ = _tmp1_->editable;
 #line 1013 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_ != NULL;
-#line 8254 "Photo.c"
+#line 8255 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp3_ = NULL;
 #line 1012 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->priv->readers;
 #line 1012 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8261 "Photo.c"
+#line 8262 "Photo.c"
 			}
 #line 1013 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 8265 "Photo.c"
+#line 8266 "Photo.c"
 		}
-		__finally277:
+		__finally290:
 		{
 			PhotoBackingReaders* _tmp4_ = NULL;
 #line 1012 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->priv->readers;
 #line 1012 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8274 "Photo.c"
+#line 8275 "Photo.c"
 		}
 #line 1012 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8278,7 +8279,7 @@ gboolean photo_has_editable (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1012 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 8282 "Photo.c"
+#line 8283 "Photo.c"
 	}
 }
 
@@ -8288,14 +8289,14 @@ gboolean photo_does_master_exist (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 1017 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
-#line 8292 "Photo.c"
+#line 8293 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 1018 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 1018 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 8299 "Photo.c"
+#line 8300 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -8308,27 +8309,27 @@ gboolean photo_does_master_exist (Photo* self) {
 			_tmp3_ = photo_file_adapter_file_exists (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
 #line 1019 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp3_;
-#line 8312 "Photo.c"
+#line 8313 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp4_ = NULL;
 #line 1018 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->priv->readers;
 #line 1018 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8319 "Photo.c"
+#line 8320 "Photo.c"
 			}
 #line 1019 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 8323 "Photo.c"
+#line 8324 "Photo.c"
 		}
-		__finally278:
+		__finally291:
 		{
 			PhotoBackingReaders* _tmp5_ = NULL;
 #line 1018 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->priv->readers;
 #line 1018 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8332 "Photo.c"
+#line 8333 "Photo.c"
 		}
 #line 1018 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8336,7 +8337,7 @@ gboolean photo_does_master_exist (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1018 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 8340 "Photo.c"
+#line 8341 "Photo.c"
 	}
 }
 
@@ -8346,14 +8347,14 @@ gboolean photo_does_editable_exist (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 1024 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
-#line 8350 "Photo.c"
+#line 8351 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 1025 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 1025 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 8357 "Photo.c"
+#line 8358 "Photo.c"
 		{
 			gboolean _tmp1_ = FALSE;
 			PhotoBackingReaders* _tmp2_ = NULL;
@@ -8364,7 +8365,7 @@ gboolean photo_does_editable_exist (Photo* self) {
 			_tmp3_ = _tmp2_->editable;
 #line 1026 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp3_ != NULL) {
-#line 8368 "Photo.c"
+#line 8369 "Photo.c"
 				PhotoBackingReaders* _tmp4_ = NULL;
 				PhotoFileReader* _tmp5_ = NULL;
 				gboolean _tmp6_ = FALSE;
@@ -8376,35 +8377,35 @@ gboolean photo_does_editable_exist (Photo* self) {
 				_tmp6_ = photo_file_adapter_file_exists (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
 #line 1026 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = _tmp6_;
-#line 8380 "Photo.c"
+#line 8381 "Photo.c"
 			} else {
 #line 1026 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = FALSE;
-#line 8384 "Photo.c"
+#line 8385 "Photo.c"
 			}
 #line 1026 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp1_;
-#line 8388 "Photo.c"
+#line 8389 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp7_ = NULL;
 #line 1025 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp7_ = self->priv->readers;
 #line 1025 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8395 "Photo.c"
+#line 8396 "Photo.c"
 			}
 #line 1026 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 8399 "Photo.c"
+#line 8400 "Photo.c"
 		}
-		__finally279:
+		__finally292:
 		{
 			PhotoBackingReaders* _tmp8_ = NULL;
 #line 1025 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp8_ = self->priv->readers;
 #line 1025 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8408 "Photo.c"
+#line 8409 "Photo.c"
 		}
 #line 1025 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8412,7 +8413,7 @@ gboolean photo_does_editable_exist (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1025 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 8416 "Photo.c"
+#line 8417 "Photo.c"
 	}
 }
 
@@ -8422,14 +8423,14 @@ gboolean photo_is_master_baseline (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 1030 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
-#line 8426 "Photo.c"
+#line 8427 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 1031 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 1031 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 8433 "Photo.c"
+#line 8434 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -8439,27 +8440,27 @@ gboolean photo_is_master_baseline (Photo* self) {
 			_tmp2_ = _tmp1_->editable;
 #line 1032 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_ == NULL;
-#line 8443 "Photo.c"
+#line 8444 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp3_ = NULL;
 #line 1031 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->priv->readers;
 #line 1031 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8450 "Photo.c"
+#line 8451 "Photo.c"
 			}
 #line 1032 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 8454 "Photo.c"
+#line 8455 "Photo.c"
 		}
-		__finally280:
+		__finally293:
 		{
 			PhotoBackingReaders* _tmp4_ = NULL;
 #line 1031 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->priv->readers;
 #line 1031 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8463 "Photo.c"
+#line 8464 "Photo.c"
 		}
 #line 1031 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8467,7 +8468,7 @@ gboolean photo_is_master_baseline (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1031 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 8471 "Photo.c"
+#line 8472 "Photo.c"
 	}
 }
 
@@ -8483,7 +8484,7 @@ gboolean photo_is_master_source (Photo* self) {
 	result = !_tmp0_;
 #line 1037 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 8487 "Photo.c"
+#line 8488 "Photo.c"
 }
 
 
@@ -8492,14 +8493,14 @@ gboolean photo_is_editable_baseline (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 1040 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
-#line 8496 "Photo.c"
+#line 8497 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 1041 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 1041 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 8503 "Photo.c"
+#line 8504 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -8509,27 +8510,27 @@ gboolean photo_is_editable_baseline (Photo* self) {
 			_tmp2_ = _tmp1_->editable;
 #line 1042 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_ != NULL;
-#line 8513 "Photo.c"
+#line 8514 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp3_ = NULL;
 #line 1041 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->priv->readers;
 #line 1041 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8520 "Photo.c"
+#line 8521 "Photo.c"
 			}
 #line 1042 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 8524 "Photo.c"
+#line 8525 "Photo.c"
 		}
-		__finally281:
+		__finally294:
 		{
 			PhotoBackingReaders* _tmp4_ = NULL;
 #line 1041 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->priv->readers;
 #line 1041 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 8533 "Photo.c"
+#line 8534 "Photo.c"
 		}
 #line 1041 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8537,7 +8538,7 @@ gboolean photo_is_editable_baseline (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1041 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 8541 "Photo.c"
+#line 8542 "Photo.c"
 	}
 }
 
@@ -8553,7 +8554,7 @@ gboolean photo_is_editable_source (Photo* self) {
 	result = _tmp0_;
 #line 1047 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 8557 "Photo.c"
+#line 8558 "Photo.c"
 }
 
 
@@ -8562,14 +8563,14 @@ BackingPhotoRow* photo_get_master_photo_row (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 1050 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 8566 "Photo.c"
+#line 8567 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 1051 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 1051 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 8573 "Photo.c"
+#line 8574 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			BackingPhotoRow* _tmp2_ = NULL;
@@ -8582,27 +8583,27 @@ BackingPhotoRow* photo_get_master_photo_row (Photo* self) {
 			_tmp3_ = _backing_photo_row_ref0 (_tmp2_);
 #line 1052 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp3_;
-#line 8586 "Photo.c"
+#line 8587 "Photo.c"
 			{
 				PhotoRow* _tmp4_ = NULL;
 #line 1051 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->row;
 #line 1051 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 8593 "Photo.c"
+#line 8594 "Photo.c"
 			}
 #line 1052 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 8597 "Photo.c"
+#line 8598 "Photo.c"
 		}
-		__finally282:
+		__finally295:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 1051 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->row;
 #line 1051 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 8606 "Photo.c"
+#line 8607 "Photo.c"
 		}
 #line 1051 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8610,7 +8611,7 @@ BackingPhotoRow* photo_get_master_photo_row (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1051 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 8614 "Photo.c"
+#line 8615 "Photo.c"
 	}
 }
 
@@ -8620,14 +8621,14 @@ BackingPhotoRow* photo_get_editable_photo_row (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 1056 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 8624 "Photo.c"
+#line 8625 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 1057 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 1057 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 8631 "Photo.c"
+#line 8632 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			gboolean _tmp2_ = FALSE;
@@ -8637,7 +8638,7 @@ BackingPhotoRow* photo_get_editable_photo_row (Photo* self) {
 			_tmp2_ = backing_photo_id_is_valid (&_tmp1_->editable_id);
 #line 1059 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_) {
-#line 8641 "Photo.c"
+#line 8642 "Photo.c"
 				BackingPhotoRow* _tmp3_ = NULL;
 				BackingPhotoRow* _tmp4_ = NULL;
 #line 1060 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8646,43 +8647,43 @@ BackingPhotoRow* photo_get_editable_photo_row (Photo* self) {
 				_tmp4_ = _backing_photo_row_ref0 (_tmp3_);
 #line 1060 "/home/jens/Source/shotwell/src/Photo.vala"
 				result = _tmp4_;
-#line 8650 "Photo.c"
+#line 8651 "Photo.c"
 				{
 					PhotoRow* _tmp5_ = NULL;
 #line 1057 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp5_ = self->row;
 #line 1057 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 8657 "Photo.c"
+#line 8658 "Photo.c"
 				}
 #line 1060 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 8661 "Photo.c"
+#line 8662 "Photo.c"
 			} else {
 #line 1062 "/home/jens/Source/shotwell/src/Photo.vala"
 				result = NULL;
-#line 8665 "Photo.c"
+#line 8666 "Photo.c"
 				{
 					PhotoRow* _tmp6_ = NULL;
 #line 1057 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp6_ = self->row;
 #line 1057 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 8672 "Photo.c"
+#line 8673 "Photo.c"
 				}
 #line 1062 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 8676 "Photo.c"
+#line 8677 "Photo.c"
 			}
 		}
-		__finally283:
+		__finally296:
 		{
 			PhotoRow* _tmp7_ = NULL;
 #line 1057 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = self->row;
 #line 1057 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 8686 "Photo.c"
+#line 8687 "Photo.c"
 		}
 #line 1057 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8690,7 +8691,7 @@ BackingPhotoRow* photo_get_editable_photo_row (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1057 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 8694 "Photo.c"
+#line 8695 "Photo.c"
 	}
 }
 
@@ -8700,14 +8701,14 @@ GeeCollection* photo_get_raw_development_photo_rows (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 1066 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 8704 "Photo.c"
+#line 8705 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 1067 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 1067 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 8711 "Photo.c"
+#line 8712 "Photo.c"
 		{
 			GeeCollection* _tmp1_ = NULL;
 			GeeHashMap* _tmp2_ = NULL;
@@ -8715,7 +8716,7 @@ GeeCollection* photo_get_raw_development_photo_rows (Photo* self) {
 			_tmp2_ = self->priv->developments;
 #line 1068 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != NULL) {
-#line 8719 "Photo.c"
+#line 8720 "Photo.c"
 				GeeHashMap* _tmp3_ = NULL;
 				GeeCollection* _tmp4_ = NULL;
 				GeeCollection* _tmp5_ = NULL;
@@ -8729,37 +8730,37 @@ GeeCollection* photo_get_raw_development_photo_rows (Photo* self) {
 				_g_object_unref0 (_tmp1_);
 #line 1068 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = _tmp5_;
-#line 8733 "Photo.c"
+#line 8734 "Photo.c"
 			} else {
 #line 1068 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (_tmp1_);
 #line 1068 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = NULL;
-#line 8739 "Photo.c"
+#line 8740 "Photo.c"
 			}
 #line 1068 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp1_;
-#line 8743 "Photo.c"
+#line 8744 "Photo.c"
 			{
 				PhotoRow* _tmp6_ = NULL;
 #line 1067 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp6_ = self->row;
 #line 1067 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 8750 "Photo.c"
+#line 8751 "Photo.c"
 			}
 #line 1068 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 8754 "Photo.c"
+#line 8755 "Photo.c"
 		}
-		__finally284:
+		__finally297:
 		{
 			PhotoRow* _tmp7_ = NULL;
 #line 1067 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = self->row;
 #line 1067 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 8763 "Photo.c"
+#line 8764 "Photo.c"
 		}
 #line 1067 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8767,7 +8768,7 @@ GeeCollection* photo_get_raw_development_photo_rows (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1067 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 8771 "Photo.c"
+#line 8772 "Photo.c"
 	}
 }
 
@@ -8777,14 +8778,14 @@ BackingPhotoRow* photo_get_raw_development_photo_row (Photo* self, RawDeveloper 
 	GError * _inner_error_ = NULL;
 #line 1072 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 8781 "Photo.c"
+#line 8782 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 1073 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 1073 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 8788 "Photo.c"
+#line 8789 "Photo.c"
 		{
 			BackingPhotoRow* _tmp1_ = NULL;
 			GeeHashMap* _tmp2_ = NULL;
@@ -8792,7 +8793,7 @@ BackingPhotoRow* photo_get_raw_development_photo_row (Photo* self, RawDeveloper 
 			_tmp2_ = self->priv->developments;
 #line 1074 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != NULL) {
-#line 8796 "Photo.c"
+#line 8797 "Photo.c"
 				GeeHashMap* _tmp3_ = NULL;
 				RawDeveloper _tmp4_ = 0;
 				gpointer _tmp5_ = NULL;
@@ -8806,37 +8807,37 @@ BackingPhotoRow* photo_get_raw_development_photo_row (Photo* self, RawDeveloper 
 				_backing_photo_row_unref0 (_tmp1_);
 #line 1074 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = (BackingPhotoRow*) _tmp5_;
-#line 8810 "Photo.c"
+#line 8811 "Photo.c"
 			} else {
 #line 1074 "/home/jens/Source/shotwell/src/Photo.vala"
 				_backing_photo_row_unref0 (_tmp1_);
 #line 1074 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = NULL;
-#line 8816 "Photo.c"
+#line 8817 "Photo.c"
 			}
 #line 1074 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp1_;
-#line 8820 "Photo.c"
+#line 8821 "Photo.c"
 			{
 				PhotoRow* _tmp6_ = NULL;
 #line 1073 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp6_ = self->row;
 #line 1073 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 8827 "Photo.c"
+#line 8828 "Photo.c"
 			}
 #line 1074 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 8831 "Photo.c"
+#line 8832 "Photo.c"
 		}
-		__finally285:
+		__finally298:
 		{
 			PhotoRow* _tmp7_ = NULL;
 #line 1073 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = self->row;
 #line 1073 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 8840 "Photo.c"
+#line 8841 "Photo.c"
 		}
 #line 1073 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8844,7 +8845,7 @@ BackingPhotoRow* photo_get_raw_development_photo_row (Photo* self, RawDeveloper 
 		g_clear_error (&_inner_error_);
 #line 1073 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 8848 "Photo.c"
+#line 8849 "Photo.c"
 	}
 }
 
@@ -8857,14 +8858,14 @@ static PhotoFileFormat* _photo_file_format_dup (PhotoFileFormat* self) {
 	memcpy (dup, self, sizeof (PhotoFileFormat));
 #line 1084 "/home/jens/Source/shotwell/src/Photo.vala"
 	return dup;
-#line 8861 "Photo.c"
+#line 8862 "Photo.c"
 }
 
 
 static gpointer __photo_file_format_dup0 (gpointer self) {
 #line 1084 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? _photo_file_format_dup (self) : NULL;
-#line 8868 "Photo.c"
+#line 8869 "Photo.c"
 }
 
 
@@ -8892,7 +8893,7 @@ PhotoFileFormat* photo_get_editable_file_format (Photo* self) {
 		_photo_file_adapter_unref0 (reader);
 #line 1081 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 8896 "Photo.c"
+#line 8897 "Photo.c"
 	}
 #line 1084 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = reader;
@@ -8906,7 +8907,7 @@ PhotoFileFormat* photo_get_editable_file_format (Photo* self) {
 	_photo_file_adapter_unref0 (reader);
 #line 1084 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 8910 "Photo.c"
+#line 8911 "Photo.c"
 }
 
 
@@ -8932,7 +8933,7 @@ PhotoFileFormat photo_get_export_format_for_parameters (Photo* self, ExportForma
 	switch (_tmp2_) {
 #line 1090 "/home/jens/Source/shotwell/src/Photo.vala"
 		case EXPORT_FORMAT_MODE_UNMODIFIED:
-#line 8936 "Photo.c"
+#line 8937 "Photo.c"
 		{
 			PhotoFileFormat _tmp3_ = 0;
 #line 1092 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8941,11 +8942,11 @@ PhotoFileFormat photo_get_export_format_for_parameters (Photo* self, ExportForma
 			_result_ = _tmp3_;
 #line 1093 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 8945 "Photo.c"
+#line 8946 "Photo.c"
 		}
 #line 1090 "/home/jens/Source/shotwell/src/Photo.vala"
 		case EXPORT_FORMAT_MODE_CURRENT:
-#line 8949 "Photo.c"
+#line 8950 "Photo.c"
 		{
 			PhotoFileFormat _tmp4_ = 0;
 #line 1096 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8954,11 +8955,11 @@ PhotoFileFormat photo_get_export_format_for_parameters (Photo* self, ExportForma
 			_result_ = _tmp4_;
 #line 1097 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 8958 "Photo.c"
+#line 8959 "Photo.c"
 		}
 #line 1090 "/home/jens/Source/shotwell/src/Photo.vala"
 		case EXPORT_FORMAT_MODE_SPECIFIED:
-#line 8962 "Photo.c"
+#line 8963 "Photo.c"
 		{
 			ExportFormatParameters _tmp5_ = {0};
 			PhotoFileFormat _tmp6_ = 0;
@@ -8970,21 +8971,21 @@ PhotoFileFormat photo_get_export_format_for_parameters (Photo* self, ExportForma
 			_result_ = _tmp6_;
 #line 1101 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 8974 "Photo.c"
+#line 8975 "Photo.c"
 		}
 		default:
 		{
 #line 1104 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_error ("Photo.vala:1104: get_export_format_for_parameters: unsupported export " \
 "format mode");
-#line 8980 "Photo.c"
+#line 8981 "Photo.c"
 		}
 	}
 #line 1107 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _result_;
 #line 1107 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 8987 "Photo.c"
+#line 8988 "Photo.c"
 }
 
 
@@ -9008,7 +9009,7 @@ gchar* photo_get_export_basename_for_parameters (Photo* self, ExportFormatParame
 	switch (_tmp1_) {
 #line 1113 "/home/jens/Source/shotwell/src/Photo.vala"
 		case EXPORT_FORMAT_MODE_UNMODIFIED:
-#line 9011 "Photo.c"
+#line 9012 "Photo.c"
 		{
 			GFile* _tmp2_ = NULL;
 			GFile* _tmp3_ = NULL;
@@ -9027,13 +9028,13 @@ gchar* photo_get_export_basename_for_parameters (Photo* self, ExportFormatParame
 			_g_object_unref0 (_tmp3_);
 #line 1116 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 9030 "Photo.c"
+#line 9031 "Photo.c"
 		}
 #line 1113 "/home/jens/Source/shotwell/src/Photo.vala"
 		case EXPORT_FORMAT_MODE_CURRENT:
 #line 1113 "/home/jens/Source/shotwell/src/Photo.vala"
 		case EXPORT_FORMAT_MODE_SPECIFIED:
-#line 9036 "Photo.c"
+#line 9037 "Photo.c"
 		{
 			ExportFormatParameters _tmp5_ = {0};
 			PhotoFileFormat _tmp6_ = 0;
@@ -9050,14 +9051,14 @@ gchar* photo_get_export_basename_for_parameters (Photo* self, ExportFormatParame
 			_g_free0 (_result_);
 #line 1120 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 9053 "Photo.c"
+#line 9054 "Photo.c"
 		}
 		default:
 		{
 #line 1123 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_error ("Photo.vala:1123: get_export_basename_for_parameters: unsupported expor" \
 "t format mode");
-#line 9059 "Photo.c"
+#line 9060 "Photo.c"
 		}
 	}
 #line 1126 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -9068,7 +9069,7 @@ gchar* photo_get_export_basename_for_parameters (Photo* self, ExportFormatParame
 	result = _result_;
 #line 1127 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 9070 "Photo.c"
+#line 9071 "Photo.c"
 }
 
 
@@ -9209,7 +9210,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 	file = _tmp2_;
 #line 1148 "/home/jens/Source/shotwell/src/Photo.vala"
 	info = NULL;
-#line 9211 "Photo.c"
+#line 9212 "Photo.c"
 	{
 		GFileInfo* _tmp3_ = NULL;
 		GFile* _tmp4_ = NULL;
@@ -9223,8 +9224,8 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_tmp3_ = _tmp5_;
 #line 1150 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 9225 "Photo.c"
-			goto __catch286_g_error;
+#line 9226 "Photo.c"
+			goto __catch299_g_error;
 		}
 #line 1150 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = _tmp3_;
@@ -9236,10 +9237,10 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		info = _tmp6_;
 #line 1149 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp3_);
-#line 9238 "Photo.c"
+#line 9239 "Photo.c"
 	}
-	goto __finally286;
-	__catch286_g_error:
+	goto __finally299;
+	__catch299_g_error:
 	{
 		GError* err = NULL;
 #line 1149 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -9256,9 +9257,9 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_g_object_unref0 (file);
 #line 1153 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 9258 "Photo.c"
+#line 9259 "Photo.c"
 	}
-	__finally286:
+	__finally299:
 #line 1149 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1149 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -9271,7 +9272,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		g_clear_error (&_inner_error_);
 #line 1149 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0;
-#line 9273 "Photo.c"
+#line 9274 "Photo.c"
 	}
 #line 1156 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp7_ = info;
@@ -9287,7 +9288,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_g_object_unref0 (file);
 #line 1157 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 9289 "Photo.c"
+#line 9290 "Photo.c"
 	}
 #line 1159 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp9_ = file;
@@ -9295,7 +9296,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 	_tmp10_ = photo_is_file_image (_tmp9_);
 #line 1159 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp10_) {
-#line 9297 "Photo.c"
+#line 9298 "Photo.c"
 		GFile* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
 		gchar* _tmp13_ = NULL;
@@ -9317,7 +9318,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_g_object_unref0 (file);
 #line 1162 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 9319 "Photo.c"
+#line 9320 "Photo.c"
 	}
 #line 1165 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp14_ = file;
@@ -9325,7 +9326,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 	_tmp15_ = photo_file_format_is_file_supported (_tmp14_);
 #line 1165 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp15_) {
-#line 9327 "Photo.c"
+#line 9328 "Photo.c"
 		GFile* _tmp16_ = NULL;
 		gchar* _tmp17_ = NULL;
 		gchar* _tmp18_ = NULL;
@@ -9347,7 +9348,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_g_object_unref0 (file);
 #line 1168 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 9349 "Photo.c"
+#line 9350 "Photo.c"
 	}
 #line 1171 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp19_ = info;
@@ -9361,7 +9362,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 	_tmp24_ = _tmp23_->exif_md5;
 #line 1174 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp24_ != NULL) {
-#line 9363 "Photo.c"
+#line 9364 "Photo.c"
 		PhotoImportParams* _tmp25_ = NULL;
 		const gchar* _tmp26_ = NULL;
 #line 1174 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -9370,15 +9371,15 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_tmp26_ = _tmp25_->thumbnail_md5;
 #line 1174 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp22_ = _tmp26_ != NULL;
-#line 9372 "Photo.c"
+#line 9373 "Photo.c"
 	} else {
 #line 1174 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp22_ = FALSE;
-#line 9376 "Photo.c"
+#line 9377 "Photo.c"
 	}
 #line 1174 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp22_) {
-#line 9380 "Photo.c"
+#line 9381 "Photo.c"
 		PhotoImportParams* _tmp27_ = NULL;
 		const gchar* _tmp28_ = NULL;
 #line 1174 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -9387,15 +9388,15 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_tmp28_ = _tmp27_->full_md5;
 #line 1174 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp21_ = _tmp28_ != NULL;
-#line 9389 "Photo.c"
+#line 9390 "Photo.c"
 	} else {
 #line 1174 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp21_ = FALSE;
-#line 9393 "Photo.c"
+#line 9394 "Photo.c"
 	}
 #line 1174 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp21_) {
-#line 9397 "Photo.c"
+#line 9398 "Photo.c"
 		PhotoImportParams* _tmp29_ = NULL;
 		PhotoImportParams* _tmp30_ = NULL;
 		PhotoFileSnifferOptions _tmp31_ = 0;
@@ -9407,7 +9408,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_tmp31_ = _tmp30_->sniffer_options;
 #line 1175 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp30_->sniffer_options = _tmp31_ | PHOTO_FILE_SNIFFER_OPTIONS_NO_MD5;
-#line 9409 "Photo.c"
+#line 9410 "Photo.c"
 	}
 #line 1178 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp32_ = file;
@@ -9419,7 +9420,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 	_tmp35_ = photo_file_interrogator_new (_tmp32_, _tmp34_);
 #line 1178 "/home/jens/Source/shotwell/src/Photo.vala"
 	interrogator = _tmp35_;
-#line 9421 "Photo.c"
+#line 9422 "Photo.c"
 	{
 		PhotoFileInterrogator* _tmp36_ = NULL;
 #line 1180 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -9428,12 +9429,12 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		photo_file_interrogator_interrogate (_tmp36_, &_inner_error_);
 #line 1180 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 9430 "Photo.c"
-			goto __catch287_g_error;
+#line 9431 "Photo.c"
+			goto __catch300_g_error;
 		}
 	}
-	goto __finally287;
-	__catch287_g_error:
+	goto __finally300;
+	__catch300_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp37_ = NULL;
@@ -9471,9 +9472,9 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_g_object_unref0 (file);
 #line 1184 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 9473 "Photo.c"
+#line 9474 "Photo.c"
 	}
-	__finally287:
+	__finally300:
 #line 1179 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1179 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -9488,7 +9489,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		g_clear_error (&_inner_error_);
 #line 1179 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0;
-#line 9490 "Photo.c"
+#line 9491 "Photo.c"
 	}
 #line 1187 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp42_ = interrogator;
@@ -9506,7 +9507,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_g_object_unref0 (file);
 #line 1188 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 9508 "Photo.c"
+#line 9509 "Photo.c"
 	}
 #line 1191 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp44_ = interrogator;
@@ -9520,7 +9521,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 	if (_tmp47_ == NULL) {
 #line 1192 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp46_ = TRUE;
-#line 9522 "Photo.c"
+#line 9523 "Photo.c"
 	} else {
 		DetectedPhotoInformation* _tmp48_ = NULL;
 		PhotoFileFormat _tmp49_ = 0;
@@ -9530,7 +9531,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_tmp49_ = _tmp48_->file_format;
 #line 1192 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp46_ = _tmp49_ == PHOTO_FILE_FORMAT_UNKNOWN;
-#line 9532 "Photo.c"
+#line 9533 "Photo.c"
 	}
 #line 1192 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp46_) {
@@ -9546,7 +9547,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_g_object_unref0 (file);
 #line 1193 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 9548 "Photo.c"
+#line 9549 "Photo.c"
 	}
 #line 1196 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp50_ = params;
@@ -9554,7 +9555,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 	_tmp51_ = _tmp50_->sniffer_options;
 #line 1196 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((_tmp51_ & PHOTO_FILE_SNIFFER_OPTIONS_NO_MD5) != 0) {
-#line 9556 "Photo.c"
+#line 9557 "Photo.c"
 		DetectedPhotoInformation* _tmp52_ = NULL;
 		PhotoImportParams* _tmp53_ = NULL;
 		const gchar* _tmp54_ = NULL;
@@ -9603,7 +9604,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_g_free0 (_tmp60_->md5);
 #line 1199 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp60_->md5 = _tmp63_;
-#line 9605 "Photo.c"
+#line 9606 "Photo.c"
 	}
 #line 1202 "/home/jens/Source/shotwell/src/Photo.vala"
 	orientation = ORIENTATION_TOP_LEFT;
@@ -9625,7 +9626,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 	_tmp67_ = _tmp66_->metadata;
 #line 1213 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp67_ != NULL) {
-#line 9627 "Photo.c"
+#line 9628 "Photo.c"
 		MetadataDateTime* date_time = NULL;
 		DetectedPhotoInformation* _tmp68_ = NULL;
 		PhotoMetadata* _tmp69_ = NULL;
@@ -9659,7 +9660,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_tmp71_ = date_time;
 #line 1215 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp71_ != NULL) {
-#line 9661 "Photo.c"
+#line 9662 "Photo.c"
 			MetadataDateTime* _tmp72_ = NULL;
 			time_t _tmp73_ = 0;
 #line 1216 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -9668,7 +9669,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 			_tmp73_ = metadata_date_time_get_timestamp (_tmp72_);
 #line 1216 "/home/jens/Source/shotwell/src/Photo.vala"
 			exposure_time = _tmp73_;
-#line 9670 "Photo.c"
+#line 9671 "Photo.c"
 		}
 #line 1218 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp74_ = detected;
@@ -9720,7 +9721,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		rating = _tmp89_;
 #line 1213 "/home/jens/Source/shotwell/src/Photo.vala"
 		_metadata_date_time_unref0 (date_time);
-#line 9722 "Photo.c"
+#line 9723 "Photo.c"
 	}
 #line 1226 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp92_ = detected;
@@ -9730,7 +9731,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 	if (_tmp93_ != GDK_COLORSPACE_RGB) {
 #line 1226 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp91_ = TRUE;
-#line 9732 "Photo.c"
+#line 9733 "Photo.c"
 	} else {
 		DetectedPhotoInformation* _tmp94_ = NULL;
 		gint _tmp95_ = 0;
@@ -9740,13 +9741,13 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_tmp95_ = _tmp94_->channels;
 #line 1227 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp91_ = _tmp95_ < 3;
-#line 9742 "Photo.c"
+#line 9743 "Photo.c"
 	}
 #line 1226 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp91_) {
 #line 1226 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp90_ = TRUE;
-#line 9748 "Photo.c"
+#line 9749 "Photo.c"
 	} else {
 		DetectedPhotoInformation* _tmp96_ = NULL;
 		gint _tmp97_ = 0;
@@ -9756,11 +9757,11 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_tmp97_ = _tmp96_->bits_per_channel;
 #line 1228 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp90_ = _tmp97_ != 8;
-#line 9758 "Photo.c"
+#line 9759 "Photo.c"
 	}
 #line 1226 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp90_) {
-#line 9762 "Photo.c"
+#line 9763 "Photo.c"
 		GFile* _tmp98_ = NULL;
 		gchar* _tmp99_ = NULL;
 		gchar* _tmp100_ = NULL;
@@ -9790,7 +9791,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_g_object_unref0 (file);
 #line 1231 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 9792 "Photo.c"
+#line 9793 "Photo.c"
 	}
 #line 1237 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp101_ = params;
@@ -10002,7 +10003,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 	_tmp177_ = _tmp176_->thumbnails;
 #line 1258 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp177_ != NULL) {
-#line 10004 "Photo.c"
+#line 10005 "Photo.c"
 		PhotoFileReader* reader = NULL;
 		PhotoImportParams* _tmp178_ = NULL;
 		PhotoRow* _tmp179_ = NULL;
@@ -10033,7 +10034,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_tmp186_ = photo_file_format_create_reader (_tmp181_, _tmp185_);
 #line 1259 "/home/jens/Source/shotwell/src/Photo.vala"
 		reader = _tmp186_;
-#line 10035 "Photo.c"
+#line 10036 "Photo.c"
 		{
 			PhotoImportParams* _tmp187_ = NULL;
 			Thumbnails* _tmp188_ = NULL;
@@ -10069,12 +10070,12 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 			thumbnail_cache_generate_for_photo (_tmp188_, _tmp189_, _tmp192_, &_tmp196_, &_inner_error_);
 #line 1262 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 10071 "Photo.c"
-				goto __catch288_g_error;
+#line 10072 "Photo.c"
+				goto __catch301_g_error;
 			}
 		}
-		goto __finally288;
-		__catch288_g_error:
+		goto __finally301;
+		__catch301_g_error:
 		{
 			GError* err = NULL;
 			GError* _tmp197_ = NULL;
@@ -10107,9 +10108,9 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 			_g_object_unref0 (file);
 #line 1265 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 10109 "Photo.c"
+#line 10110 "Photo.c"
 		}
-		__finally288:
+		__finally301:
 #line 1261 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1261 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10132,11 +10133,11 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 			g_clear_error (&_inner_error_);
 #line 1261 "/home/jens/Source/shotwell/src/Photo.vala"
 			return 0;
-#line 10134 "Photo.c"
+#line 10135 "Photo.c"
 		}
 #line 1258 "/home/jens/Source/shotwell/src/Photo.vala"
 		_photo_file_adapter_unref0 (reader);
-#line 10138 "Photo.c"
+#line 10139 "Photo.c"
 	}
 #line 1272 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = IMPORT_RESULT_SUCCESS;
@@ -10154,7 +10155,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 	_g_object_unref0 (file);
 #line 1272 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 10156 "Photo.c"
+#line 10157 "Photo.c"
 }
 
 
@@ -10393,7 +10394,7 @@ void photo_create_pre_import (PhotoImportParams* params) {
 	_tmp56_ = photo_file_interrogator_new (_tmp53_, _tmp55_);
 #line 1298 "/home/jens/Source/shotwell/src/Photo.vala"
 	interrogator = _tmp56_;
-#line 10395 "Photo.c"
+#line 10396 "Photo.c"
 	{
 		DetectedPhotoInformation* detected = NULL;
 		DetectedPhotoInformation* _tmp57_ = NULL;
@@ -10404,8 +10405,8 @@ void photo_create_pre_import (PhotoImportParams* params) {
 		photo_file_interrogator_interrogate (interrogator, &_inner_error_);
 #line 1300 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 10406 "Photo.c"
-			goto __catch289_g_error;
+#line 10407 "Photo.c"
+			goto __catch302_g_error;
 		}
 #line 1301 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp57_ = photo_file_interrogator_get_detected_photo_information (interrogator);
@@ -10415,21 +10416,21 @@ void photo_create_pre_import (PhotoImportParams* params) {
 		_tmp60_ = detected;
 #line 1302 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp60_ != NULL) {
-#line 10417 "Photo.c"
+#line 10418 "Photo.c"
 			gboolean _tmp61_ = FALSE;
 #line 1302 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp61_ = photo_file_interrogator_get_is_photo_corrupted (interrogator);
 #line 1302 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp59_ = !_tmp61_;
-#line 10423 "Photo.c"
+#line 10424 "Photo.c"
 		} else {
 #line 1302 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp59_ = FALSE;
-#line 10427 "Photo.c"
+#line 10428 "Photo.c"
 		}
 #line 1302 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp59_) {
-#line 10431 "Photo.c"
+#line 10432 "Photo.c"
 			DetectedPhotoInformation* _tmp62_ = NULL;
 			PhotoFileFormat _tmp63_ = 0;
 #line 1302 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10438,15 +10439,15 @@ void photo_create_pre_import (PhotoImportParams* params) {
 			_tmp63_ = _tmp62_->file_format;
 #line 1302 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp58_ = _tmp63_ != PHOTO_FILE_FORMAT_UNKNOWN;
-#line 10440 "Photo.c"
+#line 10441 "Photo.c"
 		} else {
 #line 1302 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp58_ = FALSE;
-#line 10444 "Photo.c"
+#line 10445 "Photo.c"
 		}
 #line 1302 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp58_) {
-#line 10448 "Photo.c"
+#line 10449 "Photo.c"
 			PhotoImportParams* _tmp64_ = NULL;
 			PhotoRow* _tmp65_ = NULL;
 			BackingPhotoRow* _tmp66_ = NULL;
@@ -10464,14 +10465,14 @@ void photo_create_pre_import (PhotoImportParams* params) {
 			_tmp68_ = _tmp67_->file_format;
 #line 1303 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp66_->file_format = _tmp68_;
-#line 10466 "Photo.c"
+#line 10467 "Photo.c"
 		}
 #line 1299 "/home/jens/Source/shotwell/src/Photo.vala"
 		_detected_photo_information_unref0 (detected);
-#line 10470 "Photo.c"
+#line 10471 "Photo.c"
 	}
-	goto __finally289;
-	__catch289_g_error:
+	goto __finally302;
+	__catch302_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp69_ = NULL;
@@ -10496,9 +10497,9 @@ void photo_create_pre_import (PhotoImportParams* params) {
 		_g_free0 (_tmp70_);
 #line 1299 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 10498 "Photo.c"
+#line 10499 "Photo.c"
 	}
-	__finally289:
+	__finally302:
 #line 1299 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1299 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10511,13 +10512,13 @@ void photo_create_pre_import (PhotoImportParams* params) {
 		g_clear_error (&_inner_error_);
 #line 1299 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 10513 "Photo.c"
+#line 10514 "Photo.c"
 	}
 #line 1275 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_file_interrogator_unref0 (interrogator);
 #line 1275 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (file);
-#line 10519 "Photo.c"
+#line 10520 "Photo.c"
 }
 
 
@@ -10573,7 +10574,7 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 	backing = _tmp0_;
 #line 1315 "/home/jens/Source/shotwell/src/Photo.vala"
 	info = NULL;
-#line 10575 "Photo.c"
+#line 10576 "Photo.c"
 	{
 		GFileInfo* _tmp1_ = NULL;
 		GFile* _tmp2_ = NULL;
@@ -10587,8 +10588,8 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 		_tmp1_ = _tmp3_;
 #line 1317 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 10589 "Photo.c"
-			goto __catch290_g_error;
+#line 10590 "Photo.c"
+			goto __catch303_g_error;
 		}
 #line 1317 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp4_ = _tmp1_;
@@ -10600,10 +10601,10 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 		info = _tmp4_;
 #line 1316 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp1_);
-#line 10602 "Photo.c"
+#line 10603 "Photo.c"
 	}
-	goto __finally290;
-	__catch290_g_error:
+	goto __finally303;
+	__catch303_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp5_ = NULL;
@@ -10641,17 +10642,17 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 		if (detected) {
 #line 1322 "/home/jens/Source/shotwell/src/Photo.vala"
 			*detected = _vala_detected;
-#line 10643 "Photo.c"
+#line 10644 "Photo.c"
 		} else {
 #line 1322 "/home/jens/Source/shotwell/src/Photo.vala"
 			_detected_photo_information_unref0 (_vala_detected);
-#line 10647 "Photo.c"
+#line 10648 "Photo.c"
 		}
 #line 1322 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 10651 "Photo.c"
+#line 10652 "Photo.c"
 	}
-	__finally290:
+	__finally303:
 #line 1316 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1316 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10662,7 +10663,7 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 		_backing_photo_row_unref0 (backing);
 #line 1316 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 10664 "Photo.c"
+#line 10665 "Photo.c"
 	}
 #line 1326 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp10_ = file;
@@ -10688,7 +10689,7 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 		_backing_photo_row_unref0 (backing);
 #line 1327 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 10690 "Photo.c"
+#line 10691 "Photo.c"
 	}
 #line 1328 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp14_ = interrogator;
@@ -10704,7 +10705,7 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 	if (_tmp17_ == NULL) {
 #line 1329 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp16_ = TRUE;
-#line 10706 "Photo.c"
+#line 10707 "Photo.c"
 	} else {
 		PhotoFileInterrogator* _tmp18_ = NULL;
 		gboolean _tmp19_ = FALSE;
@@ -10714,11 +10715,11 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 		_tmp19_ = photo_file_interrogator_get_is_photo_corrupted (_tmp18_);
 #line 1329 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp16_ = _tmp19_;
-#line 10716 "Photo.c"
+#line 10717 "Photo.c"
 	}
 #line 1329 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp16_) {
-#line 10720 "Photo.c"
+#line 10721 "Photo.c"
 		gchar* _tmp20_ = NULL;
 		gchar* _tmp21_ = NULL;
 #line 1330 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10741,15 +10742,15 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 		if (detected) {
 #line 1332 "/home/jens/Source/shotwell/src/Photo.vala"
 			*detected = _vala_detected;
-#line 10743 "Photo.c"
+#line 10744 "Photo.c"
 		} else {
 #line 1332 "/home/jens/Source/shotwell/src/Photo.vala"
 			_detected_photo_information_unref0 (_vala_detected);
-#line 10747 "Photo.c"
+#line 10748 "Photo.c"
 		}
 #line 1332 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 10751 "Photo.c"
+#line 10752 "Photo.c"
 	}
 #line 1335 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp22_ = info;
@@ -10805,7 +10806,7 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 	_tmp41_ = _tmp40_->metadata;
 #line 1342 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp41_ != NULL) {
-#line 10807 "Photo.c"
+#line 10808 "Photo.c"
 		DetectedPhotoInformation* _tmp42_ = NULL;
 		PhotoMetadata* _tmp43_ = NULL;
 		Orientation _tmp44_ = 0;
@@ -10817,11 +10818,11 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 		_tmp44_ = photo_metadata_get_orientation (_tmp43_);
 #line 1343 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp39_ = _tmp44_;
-#line 10819 "Photo.c"
+#line 10820 "Photo.c"
 	} else {
 #line 1343 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp39_ = ORIENTATION_TOP_LEFT;
-#line 10823 "Photo.c"
+#line 10824 "Photo.c"
 	}
 #line 1342 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp45_ = backing;
@@ -10837,15 +10838,15 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 	if (detected) {
 #line 1345 "/home/jens/Source/shotwell/src/Photo.vala"
 		*detected = _vala_detected;
-#line 10839 "Photo.c"
+#line 10840 "Photo.c"
 	} else {
 #line 1345 "/home/jens/Source/shotwell/src/Photo.vala"
 		_detected_photo_information_unref0 (_vala_detected);
-#line 10843 "Photo.c"
+#line 10844 "Photo.c"
 	}
 #line 1345 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 10847 "Photo.c"
+#line 10848 "Photo.c"
 }
 
 
@@ -10856,13 +10857,13 @@ static void _vala_array_add254 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1441 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 10858 "Photo.c"
+#line 10859 "Photo.c"
 	}
 #line 1441 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1441 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 10864 "Photo.c"
+#line 10865 "Photo.c"
 }
 
 
@@ -10873,13 +10874,13 @@ static void _vala_array_add255 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1444 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 10875 "Photo.c"
+#line 10876 "Photo.c"
 	}
 #line 1444 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1444 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 10881 "Photo.c"
+#line 10882 "Photo.c"
 }
 
 
@@ -10890,13 +10891,13 @@ static void _vala_array_add256 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1451 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 10892 "Photo.c"
+#line 10893 "Photo.c"
 	}
 #line 1451 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1451 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 10898 "Photo.c"
+#line 10899 "Photo.c"
 }
 
 
@@ -10907,13 +10908,13 @@ static void _vala_array_add257 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1454 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 10909 "Photo.c"
+#line 10910 "Photo.c"
 	}
 #line 1454 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1454 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 10915 "Photo.c"
+#line 10916 "Photo.c"
 }
 
 
@@ -10924,13 +10925,13 @@ static void _vala_array_add258 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1457 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 10926 "Photo.c"
+#line 10927 "Photo.c"
 	}
 #line 1457 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1457 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 10932 "Photo.c"
+#line 10933 "Photo.c"
 }
 
 
@@ -10941,20 +10942,20 @@ static void _vala_array_add259 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1460 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 10943 "Photo.c"
+#line 10944 "Photo.c"
 	}
 #line 1460 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1460 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 10949 "Photo.c"
+#line 10950 "Photo.c"
 }
 
 
 static gpointer _media_metadata_ref0 (gpointer self) {
 #line 1470 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? media_metadata_ref (self) : NULL;
-#line 10956 "Photo.c"
+#line 10957 "Photo.c"
 }
 
 
@@ -11055,13 +11056,13 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		_g_object_unref0 (file);
 #line 1415 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 11057 "Photo.c"
+#line 11058 "Photo.c"
 	}
 #line 1417 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp7_ = backing;
 #line 1417 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp7_ == NULL) {
-#line 11063 "Photo.c"
+#line 11064 "Photo.c"
 		GFile* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
 		gchar* _tmp10_ = NULL;
@@ -11087,15 +11088,15 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		if (reimport_state) {
 #line 1419 "/home/jens/Source/shotwell/src/Photo.vala"
 			*reimport_state = _vala_reimport_state;
-#line 11089 "Photo.c"
+#line 11090 "Photo.c"
 		} else {
 #line 1419 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_master_state_unref0 (_vala_reimport_state);
-#line 11093 "Photo.c"
+#line 11094 "Photo.c"
 		}
 #line 1419 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 11097 "Photo.c"
+#line 11098 "Photo.c"
 	}
 #line 1423 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp13_ = detected;
@@ -11105,7 +11106,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 	if (_tmp14_ != GDK_COLORSPACE_RGB) {
 #line 1423 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp12_ = TRUE;
-#line 11107 "Photo.c"
+#line 11108 "Photo.c"
 	} else {
 		DetectedPhotoInformation* _tmp15_ = NULL;
 		gint _tmp16_ = 0;
@@ -11115,13 +11116,13 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		_tmp16_ = _tmp15_->channels;
 #line 1424 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp12_ = _tmp16_ < 3;
-#line 11117 "Photo.c"
+#line 11118 "Photo.c"
 	}
 #line 1423 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp12_) {
 #line 1423 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp11_ = TRUE;
-#line 11123 "Photo.c"
+#line 11124 "Photo.c"
 	} else {
 		DetectedPhotoInformation* _tmp17_ = NULL;
 		gint _tmp18_ = 0;
@@ -11131,11 +11132,11 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		_tmp18_ = _tmp17_->bits_per_channel;
 #line 1425 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp11_ = _tmp18_ != 8;
-#line 11133 "Photo.c"
+#line 11134 "Photo.c"
 	}
 #line 1423 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp11_) {
-#line 11137 "Photo.c"
+#line 11138 "Photo.c"
 		GFile* _tmp19_ = NULL;
 		gchar* _tmp20_ = NULL;
 		gchar* _tmp21_ = NULL;
@@ -11161,28 +11162,28 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		if (reimport_state) {
 #line 1428 "/home/jens/Source/shotwell/src/Photo.vala"
 			*reimport_state = _vala_reimport_state;
-#line 11163 "Photo.c"
+#line 11164 "Photo.c"
 		} else {
 #line 1428 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_master_state_unref0 (_vala_reimport_state);
-#line 11167 "Photo.c"
+#line 11168 "Photo.c"
 		}
 #line 1428 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 11171 "Photo.c"
+#line 11172 "Photo.c"
 	}
 #line 1432 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp22_ = photo_row_new ();
 #line 1432 "/home/jens/Source/shotwell/src/Photo.vala"
 	updated_row = _tmp22_;
-#line 11177 "Photo.c"
+#line 11178 "Photo.c"
 	{
 		PhotoRow* _tmp23_ = NULL;
 #line 1433 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp23_ = self->row;
 #line 1433 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 11184 "Photo.c"
+#line 11185 "Photo.c"
 		{
 			PhotoRow* _tmp24_ = NULL;
 			PhotoRow* _tmp25_ = NULL;
@@ -11194,16 +11195,16 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 			_photo_row_unref0 (updated_row);
 #line 1434 "/home/jens/Source/shotwell/src/Photo.vala"
 			updated_row = _tmp25_;
-#line 11196 "Photo.c"
+#line 11197 "Photo.c"
 		}
-		__finally291:
+		__finally304:
 		{
 			PhotoRow* _tmp26_ = NULL;
 #line 1433 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp26_ = self->row;
 #line 1433 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 11205 "Photo.c"
+#line 11206 "Photo.c"
 		}
 #line 1433 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -11219,7 +11220,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 			_g_object_unref0 (file);
 #line 1433 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 11221 "Photo.c"
+#line 11222 "Photo.c"
 		}
 	}
 #line 1438 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11240,7 +11241,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 	_tmp31_ = _tmp30_->md5;
 #line 1440 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (g_strcmp0 (_tmp29_, _tmp31_) != 0) {
-#line 11242 "Photo.c"
+#line 11243 "Photo.c"
 		gchar** _tmp32_ = NULL;
 		gint _tmp32__length1 = 0;
 		gchar* _tmp33_ = NULL;
@@ -11252,7 +11253,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		_tmp33_ = g_strdup ("metadata:md5");
 #line 1441 "/home/jens/Source/shotwell/src/Photo.vala"
 		_vala_array_add254 (&list, &list_length1, &_list_size_, _tmp33_);
-#line 11254 "Photo.c"
+#line 11255 "Photo.c"
 	}
 #line 1443 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp34_ = updated_row;
@@ -11266,7 +11267,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 	_tmp38_ = _tmp37_->original_orientation;
 #line 1443 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp36_ != _tmp38_) {
-#line 11268 "Photo.c"
+#line 11269 "Photo.c"
 		gchar** _tmp39_ = NULL;
 		gint _tmp39__length1 = 0;
 		gchar* _tmp40_ = NULL;
@@ -11292,7 +11293,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		_tmp44_ = _tmp43_->original_orientation;
 #line 1445 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp42_->original_orientation = _tmp44_;
-#line 11294 "Photo.c"
+#line 11295 "Photo.c"
 	}
 #line 1448 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp45_ = detected;
@@ -11300,7 +11301,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 	_tmp46_ = _tmp45_->metadata;
 #line 1448 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp46_ != NULL) {
-#line 11302 "Photo.c"
+#line 11303 "Photo.c"
 		MetadataDateTime* date_time = NULL;
 		DetectedPhotoInformation* _tmp47_ = NULL;
 		PhotoMetadata* _tmp48_ = NULL;
@@ -11338,7 +11339,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		_tmp51_ = date_time;
 #line 1450 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp51_ != NULL) {
-#line 11340 "Photo.c"
+#line 11341 "Photo.c"
 			PhotoRow* _tmp52_ = NULL;
 			time_t _tmp53_ = 0;
 			MetadataDateTime* _tmp54_ = NULL;
@@ -11353,15 +11354,15 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 			_tmp55_ = metadata_date_time_get_timestamp (_tmp54_);
 #line 1450 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp50_ = _tmp53_ != _tmp55_;
-#line 11355 "Photo.c"
+#line 11356 "Photo.c"
 		} else {
 #line 1450 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp50_ = FALSE;
-#line 11359 "Photo.c"
+#line 11360 "Photo.c"
 		}
 #line 1450 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp50_) {
-#line 11363 "Photo.c"
+#line 11364 "Photo.c"
 			gchar** _tmp56_ = NULL;
 			gint _tmp56__length1 = 0;
 			gchar* _tmp57_ = NULL;
@@ -11373,7 +11374,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 			_tmp57_ = g_strdup ("metadata:exposure-time");
 #line 1451 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add256 (&list, &list_length1, &_list_size_, _tmp57_);
-#line 11375 "Photo.c"
+#line 11376 "Photo.c"
 		}
 #line 1453 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp58_ = updated_row;
@@ -11393,7 +11394,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		_g_free0 (_tmp63_);
 #line 1453 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp64_) {
-#line 11395 "Photo.c"
+#line 11396 "Photo.c"
 			gchar** _tmp65_ = NULL;
 			gint _tmp65__length1 = 0;
 			gchar* _tmp66_ = NULL;
@@ -11405,7 +11406,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 			_tmp66_ = g_strdup ("metadata:name");
 #line 1454 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add257 (&list, &list_length1, &_list_size_, _tmp66_);
-#line 11407 "Photo.c"
+#line 11408 "Photo.c"
 		}
 #line 1456 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp67_ = updated_row;
@@ -11425,7 +11426,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		_g_free0 (_tmp72_);
 #line 1456 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp73_) {
-#line 11427 "Photo.c"
+#line 11428 "Photo.c"
 			gchar** _tmp74_ = NULL;
 			gint _tmp74__length1 = 0;
 			gchar* _tmp75_ = NULL;
@@ -11437,7 +11438,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 			_tmp75_ = g_strdup ("metadata:comment");
 #line 1457 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add258 (&list, &list_length1, &_list_size_, _tmp75_);
-#line 11439 "Photo.c"
+#line 11440 "Photo.c"
 		}
 #line 1459 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp76_ = updated_row;
@@ -11451,7 +11452,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		_tmp80_ = photo_metadata_get_rating (_tmp79_);
 #line 1459 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp77_ != _tmp80_) {
-#line 11453 "Photo.c"
+#line 11454 "Photo.c"
 			gchar** _tmp81_ = NULL;
 			gint _tmp81__length1 = 0;
 			gchar* _tmp82_ = NULL;
@@ -11463,11 +11464,11 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 			_tmp82_ = g_strdup ("metadata:rating");
 #line 1460 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add259 (&list, &list_length1, &_list_size_, _tmp82_);
-#line 11465 "Photo.c"
+#line 11466 "Photo.c"
 		}
 #line 1448 "/home/jens/Source/shotwell/src/Photo.vala"
 		_metadata_date_time_unref0 (date_time);
-#line 11469 "Photo.c"
+#line 11470 "Photo.c"
 	}
 #line 1463 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp83_ = updated_row;
@@ -11523,7 +11524,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 	_tmp99_ = _tmp98_->metadata;
 #line 1469 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp99_ != NULL) {
-#line 11525 "Photo.c"
+#line 11526 "Photo.c"
 		DetectedPhotoInformation* _tmp100_ = NULL;
 		PhotoMetadata* _tmp101_ = NULL;
 		PhotoMetadata* _tmp102_ = NULL;
@@ -11566,7 +11567,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		_tmp106_ = date_time;
 #line 1473 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp106_ != NULL) {
-#line 11568 "Photo.c"
+#line 11569 "Photo.c"
 			PhotoRow* _tmp107_ = NULL;
 			MetadataDateTime* _tmp108_ = NULL;
 			time_t _tmp109_ = 0;
@@ -11578,7 +11579,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 			_tmp109_ = metadata_date_time_get_timestamp (_tmp108_);
 #line 1474 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp107_->exposure_time = _tmp109_;
-#line 11580 "Photo.c"
+#line 11581 "Photo.c"
 		}
 #line 1476 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp110_ = updated_row;
@@ -11616,7 +11617,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 		_tmp118_->rating = _tmp121_;
 #line 1469 "/home/jens/Source/shotwell/src/Photo.vala"
 		_metadata_date_time_unref0 (date_time);
-#line 11618 "Photo.c"
+#line 11619 "Photo.c"
 	}
 #line 1481 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp122_ = updated_row;
@@ -11650,15 +11651,15 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 	if (reimport_state) {
 #line 1483 "/home/jens/Source/shotwell/src/Photo.vala"
 		*reimport_state = _vala_reimport_state;
-#line 11652 "Photo.c"
+#line 11653 "Photo.c"
 	} else {
 #line 1483 "/home/jens/Source/shotwell/src/Photo.vala"
 		_photo_reimport_master_state_unref0 (_vala_reimport_state);
-#line 11656 "Photo.c"
+#line 11657 "Photo.c"
 	}
 #line 1483 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 11660 "Photo.c"
+#line 11661 "Photo.c"
 }
 
 
@@ -11667,7 +11668,7 @@ static void photo_real_apply_user_metadata_for_reimport (Photo* self, PhotoMetad
 	g_critical ("Type `%s' does not implement abstract method `photo_apply_user_metadata_for_reimport'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
 #line 1486 "/home/jens/Source/shotwell/src/Photo.vala"
 	return;
-#line 11669 "Photo.c"
+#line 11670 "Photo.c"
 }
 
 
@@ -11676,14 +11677,14 @@ void photo_apply_user_metadata_for_reimport (Photo* self, PhotoMetadata* metadat
 	g_return_if_fail (IS_PHOTO (self));
 #line 1486 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_GET_CLASS (self)->apply_user_metadata_for_reimport (self, metadata);
-#line 11678 "Photo.c"
+#line 11679 "Photo.c"
 }
 
 
 static gpointer _photo_reimport_master_state_ref0 (gpointer self) {
 #line 1490 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? photo_reimport_master_state_ref (self) : NULL;
-#line 11685 "Photo.c"
+#line 11686 "Photo.c"
 }
 
 
@@ -11694,13 +11695,13 @@ static void _vala_array_add260 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1508 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 11696 "Photo.c"
+#line 11697 "Photo.c"
 	}
 #line 1508 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1508 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 11702 "Photo.c"
+#line 11703 "Photo.c"
 }
 
 
@@ -11711,13 +11712,13 @@ static void _vala_array_add261 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1510 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 11713 "Photo.c"
+#line 11714 "Photo.c"
 	}
 #line 1510 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1510 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 11719 "Photo.c"
+#line 11720 "Photo.c"
 }
 
 
@@ -11766,7 +11767,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 			_photo_reimport_master_state_unref0 (reimport_state);
 #line 1492 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 11768 "Photo.c"
+#line 11769 "Photo.c"
 		} else {
 #line 1492 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_master_state_unref0 (reimport_state);
@@ -11776,7 +11777,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 			g_clear_error (&_inner_error_);
 #line 1492 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 11778 "Photo.c"
+#line 11779 "Photo.c"
 		}
 	}
 	{
@@ -11785,7 +11786,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 		_tmp5_ = self->row;
 #line 1494 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 11787 "Photo.c"
+#line 11788 "Photo.c"
 		{
 			BackingPhotoRow* original_master = NULL;
 			PhotoRow* _tmp6_ = NULL;
@@ -11843,20 +11844,20 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 			if (!_tmp18_) {
 #line 1501 "/home/jens/Source/shotwell/src/Photo.vala"
 				photo_internal_remove_all_transformations (self, FALSE);
-#line 11845 "Photo.c"
+#line 11846 "Photo.c"
 			}
 #line 1494 "/home/jens/Source/shotwell/src/Photo.vala"
 			_backing_photo_row_unref0 (original_master);
-#line 11849 "Photo.c"
+#line 11850 "Photo.c"
 		}
-		__finally292:
+		__finally305:
 		{
 			PhotoRow* _tmp19_ = NULL;
 #line 1494 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp19_ = self->row;
 #line 1494 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 11858 "Photo.c"
+#line 11859 "Photo.c"
 		}
 #line 1494 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -11868,7 +11869,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 				_photo_reimport_master_state_unref0 (reimport_state);
 #line 1494 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 11870 "Photo.c"
+#line 11871 "Photo.c"
 			} else {
 #line 1494 "/home/jens/Source/shotwell/src/Photo.vala"
 				_photo_reimport_master_state_unref0 (reimport_state);
@@ -11878,7 +11879,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 				g_clear_error (&_inner_error_);
 #line 1494 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 11880 "Photo.c"
+#line 11881 "Photo.c"
 			}
 		}
 	}
@@ -11886,19 +11887,19 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 	_tmp20_ = reimport_state->metadata;
 #line 1504 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp20_ != NULL) {
-#line 11888 "Photo.c"
+#line 11889 "Photo.c"
 		PhotoMetadata* _tmp21_ = NULL;
 #line 1505 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp21_ = reimport_state->metadata;
 #line 1505 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_apply_user_metadata_for_reimport (self, _tmp21_);
-#line 11894 "Photo.c"
+#line 11895 "Photo.c"
 	}
 #line 1507 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp22_ = reimport_state->metadata_only;
 #line 1507 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp22_) {
-#line 11900 "Photo.c"
+#line 11901 "Photo.c"
 		gchar** _tmp23_ = NULL;
 		gint _tmp23__length1 = 0;
 		gchar* _tmp24_ = NULL;
@@ -11915,7 +11916,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 		_tmp25_ = photo_is_master_baseline (self);
 #line 1509 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp25_) {
-#line 11917 "Photo.c"
+#line 11918 "Photo.c"
 			gchar** _tmp26_ = NULL;
 			gint _tmp26__length1 = 0;
 			gchar* _tmp27_ = NULL;
@@ -11927,7 +11928,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 			_tmp27_ = g_strdup ("image:baseline");
 #line 1510 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add261 (&reimport_state->alterations, &reimport_state->alterations_length1, &reimport_state->_alterations_size_, _tmp27_);
-#line 11929 "Photo.c"
+#line 11930 "Photo.c"
 		}
 	}
 #line 1513 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11936,7 +11937,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 	_tmp28__length1 = reimport_state->alterations_length1;
 #line 1513 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp28__length1 > 0) {
-#line 11938 "Photo.c"
+#line 11939 "Photo.c"
 		gchar** _tmp29_ = NULL;
 		gint _tmp29__length1 = 0;
 		Alteration* _tmp30_ = NULL;
@@ -11953,7 +11954,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp31_);
 #line 1514 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp31_);
-#line 11955 "Photo.c"
+#line 11956 "Photo.c"
 	}
 #line 1516 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp32_ = reimport_state->metadata;
@@ -11963,29 +11964,29 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 	_tmp33_ = photo_is_master_baseline (self);
 #line 1518 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp33_) {
-#line 11965 "Photo.c"
+#line 11966 "Photo.c"
 		PhotoMetadata* _tmp34_ = NULL;
 #line 1519 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp34_ = reimport_state->metadata;
 #line 1519 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_baseline_reimported (self, _tmp34_);
-#line 11971 "Photo.c"
+#line 11972 "Photo.c"
 	}
 #line 1521 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp35_ = photo_is_master_source (self);
 #line 1521 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp35_) {
-#line 11977 "Photo.c"
+#line 11978 "Photo.c"
 		PhotoMetadata* _tmp36_ = NULL;
 #line 1522 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp36_ = reimport_state->metadata;
 #line 1522 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_source_reimported (self, _tmp36_);
-#line 11983 "Photo.c"
+#line 11984 "Photo.c"
 	}
 #line 1489 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_reimport_master_state_unref0 (reimport_state);
-#line 11987 "Photo.c"
+#line 11988 "Photo.c"
 }
 
 
@@ -12024,7 +12025,7 @@ static gboolean photo_verify_file_for_reimport (Photo* self, GFile* file, Backin
 		g_propagate_error (error, _inner_error_);
 #line 1528 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 12026 "Photo.c"
+#line 12027 "Photo.c"
 	}
 #line 1528 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = _tmp0_;
@@ -12046,25 +12047,25 @@ static gboolean photo_verify_file_for_reimport (Photo* self, GFile* file, Backin
 		if (backing) {
 #line 1531 "/home/jens/Source/shotwell/src/Photo.vala"
 			*backing = _vala_backing;
-#line 12048 "Photo.c"
+#line 12049 "Photo.c"
 		} else {
 #line 1531 "/home/jens/Source/shotwell/src/Photo.vala"
 			_backing_photo_row_unref0 (_vala_backing);
-#line 12052 "Photo.c"
+#line 12053 "Photo.c"
 		}
 #line 1531 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (detected) {
 #line 1531 "/home/jens/Source/shotwell/src/Photo.vala"
 			*detected = _vala_detected;
-#line 12058 "Photo.c"
+#line 12059 "Photo.c"
 		} else {
 #line 1531 "/home/jens/Source/shotwell/src/Photo.vala"
 			_detected_photo_information_unref0 (_vala_detected);
-#line 12062 "Photo.c"
+#line 12063 "Photo.c"
 		}
 #line 1531 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 12066 "Photo.c"
+#line 12067 "Photo.c"
 	}
 #line 1535 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = _vala_detected;
@@ -12074,7 +12075,7 @@ static gboolean photo_verify_file_for_reimport (Photo* self, GFile* file, Backin
 	if (_tmp9_ != GDK_COLORSPACE_RGB) {
 #line 1535 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp7_ = TRUE;
-#line 12076 "Photo.c"
+#line 12077 "Photo.c"
 	} else {
 		DetectedPhotoInformation* _tmp10_ = NULL;
 		gint _tmp11_ = 0;
@@ -12084,13 +12085,13 @@ static gboolean photo_verify_file_for_reimport (Photo* self, GFile* file, Backin
 		_tmp11_ = _tmp10_->channels;
 #line 1536 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp7_ = _tmp11_ < 3;
-#line 12086 "Photo.c"
+#line 12087 "Photo.c"
 	}
 #line 1535 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp7_) {
 #line 1535 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = TRUE;
-#line 12092 "Photo.c"
+#line 12093 "Photo.c"
 	} else {
 		DetectedPhotoInformation* _tmp12_ = NULL;
 		gint _tmp13_ = 0;
@@ -12100,11 +12101,11 @@ static gboolean photo_verify_file_for_reimport (Photo* self, GFile* file, Backin
 		_tmp13_ = _tmp12_->bits_per_channel;
 #line 1537 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = _tmp13_ != 8;
-#line 12102 "Photo.c"
+#line 12103 "Photo.c"
 	}
 #line 1535 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp6_) {
-#line 12106 "Photo.c"
+#line 12107 "Photo.c"
 		GFile* _tmp14_ = NULL;
 		gchar* _tmp15_ = NULL;
 		gchar* _tmp16_ = NULL;
@@ -12126,25 +12127,25 @@ static gboolean photo_verify_file_for_reimport (Photo* self, GFile* file, Backin
 		if (backing) {
 #line 1540 "/home/jens/Source/shotwell/src/Photo.vala"
 			*backing = _vala_backing;
-#line 12128 "Photo.c"
+#line 12129 "Photo.c"
 		} else {
 #line 1540 "/home/jens/Source/shotwell/src/Photo.vala"
 			_backing_photo_row_unref0 (_vala_backing);
-#line 12132 "Photo.c"
+#line 12133 "Photo.c"
 		}
 #line 1540 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (detected) {
 #line 1540 "/home/jens/Source/shotwell/src/Photo.vala"
 			*detected = _vala_detected;
-#line 12138 "Photo.c"
+#line 12139 "Photo.c"
 		} else {
 #line 1540 "/home/jens/Source/shotwell/src/Photo.vala"
 			_detected_photo_information_unref0 (_vala_detected);
-#line 12142 "Photo.c"
+#line 12143 "Photo.c"
 		}
 #line 1540 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 12146 "Photo.c"
+#line 12147 "Photo.c"
 	}
 #line 1543 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = TRUE;
@@ -12154,25 +12155,25 @@ static gboolean photo_verify_file_for_reimport (Photo* self, GFile* file, Backin
 	if (backing) {
 #line 1543 "/home/jens/Source/shotwell/src/Photo.vala"
 		*backing = _vala_backing;
-#line 12156 "Photo.c"
+#line 12157 "Photo.c"
 	} else {
 #line 1543 "/home/jens/Source/shotwell/src/Photo.vala"
 		_backing_photo_row_unref0 (_vala_backing);
-#line 12160 "Photo.c"
+#line 12161 "Photo.c"
 	}
 #line 1543 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (detected) {
 #line 1543 "/home/jens/Source/shotwell/src/Photo.vala"
 		*detected = _vala_detected;
-#line 12166 "Photo.c"
+#line 12167 "Photo.c"
 	} else {
 #line 1543 "/home/jens/Source/shotwell/src/Photo.vala"
 		_detected_photo_information_unref0 (_vala_detected);
-#line 12170 "Photo.c"
+#line 12171 "Photo.c"
 	}
 #line 1543 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 12174 "Photo.c"
+#line 12175 "Photo.c"
 }
 
 
@@ -12216,15 +12217,15 @@ gboolean photo_prepare_for_reimport_editable (Photo* self, PhotoReimportEditable
 		if (state) {
 #line 1552 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 12218 "Photo.c"
+#line 12219 "Photo.c"
 		} else {
 #line 1552 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_editable_state_unref0 (_vala_state);
-#line 12222 "Photo.c"
+#line 12223 "Photo.c"
 		}
 #line 1552 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 12226 "Photo.c"
+#line 12227 "Photo.c"
 	}
 #line 1556 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp3_ = file;
@@ -12252,7 +12253,7 @@ gboolean photo_prepare_for_reimport_editable (Photo* self, PhotoReimportEditable
 		_g_object_unref0 (file);
 #line 1556 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 12254 "Photo.c"
+#line 12255 "Photo.c"
 	}
 #line 1556 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp2_) {
@@ -12268,15 +12269,15 @@ gboolean photo_prepare_for_reimport_editable (Photo* self, PhotoReimportEditable
 		if (state) {
 #line 1557 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 12270 "Photo.c"
+#line 12271 "Photo.c"
 		} else {
 #line 1557 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_editable_state_unref0 (_vala_state);
-#line 12274 "Photo.c"
+#line 12275 "Photo.c"
 		}
 #line 1557 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 12278 "Photo.c"
+#line 12279 "Photo.c"
 	}
 #line 1559 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp7_ = backing;
@@ -12302,22 +12303,22 @@ gboolean photo_prepare_for_reimport_editable (Photo* self, PhotoReimportEditable
 	if (state) {
 #line 1561 "/home/jens/Source/shotwell/src/Photo.vala"
 		*state = _vala_state;
-#line 12304 "Photo.c"
+#line 12305 "Photo.c"
 	} else {
 #line 1561 "/home/jens/Source/shotwell/src/Photo.vala"
 		_photo_reimport_editable_state_unref0 (_vala_state);
-#line 12308 "Photo.c"
+#line 12309 "Photo.c"
 	}
 #line 1561 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 12312 "Photo.c"
+#line 12313 "Photo.c"
 }
 
 
 static gpointer _photo_reimport_editable_state_ref0 (gpointer self) {
 #line 1570 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? photo_reimport_editable_state_ref (self) : NULL;
-#line 12319 "Photo.c"
+#line 12320 "Photo.c"
 }
 
 
@@ -12358,7 +12359,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 	if (_tmp1_) {
 #line 1568 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 12360 "Photo.c"
+#line 12361 "Photo.c"
 	}
 #line 1570 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = state;
@@ -12372,7 +12373,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 	_tmp5_ = _tmp4_->metadata_only;
 #line 1572 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp5_) {
-#line 12374 "Photo.c"
+#line 12375 "Photo.c"
 		BackingPhotoTable* _tmp6_ = NULL;
 		BackingPhotoTable* _tmp7_ = NULL;
 		PhotoReimportEditableStateImpl* _tmp8_ = NULL;
@@ -12399,7 +12400,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 				_photo_reimport_editable_state_unref0 (reimport_state);
 #line 1573 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 12401 "Photo.c"
+#line 12402 "Photo.c"
 			} else {
 #line 1573 "/home/jens/Source/shotwell/src/Photo.vala"
 				_photo_reimport_editable_state_unref0 (reimport_state);
@@ -12409,7 +12410,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 				g_clear_error (&_inner_error_);
 #line 1573 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 12411 "Photo.c"
+#line 12412 "Photo.c"
 			}
 		}
 		{
@@ -12418,7 +12419,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 			_tmp10_ = self->row;
 #line 1575 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_lock (&self->priv->__lock_row);
-#line 12420 "Photo.c"
+#line 12421 "Photo.c"
 			{
 				PhotoReimportEditableStateImpl* _tmp11_ = NULL;
 				BackingPhotoRow* _tmp12_ = NULL;
@@ -12446,16 +12447,16 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 				photo_set_orientation (self, _tmp16_);
 #line 1578 "/home/jens/Source/shotwell/src/Photo.vala"
 				photo_internal_remove_all_transformations (self, FALSE);
-#line 12448 "Photo.c"
+#line 12449 "Photo.c"
 			}
-			__finally293:
+			__finally306:
 			{
 				PhotoRow* _tmp17_ = NULL;
 #line 1575 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp17_ = self->row;
 #line 1575 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 12457 "Photo.c"
+#line 12458 "Photo.c"
 			}
 #line 1575 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -12467,7 +12468,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 					_photo_reimport_editable_state_unref0 (reimport_state);
 #line 1575 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 12469 "Photo.c"
+#line 12470 "Photo.c"
 				} else {
 #line 1575 "/home/jens/Source/shotwell/src/Photo.vala"
 					_photo_reimport_editable_state_unref0 (reimport_state);
@@ -12477,7 +12478,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 					g_clear_error (&_inner_error_);
 #line 1575 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 12479 "Photo.c"
+#line 12480 "Photo.c"
 				}
 			}
 		}
@@ -12493,7 +12494,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 		_tmp20_ = _tmp19_->original_orientation;
 #line 1581 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_set_orientation (self, _tmp20_);
-#line 12495 "Photo.c"
+#line 12496 "Photo.c"
 	}
 #line 1584 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp21_ = reimport_state;
@@ -12501,7 +12502,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 	_tmp22_ = _tmp21_->metadata;
 #line 1584 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp22_ != NULL) {
-#line 12503 "Photo.c"
+#line 12504 "Photo.c"
 		PhotoReimportEditableStateImpl* _tmp23_ = NULL;
 		PhotoMetadata* _tmp24_ = NULL;
 		gchar* _tmp25_ = NULL;
@@ -12553,7 +12554,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 		_tmp35_ = _tmp34_->metadata;
 #line 1588 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_apply_user_metadata_for_reimport (self, _tmp35_);
-#line 12555 "Photo.c"
+#line 12556 "Photo.c"
 	}
 #line 1591 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp36_ = g_strdup ("metadata:name,image:orientation,metadata:rating,metadata:exposure-time");
@@ -12565,7 +12566,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 	_tmp38_ = _tmp37_->metadata_only;
 #line 1592 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp38_) {
-#line 12567 "Photo.c"
+#line 12568 "Photo.c"
 		const gchar* _tmp39_ = NULL;
 		gchar* _tmp40_ = NULL;
 #line 1593 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -12576,7 +12577,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 		_g_free0 (list);
 #line 1593 "/home/jens/Source/shotwell/src/Photo.vala"
 		list = _tmp40_;
-#line 12578 "Photo.c"
+#line 12579 "Photo.c"
 	}
 #line 1595 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp41_ = list;
@@ -12598,7 +12599,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 	_tmp46_ = photo_is_editable_baseline (self);
 #line 1599 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp46_) {
-#line 12600 "Photo.c"
+#line 12601 "Photo.c"
 		PhotoReimportEditableStateImpl* _tmp47_ = NULL;
 		PhotoMetadata* _tmp48_ = NULL;
 #line 1600 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -12607,13 +12608,13 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 		_tmp48_ = _tmp47_->metadata;
 #line 1600 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_baseline_reimported (self, _tmp48_);
-#line 12609 "Photo.c"
+#line 12610 "Photo.c"
 	}
 #line 1602 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp49_ = photo_is_editable_source (self);
 #line 1602 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp49_) {
-#line 12615 "Photo.c"
+#line 12616 "Photo.c"
 		PhotoReimportEditableStateImpl* _tmp50_ = NULL;
 		PhotoMetadata* _tmp51_ = NULL;
 #line 1603 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -12622,20 +12623,20 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 		_tmp51_ = _tmp50_->metadata;
 #line 1603 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_source_reimported (self, _tmp51_);
-#line 12624 "Photo.c"
+#line 12625 "Photo.c"
 	}
 #line 1565 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_free0 (list);
 #line 1565 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_reimport_editable_state_unref0 (reimport_state);
-#line 12630 "Photo.c"
+#line 12631 "Photo.c"
 }
 
 
 static gpointer _photo_reimport_raw_development_state_ref0 (gpointer self) {
 #line 1625 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? photo_reimport_raw_development_state_ref (self) : NULL;
-#line 12637 "Photo.c"
+#line 12638 "Photo.c"
 }
 
 
@@ -12674,21 +12675,21 @@ gboolean photo_prepare_for_reimport_raw_development (Photo* self, PhotoReimportR
 		if (state) {
 #line 1612 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 12676 "Photo.c"
+#line 12677 "Photo.c"
 		} else {
 #line 1612 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_raw_development_state_unref0 (_vala_state);
-#line 12680 "Photo.c"
+#line 12681 "Photo.c"
 		}
 #line 1612 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 12684 "Photo.c"
+#line 12685 "Photo.c"
 	}
 #line 1614 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = photo_reimport_raw_development_state_impl_new ();
 #line 1614 "/home/jens/Source/shotwell/src/Photo.vala"
 	reimport_state = _tmp2_;
-#line 12690 "Photo.c"
+#line 12691 "Photo.c"
 	{
 		GeeIterator* _file_it = NULL;
 		GeeCollection* _tmp3_ = NULL;
@@ -12701,7 +12702,7 @@ gboolean photo_prepare_for_reimport_raw_development (Photo* self, PhotoReimportR
 		_file_it = _tmp4_;
 #line 1616 "/home/jens/Source/shotwell/src/Photo.vala"
 		while (TRUE) {
-#line 12703 "Photo.c"
+#line 12704 "Photo.c"
 			GeeIterator* _tmp5_ = NULL;
 			gboolean _tmp6_ = FALSE;
 			GFile* file = NULL;
@@ -12726,7 +12727,7 @@ gboolean photo_prepare_for_reimport_raw_development (Photo* self, PhotoReimportR
 			if (!_tmp6_) {
 #line 1616 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 12728 "Photo.c"
+#line 12729 "Photo.c"
 			}
 #line 1616 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = _file_it;
@@ -12766,7 +12767,7 @@ gboolean photo_prepare_for_reimport_raw_development (Photo* self, PhotoReimportR
 				_g_object_unref0 (files);
 #line 1619 "/home/jens/Source/shotwell/src/Photo.vala"
 				return FALSE;
-#line 12768 "Photo.c"
+#line 12769 "Photo.c"
 			}
 #line 1619 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (!_tmp9_) {
@@ -12778,7 +12779,7 @@ gboolean photo_prepare_for_reimport_raw_development (Photo* self, PhotoReimportR
 				_g_object_unref0 (file);
 #line 1620 "/home/jens/Source/shotwell/src/Photo.vala"
 				continue;
-#line 12780 "Photo.c"
+#line 12781 "Photo.c"
 			}
 #line 1622 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp14_ = reimport_state;
@@ -12796,11 +12797,11 @@ gboolean photo_prepare_for_reimport_raw_development (Photo* self, PhotoReimportR
 			_detected_photo_information_unref0 (detected);
 #line 1616 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (file);
-#line 12798 "Photo.c"
+#line 12799 "Photo.c"
 		}
 #line 1616 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_file_it);
-#line 12802 "Photo.c"
+#line 12803 "Photo.c"
 	}
 #line 1625 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp18_ = reimport_state;
@@ -12824,15 +12825,15 @@ gboolean photo_prepare_for_reimport_raw_development (Photo* self, PhotoReimportR
 	if (state) {
 #line 1626 "/home/jens/Source/shotwell/src/Photo.vala"
 		*state = _vala_state;
-#line 12826 "Photo.c"
+#line 12827 "Photo.c"
 	} else {
 #line 1626 "/home/jens/Source/shotwell/src/Photo.vala"
 		_photo_reimport_raw_development_state_unref0 (_vala_state);
-#line 12830 "Photo.c"
+#line 12831 "Photo.c"
 	}
 #line 1626 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 12834 "Photo.c"
+#line 12835 "Photo.c"
 }
 
 
@@ -12859,7 +12860,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 	if (_tmp0_ != PHOTO_FILE_FORMAT_RAW) {
 #line 1632 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 12861 "Photo.c"
+#line 12862 "Photo.c"
 	}
 #line 1634 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp1_ = state;
@@ -12867,7 +12868,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 	_tmp2_ = _photo_reimport_raw_development_state_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, PHOTO_TYPE_REIMPORT_RAW_DEVELOPMENT_STATE_IMPL, PhotoReimportRawDevelopmentStateImpl));
 #line 1634 "/home/jens/Source/shotwell/src/Photo.vala"
 	reimport_state = _tmp2_;
-#line 12869 "Photo.c"
+#line 12870 "Photo.c"
 	{
 		GeeIterator* _dev_it = NULL;
 		PhotoReimportRawDevelopmentStateImpl* _tmp3_ = NULL;
@@ -12883,7 +12884,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 		_dev_it = _tmp5_;
 #line 1636 "/home/jens/Source/shotwell/src/Photo.vala"
 		while (TRUE) {
-#line 12885 "Photo.c"
+#line 12886 "Photo.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			PhotoReimportRawDevelopmentStateImplDevToReimport* dev = NULL;
@@ -12899,7 +12900,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 			if (!_tmp7_) {
 #line 1636 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 12901 "Photo.c"
+#line 12902 "Photo.c"
 			}
 #line 1636 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp8_ = _dev_it;
@@ -12913,7 +12914,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 			_tmp11_ = _tmp10_->metadata_only;
 #line 1637 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (!_tmp11_) {
-#line 12915 "Photo.c"
+#line 12916 "Photo.c"
 				BackingPhotoTable* _tmp12_ = NULL;
 				BackingPhotoTable* _tmp13_ = NULL;
 				PhotoReimportRawDevelopmentStateImplDevToReimport* _tmp14_ = NULL;
@@ -12944,7 +12945,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 						_photo_reimport_raw_development_state_unref0 (reimport_state);
 #line 1638 "/home/jens/Source/shotwell/src/Photo.vala"
 						return;
-#line 12946 "Photo.c"
+#line 12947 "Photo.c"
 					} else {
 #line 1638 "/home/jens/Source/shotwell/src/Photo.vala"
 						_photo_reimport_raw_development_state_impl_dev_to_reimport_unref0 (dev);
@@ -12958,7 +12959,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 						g_clear_error (&_inner_error_);
 #line 1638 "/home/jens/Source/shotwell/src/Photo.vala"
 						return;
-#line 12960 "Photo.c"
+#line 12961 "Photo.c"
 					}
 				}
 				{
@@ -12967,13 +12968,13 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 					_tmp16_ = self->row;
 #line 1640 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_lock (&self->priv->__lock_row);
-#line 12969 "Photo.c"
+#line 12970 "Photo.c"
 					{
 						gint _tmp17_ = 0;
 						RawDeveloper* _tmp18_ = NULL;
 #line 1642 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp18_ = raw_developer_as_array (&_tmp17_);
-#line 12975 "Photo.c"
+#line 12976 "Photo.c"
 						{
 							RawDeveloper* d_collection = NULL;
 							gint d_collection_length1 = 0;
@@ -12985,11 +12986,11 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 							d_collection_length1 = _tmp17_;
 #line 1642 "/home/jens/Source/shotwell/src/Photo.vala"
 							for (d_it = 0; d_it < _tmp17_; d_it = d_it + 1) {
-#line 12987 "Photo.c"
+#line 12988 "Photo.c"
 								RawDeveloper d = 0;
 #line 1642 "/home/jens/Source/shotwell/src/Photo.vala"
 								d = d_collection[d_it];
-#line 12991 "Photo.c"
+#line 12992 "Photo.c"
 								{
 									BackingPhotoID id = {0};
 									PhotoRow* _tmp19_ = NULL;
@@ -13017,7 +13018,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 									_tmp24_ = _tmp23_.id;
 #line 1644 "/home/jens/Source/shotwell/src/Photo.vala"
 									if (_tmp24_ != BACKING_PHOTO_ID_INVALID) {
-#line 13019 "Photo.c"
+#line 13020 "Photo.c"
 										BackingPhotoRow* bpr = NULL;
 										BackingPhotoID _tmp25_ = {0};
 										BackingPhotoRow* _tmp26_ = NULL;
@@ -13032,7 +13033,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 										_tmp27_ = bpr;
 #line 1646 "/home/jens/Source/shotwell/src/Photo.vala"
 										if (_tmp27_ != NULL) {
-#line 13034 "Photo.c"
+#line 13035 "Photo.c"
 											GeeHashMap* _tmp28_ = NULL;
 											RawDeveloper _tmp29_ = 0;
 											BackingPhotoRow* _tmp30_ = NULL;
@@ -13044,27 +13045,27 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 											_tmp30_ = bpr;
 #line 1647 "/home/jens/Source/shotwell/src/Photo.vala"
 											gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) _tmp29_), _tmp30_);
-#line 13046 "Photo.c"
+#line 13047 "Photo.c"
 										}
 #line 1644 "/home/jens/Source/shotwell/src/Photo.vala"
 										_backing_photo_row_unref0 (bpr);
-#line 13050 "Photo.c"
+#line 13051 "Photo.c"
 									}
 								}
 							}
 #line 1642 "/home/jens/Source/shotwell/src/Photo.vala"
 							d_collection = (g_free (d_collection), NULL);
-#line 13056 "Photo.c"
+#line 13057 "Photo.c"
 						}
 					}
-					__finally294:
+					__finally307:
 					{
 						PhotoRow* _tmp31_ = NULL;
 #line 1640 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp31_ = self->row;
 #line 1640 "/home/jens/Source/shotwell/src/Photo.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 13066 "Photo.c"
+#line 13067 "Photo.c"
 					}
 #line 1640 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -13080,7 +13081,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 							_photo_reimport_raw_development_state_unref0 (reimport_state);
 #line 1640 "/home/jens/Source/shotwell/src/Photo.vala"
 							return;
-#line 13082 "Photo.c"
+#line 13083 "Photo.c"
 						} else {
 #line 1640 "/home/jens/Source/shotwell/src/Photo.vala"
 							_photo_reimport_raw_development_state_impl_dev_to_reimport_unref0 (dev);
@@ -13094,18 +13095,18 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 							g_clear_error (&_inner_error_);
 #line 1640 "/home/jens/Source/shotwell/src/Photo.vala"
 							return;
-#line 13096 "Photo.c"
+#line 13097 "Photo.c"
 						}
 					}
 				}
 			}
 #line 1636 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_raw_development_state_impl_dev_to_reimport_unref0 (dev);
-#line 13103 "Photo.c"
+#line 13104 "Photo.c"
 		}
 #line 1636 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_dev_it);
-#line 13107 "Photo.c"
+#line 13108 "Photo.c"
 	}
 #line 1654 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp32_ = g_strdup ("metadata:name,image:orientation,metadata:rating,metadata:exposure-time");
@@ -13117,7 +13118,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 	_tmp34_ = _tmp33_->metadata_only;
 #line 1655 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp34_) {
-#line 13119 "Photo.c"
+#line 13120 "Photo.c"
 		const gchar* _tmp35_ = NULL;
 		gchar* _tmp36_ = NULL;
 #line 1656 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -13128,7 +13129,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 		_g_free0 (list);
 #line 1656 "/home/jens/Source/shotwell/src/Photo.vala"
 		list = _tmp36_;
-#line 13130 "Photo.c"
+#line 13131 "Photo.c"
 	}
 #line 1658 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp37_ = list;
@@ -13146,7 +13147,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 	_g_free0 (list);
 #line 1630 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_reimport_raw_development_state_unref0 (reimport_state);
-#line 13148 "Photo.c"
+#line 13149 "Photo.c"
 }
 
 
@@ -13162,7 +13163,7 @@ static gchar* photo_real_get_typename (DataSource* base) {
 	result = _tmp0_;
 #line 1664 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 13164 "Photo.c"
+#line 13165 "Photo.c"
 }
 
 
@@ -13181,7 +13182,7 @@ static gint64 photo_real_get_instance_id (DataSource* base) {
 	result = _tmp1_;
 #line 1668 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 13183 "Photo.c"
+#line 13184 "Photo.c"
 }
 
 
@@ -13211,7 +13212,7 @@ static gchar* photo_real_get_source_id (DataSource* base) {
 	result = _tmp4_;
 #line 1675 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 13213 "Photo.c"
+#line 13214 "Photo.c"
 }
 
 
@@ -13231,7 +13232,7 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 	g_file_info_get_modification_time (_tmp0_, &_tmp1_);
 #line 1680 "/home/jens/Source/shotwell/src/Photo.vala"
 	modification = _tmp1_;
-#line 13233 "Photo.c"
+#line 13234 "Photo.c"
 	{
 		{
 			PhotoRow* _tmp2_ = NULL;
@@ -13239,7 +13240,7 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 			_tmp2_ = self->row;
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_lock (&self->priv->__lock_row);
-#line 13241 "Photo.c"
+#line 13242 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 				BackingPhotoRow* _tmp4_ = NULL;
@@ -13268,18 +13269,18 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 				_tmp7_ = _tmp6_.tv_sec;
 #line 1684 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp5_ == ((time_t) _tmp7_)) {
-#line 13270 "Photo.c"
+#line 13271 "Photo.c"
 					{
 						PhotoRow* _tmp8_ = NULL;
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp8_ = self->row;
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 13277 "Photo.c"
+#line 13278 "Photo.c"
 					}
 #line 1685 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 13281 "Photo.c"
+#line 13282 "Photo.c"
 				}
 #line 1687 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp9_ = photo_table_get_instance ();
@@ -13299,8 +13300,8 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 				_database_table_unref0 (_tmp10_);
 #line 1687 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 13301 "Photo.c"
-					goto __finally296;
+#line 13302 "Photo.c"
+					goto __finally309;
 				}
 #line 1688 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp15_ = self->row;
@@ -13312,23 +13313,23 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 				_tmp18_ = _tmp17_.tv_sec;
 #line 1688 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp16_->timestamp = (time_t) _tmp18_;
-#line 13314 "Photo.c"
+#line 13315 "Photo.c"
 			}
-			__finally296:
+			__finally309:
 			{
 				PhotoRow* _tmp19_ = NULL;
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp19_ = self->row;
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 13323 "Photo.c"
+#line 13324 "Photo.c"
 			}
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
-#line 13329 "Photo.c"
-					goto __catch295_database_error;
+#line 13330 "Photo.c"
+					goto __catch308_database_error;
 				}
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -13336,12 +13337,12 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 				g_clear_error (&_inner_error_);
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 13338 "Photo.c"
+#line 13339 "Photo.c"
 			}
 		}
 	}
-	goto __finally295;
-	__catch295_database_error:
+	goto __finally308;
+	__catch308_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp20_ = NULL;
@@ -13357,9 +13358,9 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 		_g_error_free0 (err);
 #line 1693 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 13359 "Photo.c"
+#line 13360 "Photo.c"
 	}
-	__finally295:
+	__finally308:
 #line 1682 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1682 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -13368,13 +13369,13 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 		g_clear_error (&_inner_error_);
 #line 1682 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 13370 "Photo.c"
+#line 13371 "Photo.c"
 	}
 #line 1696 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp21_ = photo_is_master_baseline (self);
 #line 1696 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp21_) {
-#line 13376 "Photo.c"
+#line 13377 "Photo.c"
 		Alteration* _tmp22_ = NULL;
 		Alteration* _tmp23_ = NULL;
 #line 1697 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -13385,7 +13386,7 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp23_);
 #line 1697 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp23_);
-#line 13387 "Photo.c"
+#line 13388 "Photo.c"
 	} else {
 		Alteration* _tmp24_ = NULL;
 		Alteration* _tmp25_ = NULL;
@@ -13397,7 +13398,7 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp25_);
 #line 1699 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp25_);
-#line 13399 "Photo.c"
+#line 13400 "Photo.c"
 	}
 }
 
@@ -13421,14 +13422,14 @@ void photo_update_editable_modification_time (Photo* self, GFileInfo* info, GErr
 	modification = _tmp1_;
 #line 1706 "/home/jens/Source/shotwell/src/Photo.vala"
 	altered = FALSE;
-#line 13423 "Photo.c"
+#line 13424 "Photo.c"
 	{
 		PhotoRow* _tmp2_ = NULL;
 #line 1707 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp2_ = self->row;
 #line 1707 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 13430 "Photo.c"
+#line 13431 "Photo.c"
 		{
 			gboolean _tmp3_ = FALSE;
 			PhotoRow* _tmp4_ = NULL;
@@ -13439,7 +13440,7 @@ void photo_update_editable_modification_time (Photo* self, GFileInfo* info, GErr
 			_tmp5_ = backing_photo_id_is_valid (&_tmp4_->editable_id);
 #line 1708 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp5_) {
-#line 13441 "Photo.c"
+#line 13442 "Photo.c"
 				BackingPhotoRow* _tmp6_ = NULL;
 				time_t _tmp7_ = 0;
 				GTimeVal _tmp8_ = {0};
@@ -13454,15 +13455,15 @@ void photo_update_editable_modification_time (Photo* self, GFileInfo* info, GErr
 				_tmp9_ = _tmp8_.tv_sec;
 #line 1708 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = _tmp7_ != ((time_t) _tmp9_);
-#line 13456 "Photo.c"
+#line 13457 "Photo.c"
 			} else {
 #line 1708 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = FALSE;
-#line 13460 "Photo.c"
+#line 13461 "Photo.c"
 			}
 #line 1708 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp3_) {
-#line 13464 "Photo.c"
+#line 13465 "Photo.c"
 				BackingPhotoTable* _tmp10_ = NULL;
 				BackingPhotoTable* _tmp11_ = NULL;
 				PhotoRow* _tmp12_ = NULL;
@@ -13490,8 +13491,8 @@ void photo_update_editable_modification_time (Photo* self, GFileInfo* info, GErr
 				_database_table_unref0 (_tmp11_);
 #line 1709 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 13492 "Photo.c"
-					goto __finally297;
+#line 13493 "Photo.c"
+					goto __finally310;
 				}
 #line 1711 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp16_ = self->priv->editable;
@@ -13503,17 +13504,17 @@ void photo_update_editable_modification_time (Photo* self, GFileInfo* info, GErr
 				_tmp16_->timestamp = (time_t) _tmp18_;
 #line 1712 "/home/jens/Source/shotwell/src/Photo.vala"
 				altered = TRUE;
-#line 13505 "Photo.c"
+#line 13506 "Photo.c"
 			}
 		}
-		__finally297:
+		__finally310:
 		{
 			PhotoRow* _tmp19_ = NULL;
 #line 1707 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp19_ = self->row;
 #line 1707 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 13515 "Photo.c"
+#line 13516 "Photo.c"
 		}
 #line 1707 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -13523,7 +13524,7 @@ void photo_update_editable_modification_time (Photo* self, GFileInfo* info, GErr
 				g_propagate_error (error, _inner_error_);
 #line 1707 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 13525 "Photo.c"
+#line 13526 "Photo.c"
 			} else {
 #line 1707 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -13531,7 +13532,7 @@ void photo_update_editable_modification_time (Photo* self, GFileInfo* info, GErr
 				g_clear_error (&_inner_error_);
 #line 1707 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 13533 "Photo.c"
+#line 13534 "Photo.c"
 			}
 		}
 	}
@@ -13539,7 +13540,7 @@ void photo_update_editable_modification_time (Photo* self, GFileInfo* info, GErr
 	_tmp20_ = altered;
 #line 1716 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp20_) {
-#line 13541 "Photo.c"
+#line 13542 "Photo.c"
 		Alteration* _tmp21_ = NULL;
 		Alteration* _tmp22_ = NULL;
 #line 1717 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -13550,7 +13551,7 @@ void photo_update_editable_modification_time (Photo* self, GFileInfo* info, GErr
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp22_);
 #line 1717 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp22_);
-#line 13552 "Photo.c"
+#line 13553 "Photo.c"
 	}
 }
 
@@ -13561,7 +13562,7 @@ void photo_update_many_editable_timestamps (GeeMap* map, GError** error) {
 	g_return_if_fail (GEE_IS_MAP (map));
 #line 1723 "/home/jens/Source/shotwell/src/Photo.vala"
 	database_table_begin_transaction ();
-#line 13563 "Photo.c"
+#line 13564 "Photo.c"
 	{
 		GeeIterator* _photo_it = NULL;
 		GeeMap* _tmp0_ = NULL;
@@ -13588,7 +13589,7 @@ void photo_update_many_editable_timestamps (GeeMap* map, GError** error) {
 		_photo_it = _tmp5_;
 #line 1724 "/home/jens/Source/shotwell/src/Photo.vala"
 		while (TRUE) {
-#line 13590 "Photo.c"
+#line 13591 "Photo.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			Photo* photo = NULL;
@@ -13607,7 +13608,7 @@ void photo_update_many_editable_timestamps (GeeMap* map, GError** error) {
 			if (!_tmp7_) {
 #line 1724 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 13609 "Photo.c"
+#line 13610 "Photo.c"
 			}
 #line 1724 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp8_ = _photo_it;
@@ -13641,7 +13642,7 @@ void photo_update_many_editable_timestamps (GeeMap* map, GError** error) {
 					_g_object_unref0 (_photo_it);
 #line 1725 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 13643 "Photo.c"
+#line 13644 "Photo.c"
 				} else {
 #line 1725 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_object_unref0 (photo);
@@ -13653,16 +13654,16 @@ void photo_update_many_editable_timestamps (GeeMap* map, GError** error) {
 					g_clear_error (&_inner_error_);
 #line 1725 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 13655 "Photo.c"
+#line 13656 "Photo.c"
 				}
 			}
 #line 1724 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (photo);
-#line 13660 "Photo.c"
+#line 13661 "Photo.c"
 		}
 #line 1724 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_photo_it);
-#line 13664 "Photo.c"
+#line 13665 "Photo.c"
 	}
 #line 1726 "/home/jens/Source/shotwell/src/Photo.vala"
 	database_table_commit_transaction (&_inner_error_);
@@ -13674,7 +13675,7 @@ void photo_update_many_editable_timestamps (GeeMap* map, GError** error) {
 			g_propagate_error (error, _inner_error_);
 #line 1726 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 13676 "Photo.c"
+#line 13677 "Photo.c"
 		} else {
 #line 1726 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -13682,7 +13683,7 @@ void photo_update_many_editable_timestamps (GeeMap* map, GError** error) {
 			g_clear_error (&_inner_error_);
 #line 1726 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 13684 "Photo.c"
+#line 13685 "Photo.c"
 		}
 	}
 }
@@ -13702,26 +13703,26 @@ static PhotoFileFormat photo_real_get_preferred_thumbnail_format (ThumbnailSourc
 	_tmp2_ = photo_file_format_can_write_image (_tmp1_);
 #line 1730 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_) {
-#line 13704 "Photo.c"
+#line 13705 "Photo.c"
 		PhotoFileFormat _tmp3_ = 0;
 #line 1730 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp3_ = photo_get_file_format (self);
 #line 1730 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = _tmp3_;
-#line 13710 "Photo.c"
+#line 13711 "Photo.c"
 	} else {
 		PhotoFileFormat _tmp4_ = 0;
 #line 1731 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp4_ = photo_file_format_get_system_default_format ();
 #line 1731 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = _tmp4_;
-#line 13717 "Photo.c"
+#line 13718 "Photo.c"
 	}
 #line 1730 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp0_;
 #line 1730 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 13723 "Photo.c"
+#line 13724 "Photo.c"
 }
 
 
@@ -13750,7 +13751,7 @@ static GdkPixbuf* photo_real_create_thumbnail (ThumbnailSource* base, gint scale
 		g_propagate_error (error, _inner_error_);
 #line 1735 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 13752 "Photo.c"
+#line 13753 "Photo.c"
 	}
 #line 1735 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = _tmp0_;
@@ -13762,7 +13763,7 @@ static GdkPixbuf* photo_real_create_thumbnail (ThumbnailSource* base, gint scale
 	_g_object_unref0 (_tmp0_);
 #line 1735 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 13764 "Photo.c"
+#line 13765 "Photo.c"
 }
 
 
@@ -13781,7 +13782,7 @@ gboolean photo_is_file_image (GFile* file) {
 	if (_tmp2_) {
 #line 1743 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = TRUE;
-#line 13783 "Photo.c"
+#line 13784 "Photo.c"
 	} else {
 		GFile* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
@@ -13799,13 +13800,13 @@ gboolean photo_is_file_image (GFile* file) {
 		_tmp0_ = _tmp6_;
 #line 1743 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_free0 (_tmp5_);
-#line 13801 "Photo.c"
+#line 13802 "Photo.c"
 	}
 #line 1742 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp0_;
 #line 1742 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 13807 "Photo.c"
+#line 13808 "Photo.c"
 }
 
 
@@ -13847,7 +13848,7 @@ static gboolean photo_is_extension_found (const gchar* basename, gchar** extensi
 		_g_free0 (name);
 #line 1750 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 13849 "Photo.c"
+#line 13850 "Photo.c"
 	}
 #line 1753 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = ext;
@@ -13861,7 +13862,7 @@ static gboolean photo_is_extension_found (const gchar* basename, gchar** extensi
 	_tmp6_ = extensions;
 #line 1756 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp6__length1 = extensions_length1;
-#line 13863 "Photo.c"
+#line 13864 "Photo.c"
 	{
 		gchar** extension_collection = NULL;
 		gint extension_collection_length1 = 0;
@@ -13873,14 +13874,14 @@ static gboolean photo_is_extension_found (const gchar* basename, gchar** extensi
 		extension_collection_length1 = _tmp6__length1;
 #line 1756 "/home/jens/Source/shotwell/src/Photo.vala"
 		for (extension_it = 0; extension_it < _tmp6__length1; extension_it = extension_it + 1) {
-#line 13875 "Photo.c"
+#line 13876 "Photo.c"
 			gchar* _tmp7_ = NULL;
 			gchar* extension = NULL;
 #line 1756 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = g_strdup (extension_collection[extension_it]);
 #line 1756 "/home/jens/Source/shotwell/src/Photo.vala"
 			extension = _tmp7_;
-#line 13882 "Photo.c"
+#line 13883 "Photo.c"
 			{
 				const gchar* _tmp8_ = NULL;
 				const gchar* _tmp9_ = NULL;
@@ -13900,11 +13901,11 @@ static gboolean photo_is_extension_found (const gchar* basename, gchar** extensi
 					_g_free0 (name);
 #line 1758 "/home/jens/Source/shotwell/src/Photo.vala"
 					return result;
-#line 13902 "Photo.c"
+#line 13903 "Photo.c"
 				}
 #line 1756 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_free0 (extension);
-#line 13906 "Photo.c"
+#line 13907 "Photo.c"
 			}
 		}
 	}
@@ -13916,7 +13917,7 @@ static gboolean photo_is_extension_found (const gchar* basename, gchar** extensi
 	_g_free0 (name);
 #line 1761 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 13918 "Photo.c"
+#line 13919 "Photo.c"
 }
 
 
@@ -13954,7 +13955,7 @@ gboolean photo_is_duplicate (GFile* file, const gchar* thumbnail_md5, const gcha
 	result = _tmp7_;
 #line 1770 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 13956 "Photo.c"
+#line 13957 "Photo.c"
 }
 
 
@@ -14002,13 +14003,13 @@ PhotoID* photo_get_duplicate_ids (GFile* file, const gchar* thumbnail_md5, const
 	if (result_length1) {
 #line 1779 "/home/jens/Source/shotwell/src/Photo.vala"
 		*result_length1 = _tmp9__length1;
-#line 14004 "Photo.c"
+#line 14005 "Photo.c"
 	}
 #line 1779 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp9_;
 #line 1779 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 14010 "Photo.c"
+#line 14011 "Photo.c"
 }
 
 
@@ -14029,7 +14030,7 @@ gint64 photo_get_photo_key (DataSource* source) {
 	result = _tmp2_;
 #line 1787 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 14031 "Photo.c"
+#line 14032 "Photo.c"
 }
 
 
@@ -14056,7 +14057,7 @@ static GFile* photo_real_get_file (MediaSource* base) {
 	result = _tmp3_;
 #line 1806 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 14058 "Photo.c"
+#line 14059 "Photo.c"
 }
 
 
@@ -14067,13 +14068,13 @@ static void _vala_array_add262 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1849 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 14069 "Photo.c"
+#line 14070 "Photo.c"
 	}
 #line 1849 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1849 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 14075 "Photo.c"
+#line 14076 "Photo.c"
 }
 
 
@@ -14084,13 +14085,13 @@ static void _vala_array_add263 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1854 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 14086 "Photo.c"
+#line 14087 "Photo.c"
 	}
 #line 1854 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1854 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 14092 "Photo.c"
+#line 14093 "Photo.c"
 }
 
 
@@ -14101,13 +14102,13 @@ static void _vala_array_add264 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1857 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 14103 "Photo.c"
+#line 14104 "Photo.c"
 	}
 #line 1857 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1857 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 14109 "Photo.c"
+#line 14110 "Photo.c"
 }
 
 
@@ -14118,13 +14119,13 @@ static void _vala_array_add265 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1860 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 14120 "Photo.c"
+#line 14121 "Photo.c"
 	}
 #line 1860 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1860 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 14126 "Photo.c"
+#line 14127 "Photo.c"
 }
 
 
@@ -14159,7 +14160,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 	name_changed = FALSE;
 #line 1818 "/home/jens/Source/shotwell/src/Photo.vala"
 	old_file = NULL;
-#line 14161 "Photo.c"
+#line 14162 "Photo.c"
 	{
 		{
 			PhotoRow* _tmp2_ = NULL;
@@ -14167,7 +14168,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 			_tmp2_ = self->row;
 #line 1820 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_lock (&self->priv->__lock_row);
-#line 14169 "Photo.c"
+#line 14170 "Photo.c"
 			{
 				{
 					PhotoBackingReaders* _tmp3_ = NULL;
@@ -14175,7 +14176,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 					_tmp3_ = self->priv->readers;
 #line 1821 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 14177 "Photo.c"
+#line 14178 "Photo.c"
 					{
 						PhotoBackingReaders* _tmp4_ = NULL;
 						PhotoFileReader* _tmp5_ = NULL;
@@ -14201,7 +14202,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 						_tmp9_ = g_file_equal (_tmp7_, _tmp8_);
 #line 1823 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (!_tmp9_) {
-#line 14203 "Photo.c"
+#line 14204 "Photo.c"
 							PhotoTable* _tmp10_ = NULL;
 							PhotoTable* _tmp11_ = NULL;
 							PhotoID _tmp12_ = {0};
@@ -14238,8 +14239,8 @@ void photo_set_master_file (Photo* self, GFile* file) {
 							_database_table_unref0 (_tmp11_);
 #line 1824 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 14240 "Photo.c"
-								goto __finally300;
+#line 14241 "Photo.c"
+								goto __finally313;
 							}
 #line 1826 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp14_ = self->row;
@@ -14295,7 +14296,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 							_tmp31_ = is_string_empty (_tmp30_);
 #line 1833 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (_tmp31_) {
-#line 14297 "Photo.c"
+#line 14298 "Photo.c"
 								GFile* _tmp32_ = NULL;
 								gchar* _tmp33_ = NULL;
 								gchar* _tmp34_ = NULL;
@@ -14320,48 +14321,48 @@ void photo_set_master_file (Photo* self, GFile* file) {
 								_g_free0 (_tmp37_);
 #line 1834 "/home/jens/Source/shotwell/src/Photo.vala"
 								_g_free0 (_tmp34_);
-#line 14322 "Photo.c"
+#line 14323 "Photo.c"
 							} else {
 #line 1833 "/home/jens/Source/shotwell/src/Photo.vala"
 								_tmp28_ = FALSE;
-#line 14326 "Photo.c"
+#line 14327 "Photo.c"
 							}
 #line 1833 "/home/jens/Source/shotwell/src/Photo.vala"
 							name_changed = _tmp28_;
-#line 14330 "Photo.c"
+#line 14331 "Photo.c"
 						}
 					}
-					__finally300:
+					__finally313:
 					{
 						PhotoBackingReaders* _tmp38_ = NULL;
 #line 1821 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp38_ = self->priv->readers;
 #line 1821 "/home/jens/Source/shotwell/src/Photo.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 14340 "Photo.c"
+#line 14341 "Photo.c"
 					}
 #line 1821 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 14344 "Photo.c"
-						goto __finally299;
+#line 14345 "Photo.c"
+						goto __finally312;
 					}
 				}
 			}
-			__finally299:
+			__finally312:
 			{
 				PhotoRow* _tmp39_ = NULL;
 #line 1820 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp39_ = self->row;
 #line 1820 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 14356 "Photo.c"
+#line 14357 "Photo.c"
 			}
 #line 1820 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1820 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
-#line 14362 "Photo.c"
-					goto __catch298_database_error;
+#line 14363 "Photo.c"
+					goto __catch311_database_error;
 				}
 #line 1820 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (old_file);
@@ -14373,12 +14374,12 @@ void photo_set_master_file (Photo* self, GFile* file) {
 				g_clear_error (&_inner_error_);
 #line 1820 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 14375 "Photo.c"
+#line 14376 "Photo.c"
 			}
 		}
 	}
-	goto __finally298;
-	__catch298_database_error:
+	goto __finally311;
+	__catch311_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp40_ = NULL;
@@ -14392,9 +14393,9 @@ void photo_set_master_file (Photo* self, GFile* file) {
 		app_window_database_error (_tmp40_);
 #line 1819 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 14394 "Photo.c"
+#line 14395 "Photo.c"
 	}
-	__finally298:
+	__finally311:
 #line 1819 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1819 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14407,13 +14408,13 @@ void photo_set_master_file (Photo* self, GFile* file) {
 		g_clear_error (&_inner_error_);
 #line 1819 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 14409 "Photo.c"
+#line 14410 "Photo.c"
 	}
 #line 1842 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp41_ = altered;
 #line 1842 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp41_) {
-#line 14415 "Photo.c"
+#line 14416 "Photo.c"
 		GFile* _tmp42_ = NULL;
 		GFile* _tmp43_ = NULL;
 		gboolean _tmp44_ = FALSE;
@@ -14443,7 +14444,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 		if (_tmp44_) {
 #line 1846 "/home/jens/Source/shotwell/src/Photo.vala"
 			photo_notify_baseline_replaced (self);
-#line 14445 "Photo.c"
+#line 14446 "Photo.c"
 		}
 #line 1848 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp45_ = g_new0 (gchar*, 0 + 1);
@@ -14465,7 +14466,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 		_tmp48_ = name_changed;
 #line 1853 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp48_) {
-#line 14467 "Photo.c"
+#line 14468 "Photo.c"
 			gchar** _tmp49_ = NULL;
 			gint _tmp49__length1 = 0;
 			gchar* _tmp50_ = NULL;
@@ -14477,13 +14478,13 @@ void photo_set_master_file (Photo* self, GFile* file) {
 			_tmp50_ = g_strdup ("metadata:name");
 #line 1854 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add263 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp50_);
-#line 14479 "Photo.c"
+#line 14480 "Photo.c"
 		}
 #line 1856 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp51_ = is_source;
 #line 1856 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp51_) {
-#line 14485 "Photo.c"
+#line 14486 "Photo.c"
 			gchar** _tmp52_ = NULL;
 			gint _tmp52__length1 = 0;
 			gchar* _tmp53_ = NULL;
@@ -14495,13 +14496,13 @@ void photo_set_master_file (Photo* self, GFile* file) {
 			_tmp53_ = g_strdup ("backing:source");
 #line 1857 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add264 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp53_);
-#line 14497 "Photo.c"
+#line 14498 "Photo.c"
 		}
 #line 1859 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp54_ = is_baseline;
 #line 1859 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp54_) {
-#line 14503 "Photo.c"
+#line 14504 "Photo.c"
 			gchar** _tmp55_ = NULL;
 			gint _tmp55__length1 = 0;
 			gchar* _tmp56_ = NULL;
@@ -14513,7 +14514,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 			_tmp56_ = g_strdup ("backing:baseline");
 #line 1860 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add265 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp56_);
-#line 14515 "Photo.c"
+#line 14516 "Photo.c"
 		}
 #line 1862 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp57_ = alteration_list;
@@ -14529,13 +14530,13 @@ void photo_set_master_file (Photo* self, GFile* file) {
 		_alteration_unref0 (_tmp59_);
 #line 1842 "/home/jens/Source/shotwell/src/Photo.vala"
 		alteration_list = (_vala_array_free (alteration_list, alteration_list_length1, (GDestroyNotify) g_free), NULL);
-#line 14531 "Photo.c"
+#line 14532 "Photo.c"
 	}
 #line 1811 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (old_file);
 #line 1811 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_free0 (filepath);
-#line 14537 "Photo.c"
+#line 14538 "Photo.c"
 }
 
 
@@ -14546,13 +14547,13 @@ static void _vala_array_add266 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1902 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 14548 "Photo.c"
+#line 14549 "Photo.c"
 	}
 #line 1902 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1902 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 14554 "Photo.c"
+#line 14555 "Photo.c"
 }
 
 
@@ -14563,13 +14564,13 @@ static void _vala_array_add267 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1905 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 14565 "Photo.c"
+#line 14566 "Photo.c"
 	}
 #line 1905 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1905 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 14571 "Photo.c"
+#line 14572 "Photo.c"
 }
 
 
@@ -14580,13 +14581,13 @@ static void _vala_array_add268 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 1908 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 14582 "Photo.c"
+#line 14583 "Photo.c"
 	}
 #line 1908 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 1908 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 14588 "Photo.c"
+#line 14589 "Photo.c"
 }
 
 
@@ -14618,7 +14619,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 	is_source = FALSE;
 #line 1874 "/home/jens/Source/shotwell/src/Photo.vala"
 	old_file = NULL;
-#line 14620 "Photo.c"
+#line 14621 "Photo.c"
 	{
 		{
 			PhotoRow* _tmp2_ = NULL;
@@ -14626,7 +14627,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 			_tmp2_ = self->row;
 #line 1876 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_lock (&self->priv->__lock_row);
-#line 14628 "Photo.c"
+#line 14629 "Photo.c"
 			{
 				{
 					PhotoBackingReaders* _tmp3_ = NULL;
@@ -14634,7 +14635,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 					_tmp3_ = self->priv->readers;
 #line 1877 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 14636 "Photo.c"
+#line 14637 "Photo.c"
 					{
 						GFile* _tmp4_ = NULL;
 						PhotoBackingReaders* _tmp5_ = NULL;
@@ -14648,7 +14649,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 						_tmp6_ = _tmp5_->editable;
 #line 1878 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp6_ != NULL) {
-#line 14650 "Photo.c"
+#line 14651 "Photo.c"
 							PhotoBackingReaders* _tmp7_ = NULL;
 							PhotoFileReader* _tmp8_ = NULL;
 							GFile* _tmp9_ = NULL;
@@ -14662,13 +14663,13 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 							_g_object_unref0 (_tmp4_);
 #line 1878 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp4_ = _tmp9_;
-#line 14664 "Photo.c"
+#line 14665 "Photo.c"
 						} else {
 #line 1878 "/home/jens/Source/shotwell/src/Photo.vala"
 							_g_object_unref0 (_tmp4_);
 #line 1878 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp4_ = NULL;
-#line 14670 "Photo.c"
+#line 14671 "Photo.c"
 						}
 #line 1878 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp10_ = _g_object_ref0 (_tmp4_);
@@ -14680,7 +14681,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 						_tmp12_ = old_file;
 #line 1879 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp12_ != NULL) {
-#line 14682 "Photo.c"
+#line 14683 "Photo.c"
 							GFile* _tmp13_ = NULL;
 							GFile* _tmp14_ = NULL;
 							gboolean _tmp15_ = FALSE;
@@ -14692,15 +14693,15 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 							_tmp15_ = g_file_equal (_tmp13_, _tmp14_);
 #line 1879 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp11_ = !_tmp15_;
-#line 14694 "Photo.c"
+#line 14695 "Photo.c"
 						} else {
 #line 1879 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp11_ = FALSE;
-#line 14698 "Photo.c"
+#line 14699 "Photo.c"
 						}
 #line 1879 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp11_) {
-#line 14702 "Photo.c"
+#line 14703 "Photo.c"
 							BackingPhotoTable* _tmp16_ = NULL;
 							BackingPhotoTable* _tmp17_ = NULL;
 							PhotoRow* _tmp18_ = NULL;
@@ -14734,8 +14735,8 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1880 "/home/jens/Source/shotwell/src/Photo.vala"
 								_g_object_unref0 (_tmp4_);
-#line 14736 "Photo.c"
-								goto __finally303;
+#line 14737 "Photo.c"
+								goto __finally316;
 							}
 #line 1882 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp21_ = self->priv->editable;
@@ -14771,43 +14772,43 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 							_tmp30_ = photo_is_editable_source (self);
 #line 1887 "/home/jens/Source/shotwell/src/Photo.vala"
 							is_source = _tmp30_;
-#line 14773 "Photo.c"
+#line 14774 "Photo.c"
 						}
 #line 1877 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_object_unref0 (_tmp4_);
-#line 14777 "Photo.c"
+#line 14778 "Photo.c"
 					}
-					__finally303:
+					__finally316:
 					{
 						PhotoBackingReaders* _tmp31_ = NULL;
 #line 1877 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp31_ = self->priv->readers;
 #line 1877 "/home/jens/Source/shotwell/src/Photo.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 14786 "Photo.c"
+#line 14787 "Photo.c"
 					}
 #line 1877 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 14790 "Photo.c"
-						goto __finally302;
+#line 14791 "Photo.c"
+						goto __finally315;
 					}
 				}
 			}
-			__finally302:
+			__finally315:
 			{
 				PhotoRow* _tmp32_ = NULL;
 #line 1876 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp32_ = self->row;
 #line 1876 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 14802 "Photo.c"
+#line 14803 "Photo.c"
 			}
 #line 1876 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1876 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
-#line 14808 "Photo.c"
-					goto __catch301_database_error;
+#line 14809 "Photo.c"
+					goto __catch314_database_error;
 				}
 #line 1876 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (old_file);
@@ -14819,12 +14820,12 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 				g_clear_error (&_inner_error_);
 #line 1876 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 14821 "Photo.c"
+#line 14822 "Photo.c"
 			}
 		}
 	}
-	goto __finally301;
-	__catch301_database_error:
+	goto __finally314;
+	__catch314_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp33_ = NULL;
@@ -14838,9 +14839,9 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 		app_window_database_error (_tmp33_);
 #line 1875 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 14840 "Photo.c"
+#line 14841 "Photo.c"
 	}
-	__finally301:
+	__finally314:
 #line 1875 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1875 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14853,13 +14854,13 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 		g_clear_error (&_inner_error_);
 #line 1875 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 14855 "Photo.c"
+#line 14856 "Photo.c"
 	}
 #line 1895 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp34_ = altered;
 #line 1895 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp34_) {
-#line 14861 "Photo.c"
+#line 14862 "Photo.c"
 		GFile* _tmp35_ = NULL;
 		GFile* _tmp36_ = NULL;
 		gboolean _tmp37_ = FALSE;
@@ -14888,7 +14889,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 		if (_tmp37_) {
 #line 1899 "/home/jens/Source/shotwell/src/Photo.vala"
 			photo_notify_baseline_replaced (self);
-#line 14890 "Photo.c"
+#line 14891 "Photo.c"
 		}
 #line 1901 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp38_ = g_new0 (gchar*, 0 + 1);
@@ -14910,7 +14911,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 		_tmp41_ = is_baseline;
 #line 1904 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp41_) {
-#line 14912 "Photo.c"
+#line 14913 "Photo.c"
 			gchar** _tmp42_ = NULL;
 			gint _tmp42__length1 = 0;
 			gchar* _tmp43_ = NULL;
@@ -14922,13 +14923,13 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 			_tmp43_ = g_strdup ("backing:baseline");
 #line 1905 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add267 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp43_);
-#line 14924 "Photo.c"
+#line 14925 "Photo.c"
 		}
 #line 1907 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp44_ = is_source;
 #line 1907 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp44_) {
-#line 14930 "Photo.c"
+#line 14931 "Photo.c"
 			gchar** _tmp45_ = NULL;
 			gint _tmp45__length1 = 0;
 			gchar* _tmp46_ = NULL;
@@ -14940,7 +14941,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 			_tmp46_ = g_strdup ("backing:source");
 #line 1908 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add268 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp46_);
-#line 14942 "Photo.c"
+#line 14943 "Photo.c"
 		}
 #line 1910 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp47_ = alteration_list;
@@ -14956,13 +14957,13 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 		_alteration_unref0 (_tmp49_);
 #line 1895 "/home/jens/Source/shotwell/src/Photo.vala"
 		alteration_list = (_vala_array_free (alteration_list, alteration_list_length1, (GDestroyNotify) g_free), NULL);
-#line 14958 "Photo.c"
+#line 14959 "Photo.c"
 	}
 #line 1868 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (old_file);
 #line 1868 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_free0 (filepath);
-#line 14964 "Photo.c"
+#line 14965 "Photo.c"
 }
 
 
@@ -14983,7 +14984,7 @@ void photo_set_many_editable_file (GeeMap* map, GError** error) {
 	map_iter = _tmp1_;
 #line 1919 "/home/jens/Source/shotwell/src/Photo.vala"
 	while (TRUE) {
-#line 14985 "Photo.c"
+#line 14986 "Photo.c"
 		GeeMapIterator* _tmp2_ = NULL;
 		gboolean _tmp3_ = FALSE;
 		GeeMapIterator* _tmp4_ = NULL;
@@ -15000,7 +15001,7 @@ void photo_set_many_editable_file (GeeMap* map, GError** error) {
 		if (!_tmp3_) {
 #line 1919 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 15002 "Photo.c"
+#line 15003 "Photo.c"
 		}
 #line 1920 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp4_ = map_iter;
@@ -15020,7 +15021,7 @@ void photo_set_many_editable_file (GeeMap* map, GError** error) {
 		_g_object_unref0 (_tmp9_);
 #line 1920 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp6_);
-#line 15022 "Photo.c"
+#line 15023 "Photo.c"
 	}
 #line 1922 "/home/jens/Source/shotwell/src/Photo.vala"
 	database_table_commit_transaction (&_inner_error_);
@@ -15034,7 +15035,7 @@ void photo_set_many_editable_file (GeeMap* map, GError** error) {
 			_g_object_unref0 (map_iter);
 #line 1922 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 15036 "Photo.c"
+#line 15037 "Photo.c"
 		} else {
 #line 1922 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (map_iter);
@@ -15044,12 +15045,12 @@ void photo_set_many_editable_file (GeeMap* map, GError** error) {
 			g_clear_error (&_inner_error_);
 #line 1922 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 15046 "Photo.c"
+#line 15047 "Photo.c"
 		}
 	}
 #line 1915 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (map_iter);
-#line 15051 "Photo.c"
+#line 15052 "Photo.c"
 }
 
 
@@ -15075,7 +15076,7 @@ GFile* photo_get_actual_file (Photo* self) {
 	result = _tmp3_;
 #line 1928 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 15077 "Photo.c"
+#line 15078 "Photo.c"
 }
 
 
@@ -15102,7 +15103,7 @@ static GFile* photo_real_get_master_file (MediaSource* base) {
 	result = _tmp3_;
 #line 1932 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 15104 "Photo.c"
+#line 15105 "Photo.c"
 }
 
 
@@ -15122,7 +15123,7 @@ GFile* photo_get_editable_file (Photo* self) {
 	_tmp2_ = reader;
 #line 1938 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_ != NULL) {
-#line 15124 "Photo.c"
+#line 15125 "Photo.c"
 		PhotoFileReader* _tmp3_ = NULL;
 		GFile* _tmp4_ = NULL;
 #line 1938 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15133,13 +15134,13 @@ GFile* photo_get_editable_file (Photo* self) {
 		_g_object_unref0 (_tmp1_);
 #line 1938 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = _tmp4_;
-#line 15135 "Photo.c"
+#line 15136 "Photo.c"
 	} else {
 #line 1938 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp1_);
 #line 1938 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = NULL;
-#line 15141 "Photo.c"
+#line 15142 "Photo.c"
 	}
 #line 1938 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp1_;
@@ -15147,7 +15148,7 @@ GFile* photo_get_editable_file (Photo* self) {
 	_photo_file_adapter_unref0 (reader);
 #line 1938 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 15149 "Photo.c"
+#line 15150 "Photo.c"
 }
 
 
@@ -15167,20 +15168,20 @@ GeeCollection* photo_get_raw_developer_files (Photo* self) {
 		result = NULL;
 #line 1943 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 15169 "Photo.c"
+#line 15170 "Photo.c"
 	}
 #line 1945 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp1_ = gee_array_list_new (G_TYPE_FILE, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
 #line 1945 "/home/jens/Source/shotwell/src/Photo.vala"
 	ret = _tmp1_;
-#line 15175 "Photo.c"
+#line 15176 "Photo.c"
 	{
 		PhotoRow* _tmp2_ = NULL;
 #line 1946 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp2_ = self->row;
 #line 1946 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 15182 "Photo.c"
+#line 15183 "Photo.c"
 		{
 			{
 				GeeIterator* _row_it = NULL;
@@ -15208,7 +15209,7 @@ GeeCollection* photo_get_raw_developer_files (Photo* self) {
 				_row_it = _tmp8_;
 #line 1947 "/home/jens/Source/shotwell/src/Photo.vala"
 				while (TRUE) {
-#line 15210 "Photo.c"
+#line 15211 "Photo.c"
 					GeeIterator* _tmp9_ = NULL;
 					gboolean _tmp10_ = FALSE;
 					BackingPhotoRow* row = NULL;
@@ -15227,7 +15228,7 @@ GeeCollection* photo_get_raw_developer_files (Photo* self) {
 					if (!_tmp10_) {
 #line 1947 "/home/jens/Source/shotwell/src/Photo.vala"
 						break;
-#line 15229 "Photo.c"
+#line 15230 "Photo.c"
 					}
 #line 1947 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp11_ = _row_it;
@@ -15251,21 +15252,21 @@ GeeCollection* photo_get_raw_developer_files (Photo* self) {
 					_g_object_unref0 (_tmp17_);
 #line 1947 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (row);
-#line 15253 "Photo.c"
+#line 15254 "Photo.c"
 				}
 #line 1947 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (_row_it);
-#line 15257 "Photo.c"
+#line 15258 "Photo.c"
 			}
 		}
-		__finally304:
+		__finally317:
 		{
 			PhotoRow* _tmp18_ = NULL;
 #line 1946 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp18_ = self->row;
 #line 1946 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15267 "Photo.c"
+#line 15268 "Photo.c"
 		}
 #line 1946 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -15277,14 +15278,14 @@ GeeCollection* photo_get_raw_developer_files (Photo* self) {
 			g_clear_error (&_inner_error_);
 #line 1946 "/home/jens/Source/shotwell/src/Photo.vala"
 			return NULL;
-#line 15279 "Photo.c"
+#line 15280 "Photo.c"
 		}
 	}
 #line 1951 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (ret, GEE_TYPE_COLLECTION, GeeCollection);
 #line 1951 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 15286 "Photo.c"
+#line 15287 "Photo.c"
 }
 
 
@@ -15310,7 +15311,7 @@ GFile* photo_get_source_file (Photo* self) {
 	result = _tmp3_;
 #line 1955 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 15312 "Photo.c"
+#line 15313 "Photo.c"
 }
 
 
@@ -15319,14 +15320,14 @@ PhotoFileFormat photo_get_file_format (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 1958 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), 0);
-#line 15321 "Photo.c"
+#line 15322 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 1959 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 1959 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 15328 "Photo.c"
+#line 15329 "Photo.c"
 		{
 			BackingPhotoRow* _tmp1_ = NULL;
 			PhotoFileFormat _tmp2_ = 0;
@@ -15336,27 +15337,27 @@ PhotoFileFormat photo_get_file_format (Photo* self) {
 			_tmp2_ = _tmp1_->file_format;
 #line 1960 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_;
-#line 15338 "Photo.c"
+#line 15339 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 1959 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 1959 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15345 "Photo.c"
+#line 15346 "Photo.c"
 			}
 #line 1960 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 15349 "Photo.c"
+#line 15350 "Photo.c"
 		}
-		__finally305:
+		__finally318:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 1959 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 1959 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15358 "Photo.c"
+#line 15359 "Photo.c"
 		}
 #line 1959 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -15364,7 +15365,7 @@ PhotoFileFormat photo_get_file_format (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1959 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0;
-#line 15366 "Photo.c"
+#line 15367 "Photo.c"
 	}
 }
 
@@ -15387,19 +15388,19 @@ PhotoFileFormat photo_get_best_export_file_format (Photo* self) {
 	_tmp2_ = photo_file_format_can_write (_tmp1_);
 #line 1966 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp2_) {
-#line 15389 "Photo.c"
+#line 15390 "Photo.c"
 		PhotoFileFormat _tmp3_ = 0;
 #line 1967 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp3_ = photo_file_format_get_system_default_format ();
 #line 1967 "/home/jens/Source/shotwell/src/Photo.vala"
 		file_format = _tmp3_;
-#line 15395 "Photo.c"
+#line 15396 "Photo.c"
 	}
 #line 1969 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = file_format;
 #line 1969 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 15401 "Photo.c"
+#line 15402 "Photo.c"
 }
 
 
@@ -15408,14 +15409,14 @@ PhotoFileFormat photo_get_master_file_format (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 1972 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), 0);
-#line 15410 "Photo.c"
+#line 15411 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 1973 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 1973 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 15417 "Photo.c"
+#line 15418 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -15428,27 +15429,27 @@ PhotoFileFormat photo_get_master_file_format (Photo* self) {
 			_tmp3_ = photo_file_adapter_get_file_format (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
 #line 1974 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp3_;
-#line 15430 "Photo.c"
+#line 15431 "Photo.c"
 			{
 				PhotoRow* _tmp4_ = NULL;
 #line 1973 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->row;
 #line 1973 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15437 "Photo.c"
+#line 15438 "Photo.c"
 			}
 #line 1974 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 15441 "Photo.c"
+#line 15442 "Photo.c"
 		}
-		__finally306:
+		__finally319:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 1973 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->row;
 #line 1973 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15450 "Photo.c"
+#line 15451 "Photo.c"
 		}
 #line 1973 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -15456,7 +15457,7 @@ PhotoFileFormat photo_get_master_file_format (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 1973 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0;
-#line 15458 "Photo.c"
+#line 15459 "Photo.c"
 	}
 }
 
@@ -15467,14 +15468,14 @@ static time_t photo_real_get_timestamp (MediaSource* base) {
 	GError * _inner_error_ = NULL;
 #line 1978 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 15469 "Photo.c"
+#line 15470 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 1979 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 1979 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 15476 "Photo.c"
+#line 15477 "Photo.c"
 		{
 			BackingPhotoRow* _tmp1_ = NULL;
 			time_t _tmp2_ = 0;
@@ -15484,27 +15485,27 @@ static time_t photo_real_get_timestamp (MediaSource* base) {
 			_tmp2_ = _tmp1_->timestamp;
 #line 1980 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_;
-#line 15486 "Photo.c"
+#line 15487 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 1979 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 1979 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15493 "Photo.c"
+#line 15494 "Photo.c"
 			}
 #line 1980 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 15497 "Photo.c"
+#line 15498 "Photo.c"
 		}
-		__finally307:
+		__finally320:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 1979 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 1979 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15506 "Photo.c"
+#line 15507 "Photo.c"
 		}
 #line 1979 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -15512,7 +15513,7 @@ static time_t photo_real_get_timestamp (MediaSource* base) {
 		g_clear_error (&_inner_error_);
 #line 1979 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0;
-#line 15514 "Photo.c"
+#line 15515 "Photo.c"
 	}
 }
 
@@ -15521,14 +15522,14 @@ void photo_get_photo_id (Photo* self, PhotoID* result) {
 	GError * _inner_error_ = NULL;
 #line 1984 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail (IS_PHOTO (self));
-#line 15523 "Photo.c"
+#line 15524 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 1985 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 1985 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 15530 "Photo.c"
+#line 15531 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			PhotoID _tmp2_ = {0};
@@ -15538,27 +15539,27 @@ void photo_get_photo_id (Photo* self, PhotoID* result) {
 			_tmp2_ = _tmp1_->photo_id;
 #line 1986 "/home/jens/Source/shotwell/src/Photo.vala"
 			*result = _tmp2_;
-#line 15540 "Photo.c"
+#line 15541 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 1985 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 1985 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15547 "Photo.c"
+#line 15548 "Photo.c"
 			}
 #line 1986 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 15551 "Photo.c"
+#line 15552 "Photo.c"
 		}
-		__finally308:
+		__finally321:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 1985 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 1985 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15560 "Photo.c"
+#line 15561 "Photo.c"
 		}
 #line 1985 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -15566,7 +15567,7 @@ void photo_get_photo_id (Photo* self, PhotoID* result) {
 		g_clear_error (&_inner_error_);
 #line 1985 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 15568 "Photo.c"
+#line 15569 "Photo.c"
 	}
 }
 
@@ -15585,7 +15586,7 @@ static inline void photo_real_get_event_id (MediaSource* base, EventID* result) 
 	*result = _tmp1_;
 #line 1992 "/home/jens/Source/shotwell/src/Photo.vala"
 	return;
-#line 15587 "Photo.c"
+#line 15588 "Photo.c"
 }
 
 
@@ -15606,7 +15607,7 @@ inline gint64 photo_get_raw_event_id (Photo* self) {
 	result = _tmp2_;
 #line 1997 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 15608 "Photo.c"
+#line 15609 "Photo.c"
 }
 
 
@@ -15615,14 +15616,14 @@ static void photo_real_get_import_id (MediaSource* base, ImportID* result) {
 	GError * _inner_error_ = NULL;
 #line 2000 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 15617 "Photo.c"
+#line 15618 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2001 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2001 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 15624 "Photo.c"
+#line 15625 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			ImportID _tmp2_ = {0};
@@ -15632,27 +15633,27 @@ static void photo_real_get_import_id (MediaSource* base, ImportID* result) {
 			_tmp2_ = _tmp1_->import_id;
 #line 2002 "/home/jens/Source/shotwell/src/Photo.vala"
 			*result = _tmp2_;
-#line 15634 "Photo.c"
+#line 15635 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 2001 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 2001 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15641 "Photo.c"
+#line 15642 "Photo.c"
 			}
 #line 2002 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 15645 "Photo.c"
+#line 15646 "Photo.c"
 		}
-		__finally309:
+		__finally322:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2001 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2001 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15654 "Photo.c"
+#line 15655 "Photo.c"
 		}
 #line 2001 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -15660,7 +15661,7 @@ static void photo_real_get_import_id (MediaSource* base, ImportID* result) {
 		g_clear_error (&_inner_error_);
 #line 2001 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 15662 "Photo.c"
+#line 15663 "Photo.c"
 	}
 }
 
@@ -15669,14 +15670,14 @@ void photo_get_editable_id (Photo* self, BackingPhotoID* result) {
 	GError * _inner_error_ = NULL;
 #line 2006 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail (IS_PHOTO (self));
-#line 15671 "Photo.c"
+#line 15672 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2007 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2007 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 15678 "Photo.c"
+#line 15679 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			BackingPhotoID _tmp2_ = {0};
@@ -15686,27 +15687,27 @@ void photo_get_editable_id (Photo* self, BackingPhotoID* result) {
 			_tmp2_ = _tmp1_->editable_id;
 #line 2008 "/home/jens/Source/shotwell/src/Photo.vala"
 			*result = _tmp2_;
-#line 15688 "Photo.c"
+#line 15689 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 2007 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 2007 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15695 "Photo.c"
+#line 15696 "Photo.c"
 			}
 #line 2008 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 15699 "Photo.c"
+#line 15700 "Photo.c"
 		}
-		__finally310:
+		__finally323:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2007 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2007 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15708 "Photo.c"
+#line 15709 "Photo.c"
 		}
 #line 2007 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -15714,7 +15715,7 @@ void photo_get_editable_id (Photo* self, BackingPhotoID* result) {
 		g_clear_error (&_inner_error_);
 #line 2007 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 15716 "Photo.c"
+#line 15717 "Photo.c"
 	}
 }
 
@@ -15725,14 +15726,14 @@ static gchar* photo_real_get_master_md5 (MediaSource* base) {
 	GError * _inner_error_ = NULL;
 #line 2012 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 15727 "Photo.c"
+#line 15728 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2013 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2013 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 15734 "Photo.c"
+#line 15735 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			const gchar* _tmp2_ = NULL;
@@ -15745,27 +15746,27 @@ static gchar* photo_real_get_master_md5 (MediaSource* base) {
 			_tmp3_ = g_strdup (_tmp2_);
 #line 2014 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp3_;
-#line 15747 "Photo.c"
+#line 15748 "Photo.c"
 			{
 				PhotoRow* _tmp4_ = NULL;
 #line 2013 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->row;
 #line 2013 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15754 "Photo.c"
+#line 15755 "Photo.c"
 			}
 #line 2014 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 15758 "Photo.c"
+#line 15759 "Photo.c"
 		}
-		__finally311:
+		__finally324:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2013 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->row;
 #line 2013 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15767 "Photo.c"
+#line 15768 "Photo.c"
 		}
 #line 2013 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -15773,7 +15774,7 @@ static gchar* photo_real_get_master_md5 (MediaSource* base) {
 		g_clear_error (&_inner_error_);
 #line 2013 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 15775 "Photo.c"
+#line 15776 "Photo.c"
 	}
 }
 
@@ -15783,14 +15784,14 @@ guint64 photo_get_flags (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 2020 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), 0ULL);
-#line 15785 "Photo.c"
+#line 15786 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2021 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2021 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 15792 "Photo.c"
+#line 15793 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			guint64 _tmp2_ = 0ULL;
@@ -15800,27 +15801,27 @@ guint64 photo_get_flags (Photo* self) {
 			_tmp2_ = _tmp1_->flags;
 #line 2022 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_;
-#line 15802 "Photo.c"
+#line 15803 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 2021 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 2021 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15809 "Photo.c"
+#line 15810 "Photo.c"
 			}
 #line 2022 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 15813 "Photo.c"
+#line 15814 "Photo.c"
 		}
-		__finally312:
+		__finally325:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2021 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2021 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15822 "Photo.c"
+#line 15823 "Photo.c"
 		}
 #line 2021 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -15828,7 +15829,7 @@ guint64 photo_get_flags (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2021 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0ULL;
-#line 15830 "Photo.c"
+#line 15831 "Photo.c"
 	}
 }
 
@@ -15850,7 +15851,7 @@ static void photo_notify_flags_altered (Photo* self, Alteration* additional_alte
 	_tmp1_ = additional_alteration;
 #line 2028 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_ != NULL) {
-#line 15852 "Photo.c"
+#line 15853 "Photo.c"
 		Alteration* _tmp2_ = NULL;
 		Alteration* _tmp3_ = NULL;
 		Alteration* _tmp4_ = NULL;
@@ -15864,7 +15865,7 @@ static void photo_notify_flags_altered (Photo* self, Alteration* additional_alte
 		_alteration_unref0 (alteration);
 #line 2029 "/home/jens/Source/shotwell/src/Photo.vala"
 		alteration = _tmp4_;
-#line 15866 "Photo.c"
+#line 15867 "Photo.c"
 	}
 #line 2031 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp5_ = alteration;
@@ -15872,7 +15873,7 @@ static void photo_notify_flags_altered (Photo* self, Alteration* additional_alte
 	data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp5_);
 #line 2026 "/home/jens/Source/shotwell/src/Photo.vala"
 	_alteration_unref0 (alteration);
-#line 15874 "Photo.c"
+#line 15875 "Photo.c"
 }
 
 
@@ -15886,14 +15887,14 @@ guint64 photo_replace_flags (Photo* self, guint64 flags, Alteration* additional_
 	g_return_val_if_fail (IS_PHOTO (self), 0ULL);
 #line 2034 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail ((additional_alteration == NULL) || IS_ALTERATION (additional_alteration), 0ULL);
-#line 15888 "Photo.c"
+#line 15889 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2036 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2036 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 15895 "Photo.c"
+#line 15896 "Photo.c"
 		{
 			PhotoTable* _tmp1_ = NULL;
 			PhotoTable* _tmp2_ = NULL;
@@ -15919,7 +15920,7 @@ guint64 photo_replace_flags (Photo* self, guint64 flags, Alteration* additional_
 			_tmp6_ = committed;
 #line 2038 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp6_) {
-#line 15921 "Photo.c"
+#line 15922 "Photo.c"
 				PhotoRow* _tmp7_ = NULL;
 				guint64 _tmp8_ = 0ULL;
 #line 2039 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15928,17 +15929,17 @@ guint64 photo_replace_flags (Photo* self, guint64 flags, Alteration* additional_
 				_tmp8_ = flags;
 #line 2039 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp7_->flags = _tmp8_;
-#line 15930 "Photo.c"
+#line 15931 "Photo.c"
 			}
 		}
-		__finally313:
+		__finally326:
 		{
 			PhotoRow* _tmp9_ = NULL;
 #line 2036 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp9_ = self->row;
 #line 2036 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 15940 "Photo.c"
+#line 15941 "Photo.c"
 		}
 #line 2036 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -15948,20 +15949,20 @@ guint64 photo_replace_flags (Photo* self, guint64 flags, Alteration* additional_
 			g_clear_error (&_inner_error_);
 #line 2036 "/home/jens/Source/shotwell/src/Photo.vala"
 			return 0ULL;
-#line 15950 "Photo.c"
+#line 15951 "Photo.c"
 		}
 	}
 #line 2042 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp10_ = committed;
 #line 2042 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp10_) {
-#line 15957 "Photo.c"
+#line 15958 "Photo.c"
 		Alteration* _tmp11_ = NULL;
 #line 2043 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp11_ = additional_alteration;
 #line 2043 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_flags_altered (self, _tmp11_);
-#line 15963 "Photo.c"
+#line 15964 "Photo.c"
 	}
 #line 2045 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp12_ = flags;
@@ -15969,7 +15970,7 @@ guint64 photo_replace_flags (Photo* self, guint64 flags, Alteration* additional_
 	result = _tmp12_;
 #line 2045 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 15971 "Photo.c"
+#line 15972 "Photo.c"
 }
 
 
@@ -15978,14 +15979,14 @@ gboolean photo_is_flag_set (Photo* self, guint64 mask) {
 	GError * _inner_error_ = NULL;
 #line 2048 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
-#line 15980 "Photo.c"
+#line 15981 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2049 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2049 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 15987 "Photo.c"
+#line 15988 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			guint64 _tmp2_ = 0ULL;
@@ -16001,27 +16002,27 @@ gboolean photo_is_flag_set (Photo* self, guint64 mask) {
 			_tmp4_ = media_source_internal_is_flag_set (_tmp2_, _tmp3_);
 #line 2050 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp4_;
-#line 16003 "Photo.c"
+#line 16004 "Photo.c"
 			{
 				PhotoRow* _tmp5_ = NULL;
 #line 2049 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp5_ = self->row;
 #line 2049 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 16010 "Photo.c"
+#line 16011 "Photo.c"
 			}
 #line 2050 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 16014 "Photo.c"
+#line 16015 "Photo.c"
 		}
-		__finally314:
+		__finally327:
 		{
 			PhotoRow* _tmp6_ = NULL;
 #line 2049 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp6_ = self->row;
 #line 2049 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 16023 "Photo.c"
+#line 16024 "Photo.c"
 		}
 #line 2049 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -16029,7 +16030,7 @@ gboolean photo_is_flag_set (Photo* self, guint64 mask) {
 		g_clear_error (&_inner_error_);
 #line 2049 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 16031 "Photo.c"
+#line 16032 "Photo.c"
 	}
 }
 
@@ -16048,14 +16049,14 @@ guint64 photo_add_flags (Photo* self, guint64 mask, Alteration* additional_alter
 	flags = (guint64) 0;
 #line 2057 "/home/jens/Source/shotwell/src/Photo.vala"
 	committed = FALSE;
-#line 16050 "Photo.c"
+#line 16051 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2058 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2058 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 16057 "Photo.c"
+#line 16058 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			guint64 _tmp2_ = 0ULL;
@@ -16082,7 +16083,7 @@ guint64 photo_add_flags (Photo* self, guint64 mask, Alteration* additional_alter
 			_tmp7_ = flags;
 #line 2060 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp6_ != _tmp7_) {
-#line 16084 "Photo.c"
+#line 16085 "Photo.c"
 				PhotoTable* _tmp8_ = NULL;
 				PhotoTable* _tmp9_ = NULL;
 				PhotoID _tmp10_ = {0};
@@ -16107,7 +16108,7 @@ guint64 photo_add_flags (Photo* self, guint64 mask, Alteration* additional_alter
 				_tmp13_ = committed;
 #line 2062 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp13_) {
-#line 16109 "Photo.c"
+#line 16110 "Photo.c"
 					PhotoRow* _tmp14_ = NULL;
 					guint64 _tmp15_ = 0ULL;
 #line 2063 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16116,18 +16117,18 @@ guint64 photo_add_flags (Photo* self, guint64 mask, Alteration* additional_alter
 					_tmp15_ = flags;
 #line 2063 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp14_->flags = _tmp15_;
-#line 16118 "Photo.c"
+#line 16119 "Photo.c"
 				}
 			}
 		}
-		__finally315:
+		__finally328:
 		{
 			PhotoRow* _tmp16_ = NULL;
 #line 2058 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp16_ = self->row;
 #line 2058 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 16129 "Photo.c"
+#line 16130 "Photo.c"
 		}
 #line 2058 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -16137,26 +16138,26 @@ guint64 photo_add_flags (Photo* self, guint64 mask, Alteration* additional_alter
 			g_clear_error (&_inner_error_);
 #line 2058 "/home/jens/Source/shotwell/src/Photo.vala"
 			return 0ULL;
-#line 16139 "Photo.c"
+#line 16140 "Photo.c"
 		}
 	}
 #line 2067 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp17_ = committed;
 #line 2067 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp17_) {
-#line 16146 "Photo.c"
+#line 16147 "Photo.c"
 		Alteration* _tmp18_ = NULL;
 #line 2068 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp18_ = additional_alteration;
 #line 2068 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_flags_altered (self, _tmp18_);
-#line 16152 "Photo.c"
+#line 16153 "Photo.c"
 	}
 #line 2070 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = flags;
 #line 2070 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 16158 "Photo.c"
+#line 16159 "Photo.c"
 }
 
 
@@ -16174,14 +16175,14 @@ guint64 photo_remove_flags (Photo* self, guint64 mask, Alteration* additional_al
 	flags = (guint64) 0;
 #line 2076 "/home/jens/Source/shotwell/src/Photo.vala"
 	committed = FALSE;
-#line 16176 "Photo.c"
+#line 16177 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2077 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2077 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 16183 "Photo.c"
+#line 16184 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			guint64 _tmp2_ = 0ULL;
@@ -16208,7 +16209,7 @@ guint64 photo_remove_flags (Photo* self, guint64 mask, Alteration* additional_al
 			_tmp7_ = flags;
 #line 2079 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp6_ != _tmp7_) {
-#line 16210 "Photo.c"
+#line 16211 "Photo.c"
 				PhotoTable* _tmp8_ = NULL;
 				PhotoTable* _tmp9_ = NULL;
 				PhotoID _tmp10_ = {0};
@@ -16233,7 +16234,7 @@ guint64 photo_remove_flags (Photo* self, guint64 mask, Alteration* additional_al
 				_tmp13_ = committed;
 #line 2081 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp13_) {
-#line 16235 "Photo.c"
+#line 16236 "Photo.c"
 					PhotoRow* _tmp14_ = NULL;
 					guint64 _tmp15_ = 0ULL;
 #line 2082 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16242,18 +16243,18 @@ guint64 photo_remove_flags (Photo* self, guint64 mask, Alteration* additional_al
 					_tmp15_ = flags;
 #line 2082 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp14_->flags = _tmp15_;
-#line 16244 "Photo.c"
+#line 16245 "Photo.c"
 				}
 			}
 		}
-		__finally316:
+		__finally329:
 		{
 			PhotoRow* _tmp16_ = NULL;
 #line 2077 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp16_ = self->row;
 #line 2077 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 16255 "Photo.c"
+#line 16256 "Photo.c"
 		}
 #line 2077 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -16263,26 +16264,26 @@ guint64 photo_remove_flags (Photo* self, guint64 mask, Alteration* additional_al
 			g_clear_error (&_inner_error_);
 #line 2077 "/home/jens/Source/shotwell/src/Photo.vala"
 			return 0ULL;
-#line 16265 "Photo.c"
+#line 16266 "Photo.c"
 		}
 	}
 #line 2086 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp17_ = committed;
 #line 2086 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp17_) {
-#line 16272 "Photo.c"
+#line 16273 "Photo.c"
 		Alteration* _tmp18_ = NULL;
 #line 2087 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp18_ = additional_alteration;
 #line 2087 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_flags_altered (self, _tmp18_);
-#line 16278 "Photo.c"
+#line 16279 "Photo.c"
 	}
 #line 2089 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = flags;
 #line 2089 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 16284 "Photo.c"
+#line 16285 "Photo.c"
 }
 
 
@@ -16300,14 +16301,14 @@ guint64 photo_add_remove_flags (Photo* self, guint64 add, guint64 remove, Altera
 	flags = (guint64) 0;
 #line 2095 "/home/jens/Source/shotwell/src/Photo.vala"
 	committed = FALSE;
-#line 16302 "Photo.c"
+#line 16303 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2096 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2096 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 16309 "Photo.c"
+#line 16310 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			guint64 _tmp2_ = 0ULL;
@@ -16334,7 +16335,7 @@ guint64 photo_add_remove_flags (Photo* self, guint64 add, guint64 remove, Altera
 			_tmp7_ = flags;
 #line 2098 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp6_ != _tmp7_) {
-#line 16336 "Photo.c"
+#line 16337 "Photo.c"
 				PhotoTable* _tmp8_ = NULL;
 				PhotoTable* _tmp9_ = NULL;
 				PhotoID _tmp10_ = {0};
@@ -16359,7 +16360,7 @@ guint64 photo_add_remove_flags (Photo* self, guint64 add, guint64 remove, Altera
 				_tmp13_ = committed;
 #line 2100 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp13_) {
-#line 16361 "Photo.c"
+#line 16362 "Photo.c"
 					PhotoRow* _tmp14_ = NULL;
 					guint64 _tmp15_ = 0ULL;
 #line 2101 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16368,18 +16369,18 @@ guint64 photo_add_remove_flags (Photo* self, guint64 add, guint64 remove, Altera
 					_tmp15_ = flags;
 #line 2101 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp14_->flags = _tmp15_;
-#line 16370 "Photo.c"
+#line 16371 "Photo.c"
 				}
 			}
 		}
-		__finally317:
+		__finally330:
 		{
 			PhotoRow* _tmp16_ = NULL;
 #line 2096 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp16_ = self->row;
 #line 2096 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 16381 "Photo.c"
+#line 16382 "Photo.c"
 		}
 #line 2096 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -16389,26 +16390,26 @@ guint64 photo_add_remove_flags (Photo* self, guint64 add, guint64 remove, Altera
 			g_clear_error (&_inner_error_);
 #line 2096 "/home/jens/Source/shotwell/src/Photo.vala"
 			return 0ULL;
-#line 16391 "Photo.c"
+#line 16392 "Photo.c"
 		}
 	}
 #line 2105 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp17_ = committed;
 #line 2105 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp17_) {
-#line 16398 "Photo.c"
+#line 16399 "Photo.c"
 		Alteration* _tmp18_ = NULL;
 #line 2106 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp18_ = additional_alteration;
 #line 2106 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_flags_altered (self, _tmp18_);
-#line 16404 "Photo.c"
+#line 16405 "Photo.c"
 	}
 #line 2108 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = flags;
 #line 2108 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 16410 "Photo.c"
+#line 16411 "Photo.c"
 }
 
 
@@ -16430,7 +16431,7 @@ void photo_add_remove_many_flags (GeeCollection* add, guint64 add_mask, Alterati
 	_tmp0_ = add;
 #line 2116 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp0_ != NULL) {
-#line 16432 "Photo.c"
+#line 16433 "Photo.c"
 		{
 			GeeIterator* _photo_it = NULL;
 			GeeCollection* _tmp1_ = NULL;
@@ -16443,7 +16444,7 @@ void photo_add_remove_many_flags (GeeCollection* add, guint64 add_mask, Alterati
 			_photo_it = _tmp2_;
 #line 2117 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 16445 "Photo.c"
+#line 16446 "Photo.c"
 				GeeIterator* _tmp3_ = NULL;
 				gboolean _tmp4_ = FALSE;
 				Photo* photo = NULL;
@@ -16460,7 +16461,7 @@ void photo_add_remove_many_flags (GeeCollection* add, guint64 add_mask, Alterati
 				if (!_tmp4_) {
 #line 2117 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 16462 "Photo.c"
+#line 16463 "Photo.c"
 				}
 #line 2117 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp5_ = _photo_it;
@@ -16478,18 +16479,18 @@ void photo_add_remove_many_flags (GeeCollection* add, guint64 add_mask, Alterati
 				photo_add_flags (_tmp7_, _tmp8_, _tmp9_);
 #line 2117 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (photo);
-#line 16480 "Photo.c"
+#line 16481 "Photo.c"
 			}
 #line 2117 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_photo_it);
-#line 16484 "Photo.c"
+#line 16485 "Photo.c"
 		}
 	}
 #line 2121 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp10_ = remove;
 #line 2121 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp10_ != NULL) {
-#line 16491 "Photo.c"
+#line 16492 "Photo.c"
 		{
 			GeeIterator* _photo_it = NULL;
 			GeeCollection* _tmp11_ = NULL;
@@ -16502,7 +16503,7 @@ void photo_add_remove_many_flags (GeeCollection* add, guint64 add_mask, Alterati
 			_photo_it = _tmp12_;
 #line 2122 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 16504 "Photo.c"
+#line 16505 "Photo.c"
 				GeeIterator* _tmp13_ = NULL;
 				gboolean _tmp14_ = FALSE;
 				Photo* photo = NULL;
@@ -16519,7 +16520,7 @@ void photo_add_remove_many_flags (GeeCollection* add, guint64 add_mask, Alterati
 				if (!_tmp14_) {
 #line 2122 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 16521 "Photo.c"
+#line 16522 "Photo.c"
 				}
 #line 2122 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp15_ = _photo_it;
@@ -16537,11 +16538,11 @@ void photo_add_remove_many_flags (GeeCollection* add, guint64 add_mask, Alterati
 				photo_remove_flags (_tmp17_, _tmp18_, _tmp19_);
 #line 2122 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (photo);
-#line 16539 "Photo.c"
+#line 16540 "Photo.c"
 			}
 #line 2122 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_photo_it);
-#line 16543 "Photo.c"
+#line 16544 "Photo.c"
 		}
 	}
 #line 2126 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16554,7 +16555,7 @@ void photo_add_remove_many_flags (GeeCollection* add, guint64 add_mask, Alterati
 			g_propagate_error (error, _inner_error_);
 #line 2126 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 16556 "Photo.c"
+#line 16557 "Photo.c"
 		} else {
 #line 2126 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -16562,7 +16563,7 @@ void photo_add_remove_many_flags (GeeCollection* add, guint64 add_mask, Alterati
 			g_clear_error (&_inner_error_);
 #line 2126 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 16564 "Photo.c"
+#line 16565 "Photo.c"
 		}
 	}
 }
@@ -16582,14 +16583,14 @@ guint64 photo_toggle_flags (Photo* self, guint64 mask, Alteration* additional_al
 	flags = (guint64) 0;
 #line 2132 "/home/jens/Source/shotwell/src/Photo.vala"
 	committed = FALSE;
-#line 16584 "Photo.c"
+#line 16585 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2133 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2133 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 16591 "Photo.c"
+#line 16592 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			guint64 _tmp2_ = 0ULL;
@@ -16613,7 +16614,7 @@ guint64 photo_toggle_flags (Photo* self, guint64 mask, Alteration* additional_al
 			_tmp6_ = flags;
 #line 2135 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp5_ != _tmp6_) {
-#line 16615 "Photo.c"
+#line 16616 "Photo.c"
 				PhotoTable* _tmp7_ = NULL;
 				PhotoTable* _tmp8_ = NULL;
 				PhotoID _tmp9_ = {0};
@@ -16638,7 +16639,7 @@ guint64 photo_toggle_flags (Photo* self, guint64 mask, Alteration* additional_al
 				_tmp12_ = committed;
 #line 2137 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp12_) {
-#line 16640 "Photo.c"
+#line 16641 "Photo.c"
 					PhotoRow* _tmp13_ = NULL;
 					guint64 _tmp14_ = 0ULL;
 #line 2138 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16647,18 +16648,18 @@ guint64 photo_toggle_flags (Photo* self, guint64 mask, Alteration* additional_al
 					_tmp14_ = flags;
 #line 2138 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp13_->flags = _tmp14_;
-#line 16649 "Photo.c"
+#line 16650 "Photo.c"
 				}
 			}
 		}
-		__finally318:
+		__finally331:
 		{
 			PhotoRow* _tmp15_ = NULL;
 #line 2133 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp15_ = self->row;
 #line 2133 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 16660 "Photo.c"
+#line 16661 "Photo.c"
 		}
 #line 2133 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -16668,26 +16669,26 @@ guint64 photo_toggle_flags (Photo* self, guint64 mask, Alteration* additional_al
 			g_clear_error (&_inner_error_);
 #line 2133 "/home/jens/Source/shotwell/src/Photo.vala"
 			return 0ULL;
-#line 16670 "Photo.c"
+#line 16671 "Photo.c"
 		}
 	}
 #line 2142 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp16_ = committed;
 #line 2142 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp16_) {
-#line 16677 "Photo.c"
+#line 16678 "Photo.c"
 		Alteration* _tmp17_ = NULL;
 #line 2143 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp17_ = additional_alteration;
 #line 2143 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_flags_altered (self, _tmp17_);
-#line 16683 "Photo.c"
+#line 16684 "Photo.c"
 	}
 #line 2145 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = flags;
 #line 2145 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 16689 "Photo.c"
+#line 16690 "Photo.c"
 }
 
 
@@ -16696,14 +16697,14 @@ gboolean photo_is_master_metadata_dirty (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 2148 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
-#line 16698 "Photo.c"
+#line 16699 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2149 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2149 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 16705 "Photo.c"
+#line 16706 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			gboolean _tmp2_ = FALSE;
@@ -16713,27 +16714,27 @@ gboolean photo_is_master_metadata_dirty (Photo* self) {
 			_tmp2_ = _tmp1_->metadata_dirty;
 #line 2150 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_;
-#line 16715 "Photo.c"
+#line 16716 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 2149 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 2149 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 16722 "Photo.c"
+#line 16723 "Photo.c"
 			}
 #line 2150 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 16726 "Photo.c"
+#line 16727 "Photo.c"
 		}
-		__finally319:
+		__finally332:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2149 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2149 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 16735 "Photo.c"
+#line 16736 "Photo.c"
 		}
 #line 2149 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -16741,7 +16742,7 @@ gboolean photo_is_master_metadata_dirty (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2149 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 16743 "Photo.c"
+#line 16744 "Photo.c"
 	}
 }
 
@@ -16754,14 +16755,14 @@ void photo_set_master_metadata_dirty (Photo* self, gboolean dirty, GError** erro
 	g_return_if_fail (IS_PHOTO (self));
 #line 2155 "/home/jens/Source/shotwell/src/Photo.vala"
 	committed = FALSE;
-#line 16756 "Photo.c"
+#line 16757 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2156 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2156 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 16763 "Photo.c"
+#line 16764 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			gboolean _tmp2_ = FALSE;
@@ -16774,7 +16775,7 @@ void photo_set_master_metadata_dirty (Photo* self, gboolean dirty, GError** erro
 			_tmp3_ = dirty;
 #line 2157 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != _tmp3_) {
-#line 16776 "Photo.c"
+#line 16777 "Photo.c"
 				PhotoTable* _tmp4_ = NULL;
 				PhotoTable* _tmp5_ = NULL;
 				PhotoID _tmp6_ = {0};
@@ -16795,8 +16796,8 @@ void photo_set_master_metadata_dirty (Photo* self, gboolean dirty, GError** erro
 				_database_table_unref0 (_tmp5_);
 #line 2158 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 16797 "Photo.c"
-					goto __finally320;
+#line 16798 "Photo.c"
+					goto __finally333;
 				}
 #line 2159 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp8_ = self->row;
@@ -16806,17 +16807,17 @@ void photo_set_master_metadata_dirty (Photo* self, gboolean dirty, GError** erro
 				_tmp8_->metadata_dirty = _tmp9_;
 #line 2160 "/home/jens/Source/shotwell/src/Photo.vala"
 				committed = TRUE;
-#line 16808 "Photo.c"
+#line 16809 "Photo.c"
 			}
 		}
-		__finally320:
+		__finally333:
 		{
 			PhotoRow* _tmp10_ = NULL;
 #line 2156 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp10_ = self->row;
 #line 2156 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 16818 "Photo.c"
+#line 16819 "Photo.c"
 		}
 #line 2156 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -16826,7 +16827,7 @@ void photo_set_master_metadata_dirty (Photo* self, gboolean dirty, GError** erro
 				g_propagate_error (error, _inner_error_);
 #line 2156 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 16828 "Photo.c"
+#line 16829 "Photo.c"
 			} else {
 #line 2156 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -16834,7 +16835,7 @@ void photo_set_master_metadata_dirty (Photo* self, gboolean dirty, GError** erro
 				g_clear_error (&_inner_error_);
 #line 2156 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 16836 "Photo.c"
+#line 16837 "Photo.c"
 			}
 		}
 	}
@@ -16842,7 +16843,7 @@ void photo_set_master_metadata_dirty (Photo* self, gboolean dirty, GError** erro
 	_tmp11_ = committed;
 #line 2164 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp11_) {
-#line 16844 "Photo.c"
+#line 16845 "Photo.c"
 		Alteration* _tmp12_ = NULL;
 		Alteration* _tmp13_ = NULL;
 #line 2165 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16853,7 +16854,7 @@ void photo_set_master_metadata_dirty (Photo* self, gboolean dirty, GError** erro
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp13_);
 #line 2165 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp13_);
-#line 16855 "Photo.c"
+#line 16856 "Photo.c"
 	}
 }
 
@@ -16864,14 +16865,14 @@ static Rating photo_real_get_rating (MediaSource* base) {
 	GError * _inner_error_ = NULL;
 #line 2168 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 16866 "Photo.c"
+#line 16867 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2169 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2169 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 16873 "Photo.c"
+#line 16874 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			Rating _tmp2_ = 0;
@@ -16881,27 +16882,27 @@ static Rating photo_real_get_rating (MediaSource* base) {
 			_tmp2_ = _tmp1_->rating;
 #line 2170 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_;
-#line 16883 "Photo.c"
+#line 16884 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 2169 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 2169 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 16890 "Photo.c"
+#line 16891 "Photo.c"
 			}
 #line 2170 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 16894 "Photo.c"
+#line 16895 "Photo.c"
 		}
-		__finally321:
+		__finally334:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2169 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2169 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 16903 "Photo.c"
+#line 16904 "Photo.c"
 		}
 #line 2169 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -16909,7 +16910,7 @@ static Rating photo_real_get_rating (MediaSource* base) {
 		g_clear_error (&_inner_error_);
 #line 2169 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0;
-#line 16911 "Photo.c"
+#line 16912 "Photo.c"
 	}
 }
 
@@ -16923,14 +16924,14 @@ static void photo_real_set_rating (MediaSource* base, Rating rating) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
 #line 2175 "/home/jens/Source/shotwell/src/Photo.vala"
 	committed = FALSE;
-#line 16925 "Photo.c"
+#line 16926 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2177 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2177 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 16932 "Photo.c"
+#line 16933 "Photo.c"
 		{
 			gboolean _tmp1_ = FALSE;
 			Rating _tmp2_ = 0;
@@ -16944,7 +16945,7 @@ static void photo_real_set_rating (MediaSource* base, Rating rating) {
 			_tmp4_ = _tmp3_->rating;
 #line 2178 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != _tmp4_) {
-#line 16946 "Photo.c"
+#line 16947 "Photo.c"
 				Rating _tmp5_ = 0;
 				gboolean _tmp6_ = FALSE;
 #line 2178 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16953,15 +16954,15 @@ static void photo_real_set_rating (MediaSource* base, Rating rating) {
 				_tmp6_ = rating_is_valid (_tmp5_);
 #line 2178 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = _tmp6_;
-#line 16955 "Photo.c"
+#line 16956 "Photo.c"
 			} else {
 #line 2178 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = FALSE;
-#line 16959 "Photo.c"
+#line 16960 "Photo.c"
 			}
 #line 2178 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp1_) {
-#line 16963 "Photo.c"
+#line 16964 "Photo.c"
 				PhotoTable* _tmp7_ = NULL;
 				PhotoTable* _tmp8_ = NULL;
 				PhotoID _tmp9_ = {0};
@@ -16986,7 +16987,7 @@ static void photo_real_set_rating (MediaSource* base, Rating rating) {
 				_tmp12_ = committed;
 #line 2180 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp12_) {
-#line 16988 "Photo.c"
+#line 16989 "Photo.c"
 					PhotoRow* _tmp13_ = NULL;
 					Rating _tmp14_ = 0;
 #line 2181 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16995,18 +16996,18 @@ static void photo_real_set_rating (MediaSource* base, Rating rating) {
 					_tmp14_ = rating;
 #line 2181 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp13_->rating = _tmp14_;
-#line 16997 "Photo.c"
+#line 16998 "Photo.c"
 				}
 			}
 		}
-		__finally322:
+		__finally335:
 		{
 			PhotoRow* _tmp15_ = NULL;
 #line 2177 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp15_ = self->row;
 #line 2177 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 17008 "Photo.c"
+#line 17009 "Photo.c"
 		}
 #line 2177 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -17016,14 +17017,14 @@ static void photo_real_set_rating (MediaSource* base, Rating rating) {
 			g_clear_error (&_inner_error_);
 #line 2177 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 17018 "Photo.c"
+#line 17019 "Photo.c"
 		}
 	}
 #line 2185 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp16_ = committed;
 #line 2185 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp16_) {
-#line 17025 "Photo.c"
+#line 17026 "Photo.c"
 		Alteration* _tmp17_ = NULL;
 		Alteration* _tmp18_ = NULL;
 #line 2186 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17034,7 +17035,7 @@ static void photo_real_set_rating (MediaSource* base, Rating rating) {
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp18_);
 #line 2186 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp18_);
-#line 17036 "Photo.c"
+#line 17037 "Photo.c"
 	}
 }
 
@@ -17044,14 +17045,14 @@ static void photo_real_increase_rating (MediaSource* base) {
 	GError * _inner_error_ = NULL;
 #line 2189 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 17046 "Photo.c"
+#line 17047 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2190 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2190 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 17053 "Photo.c"
+#line 17054 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			Rating _tmp2_ = 0;
@@ -17064,16 +17065,16 @@ static void photo_real_increase_rating (MediaSource* base) {
 			_tmp3_ = rating_increase (_tmp2_);
 #line 2191 "/home/jens/Source/shotwell/src/Photo.vala"
 			media_source_set_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource), _tmp3_);
-#line 17066 "Photo.c"
+#line 17067 "Photo.c"
 		}
-		__finally323:
+		__finally336:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2190 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2190 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 17075 "Photo.c"
+#line 17076 "Photo.c"
 		}
 #line 2190 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -17083,7 +17084,7 @@ static void photo_real_increase_rating (MediaSource* base) {
 			g_clear_error (&_inner_error_);
 #line 2190 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 17085 "Photo.c"
+#line 17086 "Photo.c"
 		}
 	}
 }
@@ -17094,14 +17095,14 @@ static void photo_real_decrease_rating (MediaSource* base) {
 	GError * _inner_error_ = NULL;
 #line 2195 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 17096 "Photo.c"
+#line 17097 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2196 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2196 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 17103 "Photo.c"
+#line 17104 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			Rating _tmp2_ = 0;
@@ -17114,16 +17115,16 @@ static void photo_real_decrease_rating (MediaSource* base) {
 			_tmp3_ = rating_decrease (_tmp2_);
 #line 2197 "/home/jens/Source/shotwell/src/Photo.vala"
 			media_source_set_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource), _tmp3_);
-#line 17116 "Photo.c"
+#line 17117 "Photo.c"
 		}
-		__finally324:
+		__finally337:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2196 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2196 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 17125 "Photo.c"
+#line 17126 "Photo.c"
 		}
 #line 2196 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -17133,7 +17134,7 @@ static void photo_real_decrease_rating (MediaSource* base) {
 			g_clear_error (&_inner_error_);
 #line 2196 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 17135 "Photo.c"
+#line 17136 "Photo.c"
 		}
 	}
 }
@@ -17146,7 +17147,7 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
 #line 2201 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail ((sources == NULL) || IS_SOURCE_COLLECTION (sources));
-#line 17148 "Photo.c"
+#line 17149 "Photo.c"
 	{
 		PhotoTable* _tmp0_ = NULL;
 		PhotoTable* _tmp1_ = NULL;
@@ -17168,8 +17169,8 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2206 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 17170 "Photo.c"
-				goto __catch325_database_error;
+#line 17171 "Photo.c"
+				goto __catch338_database_error;
 			}
 #line 2206 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -17177,7 +17178,7 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 			g_clear_error (&_inner_error_);
 #line 2206 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 17179 "Photo.c"
+#line 17180 "Photo.c"
 		}
 		{
 			PhotoRow* _tmp4_ = NULL;
@@ -17185,7 +17186,7 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 			_tmp4_ = self->row;
 #line 2207 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_lock (&self->priv->__lock_row);
-#line 17187 "Photo.c"
+#line 17188 "Photo.c"
 			{
 				PhotoRow* _tmp5_ = NULL;
 				const gchar* _tmp6_ = NULL;
@@ -17200,23 +17201,23 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 				_g_free0 (_tmp5_->backlinks);
 #line 2208 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp5_->backlinks = _tmp7_;
-#line 17202 "Photo.c"
+#line 17203 "Photo.c"
 			}
-			__finally326:
+			__finally339:
 			{
 				PhotoRow* _tmp8_ = NULL;
 #line 2207 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp8_ = self->row;
 #line 2207 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 17211 "Photo.c"
+#line 17212 "Photo.c"
 			}
 #line 2207 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2207 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
-#line 17217 "Photo.c"
-					goto __catch325_database_error;
+#line 17218 "Photo.c"
+					goto __catch338_database_error;
 				}
 #line 2207 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -17224,12 +17225,12 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 				g_clear_error (&_inner_error_);
 #line 2207 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 17226 "Photo.c"
+#line 17227 "Photo.c"
 			}
 		}
 	}
-	goto __finally325;
-	__catch325_database_error:
+	goto __finally338;
+	__catch338_database_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp9_ = NULL;
@@ -17254,9 +17255,9 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 		_g_free0 (_tmp10_);
 #line 2205 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 17256 "Photo.c"
+#line 17257 "Photo.c"
 	}
-	__finally325:
+	__finally338:
 #line 2205 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2205 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17265,7 +17266,7 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 		g_clear_error (&_inner_error_);
 #line 2205 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 17267 "Photo.c"
+#line 17268 "Photo.c"
 	}
 }
 
@@ -17278,14 +17279,14 @@ static gboolean photo_real_set_event_id (MediaSource* base, EventID* event_id) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
 #line 2219 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (event_id != NULL, FALSE);
-#line 17280 "Photo.c"
+#line 17281 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2220 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2220 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 17287 "Photo.c"
+#line 17288 "Photo.c"
 		{
 			gboolean committed = FALSE;
 			PhotoTable* _tmp1_ = NULL;
@@ -17318,7 +17319,7 @@ static gboolean photo_real_set_event_id (MediaSource* base, EventID* event_id) {
 			_tmp8_ = committed;
 #line 2223 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp8_) {
-#line 17320 "Photo.c"
+#line 17321 "Photo.c"
 				PhotoRow* _tmp9_ = NULL;
 				EventID _tmp10_ = {0};
 #line 2224 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17327,31 +17328,31 @@ static gboolean photo_real_set_event_id (MediaSource* base, EventID* event_id) {
 				_tmp10_ = *event_id;
 #line 2224 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp9_->event_id = _tmp10_;
-#line 17329 "Photo.c"
+#line 17330 "Photo.c"
 			}
 #line 2226 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = committed;
-#line 17333 "Photo.c"
+#line 17334 "Photo.c"
 			{
 				PhotoRow* _tmp11_ = NULL;
 #line 2220 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp11_ = self->row;
 #line 2220 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 17340 "Photo.c"
+#line 17341 "Photo.c"
 			}
 #line 2226 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 17344 "Photo.c"
+#line 17345 "Photo.c"
 		}
-		__finally327:
+		__finally340:
 		{
 			PhotoRow* _tmp12_ = NULL;
 #line 2220 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp12_ = self->row;
 #line 2220 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 17353 "Photo.c"
+#line 17354 "Photo.c"
 		}
 #line 2220 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -17359,7 +17360,7 @@ static gboolean photo_real_set_event_id (MediaSource* base, EventID* event_id) {
 		g_clear_error (&_inner_error_);
 #line 2220 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 17361 "Photo.c"
+#line 17362 "Photo.c"
 	}
 }
 
@@ -17385,7 +17386,7 @@ static gchar* photo_real_to_string (DataObject* base) {
 	_tmp1_ = photo_is_master_baseline (self);
 #line 2232 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp1_) {
-#line 17387 "Photo.c"
+#line 17388 "Photo.c"
 		GFile* _tmp2_ = NULL;
 		GFile* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
@@ -17417,7 +17418,7 @@ static gchar* photo_real_to_string (DataObject* base) {
 		_g_free0 (_tmp5_);
 #line 2232 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp3_);
-#line 17419 "Photo.c"
+#line 17420 "Photo.c"
 	} else {
 		gchar* _tmp9_ = NULL;
 #line 2232 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17426,7 +17427,7 @@ static gchar* photo_real_to_string (DataObject* base) {
 		_g_free0 (_tmp0_);
 #line 2232 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = _tmp9_;
-#line 17428 "Photo.c"
+#line 17429 "Photo.c"
 	}
 #line 2231 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_get_photo_id (self, &_tmp10_);
@@ -17460,7 +17461,7 @@ static gchar* photo_real_to_string (DataObject* base) {
 	_g_free0 (_tmp0_);
 #line 2231 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 17462 "Photo.c"
+#line 17463 "Photo.c"
 }
 
 
@@ -17487,7 +17488,7 @@ static gboolean photo_real_equals (DataSource* base, DataSource* source) {
 	_tmp2_ = photo;
 #line 2238 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_ != NULL) {
-#line 17489 "Photo.c"
+#line 17490 "Photo.c"
 		PhotoID photo_id = {0};
 		PhotoID _tmp3_ = {0};
 		PhotoID other_photo_id = {0};
@@ -17509,7 +17510,7 @@ static gboolean photo_real_equals (DataSource* base, DataSource* source) {
 		_tmp7_ = photo;
 #line 2242 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (self != _tmp7_) {
-#line 17511 "Photo.c"
+#line 17512 "Photo.c"
 			PhotoID _tmp8_ = {0};
 			gint64 _tmp9_ = 0LL;
 #line 2242 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17518,15 +17519,15 @@ static gboolean photo_real_equals (DataSource* base, DataSource* source) {
 			_tmp9_ = _tmp8_.id;
 #line 2242 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp6_ = _tmp9_ != PHOTO_ID_INVALID;
-#line 17520 "Photo.c"
+#line 17521 "Photo.c"
 		} else {
 #line 2242 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp6_ = FALSE;
-#line 17524 "Photo.c"
+#line 17525 "Photo.c"
 		}
 #line 2242 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp6_) {
-#line 17528 "Photo.c"
+#line 17529 "Photo.c"
 			PhotoID _tmp10_ = {0};
 			gint64 _tmp11_ = 0LL;
 			PhotoID _tmp12_ = {0};
@@ -17541,7 +17542,7 @@ static gboolean photo_real_equals (DataSource* base, DataSource* source) {
 			_tmp13_ = _tmp12_.id;
 #line 2243 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_assert (_tmp11_ != _tmp13_, "photo_id.id != other_photo_id.id");
-#line 17543 "Photo.c"
+#line 17544 "Photo.c"
 		}
 	}
 #line 2247 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17554,7 +17555,7 @@ static gboolean photo_real_equals (DataSource* base, DataSource* source) {
 	_g_object_unref0 (photo);
 #line 2247 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 17556 "Photo.c"
+#line 17557 "Photo.c"
 }
 
 
@@ -17582,7 +17583,7 @@ static void photo_file_exif_updated (Photo* self) {
 	file = _tmp0_;
 #line 2254 "/home/jens/Source/shotwell/src/Photo.vala"
 	info = NULL;
-#line 17584 "Photo.c"
+#line 17585 "Photo.c"
 	{
 		GFileInfo* _tmp1_ = NULL;
 		GFileInfo* _tmp2_ = NULL;
@@ -17593,8 +17594,8 @@ static void photo_file_exif_updated (Photo* self) {
 		_tmp1_ = _tmp2_;
 #line 2256 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 17595 "Photo.c"
-			goto __catch328_g_error;
+#line 17596 "Photo.c"
+			goto __catch341_g_error;
 		}
 #line 2256 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp3_ = _tmp1_;
@@ -17606,10 +17607,10 @@ static void photo_file_exif_updated (Photo* self) {
 		info = _tmp3_;
 #line 2255 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp1_);
-#line 17608 "Photo.c"
+#line 17609 "Photo.c"
 	}
-	goto __finally328;
-	__catch328_g_error:
+	goto __finally341;
+	__catch341_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp4_ = NULL;
@@ -17631,9 +17632,9 @@ static void photo_file_exif_updated (Photo* self) {
 		_g_free0 (_tmp5_);
 #line 2255 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 17633 "Photo.c"
+#line 17634 "Photo.c"
 	}
-	__finally328:
+	__finally341:
 #line 2255 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2255 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17646,7 +17647,7 @@ static void photo_file_exif_updated (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2255 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 17648 "Photo.c"
+#line 17649 "Photo.c"
 	}
 #line 2262 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp7_ = info;
@@ -17658,18 +17659,18 @@ static void photo_file_exif_updated (Photo* self) {
 	_tmp9_ = photo_file_interrogator_new (file, PHOTO_FILE_SNIFFER_OPTIONS_GET_ALL);
 #line 2265 "/home/jens/Source/shotwell/src/Photo.vala"
 	interrogator = _tmp9_;
-#line 17660 "Photo.c"
+#line 17661 "Photo.c"
 	{
 #line 2267 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_file_interrogator_interrogate (interrogator, &_inner_error_);
 #line 2267 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 17666 "Photo.c"
-			goto __catch329_g_error;
+#line 17667 "Photo.c"
+			goto __catch342_g_error;
 		}
 	}
-	goto __finally329;
-	__catch329_g_error:
+	goto __finally342;
+	__catch342_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp10_ = NULL;
@@ -17694,9 +17695,9 @@ static void photo_file_exif_updated (Photo* self) {
 		_g_free0 (_tmp11_);
 #line 2266 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 17696 "Photo.c"
+#line 17697 "Photo.c"
 	}
-	__finally329:
+	__finally342:
 #line 2266 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2266 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17711,7 +17712,7 @@ static void photo_file_exif_updated (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2266 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 17713 "Photo.c"
+#line 17714 "Photo.c"
 	}
 #line 2272 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp14_ = photo_file_interrogator_get_detected_photo_information (interrogator);
@@ -17723,18 +17724,18 @@ static void photo_file_exif_updated (Photo* self) {
 	if (_tmp16_ == NULL) {
 #line 2273 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp15_ = TRUE;
-#line 17725 "Photo.c"
+#line 17726 "Photo.c"
 	} else {
 		gboolean _tmp17_ = FALSE;
 #line 2273 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp17_ = photo_file_interrogator_get_is_photo_corrupted (interrogator);
 #line 2273 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp15_ = _tmp17_;
-#line 17732 "Photo.c"
+#line 17733 "Photo.c"
 	}
 #line 2273 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp15_) {
-#line 17736 "Photo.c"
+#line 17737 "Photo.c"
 		gchar* _tmp18_ = NULL;
 		gchar* _tmp19_ = NULL;
 #line 2274 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17755,7 +17756,7 @@ static void photo_file_exif_updated (Photo* self) {
 		_g_object_unref0 (file);
 #line 2276 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 17757 "Photo.c"
+#line 17758 "Photo.c"
 	}
 	{
 		PhotoRow* _tmp20_ = NULL;
@@ -17763,7 +17764,7 @@ static void photo_file_exif_updated (Photo* self) {
 		_tmp20_ = self->row;
 #line 2280 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 17765 "Photo.c"
+#line 17766 "Photo.c"
 		{
 			PhotoTable* _tmp21_ = NULL;
 			PhotoTable* _tmp22_ = NULL;
@@ -17814,16 +17815,16 @@ static void photo_file_exif_updated (Photo* self) {
 			success = _tmp35_;
 #line 2281 "/home/jens/Source/shotwell/src/Photo.vala"
 			_database_table_unref0 (_tmp22_);
-#line 17816 "Photo.c"
+#line 17817 "Photo.c"
 		}
-		__finally330:
+		__finally343:
 		{
 			PhotoRow* _tmp36_ = NULL;
 #line 2280 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp36_ = self->row;
 #line 2280 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 17825 "Photo.c"
+#line 17826 "Photo.c"
 		}
 #line 2280 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -17841,14 +17842,14 @@ static void photo_file_exif_updated (Photo* self) {
 			g_clear_error (&_inner_error_);
 #line 2280 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 17843 "Photo.c"
+#line 17844 "Photo.c"
 		}
 	}
 #line 2285 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp37_ = success;
 #line 2285 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp37_) {
-#line 17850 "Photo.c"
+#line 17851 "Photo.c"
 		Alteration* _tmp38_ = NULL;
 		Alteration* _tmp39_ = NULL;
 #line 2286 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17859,7 +17860,7 @@ static void photo_file_exif_updated (Photo* self) {
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp39_);
 #line 2286 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp39_);
-#line 17861 "Photo.c"
+#line 17862 "Photo.c"
 	}
 #line 2251 "/home/jens/Source/shotwell/src/Photo.vala"
 	_detected_photo_information_unref0 (detected);
@@ -17869,7 +17870,7 @@ static void photo_file_exif_updated (Photo* self) {
 	_g_object_unref0 (info);
 #line 2251 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (file);
-#line 17871 "Photo.c"
+#line 17872 "Photo.c"
 }
 
 
@@ -17879,14 +17880,14 @@ static guint64 photo_real_get_filesize (MediaSource* base) {
 	GError * _inner_error_ = NULL;
 #line 2291 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 17881 "Photo.c"
+#line 17882 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2292 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2292 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 17888 "Photo.c"
+#line 17889 "Photo.c"
 		{
 			BackingPhotoRow* _tmp1_ = NULL;
 			gint64 _tmp2_ = 0LL;
@@ -17896,27 +17897,27 @@ static guint64 photo_real_get_filesize (MediaSource* base) {
 			_tmp2_ = _tmp1_->filesize;
 #line 2293 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = (guint64) _tmp2_;
-#line 17898 "Photo.c"
+#line 17899 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 2292 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 2292 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 17905 "Photo.c"
+#line 17906 "Photo.c"
 			}
 #line 2293 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 17909 "Photo.c"
+#line 17910 "Photo.c"
 		}
-		__finally331:
+		__finally344:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2292 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2292 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 17918 "Photo.c"
+#line 17919 "Photo.c"
 		}
 #line 2292 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -17924,7 +17925,7 @@ static guint64 photo_real_get_filesize (MediaSource* base) {
 		g_clear_error (&_inner_error_);
 #line 2292 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0ULL;
-#line 17926 "Photo.c"
+#line 17927 "Photo.c"
 	}
 }
 
@@ -17935,14 +17936,14 @@ static guint64 photo_real_get_master_filesize (MediaSource* base) {
 	GError * _inner_error_ = NULL;
 #line 2297 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 17937 "Photo.c"
+#line 17938 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2298 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2298 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 17944 "Photo.c"
+#line 17945 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			BackingPhotoRow* _tmp2_ = NULL;
@@ -17955,27 +17956,27 @@ static guint64 photo_real_get_master_filesize (MediaSource* base) {
 			_tmp3_ = _tmp2_->filesize;
 #line 2299 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = (guint64) _tmp3_;
-#line 17957 "Photo.c"
+#line 17958 "Photo.c"
 			{
 				PhotoRow* _tmp4_ = NULL;
 #line 2298 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->row;
 #line 2298 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 17964 "Photo.c"
+#line 17965 "Photo.c"
 			}
 #line 2299 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 17968 "Photo.c"
+#line 17969 "Photo.c"
 		}
-		__finally332:
+		__finally345:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2298 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->row;
 #line 2298 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 17977 "Photo.c"
+#line 17978 "Photo.c"
 		}
 #line 2298 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -17983,7 +17984,7 @@ static guint64 photo_real_get_master_filesize (MediaSource* base) {
 		g_clear_error (&_inner_error_);
 #line 2298 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0ULL;
-#line 17985 "Photo.c"
+#line 17986 "Photo.c"
 	}
 }
 
@@ -17993,14 +17994,14 @@ guint64 photo_get_editable_filesize (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 2303 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), 0ULL);
-#line 17995 "Photo.c"
+#line 17996 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2304 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2304 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 18002 "Photo.c"
+#line 18003 "Photo.c"
 		{
 			BackingPhotoRow* _tmp1_ = NULL;
 			gint64 _tmp2_ = 0LL;
@@ -18010,27 +18011,27 @@ guint64 photo_get_editable_filesize (Photo* self) {
 			_tmp2_ = _tmp1_->filesize;
 #line 2305 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = (guint64) _tmp2_;
-#line 18012 "Photo.c"
+#line 18013 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 2304 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 2304 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18019 "Photo.c"
+#line 18020 "Photo.c"
 			}
 #line 2305 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 18023 "Photo.c"
+#line 18024 "Photo.c"
 		}
-		__finally333:
+		__finally346:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2304 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2304 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18032 "Photo.c"
+#line 18033 "Photo.c"
 		}
 #line 2304 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -18038,7 +18039,7 @@ guint64 photo_get_editable_filesize (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2304 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0ULL;
-#line 18040 "Photo.c"
+#line 18041 "Photo.c"
 	}
 }
 
@@ -18055,7 +18056,7 @@ static time_t photo_real_get_exposure_time (Dateable* base) {
 	result = _tmp0_;
 #line 2310 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 18057 "Photo.c"
+#line 18058 "Photo.c"
 }
 
 
@@ -18065,14 +18066,14 @@ static gchar* photo_real_get_basename (MediaSource* base) {
 	GError * _inner_error_ = NULL;
 #line 2313 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 18067 "Photo.c"
+#line 18068 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2314 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2314 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 18074 "Photo.c"
+#line 18075 "Photo.c"
 		{
 			const gchar* _tmp1_ = NULL;
 			gchar* _tmp2_ = NULL;
@@ -18082,27 +18083,27 @@ static gchar* photo_real_get_basename (MediaSource* base) {
 			_tmp2_ = g_strdup (_tmp1_);
 #line 2315 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_;
-#line 18084 "Photo.c"
+#line 18085 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 2314 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 2314 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18091 "Photo.c"
+#line 18092 "Photo.c"
 			}
 #line 2315 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 18095 "Photo.c"
+#line 18096 "Photo.c"
 		}
-		__finally334:
+		__finally347:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2314 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2314 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18104 "Photo.c"
+#line 18105 "Photo.c"
 		}
 #line 2314 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -18110,7 +18111,7 @@ static gchar* photo_real_get_basename (MediaSource* base) {
 		g_clear_error (&_inner_error_);
 #line 2314 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 18112 "Photo.c"
+#line 18113 "Photo.c"
 	}
 }
 
@@ -18121,14 +18122,14 @@ static gchar* photo_real_get_title (MediaSource* base) {
 	GError * _inner_error_ = NULL;
 #line 2319 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 18123 "Photo.c"
+#line 18124 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2320 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2320 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 18130 "Photo.c"
+#line 18131 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			const gchar* _tmp2_ = NULL;
@@ -18141,27 +18142,27 @@ static gchar* photo_real_get_title (MediaSource* base) {
 			_tmp3_ = g_strdup (_tmp2_);
 #line 2321 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp3_;
-#line 18143 "Photo.c"
+#line 18144 "Photo.c"
 			{
 				PhotoRow* _tmp4_ = NULL;
 #line 2320 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->row;
 #line 2320 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18150 "Photo.c"
+#line 18151 "Photo.c"
 			}
 #line 2321 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 18154 "Photo.c"
+#line 18155 "Photo.c"
 		}
-		__finally335:
+		__finally348:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2320 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->row;
 #line 2320 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18163 "Photo.c"
+#line 18164 "Photo.c"
 		}
 #line 2320 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -18169,7 +18170,7 @@ static gchar* photo_real_get_title (MediaSource* base) {
 		g_clear_error (&_inner_error_);
 #line 2320 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 18171 "Photo.c"
+#line 18172 "Photo.c"
 	}
 }
 
@@ -18180,14 +18181,14 @@ static gchar* photo_real_get_comment (MediaSource* base) {
 	GError * _inner_error_ = NULL;
 #line 2325 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 18182 "Photo.c"
+#line 18183 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2326 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2326 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 18189 "Photo.c"
+#line 18190 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			const gchar* _tmp2_ = NULL;
@@ -18200,27 +18201,27 @@ static gchar* photo_real_get_comment (MediaSource* base) {
 			_tmp3_ = g_strdup (_tmp2_);
 #line 2327 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp3_;
-#line 18202 "Photo.c"
+#line 18203 "Photo.c"
 			{
 				PhotoRow* _tmp4_ = NULL;
 #line 2326 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->row;
 #line 2326 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18209 "Photo.c"
+#line 18210 "Photo.c"
 			}
 #line 2327 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 18213 "Photo.c"
+#line 18214 "Photo.c"
 		}
-		__finally336:
+		__finally349:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2326 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->row;
 #line 2326 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18222 "Photo.c"
+#line 18223 "Photo.c"
 		}
 #line 2326 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -18228,7 +18229,7 @@ static gchar* photo_real_get_comment (MediaSource* base) {
 		g_clear_error (&_inner_error_);
 #line 2326 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 18230 "Photo.c"
+#line 18231 "Photo.c"
 	}
 }
 
@@ -18251,14 +18252,14 @@ static void photo_real_set_title (MediaSource* base, const gchar* title) {
 	new_title = _tmp1_;
 #line 2334 "/home/jens/Source/shotwell/src/Photo.vala"
 	committed = FALSE;
-#line 18253 "Photo.c"
+#line 18254 "Photo.c"
 	{
 		PhotoRow* _tmp2_ = NULL;
 #line 2335 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp2_ = self->row;
 #line 2335 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 18260 "Photo.c"
+#line 18261 "Photo.c"
 		{
 			const gchar* _tmp3_ = NULL;
 			PhotoRow* _tmp4_ = NULL;
@@ -18278,20 +18279,20 @@ static void photo_real_set_title (MediaSource* base, const gchar* title) {
 			_tmp5_ = _tmp4_->title;
 #line 2336 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (g_strcmp0 (_tmp3_, _tmp5_) == 0) {
-#line 18280 "Photo.c"
+#line 18281 "Photo.c"
 				{
 					PhotoRow* _tmp6_ = NULL;
 #line 2335 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp6_ = self->row;
 #line 2335 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18287 "Photo.c"
+#line 18288 "Photo.c"
 				}
 #line 2337 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_free0 (new_title);
 #line 2337 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 18293 "Photo.c"
+#line 18294 "Photo.c"
 			}
 #line 2339 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = photo_table_get_instance ();
@@ -18313,7 +18314,7 @@ static void photo_real_set_title (MediaSource* base, const gchar* title) {
 			_tmp13_ = committed;
 #line 2340 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp13_) {
-#line 18315 "Photo.c"
+#line 18316 "Photo.c"
 				PhotoRow* _tmp14_ = NULL;
 				const gchar* _tmp15_ = NULL;
 				gchar* _tmp16_ = NULL;
@@ -18327,17 +18328,17 @@ static void photo_real_set_title (MediaSource* base, const gchar* title) {
 				_g_free0 (_tmp14_->title);
 #line 2341 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp14_->title = _tmp16_;
-#line 18329 "Photo.c"
+#line 18330 "Photo.c"
 			}
 		}
-		__finally337:
+		__finally350:
 		{
 			PhotoRow* _tmp17_ = NULL;
 #line 2335 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp17_ = self->row;
 #line 2335 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18339 "Photo.c"
+#line 18340 "Photo.c"
 		}
 #line 2335 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -18349,14 +18350,14 @@ static void photo_real_set_title (MediaSource* base, const gchar* title) {
 			g_clear_error (&_inner_error_);
 #line 2335 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 18351 "Photo.c"
+#line 18352 "Photo.c"
 		}
 	}
 #line 2344 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp18_ = committed;
 #line 2344 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp18_) {
-#line 18358 "Photo.c"
+#line 18359 "Photo.c"
 		Alteration* _tmp19_ = NULL;
 		Alteration* _tmp20_ = NULL;
 #line 2345 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18367,11 +18368,11 @@ static void photo_real_set_title (MediaSource* base, const gchar* title) {
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp20_);
 #line 2345 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp20_);
-#line 18369 "Photo.c"
+#line 18370 "Photo.c"
 	}
 #line 2331 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_free0 (new_title);
-#line 18373 "Photo.c"
+#line 18374 "Photo.c"
 }
 
 
@@ -18394,14 +18395,14 @@ static gboolean photo_real_set_comment (MediaSource* base, const gchar* comment)
 	new_comment = _tmp1_;
 #line 2351 "/home/jens/Source/shotwell/src/Photo.vala"
 	committed = FALSE;
-#line 18396 "Photo.c"
+#line 18397 "Photo.c"
 	{
 		PhotoRow* _tmp2_ = NULL;
 #line 2352 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp2_ = self->row;
 #line 2352 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 18403 "Photo.c"
+#line 18404 "Photo.c"
 		{
 			const gchar* _tmp3_ = NULL;
 			PhotoRow* _tmp4_ = NULL;
@@ -18423,20 +18424,20 @@ static gboolean photo_real_set_comment (MediaSource* base, const gchar* comment)
 			if (g_strcmp0 (_tmp3_, _tmp5_) == 0) {
 #line 2354 "/home/jens/Source/shotwell/src/Photo.vala"
 				result = TRUE;
-#line 18425 "Photo.c"
+#line 18426 "Photo.c"
 				{
 					PhotoRow* _tmp6_ = NULL;
 #line 2352 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp6_ = self->row;
 #line 2352 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18432 "Photo.c"
+#line 18433 "Photo.c"
 				}
 #line 2354 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_free0 (new_comment);
 #line 2354 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 18438 "Photo.c"
+#line 18439 "Photo.c"
 			}
 #line 2356 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = photo_table_get_instance ();
@@ -18458,7 +18459,7 @@ static gboolean photo_real_set_comment (MediaSource* base, const gchar* comment)
 			_tmp13_ = committed;
 #line 2357 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp13_) {
-#line 18460 "Photo.c"
+#line 18461 "Photo.c"
 				PhotoRow* _tmp14_ = NULL;
 				const gchar* _tmp15_ = NULL;
 				gchar* _tmp16_ = NULL;
@@ -18472,17 +18473,17 @@ static gboolean photo_real_set_comment (MediaSource* base, const gchar* comment)
 				_g_free0 (_tmp14_->comment);
 #line 2358 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp14_->comment = _tmp16_;
-#line 18474 "Photo.c"
+#line 18475 "Photo.c"
 			}
 		}
-		__finally338:
+		__finally351:
 		{
 			PhotoRow* _tmp17_ = NULL;
 #line 2352 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp17_ = self->row;
 #line 2352 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18484 "Photo.c"
+#line 18485 "Photo.c"
 		}
 #line 2352 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -18494,14 +18495,14 @@ static gboolean photo_real_set_comment (MediaSource* base, const gchar* comment)
 			g_clear_error (&_inner_error_);
 #line 2352 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 18496 "Photo.c"
+#line 18497 "Photo.c"
 		}
 	}
 #line 2361 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp18_ = committed;
 #line 2361 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp18_) {
-#line 18503 "Photo.c"
+#line 18504 "Photo.c"
 		Alteration* _tmp19_ = NULL;
 		Alteration* _tmp20_ = NULL;
 #line 2362 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18512,7 +18513,7 @@ static gboolean photo_real_set_comment (MediaSource* base, const gchar* comment)
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp20_);
 #line 2362 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp20_);
-#line 18514 "Photo.c"
+#line 18515 "Photo.c"
 	}
 #line 2364 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = committed;
@@ -18520,14 +18521,14 @@ static gboolean photo_real_set_comment (MediaSource* base, const gchar* comment)
 	_g_free0 (new_comment);
 #line 2364 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 18522 "Photo.c"
+#line 18523 "Photo.c"
 }
 
 
 static gpointer _g_error_copy0 (gpointer self) {
 #line 2374 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? g_error_copy (self) : NULL;
-#line 18529 "Photo.c"
+#line 18530 "Photo.c"
 }
 
 
@@ -18541,14 +18542,14 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 	g_return_if_fail (import_id != NULL);
 #line 2368 "/home/jens/Source/shotwell/src/Photo.vala"
 	dberr = NULL;
-#line 18543 "Photo.c"
+#line 18544 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2369 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2369 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 18550 "Photo.c"
+#line 18551 "Photo.c"
 		{
 			{
 				PhotoTable* _tmp1_ = NULL;
@@ -18576,8 +18577,8 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2371 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
-#line 18578 "Photo.c"
-						goto __catch340_database_error;
+#line 18579 "Photo.c"
+						goto __catch353_database_error;
 					}
 					{
 						PhotoRow* _tmp6_ = NULL;
@@ -18585,7 +18586,7 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 						_tmp6_ = self->row;
 #line 2369 "/home/jens/Source/shotwell/src/Photo.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18587 "Photo.c"
+#line 18588 "Photo.c"
 					}
 #line 2371 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_error_free0 (dberr);
@@ -18595,7 +18596,7 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 					g_clear_error (&_inner_error_);
 #line 2371 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 18597 "Photo.c"
+#line 18598 "Photo.c"
 				}
 #line 2372 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp7_ = self->row;
@@ -18603,10 +18604,10 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 				_tmp8_ = *import_id;
 #line 2372 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp7_->import_id = _tmp8_;
-#line 18605 "Photo.c"
+#line 18606 "Photo.c"
 			}
-			goto __finally340;
-			__catch340_database_error:
+			goto __finally353;
+			__catch353_database_error:
 			{
 				GError* err = NULL;
 				GError* _tmp9_ = NULL;
@@ -18625,19 +18626,19 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 				dberr = _tmp10_;
 #line 2370 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_error_free0 (err);
-#line 18627 "Photo.c"
+#line 18628 "Photo.c"
 			}
-			__finally340:
+			__finally353:
 #line 2370 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 18632 "Photo.c"
+#line 18633 "Photo.c"
 				{
 					PhotoRow* _tmp11_ = NULL;
 #line 2369 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp11_ = self->row;
 #line 2369 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18639 "Photo.c"
+#line 18640 "Photo.c"
 				}
 #line 2370 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_error_free0 (dberr);
@@ -18647,17 +18648,17 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 				g_clear_error (&_inner_error_);
 #line 2370 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 18649 "Photo.c"
+#line 18650 "Photo.c"
 			}
 		}
-		__finally339:
+		__finally352:
 		{
 			PhotoRow* _tmp12_ = NULL;
 #line 2369 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp12_ = self->row;
 #line 2369 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 18659 "Photo.c"
+#line 18660 "Photo.c"
 		}
 #line 2369 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -18669,14 +18670,14 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 			g_clear_error (&_inner_error_);
 #line 2369 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 18671 "Photo.c"
+#line 18672 "Photo.c"
 		}
 	}
 #line 2378 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp13_ = dberr;
 #line 2378 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp13_ == NULL) {
-#line 18678 "Photo.c"
+#line 18679 "Photo.c"
 		Alteration* _tmp14_ = NULL;
 		Alteration* _tmp15_ = NULL;
 #line 2379 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18687,7 +18688,7 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp15_);
 #line 2379 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp15_);
-#line 18689 "Photo.c"
+#line 18690 "Photo.c"
 	} else {
 		gchar* _tmp16_ = NULL;
 		gchar* _tmp17_ = NULL;
@@ -18705,11 +18706,11 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 		g_warning ("Photo.vala:2381: Unable to write import ID for %s: %s", _tmp17_, _tmp19_);
 #line 2381 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_free0 (_tmp17_);
-#line 18707 "Photo.c"
+#line 18708 "Photo.c"
 	}
 #line 2367 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_error_free0 (dberr);
-#line 18711 "Photo.c"
+#line 18712 "Photo.c"
 }
 
 
@@ -18746,7 +18747,7 @@ void photo_set_title_persistent (Photo* self, const gchar* title, GError** error
 	_tmp3_ = photo_file_format_can_write_metadata (_tmp2_);
 #line 2388 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp3_) {
-#line 18748 "Photo.c"
+#line 18749 "Photo.c"
 		PhotoFileReader* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -18769,7 +18770,7 @@ void photo_set_title_persistent (Photo* self, const gchar* title, GError** error
 		_photo_file_adapter_unref0 (source);
 #line 2393 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 18771 "Photo.c"
+#line 18772 "Photo.c"
 	}
 #line 2396 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = source;
@@ -18785,7 +18786,7 @@ void photo_set_title_persistent (Photo* self, const gchar* title, GError** error
 		_photo_file_adapter_unref0 (source);
 #line 2396 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 18787 "Photo.c"
+#line 18788 "Photo.c"
 	}
 #line 2397 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp10_ = metadata;
@@ -18809,7 +18810,7 @@ void photo_set_title_persistent (Photo* self, const gchar* title, GError** error
 		_photo_file_adapter_unref0 (source);
 #line 2399 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 18811 "Photo.c"
+#line 18812 "Photo.c"
 	}
 #line 2400 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp14_ = source;
@@ -18821,7 +18822,7 @@ void photo_set_title_persistent (Photo* self, const gchar* title, GError** error
 	library_monitor_blacklist_file (_tmp16_, "Photo.set_persistent_title");
 #line 2400 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (_tmp16_);
-#line 18823 "Photo.c"
+#line 18824 "Photo.c"
 	{
 		PhotoFileMetadataWriter* _tmp17_ = NULL;
 		PhotoMetadata* _tmp18_ = NULL;
@@ -18833,11 +18834,11 @@ void photo_set_title_persistent (Photo* self, const gchar* title, GError** error
 		photo_file_metadata_writer_write_metadata (_tmp17_, _tmp18_, &_inner_error_);
 #line 2402 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 18835 "Photo.c"
-			goto __finally341;
+#line 18836 "Photo.c"
+			goto __finally354;
 		}
 	}
-	__finally341:
+	__finally354:
 	{
 		PhotoFileReader* _tmp19_ = NULL;
 		GFile* _tmp20_ = NULL;
@@ -18852,7 +18853,7 @@ void photo_set_title_persistent (Photo* self, const gchar* title, GError** error
 		library_monitor_unblacklist_file (_tmp21_);
 #line 2404 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp21_);
-#line 18854 "Photo.c"
+#line 18855 "Photo.c"
 	}
 #line 2401 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -18866,7 +18867,7 @@ void photo_set_title_persistent (Photo* self, const gchar* title, GError** error
 		_photo_file_adapter_unref0 (source);
 #line 2401 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 18868 "Photo.c"
+#line 18869 "Photo.c"
 	}
 #line 2407 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp22_ = title;
@@ -18880,7 +18881,7 @@ void photo_set_title_persistent (Photo* self, const gchar* title, GError** error
 	_media_metadata_unref0 (metadata);
 #line 2384 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_file_adapter_unref0 (source);
-#line 18882 "Photo.c"
+#line 18883 "Photo.c"
 }
 
 
@@ -18917,7 +18918,7 @@ void photo_set_comment_persistent (Photo* self, const gchar* comment, GError** e
 	_tmp3_ = photo_file_format_can_write_metadata (_tmp2_);
 #line 2416 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp3_) {
-#line 18919 "Photo.c"
+#line 18920 "Photo.c"
 		PhotoFileReader* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -18940,7 +18941,7 @@ void photo_set_comment_persistent (Photo* self, const gchar* comment, GError** e
 		_photo_file_adapter_unref0 (source);
 #line 2421 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 18942 "Photo.c"
+#line 18943 "Photo.c"
 	}
 #line 2424 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = source;
@@ -18956,14 +18957,14 @@ void photo_set_comment_persistent (Photo* self, const gchar* comment, GError** e
 		_photo_file_adapter_unref0 (source);
 #line 2424 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 18958 "Photo.c"
+#line 18959 "Photo.c"
 	}
 #line 2425 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp10_ = metadata;
 #line 2425 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp11_ = comment;
 #line 2425 "/home/jens/Source/shotwell/src/Photo.vala"
-	photo_metadata_set_comment (_tmp10_, _tmp11_);
+	photo_metadata_set_comment (_tmp10_, _tmp11_, PHOTO_METADATA_SET_OPTION_ALL_DOMAINS);
 #line 2427 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp12_ = source;
 #line 2427 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18980,7 +18981,7 @@ void photo_set_comment_persistent (Photo* self, const gchar* comment, GError** e
 		_photo_file_adapter_unref0 (source);
 #line 2427 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 18982 "Photo.c"
+#line 18983 "Photo.c"
 	}
 #line 2428 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp14_ = source;
@@ -18992,7 +18993,7 @@ void photo_set_comment_persistent (Photo* self, const gchar* comment, GError** e
 	library_monitor_blacklist_file (_tmp16_, "Photo.set_persistent_comment");
 #line 2428 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (_tmp16_);
-#line 18994 "Photo.c"
+#line 18995 "Photo.c"
 	{
 		PhotoFileMetadataWriter* _tmp17_ = NULL;
 		PhotoMetadata* _tmp18_ = NULL;
@@ -19004,11 +19005,11 @@ void photo_set_comment_persistent (Photo* self, const gchar* comment, GError** e
 		photo_file_metadata_writer_write_metadata (_tmp17_, _tmp18_, &_inner_error_);
 #line 2430 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 19006 "Photo.c"
-			goto __finally342;
+#line 19007 "Photo.c"
+			goto __finally355;
 		}
 	}
-	__finally342:
+	__finally355:
 	{
 		PhotoFileReader* _tmp19_ = NULL;
 		GFile* _tmp20_ = NULL;
@@ -19023,7 +19024,7 @@ void photo_set_comment_persistent (Photo* self, const gchar* comment, GError** e
 		library_monitor_unblacklist_file (_tmp21_);
 #line 2432 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp21_);
-#line 19025 "Photo.c"
+#line 19026 "Photo.c"
 	}
 #line 2429 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -19037,7 +19038,7 @@ void photo_set_comment_persistent (Photo* self, const gchar* comment, GError** e
 		_photo_file_adapter_unref0 (source);
 #line 2429 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 19039 "Photo.c"
+#line 19040 "Photo.c"
 	}
 #line 2435 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp22_ = comment;
@@ -19051,7 +19052,7 @@ void photo_set_comment_persistent (Photo* self, const gchar* comment, GError** e
 	_media_metadata_unref0 (metadata);
 #line 2412 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_file_adapter_unref0 (source);
-#line 19053 "Photo.c"
+#line 19054 "Photo.c"
 }
 
 
@@ -19062,14 +19063,14 @@ static void photo_real_set_exposure_time (Dateable* base, time_t time) {
 	GError * _inner_error_ = NULL;
 #line 2440 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 19064 "Photo.c"
+#line 19065 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2442 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2442 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 19071 "Photo.c"
+#line 19072 "Photo.c"
 		{
 			PhotoTable* _tmp1_ = NULL;
 			PhotoTable* _tmp2_ = NULL;
@@ -19098,7 +19099,7 @@ static void photo_real_set_exposure_time (Dateable* base, time_t time) {
 			_tmp7_ = committed;
 #line 2444 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp7_) {
-#line 19100 "Photo.c"
+#line 19101 "Photo.c"
 				PhotoRow* _tmp8_ = NULL;
 				time_t _tmp9_ = 0;
 				time_t _tmp10_ = 0;
@@ -19112,17 +19113,17 @@ static void photo_real_set_exposure_time (Dateable* base, time_t time) {
 				_tmp10_ = time;
 #line 2446 "/home/jens/Source/shotwell/src/Photo.vala"
 				self->priv->cached_exposure_time = _tmp10_;
-#line 19114 "Photo.c"
+#line 19115 "Photo.c"
 			}
 		}
-		__finally343:
+		__finally356:
 		{
 			PhotoRow* _tmp11_ = NULL;
 #line 2442 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp11_ = self->row;
 #line 2442 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 19124 "Photo.c"
+#line 19125 "Photo.c"
 		}
 #line 2442 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -19132,14 +19133,14 @@ static void photo_real_set_exposure_time (Dateable* base, time_t time) {
 			g_clear_error (&_inner_error_);
 #line 2442 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 19134 "Photo.c"
+#line 19135 "Photo.c"
 		}
 	}
 #line 2450 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp12_ = committed;
 #line 2450 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp12_) {
-#line 19141 "Photo.c"
+#line 19142 "Photo.c"
 		Alteration* _tmp13_ = NULL;
 		Alteration* _tmp14_ = NULL;
 #line 2451 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -19150,7 +19151,7 @@ static void photo_real_set_exposure_time (Dateable* base, time_t time) {
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp14_);
 #line 2451 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp14_);
-#line 19152 "Photo.c"
+#line 19153 "Photo.c"
 	}
 }
 
@@ -19190,7 +19191,7 @@ void photo_set_exposure_time_persistent (Photo* self, time_t time, GError** erro
 	_tmp3_ = photo_file_format_can_write_metadata (_tmp2_);
 #line 2458 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp3_) {
-#line 19192 "Photo.c"
+#line 19193 "Photo.c"
 		PhotoFileReader* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -19213,7 +19214,7 @@ void photo_set_exposure_time_persistent (Photo* self, time_t time, GError** erro
 		_photo_file_adapter_unref0 (source);
 #line 2463 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 19215 "Photo.c"
+#line 19216 "Photo.c"
 	}
 #line 2466 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = source;
@@ -19229,7 +19230,7 @@ void photo_set_exposure_time_persistent (Photo* self, time_t time, GError** erro
 		_photo_file_adapter_unref0 (source);
 #line 2466 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 19231 "Photo.c"
+#line 19232 "Photo.c"
 	}
 #line 2467 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp10_ = metadata;
@@ -19259,7 +19260,7 @@ void photo_set_exposure_time_persistent (Photo* self, time_t time, GError** erro
 		_photo_file_adapter_unref0 (source);
 #line 2469 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 19261 "Photo.c"
+#line 19262 "Photo.c"
 	}
 #line 2470 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp16_ = source;
@@ -19271,7 +19272,7 @@ void photo_set_exposure_time_persistent (Photo* self, time_t time, GError** erro
 	library_monitor_blacklist_file (_tmp18_, "Photo.set_exposure_time_persistent");
 #line 2470 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (_tmp18_);
-#line 19273 "Photo.c"
+#line 19274 "Photo.c"
 	{
 		PhotoFileMetadataWriter* _tmp19_ = NULL;
 		PhotoMetadata* _tmp20_ = NULL;
@@ -19283,11 +19284,11 @@ void photo_set_exposure_time_persistent (Photo* self, time_t time, GError** erro
 		photo_file_metadata_writer_write_metadata (_tmp19_, _tmp20_, &_inner_error_);
 #line 2472 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 19285 "Photo.c"
-			goto __finally344;
+#line 19286 "Photo.c"
+			goto __finally357;
 		}
 	}
-	__finally344:
+	__finally357:
 	{
 		PhotoFileReader* _tmp21_ = NULL;
 		GFile* _tmp22_ = NULL;
@@ -19302,7 +19303,7 @@ void photo_set_exposure_time_persistent (Photo* self, time_t time, GError** erro
 		library_monitor_unblacklist_file (_tmp23_);
 #line 2474 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp23_);
-#line 19304 "Photo.c"
+#line 19305 "Photo.c"
 	}
 #line 2471 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -19316,7 +19317,7 @@ void photo_set_exposure_time_persistent (Photo* self, time_t time, GError** erro
 		_photo_file_adapter_unref0 (source);
 #line 2471 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 19318 "Photo.c"
+#line 19319 "Photo.c"
 	}
 #line 2477 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp24_ = time;
@@ -19330,7 +19331,7 @@ void photo_set_exposure_time_persistent (Photo* self, time_t time, GError** erro
 	_media_metadata_unref0 (metadata);
 #line 2454 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_file_adapter_unref0 (source);
-#line 19332 "Photo.c"
+#line 19333 "Photo.c"
 }
 
 
@@ -19369,7 +19370,7 @@ static void photo_real_get_dimensions (MediaSource* base, PhotoException disallo
 	_tmp2_ = photo_exception_allows (_tmp1_, PHOTO_EXCEPTION_ORIENTATION);
 #line 2500 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_) {
-#line 19371 "Photo.c"
+#line 19372 "Photo.c"
 		Orientation ori_tmp = 0;
 		Orientation _tmp3_ = 0;
 		Orientation _tmp4_ = 0;
@@ -19389,7 +19390,7 @@ static void photo_real_get_dimensions (MediaSource* base, PhotoException disallo
 			case ORIENTATION_LEFT_BOTTOM:
 #line 2504 "/home/jens/Source/shotwell/src/Photo.vala"
 			case ORIENTATION_RIGHT_BOTTOM:
-#line 19391 "Photo.c"
+#line 19392 "Photo.c"
 			{
 				gint width_tmp = 0;
 				Dimensions _tmp5_ = {0};
@@ -19415,13 +19416,13 @@ static void photo_real_get_dimensions (MediaSource* base, PhotoException disallo
 				returned_dims.height = _tmp9_;
 #line 2514 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 19417 "Photo.c"
+#line 19418 "Photo.c"
 			}
 			default:
 			{
 #line 2518 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 19423 "Photo.c"
+#line 19424 "Photo.c"
 			}
 		}
 	}
@@ -19431,7 +19432,7 @@ static void photo_real_get_dimensions (MediaSource* base, PhotoException disallo
 	_tmp11_ = photo_exception_allows (_tmp10_, PHOTO_EXCEPTION_STRAIGHTEN);
 #line 2523 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp11_) {
-#line 19433 "Photo.c"
+#line 19434 "Photo.c"
 		gdouble x_size = 0.0;
 		gdouble y_size = 0.0;
 		gdouble angle = 0.0;
@@ -19475,7 +19476,7 @@ static void photo_real_get_dimensions (MediaSource* base, PhotoException disallo
 		_tmp21_ = y_size;
 #line 2532 "/home/jens/Source/shotwell/src/Photo.vala"
 		returned_dims.height = (gint) _tmp21_;
-#line 19477 "Photo.c"
+#line 19478 "Photo.c"
 	}
 #line 2536 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp22_ = disallowed_steps;
@@ -19483,7 +19484,7 @@ static void photo_real_get_dimensions (MediaSource* base, PhotoException disallo
 	_tmp23_ = photo_exception_allows (_tmp22_, PHOTO_EXCEPTION_CROP);
 #line 2536 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp23_) {
-#line 19485 "Photo.c"
+#line 19486 "Photo.c"
 		Box crop = {0};
 		PhotoException _tmp24_ = 0;
 		Box _tmp25_ = {0};
@@ -19496,20 +19497,20 @@ static void photo_real_get_dimensions (MediaSource* base, PhotoException disallo
 		crop = _tmp25_;
 #line 2538 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp26_) {
-#line 19498 "Photo.c"
+#line 19499 "Photo.c"
 			Dimensions _tmp27_ = {0};
 #line 2539 "/home/jens/Source/shotwell/src/Photo.vala"
 			box_get_dimensions (&crop, &_tmp27_);
 #line 2539 "/home/jens/Source/shotwell/src/Photo.vala"
 			returned_dims = _tmp27_;
-#line 19504 "Photo.c"
+#line 19505 "Photo.c"
 		}
 	}
 #line 2542 "/home/jens/Source/shotwell/src/Photo.vala"
 	*result = returned_dims;
 #line 2542 "/home/jens/Source/shotwell/src/Photo.vala"
 	return;
-#line 19511 "Photo.c"
+#line 19512 "Photo.c"
 }
 
 
@@ -19536,13 +19537,13 @@ static void photo_locked_create_adjustments_from_data (Photo* self) {
 	_tmp2_ = map;
 #line 2550 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_ == NULL) {
-#line 19538 "Photo.c"
+#line 19539 "Photo.c"
 		PixelTransformationBundle* _tmp3_ = NULL;
 #line 2551 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp3_ = self->priv->adjustments;
 #line 2551 "/home/jens/Source/shotwell/src/Photo.vala"
 		pixel_transformation_bundle_set_to_identity (_tmp3_);
-#line 19544 "Photo.c"
+#line 19545 "Photo.c"
 	} else {
 		PixelTransformationBundle* _tmp4_ = NULL;
 		KeyValueMap* _tmp5_ = NULL;
@@ -19552,7 +19553,7 @@ static void photo_locked_create_adjustments_from_data (Photo* self) {
 		_tmp5_ = map;
 #line 2553 "/home/jens/Source/shotwell/src/Photo.vala"
 		pixel_transformation_bundle_load (_tmp4_, _tmp5_);
-#line 19554 "Photo.c"
+#line 19555 "Photo.c"
 	}
 #line 2555 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp6_ = self->priv->adjustments;
@@ -19564,7 +19565,7 @@ static void photo_locked_create_adjustments_from_data (Photo* self) {
 	self->priv->transformer = _tmp7_;
 #line 2546 "/home/jens/Source/shotwell/src/Photo.vala"
 	_key_value_map_unref0 (map);
-#line 19566 "Photo.c"
+#line 19567 "Photo.c"
 }
 
 
@@ -19573,14 +19574,14 @@ PixelTransformationBundle* photo_get_color_adjustments (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 2559 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 19575 "Photo.c"
+#line 19576 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2560 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2560 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 19582 "Photo.c"
+#line 19583 "Photo.c"
 		{
 			PixelTransformationBundle* _tmp1_ = NULL;
 			PixelTransformationBundle* _tmp2_ = NULL;
@@ -19591,7 +19592,7 @@ PixelTransformationBundle* photo_get_color_adjustments (Photo* self) {
 			if (_tmp1_ == NULL) {
 #line 2562 "/home/jens/Source/shotwell/src/Photo.vala"
 				photo_locked_create_adjustments_from_data (self);
-#line 19593 "Photo.c"
+#line 19594 "Photo.c"
 			}
 #line 2564 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp2_ = self->priv->adjustments;
@@ -19599,27 +19600,27 @@ PixelTransformationBundle* photo_get_color_adjustments (Photo* self) {
 			_tmp3_ = pixel_transformation_bundle_copy (_tmp2_);
 #line 2564 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp3_;
-#line 19601 "Photo.c"
+#line 19602 "Photo.c"
 			{
 				PhotoRow* _tmp4_ = NULL;
 #line 2560 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->row;
 #line 2560 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 19608 "Photo.c"
+#line 19609 "Photo.c"
 			}
 #line 2564 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 19612 "Photo.c"
+#line 19613 "Photo.c"
 		}
-		__finally345:
+		__finally358:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2560 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->row;
 #line 2560 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 19621 "Photo.c"
+#line 19622 "Photo.c"
 		}
 #line 2560 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -19627,7 +19628,7 @@ PixelTransformationBundle* photo_get_color_adjustments (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2560 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 19629 "Photo.c"
+#line 19630 "Photo.c"
 	}
 }
 
@@ -19637,14 +19638,14 @@ PixelTransformer* photo_get_pixel_transformer (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 2568 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 19639 "Photo.c"
+#line 19640 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2569 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2569 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 19646 "Photo.c"
+#line 19647 "Photo.c"
 		{
 			PixelTransformer* _tmp1_ = NULL;
 			PixelTransformer* _tmp2_ = NULL;
@@ -19655,7 +19656,7 @@ PixelTransformer* photo_get_pixel_transformer (Photo* self) {
 			if (_tmp1_ == NULL) {
 #line 2571 "/home/jens/Source/shotwell/src/Photo.vala"
 				photo_locked_create_adjustments_from_data (self);
-#line 19657 "Photo.c"
+#line 19658 "Photo.c"
 			}
 #line 2573 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp2_ = self->priv->transformer;
@@ -19663,27 +19664,27 @@ PixelTransformer* photo_get_pixel_transformer (Photo* self) {
 			_tmp3_ = pixel_transformer_copy (_tmp2_);
 #line 2573 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp3_;
-#line 19665 "Photo.c"
+#line 19666 "Photo.c"
 			{
 				PhotoRow* _tmp4_ = NULL;
 #line 2569 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->row;
 #line 2569 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 19672 "Photo.c"
+#line 19673 "Photo.c"
 			}
 #line 2573 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 19676 "Photo.c"
+#line 19677 "Photo.c"
 		}
-		__finally346:
+		__finally359:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2569 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->row;
 #line 2569 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 19685 "Photo.c"
+#line 19686 "Photo.c"
 		}
 #line 2569 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -19691,7 +19692,7 @@ PixelTransformer* photo_get_pixel_transformer (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2569 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 19693 "Photo.c"
+#line 19694 "Photo.c"
 	}
 }
 
@@ -19707,7 +19708,7 @@ gboolean photo_has_color_adjustments (Photo* self) {
 	result = _tmp0_;
 #line 2578 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 19709 "Photo.c"
+#line 19710 "Photo.c"
 }
 
 
@@ -19736,7 +19737,7 @@ PixelTransformation* photo_get_color_adjustment (Photo* self, PixelTransformatio
 	result = _tmp4_;
 #line 2582 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 19738 "Photo.c"
+#line 19739 "Photo.c"
 }
 
 
@@ -19759,7 +19760,7 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 	_tmp1_ = pixel_transformation_bundle_is_identity (_tmp0_);
 #line 2588 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_) {
-#line 19761 "Photo.c"
+#line 19762 "Photo.c"
 		gboolean _result_ = FALSE;
 		gboolean _tmp5_ = FALSE;
 		{
@@ -19768,7 +19769,7 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 			_tmp2_ = self->row;
 #line 2590 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_lock (&self->priv->__lock_row);
-#line 19770 "Photo.c"
+#line 19771 "Photo.c"
 			{
 				gboolean _tmp3_ = FALSE;
 #line 2591 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -19783,16 +19784,16 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 				_pixel_transformer_unref0 (self->priv->transformer);
 #line 2593 "/home/jens/Source/shotwell/src/Photo.vala"
 				self->priv->transformer = NULL;
-#line 19785 "Photo.c"
+#line 19786 "Photo.c"
 			}
-			__finally347:
+			__finally360:
 			{
 				PhotoRow* _tmp4_ = NULL;
 #line 2590 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp4_ = self->row;
 #line 2590 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 19794 "Photo.c"
+#line 19795 "Photo.c"
 			}
 #line 2590 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -19802,14 +19803,14 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 				g_clear_error (&_inner_error_);
 #line 2590 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 19804 "Photo.c"
+#line 19805 "Photo.c"
 			}
 		}
 #line 2596 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp5_ = _result_;
 #line 2596 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp5_) {
-#line 19811 "Photo.c"
+#line 19812 "Photo.c"
 			Alteration* _tmp6_ = NULL;
 			Alteration* _tmp7_ = NULL;
 #line 2597 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -19820,11 +19821,11 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 			data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp7_);
 #line 2597 "/home/jens/Source/shotwell/src/Photo.vala"
 			_alteration_unref0 (_tmp7_);
-#line 19822 "Photo.c"
+#line 19823 "Photo.c"
 		}
 #line 2599 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 19826 "Photo.c"
+#line 19827 "Photo.c"
 	}
 #line 2603 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = new_adjustments;
@@ -19832,14 +19833,14 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 	_tmp9_ = pixel_transformation_bundle_save (_tmp8_, "adjustments");
 #line 2603 "/home/jens/Source/shotwell/src/Photo.vala"
 	map = _tmp9_;
-#line 19834 "Photo.c"
+#line 19835 "Photo.c"
 	{
 		PhotoRow* _tmp10_ = NULL;
 #line 2606 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp10_ = self->row;
 #line 2606 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 19841 "Photo.c"
+#line 19842 "Photo.c"
 		{
 			gboolean _tmp11_ = FALSE;
 			PixelTransformer* _tmp12_ = NULL;
@@ -19851,18 +19852,18 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 			if (_tmp12_ == NULL) {
 #line 2607 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp11_ = TRUE;
-#line 19853 "Photo.c"
+#line 19854 "Photo.c"
 			} else {
 				PixelTransformationBundle* _tmp13_ = NULL;
 #line 2607 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp13_ = self->priv->adjustments;
 #line 2607 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp11_ = _tmp13_ == NULL;
-#line 19860 "Photo.c"
+#line 19861 "Photo.c"
 			}
 #line 2607 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp11_) {
-#line 19864 "Photo.c"
+#line 19865 "Photo.c"
 				PixelTransformationBundle* _tmp14_ = NULL;
 				PixelTransformationBundle* _tmp15_ = NULL;
 				PixelTransformationBundle* _tmp16_ = NULL;
@@ -19883,7 +19884,7 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 				_pixel_transformer_unref0 (self->priv->transformer);
 #line 2610 "/home/jens/Source/shotwell/src/Photo.vala"
 				self->priv->transformer = _tmp17_;
-#line 19885 "Photo.c"
+#line 19886 "Photo.c"
 			} else {
 				PixelTransformationBundle* _tmp34_ = NULL;
 				PixelTransformationBundle* _tmp35_ = NULL;
@@ -19910,7 +19911,7 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 					_transformation_it = _tmp22_;
 #line 2613 "/home/jens/Source/shotwell/src/Photo.vala"
 					while (TRUE) {
-#line 19912 "Photo.c"
+#line 19913 "Photo.c"
 						GeeIterator* _tmp23_ = NULL;
 						gboolean _tmp24_ = FALSE;
 						PixelTransformation* transformation = NULL;
@@ -19931,7 +19932,7 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 						if (!_tmp24_) {
 #line 2613 "/home/jens/Source/shotwell/src/Photo.vala"
 							break;
-#line 19933 "Photo.c"
+#line 19934 "Photo.c"
 						}
 #line 2613 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp25_ = _transformation_it;
@@ -19959,11 +19960,11 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 						_pixel_transformation_unref0 (_tmp32_);
 #line 2613 "/home/jens/Source/shotwell/src/Photo.vala"
 						_pixel_transformation_unref0 (transformation);
-#line 19961 "Photo.c"
+#line 19962 "Photo.c"
 					}
 #line 2613 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_object_unref0 (_transformation_it);
-#line 19965 "Photo.c"
+#line 19966 "Photo.c"
 				}
 #line 2619 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp34_ = new_adjustments;
@@ -19973,7 +19974,7 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 				_pixel_transformation_bundle_unref0 (self->priv->adjustments);
 #line 2619 "/home/jens/Source/shotwell/src/Photo.vala"
 				self->priv->adjustments = _tmp35_;
-#line 19975 "Photo.c"
+#line 19976 "Photo.c"
 			}
 #line 2622 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp36_ = map;
@@ -19981,16 +19982,16 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 			_tmp37_ = photo_set_transformation (self, _tmp36_);
 #line 2622 "/home/jens/Source/shotwell/src/Photo.vala"
 			committed = _tmp37_;
-#line 19983 "Photo.c"
+#line 19984 "Photo.c"
 		}
-		__finally348:
+		__finally361:
 		{
 			PhotoRow* _tmp38_ = NULL;
 #line 2606 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp38_ = self->row;
 #line 2606 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 19992 "Photo.c"
+#line 19993 "Photo.c"
 		}
 #line 2606 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -20002,14 +20003,14 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 			g_clear_error (&_inner_error_);
 #line 2606 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 20004 "Photo.c"
+#line 20005 "Photo.c"
 		}
 	}
 #line 2625 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp39_ = committed;
 #line 2625 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp39_) {
-#line 20011 "Photo.c"
+#line 20012 "Photo.c"
 		Alteration* _tmp40_ = NULL;
 		Alteration* _tmp41_ = NULL;
 #line 2626 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -20020,11 +20021,11 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp41_);
 #line 2626 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp41_);
-#line 20022 "Photo.c"
+#line 20023 "Photo.c"
 	}
 #line 2585 "/home/jens/Source/shotwell/src/Photo.vala"
 	_key_value_map_unref0 (map);
-#line 20026 "Photo.c"
+#line 20027 "Photo.c"
 }
 
 
@@ -20034,7 +20035,7 @@ static PhotoMetadata* photo_real_get_metadata (PhotoSource* base) {
 	GError * _inner_error_ = NULL;
 #line 2630 "/home/jens/Source/shotwell/src/Photo.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PHOTO, Photo);
-#line 20036 "Photo.c"
+#line 20037 "Photo.c"
 	{
 		PhotoMetadata* _tmp0_ = NULL;
 		PhotoFileReader* _tmp1_ = NULL;
@@ -20056,8 +20057,8 @@ static PhotoMetadata* photo_real_get_metadata (PhotoSource* base) {
 		_tmp0_ = _tmp4_;
 #line 2632 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 20058 "Photo.c"
-			goto __catch349_g_error;
+#line 20059 "Photo.c"
+			goto __catch362_g_error;
 		}
 #line 2632 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp5_ = _tmp0_;
@@ -20069,10 +20070,10 @@ static PhotoMetadata* photo_real_get_metadata (PhotoSource* base) {
 		_media_metadata_unref0 (_tmp0_);
 #line 2632 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 20071 "Photo.c"
+#line 20072 "Photo.c"
 	}
-	goto __finally349;
-	__catch349_g_error:
+	goto __finally362;
+	__catch362_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -20093,16 +20094,16 @@ static PhotoMetadata* photo_real_get_metadata (PhotoSource* base) {
 		_g_error_free0 (err);
 #line 2636 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 20095 "Photo.c"
+#line 20096 "Photo.c"
 	}
-	__finally349:
+	__finally362:
 #line 2631 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 2631 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_clear_error (&_inner_error_);
 #line 2631 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 20104 "Photo.c"
+#line 20105 "Photo.c"
 }
 
 
@@ -20135,7 +20136,7 @@ PhotoMetadata* photo_get_master_metadata (Photo* self, GError** error) {
 		g_propagate_error (error, _inner_error_);
 #line 2641 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 20137 "Photo.c"
+#line 20138 "Photo.c"
 	}
 #line 2641 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp5_ = _tmp0_;
@@ -20147,7 +20148,7 @@ PhotoMetadata* photo_get_master_metadata (Photo* self, GError** error) {
 	_media_metadata_unref0 (_tmp0_);
 #line 2641 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 20149 "Photo.c"
+#line 20150 "Photo.c"
 }
 
 
@@ -20168,7 +20169,7 @@ PhotoMetadata* photo_get_editable_metadata (Photo* self, GError** error) {
 	_tmp2_ = reader;
 #line 2647 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_ != NULL) {
-#line 20170 "Photo.c"
+#line 20171 "Photo.c"
 		PhotoFileReader* _tmp3_ = NULL;
 		PhotoMetadata* _tmp4_ = NULL;
 #line 2647 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -20189,14 +20190,14 @@ PhotoMetadata* photo_get_editable_metadata (Photo* self, GError** error) {
 			_photo_file_adapter_unref0 (reader);
 #line 2647 "/home/jens/Source/shotwell/src/Photo.vala"
 			return NULL;
-#line 20191 "Photo.c"
+#line 20192 "Photo.c"
 		}
 	} else {
 #line 2647 "/home/jens/Source/shotwell/src/Photo.vala"
 		_media_metadata_unref0 (_tmp1_);
 #line 2647 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = NULL;
-#line 20198 "Photo.c"
+#line 20199 "Photo.c"
 	}
 #line 2647 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp1_;
@@ -20204,7 +20205,7 @@ PhotoMetadata* photo_get_editable_metadata (Photo* self, GError** error) {
 	_photo_file_adapter_unref0 (reader);
 #line 2647 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 20206 "Photo.c"
+#line 20207 "Photo.c"
 }
 
 
@@ -20255,15 +20256,15 @@ gboolean photo_persist_master_metadata (Photo* self, PhotoMetadata* metadata, Ph
 		if (state) {
 #line 2660 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 20257 "Photo.c"
+#line 20258 "Photo.c"
 		} else {
 #line 2660 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_master_state_unref0 (_vala_state);
-#line 20261 "Photo.c"
+#line 20262 "Photo.c"
 		}
 #line 2660 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 20265 "Photo.c"
+#line 20266 "Photo.c"
 	}
 #line 2662 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp5_ = master_reader;
@@ -20279,7 +20280,7 @@ gboolean photo_persist_master_metadata (Photo* self, PhotoMetadata* metadata, Ph
 		_photo_file_adapter_unref0 (master_reader);
 #line 2662 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 20281 "Photo.c"
+#line 20282 "Photo.c"
 	}
 #line 2662 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp7_ = _tmp4_;
@@ -20303,7 +20304,7 @@ gboolean photo_persist_master_metadata (Photo* self, PhotoMetadata* metadata, Ph
 		_photo_file_adapter_unref0 (master_reader);
 #line 2662 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 20305 "Photo.c"
+#line 20306 "Photo.c"
 	}
 #line 2664 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp12_ = photo_prepare_for_reimport_master (self, &_tmp11_, &_inner_error_);
@@ -20323,7 +20324,7 @@ gboolean photo_persist_master_metadata (Photo* self, PhotoMetadata* metadata, Ph
 		_photo_file_adapter_unref0 (master_reader);
 #line 2664 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 20325 "Photo.c"
+#line 20326 "Photo.c"
 	}
 #line 2664 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp10_) {
@@ -20337,15 +20338,15 @@ gboolean photo_persist_master_metadata (Photo* self, PhotoMetadata* metadata, Ph
 		if (state) {
 #line 2665 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 20339 "Photo.c"
+#line 20340 "Photo.c"
 		} else {
 #line 2665 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_master_state_unref0 (_vala_state);
-#line 20343 "Photo.c"
+#line 20344 "Photo.c"
 		}
 #line 2665 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 20347 "Photo.c"
+#line 20348 "Photo.c"
 	}
 #line 2667 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp13_ = _vala_state;
@@ -20361,15 +20362,15 @@ gboolean photo_persist_master_metadata (Photo* self, PhotoMetadata* metadata, Ph
 	if (state) {
 #line 2669 "/home/jens/Source/shotwell/src/Photo.vala"
 		*state = _vala_state;
-#line 20363 "Photo.c"
+#line 20364 "Photo.c"
 	} else {
 #line 2669 "/home/jens/Source/shotwell/src/Photo.vala"
 		_photo_reimport_master_state_unref0 (_vala_state);
-#line 20367 "Photo.c"
+#line 20368 "Photo.c"
 	}
 #line 2669 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 20371 "Photo.c"
+#line 20372 "Photo.c"
 }
 
 
@@ -20392,7 +20393,7 @@ void photo_finish_update_master_metadata (Photo* self, PhotoReimportMasterState*
 			g_propagate_error (error, _inner_error_);
 #line 2673 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 20394 "Photo.c"
+#line 20395 "Photo.c"
 		} else {
 #line 2673 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -20400,7 +20401,7 @@ void photo_finish_update_master_metadata (Photo* self, PhotoReimportMasterState*
 			g_clear_error (&_inner_error_);
 #line 2673 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 20402 "Photo.c"
+#line 20403 "Photo.c"
 		}
 	}
 }
@@ -20450,15 +20451,15 @@ gboolean photo_persist_editable_metadata (Photo* self, PhotoMetadata* metadata, 
 		if (state) {
 #line 2682 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 20452 "Photo.c"
+#line 20453 "Photo.c"
 		} else {
 #line 2682 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_editable_state_unref0 (_vala_state);
-#line 20456 "Photo.c"
+#line 20457 "Photo.c"
 		}
 #line 2682 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 20460 "Photo.c"
+#line 20461 "Photo.c"
 	}
 #line 2684 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = editable_reader;
@@ -20476,15 +20477,15 @@ gboolean photo_persist_editable_metadata (Photo* self, PhotoMetadata* metadata, 
 		if (state) {
 #line 2685 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 20478 "Photo.c"
+#line 20479 "Photo.c"
 		} else {
 #line 2685 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_editable_state_unref0 (_vala_state);
-#line 20482 "Photo.c"
+#line 20483 "Photo.c"
 		}
 #line 2685 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 20486 "Photo.c"
+#line 20487 "Photo.c"
 	}
 #line 2687 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp6_ = editable_reader;
@@ -20500,7 +20501,7 @@ gboolean photo_persist_editable_metadata (Photo* self, PhotoMetadata* metadata, 
 		_photo_file_adapter_unref0 (editable_reader);
 #line 2687 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 20502 "Photo.c"
+#line 20503 "Photo.c"
 	}
 #line 2687 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = _tmp5_;
@@ -20524,7 +20525,7 @@ gboolean photo_persist_editable_metadata (Photo* self, PhotoMetadata* metadata, 
 		_photo_file_adapter_unref0 (editable_reader);
 #line 2687 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 20526 "Photo.c"
+#line 20527 "Photo.c"
 	}
 #line 2689 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp13_ = photo_prepare_for_reimport_editable (self, &_tmp12_, &_inner_error_);
@@ -20544,7 +20545,7 @@ gboolean photo_persist_editable_metadata (Photo* self, PhotoMetadata* metadata, 
 		_photo_file_adapter_unref0 (editable_reader);
 #line 2689 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 20546 "Photo.c"
+#line 20547 "Photo.c"
 	}
 #line 2689 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp11_) {
@@ -20558,15 +20559,15 @@ gboolean photo_persist_editable_metadata (Photo* self, PhotoMetadata* metadata, 
 		if (state) {
 #line 2690 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 20560 "Photo.c"
+#line 20561 "Photo.c"
 		} else {
 #line 2690 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_reimport_editable_state_unref0 (_vala_state);
-#line 20564 "Photo.c"
+#line 20565 "Photo.c"
 		}
 #line 2690 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 20568 "Photo.c"
+#line 20569 "Photo.c"
 	}
 #line 2692 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp14_ = _vala_state;
@@ -20582,15 +20583,15 @@ gboolean photo_persist_editable_metadata (Photo* self, PhotoMetadata* metadata, 
 	if (state) {
 #line 2694 "/home/jens/Source/shotwell/src/Photo.vala"
 		*state = _vala_state;
-#line 20584 "Photo.c"
+#line 20585 "Photo.c"
 	} else {
 #line 2694 "/home/jens/Source/shotwell/src/Photo.vala"
 		_photo_reimport_editable_state_unref0 (_vala_state);
-#line 20588 "Photo.c"
+#line 20589 "Photo.c"
 	}
 #line 2694 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 20592 "Photo.c"
+#line 20593 "Photo.c"
 }
 
 
@@ -20613,7 +20614,7 @@ void photo_finish_update_editable_metadata (Photo* self, PhotoReimportEditableSt
 			g_propagate_error (error, _inner_error_);
 #line 2698 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 20615 "Photo.c"
+#line 20616 "Photo.c"
 		} else {
 #line 2698 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -20621,7 +20622,7 @@ void photo_finish_update_editable_metadata (Photo* self, PhotoReimportEditableSt
 			g_clear_error (&_inner_error_);
 #line 2698 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 20623 "Photo.c"
+#line 20624 "Photo.c"
 		}
 	}
 }
@@ -20631,14 +20632,14 @@ void photo_get_raw_dimensions (Photo* self, Dimensions* result) {
 	GError * _inner_error_ = NULL;
 #line 2703 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail (IS_PHOTO (self));
-#line 20633 "Photo.c"
+#line 20634 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2704 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2704 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 20640 "Photo.c"
+#line 20641 "Photo.c"
 		{
 			BackingPhotoRow* _tmp1_ = NULL;
 			Dimensions _tmp2_ = {0};
@@ -20648,27 +20649,27 @@ void photo_get_raw_dimensions (Photo* self, Dimensions* result) {
 			_tmp2_ = _tmp1_->dim;
 #line 2705 "/home/jens/Source/shotwell/src/Photo.vala"
 			*result = _tmp2_;
-#line 20650 "Photo.c"
+#line 20651 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 2704 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 2704 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 20657 "Photo.c"
+#line 20658 "Photo.c"
 			}
 #line 2705 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 20661 "Photo.c"
+#line 20662 "Photo.c"
 		}
-		__finally350:
+		__finally363:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2704 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2704 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 20670 "Photo.c"
+#line 20671 "Photo.c"
 		}
 #line 2704 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -20676,7 +20677,7 @@ void photo_get_raw_dimensions (Photo* self, Dimensions* result) {
 		g_clear_error (&_inner_error_);
 #line 2704 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 20678 "Photo.c"
+#line 20679 "Photo.c"
 	}
 }
 
@@ -20686,14 +20687,14 @@ gboolean photo_has_transformations (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 2709 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
-#line 20688 "Photo.c"
+#line 20689 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2710 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2710 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 20695 "Photo.c"
+#line 20696 "Photo.c"
 		{
 			gboolean _tmp1_ = FALSE;
 			PhotoRow* _tmp2_ = NULL;
@@ -20712,7 +20713,7 @@ gboolean photo_has_transformations (Photo* self) {
 			if (_tmp3_ != _tmp5_) {
 #line 2712 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = TRUE;
-#line 20714 "Photo.c"
+#line 20715 "Photo.c"
 			} else {
 				PhotoRow* _tmp6_ = NULL;
 				GeeHashMap* _tmp7_ = NULL;
@@ -20722,31 +20723,31 @@ gboolean photo_has_transformations (Photo* self) {
 				_tmp7_ = _tmp6_->transformations;
 #line 2713 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = _tmp7_ != NULL;
-#line 20724 "Photo.c"
+#line 20725 "Photo.c"
 			}
 #line 2711 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp1_;
-#line 20728 "Photo.c"
+#line 20729 "Photo.c"
 			{
 				PhotoRow* _tmp8_ = NULL;
 #line 2710 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp8_ = self->row;
 #line 2710 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 20735 "Photo.c"
+#line 20736 "Photo.c"
 			}
 #line 2711 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 20739 "Photo.c"
+#line 20740 "Photo.c"
 		}
-		__finally351:
+		__finally364:
 		{
 			PhotoRow* _tmp9_ = NULL;
 #line 2710 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp9_ = self->row;
 #line 2710 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 20748 "Photo.c"
+#line 20749 "Photo.c"
 		}
 #line 2710 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -20754,7 +20755,7 @@ gboolean photo_has_transformations (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2710 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 20756 "Photo.c"
+#line 20757 "Photo.c"
 	}
 }
 
@@ -20778,7 +20779,7 @@ gboolean photo_only_metadata_changed (Photo* self) {
 	_tmp1_ = metadata;
 #line 2721 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_ != NULL) {
-#line 20780 "Photo.c"
+#line 20781 "Photo.c"
 		PhotoMetadata* _tmp2_ = NULL;
 		MetadataDateTime* _tmp3_ = NULL;
 #line 2722 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -20789,7 +20790,7 @@ gboolean photo_only_metadata_changed (Photo* self) {
 		_metadata_date_time_unref0 (date_time);
 #line 2722 "/home/jens/Source/shotwell/src/Photo.vala"
 		date_time = _tmp3_;
-#line 20791 "Photo.c"
+#line 20792 "Photo.c"
 	}
 	{
 		PhotoRow* _tmp4_ = NULL;
@@ -20797,7 +20798,7 @@ gboolean photo_only_metadata_changed (Photo* self) {
 		_tmp4_ = self->row;
 #line 2724 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 20799 "Photo.c"
+#line 20800 "Photo.c"
 		{
 			gboolean _tmp5_ = FALSE;
 			PhotoRow* _tmp6_ = NULL;
@@ -20808,7 +20809,7 @@ gboolean photo_only_metadata_changed (Photo* self) {
 			_tmp7_ = _tmp6_->transformations;
 #line 2725 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp7_ == NULL) {
-#line 20810 "Photo.c"
+#line 20811 "Photo.c"
 				gboolean _tmp8_ = FALSE;
 				PhotoRow* _tmp9_ = NULL;
 				Orientation _tmp10_ = 0;
@@ -20826,7 +20827,7 @@ gboolean photo_only_metadata_changed (Photo* self) {
 				if (_tmp10_ != _tmp12_) {
 #line 2726 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp8_ = TRUE;
-#line 20828 "Photo.c"
+#line 20829 "Photo.c"
 				} else {
 					gboolean _tmp13_ = FALSE;
 					MetadataDateTime* _tmp14_ = NULL;
@@ -20834,7 +20835,7 @@ gboolean photo_only_metadata_changed (Photo* self) {
 					_tmp14_ = date_time;
 #line 2727 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_tmp14_ != NULL) {
-#line 20836 "Photo.c"
+#line 20837 "Photo.c"
 						PhotoRow* _tmp15_ = NULL;
 						time_t _tmp16_ = 0;
 						MetadataDateTime* _tmp17_ = NULL;
@@ -20849,34 +20850,34 @@ gboolean photo_only_metadata_changed (Photo* self) {
 						_tmp18_ = metadata_date_time_get_timestamp (_tmp17_);
 #line 2727 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp13_ = _tmp16_ != _tmp18_;
-#line 20851 "Photo.c"
+#line 20852 "Photo.c"
 					} else {
 #line 2727 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp13_ = FALSE;
-#line 20855 "Photo.c"
+#line 20856 "Photo.c"
 					}
 #line 2727 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp8_ = _tmp13_;
-#line 20859 "Photo.c"
+#line 20860 "Photo.c"
 				}
 #line 2726 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp5_ = _tmp8_;
-#line 20863 "Photo.c"
+#line 20864 "Photo.c"
 			} else {
 #line 2725 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp5_ = FALSE;
-#line 20867 "Photo.c"
+#line 20868 "Photo.c"
 			}
 #line 2725 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp5_;
-#line 20871 "Photo.c"
+#line 20872 "Photo.c"
 			{
 				PhotoRow* _tmp19_ = NULL;
 #line 2724 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp19_ = self->row;
 #line 2724 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 20878 "Photo.c"
+#line 20879 "Photo.c"
 			}
 #line 2725 "/home/jens/Source/shotwell/src/Photo.vala"
 			_media_metadata_unref0 (metadata);
@@ -20884,16 +20885,16 @@ gboolean photo_only_metadata_changed (Photo* self) {
 			_metadata_date_time_unref0 (date_time);
 #line 2725 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 20886 "Photo.c"
+#line 20887 "Photo.c"
 		}
-		__finally352:
+		__finally365:
 		{
 			PhotoRow* _tmp20_ = NULL;
 #line 2724 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp20_ = self->row;
 #line 2724 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 20895 "Photo.c"
+#line 20896 "Photo.c"
 		}
 #line 2724 "/home/jens/Source/shotwell/src/Photo.vala"
 		_media_metadata_unref0 (metadata);
@@ -20905,13 +20906,13 @@ gboolean photo_only_metadata_changed (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2724 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 20907 "Photo.c"
+#line 20908 "Photo.c"
 	}
 #line 2717 "/home/jens/Source/shotwell/src/Photo.vala"
 	_media_metadata_unref0 (metadata);
 #line 2717 "/home/jens/Source/shotwell/src/Photo.vala"
 	_metadata_date_time_unref0 (date_time);
-#line 20913 "Photo.c"
+#line 20914 "Photo.c"
 }
 
 
@@ -20941,7 +20942,7 @@ gboolean photo_has_alterations (Photo* self) {
 	_tmp1_ = metadata;
 #line 2737 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_ != NULL) {
-#line 20943 "Photo.c"
+#line 20944 "Photo.c"
 		PhotoMetadata* _tmp2_ = NULL;
 		MetadataDateTime* _tmp3_ = NULL;
 		PhotoMetadata* _tmp4_ = NULL;
@@ -20972,20 +20973,20 @@ gboolean photo_has_alterations (Photo* self) {
 		_g_free0 (comment);
 #line 2740 "/home/jens/Source/shotwell/src/Photo.vala"
 		comment = _tmp7_;
-#line 20974 "Photo.c"
+#line 20975 "Photo.c"
 	}
 #line 2744 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = date_time;
 #line 2744 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp8_ == NULL) {
-#line 20980 "Photo.c"
+#line 20981 "Photo.c"
 		{
 			PhotoRow* _tmp9_ = NULL;
 #line 2746 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp9_ = self->row;
 #line 2746 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_lock (&self->priv->__lock_row);
-#line 20987 "Photo.c"
+#line 20988 "Photo.c"
 			{
 				BackingPhotoRow* _tmp10_ = NULL;
 				time_t _tmp11_ = 0;
@@ -21003,14 +21004,14 @@ gboolean photo_has_alterations (Photo* self) {
 				if (_tmp11_ != _tmp13_) {
 #line 2750 "/home/jens/Source/shotwell/src/Photo.vala"
 					result = TRUE;
-#line 21005 "Photo.c"
+#line 21006 "Photo.c"
 					{
 						PhotoRow* _tmp14_ = NULL;
 #line 2746 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp14_ = self->row;
 #line 2746 "/home/jens/Source/shotwell/src/Photo.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21012 "Photo.c"
+#line 21013 "Photo.c"
 					}
 #line 2750 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (metadata);
@@ -21022,17 +21023,17 @@ gboolean photo_has_alterations (Photo* self) {
 					_metadata_date_time_unref0 (date_time);
 #line 2750 "/home/jens/Source/shotwell/src/Photo.vala"
 					return result;
-#line 21024 "Photo.c"
+#line 21025 "Photo.c"
 				}
 			}
-			__finally353:
+			__finally366:
 			{
 				PhotoRow* _tmp15_ = NULL;
 #line 2746 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp15_ = self->row;
 #line 2746 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21034 "Photo.c"
+#line 21035 "Photo.c"
 			}
 #line 2746 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -21050,7 +21051,7 @@ gboolean photo_has_alterations (Photo* self) {
 				g_clear_error (&_inner_error_);
 #line 2746 "/home/jens/Source/shotwell/src/Photo.vala"
 				return FALSE;
-#line 21052 "Photo.c"
+#line 21053 "Photo.c"
 			}
 		}
 	}
@@ -21060,7 +21061,7 @@ gboolean photo_has_alterations (Photo* self) {
 		_tmp16_ = self->row;
 #line 2755 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 21062 "Photo.c"
+#line 21063 "Photo.c"
 		{
 			gboolean _tmp17_ = FALSE;
 			gboolean _tmp18_ = FALSE;
@@ -21076,7 +21077,7 @@ gboolean photo_has_alterations (Photo* self) {
 			if (_tmp22_ != NULL) {
 #line 2756 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp20_ = TRUE;
-#line 21078 "Photo.c"
+#line 21079 "Photo.c"
 			} else {
 				PhotoRow* _tmp23_ = NULL;
 				Orientation _tmp24_ = 0;
@@ -21092,13 +21093,13 @@ gboolean photo_has_alterations (Photo* self) {
 				_tmp26_ = _tmp25_->original_orientation;
 #line 2757 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp20_ = _tmp24_ != _tmp26_;
-#line 21094 "Photo.c"
+#line 21095 "Photo.c"
 			}
 #line 2756 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp20_) {
 #line 2756 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp19_ = TRUE;
-#line 21100 "Photo.c"
+#line 21101 "Photo.c"
 			} else {
 				gboolean _tmp27_ = FALSE;
 				MetadataDateTime* _tmp28_ = NULL;
@@ -21106,7 +21107,7 @@ gboolean photo_has_alterations (Photo* self) {
 				_tmp28_ = date_time;
 #line 2758 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp28_ != NULL) {
-#line 21108 "Photo.c"
+#line 21109 "Photo.c"
 					PhotoRow* _tmp29_ = NULL;
 					time_t _tmp30_ = 0;
 					MetadataDateTime* _tmp31_ = NULL;
@@ -21121,21 +21122,21 @@ gboolean photo_has_alterations (Photo* self) {
 					_tmp32_ = metadata_date_time_get_timestamp (_tmp31_);
 #line 2758 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp27_ = _tmp30_ != _tmp32_;
-#line 21123 "Photo.c"
+#line 21124 "Photo.c"
 				} else {
 #line 2758 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp27_ = FALSE;
-#line 21127 "Photo.c"
+#line 21128 "Photo.c"
 				}
 #line 2758 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp19_ = _tmp27_;
-#line 21131 "Photo.c"
+#line 21132 "Photo.c"
 			}
 #line 2756 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp19_) {
 #line 2756 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp18_ = TRUE;
-#line 21137 "Photo.c"
+#line 21138 "Photo.c"
 			} else {
 				gchar* _tmp33_ = NULL;
 				gchar* _tmp34_ = NULL;
@@ -21150,13 +21151,13 @@ gboolean photo_has_alterations (Photo* self) {
 				_tmp18_ = g_strcmp0 (_tmp34_, _tmp35_) != 0;
 #line 2759 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_free0 (_tmp34_);
-#line 21152 "Photo.c"
+#line 21153 "Photo.c"
 			}
 #line 2756 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp18_) {
 #line 2756 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp17_ = TRUE;
-#line 21158 "Photo.c"
+#line 21159 "Photo.c"
 			} else {
 				gchar* _tmp36_ = NULL;
 				gchar* _tmp37_ = NULL;
@@ -21171,18 +21172,18 @@ gboolean photo_has_alterations (Photo* self) {
 				_tmp17_ = g_strcmp0 (_tmp37_, _tmp38_) != 0;
 #line 2760 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_free0 (_tmp37_);
-#line 21173 "Photo.c"
+#line 21174 "Photo.c"
 			}
 #line 2756 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp17_;
-#line 21177 "Photo.c"
+#line 21178 "Photo.c"
 			{
 				PhotoRow* _tmp39_ = NULL;
 #line 2755 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp39_ = self->row;
 #line 2755 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21184 "Photo.c"
+#line 21185 "Photo.c"
 			}
 #line 2756 "/home/jens/Source/shotwell/src/Photo.vala"
 			_media_metadata_unref0 (metadata);
@@ -21194,16 +21195,16 @@ gboolean photo_has_alterations (Photo* self) {
 			_metadata_date_time_unref0 (date_time);
 #line 2756 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 21196 "Photo.c"
+#line 21197 "Photo.c"
 		}
-		__finally354:
+		__finally367:
 		{
 			PhotoRow* _tmp40_ = NULL;
 #line 2755 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp40_ = self->row;
 #line 2755 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21205 "Photo.c"
+#line 21206 "Photo.c"
 		}
 #line 2755 "/home/jens/Source/shotwell/src/Photo.vala"
 		_media_metadata_unref0 (metadata);
@@ -21219,7 +21220,7 @@ gboolean photo_has_alterations (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2755 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 21221 "Photo.c"
+#line 21222 "Photo.c"
 	}
 #line 2731 "/home/jens/Source/shotwell/src/Photo.vala"
 	_media_metadata_unref0 (metadata);
@@ -21229,7 +21230,7 @@ gboolean photo_has_alterations (Photo* self) {
 	_g_free0 (title);
 #line 2731 "/home/jens/Source/shotwell/src/Photo.vala"
 	_metadata_date_time_unref0 (date_time);
-#line 21231 "Photo.c"
+#line 21232 "Photo.c"
 }
 
 
@@ -21238,14 +21239,14 @@ PhotoTransformationState* photo_save_transformation_state (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 2765 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 21240 "Photo.c"
+#line 21241 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2766 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2766 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 21247 "Photo.c"
+#line 21248 "Photo.c"
 		{
 			PixelTransformer* _tmp1_ = NULL;
 			PixelTransformer* _tmp2_ = NULL;
@@ -21260,7 +21261,7 @@ PhotoTransformationState* photo_save_transformation_state (Photo* self) {
 			_tmp2_ = self->priv->transformer;
 #line 2769 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != NULL) {
-#line 21262 "Photo.c"
+#line 21263 "Photo.c"
 				PixelTransformer* _tmp3_ = NULL;
 				PixelTransformer* _tmp4_ = NULL;
 #line 2769 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21271,19 +21272,19 @@ PhotoTransformationState* photo_save_transformation_state (Photo* self) {
 				_pixel_transformer_unref0 (_tmp1_);
 #line 2769 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = _tmp4_;
-#line 21273 "Photo.c"
+#line 21274 "Photo.c"
 			} else {
 #line 2769 "/home/jens/Source/shotwell/src/Photo.vala"
 				_pixel_transformer_unref0 (_tmp1_);
 #line 2769 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = NULL;
-#line 21279 "Photo.c"
+#line 21280 "Photo.c"
 			}
 #line 2770 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp6_ = self->priv->adjustments;
 #line 2770 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp6_ != NULL) {
-#line 21285 "Photo.c"
+#line 21286 "Photo.c"
 				PixelTransformationBundle* _tmp7_ = NULL;
 				PixelTransformationBundle* _tmp8_ = NULL;
 #line 2770 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21294,13 +21295,13 @@ PhotoTransformationState* photo_save_transformation_state (Photo* self) {
 				_pixel_transformation_bundle_unref0 (_tmp5_);
 #line 2770 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp5_ = _tmp8_;
-#line 21296 "Photo.c"
+#line 21297 "Photo.c"
 			} else {
 #line 2770 "/home/jens/Source/shotwell/src/Photo.vala"
 				_pixel_transformation_bundle_unref0 (_tmp5_);
 #line 2770 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp5_ = NULL;
-#line 21302 "Photo.c"
+#line 21303 "Photo.c"
 			}
 #line 2767 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp9_ = self->row;
@@ -21318,27 +21319,27 @@ PhotoTransformationState* photo_save_transformation_state (Photo* self) {
 			_pixel_transformation_bundle_unref0 (_tmp5_);
 #line 2767 "/home/jens/Source/shotwell/src/Photo.vala"
 			_pixel_transformer_unref0 (_tmp1_);
-#line 21320 "Photo.c"
+#line 21321 "Photo.c"
 			{
 				PhotoRow* _tmp14_ = NULL;
 #line 2766 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp14_ = self->row;
 #line 2766 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21327 "Photo.c"
+#line 21328 "Photo.c"
 			}
 #line 2767 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 21331 "Photo.c"
+#line 21332 "Photo.c"
 		}
-		__finally355:
+		__finally368:
 		{
 			PhotoRow* _tmp15_ = NULL;
 #line 2766 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp15_ = self->row;
 #line 2766 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21340 "Photo.c"
+#line 21341 "Photo.c"
 		}
 #line 2766 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -21346,7 +21347,7 @@ PhotoTransformationState* photo_save_transformation_state (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2766 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 21348 "Photo.c"
+#line 21349 "Photo.c"
 	}
 }
 
@@ -21354,14 +21355,14 @@ PhotoTransformationState* photo_save_transformation_state (Photo* self) {
 static gpointer _pixel_transformer_ref0 (gpointer self) {
 #line 2791 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? pixel_transformer_ref (self) : NULL;
-#line 21356 "Photo.c"
+#line 21357 "Photo.c"
 }
 
 
 static gpointer _pixel_transformation_bundle_ref0 (gpointer self) {
 #line 2792 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? pixel_transformation_bundle_ref (self) : NULL;
-#line 21363 "Photo.c"
+#line 21364 "Photo.c"
 }
 
 
@@ -21406,7 +21407,7 @@ gboolean photo_load_transformation_state (Photo* self, PhotoTransformationState*
 		_g_object_unref0 (state_impl);
 #line 2777 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 21408 "Photo.c"
+#line 21409 "Photo.c"
 	}
 #line 2779 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp3_ = state_impl;
@@ -21432,14 +21433,14 @@ gboolean photo_load_transformation_state (Photo* self, PhotoTransformationState*
 	_tmp10_ = photo_photo_transformation_state_impl_get_color_adjustments (_tmp9_);
 #line 2782 "/home/jens/Source/shotwell/src/Photo.vala"
 	saved_adjustments = _tmp10_;
-#line 21434 "Photo.c"
+#line 21435 "Photo.c"
 	{
 		PhotoRow* _tmp11_ = NULL;
 #line 2785 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp11_ = self->row;
 #line 2785 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 21441 "Photo.c"
+#line 21442 "Photo.c"
 		{
 			PhotoTable* _tmp12_ = NULL;
 			PhotoTable* _tmp13_ = NULL;
@@ -21471,7 +21472,7 @@ gboolean photo_load_transformation_state (Photo* self, PhotoTransformationState*
 			_tmp19_ = committed;
 #line 2788 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp19_) {
-#line 21473 "Photo.c"
+#line 21474 "Photo.c"
 				PhotoRow* _tmp20_ = NULL;
 				Orientation _tmp21_ = 0;
 				PhotoRow* _tmp22_ = NULL;
@@ -21513,17 +21514,17 @@ gboolean photo_load_transformation_state (Photo* self, PhotoTransformationState*
 				_pixel_transformation_bundle_unref0 (self->priv->adjustments);
 #line 2792 "/home/jens/Source/shotwell/src/Photo.vala"
 				self->priv->adjustments = _tmp28_;
-#line 21515 "Photo.c"
+#line 21516 "Photo.c"
 			}
 		}
-		__finally356:
+		__finally369:
 		{
 			PhotoRow* _tmp29_ = NULL;
 #line 2785 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp29_ = self->row;
 #line 2785 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21525 "Photo.c"
+#line 21526 "Photo.c"
 		}
 #line 2785 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -21541,14 +21542,14 @@ gboolean photo_load_transformation_state (Photo* self, PhotoTransformationState*
 			g_clear_error (&_inner_error_);
 #line 2785 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 21543 "Photo.c"
+#line 21544 "Photo.c"
 		}
 	}
 #line 2796 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp30_ = committed;
 #line 2796 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp30_) {
-#line 21550 "Photo.c"
+#line 21551 "Photo.c"
 		Alteration* _tmp31_ = NULL;
 		Alteration* _tmp32_ = NULL;
 #line 2797 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21559,7 +21560,7 @@ gboolean photo_load_transformation_state (Photo* self, PhotoTransformationState*
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp32_);
 #line 2797 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp32_);
-#line 21561 "Photo.c"
+#line 21562 "Photo.c"
 	}
 #line 2799 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = committed;
@@ -21573,7 +21574,7 @@ gboolean photo_load_transformation_state (Photo* self, PhotoTransformationState*
 	_g_object_unref0 (state_impl);
 #line 2799 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 21575 "Photo.c"
+#line 21576 "Photo.c"
 }
 
 
@@ -21582,7 +21583,7 @@ void photo_remove_all_transformations (Photo* self) {
 	g_return_if_fail (IS_PHOTO (self));
 #line 2803 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_internal_remove_all_transformations (self, TRUE);
-#line 21584 "Photo.c"
+#line 21585 "Photo.c"
 }
 
 
@@ -21595,14 +21596,14 @@ static void photo_internal_remove_all_transformations (Photo* self, gboolean not
 	g_return_if_fail (IS_PHOTO (self));
 #line 2807 "/home/jens/Source/shotwell/src/Photo.vala"
 	is_altered = FALSE;
-#line 21597 "Photo.c"
+#line 21598 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2808 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2808 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 21604 "Photo.c"
+#line 21605 "Photo.c"
 		{
 			PhotoTable* _tmp1_ = NULL;
 			PhotoTable* _tmp2_ = NULL;
@@ -21652,7 +21653,7 @@ static void photo_internal_remove_all_transformations (Photo* self, gboolean not
 			_tmp10_ = _tmp9_->original_orientation;
 #line 2815 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp8_ != _tmp10_) {
-#line 21654 "Photo.c"
+#line 21655 "Photo.c"
 				PhotoTable* _tmp11_ = NULL;
 				PhotoTable* _tmp12_ = NULL;
 				PhotoRow* _tmp13_ = NULL;
@@ -21688,17 +21689,17 @@ static void photo_internal_remove_all_transformations (Photo* self, gboolean not
 				_tmp17_->orientation = _tmp19_;
 #line 2819 "/home/jens/Source/shotwell/src/Photo.vala"
 				is_altered = TRUE;
-#line 21690 "Photo.c"
+#line 21691 "Photo.c"
 			}
 		}
-		__finally357:
+		__finally370:
 		{
 			PhotoRow* _tmp20_ = NULL;
 #line 2808 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp20_ = self->row;
 #line 2808 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21700 "Photo.c"
+#line 21701 "Photo.c"
 		}
 #line 2808 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -21708,28 +21709,28 @@ static void photo_internal_remove_all_transformations (Photo* self, gboolean not
 			g_clear_error (&_inner_error_);
 #line 2808 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 21710 "Photo.c"
+#line 21711 "Photo.c"
 		}
 	}
 #line 2823 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp22_ = is_altered;
 #line 2823 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp22_) {
-#line 21717 "Photo.c"
+#line 21718 "Photo.c"
 		gboolean _tmp23_ = FALSE;
 #line 2823 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp23_ = notify;
 #line 2823 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp21_ = _tmp23_;
-#line 21723 "Photo.c"
+#line 21724 "Photo.c"
 	} else {
 #line 2823 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp21_ = FALSE;
-#line 21727 "Photo.c"
+#line 21728 "Photo.c"
 	}
 #line 2823 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp21_) {
-#line 21731 "Photo.c"
+#line 21732 "Photo.c"
 		Alteration* _tmp24_ = NULL;
 		Alteration* _tmp25_ = NULL;
 #line 2824 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21740,7 +21741,7 @@ static void photo_internal_remove_all_transformations (Photo* self, gboolean not
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp25_);
 #line 2824 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp25_);
-#line 21742 "Photo.c"
+#line 21743 "Photo.c"
 	}
 }
 
@@ -21750,14 +21751,14 @@ Orientation photo_get_original_orientation (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 2827 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), 0);
-#line 21752 "Photo.c"
+#line 21753 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2828 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2828 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 21759 "Photo.c"
+#line 21760 "Photo.c"
 		{
 			BackingPhotoRow* _tmp1_ = NULL;
 			Orientation _tmp2_ = 0;
@@ -21767,27 +21768,27 @@ Orientation photo_get_original_orientation (Photo* self) {
 			_tmp2_ = _tmp1_->original_orientation;
 #line 2829 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_;
-#line 21769 "Photo.c"
+#line 21770 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 2828 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 2828 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21776 "Photo.c"
+#line 21777 "Photo.c"
 			}
 #line 2829 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 21780 "Photo.c"
+#line 21781 "Photo.c"
 		}
-		__finally358:
+		__finally371:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2828 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2828 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21789 "Photo.c"
+#line 21790 "Photo.c"
 		}
 #line 2828 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -21795,7 +21796,7 @@ Orientation photo_get_original_orientation (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2828 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0;
-#line 21797 "Photo.c"
+#line 21798 "Photo.c"
 	}
 }
 
@@ -21805,14 +21806,14 @@ Orientation photo_get_orientation (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 2833 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), 0);
-#line 21807 "Photo.c"
+#line 21808 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2834 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2834 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 21814 "Photo.c"
+#line 21815 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			Orientation _tmp2_ = 0;
@@ -21822,27 +21823,27 @@ Orientation photo_get_orientation (Photo* self) {
 			_tmp2_ = _tmp1_->orientation;
 #line 2835 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp2_;
-#line 21824 "Photo.c"
+#line 21825 "Photo.c"
 			{
 				PhotoRow* _tmp3_ = NULL;
 #line 2834 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_ = self->row;
 #line 2834 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21831 "Photo.c"
+#line 21832 "Photo.c"
 			}
 #line 2835 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 21835 "Photo.c"
+#line 21836 "Photo.c"
 		}
-		__finally359:
+		__finally372:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2834 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2834 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21844 "Photo.c"
+#line 21845 "Photo.c"
 		}
 #line 2834 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -21850,7 +21851,7 @@ Orientation photo_get_orientation (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 2834 "/home/jens/Source/shotwell/src/Photo.vala"
 		return 0;
-#line 21852 "Photo.c"
+#line 21853 "Photo.c"
 	}
 }
 
@@ -21864,14 +21865,14 @@ gboolean photo_set_orientation (Photo* self, Orientation orientation) {
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
 #line 2840 "/home/jens/Source/shotwell/src/Photo.vala"
 	committed = FALSE;
-#line 21866 "Photo.c"
+#line 21867 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2841 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2841 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 21873 "Photo.c"
+#line 21874 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			Orientation _tmp2_ = 0;
@@ -21884,7 +21885,7 @@ gboolean photo_set_orientation (Photo* self, Orientation orientation) {
 			_tmp3_ = orientation;
 #line 2842 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != _tmp3_) {
-#line 21886 "Photo.c"
+#line 21887 "Photo.c"
 				PhotoTable* _tmp4_ = NULL;
 				PhotoTable* _tmp5_ = NULL;
 				PhotoRow* _tmp6_ = NULL;
@@ -21912,7 +21913,7 @@ gboolean photo_set_orientation (Photo* self, Orientation orientation) {
 				_tmp10_ = committed;
 #line 2844 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp10_) {
-#line 21914 "Photo.c"
+#line 21915 "Photo.c"
 					PhotoRow* _tmp11_ = NULL;
 					Orientation _tmp12_ = 0;
 #line 2845 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21921,18 +21922,18 @@ gboolean photo_set_orientation (Photo* self, Orientation orientation) {
 					_tmp12_ = orientation;
 #line 2845 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp11_->orientation = _tmp12_;
-#line 21923 "Photo.c"
+#line 21924 "Photo.c"
 				}
 			}
 		}
-		__finally360:
+		__finally373:
 		{
 			PhotoRow* _tmp13_ = NULL;
 #line 2841 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp13_ = self->row;
 #line 2841 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 21934 "Photo.c"
+#line 21935 "Photo.c"
 		}
 #line 2841 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -21942,14 +21943,14 @@ gboolean photo_set_orientation (Photo* self, Orientation orientation) {
 			g_clear_error (&_inner_error_);
 #line 2841 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 21944 "Photo.c"
+#line 21945 "Photo.c"
 		}
 	}
 #line 2849 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp14_ = committed;
 #line 2849 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp14_) {
-#line 21951 "Photo.c"
+#line 21952 "Photo.c"
 		Alteration* _tmp15_ = NULL;
 		Alteration* _tmp16_ = NULL;
 #line 2850 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21960,13 +21961,13 @@ gboolean photo_set_orientation (Photo* self, Orientation orientation) {
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp16_);
 #line 2850 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp16_);
-#line 21962 "Photo.c"
+#line 21963 "Photo.c"
 	}
 #line 2852 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = committed;
 #line 2852 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 21968 "Photo.c"
+#line 21969 "Photo.c"
 }
 
 
@@ -21981,7 +21982,7 @@ gboolean photo_check_can_rotate (Photo* self) {
 	result = _tmp0_;
 #line 2856 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 21983 "Photo.c"
+#line 21984 "Photo.c"
 }
 
 
@@ -21993,7 +21994,7 @@ static void photo_real_rotate (Photo* self, Rotation rotation) {
 		_tmp0_ = self->row;
 #line 2860 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 21995 "Photo.c"
+#line 21996 "Photo.c"
 		{
 			Orientation _tmp1_ = 0;
 			Rotation _tmp2_ = 0;
@@ -22006,16 +22007,16 @@ static void photo_real_rotate (Photo* self, Rotation rotation) {
 			_tmp3_ = orientation_perform (_tmp1_, _tmp2_);
 #line 2861 "/home/jens/Source/shotwell/src/Photo.vala"
 			photo_set_orientation (self, _tmp3_);
-#line 22008 "Photo.c"
+#line 22009 "Photo.c"
 		}
-		__finally361:
+		__finally374:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2860 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 2860 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 22017 "Photo.c"
+#line 22018 "Photo.c"
 		}
 #line 2860 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -22025,7 +22026,7 @@ static void photo_real_rotate (Photo* self, Rotation rotation) {
 			g_clear_error (&_inner_error_);
 #line 2860 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 22027 "Photo.c"
+#line 22028 "Photo.c"
 		}
 	}
 }
@@ -22036,7 +22037,7 @@ void photo_rotate (Photo* self, Rotation rotation) {
 	g_return_if_fail (IS_PHOTO (self));
 #line 2859 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_GET_CLASS (self)->rotate (self, rotation);
-#line 22038 "Photo.c"
+#line 22039 "Photo.c"
 }
 
 
@@ -22047,14 +22048,14 @@ static gboolean photo_has_transformation (Photo* self, const gchar* name) {
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
 #line 2865 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (name != NULL, FALSE);
-#line 22049 "Photo.c"
+#line 22050 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2866 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2866 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 22056 "Photo.c"
+#line 22057 "Photo.c"
 		{
 			gboolean _tmp1_ = FALSE;
 			PhotoRow* _tmp2_ = NULL;
@@ -22065,7 +22066,7 @@ static gboolean photo_has_transformation (Photo* self, const gchar* name) {
 			_tmp3_ = _tmp2_->transformations;
 #line 2867 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp3_ != NULL) {
-#line 22067 "Photo.c"
+#line 22068 "Photo.c"
 				PhotoRow* _tmp4_ = NULL;
 				GeeHashMap* _tmp5_ = NULL;
 				const gchar* _tmp6_ = NULL;
@@ -22080,35 +22081,35 @@ static gboolean photo_has_transformation (Photo* self, const gchar* name) {
 				_tmp7_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp6_);
 #line 2867 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = _tmp7_;
-#line 22082 "Photo.c"
+#line 22083 "Photo.c"
 			} else {
 #line 2867 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = FALSE;
-#line 22086 "Photo.c"
+#line 22087 "Photo.c"
 			}
 #line 2867 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp1_;
-#line 22090 "Photo.c"
+#line 22091 "Photo.c"
 			{
 				PhotoRow* _tmp8_ = NULL;
 #line 2866 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp8_ = self->row;
 #line 2866 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 22097 "Photo.c"
+#line 22098 "Photo.c"
 			}
 #line 2867 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 22101 "Photo.c"
+#line 22102 "Photo.c"
 		}
-		__finally362:
+		__finally375:
 		{
 			PhotoRow* _tmp9_ = NULL;
 #line 2866 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp9_ = self->row;
 #line 2866 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 22110 "Photo.c"
+#line 22111 "Photo.c"
 		}
 #line 2866 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -22116,7 +22117,7 @@ static gboolean photo_has_transformation (Photo* self, const gchar* name) {
 		g_clear_error (&_inner_error_);
 #line 2866 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 22118 "Photo.c"
+#line 22119 "Photo.c"
 	}
 }
 
@@ -22131,14 +22132,14 @@ static KeyValueMap* photo_get_transformation (Photo* self, const gchar* name) {
 	g_return_val_if_fail (name != NULL, NULL);
 #line 2875 "/home/jens/Source/shotwell/src/Photo.vala"
 	map = NULL;
-#line 22133 "Photo.c"
+#line 22134 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2876 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2876 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 22140 "Photo.c"
+#line 22141 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			GeeHashMap* _tmp2_ = NULL;
@@ -22148,7 +22149,7 @@ static KeyValueMap* photo_get_transformation (Photo* self, const gchar* name) {
 			_tmp2_ = _tmp1_->transformations;
 #line 2877 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != NULL) {
-#line 22150 "Photo.c"
+#line 22151 "Photo.c"
 				PhotoRow* _tmp3_ = NULL;
 				GeeHashMap* _tmp4_ = NULL;
 				const gchar* _tmp5_ = NULL;
@@ -22170,7 +22171,7 @@ static KeyValueMap* photo_get_transformation (Photo* self, const gchar* name) {
 				_tmp7_ = map;
 #line 2879 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp7_ != NULL) {
-#line 22172 "Photo.c"
+#line 22173 "Photo.c"
 					KeyValueMap* _tmp8_ = NULL;
 					KeyValueMap* _tmp9_ = NULL;
 #line 2880 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -22181,18 +22182,18 @@ static KeyValueMap* photo_get_transformation (Photo* self, const gchar* name) {
 					_key_value_map_unref0 (map);
 #line 2880 "/home/jens/Source/shotwell/src/Photo.vala"
 					map = _tmp9_;
-#line 22183 "Photo.c"
+#line 22184 "Photo.c"
 				}
 			}
 		}
-		__finally363:
+		__finally376:
 		{
 			PhotoRow* _tmp10_ = NULL;
 #line 2876 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp10_ = self->row;
 #line 2876 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 22194 "Photo.c"
+#line 22195 "Photo.c"
 		}
 #line 2876 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -22204,14 +22205,14 @@ static KeyValueMap* photo_get_transformation (Photo* self, const gchar* name) {
 			g_clear_error (&_inner_error_);
 #line 2876 "/home/jens/Source/shotwell/src/Photo.vala"
 			return NULL;
-#line 22206 "Photo.c"
+#line 22207 "Photo.c"
 		}
 	}
 #line 2884 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = map;
 #line 2884 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 22213 "Photo.c"
+#line 22214 "Photo.c"
 }
 
 
@@ -22222,14 +22223,14 @@ static gboolean photo_set_transformation (Photo* self, KeyValueMap* trans) {
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
 #line 2887 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_KEY_VALUE_MAP (trans), FALSE);
-#line 22224 "Photo.c"
+#line 22225 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2888 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2888 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 22231 "Photo.c"
+#line 22232 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			GeeHashMap* _tmp2_ = NULL;
@@ -22252,7 +22253,7 @@ static gboolean photo_set_transformation (Photo* self, KeyValueMap* trans) {
 			_tmp2_ = _tmp1_->transformations;
 #line 2889 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ == NULL) {
-#line 22254 "Photo.c"
+#line 22255 "Photo.c"
 				PhotoRow* _tmp3_ = NULL;
 				GeeHashMap* _tmp4_ = NULL;
 #line 2890 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -22263,7 +22264,7 @@ static gboolean photo_set_transformation (Photo* self, KeyValueMap* trans) {
 				_g_object_unref0 (_tmp3_->transformations);
 #line 2890 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp3_->transformations = _tmp4_;
-#line 22265 "Photo.c"
+#line 22266 "Photo.c"
 			}
 #line 2892 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->row;
@@ -22299,27 +22300,27 @@ static gboolean photo_set_transformation (Photo* self, KeyValueMap* trans) {
 			_database_table_unref0 (_tmp12_);
 #line 2894 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp17_;
-#line 22301 "Photo.c"
+#line 22302 "Photo.c"
 			{
 				PhotoRow* _tmp18_ = NULL;
 #line 2888 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp18_ = self->row;
 #line 2888 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 22308 "Photo.c"
+#line 22309 "Photo.c"
 			}
 #line 2894 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 22312 "Photo.c"
+#line 22313 "Photo.c"
 		}
-		__finally364:
+		__finally377:
 		{
 			PhotoRow* _tmp19_ = NULL;
 #line 2888 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp19_ = self->row;
 #line 2888 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 22321 "Photo.c"
+#line 22322 "Photo.c"
 		}
 #line 2888 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -22327,7 +22328,7 @@ static gboolean photo_set_transformation (Photo* self, KeyValueMap* trans) {
 		g_clear_error (&_inner_error_);
 #line 2888 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 22329 "Photo.c"
+#line 22330 "Photo.c"
 	}
 }
 
@@ -22343,14 +22344,14 @@ static gboolean photo_remove_transformation (Photo* self, const gchar* name) {
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
 #line 2898 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (name != NULL, FALSE);
-#line 22345 "Photo.c"
+#line 22346 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 2900 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 2900 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 22352 "Photo.c"
+#line 22353 "Photo.c"
 		{
 			PhotoRow* _tmp1_ = NULL;
 			GeeHashMap* _tmp2_ = NULL;
@@ -22366,7 +22367,7 @@ static gboolean photo_remove_transformation (Photo* self, const gchar* name) {
 			_tmp2_ = _tmp1_->transformations;
 #line 2901 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != NULL) {
-#line 22368 "Photo.c"
+#line 22369 "Photo.c"
 				PhotoRow* _tmp3_ = NULL;
 				GeeHashMap* _tmp4_ = NULL;
 				const gchar* _tmp5_ = NULL;
@@ -22395,7 +22396,7 @@ static gboolean photo_remove_transformation (Photo* self, const gchar* name) {
 				_tmp10_ = _tmp9_;
 #line 2903 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp10_ == 0) {
-#line 22397 "Photo.c"
+#line 22398 "Photo.c"
 					PhotoRow* _tmp11_ = NULL;
 #line 2904 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp11_ = self->row;
@@ -22403,12 +22404,12 @@ static gboolean photo_remove_transformation (Photo* self, const gchar* name) {
 					_g_object_unref0 (_tmp11_->transformations);
 #line 2904 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp11_->transformations = NULL;
-#line 22405 "Photo.c"
+#line 22406 "Photo.c"
 				}
 			} else {
 #line 2906 "/home/jens/Source/shotwell/src/Photo.vala"
 				altered_cache = FALSE;
-#line 22410 "Photo.c"
+#line 22411 "Photo.c"
 			}
 #line 2909 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp12_ = photo_table_get_instance ();
@@ -22426,16 +22427,16 @@ static gboolean photo_remove_transformation (Photo* self, const gchar* name) {
 			altered_persistent = _tmp17_;
 #line 2909 "/home/jens/Source/shotwell/src/Photo.vala"
 			_database_table_unref0 (_tmp13_);
-#line 22428 "Photo.c"
+#line 22429 "Photo.c"
 		}
-		__finally365:
+		__finally378:
 		{
 			PhotoRow* _tmp18_ = NULL;
 #line 2900 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp18_ = self->row;
 #line 2900 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 22437 "Photo.c"
+#line 22438 "Photo.c"
 		}
 #line 2900 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -22445,7 +22446,7 @@ static gboolean photo_remove_transformation (Photo* self, const gchar* name) {
 			g_clear_error (&_inner_error_);
 #line 2900 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 22447 "Photo.c"
+#line 22448 "Photo.c"
 		}
 	}
 #line 2913 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -22454,17 +22455,17 @@ static gboolean photo_remove_transformation (Photo* self, const gchar* name) {
 	if (_tmp20_) {
 #line 2913 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp19_ = TRUE;
-#line 22456 "Photo.c"
+#line 22457 "Photo.c"
 	} else {
 #line 2913 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp19_ = altered_persistent;
-#line 22460 "Photo.c"
+#line 22461 "Photo.c"
 	}
 #line 2913 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp19_;
 #line 2913 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 22466 "Photo.c"
+#line 22467 "Photo.c"
 }
 
 
@@ -22479,7 +22480,7 @@ gboolean photo_has_crop (Photo* self) {
 	result = _tmp0_;
 #line 2917 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 22481 "Photo.c"
+#line 22482 "Photo.c"
 }
 
 
@@ -22529,11 +22530,11 @@ gboolean photo_get_raw_crop (Photo* self, Box* crop) {
 		if (crop) {
 #line 2926 "/home/jens/Source/shotwell/src/Photo.vala"
 			*crop = _vala_crop;
-#line 22531 "Photo.c"
+#line 22532 "Photo.c"
 		}
 #line 2926 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 22535 "Photo.c"
+#line 22536 "Photo.c"
 	}
 #line 2928 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = map;
@@ -22565,40 +22566,40 @@ gboolean photo_get_raw_crop (Photo* self, Box* crop) {
 	if (_tmp13_ == -1) {
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp12_ = TRUE;
-#line 22567 "Photo.c"
+#line 22568 "Photo.c"
 	} else {
 		gint _tmp14_ = 0;
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp14_ = top;
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp12_ = _tmp14_ == -1;
-#line 22574 "Photo.c"
+#line 22575 "Photo.c"
 	}
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp12_) {
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp11_ = TRUE;
-#line 22580 "Photo.c"
+#line 22581 "Photo.c"
 	} else {
 		gint _tmp15_ = 0;
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp15_ = right;
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp11_ = _tmp15_ == -1;
-#line 22587 "Photo.c"
+#line 22588 "Photo.c"
 	}
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp11_) {
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp10_ = TRUE;
-#line 22593 "Photo.c"
+#line 22594 "Photo.c"
 	} else {
 		gint _tmp16_ = 0;
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp16_ = bottom;
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp10_ = _tmp16_ == -1;
-#line 22600 "Photo.c"
+#line 22601 "Photo.c"
 	}
 #line 2933 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp10_) {
@@ -22610,11 +22611,11 @@ gboolean photo_get_raw_crop (Photo* self, Box* crop) {
 		if (crop) {
 #line 2934 "/home/jens/Source/shotwell/src/Photo.vala"
 			*crop = _vala_crop;
-#line 22612 "Photo.c"
+#line 22613 "Photo.c"
 		}
 #line 2934 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 22616 "Photo.c"
+#line 22617 "Photo.c"
 	}
 #line 2936 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp17_ = left;
@@ -22634,11 +22635,11 @@ gboolean photo_get_raw_crop (Photo* self, Box* crop) {
 	if (crop) {
 #line 2938 "/home/jens/Source/shotwell/src/Photo.vala"
 		*crop = _vala_crop;
-#line 22636 "Photo.c"
+#line 22637 "Photo.c"
 	}
 #line 2938 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 22640 "Photo.c"
+#line 22641 "Photo.c"
 }
 
 
@@ -22705,7 +22706,7 @@ static void photo_set_raw_crop (Photo* self, Box* crop) {
 	_tmp14_ = photo_set_transformation (self, _tmp13_);
 #line 2949 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp14_) {
-#line 22707 "Photo.c"
+#line 22708 "Photo.c"
 		Alteration* _tmp15_ = NULL;
 		Alteration* _tmp16_ = NULL;
 #line 2950 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -22716,11 +22717,11 @@ static void photo_set_raw_crop (Photo* self, Box* crop) {
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp16_);
 #line 2950 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp16_);
-#line 22718 "Photo.c"
+#line 22719 "Photo.c"
 	}
 #line 2942 "/home/jens/Source/shotwell/src/Photo.vala"
 	_key_value_map_unref0 (map);
-#line 22722 "Photo.c"
+#line 22723 "Photo.c"
 }
 
 
@@ -22752,11 +22753,11 @@ static gboolean photo_get_raw_straighten (Photo* self, gdouble* angle) {
 		if (angle) {
 #line 2958 "/home/jens/Source/shotwell/src/Photo.vala"
 			*angle = _vala_angle;
-#line 22754 "Photo.c"
+#line 22755 "Photo.c"
 		}
 #line 2958 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 22758 "Photo.c"
+#line 22759 "Photo.c"
 	}
 #line 2961 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = map;
@@ -22772,11 +22773,11 @@ static gboolean photo_get_raw_straighten (Photo* self, gdouble* angle) {
 	if (angle) {
 #line 2963 "/home/jens/Source/shotwell/src/Photo.vala"
 		*angle = _vala_angle;
-#line 22774 "Photo.c"
+#line 22775 "Photo.c"
 	}
 #line 2963 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 22778 "Photo.c"
+#line 22779 "Photo.c"
 }
 
 
@@ -22805,7 +22806,7 @@ static void photo_set_raw_straighten (Photo* self, gdouble theta) {
 	_tmp4_ = photo_set_transformation (self, _tmp3_);
 #line 2970 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp4_) {
-#line 22807 "Photo.c"
+#line 22808 "Photo.c"
 		Alteration* _tmp5_ = NULL;
 		Alteration* _tmp6_ = NULL;
 #line 2971 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -22816,11 +22817,11 @@ static void photo_set_raw_straighten (Photo* self, gdouble theta) {
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp6_);
 #line 2971 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp6_);
-#line 22818 "Photo.c"
+#line 22819 "Photo.c"
 	}
 #line 2966 "/home/jens/Source/shotwell/src/Photo.vala"
 	_key_value_map_unref0 (map);
-#line 22822 "Photo.c"
+#line 22823 "Photo.c"
 }
 
 
@@ -22852,7 +22853,7 @@ static EditingToolsRedeyeInstance* photo_get_raw_redeye_instances (Photo* self, 
 	_tmp1_ = map;
 #line 2978 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_ == NULL) {
-#line 22854 "Photo.c"
+#line 22855 "Photo.c"
 		EditingToolsRedeyeInstance* _tmp2_ = NULL;
 		EditingToolsRedeyeInstance* _tmp3_ = NULL;
 		gint _tmp3__length1 = 0;
@@ -22866,7 +22867,7 @@ static EditingToolsRedeyeInstance* photo_get_raw_redeye_instances (Photo* self, 
 		if (result_length1) {
 #line 2979 "/home/jens/Source/shotwell/src/Photo.vala"
 			*result_length1 = _tmp3__length1;
-#line 22868 "Photo.c"
+#line 22869 "Photo.c"
 		}
 #line 2979 "/home/jens/Source/shotwell/src/Photo.vala"
 		result = _tmp3_;
@@ -22874,7 +22875,7 @@ static EditingToolsRedeyeInstance* photo_get_raw_redeye_instances (Photo* self, 
 		_key_value_map_unref0 (map);
 #line 2979 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 22876 "Photo.c"
+#line 22877 "Photo.c"
 	}
 #line 2981 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = map;
@@ -22904,19 +22905,19 @@ static EditingToolsRedeyeInstance* photo_get_raw_redeye_instances (Photo* self, 
 	default_point.x = -1;
 #line 2988 "/home/jens/Source/shotwell/src/Photo.vala"
 	default_point.y = -1;
-#line 22906 "Photo.c"
+#line 22907 "Photo.c"
 	{
 		gint i = 0;
 #line 2990 "/home/jens/Source/shotwell/src/Photo.vala"
 		i = 0;
-#line 22911 "Photo.c"
+#line 22912 "Photo.c"
 		{
 			gboolean _tmp10_ = FALSE;
 #line 2990 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp10_ = TRUE;
 #line 2990 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 22918 "Photo.c"
+#line 22919 "Photo.c"
 				gint _tmp12_ = 0;
 				gint _tmp13_ = 0;
 				gchar* center_key = NULL;
@@ -22961,13 +22962,13 @@ static EditingToolsRedeyeInstance* photo_get_raw_redeye_instances (Photo* self, 
 				gint _tmp46_ = 0;
 #line 2990 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (!_tmp10_) {
-#line 22963 "Photo.c"
+#line 22964 "Photo.c"
 					gint _tmp11_ = 0;
 #line 2990 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp11_ = i;
 #line 2990 "/home/jens/Source/shotwell/src/Photo.vala"
 					i = _tmp11_ + 1;
-#line 22969 "Photo.c"
+#line 22970 "Photo.c"
 				}
 #line 2990 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp10_ = FALSE;
@@ -22979,7 +22980,7 @@ static EditingToolsRedeyeInstance* photo_get_raw_redeye_instances (Photo* self, 
 				if (!(_tmp12_ < _tmp13_)) {
 #line 2990 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 22981 "Photo.c"
+#line 22982 "Photo.c"
 				}
 #line 2991 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp14_ = i;
@@ -23075,7 +23076,7 @@ static EditingToolsRedeyeInstance* photo_get_raw_redeye_instances (Photo* self, 
 				_g_free0 (radius_key);
 #line 2990 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_free0 (center_key);
-#line 23077 "Photo.c"
+#line 23078 "Photo.c"
 			}
 		}
 	}
@@ -23087,7 +23088,7 @@ static EditingToolsRedeyeInstance* photo_get_raw_redeye_instances (Photo* self, 
 	if (result_length1) {
 #line 3002 "/home/jens/Source/shotwell/src/Photo.vala"
 		*result_length1 = _tmp47__length1;
-#line 23089 "Photo.c"
+#line 23090 "Photo.c"
 	}
 #line 3002 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp47_;
@@ -23095,7 +23096,7 @@ static EditingToolsRedeyeInstance* photo_get_raw_redeye_instances (Photo* self, 
 	_key_value_map_unref0 (map);
 #line 3002 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 23097 "Photo.c"
+#line 23098 "Photo.c"
 }
 
 
@@ -23110,7 +23111,7 @@ gboolean photo_has_redeye_transformations (Photo* self) {
 	result = _tmp0_;
 #line 3006 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 23112 "Photo.c"
+#line 23113 "Photo.c"
 }
 
 
@@ -23153,7 +23154,7 @@ void photo_add_redeye_instance (Photo* self, EditingToolsRedeyeInstance* redeye)
 	_tmp1_ = map;
 #line 3012 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_ == NULL) {
-#line 23155 "Photo.c"
+#line 23156 "Photo.c"
 		KeyValueMap* _tmp2_ = NULL;
 		KeyValueMap* _tmp3_ = NULL;
 #line 3013 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -23166,7 +23167,7 @@ void photo_add_redeye_instance (Photo* self, EditingToolsRedeyeInstance* redeye)
 		_tmp3_ = map;
 #line 3014 "/home/jens/Source/shotwell/src/Photo.vala"
 		key_value_map_set_int (_tmp3_, "num_points", 0);
-#line 23168 "Photo.c"
+#line 23169 "Photo.c"
 	}
 #line 3017 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = map;
@@ -23226,7 +23227,7 @@ void photo_add_redeye_instance (Photo* self, EditingToolsRedeyeInstance* redeye)
 	_tmp23_ = photo_set_transformation (self, _tmp22_);
 #line 3030 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp23_) {
-#line 23228 "Photo.c"
+#line 23229 "Photo.c"
 		Alteration* _tmp24_ = NULL;
 		Alteration* _tmp25_ = NULL;
 #line 3031 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -23237,7 +23238,7 @@ void photo_add_redeye_instance (Photo* self, EditingToolsRedeyeInstance* redeye)
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp25_);
 #line 3031 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp25_);
-#line 23239 "Photo.c"
+#line 23240 "Photo.c"
 	}
 #line 3010 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_free0 (center_key);
@@ -23245,7 +23246,7 @@ void photo_add_redeye_instance (Photo* self, EditingToolsRedeyeInstance* redeye)
 	_g_free0 (radius_key);
 #line 3010 "/home/jens/Source/shotwell/src/Photo.vala"
 	_key_value_map_unref0 (map);
-#line 23247 "Photo.c"
+#line 23248 "Photo.c"
 }
 
 
@@ -23258,14 +23259,14 @@ static gboolean photo_calculate_pixbuf_dimensions (Photo* self, Scaling* scaling
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
 #line 3045 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (scaling != NULL, FALSE);
-#line 23260 "Photo.c"
+#line 23261 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 3047 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 3047 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 23267 "Photo.c"
+#line 23268 "Photo.c"
 		{
 			Scaling _tmp1_ = {0};
 			PhotoException _tmp2_ = 0;
@@ -23284,39 +23285,39 @@ static gboolean photo_calculate_pixbuf_dimensions (Photo* self, Scaling* scaling
 			_vala_scaled_to_viewport = _tmp4_;
 #line 3049 "/home/jens/Source/shotwell/src/Photo.vala"
 			result = _tmp5_;
-#line 23286 "Photo.c"
+#line 23287 "Photo.c"
 			{
 				PhotoRow* _tmp6_ = NULL;
 #line 3047 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp6_ = self->row;
 #line 3047 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 23293 "Photo.c"
+#line 23294 "Photo.c"
 			}
 #line 3049 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (scaled_image) {
 #line 3049 "/home/jens/Source/shotwell/src/Photo.vala"
 				*scaled_image = _vala_scaled_image;
-#line 23299 "Photo.c"
+#line 23300 "Photo.c"
 			}
 #line 3049 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (scaled_to_viewport) {
 #line 3049 "/home/jens/Source/shotwell/src/Photo.vala"
 				*scaled_to_viewport = _vala_scaled_to_viewport;
-#line 23305 "Photo.c"
+#line 23306 "Photo.c"
 			}
 #line 3049 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 23309 "Photo.c"
+#line 23310 "Photo.c"
 		}
-		__finally366:
+		__finally379:
 		{
 			PhotoRow* _tmp7_ = NULL;
 #line 3047 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = self->row;
 #line 3047 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 23318 "Photo.c"
+#line 23319 "Photo.c"
 		}
 #line 3047 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -23324,19 +23325,19 @@ static gboolean photo_calculate_pixbuf_dimensions (Photo* self, Scaling* scaling
 		g_clear_error (&_inner_error_);
 #line 3047 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 23326 "Photo.c"
+#line 23327 "Photo.c"
 	}
 #line 3045 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (scaled_image) {
 #line 3045 "/home/jens/Source/shotwell/src/Photo.vala"
 		*scaled_image = _vala_scaled_image;
-#line 23332 "Photo.c"
+#line 23333 "Photo.c"
 	}
 #line 3045 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (scaled_to_viewport) {
 #line 3045 "/home/jens/Source/shotwell/src/Photo.vala"
 		*scaled_to_viewport = _vala_scaled_to_viewport;
-#line 23338 "Photo.c"
+#line 23339 "Photo.c"
 	}
 }
 
@@ -23372,7 +23373,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 	_tmp1_ = scaling_is_unscaled (scaling);
 #line 3059 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_) {
-#line 23374 "Photo.c"
+#line 23375 "Photo.c"
 		Dimensions _tmp2_ = {0};
 		Dimensions _tmp3_ = {0};
 #line 3060 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -23389,17 +23390,17 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 		if (scaled_image) {
 #line 3063 "/home/jens/Source/shotwell/src/Photo.vala"
 			*scaled_image = _vala_scaled_image;
-#line 23391 "Photo.c"
+#line 23392 "Photo.c"
 		}
 #line 3063 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (scaled_to_viewport) {
 #line 3063 "/home/jens/Source/shotwell/src/Photo.vala"
 			*scaled_to_viewport = _vala_scaled_to_viewport;
-#line 23397 "Photo.c"
+#line 23398 "Photo.c"
 		}
 #line 3063 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 23401 "Photo.c"
+#line 23402 "Photo.c"
 	}
 #line 3066 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = photo_get_orientation (self);
@@ -23415,7 +23416,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 	_tmp6_ = photo_exception_allows (_tmp5_, PHOTO_EXCEPTION_CROP);
 #line 3074 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp6_) {
-#line 23417 "Photo.c"
+#line 23418 "Photo.c"
 		Box crop = {0};
 		Box _tmp7_ = {0};
 		gboolean _tmp8_ = FALSE;
@@ -23425,7 +23426,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 		crop = _tmp7_;
 #line 3076 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp8_) {
-#line 23427 "Photo.c"
+#line 23428 "Photo.c"
 			Dimensions rotated_raw = {0};
 			Dimensions _tmp9_ = {0};
 			PhotoException _tmp10_ = 0;
@@ -23453,7 +23454,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 			_tmp11_ = photo_exception_allows (_tmp10_, PHOTO_EXCEPTION_ORIENTATION);
 #line 3080 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp11_) {
-#line 23455 "Photo.c"
+#line 23456 "Photo.c"
 				Orientation _tmp12_ = 0;
 				Dimensions _tmp13_ = {0};
 				Box _tmp14_ = {0};
@@ -23479,7 +23480,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 				orientation_rotate_dimensions (_tmp16_, &_tmp17_, &_tmp18_);
 #line 3082 "/home/jens/Source/shotwell/src/Photo.vala"
 				rotated_raw = _tmp18_;
-#line 23481 "Photo.c"
+#line 23482 "Photo.c"
 			}
 #line 3086 "/home/jens/Source/shotwell/src/Photo.vala"
 			box_get_dimensions (&crop, &_tmp19_);
@@ -23499,7 +23500,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 			_tmp25_ = box_get_width (&scaled_crop);
 #line 3092 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp24_ <= _tmp25_) {
-#line 23501 "Photo.c"
+#line 23502 "Photo.c"
 				gint _tmp26_ = 0;
 				gint _tmp27_ = 0;
 #line 3093 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -23508,15 +23509,15 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 				_tmp27_ = box_get_height (&scaled_crop);
 #line 3093 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp23_ = _tmp26_ <= _tmp27_;
-#line 23510 "Photo.c"
+#line 23511 "Photo.c"
 			} else {
 #line 3092 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp23_ = FALSE;
-#line 23514 "Photo.c"
+#line 23515 "Photo.c"
 			}
 #line 3092 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp23_) {
-#line 23518 "Photo.c"
+#line 23519 "Photo.c"
 				Dimensions _tmp28_ = {0};
 				Dimensions _tmp29_ = {0};
 #line 3094 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -23533,17 +23534,17 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 				if (scaled_image) {
 #line 3097 "/home/jens/Source/shotwell/src/Photo.vala"
 					*scaled_image = _vala_scaled_image;
-#line 23535 "Photo.c"
+#line 23536 "Photo.c"
 				}
 #line 3097 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (scaled_to_viewport) {
 #line 3097 "/home/jens/Source/shotwell/src/Photo.vala"
 					*scaled_to_viewport = _vala_scaled_to_viewport;
-#line 23541 "Photo.c"
+#line 23542 "Photo.c"
 				}
 #line 3097 "/home/jens/Source/shotwell/src/Photo.vala"
 				return result;
-#line 23545 "Photo.c"
+#line 23546 "Photo.c"
 			}
 #line 3102 "/home/jens/Source/shotwell/src/Photo.vala"
 			box_get_dimensions (&crop, &_tmp30_);
@@ -23559,7 +23560,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 			_tmp34_ = photo_exception_allows (_tmp33_, PHOTO_EXCEPTION_ORIENTATION);
 #line 3106 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp34_) {
-#line 23561 "Photo.c"
+#line 23562 "Photo.c"
 				Orientation _tmp35_ = 0;
 				Dimensions _tmp36_ = {0};
 				Dimensions _tmp37_ = {0};
@@ -23571,7 +23572,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 				orientation_derotate_dimensions (_tmp35_, &_tmp36_, &_tmp37_);
 #line 3107 "/home/jens/Source/shotwell/src/Photo.vala"
 				_vala_scaled_image = _tmp37_;
-#line 23573 "Photo.c"
+#line 23574 "Photo.c"
 			}
 		}
 	}
@@ -23579,7 +23580,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 	_tmp38_ = dimensions_has_area (&_vala_scaled_image);
 #line 3112 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp38_) {
-#line 23581 "Photo.c"
+#line 23582 "Photo.c"
 		Dimensions rotated_raw = {0};
 		Dimensions _tmp39_ = {0};
 		PhotoException _tmp40_ = 0;
@@ -23599,7 +23600,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 		_tmp41_ = photo_exception_allows (_tmp40_, PHOTO_EXCEPTION_ORIENTATION);
 #line 3115 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp41_) {
-#line 23601 "Photo.c"
+#line 23602 "Photo.c"
 			Orientation _tmp42_ = 0;
 			Dimensions _tmp43_ = {0};
 			Dimensions _tmp44_ = {0};
@@ -23611,7 +23612,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 			orientation_rotate_dimensions (_tmp42_, &_tmp43_, &_tmp44_);
 #line 3116 "/home/jens/Source/shotwell/src/Photo.vala"
 			rotated_raw = _tmp44_;
-#line 23613 "Photo.c"
+#line 23614 "Photo.c"
 		}
 #line 3118 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp45_ = rotated_raw;
@@ -23629,7 +23630,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 		_tmp49_ = photo_exception_allows (_tmp48_, PHOTO_EXCEPTION_ORIENTATION);
 #line 3122 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp49_) {
-#line 23631 "Photo.c"
+#line 23632 "Photo.c"
 			Orientation _tmp50_ = 0;
 			Dimensions _tmp51_ = {0};
 			Dimensions _tmp52_ = {0};
@@ -23641,7 +23642,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 			orientation_derotate_dimensions (_tmp50_, &_tmp51_, &_tmp52_);
 #line 3123 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_scaled_image = _tmp52_;
-#line 23643 "Photo.c"
+#line 23644 "Photo.c"
 		}
 	}
 #line 3127 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -23654,7 +23655,7 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 	_tmp57_ = _tmp56_.width;
 #line 3127 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp55_ >= _tmp57_) {
-#line 23656 "Photo.c"
+#line 23657 "Photo.c"
 		Dimensions _tmp58_ = {0};
 		gint _tmp59_ = 0;
 		Dimensions _tmp60_ = {0};
@@ -23669,15 +23670,15 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 		_tmp61_ = _tmp60_.height;
 #line 3127 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp53_ = _tmp59_ >= _tmp61_;
-#line 23671 "Photo.c"
+#line 23672 "Photo.c"
 	} else {
 #line 3127 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp53_ = FALSE;
-#line 23675 "Photo.c"
+#line 23676 "Photo.c"
 	}
 #line 3127 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp53_) {
-#line 23679 "Photo.c"
+#line 23680 "Photo.c"
 		Dimensions _tmp62_ = {0};
 #line 3128 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp62_ = raw;
@@ -23689,17 +23690,17 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 		if (scaled_image) {
 #line 3130 "/home/jens/Source/shotwell/src/Photo.vala"
 			*scaled_image = _vala_scaled_image;
-#line 23691 "Photo.c"
+#line 23692 "Photo.c"
 		}
 #line 3130 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (scaled_to_viewport) {
 #line 3130 "/home/jens/Source/shotwell/src/Photo.vala"
 			*scaled_to_viewport = _vala_scaled_to_viewport;
-#line 23697 "Photo.c"
+#line 23698 "Photo.c"
 		}
 #line 3130 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 23701 "Photo.c"
+#line 23702 "Photo.c"
 	}
 #line 3133 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp63_ = dimensions_has_area (&_vala_scaled_image);
@@ -23715,17 +23716,17 @@ static gboolean photo_locked_calculate_pixbuf_dimensions (Photo* self, Scaling* 
 	if (scaled_image) {
 #line 3136 "/home/jens/Source/shotwell/src/Photo.vala"
 		*scaled_image = _vala_scaled_image;
-#line 23717 "Photo.c"
+#line 23718 "Photo.c"
 	}
 #line 3136 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (scaled_to_viewport) {
 #line 3136 "/home/jens/Source/shotwell/src/Photo.vala"
 		*scaled_to_viewport = _vala_scaled_to_viewport;
-#line 23723 "Photo.c"
+#line 23724 "Photo.c"
 	}
 #line 3136 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 23727 "Photo.c"
+#line 23728 "Photo.c"
 }
 
 
@@ -23767,7 +23768,7 @@ static GdkPixbuf* photo_load_raw_pixbuf (Photo* self, Scaling* scaling, PhotoExc
 	_tmp2_ = scaling_is_unscaled (scaling);
 #line 3148 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_) {
-#line 23769 "Photo.c"
+#line 23770 "Photo.c"
 		GdkPixbuf* _tmp3_ = NULL;
 		PhotoFileReader* _tmp4_ = NULL;
 		GdkPixbuf* _tmp5_ = NULL;
@@ -23786,7 +23787,7 @@ static GdkPixbuf* photo_load_raw_pixbuf (Photo* self, Scaling* scaling, PhotoExc
 			_photo_file_adapter_unref0 (loader);
 #line 3153 "/home/jens/Source/shotwell/src/Photo.vala"
 			return NULL;
-#line 23788 "Photo.c"
+#line 23789 "Photo.c"
 		}
 #line 3153 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = _tmp3_;
@@ -23800,7 +23801,7 @@ static GdkPixbuf* photo_load_raw_pixbuf (Photo* self, Scaling* scaling, PhotoExc
 		_photo_file_adapter_unref0 (loader);
 #line 3153 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 23802 "Photo.c"
+#line 23803 "Photo.c"
 	}
 #line 3158 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp7_ = *scaling;
@@ -23818,7 +23819,7 @@ static GdkPixbuf* photo_load_raw_pixbuf (Photo* self, Scaling* scaling, PhotoExc
 	_tmp12_ = is_scaled;
 #line 3160 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp12_) {
-#line 23820 "Photo.c"
+#line 23821 "Photo.c"
 		GdkPixbuf* _tmp13_ = NULL;
 		PhotoFileReader* _tmp14_ = NULL;
 		GdkPixbuf* _tmp15_ = NULL;
@@ -23837,7 +23838,7 @@ static GdkPixbuf* photo_load_raw_pixbuf (Photo* self, Scaling* scaling, PhotoExc
 			_photo_file_adapter_unref0 (loader);
 #line 3165 "/home/jens/Source/shotwell/src/Photo.vala"
 			return NULL;
-#line 23839 "Photo.c"
+#line 23840 "Photo.c"
 		}
 #line 3165 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp16_ = _tmp13_;
@@ -23851,7 +23852,7 @@ static GdkPixbuf* photo_load_raw_pixbuf (Photo* self, Scaling* scaling, PhotoExc
 		_photo_file_adapter_unref0 (loader);
 #line 3165 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 23853 "Photo.c"
+#line 23854 "Photo.c"
 	}
 #line 3168 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp17_ = loader;
@@ -23871,7 +23872,7 @@ static GdkPixbuf* photo_load_raw_pixbuf (Photo* self, Scaling* scaling, PhotoExc
 		_photo_file_adapter_unref0 (loader);
 #line 3168 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 23873 "Photo.c"
+#line 23874 "Photo.c"
 	}
 #line 3176 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp21_ = pixbuf;
@@ -23887,7 +23888,7 @@ static GdkPixbuf* photo_load_raw_pixbuf (Photo* self, Scaling* scaling, PhotoExc
 	_photo_file_adapter_unref0 (loader);
 #line 3178 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 23889 "Photo.c"
+#line 23890 "Photo.c"
 }
 
 
@@ -23917,7 +23918,7 @@ GdkPixbuf* photo_get_master_pixbuf (Photo* self, Scaling* scaling, gboolean rota
 		g_propagate_error (error, _inner_error_);
 #line 3184 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 23919 "Photo.c"
+#line 23920 "Photo.c"
 	}
 #line 3184 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = _tmp0_;
@@ -23929,7 +23930,7 @@ GdkPixbuf* photo_get_master_pixbuf (Photo* self, Scaling* scaling, gboolean rota
 	_g_object_unref0 (_tmp0_);
 #line 3184 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 23931 "Photo.c"
+#line 23932 "Photo.c"
 }
 
 
@@ -23959,7 +23960,7 @@ GdkPixbuf* photo_get_unmodified_pixbuf (Photo* self, Scaling* scaling, gboolean 
 		g_propagate_error (error, _inner_error_);
 #line 3189 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 23961 "Photo.c"
+#line 23962 "Photo.c"
 	}
 #line 3189 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = _tmp0_;
@@ -23971,7 +23972,7 @@ GdkPixbuf* photo_get_unmodified_pixbuf (Photo* self, Scaling* scaling, gboolean 
 	_g_object_unref0 (_tmp0_);
 #line 3189 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 23973 "Photo.c"
+#line 23974 "Photo.c"
 }
 
 
@@ -23990,14 +23991,14 @@ static GdkPixbuf* photo_get_untransformed_pixbuf (Photo* self, Scaling* scaling,
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
 #line 3193 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (scaling != NULL, NULL);
-#line 23992 "Photo.c"
+#line 23993 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 3207 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 3207 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 23999 "Photo.c"
+#line 24000 "Photo.c"
 		{
 			Scaling _tmp1_ = {0};
 			Dimensions _tmp2_ = {0};
@@ -24015,16 +24016,16 @@ static GdkPixbuf* photo_get_untransformed_pixbuf (Photo* self, Scaling* scaling,
 			_tmp4_ = photo_get_original_orientation (self);
 #line 3210 "/home/jens/Source/shotwell/src/Photo.vala"
 			original_orientation = _tmp4_;
-#line 24017 "Photo.c"
+#line 24018 "Photo.c"
 		}
-		__finally367:
+		__finally380:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 3207 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = self->row;
 #line 3207 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 24026 "Photo.c"
+#line 24027 "Photo.c"
 		}
 #line 3207 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -24032,7 +24033,7 @@ static GdkPixbuf* photo_get_untransformed_pixbuf (Photo* self, Scaling* scaling,
 			g_propagate_error (error, _inner_error_);
 #line 3207 "/home/jens/Source/shotwell/src/Photo.vala"
 			return NULL;
-#line 24034 "Photo.c"
+#line 24035 "Photo.c"
 		}
 	}
 #line 3214 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24049,13 +24050,13 @@ static GdkPixbuf* photo_get_untransformed_pixbuf (Photo* self, Scaling* scaling,
 		g_propagate_error (error, _inner_error_);
 #line 3214 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 24051 "Photo.c"
+#line 24052 "Photo.c"
 	}
 #line 3220 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp9_ = rotate;
 #line 3220 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp9_) {
-#line 24057 "Photo.c"
+#line 24058 "Photo.c"
 		GdkPixbuf* _tmp10_ = NULL;
 		GdkPixbuf* _tmp11_ = NULL;
 #line 3221 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24066,13 +24067,13 @@ static GdkPixbuf* photo_get_untransformed_pixbuf (Photo* self, Scaling* scaling,
 		_g_object_unref0 (pixbuf);
 #line 3221 "/home/jens/Source/shotwell/src/Photo.vala"
 		pixbuf = _tmp11_;
-#line 24068 "Photo.c"
+#line 24069 "Photo.c"
 	}
 #line 3230 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = pixbuf;
 #line 3230 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 24074 "Photo.c"
+#line 24075 "Photo.c"
 }
 
 
@@ -24100,7 +24101,7 @@ static GdkPixbuf* photo_real_get_pixbuf (PhotoSource* base, Scaling* scaling, GE
 		g_propagate_error (error, _inner_error_);
 #line 3234 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 24102 "Photo.c"
+#line 24103 "Photo.c"
 	}
 #line 3234 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp3_ = _tmp0_;
@@ -24112,7 +24113,7 @@ static GdkPixbuf* photo_real_get_pixbuf (PhotoSource* base, Scaling* scaling, GE
 	_g_object_unref0 (_tmp0_);
 #line 3234 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 24114 "Photo.c"
+#line 24115 "Photo.c"
 }
 
 
@@ -24134,7 +24135,7 @@ static GdkPixbuf* photo_real_get_pixbuf (PhotoSource* base, Scaling* scaling, GE
 static gpointer _photo_cached_pixbuf_ref0 (gpointer self) {
 #line 3269 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? photo_cached_pixbuf_ref (self) : NULL;
-#line 24136 "Photo.c"
+#line 24137 "Photo.c"
 }
 
 
@@ -24143,7 +24144,7 @@ static gboolean _photo_trim_source_pixbuf_cache_gsource_func (gpointer self) {
 	result = photo_trim_source_pixbuf_cache ();
 #line 3321 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 24145 "Photo.c"
+#line 24146 "Photo.c"
 }
 
 
@@ -24152,14 +24153,14 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 	GError * _inner_error_ = NULL;
 #line 3252 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail ((locate == NULL) || IS_PHOTO (locate), NULL);
-#line 24154 "Photo.c"
+#line 24155 "Photo.c"
 	{
 		GeeLinkedList* _tmp0_ = NULL;
 #line 3253 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = photo_source_pixbuf_cache;
 #line 3253 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&__lock_photo_source_pixbuf_cache);
-#line 24161 "Photo.c"
+#line 24162 "Photo.c"
 		{
 			PhotoCachedPixbuf* found = NULL;
 			gdouble min_elapsed = 0.0;
@@ -24193,7 +24194,7 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 			iter = _tmp2_;
 #line 3261 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 24195 "Photo.c"
+#line 24196 "Photo.c"
 				GeeIterator* _tmp3_ = NULL;
 				gboolean _tmp4_ = FALSE;
 				PhotoCachedPixbuf* cached_pixbuf = NULL;
@@ -24214,7 +24215,7 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 				if (!_tmp4_) {
 #line 3261 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 24216 "Photo.c"
+#line 24217 "Photo.c"
 				}
 #line 3262 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp5_ = iter;
@@ -24236,7 +24237,7 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 				_tmp12_ = locate;
 #line 3266 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp12_ != NULL) {
-#line 24238 "Photo.c"
+#line 24239 "Photo.c"
 					PhotoCachedPixbuf* _tmp13_ = NULL;
 					Photo* _tmp14_ = NULL;
 					Photo* _tmp15_ = NULL;
@@ -24251,15 +24252,15 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 					_tmp16_ = data_source_equals (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_DATA_SOURCE, DataSource), G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, TYPE_DATA_SOURCE, DataSource));
 #line 3266 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp11_ = _tmp16_;
-#line 24253 "Photo.c"
+#line 24254 "Photo.c"
 				} else {
 #line 3266 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp11_ = FALSE;
-#line 24257 "Photo.c"
+#line 24258 "Photo.c"
 				}
 #line 3266 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp11_) {
-#line 24261 "Photo.c"
+#line 24262 "Photo.c"
 					GeeIterator* _tmp17_ = NULL;
 					PhotoCachedPixbuf* _tmp18_ = NULL;
 					PhotoCachedPixbuf* _tmp19_ = NULL;
@@ -24280,33 +24281,33 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 					_tmp20_ = count;
 #line 3272 "/home/jens/Source/shotwell/src/Photo.vala"
 					count = _tmp20_ + 1;
-#line 24282 "Photo.c"
+#line 24283 "Photo.c"
 				} else {
 					gdouble _tmp21_ = 0.0;
 #line 3273 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp21_ = elapsed;
 #line 3273 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_tmp21_ >= ((gdouble) PHOTO_SOURCE_PIXBUF_TIME_TO_LIVE_SEC)) {
-#line 24289 "Photo.c"
+#line 24290 "Photo.c"
 						GeeIterator* _tmp22_ = NULL;
 #line 3274 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp22_ = iter;
 #line 3274 "/home/jens/Source/shotwell/src/Photo.vala"
 						gee_iterator_remove (_tmp22_);
-#line 24295 "Photo.c"
+#line 24296 "Photo.c"
 					} else {
 						gint _tmp23_ = 0;
 #line 3275 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp23_ = count;
 #line 3275 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp23_ >= PHOTO_SOURCE_PIXBUF_MAX_LRU_COUNT) {
-#line 24302 "Photo.c"
+#line 24303 "Photo.c"
 							GeeIterator* _tmp24_ = NULL;
 #line 3276 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp24_ = iter;
 #line 3276 "/home/jens/Source/shotwell/src/Photo.vala"
 							gee_iterator_remove (_tmp24_);
-#line 24308 "Photo.c"
+#line 24309 "Photo.c"
 						} else {
 							gdouble _tmp25_ = 0.0;
 							gdouble _tmp26_ = 0.0;
@@ -24324,47 +24325,47 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 							_tmp28_ = count;
 #line 3281 "/home/jens/Source/shotwell/src/Photo.vala"
 							count = _tmp28_ + 1;
-#line 24326 "Photo.c"
+#line 24327 "Photo.c"
 						}
 					}
 				}
 #line 3261 "/home/jens/Source/shotwell/src/Photo.vala"
 				_photo_cached_pixbuf_unref0 (cached_pixbuf);
-#line 24332 "Photo.c"
+#line 24333 "Photo.c"
 			}
 #line 3286 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp31_ = found;
 #line 3286 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp31_ == NULL) {
-#line 24338 "Photo.c"
+#line 24339 "Photo.c"
 				Photo* _tmp32_ = NULL;
 #line 3286 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp32_ = locate;
 #line 3286 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp30_ = _tmp32_ != NULL;
-#line 24344 "Photo.c"
+#line 24345 "Photo.c"
 			} else {
 #line 3286 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp30_ = FALSE;
-#line 24348 "Photo.c"
+#line 24349 "Photo.c"
 			}
 #line 3286 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp30_) {
-#line 24352 "Photo.c"
+#line 24353 "Photo.c"
 				gboolean _tmp33_ = FALSE;
 #line 3286 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp33_ = keep;
 #line 3286 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp29_ = _tmp33_;
-#line 24358 "Photo.c"
+#line 24359 "Photo.c"
 			} else {
 #line 3286 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp29_ = FALSE;
-#line 24362 "Photo.c"
+#line 24363 "Photo.c"
 			}
 #line 3286 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp29_) {
-#line 24366 "Photo.c"
+#line 24367 "Photo.c"
 				GdkPixbuf* _tmp34_ = NULL;
 				Photo* _tmp35_ = NULL;
 				Scaling _tmp36_ = {0};
@@ -24385,8 +24386,8 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 					_g_object_unref0 (iter);
 #line 3288 "/home/jens/Source/shotwell/src/Photo.vala"
 					_photo_cached_pixbuf_unref0 (found);
-#line 24387 "Photo.c"
-					goto __finally368;
+#line 24388 "Photo.c"
+					goto __finally381;
 				}
 #line 3287 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp38_ = locate;
@@ -24398,14 +24399,14 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 				found = _tmp39_;
 #line 3286 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (_tmp34_);
-#line 24400 "Photo.c"
+#line 24401 "Photo.c"
 			} else {
 				PhotoCachedPixbuf* _tmp40_ = NULL;
 #line 3289 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp40_ = found;
 #line 3289 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp40_ != NULL) {
-#line 24407 "Photo.c"
+#line 24408 "Photo.c"
 					PhotoCachedPixbuf* _tmp41_ = NULL;
 					GTimer* _tmp42_ = NULL;
 #line 3291 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24414,28 +24415,28 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 					_tmp42_ = _tmp41_->last_touched;
 #line 3291 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_timer_start (_tmp42_);
-#line 24416 "Photo.c"
+#line 24417 "Photo.c"
 				}
 			}
 #line 3295 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp44_ = found;
 #line 3295 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp44_ != NULL) {
-#line 24423 "Photo.c"
+#line 24424 "Photo.c"
 				gboolean _tmp45_ = FALSE;
 #line 3295 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp45_ = keep;
 #line 3295 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp43_ = _tmp45_;
-#line 24429 "Photo.c"
+#line 24430 "Photo.c"
 			} else {
 #line 3295 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp43_ = FALSE;
-#line 24433 "Photo.c"
+#line 24434 "Photo.c"
 			}
 #line 3295 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp43_) {
-#line 24437 "Photo.c"
+#line 24438 "Photo.c"
 				GeeLinkedList* _tmp46_ = NULL;
 				PhotoCachedPixbuf* _tmp47_ = NULL;
 				PhotoCachedPixbuf* _tmp48_ = NULL;
@@ -24463,7 +24464,7 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 				min_elapsed = _tmp52_;
 #line 3305 "/home/jens/Source/shotwell/src/Photo.vala"
 				while (TRUE) {
-#line 24465 "Photo.c"
+#line 24466 "Photo.c"
 					GeeLinkedList* _tmp53_ = NULL;
 					gint _tmp54_ = 0;
 					gint _tmp55_ = 0;
@@ -24480,7 +24481,7 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 					if (!(_tmp55_ > PHOTO_SOURCE_PIXBUF_MAX_LRU_COUNT)) {
 #line 3305 "/home/jens/Source/shotwell/src/Photo.vala"
 						break;
-#line 24482 "Photo.c"
+#line 24483 "Photo.c"
 					}
 #line 3306 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp56_ = photo_source_pixbuf_cache;
@@ -24490,14 +24491,14 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 					_tmp58_ = (PhotoCachedPixbuf*) _tmp57_;
 #line 3306 "/home/jens/Source/shotwell/src/Photo.vala"
 					_photo_cached_pixbuf_unref0 (_tmp58_);
-#line 24492 "Photo.c"
+#line 24493 "Photo.c"
 				}
 			}
 #line 3310 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp59_ = photo_discard_source_id;
 #line 3310 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp59_ != ((guint) 0)) {
-#line 24499 "Photo.c"
+#line 24500 "Photo.c"
 				guint _tmp60_ = 0U;
 #line 3311 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp60_ = photo_discard_source_id;
@@ -24505,7 +24506,7 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 				g_source_remove (_tmp60_);
 #line 3312 "/home/jens/Source/shotwell/src/Photo.vala"
 				photo_discard_source_id = (guint) 0;
-#line 24507 "Photo.c"
+#line 24508 "Photo.c"
 			}
 #line 3316 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp61_ = photo_source_pixbuf_cache;
@@ -24515,7 +24516,7 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 			_tmp63_ = _tmp62_;
 #line 3316 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp63_ > PHOTO_SOURCE_PIXBUF_MIN_LRU_COUNT) {
-#line 24517 "Photo.c"
+#line 24518 "Photo.c"
 				gdouble _tmp64_ = 0.0;
 				guint retry_sec = 0U;
 				gdouble _tmp65_ = 0.0;
@@ -24538,13 +24539,13 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 				_tmp68_ = g_timeout_add_seconds_full (G_PRIORITY_LOW, _tmp67_, _photo_trim_source_pixbuf_cache_gsource_func, NULL, NULL);
 #line 3321 "/home/jens/Source/shotwell/src/Photo.vala"
 				photo_discard_source_id = _tmp68_;
-#line 24540 "Photo.c"
+#line 24541 "Photo.c"
 			}
 #line 3324 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp70_ = found;
 #line 3324 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp70_ != NULL) {
-#line 24546 "Photo.c"
+#line 24547 "Photo.c"
 				PhotoCachedPixbuf* _tmp71_ = NULL;
 				GdkPixbuf* _tmp72_ = NULL;
 #line 3324 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24553,11 +24554,11 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 				_tmp72_ = _tmp71_->pixbuf;
 #line 3324 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp69_ = _tmp72_;
-#line 24555 "Photo.c"
+#line 24556 "Photo.c"
 			} else {
 #line 3324 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp69_ = NULL;
-#line 24559 "Photo.c"
+#line 24560 "Photo.c"
 			}
 #line 3324 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp73_ = _g_object_ref0 (_tmp69_);
@@ -24567,33 +24568,33 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 			_g_object_unref0 (iter);
 #line 3324 "/home/jens/Source/shotwell/src/Photo.vala"
 			_photo_cached_pixbuf_unref0 (found);
-#line 24569 "Photo.c"
+#line 24570 "Photo.c"
 			{
 				GeeLinkedList* _tmp74_ = NULL;
 #line 3253 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp74_ = photo_source_pixbuf_cache;
 #line 3253 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&__lock_photo_source_pixbuf_cache);
-#line 24576 "Photo.c"
+#line 24577 "Photo.c"
 			}
 #line 3324 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 24580 "Photo.c"
+#line 24581 "Photo.c"
 		}
-		__finally368:
+		__finally381:
 		{
 			GeeLinkedList* _tmp75_ = NULL;
 #line 3253 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp75_ = photo_source_pixbuf_cache;
 #line 3253 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&__lock_photo_source_pixbuf_cache);
-#line 24589 "Photo.c"
+#line 24590 "Photo.c"
 		}
 #line 3253 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_propagate_error (error, _inner_error_);
 #line 3253 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 24595 "Photo.c"
+#line 24596 "Photo.c"
 	}
 }
 
@@ -24612,12 +24613,12 @@ static gboolean photo_trim_source_pixbuf_cache (void) {
 		_g_object_unref0 (_tmp1_);
 #line 3330 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 24614 "Photo.c"
-			goto __catch369_g_error;
+#line 24615 "Photo.c"
+			goto __catch382_g_error;
 		}
 	}
-	goto __finally369;
-	__catch369_g_error:
+	goto __finally382;
+	__catch382_g_error:
 	{
 		GError* err = NULL;
 #line 3329 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24626,9 +24627,9 @@ static gboolean photo_trim_source_pixbuf_cache (void) {
 		_inner_error_ = NULL;
 #line 3329 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 24628 "Photo.c"
+#line 24629 "Photo.c"
 	}
-	__finally369:
+	__finally382:
 #line 3329 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3329 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24637,13 +24638,13 @@ static gboolean photo_trim_source_pixbuf_cache (void) {
 		g_clear_error (&_inner_error_);
 #line 3329 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 24639 "Photo.c"
+#line 24640 "Photo.c"
 	}
 #line 3334 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = FALSE;
 #line 3334 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 24645 "Photo.c"
+#line 24646 "Photo.c"
 }
 
 
@@ -24673,7 +24674,7 @@ GdkPixbuf* photo_get_prefetched_copy (Photo* self, GError** error) {
 		g_propagate_error (error, _inner_error_);
 #line 3343 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 24675 "Photo.c"
+#line 24676 "Photo.c"
 	}
 #line 3343 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = _tmp0_;
@@ -24693,7 +24694,7 @@ GdkPixbuf* photo_get_prefetched_copy (Photo* self, GError** error) {
 	_g_object_unref0 (_tmp0_);
 #line 3343 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 24695 "Photo.c"
+#line 24696 "Photo.c"
 }
 
 
@@ -24704,7 +24705,7 @@ void photo_discard_prefetched (Photo* self) {
 	GError * _inner_error_ = NULL;
 #line 3349 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail (IS_PHOTO (self));
-#line 24706 "Photo.c"
+#line 24707 "Photo.c"
 	{
 		GdkPixbuf* _tmp0_ = NULL;
 		GdkPixbuf* _tmp1_ = NULL;
@@ -24716,12 +24717,12 @@ void photo_discard_prefetched (Photo* self) {
 		_g_object_unref0 (_tmp1_);
 #line 3351 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 24718 "Photo.c"
-			goto __catch370_g_error;
+#line 24719 "Photo.c"
+			goto __catch383_g_error;
 		}
 	}
-	goto __finally370;
-	__catch370_g_error:
+	goto __finally383;
+	__catch383_g_error:
 	{
 		GError* err = NULL;
 #line 3350 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24730,9 +24731,9 @@ void photo_discard_prefetched (Photo* self) {
 		_inner_error_ = NULL;
 #line 3350 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 24732 "Photo.c"
+#line 24733 "Photo.c"
 	}
-	__finally370:
+	__finally383:
 #line 3350 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3350 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24741,7 +24742,7 @@ void photo_discard_prefetched (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 3350 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 24743 "Photo.c"
+#line 24744 "Photo.c"
 	}
 }
 
@@ -24803,21 +24804,21 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 	_tmp4_ = _tmp3_;
 #line 3380 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp4_) {
-#line 24805 "Photo.c"
+#line 24806 "Photo.c"
 		PhotoFileFormat _tmp5_ = 0;
 #line 3381 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp5_ = photo_get_master_file_format (self);
 #line 3381 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp2_ = _tmp5_ == PHOTO_FILE_FORMAT_RAW;
-#line 24811 "Photo.c"
+#line 24812 "Photo.c"
 	} else {
 #line 3380 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp2_ = FALSE;
-#line 24815 "Photo.c"
+#line 24816 "Photo.c"
 	}
 #line 3380 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_) {
-#line 24819 "Photo.c"
+#line 24820 "Photo.c"
 		gboolean _tmp6_ = FALSE;
 		gboolean _tmp7_ = FALSE;
 		BackingFetchMode _tmp8_ = 0;
@@ -24827,39 +24828,39 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 		if (_tmp8_ == BACKING_FETCH_MODE_BASELINE) {
 #line 3382 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = TRUE;
-#line 24829 "Photo.c"
+#line 24830 "Photo.c"
 		} else {
 			BackingFetchMode _tmp9_ = 0;
 #line 3382 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp9_ = fetch_mode;
 #line 3382 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = _tmp9_ == BACKING_FETCH_MODE_UNMODIFIED;
-#line 24836 "Photo.c"
+#line 24837 "Photo.c"
 		}
 #line 3382 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp7_) {
 #line 3382 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp6_ = TRUE;
-#line 24842 "Photo.c"
+#line 24843 "Photo.c"
 		} else {
 			BackingFetchMode _tmp10_ = 0;
 #line 3383 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp10_ = fetch_mode;
 #line 3383 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp6_ = _tmp10_ == BACKING_FETCH_MODE_SOURCE;
-#line 24849 "Photo.c"
+#line 24850 "Photo.c"
 		}
 #line 3382 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = _tmp6_;
-#line 24853 "Photo.c"
+#line 24854 "Photo.c"
 	} else {
 #line 3380 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = FALSE;
-#line 24857 "Photo.c"
+#line 24858 "Photo.c"
 	}
 #line 3380 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_) {
-#line 24861 "Photo.c"
+#line 24862 "Photo.c"
 		RawDeveloper _tmp11_ = 0;
 		gboolean _tmp12_ = FALSE;
 #line 3384 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24868,21 +24869,21 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 		_tmp12_ = photo_is_raw_developer_complete (self, _tmp11_);
 #line 3384 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = !_tmp12_;
-#line 24870 "Photo.c"
+#line 24871 "Photo.c"
 	} else {
 #line 3380 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = FALSE;
-#line 24874 "Photo.c"
+#line 24875 "Photo.c"
 	}
 #line 3380 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp0_) {
-#line 24878 "Photo.c"
+#line 24879 "Photo.c"
 		RawDeveloper _tmp13_ = 0;
 #line 3385 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp13_ = photo_get_raw_developer (self);
 #line 3385 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_set_raw_developer (self, _tmp13_);
-#line 24884 "Photo.c"
+#line 24885 "Photo.c"
 	}
 #line 3390 "/home/jens/Source/shotwell/src/Photo.vala"
 	dimensions_init (&original, 0, 0);
@@ -24896,14 +24897,14 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 	_redeye_instances_size_ = redeye_instances_length1;
 #line 3395 "/home/jens/Source/shotwell/src/Photo.vala"
 	transformer = NULL;
-#line 24898 "Photo.c"
+#line 24899 "Photo.c"
 	{
 		PhotoRow* _tmp14_ = NULL;
 #line 3398 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp14_ = self->row;
 #line 3398 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 24905 "Photo.c"
+#line 24906 "Photo.c"
 		{
 			Dimensions _tmp15_ = {0};
 			PhotoException _tmp16_ = 0;
@@ -24971,7 +24972,7 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 			_tmp29_ = photo_has_color_adjustments (self);
 #line 3411 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp29_) {
-#line 24973 "Photo.c"
+#line 24974 "Photo.c"
 				PixelTransformer* _tmp30_ = NULL;
 #line 3412 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp30_ = photo_get_pixel_transformer (self);
@@ -24979,22 +24980,22 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 				_pixel_transformer_unref0 (transformer);
 #line 3412 "/home/jens/Source/shotwell/src/Photo.vala"
 				transformer = _tmp30_;
-#line 24981 "Photo.c"
+#line 24982 "Photo.c"
 			}
 #line 3414 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp31_ = photo_get_orientation (self);
 #line 3414 "/home/jens/Source/shotwell/src/Photo.vala"
 			orientation = _tmp31_;
-#line 24987 "Photo.c"
+#line 24988 "Photo.c"
 		}
-		__finally371:
+		__finally384:
 		{
 			PhotoRow* _tmp32_ = NULL;
 #line 3398 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp32_ = self->row;
 #line 3398 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 24996 "Photo.c"
+#line 24997 "Photo.c"
 		}
 #line 3398 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -25006,7 +25007,7 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 			redeye_instances = (g_free (redeye_instances), NULL);
 #line 3398 "/home/jens/Source/shotwell/src/Photo.vala"
 			return NULL;
-#line 25008 "Photo.c"
+#line 25009 "Photo.c"
 		}
 	}
 #line 3421 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -25023,7 +25024,7 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 		redeye_instances = (g_free (redeye_instances), NULL);
 #line 3421 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 25025 "Photo.c"
+#line 25026 "Photo.c"
 	}
 #line 3428 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp34_ = exceptions;
@@ -25031,14 +25032,14 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 	_tmp35_ = photo_exception_allows (_tmp34_, PHOTO_EXCEPTION_REDEYE);
 #line 3428 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp35_) {
-#line 25033 "Photo.c"
+#line 25034 "Photo.c"
 		EditingToolsRedeyeInstance* _tmp36_ = NULL;
 		gint _tmp36__length1 = 0;
 #line 3433 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp36_ = redeye_instances;
 #line 3433 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp36__length1 = redeye_instances_length1;
-#line 25040 "Photo.c"
+#line 25041 "Photo.c"
 		{
 			EditingToolsRedeyeInstance* instance_collection = NULL;
 			gint instance_collection_length1 = 0;
@@ -25050,11 +25051,11 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 			instance_collection_length1 = _tmp36__length1;
 #line 3433 "/home/jens/Source/shotwell/src/Photo.vala"
 			for (instance_it = 0; instance_it < _tmp36__length1; instance_it = instance_it + 1) {
-#line 25052 "Photo.c"
+#line 25053 "Photo.c"
 				EditingToolsRedeyeInstance instance = {0};
 #line 3433 "/home/jens/Source/shotwell/src/Photo.vala"
 				instance = instance_collection[instance_it];
-#line 25056 "Photo.c"
+#line 25057 "Photo.c"
 				{
 					GdkPixbuf* _tmp37_ = NULL;
 					EditingToolsRedeyeInstance _tmp38_ = {0};
@@ -25069,7 +25070,7 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 					_g_object_unref0 (pixbuf);
 #line 3434 "/home/jens/Source/shotwell/src/Photo.vala"
 					pixbuf = _tmp39_;
-#line 25071 "Photo.c"
+#line 25072 "Photo.c"
 				}
 			}
 		}
@@ -25080,13 +25081,13 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 	_tmp41_ = photo_exception_allows (_tmp40_, PHOTO_EXCEPTION_STRAIGHTEN);
 #line 3442 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp41_) {
-#line 25082 "Photo.c"
+#line 25083 "Photo.c"
 		gboolean _tmp42_ = FALSE;
 #line 3446 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp42_ = is_straightened;
 #line 3446 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp42_) {
-#line 25088 "Photo.c"
+#line 25089 "Photo.c"
 			GdkPixbuf* _tmp43_ = NULL;
 			gdouble _tmp44_ = 0.0;
 			GdkPixbuf* _tmp45_ = NULL;
@@ -25100,7 +25101,7 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 			_g_object_unref0 (pixbuf);
 #line 3447 "/home/jens/Source/shotwell/src/Photo.vala"
 			pixbuf = _tmp45_;
-#line 25102 "Photo.c"
+#line 25103 "Photo.c"
 		}
 	}
 #line 3456 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -25109,13 +25110,13 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 	_tmp47_ = photo_exception_allows (_tmp46_, PHOTO_EXCEPTION_CROP);
 #line 3456 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp47_) {
-#line 25111 "Photo.c"
+#line 25112 "Photo.c"
 		gboolean _tmp48_ = FALSE;
 #line 3460 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp48_ = is_cropped;
 #line 3460 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp48_) {
-#line 25117 "Photo.c"
+#line 25118 "Photo.c"
 			Box _tmp49_ = {0};
 			gint _tmp50_ = 0;
 			GdkPixbuf* _tmp51_ = NULL;
@@ -25236,7 +25237,7 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 			_g_object_unref0 (pixbuf);
 #line 3471 "/home/jens/Source/shotwell/src/Photo.vala"
 			pixbuf = _tmp84_;
-#line 25238 "Photo.c"
+#line 25239 "Photo.c"
 		}
 	}
 #line 3481 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -25245,7 +25246,7 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 	_tmp86_ = photo_exception_allows (_tmp85_, PHOTO_EXCEPTION_ORIENTATION);
 #line 3481 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp86_) {
-#line 25247 "Photo.c"
+#line 25248 "Photo.c"
 		GdkPixbuf* _tmp87_ = NULL;
 		GdkPixbuf* _tmp88_ = NULL;
 #line 3485 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -25256,13 +25257,13 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 		_g_object_unref0 (pixbuf);
 #line 3485 "/home/jens/Source/shotwell/src/Photo.vala"
 		pixbuf = _tmp88_;
-#line 25258 "Photo.c"
+#line 25259 "Photo.c"
 	}
 #line 3492 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp89_ = is_scaled;
 #line 3492 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp89_) {
-#line 25264 "Photo.c"
+#line 25265 "Photo.c"
 		GdkPixbuf* _tmp90_ = NULL;
 		Dimensions _tmp91_ = {0};
 		gint _tmp92_ = 0;
@@ -25285,7 +25286,7 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 		_g_object_unref0 (pixbuf);
 #line 3496 "/home/jens/Source/shotwell/src/Photo.vala"
 		pixbuf = _tmp95_;
-#line 25287 "Photo.c"
+#line 25288 "Photo.c"
 	}
 #line 3504 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp96_ = exceptions;
@@ -25293,13 +25294,13 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 	_tmp97_ = photo_exception_allows (_tmp96_, PHOTO_EXCEPTION_ADJUST);
 #line 3504 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp97_) {
-#line 25295 "Photo.c"
+#line 25296 "Photo.c"
 		PixelTransformer* _tmp98_ = NULL;
 #line 3508 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp98_ = transformer;
 #line 3508 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp98_ != NULL) {
-#line 25301 "Photo.c"
+#line 25302 "Photo.c"
 			PixelTransformer* _tmp99_ = NULL;
 			GdkPixbuf* _tmp100_ = NULL;
 #line 3509 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -25308,28 +25309,28 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 			_tmp100_ = pixbuf;
 #line 3509 "/home/jens/Source/shotwell/src/Photo.vala"
 			pixel_transformer_transform_pixbuf (_tmp99_, _tmp100_, NULL);
-#line 25310 "Photo.c"
+#line 25311 "Photo.c"
 		}
 	}
 #line 3518 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp102_ = is_scaled;
 #line 3518 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp102_) {
-#line 25317 "Photo.c"
+#line 25318 "Photo.c"
 		gboolean _tmp103_ = FALSE;
 #line 3518 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp103_ = is_straightened;
 #line 3518 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp101_ = !_tmp103_;
-#line 25323 "Photo.c"
+#line 25324 "Photo.c"
 	} else {
 #line 3518 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp101_ = FALSE;
-#line 25327 "Photo.c"
+#line 25328 "Photo.c"
 	}
 #line 3518 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp101_) {
-#line 25331 "Photo.c"
+#line 25332 "Photo.c"
 		GdkPixbuf* _tmp104_ = NULL;
 		Dimensions _tmp105_ = {0};
 		gboolean _tmp106_ = FALSE;
@@ -25341,7 +25342,7 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 		_tmp106_ = dimensions_approx_equals (&scaled_to_viewport, &_tmp105_, PHOTO_SCALING_FUDGE);
 #line 3519 "/home/jens/Source/shotwell/src/Photo.vala"
 		_vala_assert (_tmp106_, "scaled_to_viewport.approx_equals(Dimensions.for_pixbuf(pixbuf), SCALING_FUDGE)");
-#line 25343 "Photo.c"
+#line 25344 "Photo.c"
 	}
 #line 3527 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = pixbuf;
@@ -25351,7 +25352,7 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 	redeye_instances = (g_free (redeye_instances), NULL);
 #line 3527 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 25353 "Photo.c"
+#line 25354 "Photo.c"
 }
 
 
@@ -25360,7 +25361,7 @@ static gboolean photo_real_has_user_generated_metadata (Photo* self) {
 	g_critical ("Type `%s' does not implement abstract method `photo_has_user_generated_metadata'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
 #line 3535 "/home/jens/Source/shotwell/src/Photo.vala"
 	return FALSE;
-#line 25362 "Photo.c"
+#line 25363 "Photo.c"
 }
 
 
@@ -25369,7 +25370,7 @@ gboolean photo_has_user_generated_metadata (Photo* self) {
 	g_return_val_if_fail (IS_PHOTO (self), FALSE);
 #line 3535 "/home/jens/Source/shotwell/src/Photo.vala"
 	return PHOTO_GET_CLASS (self)->has_user_generated_metadata (self);
-#line 25371 "Photo.c"
+#line 25372 "Photo.c"
 }
 
 
@@ -25378,7 +25379,7 @@ static void photo_real_set_user_metadata_for_export (Photo* self, PhotoMetadata*
 	g_critical ("Type `%s' does not implement abstract method `photo_set_user_metadata_for_export'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
 #line 3539 "/home/jens/Source/shotwell/src/Photo.vala"
 	return;
-#line 25380 "Photo.c"
+#line 25381 "Photo.c"
 }
 
 
@@ -25387,7 +25388,7 @@ void photo_set_user_metadata_for_export (Photo* self, PhotoMetadata* metadata) {
 	g_return_if_fail (IS_PHOTO (self));
 #line 3539 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_GET_CLASS (self)->set_user_metadata_for_export (self, metadata);
-#line 25389 "Photo.c"
+#line 25390 "Photo.c"
 }
 
 
@@ -25400,7 +25401,7 @@ gchar* photo_get_export_basename (Photo* self, PhotoFileFormat* file_format) {
 	_tmp0_ = file_format;
 #line 3547 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp0_ != NULL) {
-#line 25402 "Photo.c"
+#line 25403 "Photo.c"
 		PhotoFileFormat* _tmp1_ = NULL;
 		PhotoFileFormatProperties* _tmp2_ = NULL;
 		PhotoFileFormatProperties* _tmp3_ = NULL;
@@ -25438,7 +25439,7 @@ gchar* photo_get_export_basename (Photo* self, PhotoFileFormat* file_format) {
 		result = _tmp9_;
 #line 3548 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 25440 "Photo.c"
+#line 25441 "Photo.c"
 	} else {
 		PhotoFileFormat _tmp10_ = 0;
 		gboolean _tmp11_ = FALSE;
@@ -25448,7 +25449,7 @@ gchar* photo_get_export_basename (Photo* self, PhotoFileFormat* file_format) {
 		_tmp11_ = photo_file_format_can_write (_tmp10_);
 #line 3550 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp11_) {
-#line 25450 "Photo.c"
+#line 25451 "Photo.c"
 			PhotoFileFormat _tmp12_ = 0;
 			PhotoFileFormatProperties* _tmp13_ = NULL;
 			PhotoFileFormatProperties* _tmp14_ = NULL;
@@ -25486,7 +25487,7 @@ gchar* photo_get_export_basename (Photo* self, PhotoFileFormat* file_format) {
 			result = _tmp20_;
 #line 3551 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 25488 "Photo.c"
+#line 25489 "Photo.c"
 		} else {
 			PhotoFileFormat _tmp21_ = 0;
 			PhotoFileFormatProperties* _tmp22_ = NULL;
@@ -25525,7 +25526,7 @@ gchar* photo_get_export_basename (Photo* self, PhotoFileFormat* file_format) {
 			result = _tmp29_;
 #line 3554 "/home/jens/Source/shotwell/src/Photo.vala"
 			return result;
-#line 25527 "Photo.c"
+#line 25528 "Photo.c"
 		}
 	}
 }
@@ -25587,14 +25588,14 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 	export_reader = NULL;
 #line 3564 "/home/jens/Source/shotwell/src/Photo.vala"
 	is_master = TRUE;
-#line 25589 "Photo.c"
+#line 25590 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 3565 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 3565 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 25596 "Photo.c"
+#line 25597 "Photo.c"
 		{
 			gboolean _tmp1_ = FALSE;
 			PhotoBackingReaders* _tmp2_ = NULL;
@@ -25605,7 +25606,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 			_tmp3_ = _tmp2_->editable;
 #line 3566 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp3_ != NULL) {
-#line 25607 "Photo.c"
+#line 25608 "Photo.c"
 				PhotoBackingReaders* _tmp4_ = NULL;
 				PhotoFileReader* _tmp5_ = NULL;
 				PhotoFileFormat _tmp6_ = 0;
@@ -25620,15 +25621,15 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 				_tmp7_ = photo_file_format_can_write_metadata (_tmp6_);
 #line 3566 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = _tmp7_;
-#line 25622 "Photo.c"
+#line 25623 "Photo.c"
 			} else {
 #line 3566 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp1_ = FALSE;
-#line 25626 "Photo.c"
+#line 25627 "Photo.c"
 			}
 #line 3566 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp1_) {
-#line 25630 "Photo.c"
+#line 25631 "Photo.c"
 				PhotoBackingReaders* _tmp8_ = NULL;
 				PhotoFileReader* _tmp9_ = NULL;
 				PhotoFileReader* _tmp10_ = NULL;
@@ -25644,7 +25645,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 				export_reader = _tmp10_;
 #line 3568 "/home/jens/Source/shotwell/src/Photo.vala"
 				is_master = FALSE;
-#line 25646 "Photo.c"
+#line 25647 "Photo.c"
 			} else {
 				gboolean _tmp11_ = FALSE;
 				PhotoBackingReaders* _tmp12_ = NULL;
@@ -25655,7 +25656,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 				_tmp13_ = _tmp12_->developer;
 #line 3569 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp13_ != NULL) {
-#line 25657 "Photo.c"
+#line 25658 "Photo.c"
 					PhotoBackingReaders* _tmp14_ = NULL;
 					PhotoFileReader* _tmp15_ = NULL;
 					PhotoFileFormat _tmp16_ = 0;
@@ -25670,15 +25671,15 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 					_tmp17_ = photo_file_format_can_write_metadata (_tmp16_);
 #line 3569 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp11_ = _tmp17_;
-#line 25672 "Photo.c"
+#line 25673 "Photo.c"
 				} else {
 #line 3569 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp11_ = FALSE;
-#line 25676 "Photo.c"
+#line 25677 "Photo.c"
 				}
 #line 3569 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp11_) {
-#line 25680 "Photo.c"
+#line 25681 "Photo.c"
 					PhotoBackingReaders* _tmp18_ = NULL;
 					PhotoFileReader* _tmp19_ = NULL;
 					PhotoFileReader* _tmp20_ = NULL;
@@ -25694,7 +25695,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 					export_reader = _tmp20_;
 #line 3571 "/home/jens/Source/shotwell/src/Photo.vala"
 					is_master = FALSE;
-#line 25696 "Photo.c"
+#line 25697 "Photo.c"
 				} else {
 					PhotoBackingReaders* _tmp21_ = NULL;
 					PhotoFileReader* _tmp22_ = NULL;
@@ -25710,7 +25711,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 					_tmp24_ = photo_file_format_can_write_metadata (_tmp23_);
 #line 3572 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_tmp24_) {
-#line 25712 "Photo.c"
+#line 25713 "Photo.c"
 						PhotoBackingReaders* _tmp25_ = NULL;
 						PhotoFileReader* _tmp26_ = NULL;
 						PhotoFileReader* _tmp27_ = NULL;
@@ -25724,19 +25725,19 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 						_photo_file_adapter_unref0 (export_reader);
 #line 3573 "/home/jens/Source/shotwell/src/Photo.vala"
 						export_reader = _tmp27_;
-#line 25726 "Photo.c"
+#line 25727 "Photo.c"
 					}
 				}
 			}
 		}
-		__finally372:
+		__finally385:
 		{
 			PhotoBackingReaders* _tmp28_ = NULL;
 #line 3565 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp28_ = self->priv->readers;
 #line 3565 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 25738 "Photo.c"
+#line 25739 "Photo.c"
 		}
 #line 3565 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -25746,7 +25747,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 			_photo_file_adapter_unref0 (export_reader);
 #line 3565 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 25748 "Photo.c"
+#line 25749 "Photo.c"
 		}
 	}
 #line 3577 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -25759,7 +25760,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 		_photo_file_adapter_unref0 (export_reader);
 #line 3578 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 25761 "Photo.c"
+#line 25762 "Photo.c"
 	}
 #line 3580 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp30_ = export_reader;
@@ -25807,7 +25808,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 		_photo_file_adapter_unref0 (export_reader);
 #line 3586 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 25809 "Photo.c"
+#line 25810 "Photo.c"
 	}
 #line 3589 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp43_ = data_object_to_string (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject));
@@ -25851,41 +25852,41 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 		_photo_file_adapter_unref0 (export_reader);
 #line 3591 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 25853 "Photo.c"
+#line 25854 "Photo.c"
 	}
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp57_ = photo_has_alterations (self);
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp57_) {
-#line 25859 "Photo.c"
+#line 25860 "Photo.c"
 		gboolean _tmp58_ = FALSE;
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp58_ = is_master;
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp56_ = _tmp58_;
-#line 25865 "Photo.c"
+#line 25866 "Photo.c"
 	} else {
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp56_ = FALSE;
-#line 25869 "Photo.c"
+#line 25870 "Photo.c"
 	}
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp56_) {
-#line 25873 "Photo.c"
+#line 25874 "Photo.c"
 		gboolean _tmp59_ = FALSE;
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp59_ = photo_has_user_generated_metadata (self);
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp55_ = !_tmp59_;
-#line 25879 "Photo.c"
+#line 25880 "Photo.c"
 	} else {
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp55_ = FALSE;
-#line 25883 "Photo.c"
+#line 25884 "Photo.c"
 	}
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp55_) {
-#line 25887 "Photo.c"
+#line 25888 "Photo.c"
 		gchar* _tmp60_ = NULL;
 		gchar* _tmp61_ = NULL;
 #line 3597 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -25896,15 +25897,15 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 		_tmp54_ = _tmp61_ == NULL;
 #line 3597 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_free0 (_tmp61_);
-#line 25898 "Photo.c"
+#line 25899 "Photo.c"
 	} else {
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp54_ = FALSE;
-#line 25902 "Photo.c"
+#line 25903 "Photo.c"
 	}
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp54_) {
-#line 25906 "Photo.c"
+#line 25907 "Photo.c"
 		gchar* _tmp62_ = NULL;
 		gchar* _tmp63_ = NULL;
 #line 3597 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -25915,25 +25916,25 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 		_tmp53_ = _tmp63_ == NULL;
 #line 3597 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_free0 (_tmp63_);
-#line 25917 "Photo.c"
+#line 25918 "Photo.c"
 	} else {
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp53_ = FALSE;
-#line 25921 "Photo.c"
+#line 25922 "Photo.c"
 	}
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp53_) {
-#line 25925 "Photo.c"
+#line 25926 "Photo.c"
 		gboolean _tmp64_ = FALSE;
 #line 3597 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp64_ = export_metadata;
 #line 3597 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp52_ = _tmp64_;
-#line 25931 "Photo.c"
+#line 25932 "Photo.c"
 	} else {
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp52_ = FALSE;
-#line 25935 "Photo.c"
+#line 25936 "Photo.c"
 	}
 #line 3596 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp52_) {
@@ -25949,7 +25950,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 		_photo_file_adapter_unref0 (export_reader);
 #line 3598 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 25951 "Photo.c"
+#line 25952 "Photo.c"
 	}
 #line 3601 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp65_ = export_reader;
@@ -25971,13 +25972,13 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 		_photo_file_adapter_unref0 (export_reader);
 #line 3601 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 25973 "Photo.c"
+#line 25974 "Photo.c"
 	}
 #line 3602 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp67_ = metadata;
 #line 3602 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp67_ == NULL) {
-#line 25979 "Photo.c"
+#line 25980 "Photo.c"
 		PhotoFileReader* _tmp68_ = NULL;
 		PhotoFileFormat _tmp69_ = 0;
 		PhotoMetadata* _tmp70_ = NULL;
@@ -25991,7 +25992,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 		_media_metadata_unref0 (metadata);
 #line 3603 "/home/jens/Source/shotwell/src/Photo.vala"
 		metadata = _tmp70_;
-#line 25993 "Photo.c"
+#line 25994 "Photo.c"
 	}
 #line 3605 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp71_ = writer;
@@ -26007,7 +26008,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 	_tmp74_ = media_source_get_exposure_time (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
 #line 3607 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp74_ != ((time_t) 0)) {
-#line 26009 "Photo.c"
+#line 26010 "Photo.c"
 		PhotoMetadata* _tmp75_ = NULL;
 		time_t _tmp76_ = 0;
 		MetadataDateTime* _tmp77_ = NULL;
@@ -26024,20 +26025,20 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 		photo_metadata_set_exposure_date_time (_tmp75_, _tmp78_, PHOTO_METADATA_SET_OPTION_ALL_DOMAINS);
 #line 3608 "/home/jens/Source/shotwell/src/Photo.vala"
 		_metadata_date_time_unref0 (_tmp78_);
-#line 26026 "Photo.c"
+#line 26027 "Photo.c"
 	} else {
 		PhotoMetadata* _tmp79_ = NULL;
 #line 3610 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp79_ = metadata;
 #line 3610 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_metadata_set_exposure_date_time (_tmp79_, NULL, PHOTO_METADATA_SET_OPTION_ALL_DOMAINS);
-#line 26033 "Photo.c"
+#line 26034 "Photo.c"
 	}
 #line 3612 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp80_ = export_metadata;
 #line 3612 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp80_) {
-#line 26039 "Photo.c"
+#line 26040 "Photo.c"
 		PhotoMetadata* _tmp81_ = NULL;
 		gchar* _tmp82_ = NULL;
 		gchar* _tmp83_ = NULL;
@@ -26069,7 +26070,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 #line 3615 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp86_ = _tmp85_;
 #line 3615 "/home/jens/Source/shotwell/src/Photo.vala"
-		photo_metadata_set_comment (_tmp84_, _tmp86_);
+		photo_metadata_set_comment (_tmp84_, _tmp86_, PHOTO_METADATA_SET_OPTION_ALL_DOMAINS);
 #line 3615 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_free0 (_tmp86_);
 #line 3616 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -26094,26 +26095,26 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 		_tmp93_ = photo_get_original_orientation (self);
 #line 3620 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp92_ != _tmp93_) {
-#line 26096 "Photo.c"
+#line 26097 "Photo.c"
 			PhotoMetadata* _tmp94_ = NULL;
 #line 3621 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp94_ = metadata;
 #line 3621 "/home/jens/Source/shotwell/src/Photo.vala"
 			photo_metadata_remove_exif_thumbnail (_tmp94_);
-#line 26102 "Photo.c"
+#line 26103 "Photo.c"
 		}
 #line 3623 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp95_ = metadata;
 #line 3623 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_set_user_metadata_for_export (self, _tmp95_);
-#line 26108 "Photo.c"
+#line 26109 "Photo.c"
 	} else {
 		PhotoMetadata* _tmp96_ = NULL;
 #line 3627 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp96_ = metadata;
 #line 3627 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_metadata_clear (_tmp96_);
-#line 26115 "Photo.c"
+#line 26116 "Photo.c"
 	}
 #line 3629 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp97_ = writer;
@@ -26137,7 +26138,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 		_photo_file_adapter_unref0 (export_reader);
 #line 3629 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 26139 "Photo.c"
+#line 26140 "Photo.c"
 	}
 #line 3631 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = TRUE;
@@ -26153,7 +26154,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 	_photo_file_adapter_unref0 (export_reader);
 #line 3631 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 26155 "Photo.c"
+#line 26156 "Photo.c"
 }
 
 
@@ -26173,33 +26174,33 @@ gboolean photo_is_export_required (Photo* self, Scaling* scaling, PhotoFileForma
 	if (!_tmp3_) {
 #line 3638 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp2_ = TRUE;
-#line 26175 "Photo.c"
+#line 26176 "Photo.c"
 	} else {
 		gboolean _tmp4_ = FALSE;
 #line 3638 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp4_ = photo_has_alterations (self);
 #line 3638 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp2_ = _tmp4_;
-#line 26182 "Photo.c"
+#line 26183 "Photo.c"
 	}
 #line 3638 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_) {
 #line 3638 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = TRUE;
-#line 26188 "Photo.c"
+#line 26189 "Photo.c"
 	} else {
 		gboolean _tmp5_ = FALSE;
 #line 3638 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp5_ = photo_has_user_generated_metadata (self);
 #line 3638 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = _tmp5_;
-#line 26195 "Photo.c"
+#line 26196 "Photo.c"
 	}
 #line 3638 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_) {
 #line 3638 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = TRUE;
-#line 26201 "Photo.c"
+#line 26202 "Photo.c"
 	} else {
 		PhotoFileFormat _tmp6_ = 0;
 		PhotoFileFormat _tmp7_ = 0;
@@ -26209,13 +26210,13 @@ gboolean photo_is_export_required (Photo* self, Scaling* scaling, PhotoFileForma
 		_tmp7_ = photo_get_file_format (self);
 #line 3639 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = _tmp6_ != _tmp7_;
-#line 26211 "Photo.c"
+#line 26212 "Photo.c"
 	}
 #line 3638 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp0_;
 #line 3638 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 26217 "Photo.c"
+#line 26218 "Photo.c"
 }
 
 
@@ -26277,7 +26278,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 	_tmp0_ = direct_copy_unmodified;
 #line 3647 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp0_) {
-#line 26279 "Photo.c"
+#line 26280 "Photo.c"
 		GFile* _tmp1_ = NULL;
 		GFile* _tmp2_ = NULL;
 		GFile* _tmp3_ = NULL;
@@ -26297,17 +26298,17 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 			g_propagate_error (error, _inner_error_);
 #line 3648 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 26299 "Photo.c"
+#line 26300 "Photo.c"
 		}
 #line 3650 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 26303 "Photo.c"
+#line 26304 "Photo.c"
 	}
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp7_ = scaling_is_unscaled (scaling);
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp7_) {
-#line 26309 "Photo.c"
+#line 26310 "Photo.c"
 		gboolean _tmp8_ = FALSE;
 		gboolean _tmp9_ = FALSE;
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -26316,26 +26317,26 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		if (!_tmp9_) {
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp8_ = TRUE;
-#line 26318 "Photo.c"
+#line 26319 "Photo.c"
 		} else {
 			gboolean _tmp10_ = FALSE;
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp10_ = photo_only_metadata_changed (self);
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp8_ = _tmp10_;
-#line 26325 "Photo.c"
+#line 26326 "Photo.c"
 		}
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = _tmp8_;
-#line 26329 "Photo.c"
+#line 26330 "Photo.c"
 	} else {
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = FALSE;
-#line 26333 "Photo.c"
+#line 26334 "Photo.c"
 	}
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp6_) {
-#line 26337 "Photo.c"
+#line 26338 "Photo.c"
 		PhotoFileFormat _tmp11_ = 0;
 		PhotoFileFormat _tmp12_ = 0;
 #line 3658 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -26344,29 +26345,29 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		_tmp12_ = photo_get_file_format (self);
 #line 3658 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp5_ = _tmp11_ == _tmp12_;
-#line 26346 "Photo.c"
+#line 26347 "Photo.c"
 	} else {
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp5_ = FALSE;
-#line 26350 "Photo.c"
+#line 26351 "Photo.c"
 	}
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp5_) {
-#line 26354 "Photo.c"
+#line 26355 "Photo.c"
 		PhotoFileFormat _tmp13_ = 0;
 #line 3658 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp13_ = photo_get_file_format (self);
 #line 3658 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp4_ = _tmp13_ == PHOTO_FILE_FORMAT_JFIF;
-#line 26360 "Photo.c"
+#line 26361 "Photo.c"
 	} else {
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp4_ = FALSE;
-#line 26364 "Photo.c"
+#line 26365 "Photo.c"
 	}
 #line 3657 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp4_) {
-#line 26368 "Photo.c"
+#line 26369 "Photo.c"
 		gboolean _tmp14_ = FALSE;
 		GFile* _tmp15_ = NULL;
 		gboolean _tmp16_ = FALSE;
@@ -26385,13 +26386,13 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 			g_propagate_error (error, _inner_error_);
 #line 3659 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 26387 "Photo.c"
+#line 26388 "Photo.c"
 		}
 #line 3659 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp14_) {
 #line 3660 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 26393 "Photo.c"
+#line 26394 "Photo.c"
 		}
 	}
 #line 3666 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -26402,7 +26403,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 	_tmp19_ = metadata;
 #line 3667 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp19_ == NULL) {
-#line 26404 "Photo.c"
+#line 26405 "Photo.c"
 		PhotoFileFormat _tmp20_ = 0;
 		PhotoMetadata* _tmp21_ = NULL;
 #line 3668 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -26413,7 +26414,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		_media_metadata_unref0 (metadata);
 #line 3668 "/home/jens/Source/shotwell/src/Photo.vala"
 		metadata = _tmp21_;
-#line 26415 "Photo.c"
+#line 26416 "Photo.c"
 	}
 #line 3670 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp22_ = export_format;
@@ -26421,13 +26422,13 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 	_tmp23_ = photo_file_format_can_write (_tmp22_);
 #line 3670 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp23_) {
-#line 26423 "Photo.c"
+#line 26424 "Photo.c"
 		PhotoFileFormat _tmp24_ = 0;
 #line 3671 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp24_ = photo_file_format_get_system_default_format ();
 #line 3671 "/home/jens/Source/shotwell/src/Photo.vala"
 		export_format = _tmp24_;
-#line 26429 "Photo.c"
+#line 26430 "Photo.c"
 	}
 #line 3673 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp25_ = export_format;
@@ -26453,7 +26454,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		_media_metadata_unref0 (metadata);
 #line 3673 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 26455 "Photo.c"
+#line 26456 "Photo.c"
 	}
 #line 3675 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp31_ = data_object_to_string (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject));
@@ -26482,18 +26483,18 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 	if (_tmp39_ == PHOTO_FILE_FORMAT_JFIF) {
 #line 3682 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp38_ = TRUE;
-#line 26483 "Photo.c"
+#line 26484 "Photo.c"
 	} else {
 		PhotoFileFormat _tmp40_ = 0;
 #line 3683 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp40_ = photo_get_file_format (self);
 #line 3683 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp38_ = _tmp40_ == PHOTO_FILE_FORMAT_RAW;
-#line 26490 "Photo.c"
+#line 26491 "Photo.c"
 	}
 #line 3682 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp38_) {
-#line 26494 "Photo.c"
+#line 26495 "Photo.c"
 		GdkPixbuf* _tmp41_ = NULL;
 		Scaling _tmp42_ = {0};
 		GdkPixbuf* _tmp43_ = NULL;
@@ -26516,7 +26517,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 			_media_metadata_unref0 (metadata);
 #line 3684 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 26517 "Photo.c"
+#line 26518 "Photo.c"
 		}
 #line 3684 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp44_ = _tmp41_;
@@ -26528,7 +26529,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		pixbuf = _tmp44_;
 #line 3682 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp41_);
-#line 26529 "Photo.c"
+#line 26530 "Photo.c"
 	} else {
 		GdkPixbuf* _tmp45_ = NULL;
 		Scaling _tmp46_ = {0};
@@ -26552,7 +26553,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 			_media_metadata_unref0 (metadata);
 #line 3688 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 26553 "Photo.c"
+#line 26554 "Photo.c"
 		}
 #line 3688 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp48_ = _tmp45_;
@@ -26564,7 +26565,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		pixbuf = _tmp48_;
 #line 3682 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp45_);
-#line 26565 "Photo.c"
+#line 26566 "Photo.c"
 	}
 #line 3692 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp49_ = writer;
@@ -26586,7 +26587,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		_media_metadata_unref0 (metadata);
 #line 3692 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 26587 "Photo.c"
+#line 26588 "Photo.c"
 	}
 #line 3694 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp52_ = writer;
@@ -26602,7 +26603,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 	_tmp55_ = export_metadata;
 #line 3697 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp55_) {
-#line 26603 "Photo.c"
+#line 26604 "Photo.c"
 		PhotoMetadata* _tmp56_ = NULL;
 		gchar* _tmp57_ = NULL;
 		gchar* _tmp58_ = NULL;
@@ -26632,7 +26633,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 #line 3700 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp61_ = _tmp60_;
 #line 3700 "/home/jens/Source/shotwell/src/Photo.vala"
-		photo_metadata_set_comment (_tmp59_, _tmp61_);
+		photo_metadata_set_comment (_tmp59_, _tmp61_, PHOTO_METADATA_SET_OPTION_ALL_DOMAINS);
 #line 3700 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_free0 (_tmp61_);
 #line 3701 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -26643,7 +26644,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		_tmp63_ = media_source_get_exposure_time (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
 #line 3703 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp63_ != ((time_t) 0)) {
-#line 26644 "Photo.c"
+#line 26645 "Photo.c"
 			PhotoMetadata* _tmp64_ = NULL;
 			time_t _tmp65_ = 0;
 			MetadataDateTime* _tmp66_ = NULL;
@@ -26660,14 +26661,14 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 			photo_metadata_set_exposure_date_time (_tmp64_, _tmp67_, PHOTO_METADATA_SET_OPTION_ALL_DOMAINS);
 #line 3704 "/home/jens/Source/shotwell/src/Photo.vala"
 			_metadata_date_time_unref0 (_tmp67_);
-#line 26661 "Photo.c"
+#line 26662 "Photo.c"
 		} else {
 			PhotoMetadata* _tmp68_ = NULL;
 #line 3706 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp68_ = metadata;
 #line 3706 "/home/jens/Source/shotwell/src/Photo.vala"
 			photo_metadata_set_exposure_date_time (_tmp68_, NULL, PHOTO_METADATA_SET_OPTION_ALL_DOMAINS);
-#line 26668 "Photo.c"
+#line 26669 "Photo.c"
 		}
 #line 3708 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp69_ = metadata;
@@ -26685,13 +26686,13 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		_tmp72_ = photo_has_user_generated_metadata (self);
 #line 3712 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp72_) {
-#line 26686 "Photo.c"
+#line 26687 "Photo.c"
 			PhotoMetadata* _tmp73_ = NULL;
 #line 3713 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp73_ = metadata;
 #line 3713 "/home/jens/Source/shotwell/src/Photo.vala"
 			photo_set_user_metadata_for_export (self, _tmp73_);
-#line 26692 "Photo.c"
+#line 26693 "Photo.c"
 		}
 	} else {
 		PhotoMetadata* _tmp74_ = NULL;
@@ -26699,7 +26700,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		_tmp74_ = metadata;
 #line 3717 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_metadata_clear (_tmp74_);
-#line 26700 "Photo.c"
+#line 26701 "Photo.c"
 	}
 #line 3724 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp76_ = photo_get_file_format (self);
@@ -26707,18 +26708,18 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 	if (_tmp76_ == PHOTO_FILE_FORMAT_JFIF) {
 #line 3724 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp75_ = TRUE;
-#line 26708 "Photo.c"
+#line 26709 "Photo.c"
 	} else {
 		PhotoFileFormat _tmp77_ = 0;
 #line 3725 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp77_ = photo_get_file_format (self);
 #line 3725 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp75_ = _tmp77_ == PHOTO_FILE_FORMAT_RAW;
-#line 26715 "Photo.c"
+#line 26716 "Photo.c"
 	}
 #line 3724 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp75_) {
-#line 26719 "Photo.c"
+#line 26720 "Photo.c"
 		PhotoMetadata* _tmp78_ = NULL;
 		Dimensions _tmp79_ = {0};
 		PhotoMetadata* _tmp80_ = NULL;
@@ -26735,7 +26736,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		_tmp81_ = photo_get_orientation (self);
 #line 3727 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_metadata_set_orientation (_tmp80_, _tmp81_);
-#line 26736 "Photo.c"
+#line 26737 "Photo.c"
 	} else {
 		PhotoMetadata* _tmp82_ = NULL;
 		GdkPixbuf* _tmp83_ = NULL;
@@ -26753,7 +26754,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		_tmp85_ = metadata;
 #line 3731 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_metadata_set_orientation (_tmp85_, ORIENTATION_TOP_LEFT);
-#line 26754 "Photo.c"
+#line 26755 "Photo.c"
 	}
 #line 3734 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp87_ = export_format;
@@ -26783,7 +26784,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		_media_metadata_unref0 (metadata);
 #line 3734 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 26784 "Photo.c"
+#line 26785 "Photo.c"
 	}
 #line 3734 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp93_ = _tmp86_;
@@ -26811,7 +26812,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 		_media_metadata_unref0 (metadata);
 #line 3734 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 26812 "Photo.c"
+#line 26813 "Photo.c"
 	}
 #line 3645 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_file_adapter_unref0 (_tmp86_);
@@ -26821,7 +26822,7 @@ void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality 
 	_photo_file_adapter_unref0 (writer);
 #line 3645 "/home/jens/Source/shotwell/src/Photo.vala"
 	_media_metadata_unref0 (metadata);
-#line 26822 "Photo.c"
+#line 26823 "Photo.c"
 }
 
 
@@ -26855,14 +26856,14 @@ static GFile* photo_generate_new_editable_file (Photo* self, PhotoFileFormat* fi
 	GError * _inner_error_ = NULL;
 #line 3737 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
-#line 26856 "Photo.c"
+#line 26857 "Photo.c"
 	{
 		PhotoRow* _tmp0_ = NULL;
 #line 3739 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->row;
 #line 3739 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 26863 "Photo.c"
+#line 26864 "Photo.c"
 		{
 			PhotoFileFormat _tmp1_ = 0;
 			GFile* _tmp2_ = NULL;
@@ -26876,16 +26877,16 @@ static GFile* photo_generate_new_editable_file (Photo* self, PhotoFileFormat* fi
 			_g_object_unref0 (backing);
 #line 3741 "/home/jens/Source/shotwell/src/Photo.vala"
 			backing = _tmp2_;
-#line 26877 "Photo.c"
+#line 26878 "Photo.c"
 		}
-		__finally373:
+		__finally386:
 		{
 			PhotoRow* _tmp3_ = NULL;
 #line 3739 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp3_ = self->row;
 #line 3739 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 26886 "Photo.c"
+#line 26887 "Photo.c"
 		}
 #line 3739 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -26895,7 +26896,7 @@ static GFile* photo_generate_new_editable_file (Photo* self, PhotoFileFormat* fi
 			_g_object_unref0 (backing);
 #line 3739 "/home/jens/Source/shotwell/src/Photo.vala"
 			return NULL;
-#line 26896 "Photo.c"
+#line 26897 "Photo.c"
 		}
 	}
 #line 3744 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -26904,13 +26905,13 @@ static GFile* photo_generate_new_editable_file (Photo* self, PhotoFileFormat* fi
 	_tmp5_ = photo_file_format_can_write (_tmp4_);
 #line 3744 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp5_) {
-#line 26905 "Photo.c"
+#line 26906 "Photo.c"
 		PhotoFileFormat _tmp6_ = 0;
 #line 3745 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = photo_file_format_get_system_default_format ();
 #line 3745 "/home/jens/Source/shotwell/src/Photo.vala"
 		_vala_file_format = _tmp6_;
-#line 26911 "Photo.c"
+#line 26912 "Photo.c"
 	}
 #line 3748 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp7_ = g_file_get_basename (backing);
@@ -26934,7 +26935,7 @@ static GFile* photo_generate_new_editable_file (Photo* self, PhotoFileFormat* fi
 	if (_tmp12_ == NULL) {
 #line 3750 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp11_ = TRUE;
-#line 26935 "Photo.c"
+#line 26936 "Photo.c"
 	} else {
 		PhotoFileFormat _tmp13_ = 0;
 		PhotoFileFormatProperties* _tmp14_ = NULL;
@@ -26955,11 +26956,11 @@ static GFile* photo_generate_new_editable_file (Photo* self, PhotoFileFormat* fi
 		_tmp11_ = !_tmp17_;
 #line 3750 "/home/jens/Source/shotwell/src/Photo.vala"
 		_photo_file_format_properties_unref0 (_tmp15_);
-#line 26956 "Photo.c"
+#line 26957 "Photo.c"
 	}
 #line 3750 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp11_) {
-#line 26960 "Photo.c"
+#line 26961 "Photo.c"
 		PhotoFileFormat _tmp18_ = 0;
 		PhotoFileFormatProperties* _tmp19_ = NULL;
 		PhotoFileFormatProperties* _tmp20_ = NULL;
@@ -26978,7 +26979,7 @@ static GFile* photo_generate_new_editable_file (Photo* self, PhotoFileFormat* fi
 		ext = _tmp21_;
 #line 3751 "/home/jens/Source/shotwell/src/Photo.vala"
 		_photo_file_format_properties_unref0 (_tmp20_);
-#line 26979 "Photo.c"
+#line 26980 "Photo.c"
 	}
 #line 3753 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp22_ = name;
@@ -27018,7 +27019,7 @@ static GFile* photo_generate_new_editable_file (Photo* self, PhotoFileFormat* fi
 		_g_object_unref0 (backing);
 #line 3756 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 27019 "Photo.c"
+#line 27020 "Photo.c"
 	}
 #line 3756 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp32_ = _tmp26_;
@@ -27040,18 +27041,18 @@ static GFile* photo_generate_new_editable_file (Photo* self, PhotoFileFormat* fi
 	if (file_format) {
 #line 3756 "/home/jens/Source/shotwell/src/Photo.vala"
 		*file_format = _vala_file_format;
-#line 27041 "Photo.c"
+#line 27042 "Photo.c"
 	}
 #line 3756 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 27045 "Photo.c"
+#line 27046 "Photo.c"
 }
 
 
 static void _g_object_unref0_ (gpointer var) {
 #line 3778 "/home/jens/Source/shotwell/src/Photo.vala"
 	(var == NULL) ? NULL : (var = (g_object_unref (var), NULL));
-#line 27052 "Photo.c"
+#line 27053 "Photo.c"
 }
 
 
@@ -27060,7 +27061,7 @@ static void _g_list_free__g_object_unref0_ (GList* self) {
 	g_list_foreach (self, (GFunc) _g_object_unref0_, NULL);
 #line 3778 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_list_free (self);
-#line 27061 "Photo.c"
+#line 27062 "Photo.c"
 }
 
 
@@ -27104,7 +27105,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 	_tmp1_ = file_format;
 #line 3760 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_ == PHOTO_FILE_FORMAT_RAW) {
-#line 27105 "Photo.c"
+#line 27106 "Photo.c"
 		ConfigFacade* _tmp2_ = NULL;
 		ConfigFacade* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
@@ -27120,7 +27121,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 		_tmp0_ = _tmp4_;
 #line 3760 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp3_);
-#line 27121 "Photo.c"
+#line 27122 "Photo.c"
 	} else {
 		ConfigFacade* _tmp5_ = NULL;
 		ConfigFacade* _tmp6_ = NULL;
@@ -27137,7 +27138,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 		_tmp0_ = _tmp7_;
 #line 3761 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp6_);
-#line 27138 "Photo.c"
+#line 27139 "Photo.c"
 	}
 #line 3760 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = g_strdup (_tmp0_);
@@ -27157,7 +27158,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 		_g_free0 (_tmp0_);
 #line 3764 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 27158 "Photo.c"
+#line 27159 "Photo.c"
 	}
 	{
 		GAppInfo* _tmp11_ = NULL;
@@ -27172,8 +27173,8 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 		_tmp11_ = _tmp13_;
 #line 3768 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 27173 "Photo.c"
-			goto __catch374_g_error;
+#line 27174 "Photo.c"
+			goto __catch387_g_error;
 		}
 #line 3768 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp14_ = _tmp11_;
@@ -27185,10 +27186,10 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 		app = _tmp14_;
 #line 3767 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp11_);
-#line 27186 "Photo.c"
+#line 27187 "Photo.c"
 	}
-	goto __finally374;
-	__catch374_g_error:
+	goto __finally387;
+	__catch387_g_error:
 	{
 		GError* er = NULL;
 #line 3767 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27201,9 +27202,9 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 		app = NULL;
 #line 3767 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (er);
-#line 27202 "Photo.c"
+#line 27203 "Photo.c"
 	}
-	__finally374:
+	__finally387:
 #line 3767 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3767 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27216,7 +27217,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 		_g_free0 (_tmp0_);
 #line 3767 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 27217 "Photo.c"
+#line 27218 "Photo.c"
 	}
 #line 3774 "/home/jens/Source/shotwell/src/Photo.vala"
 	files = NULL;
@@ -27230,7 +27231,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 	_tmp17_ = app;
 #line 3777 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp17_ != NULL) {
-#line 27231 "Photo.c"
+#line 27232 "Photo.c"
 		gboolean _tmp18_ = FALSE;
 		GAppInfo* _tmp19_ = NULL;
 		GList* _tmp20_ = NULL;
@@ -27257,7 +27258,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 			_g_free0 (_tmp0_);
 #line 3778 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 27258 "Photo.c"
+#line 27259 "Photo.c"
 		}
 #line 3778 "/home/jens/Source/shotwell/src/Photo.vala"
 		result = _tmp18_;
@@ -27271,7 +27272,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 		_g_free0 (_tmp0_);
 #line 3778 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 27272 "Photo.c"
+#line 27273 "Photo.c"
 	}
 #line 3780 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp22_ = g_new0 (gchar*, 2 + 1);
@@ -27335,7 +27336,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 		_g_free0 (_tmp0_);
 #line 3786 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 27336 "Photo.c"
+#line 27337 "Photo.c"
 	}
 #line 3786 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp31_;
@@ -27351,7 +27352,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 	_g_free0 (_tmp0_);
 #line 3786 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 27352 "Photo.c"
+#line 27353 "Photo.c"
 }
 
 
@@ -27378,7 +27379,7 @@ void photo_open_with_raw_external_editor (Photo* self, GError** error) {
 		g_propagate_error (error, _inner_error_);
 #line 3797 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 27379 "Photo.c"
+#line 27380 "Photo.c"
 	}
 }
 
@@ -27403,14 +27404,14 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 	current_editable_file = NULL;
 #line 3803 "/home/jens/Source/shotwell/src/Photo.vala"
 	create_editable_file = NULL;
-#line 27404 "Photo.c"
+#line 27405 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 3805 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 3805 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 27411 "Photo.c"
+#line 27412 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -27421,7 +27422,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 			_tmp2_ = _tmp1_->editable;
 #line 3806 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != NULL) {
-#line 27422 "Photo.c"
+#line 27423 "Photo.c"
 				PhotoBackingReaders* _tmp3_ = NULL;
 				PhotoFileReader* _tmp4_ = NULL;
 				GFile* _tmp5_ = NULL;
@@ -27435,13 +27436,13 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 				_g_object_unref0 (current_editable_file);
 #line 3807 "/home/jens/Source/shotwell/src/Photo.vala"
 				current_editable_file = _tmp5_;
-#line 27436 "Photo.c"
+#line 27437 "Photo.c"
 			}
 #line 3809 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp6_ = current_editable_file;
 #line 3809 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp6_ == NULL) {
-#line 27442 "Photo.c"
+#line 27443 "Photo.c"
 				GFile* _tmp7_ = NULL;
 				PhotoFileFormat _tmp8_ = 0;
 				GFile* _tmp9_ = NULL;
@@ -27454,8 +27455,8 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 				_tmp7_ = _tmp9_;
 #line 3810 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 27455 "Photo.c"
-					goto __finally375;
+#line 27456 "Photo.c"
+					goto __finally388;
 				}
 #line 3810 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp10_ = _tmp7_;
@@ -27467,7 +27468,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 				create_editable_file = _tmp10_;
 #line 3809 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (_tmp7_);
-#line 27468 "Photo.c"
+#line 27469 "Photo.c"
 			} else {
 				PhotoBackingReaders* _tmp11_ = NULL;
 				PhotoFileReader* _tmp12_ = NULL;
@@ -27480,17 +27481,17 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 				_tmp13_ = photo_file_adapter_get_file_format (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
 #line 3812 "/home/jens/Source/shotwell/src/Photo.vala"
 				editable_file_format = _tmp13_;
-#line 27481 "Photo.c"
+#line 27482 "Photo.c"
 			}
 		}
-		__finally375:
+		__finally388:
 		{
 			PhotoBackingReaders* _tmp14_ = NULL;
 #line 3805 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp14_ = self->priv->readers;
 #line 3805 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 27491 "Photo.c"
+#line 27492 "Photo.c"
 		}
 #line 3805 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -27502,28 +27503,28 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 			_g_object_unref0 (current_editable_file);
 #line 3805 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 27503 "Photo.c"
+#line 27504 "Photo.c"
 		}
 	}
 #line 3817 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp17_ = create_editable_file;
 #line 3817 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp17_ == NULL) {
-#line 27510 "Photo.c"
+#line 27511 "Photo.c"
 		GFile* _tmp18_ = NULL;
 #line 3817 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp18_ = current_editable_file;
 #line 3817 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp16_ = _tmp18_ != NULL;
-#line 27516 "Photo.c"
+#line 27517 "Photo.c"
 	} else {
 #line 3817 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp16_ = FALSE;
-#line 27520 "Photo.c"
+#line 27521 "Photo.c"
 	}
 #line 3817 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp16_) {
-#line 27524 "Photo.c"
+#line 27525 "Photo.c"
 		gboolean _tmp19_ = FALSE;
 		GFile* _tmp20_ = NULL;
 		gboolean _tmp21_ = FALSE;
@@ -27535,26 +27536,26 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 		if (!_tmp21_) {
 #line 3818 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp19_ = TRUE;
-#line 27536 "Photo.c"
+#line 27537 "Photo.c"
 		} else {
 			gboolean _tmp22_ = FALSE;
 #line 3818 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp22_ = photo_has_transformations (self);
 #line 3818 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp19_ = _tmp22_;
-#line 27543 "Photo.c"
+#line 27544 "Photo.c"
 		}
 #line 3818 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp15_ = _tmp19_;
-#line 27547 "Photo.c"
+#line 27548 "Photo.c"
 	} else {
 #line 3817 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp15_ = FALSE;
-#line 27551 "Photo.c"
+#line 27552 "Photo.c"
 	}
 #line 3817 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp15_) {
-#line 27555 "Photo.c"
+#line 27556 "Photo.c"
 		GFile* _tmp23_ = NULL;
 		GFile* _tmp24_ = NULL;
 #line 3819 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27565,13 +27566,13 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 		_g_object_unref0 (create_editable_file);
 #line 3819 "/home/jens/Source/shotwell/src/Photo.vala"
 		create_editable_file = _tmp24_;
-#line 27566 "Photo.c"
+#line 27567 "Photo.c"
 	}
 #line 3822 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp26_ = create_editable_file;
 #line 3822 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp26_ != NULL) {
-#line 27572 "Photo.c"
+#line 27573 "Photo.c"
 		PhotoFileFormat _tmp27_ = 0;
 		gboolean _tmp28_ = FALSE;
 #line 3822 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27580,22 +27581,22 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 		_tmp28_ = photo_file_format_can_write (_tmp27_);
 #line 3822 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp25_ = _tmp28_;
-#line 27581 "Photo.c"
+#line 27582 "Photo.c"
 	} else {
 #line 3822 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp25_ = FALSE;
-#line 27585 "Photo.c"
+#line 27586 "Photo.c"
 	}
 #line 3822 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp25_) {
-#line 27589 "Photo.c"
+#line 27590 "Photo.c"
 		PhotoFileFormat _tmp40_ = 0;
 		GFile* _tmp41_ = NULL;
 		GFile* _tmp42_ = NULL;
 		GFile* _tmp43_ = NULL;
 #line 3823 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_halt_monitoring_editable (self);
-#line 27596 "Photo.c"
+#line 27597 "Photo.c"
 		{
 			GFile* _tmp29_ = NULL;
 			Scaling _tmp30_ = {0};
@@ -27610,12 +27611,12 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 			photo_export (self, _tmp29_, &_tmp30_, JPEG_QUALITY_MAXIMUM, _tmp31_, FALSE, TRUE, &_inner_error_);
 #line 3826 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 27611 "Photo.c"
-				goto __catch376_g_error;
+#line 27612 "Photo.c"
+				goto __catch389_g_error;
 			}
 		}
-		goto __finally376;
-		__catch376_g_error:
+		goto __finally389;
+		__catch389_g_error:
 		{
 			GError* err = NULL;
 			GError* _tmp38_ = NULL;
@@ -27624,7 +27625,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 			err = _inner_error_;
 #line 3825 "/home/jens/Source/shotwell/src/Photo.vala"
 			_inner_error_ = NULL;
-#line 27625 "Photo.c"
+#line 27626 "Photo.c"
 			{
 				GFile* _tmp32_ = NULL;
 #line 3831 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27633,12 +27634,12 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 				g_file_delete (_tmp32_, NULL, &_inner_error_);
 #line 3831 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 27634 "Photo.c"
-					goto __catch377_g_error;
+#line 27635 "Photo.c"
+					goto __catch390_g_error;
 				}
 			}
-			goto __finally377;
-			__catch377_g_error:
+			goto __finally390;
+			__catch390_g_error:
 			{
 				GError* delete_err = NULL;
 				GFile* _tmp33_ = NULL;
@@ -27667,9 +27668,9 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 				_g_free0 (_tmp35_);
 #line 3830 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_error_free0 (delete_err);
-#line 27667 "Photo.c"
+#line 27668 "Photo.c"
 			}
-			__finally377:
+			__finally390:
 #line 3830 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3830 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27686,7 +27687,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 				g_clear_error (&_inner_error_);
 #line 3830 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 27686 "Photo.c"
+#line 27687 "Photo.c"
 			}
 #line 3838 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp38_ = err;
@@ -27696,10 +27697,10 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 			_inner_error_ = _tmp39_;
 #line 3838 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_error_free0 (err);
-#line 27696 "Photo.c"
-			goto __finally376;
+#line 27697 "Photo.c"
+			goto __finally389;
 		}
-		__finally376:
+		__finally389:
 #line 3825 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3825 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27710,7 +27711,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 			_g_object_unref0 (current_editable_file);
 #line 3825 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 27710 "Photo.c"
+#line 27711 "Photo.c"
 		}
 #line 3842 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp40_ = editable_file_format;
@@ -27728,7 +27729,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 			_g_object_unref0 (current_editable_file);
 #line 3842 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 27728 "Photo.c"
+#line 27729 "Photo.c"
 		}
 #line 3844 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp42_ = create_editable_file;
@@ -27738,7 +27739,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 		_g_object_unref0 (current_editable_file);
 #line 3844 "/home/jens/Source/shotwell/src/Photo.vala"
 		current_editable_file = _tmp43_;
-#line 27738 "Photo.c"
+#line 27739 "Photo.c"
 	}
 #line 3847 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp44_ = current_editable_file;
@@ -27748,7 +27749,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 	_tmp45_ = self->priv->editable_monitor;
 #line 3850 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp45_ == NULL) {
-#line 27748 "Photo.c"
+#line 27749 "Photo.c"
 		GFile* _tmp46_ = NULL;
 #line 3851 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp46_ = current_editable_file;
@@ -27764,7 +27765,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 			_g_object_unref0 (current_editable_file);
 #line 3851 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 27764 "Photo.c"
+#line 27765 "Photo.c"
 		}
 	}
 #line 3853 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27783,13 +27784,13 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 		_g_object_unref0 (current_editable_file);
 #line 3853 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 27783 "Photo.c"
+#line 27784 "Photo.c"
 	}
 #line 3801 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (create_editable_file);
 #line 3801 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (current_editable_file);
-#line 27789 "Photo.c"
+#line 27790 "Photo.c"
 }
 
 
@@ -27801,14 +27802,14 @@ void photo_revert_to_master (Photo* self, gboolean notify) {
 	_tmp0_ = notify;
 #line 3857 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_detach_editable (self, TRUE, TRUE, _tmp0_);
-#line 27801 "Photo.c"
+#line 27802 "Photo.c"
 }
 
 
 static void _photo_on_editable_file_changed_g_file_monitor_changed (GFileMonitor* _sender, GFile* file, GFile* other_file, GFileMonitorEvent event_type, gpointer self) {
 #line 3867 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_on_editable_file_changed ((Photo*) self, file, other_file, event_type);
-#line 27808 "Photo.c"
+#line 27809 "Photo.c"
 }
 
 
@@ -27842,7 +27843,7 @@ static void photo_start_monitoring_editable (Photo* self, GFile* file, GError** 
 		g_propagate_error (error, _inner_error_);
 #line 3866 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 27842 "Photo.c"
+#line 27843 "Photo.c"
 	}
 #line 3866 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = _tmp1_;
@@ -27858,7 +27859,7 @@ static void photo_start_monitoring_editable (Photo* self, GFile* file, GError** 
 	g_signal_connect_object (_tmp5_, "changed", (GCallback) _photo_on_editable_file_changed_g_file_monitor_changed, self, 0);
 #line 3860 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (_tmp1_);
-#line 27858 "Photo.c"
+#line 27859 "Photo.c"
 }
 
 
@@ -27878,7 +27879,7 @@ static void photo_halt_monitoring_editable (Photo* self) {
 	if (_tmp0_ == NULL) {
 #line 3872 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 27878 "Photo.c"
+#line 27879 "Photo.c"
 	}
 #line 3875 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp1_ = photo_get_editable_file (self);
@@ -27888,13 +27889,13 @@ static void photo_halt_monitoring_editable (Photo* self) {
 	_tmp2_ = file;
 #line 3876 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_ != NULL) {
-#line 27888 "Photo.c"
+#line 27889 "Photo.c"
 		GFile* _tmp3_ = NULL;
 #line 3877 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp3_ = file;
 #line 3877 "/home/jens/Source/shotwell/src/Photo.vala"
 		library_monitor_unblacklist_file (_tmp3_);
-#line 27894 "Photo.c"
+#line 27895 "Photo.c"
 	}
 #line 3879 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = self->priv->editable_monitor;
@@ -27912,7 +27913,7 @@ static void photo_halt_monitoring_editable (Photo* self) {
 	self->priv->editable_monitor = NULL;
 #line 3870 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (file);
-#line 27912 "Photo.c"
+#line 27913 "Photo.c"
 }
 
 
@@ -27954,7 +27955,7 @@ static void photo_attach_editable (Photo* self, PhotoFileFormat file_format, GFi
 		g_propagate_error (error, _inner_error_);
 #line 3890 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 27954 "Photo.c"
+#line 27955 "Photo.c"
 	}
 }
 
@@ -27971,7 +27972,7 @@ static void photo_update_editable_attributes (Photo* self, GError** error) {
 		g_propagate_error (error, _inner_error_);
 #line 3894 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 27971 "Photo.c"
+#line 27972 "Photo.c"
 	}
 }
 
@@ -27988,7 +27989,7 @@ void photo_reimport_editable (Photo* self, GError** error) {
 		g_propagate_error (error, _inner_error_);
 #line 3898 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 27988 "Photo.c"
+#line 27989 "Photo.c"
 	}
 }
 
@@ -28000,13 +28001,13 @@ static void _vala_array_add269 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 4005 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 28000 "Photo.c"
+#line 28001 "Photo.c"
 	}
 #line 4005 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 4005 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 28006 "Photo.c"
+#line 28007 "Photo.c"
 }
 
 
@@ -28017,13 +28018,13 @@ static void _vala_array_add270 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 4006 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 28017 "Photo.c"
+#line 28018 "Photo.c"
 	}
 #line 4006 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 4006 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 28023 "Photo.c"
+#line 28024 "Photo.c"
 }
 
 
@@ -28034,13 +28035,13 @@ static void _vala_array_add271 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 4009 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 28034 "Photo.c"
+#line 28035 "Photo.c"
 	}
 #line 4009 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 4009 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 28040 "Photo.c"
+#line 28041 "Photo.c"
 }
 
 
@@ -28051,13 +28052,13 @@ static void _vala_array_add272 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 4013 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 28051 "Photo.c"
+#line 28052 "Photo.c"
 	}
 #line 4013 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 4013 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 28057 "Photo.c"
+#line 28058 "Photo.c"
 }
 
 
@@ -28068,13 +28069,13 @@ static void _vala_array_add273 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 4014 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 28068 "Photo.c"
+#line 28069 "Photo.c"
 	}
 #line 4014 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 4014 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 28074 "Photo.c"
+#line 28075 "Photo.c"
 }
 
 
@@ -28085,13 +28086,13 @@ static void _vala_array_add274 (gchar*** array, int* length, int* size, gchar* v
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 4017 "/home/jens/Source/shotwell/src/Photo.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 28085 "Photo.c"
+#line 28086 "Photo.c"
 	}
 #line 4017 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[(*length)++] = value;
 #line 4017 "/home/jens/Source/shotwell/src/Photo.vala"
 	(*array)[*length] = NULL;
-#line 28091 "Photo.c"
+#line 28092 "Photo.c"
 }
 
 
@@ -28142,30 +28143,30 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 	_tmp2_ = only_attributes;
 #line 3905 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_) {
-#line 28142 "Photo.c"
+#line 28143 "Photo.c"
 		PhotoFileReader* _tmp3_ = NULL;
 #line 3905 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp3_ = new_reader;
 #line 3905 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = _tmp3_ == NULL;
-#line 28148 "Photo.c"
+#line 28149 "Photo.c"
 	} else {
 #line 3905 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = FALSE;
-#line 28152 "Photo.c"
+#line 28153 "Photo.c"
 	}
 #line 3905 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_) {
 #line 3905 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = TRUE;
-#line 28158 "Photo.c"
+#line 28159 "Photo.c"
 	} else {
 		gboolean _tmp4_ = FALSE;
 #line 3905 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp4_ = only_attributes;
 #line 3905 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = !_tmp4_;
-#line 28165 "Photo.c"
+#line 28166 "Photo.c"
 	}
 #line 3905 "/home/jens/Source/shotwell/src/Photo.vala"
 	_vala_assert (_tmp0_, "(only_attributes && new_reader == null) || (!only_attributes)");
@@ -28179,13 +28180,13 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 	_tmp6_ = _tmp7_;
 #line 3909 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp6_ == NULL) {
-#line 28179 "Photo.c"
+#line 28180 "Photo.c"
 		PhotoFileReader* _tmp8_ = NULL;
 #line 3909 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp8_ = old_reader;
 #line 3909 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = _tmp8_;
-#line 28185 "Photo.c"
+#line 28186 "Photo.c"
 	}
 #line 3909 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp9_ = _photo_file_adapter_ref0 (_tmp6_);
@@ -28203,7 +28204,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 		_photo_file_adapter_unref0 (old_reader);
 #line 3913 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 28203 "Photo.c"
+#line 28204 "Photo.c"
 	}
 #line 3916 "/home/jens/Source/shotwell/src/Photo.vala"
 	timestamp_changed = FALSE;
@@ -28245,19 +28246,19 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 		_photo_file_adapter_unref0 (old_reader);
 #line 3924 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 28245 "Photo.c"
+#line 28246 "Photo.c"
 	}
 #line 3928 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp17_ = backing_photo_id_is_invalid (&editable_id);
 #line 3928 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp17_) {
-#line 28251 "Photo.c"
+#line 28252 "Photo.c"
 		BackingPhotoRow* _tmp18_ = NULL;
 #line 3930 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp18_ = backing;
 #line 3930 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp18_ != NULL) {
-#line 28257 "Photo.c"
+#line 28258 "Photo.c"
 			BackingPhotoTable* _tmp19_ = NULL;
 			BackingPhotoTable* _tmp20_ = NULL;
 			BackingPhotoRow* _tmp21_ = NULL;
@@ -28287,7 +28288,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 				_photo_file_adapter_unref0 (old_reader);
 #line 3931 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 28287 "Photo.c"
+#line 28288 "Photo.c"
 			}
 			{
 				PhotoRow* _tmp22_ = NULL;
@@ -28295,7 +28296,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 				_tmp22_ = self->row;
 #line 3932 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_lock (&self->priv->__lock_row);
-#line 28295 "Photo.c"
+#line 28296 "Photo.c"
 				{
 					PhotoTable* _tmp23_ = NULL;
 					PhotoTable* _tmp24_ = NULL;
@@ -28328,8 +28329,8 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 					_database_table_unref0 (_tmp24_);
 #line 3936 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 28328 "Photo.c"
-						goto __finally378;
+#line 28329 "Photo.c"
+						goto __finally391;
 					}
 #line 3937 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp28_ = backing;
@@ -28353,16 +28354,16 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 					_tmp33_ = _tmp32_->original_orientation;
 #line 3939 "/home/jens/Source/shotwell/src/Photo.vala"
 					photo_set_orientation (self, _tmp33_);
-#line 28353 "Photo.c"
+#line 28354 "Photo.c"
 				}
-				__finally378:
+				__finally391:
 				{
 					PhotoRow* _tmp34_ = NULL;
 #line 3932 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp34_ = self->row;
 #line 3932 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 28362 "Photo.c"
+#line 28363 "Photo.c"
 				}
 #line 3932 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -28380,19 +28381,19 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 					_photo_file_adapter_unref0 (old_reader);
 #line 3932 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 28380 "Photo.c"
+#line 28381 "Photo.c"
 				}
 			}
 		}
 #line 3942 "/home/jens/Source/shotwell/src/Photo.vala"
 		is_new_editable = TRUE;
-#line 28386 "Photo.c"
+#line 28387 "Photo.c"
 	}
 #line 3945 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp35_ = only_attributes;
 #line 3945 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp35_) {
-#line 28392 "Photo.c"
+#line 28393 "Photo.c"
 		gboolean _tmp36_ = FALSE;
 		GFileInfo* info = NULL;
 		GTimeVal timestamp = {0};
@@ -28409,7 +28410,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 		_tmp36_ = backing_photo_id_is_valid (&editable_id);
 #line 3947 "/home/jens/Source/shotwell/src/Photo.vala"
 		_vala_assert (_tmp36_, "editable_id.is_valid()");
-#line 28409 "Photo.c"
+#line 28410 "Photo.c"
 		{
 			GFileInfo* _tmp37_ = NULL;
 			GFile* _tmp38_ = NULL;
@@ -28423,8 +28424,8 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			_tmp37_ = _tmp39_;
 #line 3951 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 28423 "Photo.c"
-				goto __catch379_g_error;
+#line 28424 "Photo.c"
+				goto __catch392_g_error;
 			}
 #line 3951 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp40_ = _tmp37_;
@@ -28436,10 +28437,10 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			info = _tmp40_;
 #line 3950 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_tmp37_);
-#line 28436 "Photo.c"
+#line 28437 "Photo.c"
 		}
-		goto __finally379;
-		__catch379_g_error:
+		goto __finally392;
+		__catch392_g_error:
 		{
 			GError* err = NULL;
 			gchar* _tmp41_ = NULL;
@@ -28480,9 +28481,9 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			_photo_file_adapter_unref0 (old_reader);
 #line 3956 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 28480 "Photo.c"
+#line 28481 "Photo.c"
 		}
-		__finally379:
+		__finally392:
 #line 3950 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3950 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28501,7 +28502,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			_photo_file_adapter_unref0 (old_reader);
 #line 3950 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 28501 "Photo.c"
+#line 28502 "Photo.c"
 		}
 #line 3959 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp45_ = info;
@@ -28545,7 +28546,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			_photo_file_adapter_unref0 (old_reader);
 #line 3961 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 28545 "Photo.c"
+#line 28546 "Photo.c"
 		}
 		{
 			PhotoRow* _tmp54_ = NULL;
@@ -28553,7 +28554,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			_tmp54_ = self->row;
 #line 3963 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_lock (&self->priv->__lock_row);
-#line 28553 "Photo.c"
+#line 28554 "Photo.c"
 			{
 				BackingPhotoRow* _tmp55_ = NULL;
 				time_t _tmp56_ = 0;
@@ -28605,16 +28606,16 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 				_tmp68_ = g_file_info_get_size (_tmp67_);
 #line 3968 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp66_->filesize = _tmp68_;
-#line 28605 "Photo.c"
+#line 28606 "Photo.c"
 			}
-			__finally380:
+			__finally393:
 			{
 				PhotoRow* _tmp69_ = NULL;
 #line 3963 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp69_ = self->row;
 #line 3963 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 28614 "Photo.c"
+#line 28615 "Photo.c"
 			}
 #line 3963 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -28634,12 +28635,12 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 				_photo_file_adapter_unref0 (old_reader);
 #line 3963 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 28634 "Photo.c"
+#line 28635 "Photo.c"
 			}
 		}
 #line 3945 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (info);
-#line 28639 "Photo.c"
+#line 28640 "Photo.c"
 	} else {
 		gboolean _tmp70_ = FALSE;
 		gboolean _tmp71_ = FALSE;
@@ -28647,21 +28648,21 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 		_tmp71_ = backing_photo_id_is_valid (&editable_id);
 #line 3972 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp71_) {
-#line 28647 "Photo.c"
+#line 28648 "Photo.c"
 			gboolean _tmp72_ = FALSE;
 #line 3972 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp72_ = is_new_editable;
 #line 3972 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp70_ = !_tmp72_;
-#line 28653 "Photo.c"
+#line 28654 "Photo.c"
 		} else {
 #line 3972 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp70_ = FALSE;
-#line 28657 "Photo.c"
+#line 28658 "Photo.c"
 		}
 #line 3972 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp70_) {
-#line 28661 "Photo.c"
+#line 28662 "Photo.c"
 			BackingPhotoRow* _tmp73_ = NULL;
 			BackingPhotoID _tmp74_ = {0};
 			BackingPhotoTable* _tmp75_ = NULL;
@@ -28699,7 +28700,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 				_photo_file_adapter_unref0 (old_reader);
 #line 3978 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 28699 "Photo.c"
+#line 28700 "Photo.c"
 			}
 			{
 				PhotoRow* _tmp78_ = NULL;
@@ -28707,7 +28708,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 				_tmp78_ = self->row;
 #line 3979 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_lock (&self->priv->__lock_row);
-#line 28707 "Photo.c"
+#line 28708 "Photo.c"
 				{
 					BackingPhotoRow* _tmp79_ = NULL;
 					time_t _tmp80_ = 0;
@@ -28765,16 +28766,16 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 					_tmp92_ = _tmp91_->original_orientation;
 #line 3985 "/home/jens/Source/shotwell/src/Photo.vala"
 					photo_set_orientation (self, _tmp92_);
-#line 28765 "Photo.c"
+#line 28766 "Photo.c"
 				}
-				__finally381:
+				__finally394:
 				{
 					PhotoRow* _tmp93_ = NULL;
 #line 3979 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp93_ = self->row;
 #line 3979 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 28774 "Photo.c"
+#line 28775 "Photo.c"
 				}
 #line 3979 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -28792,7 +28793,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 					_photo_file_adapter_unref0 (old_reader);
 #line 3979 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 28792 "Photo.c"
+#line 28793 "Photo.c"
 				}
 			}
 		}
@@ -28801,14 +28802,14 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 	_tmp94_ = new_reader;
 #line 3991 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp94_ != NULL) {
-#line 28801 "Photo.c"
+#line 28802 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp95_ = NULL;
 #line 3992 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp95_ = self->priv->readers;
 #line 3992 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 28808 "Photo.c"
+#line 28809 "Photo.c"
 			{
 				PhotoBackingReaders* _tmp96_ = NULL;
 				PhotoFileReader* _tmp97_ = NULL;
@@ -28823,16 +28824,16 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 				_photo_file_adapter_unref0 (_tmp96_->editable);
 #line 3993 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp96_->editable = _tmp98_;
-#line 28823 "Photo.c"
+#line 28824 "Photo.c"
 			}
-			__finally382:
+			__finally395:
 			{
 				PhotoBackingReaders* _tmp99_ = NULL;
 #line 3992 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp99_ = self->priv->readers;
 #line 3992 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 28832 "Photo.c"
+#line 28833 "Photo.c"
 			}
 #line 3992 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -28850,7 +28851,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 				_photo_file_adapter_unref0 (old_reader);
 #line 3992 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 28850 "Photo.c"
+#line 28851 "Photo.c"
 			}
 		}
 	}
@@ -28858,7 +28859,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 	_tmp101_ = only_attributes;
 #line 3997 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp101_) {
-#line 28858 "Photo.c"
+#line 28859 "Photo.c"
 		PhotoFileReader* _tmp102_ = NULL;
 		PhotoFileReader* _tmp103_ = NULL;
 #line 3997 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28867,15 +28868,15 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 		_tmp103_ = old_reader;
 #line 3997 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp100_ = _tmp102_ != _tmp103_;
-#line 28867 "Photo.c"
+#line 28868 "Photo.c"
 	} else {
 #line 3997 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp100_ = FALSE;
-#line 28871 "Photo.c"
+#line 28872 "Photo.c"
 	}
 #line 3997 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp100_) {
-#line 28875 "Photo.c"
+#line 28876 "Photo.c"
 		GFile* _tmp104_ = NULL;
 		PhotoFileReader* _tmp105_ = NULL;
 		GFile* _tmp108_ = NULL;
@@ -28886,7 +28887,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 		_tmp105_ = old_reader;
 #line 3999 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp105_ != NULL) {
-#line 28886 "Photo.c"
+#line 28887 "Photo.c"
 			PhotoFileReader* _tmp106_ = NULL;
 			GFile* _tmp107_ = NULL;
 #line 3999 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28897,19 +28898,19 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			_g_object_unref0 (_tmp104_);
 #line 3999 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp104_ = _tmp107_;
-#line 28897 "Photo.c"
+#line 28898 "Photo.c"
 		} else {
 #line 3999 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_tmp104_);
 #line 3999 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp104_ = NULL;
-#line 28903 "Photo.c"
+#line 28904 "Photo.c"
 		}
 #line 4000 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp109_ = new_reader;
 #line 4000 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp109_ != NULL) {
-#line 28909 "Photo.c"
+#line 28910 "Photo.c"
 			PhotoFileReader* _tmp110_ = NULL;
 			GFile* _tmp111_ = NULL;
 #line 4000 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28920,13 +28921,13 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			_g_object_unref0 (_tmp108_);
 #line 4000 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp108_ = _tmp111_;
-#line 28920 "Photo.c"
+#line 28921 "Photo.c"
 		} else {
 #line 4000 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_tmp108_);
 #line 4000 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp108_ = NULL;
-#line 28926 "Photo.c"
+#line 28927 "Photo.c"
 		}
 #line 3999 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_editable_replaced (self, _tmp104_, _tmp108_);
@@ -28934,7 +28935,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 		_g_object_unref0 (_tmp108_);
 #line 3997 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp104_);
-#line 28934 "Photo.c"
+#line 28935 "Photo.c"
 	}
 #line 4003 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp112_ = g_new0 (gchar*, 0 + 1);
@@ -28948,7 +28949,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 	_tmp113_ = timestamp_changed;
 #line 4004 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp113_) {
-#line 28948 "Photo.c"
+#line 28949 "Photo.c"
 		gchar** _tmp114_ = NULL;
 		gint _tmp114__length1 = 0;
 		gchar* _tmp115_ = NULL;
@@ -28976,7 +28977,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 		_tmp118_ = photo_is_editable_source (self);
 #line 4008 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp118_) {
-#line 28976 "Photo.c"
+#line 28977 "Photo.c"
 			gchar** _tmp119_ = NULL;
 			gint _tmp119__length1 = 0;
 			gchar* _tmp120_ = NULL;
@@ -28988,7 +28989,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			_tmp120_ = g_strdup ("metadata:source-timestamp");
 #line 4009 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add271 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp120_);
-#line 28988 "Photo.c"
+#line 28989 "Photo.c"
 		}
 	}
 #line 4012 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28997,18 +28998,18 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 	if (_tmp122_) {
 #line 4012 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp121_ = TRUE;
-#line 28997 "Photo.c"
+#line 28998 "Photo.c"
 	} else {
 		PhotoFileReader* _tmp123_ = NULL;
 #line 4012 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp123_ = new_reader;
 #line 4012 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp121_ = _tmp123_ != NULL;
-#line 29004 "Photo.c"
+#line 29005 "Photo.c"
 	}
 #line 4012 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp121_) {
-#line 29008 "Photo.c"
+#line 29009 "Photo.c"
 		gchar** _tmp124_ = NULL;
 		gint _tmp124__length1 = 0;
 		gchar* _tmp125_ = NULL;
@@ -29036,7 +29037,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 		_tmp128_ = photo_is_editable_source (self);
 #line 4016 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp128_) {
-#line 29036 "Photo.c"
+#line 29037 "Photo.c"
 			gchar** _tmp129_ = NULL;
 			gint _tmp129__length1 = 0;
 			gchar* _tmp130_ = NULL;
@@ -29048,7 +29049,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			_tmp130_ = g_strdup ("image:source");
 #line 4017 "/home/jens/Source/shotwell/src/Photo.vala"
 			_vala_array_add274 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp130_);
-#line 29048 "Photo.c"
+#line 29049 "Photo.c"
 		}
 	}
 #line 4020 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29057,7 +29058,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 	_tmp131__length1 = alteration_list_length1;
 #line 4020 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp131__length1 > 0) {
-#line 29057 "Photo.c"
+#line 29058 "Photo.c"
 		gchar** _tmp132_ = NULL;
 		gint _tmp132__length1 = 0;
 		Alteration* _tmp133_ = NULL;
@@ -29074,7 +29075,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp134_);
 #line 4021 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp134_);
-#line 29074 "Photo.c"
+#line 29075 "Photo.c"
 	}
 #line 3903 "/home/jens/Source/shotwell/src/Photo.vala"
 	alteration_list = (_vala_array_free (alteration_list, alteration_list_length1, (GDestroyNotify) g_free), NULL);
@@ -29088,7 +29089,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 	_photo_file_adapter_unref0 (reader);
 #line 3903 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_file_adapter_unref0 (old_reader);
-#line 29088 "Photo.c"
+#line 29089 "Photo.c"
 }
 
 
@@ -29112,14 +29113,14 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 	has_editable = FALSE;
 #line 4028 "/home/jens/Source/shotwell/src/Photo.vala"
 	editable_file = NULL;
-#line 29112 "Photo.c"
+#line 29113 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 4029 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 4029 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 29119 "Photo.c"
+#line 29120 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -29129,7 +29130,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			_tmp2_ = _tmp1_->editable;
 #line 4030 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp2_ != NULL) {
-#line 29129 "Photo.c"
+#line 29130 "Photo.c"
 				PhotoBackingReaders* _tmp3_ = NULL;
 				PhotoFileReader* _tmp4_ = NULL;
 				GFile* _tmp5_ = NULL;
@@ -29152,17 +29153,17 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 				_tmp6_->editable = NULL;
 #line 4033 "/home/jens/Source/shotwell/src/Photo.vala"
 				has_editable = TRUE;
-#line 29152 "Photo.c"
+#line 29153 "Photo.c"
 			}
 		}
-		__finally383:
+		__finally396:
 		{
 			PhotoBackingReaders* _tmp7_ = NULL;
 #line 4029 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = self->priv->readers;
 #line 4029 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 29162 "Photo.c"
+#line 29163 "Photo.c"
 		}
 #line 4029 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -29174,18 +29175,18 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			g_clear_error (&_inner_error_);
 #line 4029 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 29174 "Photo.c"
+#line 29175 "Photo.c"
 		}
 	}
 #line 4037 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = has_editable;
 #line 4037 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp8_) {
-#line 29181 "Photo.c"
+#line 29182 "Photo.c"
 		BackingPhotoID editable_id = {0};
 #line 4038 "/home/jens/Source/shotwell/src/Photo.vala"
 		backing_photo_id_init (&editable_id, BACKING_PHOTO_ID_INVALID);
-#line 29185 "Photo.c"
+#line 29186 "Photo.c"
 		{
 			{
 				PhotoRow* _tmp9_ = NULL;
@@ -29193,7 +29194,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 				_tmp9_ = self->row;
 #line 4040 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_rec_mutex_lock (&self->priv->__lock_row);
-#line 29193 "Photo.c"
+#line 29194 "Photo.c"
 				{
 					PhotoRow* _tmp10_ = NULL;
 					BackingPhotoID _tmp11_ = {0};
@@ -29211,7 +29212,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 					_tmp12_ = backing_photo_id_is_valid (&editable_id);
 #line 4042 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_tmp12_) {
-#line 29211 "Photo.c"
+#line 29212 "Photo.c"
 						PhotoTable* _tmp13_ = NULL;
 						PhotoTable* _tmp14_ = NULL;
 						PhotoRow* _tmp15_ = NULL;
@@ -29227,8 +29228,8 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 						_database_table_unref0 (_tmp14_);
 #line 4043 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 29227 "Photo.c"
-							goto __finally385;
+#line 29228 "Photo.c"
+							goto __finally398;
 						}
 					}
 #line 4044 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29241,23 +29242,23 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 					_backing_photo_row_unref0 (self->backing_photo_row);
 #line 4044 "/home/jens/Source/shotwell/src/Photo.vala"
 					self->backing_photo_row = _tmp18_;
-#line 29241 "Photo.c"
+#line 29242 "Photo.c"
 				}
-				__finally385:
+				__finally398:
 				{
 					PhotoRow* _tmp19_ = NULL;
 #line 4040 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp19_ = self->row;
 #line 4040 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 29250 "Photo.c"
+#line 29251 "Photo.c"
 				}
 #line 4040 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4040 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
-#line 29256 "Photo.c"
-						goto __catch384_database_error;
+#line 29257 "Photo.c"
+						goto __catch397_database_error;
 					}
 #line 4040 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_object_unref0 (editable_file);
@@ -29267,12 +29268,12 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 					g_clear_error (&_inner_error_);
 #line 4040 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 29267 "Photo.c"
+#line 29268 "Photo.c"
 				}
 			}
 		}
-		goto __finally384;
-		__catch384_database_error:
+		goto __finally397;
+		__catch397_database_error:
 		{
 			GError* err = NULL;
 			GError* _tmp20_ = NULL;
@@ -29289,9 +29290,9 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			g_warning ("Photo.vala:4047: Unable to remove editable from PhotoTable: %s", _tmp21_);
 #line 4039 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_error_free0 (err);
-#line 29289 "Photo.c"
+#line 29290 "Photo.c"
 		}
-		__finally384:
+		__finally397:
 #line 4039 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4039 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29302,7 +29303,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			g_clear_error (&_inner_error_);
 #line 4039 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 29302 "Photo.c"
+#line 29303 "Photo.c"
 		}
 		{
 			gboolean _tmp22_ = FALSE;
@@ -29310,7 +29311,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			_tmp22_ = backing_photo_id_is_valid (&editable_id);
 #line 4051 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp22_) {
-#line 29310 "Photo.c"
+#line 29311 "Photo.c"
 				BackingPhotoTable* _tmp23_ = NULL;
 				BackingPhotoTable* _tmp24_ = NULL;
 				BackingPhotoID _tmp25_ = {0};
@@ -29328,8 +29329,8 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4052 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
-#line 29328 "Photo.c"
-						goto __catch386_database_error;
+#line 29329 "Photo.c"
+						goto __catch399_database_error;
 					}
 #line 4052 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_object_unref0 (editable_file);
@@ -29339,12 +29340,12 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 					g_clear_error (&_inner_error_);
 #line 4052 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 29339 "Photo.c"
+#line 29340 "Photo.c"
 				}
 			}
 		}
-		goto __finally386;
-		__catch386_database_error:
+		goto __finally399;
+		__catch399_database_error:
 		{
 			GError* err = NULL;
 			GError* _tmp26_ = NULL;
@@ -29361,9 +29362,9 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			g_warning ("Photo.vala:4054: Unable to remove editable from BackingPhotoTable: %s", _tmp27_);
 #line 4050 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_error_free0 (err);
-#line 29361 "Photo.c"
+#line 29362 "Photo.c"
 		}
-		__finally386:
+		__finally399:
 #line 4050 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4050 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29374,7 +29375,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			g_clear_error (&_inner_error_);
 #line 4050 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 29374 "Photo.c"
+#line 29375 "Photo.c"
 		}
 	}
 #line 4058 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29383,13 +29384,13 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 	if (_tmp28_) {
 #line 4059 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_internal_remove_all_transformations (self, FALSE);
-#line 29383 "Photo.c"
+#line 29384 "Photo.c"
 	}
 #line 4061 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp29_ = has_editable;
 #line 4061 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp29_) {
-#line 29389 "Photo.c"
+#line 29390 "Photo.c"
 		GFile* _tmp30_ = NULL;
 #line 4062 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_baseline_replaced (self);
@@ -29397,27 +29398,27 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 		_tmp30_ = editable_file;
 #line 4063 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_notify_editable_replaced (self, _tmp30_, NULL);
-#line 29397 "Photo.c"
+#line 29398 "Photo.c"
 	}
 #line 4066 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp32_ = delete_editable;
 #line 4066 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp32_) {
-#line 29403 "Photo.c"
+#line 29404 "Photo.c"
 		GFile* _tmp33_ = NULL;
 #line 4066 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp33_ = editable_file;
 #line 4066 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp31_ = _tmp33_ != NULL;
-#line 29409 "Photo.c"
+#line 29410 "Photo.c"
 	} else {
 #line 4066 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp31_ = FALSE;
-#line 29413 "Photo.c"
+#line 29414 "Photo.c"
 	}
 #line 4066 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp31_) {
-#line 29417 "Photo.c"
+#line 29418 "Photo.c"
 		{
 			GFile* _tmp34_ = NULL;
 #line 4068 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29426,12 +29427,12 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			g_file_trash (_tmp34_, NULL, &_inner_error_);
 #line 4068 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 29426 "Photo.c"
-				goto __catch387_g_error;
+#line 29427 "Photo.c"
+				goto __catch400_g_error;
 			}
 		}
-		goto __finally387;
-		__catch387_g_error:
+		goto __finally400;
+		__catch400_g_error:
 		{
 			GError* err = NULL;
 			GFile* _tmp35_ = NULL;
@@ -29467,9 +29468,9 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			_g_free0 (_tmp37_);
 #line 4067 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_error_free0 (err);
-#line 29467 "Photo.c"
+#line 29468 "Photo.c"
 		}
-		__finally387:
+		__finally400:
 #line 4067 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4067 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29480,7 +29481,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			g_clear_error (&_inner_error_);
 #line 4067 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 29480 "Photo.c"
+#line 29481 "Photo.c"
 		}
 	}
 #line 4075 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29489,32 +29490,32 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 	if (_tmp44_) {
 #line 4075 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp43_ = TRUE;
-#line 29489 "Photo.c"
+#line 29490 "Photo.c"
 	} else {
 		gboolean _tmp45_ = FALSE;
 #line 4075 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp45_ = remove_transformations;
 #line 4075 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp43_ = _tmp45_;
-#line 29496 "Photo.c"
+#line 29497 "Photo.c"
 	}
 #line 4075 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp43_) {
-#line 29500 "Photo.c"
+#line 29501 "Photo.c"
 		gboolean _tmp46_ = FALSE;
 #line 4075 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp46_ = notify;
 #line 4075 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp42_ = _tmp46_;
-#line 29506 "Photo.c"
+#line 29507 "Photo.c"
 	} else {
 #line 4075 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp42_ = FALSE;
-#line 29510 "Photo.c"
+#line 29511 "Photo.c"
 	}
 #line 4075 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp42_) {
-#line 29514 "Photo.c"
+#line 29515 "Photo.c"
 		Alteration* _tmp47_ = NULL;
 		Alteration* _tmp48_ = NULL;
 #line 4076 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29525,32 +29526,32 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 		data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp48_);
 #line 4076 "/home/jens/Source/shotwell/src/Photo.vala"
 		_alteration_unref0 (_tmp48_);
-#line 29525 "Photo.c"
+#line 29526 "Photo.c"
 	}
 #line 4024 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (editable_file);
-#line 29529 "Photo.c"
+#line 29530 "Photo.c"
 }
 
 
 static void _photo_on_reimport_editable_one_shot_callback (gpointer self) {
 #line 4098 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_on_reimport_editable ((Photo*) self);
-#line 29536 "Photo.c"
+#line 29537 "Photo.c"
 }
 
 
 static void _photo_on_update_editable_attributes_one_shot_callback (gpointer self) {
 #line 4107 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_on_update_editable_attributes ((Photo*) self);
-#line 29543 "Photo.c"
+#line 29544 "Photo.c"
 }
 
 
 static void _photo_on_remove_editable_one_shot_callback (gpointer self) {
 #line 4116 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_on_remove_editable ((Photo*) self);
-#line 29550 "Photo.c"
+#line 29551 "Photo.c"
 }
 
 
@@ -29568,14 +29569,14 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 	g_return_if_fail (G_IS_FILE (file));
 #line 4079 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail ((other_file == NULL) || G_IS_FILE (other_file));
-#line 29568 "Photo.c"
+#line 29569 "Photo.c"
 	{
 		PhotoBackingReaders* _tmp0_ = NULL;
 #line 4081 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = self->priv->readers;
 #line 4081 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_readers);
-#line 29575 "Photo.c"
+#line 29576 "Photo.c"
 		{
 			PhotoBackingReaders* _tmp1_ = NULL;
 			PhotoFileReader* _tmp2_ = NULL;
@@ -29610,28 +29611,28 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 			_g_object_unref0 (_tmp7_);
 #line 4084 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp9_) {
-#line 29610 "Photo.c"
+#line 29611 "Photo.c"
 				{
 					PhotoBackingReaders* _tmp10_ = NULL;
 #line 4081 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp10_ = self->priv->readers;
 #line 4081 "/home/jens/Source/shotwell/src/Photo.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 29617 "Photo.c"
+#line 29618 "Photo.c"
 				}
 #line 4088 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 29621 "Photo.c"
+#line 29622 "Photo.c"
 			}
 		}
-		__finally388:
+		__finally401:
 		{
 			PhotoBackingReaders* _tmp11_ = NULL;
 #line 4081 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp11_ = self->priv->readers;
 #line 4081 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_readers);
-#line 29631 "Photo.c"
+#line 29632 "Photo.c"
 		}
 #line 4081 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -29641,7 +29642,7 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 			g_clear_error (&_inner_error_);
 #line 4081 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 29641 "Photo.c"
+#line 29642 "Photo.c"
 		}
 	}
 #line 4092 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29666,7 +29667,7 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 		case G_FILE_MONITOR_EVENT_CHANGED:
 #line 4094 "/home/jens/Source/shotwell/src/Photo.vala"
 		case G_FILE_MONITOR_EVENT_CREATED:
-#line 29666 "Photo.c"
+#line 29667 "Photo.c"
 		{
 			OneShotScheduler* _tmp18_ = NULL;
 			OneShotScheduler* _tmp20_ = NULL;
@@ -29674,7 +29675,7 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 			_tmp18_ = self->priv->reimport_editable_scheduler;
 #line 4097 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp18_ == NULL) {
-#line 29674 "Photo.c"
+#line 29675 "Photo.c"
 				OneShotScheduler* _tmp19_ = NULL;
 #line 4098 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp19_ = one_shot_scheduler_new ("Photo.reimport_editable", _photo_on_reimport_editable_one_shot_callback, self);
@@ -29682,7 +29683,7 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 				_one_shot_scheduler_unref0 (self->priv->reimport_editable_scheduler);
 #line 4098 "/home/jens/Source/shotwell/src/Photo.vala"
 				self->priv->reimport_editable_scheduler = _tmp19_;
-#line 29682 "Photo.c"
+#line 29683 "Photo.c"
 			}
 #line 4102 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp20_ = self->priv->reimport_editable_scheduler;
@@ -29690,11 +29691,11 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 			one_shot_scheduler_after_timeout (_tmp20_, (guint) 1000, TRUE);
 #line 4103 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 29690 "Photo.c"
+#line 29691 "Photo.c"
 		}
 #line 4094 "/home/jens/Source/shotwell/src/Photo.vala"
 		case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
-#line 29694 "Photo.c"
+#line 29695 "Photo.c"
 		{
 			OneShotScheduler* _tmp21_ = NULL;
 			OneShotScheduler* _tmp23_ = NULL;
@@ -29702,7 +29703,7 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 			_tmp21_ = self->priv->update_editable_attributes_scheduler;
 #line 4106 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp21_ == NULL) {
-#line 29702 "Photo.c"
+#line 29703 "Photo.c"
 				OneShotScheduler* _tmp22_ = NULL;
 #line 4107 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp22_ = one_shot_scheduler_new ("Photo.update_editable_attributes", _photo_on_update_editable_attributes_one_shot_callback, self);
@@ -29710,7 +29711,7 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 				_one_shot_scheduler_unref0 (self->priv->update_editable_attributes_scheduler);
 #line 4107 "/home/jens/Source/shotwell/src/Photo.vala"
 				self->priv->update_editable_attributes_scheduler = _tmp22_;
-#line 29710 "Photo.c"
+#line 29711 "Photo.c"
 			}
 #line 4111 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp23_ = self->priv->update_editable_attributes_scheduler;
@@ -29718,11 +29719,11 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 			one_shot_scheduler_after_timeout (_tmp23_, (guint) 1000, TRUE);
 #line 4112 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 29718 "Photo.c"
+#line 29719 "Photo.c"
 		}
 #line 4094 "/home/jens/Source/shotwell/src/Photo.vala"
 		case G_FILE_MONITOR_EVENT_DELETED:
-#line 29722 "Photo.c"
+#line 29723 "Photo.c"
 		{
 			OneShotScheduler* _tmp24_ = NULL;
 			OneShotScheduler* _tmp26_ = NULL;
@@ -29730,7 +29731,7 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 			_tmp24_ = self->priv->remove_editable_scheduler;
 #line 4115 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp24_ == NULL) {
-#line 29730 "Photo.c"
+#line 29731 "Photo.c"
 				OneShotScheduler* _tmp25_ = NULL;
 #line 4116 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp25_ = one_shot_scheduler_new ("Photo.remove_editable", _photo_on_remove_editable_one_shot_callback, self);
@@ -29738,7 +29739,7 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 				_one_shot_scheduler_unref0 (self->priv->remove_editable_scheduler);
 #line 4116 "/home/jens/Source/shotwell/src/Photo.vala"
 				self->priv->remove_editable_scheduler = _tmp25_;
-#line 29738 "Photo.c"
+#line 29739 "Photo.c"
 			}
 #line 4120 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp26_ = self->priv->remove_editable_scheduler;
@@ -29746,21 +29747,21 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 			one_shot_scheduler_after_timeout (_tmp26_, (guint) 3000, TRUE);
 #line 4121 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 29746 "Photo.c"
+#line 29747 "Photo.c"
 		}
 		default:
 #line 4094 "/home/jens/Source/shotwell/src/Photo.vala"
 		case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
-#line 29751 "Photo.c"
+#line 29752 "Photo.c"
 		{
 #line 4126 "/home/jens/Source/shotwell/src/Photo.vala"
 			break;
-#line 29755 "Photo.c"
+#line 29756 "Photo.c"
 		}
 	}
 #line 4131 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_discard_prefetched (self);
-#line 29760 "Photo.c"
+#line 29761 "Photo.c"
 }
 
 
@@ -29780,18 +29781,18 @@ static void photo_on_reimport_editable (Photo* self) {
 	g_debug ("Photo.vala:4138: Reimporting editable for %s", _tmp1_);
 #line 4138 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_free0 (_tmp1_);
-#line 29780 "Photo.c"
+#line 29781 "Photo.c"
 	{
 #line 4140 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_editable (self, &_inner_error_);
 #line 4140 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 29786 "Photo.c"
-			goto __catch389_g_error;
+#line 29787 "Photo.c"
+			goto __catch402_g_error;
 		}
 	}
-	goto __finally389;
-	__catch389_g_error:
+	goto __finally402;
+	__catch402_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp2_ = NULL;
@@ -29817,9 +29818,9 @@ static void photo_on_reimport_editable (Photo* self) {
 		_g_free0 (_tmp3_);
 #line 4139 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 29816 "Photo.c"
+#line 29817 "Photo.c"
 	}
-	__finally389:
+	__finally402:
 #line 4139 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4139 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29828,7 +29829,7 @@ static void photo_on_reimport_editable (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 4139 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 29827 "Photo.c"
+#line 29828 "Photo.c"
 	}
 }
 
@@ -29847,18 +29848,18 @@ static void photo_on_update_editable_attributes (Photo* self) {
 	g_debug ("Photo.vala:4148: Updating editable attributes for %s", _tmp1_);
 #line 4148 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_free0 (_tmp1_);
-#line 29846 "Photo.c"
+#line 29847 "Photo.c"
 	{
 #line 4150 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_update_editable_attributes (self, &_inner_error_);
 #line 4150 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 29852 "Photo.c"
-			goto __catch390_g_error;
+#line 29853 "Photo.c"
+			goto __catch403_g_error;
 		}
 	}
-	goto __finally390;
-	__catch390_g_error:
+	goto __finally403;
+	__catch403_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp2_ = NULL;
@@ -29875,9 +29876,9 @@ static void photo_on_update_editable_attributes (Photo* self) {
 		g_warning ("Photo.vala:4152: Unable to update editable attributes: %s", _tmp3_);
 #line 4149 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 29874 "Photo.c"
+#line 29875 "Photo.c"
 	}
-	__finally390:
+	__finally403:
 #line 4149 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4149 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29886,7 +29887,7 @@ static void photo_on_update_editable_attributes (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 4149 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 29885 "Photo.c"
+#line 29886 "Photo.c"
 	}
 }
 
@@ -29916,7 +29917,7 @@ static void photo_on_remove_editable (Photo* self) {
 		_photo_file_adapter_unref0 (reader);
 #line 4159 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 29915 "Photo.c"
+#line 29916 "Photo.c"
 	}
 #line 4161 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = reader;
@@ -29930,7 +29931,7 @@ static void photo_on_remove_editable (Photo* self) {
 	_tmp5_ = g_file_query_exists (_tmp4_, NULL);
 #line 4162 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp5_) {
-#line 29929 "Photo.c"
+#line 29930 "Photo.c"
 		gchar* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
 #line 4163 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29947,7 +29948,7 @@ static void photo_on_remove_editable (Photo* self) {
 		_photo_file_adapter_unref0 (reader);
 #line 4165 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 29946 "Photo.c"
+#line 29947 "Photo.c"
 	}
 #line 4168 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = data_object_to_string (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject));
@@ -29963,7 +29964,7 @@ static void photo_on_remove_editable (Photo* self) {
 	_g_object_unref0 (file);
 #line 4156 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_file_adapter_unref0 (reader);
-#line 29962 "Photo.c"
+#line 29963 "Photo.c"
 }
 
 
@@ -29992,7 +29993,7 @@ void photo_get_original_dimensions (Photo* self, Dimensions* result) {
 	*result = _tmp3_;
 #line 4181 "/home/jens/Source/shotwell/src/Photo.vala"
 	return;
-#line 29991 "Photo.c"
+#line 29992 "Photo.c"
 }
 
 
@@ -30012,7 +30013,7 @@ void photo_get_master_dimensions (Photo* self, Dimensions* result) {
 	*result = _tmp2_;
 #line 4186 "/home/jens/Source/shotwell/src/Photo.vala"
 	return;
-#line 30011 "Photo.c"
+#line 30012 "Photo.c"
 }
 
 
@@ -30044,11 +30045,11 @@ gboolean photo_get_crop (Photo* self, Box* crop, PhotoException exceptions) {
 		if (crop) {
 #line 4195 "/home/jens/Source/shotwell/src/Photo.vala"
 			*crop = _vala_crop;
-#line 30043 "Photo.c"
+#line 30044 "Photo.c"
 		}
 #line 4195 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 30047 "Photo.c"
+#line 30048 "Photo.c"
 	}
 #line 4198 "/home/jens/Source/shotwell/src/Photo.vala"
 	media_source_get_dimensions (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource), PHOTO_EXCEPTION_CROP | PHOTO_EXCEPTION_ORIENTATION, &_tmp2_);
@@ -30064,7 +30065,7 @@ gboolean photo_get_crop (Photo* self, Box* crop, PhotoException exceptions) {
 	_tmp5_ = photo_exception_allows (_tmp4_, PHOTO_EXCEPTION_ORIENTATION);
 #line 4201 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp5_) {
-#line 30063 "Photo.c"
+#line 30064 "Photo.c"
 		Orientation _tmp6_ = 0;
 		Dimensions _tmp7_ = {0};
 		Box _tmp8_ = {0};
@@ -30079,14 +30080,14 @@ gboolean photo_get_crop (Photo* self, Box* crop, PhotoException exceptions) {
 		orientation_rotate_box (_tmp6_, &_tmp7_, &_tmp8_, &_tmp9_);
 #line 4202 "/home/jens/Source/shotwell/src/Photo.vala"
 		_vala_crop = _tmp9_;
-#line 30078 "Photo.c"
+#line 30079 "Photo.c"
 	} else {
 		Box _tmp10_ = {0};
 #line 4204 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp10_ = raw;
 #line 4204 "/home/jens/Source/shotwell/src/Photo.vala"
 		_vala_crop = _tmp10_;
-#line 30085 "Photo.c"
+#line 30086 "Photo.c"
 	}
 #line 4206 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = TRUE;
@@ -30094,11 +30095,11 @@ gboolean photo_get_crop (Photo* self, Box* crop, PhotoException exceptions) {
 	if (crop) {
 #line 4206 "/home/jens/Source/shotwell/src/Photo.vala"
 		*crop = _vala_crop;
-#line 30093 "Photo.c"
+#line 30094 "Photo.c"
 	}
 #line 4206 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 30097 "Photo.c"
+#line 30098 "Photo.c"
 }
 
 
@@ -30216,7 +30217,7 @@ void photo_set_crop (Photo* self, Box* crop) {
 	_tmp29_ = derotated;
 #line 4222 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_set_raw_crop (self, &_tmp29_);
-#line 30215 "Photo.c"
+#line 30216 "Photo.c"
 }
 
 
@@ -30239,11 +30240,11 @@ gboolean photo_get_straighten (Photo* self, gdouble* theta) {
 		if (theta) {
 #line 4227 "/home/jens/Source/shotwell/src/Photo.vala"
 			*theta = _vala_theta;
-#line 30238 "Photo.c"
+#line 30239 "Photo.c"
 		}
 #line 4227 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 30242 "Photo.c"
+#line 30243 "Photo.c"
 	}
 #line 4229 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = TRUE;
@@ -30251,11 +30252,11 @@ gboolean photo_get_straighten (Photo* self, gdouble* theta) {
 	if (theta) {
 #line 4229 "/home/jens/Source/shotwell/src/Photo.vala"
 		*theta = _vala_theta;
-#line 30250 "Photo.c"
+#line 30251 "Photo.c"
 	}
 #line 4229 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 30254 "Photo.c"
+#line 30255 "Photo.c"
 }
 
 
@@ -30267,7 +30268,7 @@ void photo_set_straighten (Photo* self, gdouble theta) {
 	_tmp0_ = theta;
 #line 4233 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_set_raw_straighten (self, _tmp0_);
-#line 30266 "Photo.c"
+#line 30267 "Photo.c"
 }
 
 
@@ -30351,7 +30352,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 	_x_insets_first_quadrant_size_ = x_insets_first_quadrant_length1;
 #line 4249 "/home/jens/Source/shotwell/src/Photo.vala"
 	i = 0;
-#line 30350 "Photo.c"
+#line 30351 "Photo.c"
 	{
 		gdouble y = 0.0;
 		gdouble _tmp5_ = 0.0;
@@ -30359,14 +30360,14 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 		_tmp5_ = r;
 #line 4250 "/home/jens/Source/shotwell/src/Photo.vala"
 		y = _tmp5_;
-#line 30358 "Photo.c"
+#line 30359 "Photo.c"
 		{
 			gboolean _tmp6_ = FALSE;
 #line 4250 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp6_ = TRUE;
 #line 4250 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 30365 "Photo.c"
+#line 30366 "Photo.c"
 				gdouble _tmp8_ = 0.0;
 				gdouble theta = 0.0;
 				gdouble _tmp9_ = 0.0;
@@ -30386,13 +30387,13 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				gint _tmp21_ = 0;
 #line 4250 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (!_tmp6_) {
-#line 30385 "Photo.c"
+#line 30386 "Photo.c"
 					gdouble _tmp7_ = 0.0;
 #line 4250 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp7_ = y;
 #line 4250 "/home/jens/Source/shotwell/src/Photo.vala"
 					y = _tmp7_ - 1.0;
-#line 30391 "Photo.c"
+#line 30392 "Photo.c"
 				}
 #line 4250 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp6_ = FALSE;
@@ -30402,7 +30403,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				if (!(_tmp8_ >= 0.0)) {
 #line 4250 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 30401 "Photo.c"
+#line 30402 "Photo.c"
 				}
 #line 4251 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp9_ = y;
@@ -30440,7 +30441,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				_tmp21_ = i;
 #line 4255 "/home/jens/Source/shotwell/src/Photo.vala"
 				i = _tmp21_ + 1;
-#line 30439 "Photo.c"
+#line 30440 "Photo.c"
 			}
 		}
 	}
@@ -30486,14 +30487,14 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 	if (_tmp38_ < 0) {
 #line 4261 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp37_ = 0;
-#line 30485 "Photo.c"
+#line 30486 "Photo.c"
 	} else {
 		gint _tmp39_ = 0;
 #line 4261 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp39_ = ymin;
 #line 4261 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp37_ = _tmp39_;
-#line 30492 "Photo.c"
+#line 30493 "Photo.c"
 	}
 #line 4261 "/home/jens/Source/shotwell/src/Photo.vala"
 	ymin = _tmp37_;
@@ -30515,7 +30516,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 	_tmp47_ = _tmp46_;
 #line 4263 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp44_ > (_tmp47_ - 1)) {
-#line 30514 "Photo.c"
+#line 30515 "Photo.c"
 		GdkPixbuf* _tmp48_ = NULL;
 		gint _tmp49_ = 0;
 		gint _tmp50_ = 0;
@@ -30527,20 +30528,20 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 		_tmp50_ = _tmp49_;
 #line 4263 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp43_ = _tmp50_ - 1;
-#line 30526 "Photo.c"
+#line 30527 "Photo.c"
 	} else {
 		gint _tmp51_ = 0;
 #line 4263 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp51_ = ymax;
 #line 4263 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp43_ = _tmp51_;
-#line 30533 "Photo.c"
+#line 30534 "Photo.c"
 	}
 #line 4263 "/home/jens/Source/shotwell/src/Photo.vala"
 	ymax = _tmp43_;
 #line 4267 "/home/jens/Source/shotwell/src/Photo.vala"
 	inset_index = 0;
-#line 30539 "Photo.c"
+#line 30540 "Photo.c"
 	{
 		gint y_it = 0;
 		gint _tmp52_ = 0;
@@ -30548,14 +30549,14 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 		_tmp52_ = ymin;
 #line 4268 "/home/jens/Source/shotwell/src/Photo.vala"
 		y_it = _tmp52_;
-#line 30547 "Photo.c"
+#line 30548 "Photo.c"
 		{
 			gboolean _tmp53_ = FALSE;
 #line 4268 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp53_ = TRUE;
 #line 4268 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 30554 "Photo.c"
+#line 30555 "Photo.c"
 				gint _tmp55_ = 0;
 				gint _tmp56_ = 0;
 				gint xmin = 0;
@@ -30580,13 +30581,13 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				gint _tmp87_ = 0;
 #line 4268 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (!_tmp53_) {
-#line 30579 "Photo.c"
+#line 30580 "Photo.c"
 					gint _tmp54_ = 0;
 #line 4268 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp54_ = y_it;
 #line 4268 "/home/jens/Source/shotwell/src/Photo.vala"
 					y_it = _tmp54_ + 1;
-#line 30585 "Photo.c"
+#line 30586 "Photo.c"
 				}
 #line 4268 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp53_ = FALSE;
@@ -30598,7 +30599,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				if (!(_tmp55_ <= _tmp56_)) {
 #line 4268 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 30597 "Photo.c"
+#line 30598 "Photo.c"
 				}
 #line 4269 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp57_ = x_bounds_min;
@@ -30618,14 +30619,14 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				if (_tmp62_ < 0) {
 #line 4270 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp61_ = 0;
-#line 30617 "Photo.c"
+#line 30618 "Photo.c"
 				} else {
 					gint _tmp63_ = 0;
 #line 4270 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp63_ = xmin;
 #line 4270 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp61_ = _tmp63_;
-#line 30624 "Photo.c"
+#line 30625 "Photo.c"
 				}
 #line 4270 "/home/jens/Source/shotwell/src/Photo.vala"
 				xmin = _tmp61_;
@@ -30651,7 +30652,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				_tmp72_ = _tmp71_;
 #line 4272 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp69_ > (_tmp72_ - 1)) {
-#line 30650 "Photo.c"
+#line 30651 "Photo.c"
 					GdkPixbuf* _tmp73_ = NULL;
 					gint _tmp74_ = 0;
 					gint _tmp75_ = 0;
@@ -30663,18 +30664,18 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 					_tmp75_ = _tmp74_;
 #line 4272 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp68_ = _tmp75_ - 1;
-#line 30662 "Photo.c"
+#line 30663 "Photo.c"
 				} else {
 					gint _tmp76_ = 0;
 #line 4272 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp76_ = xmax;
 #line 4272 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp68_ = _tmp76_;
-#line 30669 "Photo.c"
+#line 30670 "Photo.c"
 				}
 #line 4272 "/home/jens/Source/shotwell/src/Photo.vala"
 				xmax = _tmp68_;
-#line 30673 "Photo.c"
+#line 30674 "Photo.c"
 				{
 					gint x_it = 0;
 					gint _tmp77_ = 0;
@@ -30682,14 +30683,14 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 					_tmp77_ = xmin;
 #line 4274 "/home/jens/Source/shotwell/src/Photo.vala"
 					x_it = _tmp77_;
-#line 30681 "Photo.c"
+#line 30682 "Photo.c"
 					{
 						gboolean _tmp78_ = FALSE;
 #line 4274 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp78_ = TRUE;
 #line 4274 "/home/jens/Source/shotwell/src/Photo.vala"
 						while (TRUE) {
-#line 30688 "Photo.c"
+#line 30689 "Photo.c"
 							gint _tmp80_ = 0;
 							gint _tmp81_ = 0;
 							GdkPixbuf* _tmp82_ = NULL;
@@ -30699,13 +30700,13 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 							GdkPixbuf* _tmp86_ = NULL;
 #line 4274 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (!_tmp78_) {
-#line 30698 "Photo.c"
+#line 30699 "Photo.c"
 								gint _tmp79_ = 0;
 #line 4274 "/home/jens/Source/shotwell/src/Photo.vala"
 								_tmp79_ = x_it;
 #line 4274 "/home/jens/Source/shotwell/src/Photo.vala"
 								x_it = _tmp79_ + 1;
-#line 30704 "Photo.c"
+#line 30705 "Photo.c"
 							}
 #line 4274 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp78_ = FALSE;
@@ -30717,7 +30718,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 							if (!(_tmp80_ <= _tmp81_)) {
 #line 4274 "/home/jens/Source/shotwell/src/Photo.vala"
 								break;
-#line 30716 "Photo.c"
+#line 30717 "Photo.c"
 							}
 #line 4275 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp82_ = pixbuf;
@@ -30731,7 +30732,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 							_tmp86_ = _tmp85_;
 #line 4275 "/home/jens/Source/shotwell/src/Photo.vala"
 							_g_object_unref0 (_tmp86_);
-#line 30730 "Photo.c"
+#line 30731 "Photo.c"
 						}
 					}
 				}
@@ -30739,7 +30740,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				_tmp87_ = inset_index;
 #line 4277 "/home/jens/Source/shotwell/src/Photo.vala"
 				inset_index = _tmp87_ + 1;
-#line 30738 "Photo.c"
+#line 30739 "Photo.c"
 			}
 		}
 	}
@@ -30769,7 +30770,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 	_tmp96__length1 = x_insets_first_quadrant_length1;
 #line 4284 "/home/jens/Source/shotwell/src/Photo.vala"
 	inset_index = _tmp96__length1 - 1;
-#line 30768 "Photo.c"
+#line 30769 "Photo.c"
 	{
 		gint y_it = 0;
 		gint _tmp97_ = 0;
@@ -30777,14 +30778,14 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 		_tmp97_ = ymin;
 #line 4285 "/home/jens/Source/shotwell/src/Photo.vala"
 		y_it = _tmp97_;
-#line 30776 "Photo.c"
+#line 30777 "Photo.c"
 		{
 			gboolean _tmp98_ = FALSE;
 #line 4285 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp98_ = TRUE;
 #line 4285 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 30783 "Photo.c"
+#line 30784 "Photo.c"
 				gint _tmp100_ = 0;
 				gint _tmp101_ = 0;
 				gint xmin = 0;
@@ -30809,13 +30810,13 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				gint _tmp132_ = 0;
 #line 4285 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (!_tmp98_) {
-#line 30808 "Photo.c"
+#line 30809 "Photo.c"
 					gint _tmp99_ = 0;
 #line 4285 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp99_ = y_it;
 #line 4285 "/home/jens/Source/shotwell/src/Photo.vala"
 					y_it = _tmp99_ + 1;
-#line 30814 "Photo.c"
+#line 30815 "Photo.c"
 				}
 #line 4285 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp98_ = FALSE;
@@ -30827,7 +30828,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				if (!(_tmp100_ <= _tmp101_)) {
 #line 4285 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 30826 "Photo.c"
+#line 30827 "Photo.c"
 				}
 #line 4286 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp102_ = x_bounds_min;
@@ -30847,14 +30848,14 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				if (_tmp107_ < 0) {
 #line 4287 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp106_ = 0;
-#line 30846 "Photo.c"
+#line 30847 "Photo.c"
 				} else {
 					gint _tmp108_ = 0;
 #line 4287 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp108_ = xmin;
 #line 4287 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp106_ = _tmp108_;
-#line 30853 "Photo.c"
+#line 30854 "Photo.c"
 				}
 #line 4287 "/home/jens/Source/shotwell/src/Photo.vala"
 				xmin = _tmp106_;
@@ -30880,7 +30881,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				_tmp117_ = _tmp116_;
 #line 4289 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp114_ > (_tmp117_ - 1)) {
-#line 30879 "Photo.c"
+#line 30880 "Photo.c"
 					GdkPixbuf* _tmp118_ = NULL;
 					gint _tmp119_ = 0;
 					gint _tmp120_ = 0;
@@ -30892,18 +30893,18 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 					_tmp120_ = _tmp119_;
 #line 4289 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp113_ = _tmp120_ - 1;
-#line 30891 "Photo.c"
+#line 30892 "Photo.c"
 				} else {
 					gint _tmp121_ = 0;
 #line 4289 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp121_ = xmax;
 #line 4289 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp113_ = _tmp121_;
-#line 30898 "Photo.c"
+#line 30899 "Photo.c"
 				}
 #line 4289 "/home/jens/Source/shotwell/src/Photo.vala"
 				xmax = _tmp113_;
-#line 30902 "Photo.c"
+#line 30903 "Photo.c"
 				{
 					gint x_it = 0;
 					gint _tmp122_ = 0;
@@ -30911,14 +30912,14 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 					_tmp122_ = xmin;
 #line 4291 "/home/jens/Source/shotwell/src/Photo.vala"
 					x_it = _tmp122_;
-#line 30910 "Photo.c"
+#line 30911 "Photo.c"
 					{
 						gboolean _tmp123_ = FALSE;
 #line 4291 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp123_ = TRUE;
 #line 4291 "/home/jens/Source/shotwell/src/Photo.vala"
 						while (TRUE) {
-#line 30917 "Photo.c"
+#line 30918 "Photo.c"
 							gint _tmp125_ = 0;
 							gint _tmp126_ = 0;
 							GdkPixbuf* _tmp127_ = NULL;
@@ -30928,13 +30929,13 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 							GdkPixbuf* _tmp131_ = NULL;
 #line 4291 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (!_tmp123_) {
-#line 30927 "Photo.c"
+#line 30928 "Photo.c"
 								gint _tmp124_ = 0;
 #line 4291 "/home/jens/Source/shotwell/src/Photo.vala"
 								_tmp124_ = x_it;
 #line 4291 "/home/jens/Source/shotwell/src/Photo.vala"
 								x_it = _tmp124_ + 1;
-#line 30933 "Photo.c"
+#line 30934 "Photo.c"
 							}
 #line 4291 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp123_ = FALSE;
@@ -30946,7 +30947,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 							if (!(_tmp125_ <= _tmp126_)) {
 #line 4291 "/home/jens/Source/shotwell/src/Photo.vala"
 								break;
-#line 30945 "Photo.c"
+#line 30946 "Photo.c"
 							}
 #line 4292 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp127_ = pixbuf;
@@ -30960,7 +30961,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 							_tmp131_ = _tmp130_;
 #line 4292 "/home/jens/Source/shotwell/src/Photo.vala"
 							_g_object_unref0 (_tmp131_);
-#line 30959 "Photo.c"
+#line 30960 "Photo.c"
 						}
 					}
 				}
@@ -30968,7 +30969,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 				_tmp132_ = inset_index;
 #line 4294 "/home/jens/Source/shotwell/src/Photo.vala"
 				inset_index = _tmp132_ - 1;
-#line 30967 "Photo.c"
+#line 30968 "Photo.c"
 			}
 		}
 	}
@@ -30982,7 +30983,7 @@ static GdkPixbuf* photo_do_redeye (Photo* self, GdkPixbuf* pixbuf, EditingToolsR
 	x_insets_first_quadrant = (g_free (x_insets_first_quadrant), NULL);
 #line 4297 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 30981 "Photo.c"
+#line 30982 "Photo.c"
 }
 
 
@@ -31023,21 +31024,21 @@ static GdkPixbuf* photo_red_reduce_pixel (Photo* self, GdkPixbuf* pixbuf, gint x
 	_tmp9_ = x;
 #line 4308 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp9_ >= 0) {
-#line 31022 "Photo.c"
+#line 31023 "Photo.c"
 		gint _tmp10_ = 0;
 #line 4308 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp10_ = y;
 #line 4308 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp8_ = _tmp10_ >= 0;
-#line 31028 "Photo.c"
+#line 31029 "Photo.c"
 	} else {
 #line 4308 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp8_ = FALSE;
-#line 31032 "Photo.c"
+#line 31033 "Photo.c"
 	}
 #line 4308 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp8_) {
-#line 31036 "Photo.c"
+#line 31037 "Photo.c"
 		gint _tmp11_ = 0;
 		GdkPixbuf* _tmp12_ = NULL;
 		gint _tmp13_ = 0;
@@ -31052,15 +31053,15 @@ static GdkPixbuf* photo_red_reduce_pixel (Photo* self, GdkPixbuf* pixbuf, gint x
 		_tmp14_ = _tmp13_;
 #line 4308 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp7_ = _tmp11_ < _tmp14_;
-#line 31051 "Photo.c"
+#line 31052 "Photo.c"
 	} else {
 #line 4308 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp7_ = FALSE;
-#line 31055 "Photo.c"
+#line 31056 "Photo.c"
 	}
 #line 4308 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp7_) {
-#line 31059 "Photo.c"
+#line 31060 "Photo.c"
 		gint _tmp15_ = 0;
 		GdkPixbuf* _tmp16_ = NULL;
 		gint _tmp17_ = 0;
@@ -31075,15 +31076,15 @@ static GdkPixbuf* photo_red_reduce_pixel (Photo* self, GdkPixbuf* pixbuf, gint x
 		_tmp18_ = _tmp17_;
 #line 4308 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = _tmp15_ < _tmp18_;
-#line 31074 "Photo.c"
+#line 31075 "Photo.c"
 	} else {
 #line 4308 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = FALSE;
-#line 31078 "Photo.c"
+#line 31079 "Photo.c"
 	}
 #line 4308 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp6_) {
-#line 31082 "Photo.c"
+#line 31083 "Photo.c"
 		guchar* pixel_data = NULL;
 		GdkPixbuf* _tmp19_ = NULL;
 		guint8* _tmp20_ = NULL;
@@ -31155,7 +31156,7 @@ static GdkPixbuf* photo_red_reduce_pixel (Photo* self, GdkPixbuf* pixbuf, gint x
 		_tmp29_[_tmp30_] = _tmp31_;
 #line 4324 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp32_ = _tmp29_[_tmp30_];
-#line 31154 "Photo.c"
+#line 31155 "Photo.c"
 	}
 #line 4327 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp33_ = pixbuf;
@@ -31165,7 +31166,7 @@ static GdkPixbuf* photo_red_reduce_pixel (Photo* self, GdkPixbuf* pixbuf, gint x
 	result = _tmp34_;
 #line 4327 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 31164 "Photo.c"
+#line 31165 "Photo.c"
 }
 
 
@@ -31216,7 +31217,7 @@ void photo_unscaled_to_raw_point (Photo* self, GdkPoint* unscaled_point, GdkPoin
 	crop_box = _tmp4_;
 #line 4340 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp5_) {
-#line 31215 "Photo.c"
+#line 31216 "Photo.c"
 		Box _tmp6_ = {0};
 		gint _tmp7_ = 0;
 		Box _tmp8_ = {0};
@@ -31233,7 +31234,7 @@ void photo_unscaled_to_raw_point (Photo* self, GdkPoint* unscaled_point, GdkPoin
 		_tmp9_ = _tmp8_.top;
 #line 4342 "/home/jens/Source/shotwell/src/Photo.vala"
 		unscaled_y_offset_raw = _tmp9_;
-#line 31232 "Photo.c"
+#line 31233 "Photo.c"
 	}
 #line 4345 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp10_ = unscaled_orientation;
@@ -31261,7 +31262,7 @@ void photo_unscaled_to_raw_point (Photo* self, GdkPoint* unscaled_point, GdkPoin
 	*result = derotated_point;
 #line 4352 "/home/jens/Source/shotwell/src/Photo.vala"
 	return;
-#line 31260 "Photo.c"
+#line 31261 "Photo.c"
 }
 
 
@@ -31373,7 +31374,7 @@ void photo_unscaled_to_raw_rect (Photo* self, GdkRectangle* unscaled_rect, GdkRe
 	_tmp21_ = _tmp20_.x;
 #line 4366 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp19_ > _tmp21_) {
-#line 31372 "Photo.c"
+#line 31373 "Photo.c"
 		gint temp = 0;
 		GdkPoint _tmp22_ = {0};
 		gint _tmp23_ = 0;
@@ -31396,7 +31397,7 @@ void photo_unscaled_to_raw_rect (Photo* self, GdkRectangle* unscaled_rect, GdkRe
 		_tmp26_ = temp;
 #line 4369 "/home/jens/Source/shotwell/src/Photo.vala"
 		lower_right.x = _tmp26_;
-#line 31395 "Photo.c"
+#line 31396 "Photo.c"
 	}
 #line 4371 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp27_ = upper_left;
@@ -31408,7 +31409,7 @@ void photo_unscaled_to_raw_rect (Photo* self, GdkRectangle* unscaled_rect, GdkRe
 	_tmp30_ = _tmp29_.y;
 #line 4371 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp28_ > _tmp30_) {
-#line 31407 "Photo.c"
+#line 31408 "Photo.c"
 		gint temp = 0;
 		GdkPoint _tmp31_ = {0};
 		gint _tmp32_ = 0;
@@ -31431,7 +31432,7 @@ void photo_unscaled_to_raw_rect (Photo* self, GdkRectangle* unscaled_rect, GdkRe
 		_tmp35_ = temp;
 #line 4374 "/home/jens/Source/shotwell/src/Photo.vala"
 		lower_right.y = _tmp35_;
-#line 31430 "Photo.c"
+#line 31431 "Photo.c"
 	}
 #line 4377 "/home/jens/Source/shotwell/src/Photo.vala"
 	memset (&raw_rect, 0, sizeof (GdkRectangle));
@@ -31471,7 +31472,7 @@ void photo_unscaled_to_raw_rect (Photo* self, GdkRectangle* unscaled_rect, GdkRe
 	*result = raw_rect;
 #line 4383 "/home/jens/Source/shotwell/src/Photo.vala"
 	return;
-#line 31470 "Photo.c"
+#line 31471 "Photo.c"
 }
 
 
@@ -31486,7 +31487,7 @@ PixelTransformationBundle* photo_get_enhance_transformations (Photo* self) {
 	g_return_val_if_fail (IS_PHOTO (self), NULL);
 #line 4387 "/home/jens/Source/shotwell/src/Photo.vala"
 	pixbuf = NULL;
-#line 31485 "Photo.c"
+#line 31486 "Photo.c"
 	{
 		GdkPixbuf* _tmp0_ = NULL;
 		Scaling _tmp1_ = {0};
@@ -31500,8 +31501,8 @@ PixelTransformationBundle* photo_get_enhance_transformations (Photo* self) {
 		_tmp0_ = _tmp2_;
 #line 4394 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 31499 "Photo.c"
-			goto __catch391_g_error;
+#line 31500 "Photo.c"
+			goto __catch404_g_error;
 		}
 #line 4394 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp3_ = _tmp0_;
@@ -31513,10 +31514,10 @@ PixelTransformationBundle* photo_get_enhance_transformations (Photo* self) {
 		pixbuf = _tmp3_;
 #line 4393 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp0_);
-#line 31512 "Photo.c"
+#line 31513 "Photo.c"
 	}
-	goto __finally391;
-	__catch391_g_error:
+	goto __finally404;
+	__catch404_g_error:
 	{
 		GError* e = NULL;
 #line 4393 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -31533,9 +31534,9 @@ PixelTransformationBundle* photo_get_enhance_transformations (Photo* self) {
 		_g_object_unref0 (pixbuf);
 #line 4403 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 31532 "Photo.c"
+#line 31533 "Photo.c"
 	}
-	__finally391:
+	__finally404:
 #line 4393 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4393 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -31546,7 +31547,7 @@ PixelTransformationBundle* photo_get_enhance_transformations (Photo* self) {
 		g_clear_error (&_inner_error_);
 #line 4393 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 31545 "Photo.c"
+#line 31546 "Photo.c"
 	}
 #line 4410 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = pixbuf;
@@ -31560,7 +31561,7 @@ PixelTransformationBundle* photo_get_enhance_transformations (Photo* self) {
 	_g_object_unref0 (pixbuf);
 #line 4418 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 31559 "Photo.c"
+#line 31560 "Photo.c"
 }
 
 
@@ -31586,7 +31587,7 @@ gboolean photo_enhance (Photo* self) {
 		_pixel_transformation_bundle_unref0 (transformations);
 #line 4425 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 31585 "Photo.c"
+#line 31586 "Photo.c"
 	}
 	{
 		PhotoRow* _tmp2_ = NULL;
@@ -31594,23 +31595,23 @@ gboolean photo_enhance (Photo* self) {
 		_tmp2_ = self->row;
 #line 4430 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_rec_mutex_lock (&self->priv->__lock_row);
-#line 31593 "Photo.c"
+#line 31594 "Photo.c"
 		{
 			PixelTransformationBundle* _tmp3_ = NULL;
 #line 4431 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp3_ = transformations;
 #line 4431 "/home/jens/Source/shotwell/src/Photo.vala"
 			photo_set_color_adjustments (self, _tmp3_);
-#line 31600 "Photo.c"
+#line 31601 "Photo.c"
 		}
-		__finally392:
+		__finally405:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 4430 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = self->row;
 #line 4430 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_row);
-#line 31609 "Photo.c"
+#line 31610 "Photo.c"
 		}
 #line 4430 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -31622,7 +31623,7 @@ gboolean photo_enhance (Photo* self) {
 			g_clear_error (&_inner_error_);
 #line 4430 "/home/jens/Source/shotwell/src/Photo.vala"
 			return FALSE;
-#line 31621 "Photo.c"
+#line 31622 "Photo.c"
 		}
 	}
 #line 4438 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -31631,7 +31632,7 @@ gboolean photo_enhance (Photo* self) {
 	_pixel_transformation_bundle_unref0 (transformations);
 #line 4438 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 31630 "Photo.c"
+#line 31631 "Photo.c"
 }
 
 
@@ -31644,7 +31645,7 @@ gboolean photo_get_develop_raw_photos_to_files (void) {
 	result = _tmp0_;
 #line 349 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 31643 "Photo.c"
+#line 31644 "Photo.c"
 }
 
 
@@ -31654,7 +31655,7 @@ void photo_set_develop_raw_photos_to_files (gboolean value) {
 	_tmp0_ = value;
 #line 349 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo__develop_raw_photos_to_files = _tmp0_;
-#line 31653 "Photo.c"
+#line 31654 "Photo.c"
 }
 
 
@@ -31663,7 +31664,7 @@ static void photo_real_editable_replaced (Photo* self, GFile* old_file, GFile* n
 	g_return_if_fail ((old_file == NULL) || G_IS_FILE (old_file));
 #line 358 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail ((new_file == NULL) || G_IS_FILE (new_file));
-#line 31662 "Photo.c"
+#line 31663 "Photo.c"
 }
 
 
@@ -31682,19 +31683,19 @@ static void g_cclosure_user_marshal_VOID__OBJECT_OBJECT (GClosure * closure, GVa
 		data1 = closure->data;
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 31681 "Photo.c"
+#line 31682 "Photo.c"
 	} else {
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 		data2 = closure->data;
-#line 31687 "Photo.c"
+#line 31688 "Photo.c"
 	}
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 	callback = (GMarshalFunc_VOID__OBJECT_OBJECT) (marshal_data ? marshal_data : cc->callback);
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 	callback (data1, g_value_get_object (param_values + 1), g_value_get_object (param_values + 2), data2);
-#line 31693 "Photo.c"
+#line 31694 "Photo.c"
 }
 
 
@@ -31709,7 +31710,7 @@ static void photo_real_baseline_replaced (Photo* self) {
 static void photo_real_master_reimported (Photo* self, PhotoMetadata* metadata) {
 #line 376 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail ((metadata == NULL) || IS_PHOTO_METADATA (metadata));
-#line 31708 "Photo.c"
+#line 31709 "Photo.c"
 }
 
 
@@ -31728,47 +31729,47 @@ static void g_cclosure_user_marshal_VOID__MEDIA_METADATA (GClosure * closure, GV
 		data1 = closure->data;
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 31727 "Photo.c"
+#line 31728 "Photo.c"
 	} else {
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 		data2 = closure->data;
-#line 31733 "Photo.c"
+#line 31734 "Photo.c"
 	}
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 	callback = (GMarshalFunc_VOID__MEDIA_METADATA) (marshal_data ? marshal_data : cc->callback);
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 	callback (data1, value_get_media_metadata (param_values + 1), data2);
-#line 31739 "Photo.c"
+#line 31740 "Photo.c"
 }
 
 
 static void photo_real_editable_reimported (Photo* self, PhotoMetadata* metadata) {
 #line 380 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail ((metadata == NULL) || IS_PHOTO_METADATA (metadata));
-#line 31746 "Photo.c"
+#line 31747 "Photo.c"
 }
 
 
 static void photo_real_baseline_reimported (Photo* self, PhotoMetadata* metadata) {
 #line 387 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail ((metadata == NULL) || IS_PHOTO_METADATA (metadata));
-#line 31753 "Photo.c"
+#line 31754 "Photo.c"
 }
 
 
 static void photo_real_source_reimported (Photo* self, PhotoMetadata* metadata) {
 #line 394 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail ((metadata == NULL) || IS_PHOTO_METADATA (metadata));
-#line 31760 "Photo.c"
+#line 31761 "Photo.c"
 }
 
 
 static void _photo_photo_transformation_state_impl_on_photo_baseline_replaced_photo_baseline_replaced (Photo* _sender, gpointer self) {
 #line 257 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_photo_transformation_state_impl_on_photo_baseline_replaced ((PhotoPhotoTransformationStateImpl*) self);
-#line 31767 "Photo.c"
+#line 31768 "Photo.c"
 }
 
 
@@ -31836,14 +31837,14 @@ static PhotoPhotoTransformationStateImpl* photo_photo_transformation_state_impl_
 	g_signal_connect_object (_tmp9_, "baseline-replaced", (GCallback) _photo_photo_transformation_state_impl_on_photo_baseline_replaced_photo_baseline_replaced, self, 0);
 #line 244 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 31835 "Photo.c"
+#line 31836 "Photo.c"
 }
 
 
 static PhotoPhotoTransformationStateImpl* photo_photo_transformation_state_impl_new (Photo* photo, Orientation orientation, GeeHashMap* transformations, PixelTransformer* transformer, PixelTransformationBundle* adjustments) {
 #line 244 "/home/jens/Source/shotwell/src/Photo.vala"
 	return photo_photo_transformation_state_impl_construct (PHOTO_TYPE_PHOTO_TRANSFORMATION_STATE_IMPL, photo, orientation, transformations, transformer, adjustments);
-#line 31842 "Photo.c"
+#line 31843 "Photo.c"
 }
 
 
@@ -31858,7 +31859,7 @@ static Orientation photo_photo_transformation_state_impl_get_orientation (PhotoP
 	result = _tmp0_;
 #line 261 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 31857 "Photo.c"
+#line 31858 "Photo.c"
 }
 
 
@@ -31876,7 +31877,7 @@ static GeeHashMap* photo_photo_transformation_state_impl_get_transformations (Ph
 	result = _tmp1_;
 #line 265 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 31875 "Photo.c"
+#line 31876 "Photo.c"
 }
 
 
@@ -31890,7 +31891,7 @@ static PixelTransformer* photo_photo_transformation_state_impl_get_transformer (
 	_tmp1_ = self->priv->transformer;
 #line 269 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_ != NULL) {
-#line 31889 "Photo.c"
+#line 31890 "Photo.c"
 		PixelTransformer* _tmp2_ = NULL;
 		PixelTransformer* _tmp3_ = NULL;
 #line 269 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -31901,19 +31902,19 @@ static PixelTransformer* photo_photo_transformation_state_impl_get_transformer (
 		_pixel_transformer_unref0 (_tmp0_);
 #line 269 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = _tmp3_;
-#line 31900 "Photo.c"
+#line 31901 "Photo.c"
 	} else {
 #line 269 "/home/jens/Source/shotwell/src/Photo.vala"
 		_pixel_transformer_unref0 (_tmp0_);
 #line 269 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = NULL;
-#line 31906 "Photo.c"
+#line 31907 "Photo.c"
 	}
 #line 269 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp0_;
 #line 269 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 31912 "Photo.c"
+#line 31913 "Photo.c"
 }
 
 
@@ -31927,7 +31928,7 @@ static PixelTransformationBundle* photo_photo_transformation_state_impl_get_colo
 	_tmp1_ = self->priv->adjustments;
 #line 273 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_ != NULL) {
-#line 31926 "Photo.c"
+#line 31927 "Photo.c"
 		PixelTransformationBundle* _tmp2_ = NULL;
 		PixelTransformationBundle* _tmp3_ = NULL;
 #line 273 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -31938,19 +31939,19 @@ static PixelTransformationBundle* photo_photo_transformation_state_impl_get_colo
 		_pixel_transformation_bundle_unref0 (_tmp0_);
 #line 273 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = _tmp3_;
-#line 31937 "Photo.c"
+#line 31938 "Photo.c"
 	} else {
 #line 273 "/home/jens/Source/shotwell/src/Photo.vala"
 		_pixel_transformation_bundle_unref0 (_tmp0_);
 #line 273 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = NULL;
-#line 31943 "Photo.c"
+#line 31944 "Photo.c"
 	}
 #line 273 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = _tmp0_;
 #line 273 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 31949 "Photo.c"
+#line 31950 "Photo.c"
 }
 
 
@@ -31969,13 +31970,13 @@ static GeeHashMap* photo_photo_transformation_state_impl_copy_transformations (G
 		result = NULL;
 #line 279 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 31968 "Photo.c"
+#line 31969 "Photo.c"
 	}
 #line 281 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp1_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, TYPE_KEY_VALUE_MAP, (GBoxedCopyFunc) key_value_map_ref, key_value_map_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 #line 281 "/home/jens/Source/shotwell/src/Photo.vala"
 	clone = _tmp1_;
-#line 31974 "Photo.c"
+#line 31975 "Photo.c"
 	{
 		GeeIterator* _object_it = NULL;
 		GeeHashMap* _tmp2_ = NULL;
@@ -32002,7 +32003,7 @@ static GeeHashMap* photo_photo_transformation_state_impl_copy_transformations (G
 		_object_it = _tmp7_;
 #line 282 "/home/jens/Source/shotwell/src/Photo.vala"
 		while (TRUE) {
-#line 32001 "Photo.c"
+#line 32002 "Photo.c"
 			GeeIterator* _tmp8_ = NULL;
 			gboolean _tmp9_ = FALSE;
 			gchar* object = NULL;
@@ -32024,7 +32025,7 @@ static GeeHashMap* photo_photo_transformation_state_impl_copy_transformations (G
 			if (!_tmp9_) {
 #line 282 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 32023 "Photo.c"
+#line 32024 "Photo.c"
 			}
 #line 282 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp10_ = _object_it;
@@ -32056,17 +32057,17 @@ static GeeHashMap* photo_photo_transformation_state_impl_copy_transformations (G
 			_key_value_map_unref0 (_tmp17_);
 #line 282 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_free0 (object);
-#line 32055 "Photo.c"
+#line 32056 "Photo.c"
 		}
 #line 282 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_object_it);
-#line 32059 "Photo.c"
+#line 32060 "Photo.c"
 	}
 #line 285 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = clone;
 #line 285 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 32065 "Photo.c"
+#line 32066 "Photo.c"
 }
 
 
@@ -32080,7 +32081,7 @@ static void photo_photo_transformation_state_impl_on_photo_baseline_replaced (Ph
 	if (!_tmp0_) {
 #line 290 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_TRANSFORMATION_STATE, PhotoTransformationState), "broken");
-#line 32079 "Photo.c"
+#line 32080 "Photo.c"
 	}
 }
 
@@ -32092,14 +32093,14 @@ static void photo_photo_transformation_state_impl_class_init (PhotoPhotoTransfor
 	g_type_class_add_private (klass, sizeof (PhotoPhotoTransformationStateImplPrivate));
 #line 237 "/home/jens/Source/shotwell/src/Photo.vala"
 	G_OBJECT_CLASS (klass)->finalize = photo_photo_transformation_state_impl_finalize;
-#line 32091 "Photo.c"
+#line 32092 "Photo.c"
 }
 
 
 static void photo_photo_transformation_state_impl_instance_init (PhotoPhotoTransformationStateImpl * self) {
 #line 237 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->priv = PHOTO_PHOTO_TRANSFORMATION_STATE_IMPL_GET_PRIVATE (self);
-#line 32098 "Photo.c"
+#line 32099 "Photo.c"
 }
 
 
@@ -32125,7 +32126,7 @@ static void photo_photo_transformation_state_impl_finalize (GObject* obj) {
 	_pixel_transformation_bundle_unref0 (self->priv->adjustments);
 #line 237 "/home/jens/Source/shotwell/src/Photo.vala"
 	G_OBJECT_CLASS (photo_photo_transformation_state_impl_parent_class)->finalize (obj);
-#line 32124 "Photo.c"
+#line 32125 "Photo.c"
 }
 
 
@@ -32147,21 +32148,21 @@ static PhotoBackingReaders* photo_backing_readers_construct (GType object_type) 
 	self = (PhotoBackingReaders*) g_type_create_instance (object_type);
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 32146 "Photo.c"
+#line 32147 "Photo.c"
 }
 
 
 static PhotoBackingReaders* photo_backing_readers_new (void) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	return photo_backing_readers_construct (PHOTO_TYPE_BACKING_READERS);
-#line 32153 "Photo.c"
+#line 32154 "Photo.c"
 }
 
 
 static void photo_value_backing_readers_init (GValue* value) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	value->data[0].v_pointer = NULL;
-#line 32160 "Photo.c"
+#line 32161 "Photo.c"
 }
 
 
@@ -32170,7 +32171,7 @@ static void photo_value_backing_readers_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_backing_readers_unref (value->data[0].v_pointer);
-#line 32169 "Photo.c"
+#line 32170 "Photo.c"
 	}
 }
 
@@ -32180,11 +32181,11 @@ static void photo_value_backing_readers_copy_value (const GValue* src_value, GVa
 	if (src_value->data[0].v_pointer) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = photo_backing_readers_ref (src_value->data[0].v_pointer);
-#line 32179 "Photo.c"
+#line 32180 "Photo.c"
 	} else {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 32183 "Photo.c"
+#line 32184 "Photo.c"
 	}
 }
 
@@ -32192,37 +32193,37 @@ static void photo_value_backing_readers_copy_value (const GValue* src_value, GVa
 static gpointer photo_value_backing_readers_peek_pointer (const GValue* value) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 32191 "Photo.c"
+#line 32192 "Photo.c"
 }
 
 
 static gchar* photo_value_backing_readers_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (collect_values[0].v_pointer) {
-#line 32198 "Photo.c"
+#line 32199 "Photo.c"
 		PhotoBackingReaders* object;
 		object = collect_values[0].v_pointer;
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 32205 "Photo.c"
+#line 32206 "Photo.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 32209 "Photo.c"
+#line 32210 "Photo.c"
 		}
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = photo_backing_readers_ref (object);
-#line 32213 "Photo.c"
+#line 32214 "Photo.c"
 	} else {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 32217 "Photo.c"
+#line 32218 "Photo.c"
 	}
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 32221 "Photo.c"
+#line 32222 "Photo.c"
 }
 
 
@@ -32233,25 +32234,25 @@ static gchar* photo_value_backing_readers_lcopy_value (const GValue* value, guin
 	if (!object_p) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 32232 "Photo.c"
+#line 32233 "Photo.c"
 	}
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!value->data[0].v_pointer) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = NULL;
-#line 32238 "Photo.c"
+#line 32239 "Photo.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = value->data[0].v_pointer;
-#line 32242 "Photo.c"
+#line 32243 "Photo.c"
 	} else {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = photo_backing_readers_ref (value->data[0].v_pointer);
-#line 32246 "Photo.c"
+#line 32247 "Photo.c"
 	}
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 32250 "Photo.c"
+#line 32251 "Photo.c"
 }
 
 
@@ -32265,7 +32266,7 @@ static GParamSpec* photo_param_spec_backing_readers (const gchar* name, const gc
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	return G_PARAM_SPEC (spec);
-#line 32264 "Photo.c"
+#line 32265 "Photo.c"
 }
 
 
@@ -32274,7 +32275,7 @@ static gpointer photo_value_get_backing_readers (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PHOTO_TYPE_BACKING_READERS), NULL);
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 32273 "Photo.c"
+#line 32274 "Photo.c"
 }
 
 
@@ -32294,17 +32295,17 @@ static void photo_value_set_backing_readers (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_backing_readers_ref (value->data[0].v_pointer);
-#line 32293 "Photo.c"
+#line 32294 "Photo.c"
 	} else {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 32297 "Photo.c"
+#line 32298 "Photo.c"
 	}
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_backing_readers_unref (old);
-#line 32303 "Photo.c"
+#line 32304 "Photo.c"
 	}
 }
 
@@ -32323,17 +32324,17 @@ static void photo_value_take_backing_readers (GValue* value, gpointer v_object) 
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = v_object;
-#line 32322 "Photo.c"
+#line 32323 "Photo.c"
 	} else {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 32326 "Photo.c"
+#line 32327 "Photo.c"
 	}
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_backing_readers_unref (old);
-#line 32332 "Photo.c"
+#line 32333 "Photo.c"
 	}
 }
 
@@ -32343,14 +32344,14 @@ static void photo_backing_readers_class_init (PhotoBackingReadersClass * klass) 
 	photo_backing_readers_parent_class = g_type_class_peek_parent (klass);
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	((PhotoBackingReadersClass *) klass)->finalize = photo_backing_readers_finalize;
-#line 32342 "Photo.c"
+#line 32343 "Photo.c"
 }
 
 
 static void photo_backing_readers_instance_init (PhotoBackingReaders * self) {
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->ref_count = 1;
-#line 32349 "Photo.c"
+#line 32350 "Photo.c"
 }
 
 
@@ -32366,7 +32367,7 @@ static void photo_backing_readers_finalize (PhotoBackingReaders* obj) {
 	_photo_file_adapter_unref0 (self->developer);
 #line 297 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_file_adapter_unref0 (self->editable);
-#line 32365 "Photo.c"
+#line 32366 "Photo.c"
 }
 
 
@@ -32391,7 +32392,7 @@ static gpointer photo_backing_readers_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 	return instance;
-#line 32390 "Photo.c"
+#line 32391 "Photo.c"
 }
 
 
@@ -32404,7 +32405,7 @@ static void photo_backing_readers_unref (gpointer instance) {
 		PHOTO_BACKING_READERS_GET_CLASS (self)->finalize (self);
 #line 294 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 32403 "Photo.c"
+#line 32404 "Photo.c"
 	}
 }
 
@@ -32439,21 +32440,21 @@ static PhotoCachedPixbuf* photo_cached_pixbuf_construct (GType object_type, Phot
 	self->pixbuf = _tmp3_;
 #line 305 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 32438 "Photo.c"
+#line 32439 "Photo.c"
 }
 
 
 static PhotoCachedPixbuf* photo_cached_pixbuf_new (Photo* photo, GdkPixbuf* pixbuf) {
 #line 305 "/home/jens/Source/shotwell/src/Photo.vala"
 	return photo_cached_pixbuf_construct (PHOTO_TYPE_CACHED_PIXBUF, photo, pixbuf);
-#line 32445 "Photo.c"
+#line 32446 "Photo.c"
 }
 
 
 static void photo_value_cached_pixbuf_init (GValue* value) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	value->data[0].v_pointer = NULL;
-#line 32452 "Photo.c"
+#line 32453 "Photo.c"
 }
 
 
@@ -32462,7 +32463,7 @@ static void photo_value_cached_pixbuf_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_cached_pixbuf_unref (value->data[0].v_pointer);
-#line 32461 "Photo.c"
+#line 32462 "Photo.c"
 	}
 }
 
@@ -32472,11 +32473,11 @@ static void photo_value_cached_pixbuf_copy_value (const GValue* src_value, GValu
 	if (src_value->data[0].v_pointer) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = photo_cached_pixbuf_ref (src_value->data[0].v_pointer);
-#line 32471 "Photo.c"
+#line 32472 "Photo.c"
 	} else {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 32475 "Photo.c"
+#line 32476 "Photo.c"
 	}
 }
 
@@ -32484,37 +32485,37 @@ static void photo_value_cached_pixbuf_copy_value (const GValue* src_value, GValu
 static gpointer photo_value_cached_pixbuf_peek_pointer (const GValue* value) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 32483 "Photo.c"
+#line 32484 "Photo.c"
 }
 
 
 static gchar* photo_value_cached_pixbuf_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (collect_values[0].v_pointer) {
-#line 32490 "Photo.c"
+#line 32491 "Photo.c"
 		PhotoCachedPixbuf* object;
 		object = collect_values[0].v_pointer;
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 32497 "Photo.c"
+#line 32498 "Photo.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 32501 "Photo.c"
+#line 32502 "Photo.c"
 		}
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = photo_cached_pixbuf_ref (object);
-#line 32505 "Photo.c"
+#line 32506 "Photo.c"
 	} else {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 32509 "Photo.c"
+#line 32510 "Photo.c"
 	}
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 32513 "Photo.c"
+#line 32514 "Photo.c"
 }
 
 
@@ -32525,25 +32526,25 @@ static gchar* photo_value_cached_pixbuf_lcopy_value (const GValue* value, guint 
 	if (!object_p) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 32524 "Photo.c"
+#line 32525 "Photo.c"
 	}
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!value->data[0].v_pointer) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = NULL;
-#line 32530 "Photo.c"
+#line 32531 "Photo.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = value->data[0].v_pointer;
-#line 32534 "Photo.c"
+#line 32535 "Photo.c"
 	} else {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = photo_cached_pixbuf_ref (value->data[0].v_pointer);
-#line 32538 "Photo.c"
+#line 32539 "Photo.c"
 	}
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 32542 "Photo.c"
+#line 32543 "Photo.c"
 }
 
 
@@ -32557,7 +32558,7 @@ static GParamSpec* photo_param_spec_cached_pixbuf (const gchar* name, const gcha
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	return G_PARAM_SPEC (spec);
-#line 32556 "Photo.c"
+#line 32557 "Photo.c"
 }
 
 
@@ -32566,7 +32567,7 @@ static gpointer photo_value_get_cached_pixbuf (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PHOTO_TYPE_CACHED_PIXBUF), NULL);
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 32565 "Photo.c"
+#line 32566 "Photo.c"
 }
 
 
@@ -32586,17 +32587,17 @@ static void photo_value_set_cached_pixbuf (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_cached_pixbuf_ref (value->data[0].v_pointer);
-#line 32585 "Photo.c"
+#line 32586 "Photo.c"
 	} else {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 32589 "Photo.c"
+#line 32590 "Photo.c"
 	}
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_cached_pixbuf_unref (old);
-#line 32595 "Photo.c"
+#line 32596 "Photo.c"
 	}
 }
 
@@ -32615,17 +32616,17 @@ static void photo_value_take_cached_pixbuf (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = v_object;
-#line 32614 "Photo.c"
+#line 32615 "Photo.c"
 	} else {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 32618 "Photo.c"
+#line 32619 "Photo.c"
 	}
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_cached_pixbuf_unref (old);
-#line 32624 "Photo.c"
+#line 32625 "Photo.c"
 	}
 }
 
@@ -32635,7 +32636,7 @@ static void photo_cached_pixbuf_class_init (PhotoCachedPixbufClass * klass) {
 	photo_cached_pixbuf_parent_class = g_type_class_peek_parent (klass);
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	((PhotoCachedPixbufClass *) klass)->finalize = photo_cached_pixbuf_finalize;
-#line 32634 "Photo.c"
+#line 32635 "Photo.c"
 }
 
 
@@ -32647,7 +32648,7 @@ static void photo_cached_pixbuf_instance_init (PhotoCachedPixbuf * self) {
 	self->last_touched = _tmp0_;
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->ref_count = 1;
-#line 32646 "Photo.c"
+#line 32647 "Photo.c"
 }
 
 
@@ -32663,7 +32664,7 @@ static void photo_cached_pixbuf_finalize (PhotoCachedPixbuf* obj) {
 	_g_object_unref0 (self->pixbuf);
 #line 303 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_timer_destroy0 (self->last_touched);
-#line 32662 "Photo.c"
+#line 32663 "Photo.c"
 }
 
 
@@ -32688,7 +32689,7 @@ static gpointer photo_cached_pixbuf_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 	return instance;
-#line 32687 "Photo.c"
+#line 32688 "Photo.c"
 }
 
 
@@ -32701,7 +32702,7 @@ static void photo_cached_pixbuf_unref (gpointer instance) {
 		PHOTO_CACHED_PIXBUF_GET_CLASS (self)->finalize (self);
 #line 300 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 32700 "Photo.c"
+#line 32701 "Photo.c"
 	}
 }
 
@@ -32712,14 +32713,14 @@ PhotoReimportMasterState* photo_reimport_master_state_construct (GType object_ty
 	self = (PhotoReimportMasterState*) g_type_create_instance (object_type);
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 32711 "Photo.c"
+#line 32712 "Photo.c"
 }
 
 
 static void photo_value_reimport_master_state_init (GValue* value) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	value->data[0].v_pointer = NULL;
-#line 32718 "Photo.c"
+#line 32719 "Photo.c"
 }
 
 
@@ -32728,7 +32729,7 @@ static void photo_value_reimport_master_state_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_master_state_unref (value->data[0].v_pointer);
-#line 32727 "Photo.c"
+#line 32728 "Photo.c"
 	}
 }
 
@@ -32738,11 +32739,11 @@ static void photo_value_reimport_master_state_copy_value (const GValue* src_valu
 	if (src_value->data[0].v_pointer) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = photo_reimport_master_state_ref (src_value->data[0].v_pointer);
-#line 32737 "Photo.c"
+#line 32738 "Photo.c"
 	} else {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 32741 "Photo.c"
+#line 32742 "Photo.c"
 	}
 }
 
@@ -32750,37 +32751,37 @@ static void photo_value_reimport_master_state_copy_value (const GValue* src_valu
 static gpointer photo_value_reimport_master_state_peek_pointer (const GValue* value) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 32749 "Photo.c"
+#line 32750 "Photo.c"
 }
 
 
 static gchar* photo_value_reimport_master_state_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (collect_values[0].v_pointer) {
-#line 32756 "Photo.c"
+#line 32757 "Photo.c"
 		PhotoReimportMasterState* object;
 		object = collect_values[0].v_pointer;
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 32763 "Photo.c"
+#line 32764 "Photo.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 32767 "Photo.c"
+#line 32768 "Photo.c"
 		}
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = photo_reimport_master_state_ref (object);
-#line 32771 "Photo.c"
+#line 32772 "Photo.c"
 	} else {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 32775 "Photo.c"
+#line 32776 "Photo.c"
 	}
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 32779 "Photo.c"
+#line 32780 "Photo.c"
 }
 
 
@@ -32791,25 +32792,25 @@ static gchar* photo_value_reimport_master_state_lcopy_value (const GValue* value
 	if (!object_p) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 32790 "Photo.c"
+#line 32791 "Photo.c"
 	}
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!value->data[0].v_pointer) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = NULL;
-#line 32796 "Photo.c"
+#line 32797 "Photo.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = value->data[0].v_pointer;
-#line 32800 "Photo.c"
+#line 32801 "Photo.c"
 	} else {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = photo_reimport_master_state_ref (value->data[0].v_pointer);
-#line 32804 "Photo.c"
+#line 32805 "Photo.c"
 	}
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 32808 "Photo.c"
+#line 32809 "Photo.c"
 }
 
 
@@ -32823,7 +32824,7 @@ GParamSpec* photo_param_spec_reimport_master_state (const gchar* name, const gch
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	return G_PARAM_SPEC (spec);
-#line 32822 "Photo.c"
+#line 32823 "Photo.c"
 }
 
 
@@ -32832,7 +32833,7 @@ gpointer photo_value_get_reimport_master_state (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PHOTO_TYPE_REIMPORT_MASTER_STATE), NULL);
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 32831 "Photo.c"
+#line 32832 "Photo.c"
 }
 
 
@@ -32852,17 +32853,17 @@ void photo_value_set_reimport_master_state (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_master_state_ref (value->data[0].v_pointer);
-#line 32851 "Photo.c"
+#line 32852 "Photo.c"
 	} else {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 32855 "Photo.c"
+#line 32856 "Photo.c"
 	}
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_master_state_unref (old);
-#line 32861 "Photo.c"
+#line 32862 "Photo.c"
 	}
 }
 
@@ -32881,17 +32882,17 @@ void photo_value_take_reimport_master_state (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = v_object;
-#line 32880 "Photo.c"
+#line 32881 "Photo.c"
 	} else {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 32884 "Photo.c"
+#line 32885 "Photo.c"
 	}
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_master_state_unref (old);
-#line 32890 "Photo.c"
+#line 32891 "Photo.c"
 	}
 }
 
@@ -32901,14 +32902,14 @@ static void photo_reimport_master_state_class_init (PhotoReimportMasterStateClas
 	photo_reimport_master_state_parent_class = g_type_class_peek_parent (klass);
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	((PhotoReimportMasterStateClass *) klass)->finalize = photo_reimport_master_state_finalize;
-#line 32900 "Photo.c"
+#line 32901 "Photo.c"
 }
 
 
 static void photo_reimport_master_state_instance_init (PhotoReimportMasterState * self) {
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->ref_count = 1;
-#line 32907 "Photo.c"
+#line 32908 "Photo.c"
 }
 
 
@@ -32918,7 +32919,7 @@ static void photo_reimport_master_state_finalize (PhotoReimportMasterState* obj)
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PHOTO_TYPE_REIMPORT_MASTER_STATE, PhotoReimportMasterState);
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_handlers_destroy (self);
-#line 32917 "Photo.c"
+#line 32918 "Photo.c"
 }
 
 
@@ -32943,7 +32944,7 @@ gpointer photo_reimport_master_state_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 	return instance;
-#line 32942 "Photo.c"
+#line 32943 "Photo.c"
 }
 
 
@@ -32956,7 +32957,7 @@ void photo_reimport_master_state_unref (gpointer instance) {
 		PHOTO_REIMPORT_MASTER_STATE_GET_CLASS (self)->finalize (self);
 #line 1348 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 32955 "Photo.c"
+#line 32956 "Photo.c"
 	}
 }
 
@@ -32968,17 +32969,17 @@ static gchar** _vala_array_dup29 (gchar** self, int length) {
 	result = g_new0 (gchar*, length + 1);
 #line 1360 "/home/jens/Source/shotwell/src/Photo.vala"
 	for (i = 0; i < length; i++) {
-#line 32967 "Photo.c"
+#line 32968 "Photo.c"
 		gchar* _tmp0_ = NULL;
 #line 1360 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = g_strdup (self[i]);
 #line 1360 "/home/jens/Source/shotwell/src/Photo.vala"
 		result[i] = _tmp0_;
-#line 32973 "Photo.c"
+#line 32974 "Photo.c"
 	}
 #line 1360 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 32977 "Photo.c"
+#line 32978 "Photo.c"
 }
 
 
@@ -33032,14 +33033,14 @@ static PhotoReimportMasterStateImpl* photo_reimport_master_state_impl_construct 
 	self->_alterations_size_ = self->alterations_length1;
 #line 1357 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 33031 "Photo.c"
+#line 33032 "Photo.c"
 }
 
 
 static PhotoReimportMasterStateImpl* photo_reimport_master_state_impl_new (PhotoRow* row, PhotoMetadata* metadata, gchar** alterations, int alterations_length1) {
 #line 1357 "/home/jens/Source/shotwell/src/Photo.vala"
 	return photo_reimport_master_state_impl_construct (PHOTO_TYPE_REIMPORT_MASTER_STATE_IMPL, row, metadata, alterations, alterations_length1);
-#line 33038 "Photo.c"
+#line 33039 "Photo.c"
 }
 
 
@@ -33048,7 +33049,7 @@ static void photo_reimport_master_state_impl_class_init (PhotoReimportMasterStat
 	photo_reimport_master_state_impl_parent_class = g_type_class_peek_parent (klass);
 #line 1351 "/home/jens/Source/shotwell/src/Photo.vala"
 	((PhotoReimportMasterStateClass *) klass)->finalize = photo_reimport_master_state_impl_finalize;
-#line 33047 "Photo.c"
+#line 33048 "Photo.c"
 }
 
 
@@ -33060,7 +33061,7 @@ static void photo_reimport_master_state_impl_instance_init (PhotoReimportMasterS
 	self->row = _tmp0_;
 #line 1355 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->metadata_only = FALSE;
-#line 33059 "Photo.c"
+#line 33060 "Photo.c"
 }
 
 
@@ -33076,7 +33077,7 @@ static void photo_reimport_master_state_impl_finalize (PhotoReimportMasterState*
 	self->alterations = (_vala_array_free (self->alterations, self->alterations_length1, (GDestroyNotify) g_free), NULL);
 #line 1351 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_REIMPORT_MASTER_STATE_CLASS (photo_reimport_master_state_impl_parent_class)->finalize (obj);
-#line 33075 "Photo.c"
+#line 33076 "Photo.c"
 }
 
 
@@ -33098,14 +33099,14 @@ PhotoReimportEditableState* photo_reimport_editable_state_construct (GType objec
 	self = (PhotoReimportEditableState*) g_type_create_instance (object_type);
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 33097 "Photo.c"
+#line 33098 "Photo.c"
 }
 
 
 static void photo_value_reimport_editable_state_init (GValue* value) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	value->data[0].v_pointer = NULL;
-#line 33104 "Photo.c"
+#line 33105 "Photo.c"
 }
 
 
@@ -33114,7 +33115,7 @@ static void photo_value_reimport_editable_state_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_editable_state_unref (value->data[0].v_pointer);
-#line 33113 "Photo.c"
+#line 33114 "Photo.c"
 	}
 }
 
@@ -33124,11 +33125,11 @@ static void photo_value_reimport_editable_state_copy_value (const GValue* src_va
 	if (src_value->data[0].v_pointer) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = photo_reimport_editable_state_ref (src_value->data[0].v_pointer);
-#line 33123 "Photo.c"
+#line 33124 "Photo.c"
 	} else {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 33127 "Photo.c"
+#line 33128 "Photo.c"
 	}
 }
 
@@ -33136,37 +33137,37 @@ static void photo_value_reimport_editable_state_copy_value (const GValue* src_va
 static gpointer photo_value_reimport_editable_state_peek_pointer (const GValue* value) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 33135 "Photo.c"
+#line 33136 "Photo.c"
 }
 
 
 static gchar* photo_value_reimport_editable_state_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (collect_values[0].v_pointer) {
-#line 33142 "Photo.c"
+#line 33143 "Photo.c"
 		PhotoReimportEditableState* object;
 		object = collect_values[0].v_pointer;
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 33149 "Photo.c"
+#line 33150 "Photo.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 33153 "Photo.c"
+#line 33154 "Photo.c"
 		}
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = photo_reimport_editable_state_ref (object);
-#line 33157 "Photo.c"
+#line 33158 "Photo.c"
 	} else {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 33161 "Photo.c"
+#line 33162 "Photo.c"
 	}
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 33165 "Photo.c"
+#line 33166 "Photo.c"
 }
 
 
@@ -33177,25 +33178,25 @@ static gchar* photo_value_reimport_editable_state_lcopy_value (const GValue* val
 	if (!object_p) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 33176 "Photo.c"
+#line 33177 "Photo.c"
 	}
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!value->data[0].v_pointer) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = NULL;
-#line 33182 "Photo.c"
+#line 33183 "Photo.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = value->data[0].v_pointer;
-#line 33186 "Photo.c"
+#line 33187 "Photo.c"
 	} else {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = photo_reimport_editable_state_ref (value->data[0].v_pointer);
-#line 33190 "Photo.c"
+#line 33191 "Photo.c"
 	}
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 33194 "Photo.c"
+#line 33195 "Photo.c"
 }
 
 
@@ -33209,7 +33210,7 @@ GParamSpec* photo_param_spec_reimport_editable_state (const gchar* name, const g
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	return G_PARAM_SPEC (spec);
-#line 33208 "Photo.c"
+#line 33209 "Photo.c"
 }
 
 
@@ -33218,7 +33219,7 @@ gpointer photo_value_get_reimport_editable_state (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PHOTO_TYPE_REIMPORT_EDITABLE_STATE), NULL);
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 33217 "Photo.c"
+#line 33218 "Photo.c"
 }
 
 
@@ -33238,17 +33239,17 @@ void photo_value_set_reimport_editable_state (GValue* value, gpointer v_object) 
 		value->data[0].v_pointer = v_object;
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_editable_state_ref (value->data[0].v_pointer);
-#line 33237 "Photo.c"
+#line 33238 "Photo.c"
 	} else {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 33241 "Photo.c"
+#line 33242 "Photo.c"
 	}
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_editable_state_unref (old);
-#line 33247 "Photo.c"
+#line 33248 "Photo.c"
 	}
 }
 
@@ -33267,17 +33268,17 @@ void photo_value_take_reimport_editable_state (GValue* value, gpointer v_object)
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = v_object;
-#line 33266 "Photo.c"
+#line 33267 "Photo.c"
 	} else {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 33270 "Photo.c"
+#line 33271 "Photo.c"
 	}
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_editable_state_unref (old);
-#line 33276 "Photo.c"
+#line 33277 "Photo.c"
 	}
 }
 
@@ -33287,14 +33288,14 @@ static void photo_reimport_editable_state_class_init (PhotoReimportEditableState
 	photo_reimport_editable_state_parent_class = g_type_class_peek_parent (klass);
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	((PhotoReimportEditableStateClass *) klass)->finalize = photo_reimport_editable_state_finalize;
-#line 33286 "Photo.c"
+#line 33287 "Photo.c"
 }
 
 
 static void photo_reimport_editable_state_instance_init (PhotoReimportEditableState * self) {
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->ref_count = 1;
-#line 33293 "Photo.c"
+#line 33294 "Photo.c"
 }
 
 
@@ -33304,7 +33305,7 @@ static void photo_reimport_editable_state_finalize (PhotoReimportEditableState* 
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PHOTO_TYPE_REIMPORT_EDITABLE_STATE, PhotoReimportEditableState);
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_handlers_destroy (self);
-#line 33303 "Photo.c"
+#line 33304 "Photo.c"
 }
 
 
@@ -33329,7 +33330,7 @@ gpointer photo_reimport_editable_state_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 	return instance;
-#line 33328 "Photo.c"
+#line 33329 "Photo.c"
 }
 
 
@@ -33342,7 +33343,7 @@ void photo_reimport_editable_state_unref (gpointer instance) {
 		PHOTO_REIMPORT_EDITABLE_STATE_GET_CLASS (self)->finalize (self);
 #line 1364 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 33341 "Photo.c"
+#line 33342 "Photo.c"
 	}
 }
 
@@ -33377,14 +33378,14 @@ static PhotoReimportEditableStateImpl* photo_reimport_editable_state_impl_constr
 	self->metadata = _tmp3_;
 #line 1372 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 33376 "Photo.c"
+#line 33377 "Photo.c"
 }
 
 
 static PhotoReimportEditableStateImpl* photo_reimport_editable_state_impl_new (BackingPhotoRow* backing_state, PhotoMetadata* metadata) {
 #line 1372 "/home/jens/Source/shotwell/src/Photo.vala"
 	return photo_reimport_editable_state_impl_construct (PHOTO_TYPE_REIMPORT_EDITABLE_STATE_IMPL, backing_state, metadata);
-#line 33383 "Photo.c"
+#line 33384 "Photo.c"
 }
 
 
@@ -33393,7 +33394,7 @@ static void photo_reimport_editable_state_impl_class_init (PhotoReimportEditable
 	photo_reimport_editable_state_impl_parent_class = g_type_class_peek_parent (klass);
 #line 1367 "/home/jens/Source/shotwell/src/Photo.vala"
 	((PhotoReimportEditableStateClass *) klass)->finalize = photo_reimport_editable_state_impl_finalize;
-#line 33392 "Photo.c"
+#line 33393 "Photo.c"
 }
 
 
@@ -33405,7 +33406,7 @@ static void photo_reimport_editable_state_impl_instance_init (PhotoReimportEdita
 	self->backing_state = _tmp0_;
 #line 1370 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->metadata_only = FALSE;
-#line 33404 "Photo.c"
+#line 33405 "Photo.c"
 }
 
 
@@ -33419,7 +33420,7 @@ static void photo_reimport_editable_state_impl_finalize (PhotoReimportEditableSt
 	_media_metadata_unref0 (self->metadata);
 #line 1367 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_REIMPORT_EDITABLE_STATE_CLASS (photo_reimport_editable_state_impl_parent_class)->finalize (obj);
-#line 33418 "Photo.c"
+#line 33419 "Photo.c"
 }
 
 
@@ -33441,14 +33442,14 @@ PhotoReimportRawDevelopmentState* photo_reimport_raw_development_state_construct
 	self = (PhotoReimportRawDevelopmentState*) g_type_create_instance (object_type);
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 33440 "Photo.c"
+#line 33441 "Photo.c"
 }
 
 
 static void photo_value_reimport_raw_development_state_init (GValue* value) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	value->data[0].v_pointer = NULL;
-#line 33447 "Photo.c"
+#line 33448 "Photo.c"
 }
 
 
@@ -33457,7 +33458,7 @@ static void photo_value_reimport_raw_development_state_free_value (GValue* value
 	if (value->data[0].v_pointer) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_raw_development_state_unref (value->data[0].v_pointer);
-#line 33456 "Photo.c"
+#line 33457 "Photo.c"
 	}
 }
 
@@ -33467,11 +33468,11 @@ static void photo_value_reimport_raw_development_state_copy_value (const GValue*
 	if (src_value->data[0].v_pointer) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = photo_reimport_raw_development_state_ref (src_value->data[0].v_pointer);
-#line 33466 "Photo.c"
+#line 33467 "Photo.c"
 	} else {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 33470 "Photo.c"
+#line 33471 "Photo.c"
 	}
 }
 
@@ -33479,37 +33480,37 @@ static void photo_value_reimport_raw_development_state_copy_value (const GValue*
 static gpointer photo_value_reimport_raw_development_state_peek_pointer (const GValue* value) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 33478 "Photo.c"
+#line 33479 "Photo.c"
 }
 
 
 static gchar* photo_value_reimport_raw_development_state_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (collect_values[0].v_pointer) {
-#line 33485 "Photo.c"
+#line 33486 "Photo.c"
 		PhotoReimportRawDevelopmentState* object;
 		object = collect_values[0].v_pointer;
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 33492 "Photo.c"
+#line 33493 "Photo.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 33496 "Photo.c"
+#line 33497 "Photo.c"
 		}
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = photo_reimport_raw_development_state_ref (object);
-#line 33500 "Photo.c"
+#line 33501 "Photo.c"
 	} else {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 33504 "Photo.c"
+#line 33505 "Photo.c"
 	}
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 33508 "Photo.c"
+#line 33509 "Photo.c"
 }
 
 
@@ -33520,25 +33521,25 @@ static gchar* photo_value_reimport_raw_development_state_lcopy_value (const GVal
 	if (!object_p) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 33519 "Photo.c"
+#line 33520 "Photo.c"
 	}
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!value->data[0].v_pointer) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = NULL;
-#line 33525 "Photo.c"
+#line 33526 "Photo.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = value->data[0].v_pointer;
-#line 33529 "Photo.c"
+#line 33530 "Photo.c"
 	} else {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = photo_reimport_raw_development_state_ref (value->data[0].v_pointer);
-#line 33533 "Photo.c"
+#line 33534 "Photo.c"
 	}
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 33537 "Photo.c"
+#line 33538 "Photo.c"
 }
 
 
@@ -33552,7 +33553,7 @@ GParamSpec* photo_param_spec_reimport_raw_development_state (const gchar* name, 
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	return G_PARAM_SPEC (spec);
-#line 33551 "Photo.c"
+#line 33552 "Photo.c"
 }
 
 
@@ -33561,7 +33562,7 @@ gpointer photo_value_get_reimport_raw_development_state (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PHOTO_TYPE_REIMPORT_RAW_DEVELOPMENT_STATE), NULL);
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 33560 "Photo.c"
+#line 33561 "Photo.c"
 }
 
 
@@ -33581,17 +33582,17 @@ void photo_value_set_reimport_raw_development_state (GValue* value, gpointer v_o
 		value->data[0].v_pointer = v_object;
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_raw_development_state_ref (value->data[0].v_pointer);
-#line 33580 "Photo.c"
+#line 33581 "Photo.c"
 	} else {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 33584 "Photo.c"
+#line 33585 "Photo.c"
 	}
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_raw_development_state_unref (old);
-#line 33590 "Photo.c"
+#line 33591 "Photo.c"
 	}
 }
 
@@ -33610,17 +33611,17 @@ void photo_value_take_reimport_raw_development_state (GValue* value, gpointer v_
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = v_object;
-#line 33609 "Photo.c"
+#line 33610 "Photo.c"
 	} else {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 33613 "Photo.c"
+#line 33614 "Photo.c"
 	}
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_raw_development_state_unref (old);
-#line 33619 "Photo.c"
+#line 33620 "Photo.c"
 	}
 }
 
@@ -33630,14 +33631,14 @@ static void photo_reimport_raw_development_state_class_init (PhotoReimportRawDev
 	photo_reimport_raw_development_state_parent_class = g_type_class_peek_parent (klass);
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	((PhotoReimportRawDevelopmentStateClass *) klass)->finalize = photo_reimport_raw_development_state_finalize;
-#line 33629 "Photo.c"
+#line 33630 "Photo.c"
 }
 
 
 static void photo_reimport_raw_development_state_instance_init (PhotoReimportRawDevelopmentState * self) {
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->ref_count = 1;
-#line 33636 "Photo.c"
+#line 33637 "Photo.c"
 }
 
 
@@ -33647,7 +33648,7 @@ static void photo_reimport_raw_development_state_finalize (PhotoReimportRawDevel
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PHOTO_TYPE_REIMPORT_RAW_DEVELOPMENT_STATE, PhotoReimportRawDevelopmentState);
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_handlers_destroy (self);
-#line 33646 "Photo.c"
+#line 33647 "Photo.c"
 }
 
 
@@ -33672,7 +33673,7 @@ gpointer photo_reimport_raw_development_state_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 	return instance;
-#line 33671 "Photo.c"
+#line 33672 "Photo.c"
 }
 
 
@@ -33685,7 +33686,7 @@ void photo_reimport_raw_development_state_unref (gpointer instance) {
 		PHOTO_REIMPORT_RAW_DEVELOPMENT_STATE_GET_CLASS (self)->finalize (self);
 #line 1378 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 33684 "Photo.c"
+#line 33685 "Photo.c"
 	}
 }
 
@@ -33696,14 +33697,14 @@ static PhotoReimportRawDevelopmentStateImpl* photo_reimport_raw_development_stat
 	self = (PhotoReimportRawDevelopmentStateImpl*) photo_reimport_raw_development_state_construct (object_type);
 #line 1395 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 33695 "Photo.c"
+#line 33696 "Photo.c"
 }
 
 
 static PhotoReimportRawDevelopmentStateImpl* photo_reimport_raw_development_state_impl_new (void) {
 #line 1395 "/home/jens/Source/shotwell/src/Photo.vala"
 	return photo_reimport_raw_development_state_impl_construct (PHOTO_TYPE_REIMPORT_RAW_DEVELOPMENT_STATE_IMPL);
-#line 33702 "Photo.c"
+#line 33703 "Photo.c"
 }
 
 
@@ -33733,7 +33734,7 @@ static void photo_reimport_raw_development_state_impl_add (PhotoReimportRawDevel
 	gee_collection_add (_tmp0_, _tmp4_);
 #line 1399 "/home/jens/Source/shotwell/src/Photo.vala"
 	_photo_reimport_raw_development_state_impl_dev_to_reimport_unref0 (_tmp4_);
-#line 33732 "Photo.c"
+#line 33733 "Photo.c"
 }
 
 
@@ -33754,7 +33755,7 @@ static gint photo_reimport_raw_development_state_impl_get_size (PhotoReimportRaw
 	result = _tmp2_;
 #line 1403 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 33753 "Photo.c"
+#line 33754 "Photo.c"
 }
 
 
@@ -33788,21 +33789,21 @@ static PhotoReimportRawDevelopmentStateImplDevToReimport* photo_reimport_raw_dev
 	self->metadata = _tmp3_;
 #line 1386 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 33787 "Photo.c"
+#line 33788 "Photo.c"
 }
 
 
 static PhotoReimportRawDevelopmentStateImplDevToReimport* photo_reimport_raw_development_state_impl_dev_to_reimport_new (BackingPhotoRow* backing, PhotoMetadata* metadata) {
 #line 1386 "/home/jens/Source/shotwell/src/Photo.vala"
 	return photo_reimport_raw_development_state_impl_dev_to_reimport_construct (PHOTO_REIMPORT_RAW_DEVELOPMENT_STATE_IMPL_TYPE_DEV_TO_REIMPORT, backing, metadata);
-#line 33794 "Photo.c"
+#line 33795 "Photo.c"
 }
 
 
 static void photo_reimport_raw_development_state_impl_value_dev_to_reimport_init (GValue* value) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	value->data[0].v_pointer = NULL;
-#line 33801 "Photo.c"
+#line 33802 "Photo.c"
 }
 
 
@@ -33811,7 +33812,7 @@ static void photo_reimport_raw_development_state_impl_value_dev_to_reimport_free
 	if (value->data[0].v_pointer) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_raw_development_state_impl_dev_to_reimport_unref (value->data[0].v_pointer);
-#line 33810 "Photo.c"
+#line 33811 "Photo.c"
 	}
 }
 
@@ -33821,11 +33822,11 @@ static void photo_reimport_raw_development_state_impl_value_dev_to_reimport_copy
 	if (src_value->data[0].v_pointer) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = photo_reimport_raw_development_state_impl_dev_to_reimport_ref (src_value->data[0].v_pointer);
-#line 33820 "Photo.c"
+#line 33821 "Photo.c"
 	} else {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 33824 "Photo.c"
+#line 33825 "Photo.c"
 	}
 }
 
@@ -33833,37 +33834,37 @@ static void photo_reimport_raw_development_state_impl_value_dev_to_reimport_copy
 static gpointer photo_reimport_raw_development_state_impl_value_dev_to_reimport_peek_pointer (const GValue* value) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 33832 "Photo.c"
+#line 33833 "Photo.c"
 }
 
 
 static gchar* photo_reimport_raw_development_state_impl_value_dev_to_reimport_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (collect_values[0].v_pointer) {
-#line 33839 "Photo.c"
+#line 33840 "Photo.c"
 		PhotoReimportRawDevelopmentStateImplDevToReimport* object;
 		object = collect_values[0].v_pointer;
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 33846 "Photo.c"
+#line 33847 "Photo.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 33850 "Photo.c"
+#line 33851 "Photo.c"
 		}
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = photo_reimport_raw_development_state_impl_dev_to_reimport_ref (object);
-#line 33854 "Photo.c"
+#line 33855 "Photo.c"
 	} else {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 33858 "Photo.c"
+#line 33859 "Photo.c"
 	}
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 33862 "Photo.c"
+#line 33863 "Photo.c"
 }
 
 
@@ -33874,25 +33875,25 @@ static gchar* photo_reimport_raw_development_state_impl_value_dev_to_reimport_lc
 	if (!object_p) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 33873 "Photo.c"
+#line 33874 "Photo.c"
 	}
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!value->data[0].v_pointer) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = NULL;
-#line 33879 "Photo.c"
+#line 33880 "Photo.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = value->data[0].v_pointer;
-#line 33883 "Photo.c"
+#line 33884 "Photo.c"
 	} else {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		*object_p = photo_reimport_raw_development_state_impl_dev_to_reimport_ref (value->data[0].v_pointer);
-#line 33887 "Photo.c"
+#line 33888 "Photo.c"
 	}
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	return NULL;
-#line 33891 "Photo.c"
+#line 33892 "Photo.c"
 }
 
 
@@ -33906,7 +33907,7 @@ static GParamSpec* photo_reimport_raw_development_state_impl_param_spec_dev_to_r
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	return G_PARAM_SPEC (spec);
-#line 33905 "Photo.c"
+#line 33906 "Photo.c"
 }
 
 
@@ -33915,7 +33916,7 @@ static gpointer photo_reimport_raw_development_state_impl_value_get_dev_to_reimp
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PHOTO_REIMPORT_RAW_DEVELOPMENT_STATE_IMPL_TYPE_DEV_TO_REIMPORT), NULL);
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	return value->data[0].v_pointer;
-#line 33914 "Photo.c"
+#line 33915 "Photo.c"
 }
 
 
@@ -33935,17 +33936,17 @@ static void photo_reimport_raw_development_state_impl_value_set_dev_to_reimport 
 		value->data[0].v_pointer = v_object;
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_raw_development_state_impl_dev_to_reimport_ref (value->data[0].v_pointer);
-#line 33934 "Photo.c"
+#line 33935 "Photo.c"
 	} else {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 33938 "Photo.c"
+#line 33939 "Photo.c"
 	}
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_raw_development_state_impl_dev_to_reimport_unref (old);
-#line 33944 "Photo.c"
+#line 33945 "Photo.c"
 	}
 }
 
@@ -33964,17 +33965,17 @@ static void photo_reimport_raw_development_state_impl_value_take_dev_to_reimport
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = v_object;
-#line 33963 "Photo.c"
+#line 33964 "Photo.c"
 	} else {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		value->data[0].v_pointer = NULL;
-#line 33967 "Photo.c"
+#line 33968 "Photo.c"
 	}
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (old) {
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_reimport_raw_development_state_impl_dev_to_reimport_unref (old);
-#line 33973 "Photo.c"
+#line 33974 "Photo.c"
 	}
 }
 
@@ -33984,7 +33985,7 @@ static void photo_reimport_raw_development_state_impl_dev_to_reimport_class_init
 	photo_reimport_raw_development_state_impl_dev_to_reimport_parent_class = g_type_class_peek_parent (klass);
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	((PhotoReimportRawDevelopmentStateImplDevToReimportClass *) klass)->finalize = photo_reimport_raw_development_state_impl_dev_to_reimport_finalize;
-#line 33983 "Photo.c"
+#line 33984 "Photo.c"
 }
 
 
@@ -33996,7 +33997,7 @@ static void photo_reimport_raw_development_state_impl_dev_to_reimport_instance_i
 	self->backing = _tmp0_;
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->ref_count = 1;
-#line 33995 "Photo.c"
+#line 33996 "Photo.c"
 }
 
 
@@ -34010,7 +34011,7 @@ static void photo_reimport_raw_development_state_impl_dev_to_reimport_finalize (
 	_backing_photo_row_unref0 (self->backing);
 #line 1384 "/home/jens/Source/shotwell/src/Photo.vala"
 	_media_metadata_unref0 (self->metadata);
-#line 34009 "Photo.c"
+#line 34010 "Photo.c"
 }
 
 
@@ -34035,7 +34036,7 @@ static gpointer photo_reimport_raw_development_state_impl_dev_to_reimport_ref (g
 	g_atomic_int_inc (&self->ref_count);
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 	return instance;
-#line 34034 "Photo.c"
+#line 34035 "Photo.c"
 }
 
 
@@ -34048,7 +34049,7 @@ static void photo_reimport_raw_development_state_impl_dev_to_reimport_unref (gpo
 		PHOTO_REIMPORT_RAW_DEVELOPMENT_STATE_IMPL_DEV_TO_REIMPORT_GET_CLASS (self)->finalize (self);
 #line 1382 "/home/jens/Source/shotwell/src/Photo.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 34047 "Photo.c"
+#line 34048 "Photo.c"
 	}
 }
 
@@ -34058,7 +34059,7 @@ static void photo_reimport_raw_development_state_impl_class_init (PhotoReimportR
 	photo_reimport_raw_development_state_impl_parent_class = g_type_class_peek_parent (klass);
 #line 1381 "/home/jens/Source/shotwell/src/Photo.vala"
 	((PhotoReimportRawDevelopmentStateClass *) klass)->finalize = photo_reimport_raw_development_state_impl_finalize;
-#line 34057 "Photo.c"
+#line 34058 "Photo.c"
 }
 
 
@@ -34070,7 +34071,7 @@ static void photo_reimport_raw_development_state_impl_instance_init (PhotoReimpo
 	self->list = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_COLLECTION, GeeCollection);
 #line 1393 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->metadata_only = FALSE;
-#line 34069 "Photo.c"
+#line 34070 "Photo.c"
 }
 
 
@@ -34082,7 +34083,7 @@ static void photo_reimport_raw_development_state_impl_finalize (PhotoReimportRaw
 	_g_object_unref0 (self->list);
 #line 1381 "/home/jens/Source/shotwell/src/Photo.vala"
 	PHOTO_REIMPORT_RAW_DEVELOPMENT_STATE_CLASS (photo_reimport_raw_development_state_impl_parent_class)->finalize (obj);
-#line 34081 "Photo.c"
+#line 34082 "Photo.c"
 }
 
 
@@ -34225,7 +34226,7 @@ static void photo_class_init (PhotoClass * klass) {
 	g_signal_new ("source_reimported", TYPE_PHOTO, G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (PhotoClass, source_reimported), NULL, NULL, g_cclosure_user_marshal_VOID__MEDIA_METADATA, G_TYPE_NONE, 1, TYPE_PHOTO_METADATA);
 #line 326 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_rec_mutex_init (&__lock_photo_source_pixbuf_cache);
-#line 34224 "Photo.c"
+#line 34225 "Photo.c"
 }
 
 
@@ -34236,7 +34237,7 @@ static void photo_dateable_interface_init (DateableIface * iface) {
 	iface->get_exposure_time = (time_t (*)(Dateable*)) photo_real_get_exposure_time;
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 	iface->set_exposure_time = (void (*)(Dateable*, time_t)) photo_real_set_exposure_time;
-#line 34235 "Photo.c"
+#line 34236 "Photo.c"
 }
 
 
@@ -34279,7 +34280,7 @@ static void photo_instance_init (Photo * self) {
 	self->priv->developments = NULL;
 #line 353 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->backing_photo_row = NULL;
-#line 34278 "Photo.c"
+#line 34279 "Photo.c"
 }
 
 
@@ -34319,7 +34320,7 @@ static void photo_finalize (GObject* obj) {
 	_backing_photo_row_unref0 (self->backing_photo_row);
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 	G_OBJECT_CLASS (photo_parent_class)->finalize (obj);
-#line 34318 "Photo.c"
+#line 34319 "Photo.c"
 }
 
 
@@ -34342,13 +34343,13 @@ static void _vala_photo_get_property (GObject * object, guint property_id, GValu
 	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_PHOTO, Photo);
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 	switch (property_id) {
-#line 34341 "Photo.c"
+#line 34342 "Photo.c"
 		default:
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 		break;
-#line 34347 "Photo.c"
+#line 34348 "Photo.c"
 	}
 }
 
@@ -34358,13 +34359,13 @@ static void _vala_photo_set_property (GObject * object, guint property_id, const
 	self = G_TYPE_CHECK_INSTANCE_CAST (object, TYPE_PHOTO, Photo);
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 	switch (property_id) {
-#line 34357 "Photo.c"
+#line 34358 "Photo.c"
 		default:
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 161 "/home/jens/Source/shotwell/src/Photo.vala"
 		break;
-#line 34363 "Photo.c"
+#line 34364 "Photo.c"
 	}
 }
 
@@ -34386,7 +34387,7 @@ static guint _file_hash_gee_hash_data_func (gconstpointer v, gpointer self) {
 	result = file_hash ((GFile*) v);
 #line 4462 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34385 "Photo.c"
+#line 34386 "Photo.c"
 }
 
 
@@ -34395,7 +34396,7 @@ static gboolean _file_equal_gee_equal_data_func (gconstpointer a, gconstpointer 
 	result = file_equal ((GFile*) a, (GFile*) b);
 #line 4462 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34394 "Photo.c"
+#line 34395 "Photo.c"
 }
 
 
@@ -34404,7 +34405,7 @@ static gint _int64_compare_gcompare_data_func (gconstpointer a, gconstpointer b,
 	result = int64_compare ((gint64*) a, (gint64*) b);
 #line 4466 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34403 "Photo.c"
+#line 34404 "Photo.c"
 }
 
 
@@ -34416,7 +34417,7 @@ static gint64* _int64_dup (gint64* self) {
 	memcpy (dup, self, sizeof (gint64));
 #line 4466 "/home/jens/Source/shotwell/src/Photo.vala"
 	return dup;
-#line 34415 "Photo.c"
+#line 34416 "Photo.c"
 }
 
 
@@ -34425,7 +34426,7 @@ static gboolean _int64_equal_gee_equal_data_func (gconstpointer a, gconstpointer
 	result = int64_equal ((gint64*) a, (gint64*) b);
 #line 4468 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34424 "Photo.c"
+#line 34425 "Photo.c"
 }
 
 
@@ -34434,21 +34435,21 @@ static gint64 _photo_get_photo_key_get_source_database_key (DataSource* source, 
 	result = photo_get_photo_key (source);
 #line 4488 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34433 "Photo.c"
+#line 34434 "Photo.c"
 }
 
 
 static void _library_photo_source_collection_on_trashcan_contents_altered_source_holding_tank_contents_altered (SourceHoldingTank* _sender, GeeCollection* added, GeeCollection* removed, gpointer self) {
 #line 4490 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_source_collection_on_trashcan_contents_altered ((LibraryPhotoSourceCollection*) self, added, removed);
-#line 34440 "Photo.c"
+#line 34441 "Photo.c"
 }
 
 
 static void _library_photo_source_collection_on_offline_contents_altered_source_holding_tank_contents_altered (SourceHoldingTank* _sender, GeeCollection* added, GeeCollection* removed, gpointer self) {
 #line 4491 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_source_collection_on_offline_contents_altered ((LibraryPhotoSourceCollection*) self, added, removed);
-#line 34447 "Photo.c"
+#line 34448 "Photo.c"
 }
 
 
@@ -34478,14 +34479,14 @@ LibraryPhotoSourceCollection* library_photo_source_collection_construct (GType o
 	_source_holding_tank_unref0 (_tmp3_);
 #line 4487 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 34477 "Photo.c"
+#line 34478 "Photo.c"
 }
 
 
 LibraryPhotoSourceCollection* library_photo_source_collection_new (void) {
 #line 4487 "/home/jens/Source/shotwell/src/Photo.vala"
 	return library_photo_source_collection_construct (TYPE_LIBRARY_PHOTO_SOURCE_COLLECTION);
-#line 34484 "Photo.c"
+#line 34485 "Photo.c"
 }
 
 
@@ -34494,7 +34495,7 @@ static gboolean _library_photo_source_collection_check_if_trashed_photo_source_h
 	result = library_photo_source_collection_check_if_trashed_photo ((LibraryPhotoSourceCollection*) self, source, alteration);
 #line 4495 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34493 "Photo.c"
+#line 34494 "Photo.c"
 }
 
 
@@ -34510,7 +34511,7 @@ static MediaSourceHoldingTank* library_photo_source_collection_real_create_trash
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_MEDIA_SOURCE_HOLDING_TANK, MediaSourceHoldingTank);
 #line 4495 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34509 "Photo.c"
+#line 34510 "Photo.c"
 }
 
 
@@ -34519,7 +34520,7 @@ static gboolean _library_photo_source_collection_check_if_offline_photo_source_h
 	result = library_photo_source_collection_check_if_offline_photo ((LibraryPhotoSourceCollection*) self, source, alteration);
 #line 4499 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34518 "Photo.c"
+#line 34519 "Photo.c"
 }
 
 
@@ -34535,7 +34536,7 @@ static MediaSourceHoldingTank* library_photo_source_collection_real_create_offli
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_MEDIA_SOURCE_HOLDING_TANK, MediaSourceHoldingTank);
 #line 4499 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34534 "Photo.c"
+#line 34535 "Photo.c"
 }
 
 
@@ -34561,7 +34562,7 @@ static MediaMonitor* library_photo_source_collection_real_create_media_monitor (
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_MEDIA_MONITOR, MediaMonitor);
 #line 4503 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34560 "Photo.c"
+#line 34561 "Photo.c"
 }
 
 
@@ -34579,7 +34580,7 @@ static gboolean library_photo_source_collection_real_holds_type_of_source (Sourc
 	result = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_LIBRARY_PHOTO);
 #line 4507 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34578 "Photo.c"
+#line 34579 "Photo.c"
 }
 
 
@@ -34595,7 +34596,7 @@ static gchar* library_photo_source_collection_real_get_typename (MediaSourceColl
 	result = _tmp0_;
 #line 4511 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34594 "Photo.c"
+#line 34595 "Photo.c"
 }
 
 
@@ -34616,21 +34617,21 @@ static gboolean library_photo_source_collection_real_is_file_recognized (MediaSo
 	result = _tmp1_;
 #line 4515 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 34615 "Photo.c"
+#line 34616 "Photo.c"
 }
 
 
 static void _library_photo_source_collection_on_editable_replaced_photo_editable_replaced (Photo* _sender, GFile* old_file, GFile* new_file, gpointer self) {
 #line 4527 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_source_collection_on_editable_replaced ((LibraryPhotoSourceCollection*) self, _sender, old_file, new_file);
-#line 34622 "Photo.c"
+#line 34623 "Photo.c"
 }
 
 
 static void _library_photo_source_collection_on_raw_development_modified_photo_raw_development_modified (Photo* _sender, gpointer self) {
 #line 4533 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_source_collection_on_raw_development_modified ((LibraryPhotoSourceCollection*) self, _sender);
-#line 34629 "Photo.c"
+#line 34630 "Photo.c"
 }
 
 
@@ -34650,7 +34651,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 	_tmp0_ = added;
 #line 4520 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp0_ != NULL) {
-#line 34649 "Photo.c"
+#line 34650 "Photo.c"
 		{
 			GeeIterator* _object_it = NULL;
 			GeeIterable* _tmp1_ = NULL;
@@ -34663,7 +34664,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 			_object_it = _tmp2_;
 #line 4521 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 34662 "Photo.c"
+#line 34663 "Photo.c"
 				GeeIterator* _tmp3_ = NULL;
 				gboolean _tmp4_ = FALSE;
 				DataObject* object = NULL;
@@ -34713,7 +34714,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				if (!_tmp4_) {
 #line 4521 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 34712 "Photo.c"
+#line 34713 "Photo.c"
 				}
 #line 4521 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp5_ = _object_it;
@@ -34737,7 +34738,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_tmp11_ = editable;
 #line 4525 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp11_ != NULL) {
-#line 34736 "Photo.c"
+#line 34737 "Photo.c"
 					GeeHashMap* _tmp12_ = NULL;
 					GFile* _tmp13_ = NULL;
 					LibraryPhoto* _tmp14_ = NULL;
@@ -34749,7 +34750,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 					_tmp14_ = photo;
 #line 4526 "/home/jens/Source/shotwell/src/Photo.vala"
 					gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp13_, _tmp14_);
-#line 34748 "Photo.c"
+#line 34749 "Photo.c"
 				}
 #line 4527 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp15_ = photo;
@@ -34765,7 +34766,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_tmp18_ = raw_list;
 #line 4530 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp18_ != NULL) {
-#line 34764 "Photo.c"
+#line 34765 "Photo.c"
 					{
 						GeeIterator* _f_it = NULL;
 						GeeCollection* _tmp19_ = NULL;
@@ -34778,7 +34779,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 						_f_it = _tmp20_;
 #line 4531 "/home/jens/Source/shotwell/src/Photo.vala"
 						while (TRUE) {
-#line 34777 "Photo.c"
+#line 34778 "Photo.c"
 							GeeIterator* _tmp21_ = NULL;
 							gboolean _tmp22_ = FALSE;
 							GFile* f = NULL;
@@ -34795,7 +34796,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 							if (!_tmp22_) {
 #line 4531 "/home/jens/Source/shotwell/src/Photo.vala"
 								break;
-#line 34794 "Photo.c"
+#line 34795 "Photo.c"
 							}
 #line 4531 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp23_ = _f_it;
@@ -34813,11 +34814,11 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 							gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp26_, _tmp27_);
 #line 4531 "/home/jens/Source/shotwell/src/Photo.vala"
 							_g_object_unref0 (f);
-#line 34812 "Photo.c"
+#line 34813 "Photo.c"
 						}
 #line 4531 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_object_unref0 (_f_it);
-#line 34816 "Photo.c"
+#line 34817 "Photo.c"
 					}
 				}
 #line 4533 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -34850,7 +34851,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_backing_photo_row_unref0 (_tmp37_);
 #line 4536 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp38_) {
-#line 34849 "Photo.c"
+#line 34850 "Photo.c"
 					LibraryPhoto* _tmp39_ = NULL;
 					BackingPhotoRow* _tmp40_ = NULL;
 					BackingPhotoRow* _tmp41_ = NULL;
@@ -34867,11 +34868,11 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 					_tmp34_ = _tmp42_;
 #line 4537 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp41_);
-#line 34866 "Photo.c"
+#line 34867 "Photo.c"
 				} else {
 #line 4538 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp34_ = (gint64) -1;
-#line 34870 "Photo.c"
+#line 34871 "Photo.c"
 				}
 #line 4536 "/home/jens/Source/shotwell/src/Photo.vala"
 				editable_filesize = _tmp34_;
@@ -34895,7 +34896,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_tmp49_ = editable_filesize;
 #line 4541 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp49_ >= ((gint64) 0)) {
-#line 34894 "Photo.c"
+#line 34895 "Photo.c"
 					GeeMultiMap* _tmp50_ = NULL;
 					gint64 _tmp51_ = 0LL;
 					LibraryPhoto* _tmp52_ = NULL;
@@ -34918,7 +34919,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 					_tmp55_ = editable_filesize;
 #line 4543 "/home/jens/Source/shotwell/src/Photo.vala"
 					gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp53_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp54_, &_tmp55_);
-#line 34917 "Photo.c"
+#line 34918 "Photo.c"
 				}
 #line 4546 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp56_ = photo;
@@ -34930,7 +34931,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_tmp58_ = raw_rows;
 #line 4547 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp58_ != NULL) {
-#line 34929 "Photo.c"
+#line 34930 "Photo.c"
 					{
 						GeeIterator* _row_it = NULL;
 						GeeCollection* _tmp59_ = NULL;
@@ -34943,7 +34944,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 						_row_it = _tmp60_;
 #line 4548 "/home/jens/Source/shotwell/src/Photo.vala"
 						while (TRUE) {
-#line 34942 "Photo.c"
+#line 34943 "Photo.c"
 							GeeIterator* _tmp61_ = NULL;
 							gboolean _tmp62_ = FALSE;
 							BackingPhotoRow* row = NULL;
@@ -34959,7 +34960,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 							if (!_tmp62_) {
 #line 4548 "/home/jens/Source/shotwell/src/Photo.vala"
 								break;
-#line 34958 "Photo.c"
+#line 34959 "Photo.c"
 							}
 #line 4548 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp63_ = _row_it;
@@ -34973,7 +34974,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 							_tmp66_ = _tmp65_->filesize;
 #line 4549 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (_tmp66_ >= ((gint64) 0)) {
-#line 34972 "Photo.c"
+#line 34973 "Photo.c"
 								GeeMultiMap* _tmp67_ = NULL;
 								BackingPhotoRow* _tmp68_ = NULL;
 								gint64 _tmp69_ = 0LL;
@@ -35002,15 +35003,15 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 								_tmp74_ = _tmp73_->filesize;
 #line 4551 "/home/jens/Source/shotwell/src/Photo.vala"
 								gee_multi_map_set (_tmp71_, _tmp72_, &_tmp74_);
-#line 35001 "Photo.c"
+#line 35002 "Photo.c"
 							}
 #line 4548 "/home/jens/Source/shotwell/src/Photo.vala"
 							_backing_photo_row_unref0 (row);
-#line 35005 "Photo.c"
+#line 35006 "Photo.c"
 						}
 #line 4548 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_object_unref0 (_row_it);
-#line 35009 "Photo.c"
+#line 35010 "Photo.c"
 					}
 				}
 #line 4521 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -35023,18 +35024,18 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_g_object_unref0 (photo);
 #line 4521 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (object);
-#line 35022 "Photo.c"
+#line 35023 "Photo.c"
 			}
 #line 4521 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_object_it);
-#line 35026 "Photo.c"
+#line 35027 "Photo.c"
 		}
 	}
 #line 4558 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp75_ = removed;
 #line 4558 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp75_ != NULL) {
-#line 35033 "Photo.c"
+#line 35034 "Photo.c"
 		{
 			GeeIterator* _object_it = NULL;
 			GeeIterable* _tmp76_ = NULL;
@@ -35047,7 +35048,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 			_object_it = _tmp77_;
 #line 4559 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 35046 "Photo.c"
+#line 35047 "Photo.c"
 				GeeIterator* _tmp78_ = NULL;
 				gboolean _tmp79_ = FALSE;
 				DataObject* object = NULL;
@@ -35098,7 +35099,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				if (!_tmp79_) {
 #line 4559 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 35097 "Photo.c"
+#line 35098 "Photo.c"
 				}
 #line 4559 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp80_ = _object_it;
@@ -35122,7 +35123,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_tmp86_ = editable;
 #line 4563 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp86_ != NULL) {
-#line 35121 "Photo.c"
+#line 35122 "Photo.c"
 					gboolean is_removed = FALSE;
 					GeeHashMap* _tmp87_ = NULL;
 					LibraryPhoto* _tmp88_ = NULL;
@@ -35151,7 +35152,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 					_tmp93_ = is_removed;
 #line 4565 "/home/jens/Source/shotwell/src/Photo.vala"
 					_vala_assert (_tmp93_, "is_removed");
-#line 35150 "Photo.c"
+#line 35151 "Photo.c"
 				}
 #line 4567 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp94_ = photo;
@@ -35169,7 +35170,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_tmp98_ = raw_list;
 #line 4570 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp98_ != NULL) {
-#line 35168 "Photo.c"
+#line 35169 "Photo.c"
 					{
 						GeeIterator* _f_it = NULL;
 						GeeCollection* _tmp99_ = NULL;
@@ -35182,7 +35183,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 						_f_it = _tmp100_;
 #line 4571 "/home/jens/Source/shotwell/src/Photo.vala"
 						while (TRUE) {
-#line 35181 "Photo.c"
+#line 35182 "Photo.c"
 							GeeIterator* _tmp101_ = NULL;
 							gboolean _tmp102_ = FALSE;
 							GFile* f = NULL;
@@ -35198,7 +35199,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 							if (!_tmp102_) {
 #line 4571 "/home/jens/Source/shotwell/src/Photo.vala"
 								break;
-#line 35197 "Photo.c"
+#line 35198 "Photo.c"
 							}
 #line 4571 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp103_ = _f_it;
@@ -35214,11 +35215,11 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 							gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp105_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp106_, NULL);
 #line 4571 "/home/jens/Source/shotwell/src/Photo.vala"
 							_g_object_unref0 (f);
-#line 35213 "Photo.c"
+#line 35214 "Photo.c"
 						}
 #line 4571 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_object_unref0 (_f_it);
-#line 35217 "Photo.c"
+#line 35218 "Photo.c"
 					}
 				}
 #line 4573 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -35253,7 +35254,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_backing_photo_row_unref0 (_tmp117_);
 #line 4576 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp118_) {
-#line 35252 "Photo.c"
+#line 35253 "Photo.c"
 					LibraryPhoto* _tmp119_ = NULL;
 					BackingPhotoRow* _tmp120_ = NULL;
 					BackingPhotoRow* _tmp121_ = NULL;
@@ -35270,11 +35271,11 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 					_tmp114_ = _tmp122_;
 #line 4577 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp121_);
-#line 35269 "Photo.c"
+#line 35270 "Photo.c"
 				} else {
 #line 4578 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp114_ = (gint64) -1;
-#line 35273 "Photo.c"
+#line 35274 "Photo.c"
 				}
 #line 4576 "/home/jens/Source/shotwell/src/Photo.vala"
 				editable_filesize = _tmp114_;
@@ -35296,7 +35297,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_tmp128_ = editable_filesize;
 #line 4581 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp128_ >= ((gint64) 0)) {
-#line 35295 "Photo.c"
+#line 35296 "Photo.c"
 					GeeMultiMap* _tmp129_ = NULL;
 					gint64 _tmp130_ = 0LL;
 					LibraryPhoto* _tmp131_ = NULL;
@@ -35316,7 +35317,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 					_tmp133_ = photo;
 #line 4583 "/home/jens/Source/shotwell/src/Photo.vala"
 					gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp132_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp133_, NULL);
-#line 35315 "Photo.c"
+#line 35316 "Photo.c"
 				}
 #line 4586 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp134_ = photo;
@@ -35328,7 +35329,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_tmp136_ = raw_rows;
 #line 4587 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp136_ != NULL) {
-#line 35327 "Photo.c"
+#line 35328 "Photo.c"
 					{
 						GeeIterator* _row_it = NULL;
 						GeeCollection* _tmp137_ = NULL;
@@ -35341,7 +35342,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 						_row_it = _tmp138_;
 #line 4588 "/home/jens/Source/shotwell/src/Photo.vala"
 						while (TRUE) {
-#line 35340 "Photo.c"
+#line 35341 "Photo.c"
 							GeeIterator* _tmp139_ = NULL;
 							gboolean _tmp140_ = FALSE;
 							BackingPhotoRow* row = NULL;
@@ -35357,7 +35358,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 							if (!_tmp140_) {
 #line 4588 "/home/jens/Source/shotwell/src/Photo.vala"
 								break;
-#line 35356 "Photo.c"
+#line 35357 "Photo.c"
 							}
 #line 4588 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp141_ = _row_it;
@@ -35371,7 +35372,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 							_tmp144_ = _tmp143_->filesize;
 #line 4589 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (_tmp144_ >= ((gint64) 0)) {
-#line 35370 "Photo.c"
+#line 35371 "Photo.c"
 								GeeMultiMap* _tmp145_ = NULL;
 								BackingPhotoRow* _tmp146_ = NULL;
 								gint64 _tmp147_ = 0LL;
@@ -35400,15 +35401,15 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 								_tmp152_ = _tmp151_->filesize;
 #line 4591 "/home/jens/Source/shotwell/src/Photo.vala"
 								gee_multi_map_remove (_tmp149_, _tmp150_, &_tmp152_);
-#line 35399 "Photo.c"
+#line 35400 "Photo.c"
 							}
 #line 4588 "/home/jens/Source/shotwell/src/Photo.vala"
 							_backing_photo_row_unref0 (row);
-#line 35403 "Photo.c"
+#line 35404 "Photo.c"
 						}
 #line 4588 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_object_unref0 (_row_it);
-#line 35407 "Photo.c"
+#line 35408 "Photo.c"
 					}
 				}
 #line 4559 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -35421,11 +35422,11 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 				_g_object_unref0 (photo);
 #line 4559 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (object);
-#line 35420 "Photo.c"
+#line 35421 "Photo.c"
 			}
 #line 4559 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_object_it);
-#line 35424 "Photo.c"
+#line 35425 "Photo.c"
 		}
 	}
 #line 4598 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -35434,7 +35435,7 @@ static void library_photo_source_collection_real_notify_contents_altered (DataCo
 	_tmp154_ = removed;
 #line 4598 "/home/jens/Source/shotwell/src/Photo.vala"
 	DATA_COLLECTION_CLASS (library_photo_source_collection_parent_class)->notify_contents_altered (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), TYPE_DATA_COLLECTION, DataCollection), _tmp153_, _tmp154_);
-#line 35433 "Photo.c"
+#line 35434 "Photo.c"
 }
 
 
@@ -35453,7 +35454,7 @@ static void library_photo_source_collection_on_editable_replaced (LibraryPhotoSo
 	_tmp0_ = old_file;
 #line 4602 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp0_ != NULL) {
-#line 35452 "Photo.c"
+#line 35453 "Photo.c"
 		gboolean is_removed = FALSE;
 		GeeHashMap* _tmp1_ = NULL;
 		GFile* _tmp2_ = NULL;
@@ -35471,13 +35472,13 @@ static void library_photo_source_collection_on_editable_replaced (LibraryPhotoSo
 		_tmp4_ = is_removed;
 #line 4604 "/home/jens/Source/shotwell/src/Photo.vala"
 		_vala_assert (_tmp4_, "is_removed");
-#line 35470 "Photo.c"
+#line 35471 "Photo.c"
 	}
 #line 4607 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp5_ = new_file;
 #line 4607 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp5_ != NULL) {
-#line 35476 "Photo.c"
+#line 35477 "Photo.c"
 		GeeHashMap* _tmp6_ = NULL;
 		GFile* _tmp7_ = NULL;
 		Photo* _tmp8_ = NULL;
@@ -35489,7 +35490,7 @@ static void library_photo_source_collection_on_editable_replaced (LibraryPhotoSo
 		_tmp8_ = photo;
 #line 4608 "/home/jens/Source/shotwell/src/Photo.vala"
 		gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp7_, G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, TYPE_LIBRARY_PHOTO, LibraryPhoto));
-#line 35488 "Photo.c"
+#line 35489 "Photo.c"
 	}
 }
 
@@ -35528,7 +35529,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 		_g_object_unref0 (photo);
 #line 4614 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 35527 "Photo.c"
+#line 35528 "Photo.c"
 	}
 #line 4617 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp3_ = self->priv->photo_to_raw_development_filesize;
@@ -35538,7 +35539,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 	_tmp5_ = gee_multi_map_contains (_tmp3_, _tmp4_);
 #line 4617 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp5_) {
-#line 35537 "Photo.c"
+#line 35538 "Photo.c"
 		GeeMultiMap* _tmp21_ = NULL;
 		LibraryPhoto* _tmp22_ = NULL;
 		{
@@ -35567,7 +35568,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 			_s_it = _tmp11_;
 #line 4618 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 35566 "Photo.c"
+#line 35567 "Photo.c"
 				GeeIterator* _tmp12_ = NULL;
 				gboolean _tmp13_ = FALSE;
 				gint64 s = 0LL;
@@ -35586,7 +35587,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 				if (!_tmp13_) {
 #line 4618 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 35585 "Photo.c"
+#line 35586 "Photo.c"
 				}
 #line 4618 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp14_ = _s_it;
@@ -35608,11 +35609,11 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 				_tmp20_ = photo;
 #line 4619 "/home/jens/Source/shotwell/src/Photo.vala"
 				gee_multi_map_remove (_tmp18_, &_tmp19_, _tmp20_);
-#line 35607 "Photo.c"
+#line 35608 "Photo.c"
 			}
 #line 4618 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_s_it);
-#line 35611 "Photo.c"
+#line 35612 "Photo.c"
 		}
 #line 4620 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp21_ = self->priv->photo_to_raw_development_filesize;
@@ -35620,7 +35621,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 		_tmp22_ = photo;
 #line 4620 "/home/jens/Source/shotwell/src/Photo.vala"
 		gee_multi_map_remove_all (_tmp21_, _tmp22_);
-#line 35619 "Photo.c"
+#line 35620 "Photo.c"
 	}
 #line 4624 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp23_ = photo;
@@ -35632,7 +35633,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 	_tmp25_ = raw_list;
 #line 4625 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp25_ != NULL) {
-#line 35631 "Photo.c"
+#line 35632 "Photo.c"
 		{
 			GeeIterator* _f_it = NULL;
 			GeeCollection* _tmp26_ = NULL;
@@ -35645,7 +35646,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 			_f_it = _tmp27_;
 #line 4626 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 35644 "Photo.c"
+#line 35645 "Photo.c"
 				GeeIterator* _tmp28_ = NULL;
 				gboolean _tmp29_ = FALSE;
 				GFile* f = NULL;
@@ -35662,7 +35663,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 				if (!_tmp29_) {
 #line 4626 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 35661 "Photo.c"
+#line 35662 "Photo.c"
 				}
 #line 4626 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp30_ = _f_it;
@@ -35680,11 +35681,11 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 				gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp33_, _tmp34_);
 #line 4626 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (f);
-#line 35679 "Photo.c"
+#line 35680 "Photo.c"
 			}
 #line 4626 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_f_it);
-#line 35683 "Photo.c"
+#line 35684 "Photo.c"
 		}
 	}
 #line 4629 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -35697,7 +35698,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 	_tmp37_ = raw_rows;
 #line 4630 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp37_ != NULL) {
-#line 35696 "Photo.c"
+#line 35697 "Photo.c"
 		{
 			GeeIterator* _row_it = NULL;
 			GeeCollection* _tmp38_ = NULL;
@@ -35710,7 +35711,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 			_row_it = _tmp39_;
 #line 4631 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 35709 "Photo.c"
+#line 35710 "Photo.c"
 				GeeIterator* _tmp40_ = NULL;
 				gboolean _tmp41_ = FALSE;
 				BackingPhotoRow* row = NULL;
@@ -35726,7 +35727,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 				if (!_tmp41_) {
 #line 4631 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 35725 "Photo.c"
+#line 35726 "Photo.c"
 				}
 #line 4631 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp42_ = _row_it;
@@ -35740,7 +35741,7 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 				_tmp45_ = _tmp44_->filesize;
 #line 4632 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp45_ > ((gint64) 0)) {
-#line 35739 "Photo.c"
+#line 35740 "Photo.c"
 					GeeMultiMap* _tmp46_ = NULL;
 					BackingPhotoRow* _tmp47_ = NULL;
 					gint64 _tmp48_ = 0LL;
@@ -35769,15 +35770,15 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 					_tmp53_ = _tmp52_->filesize;
 #line 4634 "/home/jens/Source/shotwell/src/Photo.vala"
 					gee_multi_map_set (_tmp50_, _tmp51_, &_tmp53_);
-#line 35768 "Photo.c"
+#line 35769 "Photo.c"
 				}
 #line 4631 "/home/jens/Source/shotwell/src/Photo.vala"
 				_backing_photo_row_unref0 (row);
-#line 35772 "Photo.c"
+#line 35773 "Photo.c"
 			}
 #line 4631 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_row_it);
-#line 35776 "Photo.c"
+#line 35777 "Photo.c"
 		}
 	}
 #line 4611 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -35786,14 +35787,14 @@ static void library_photo_source_collection_on_raw_development_modified (Library
 	_g_object_unref0 (raw_list);
 #line 4611 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (photo);
-#line 35785 "Photo.c"
+#line 35786 "Photo.c"
 }
 
 
 static gpointer __int64_dup0 (gpointer self) {
 #line 4650 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self ? _int64_dup (self) : NULL;
-#line 35792 "Photo.c"
+#line 35793 "Photo.c"
 }
 
 
@@ -35804,7 +35805,7 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_LIBRARY_PHOTO_SOURCE_COLLECTION, LibraryPhotoSourceCollection);
 #line 4640 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail (GEE_IS_MAP (items));
-#line 35803 "Photo.c"
+#line 35804 "Photo.c"
 	{
 		GeeIterator* _object_it = NULL;
 		GeeMap* _tmp0_ = NULL;
@@ -35831,7 +35832,7 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 		_object_it = _tmp5_;
 #line 4641 "/home/jens/Source/shotwell/src/Photo.vala"
 		while (TRUE) {
-#line 35830 "Photo.c"
+#line 35831 "Photo.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			DataObject* object = NULL;
@@ -35855,7 +35856,7 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 			if (!_tmp7_) {
 #line 4641 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 35854 "Photo.c"
+#line 35855 "Photo.c"
 			}
 #line 4641 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp8_ = _object_it;
@@ -35885,7 +35886,7 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 			if (_tmp17_) {
 #line 4646 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp15_ = TRUE;
-#line 35884 "Photo.c"
+#line 35885 "Photo.c"
 			} else {
 				Alteration* _tmp18_ = NULL;
 				gboolean _tmp19_ = FALSE;
@@ -35895,11 +35896,11 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 				_tmp19_ = alteration_has_detail (_tmp18_, "image", "editable");
 #line 4646 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp15_ = _tmp19_;
-#line 35894 "Photo.c"
+#line 35895 "Photo.c"
 			}
 #line 4646 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp15_) {
-#line 35898 "Photo.c"
+#line 35899 "Photo.c"
 				gint64 old_master_filesize = 0LL;
 				GeeHashMap* _tmp20_ = NULL;
 				LibraryPhoto* _tmp21_ = NULL;
@@ -35958,7 +35959,7 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 				_tmp28_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp27_);
 #line 4648 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp28_) {
-#line 35957 "Photo.c"
+#line 35958 "Photo.c"
 					GeeHashMap* _tmp29_ = NULL;
 					LibraryPhoto* _tmp30_ = NULL;
 					gpointer _tmp31_ = NULL;
@@ -35972,7 +35973,7 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 					_g_free0 (_tmp25_);
 #line 4649 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp25_ = (gint64*) _tmp31_;
-#line 35971 "Photo.c"
+#line 35972 "Photo.c"
 				} else {
 					gint64 _tmp32_ = 0LL;
 					gint64* _tmp33_ = NULL;
@@ -35984,7 +35985,7 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 					_g_free0 (_tmp25_);
 #line 4650 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp25_ = _tmp33_;
-#line 35983 "Photo.c"
+#line 35984 "Photo.c"
 				}
 #line 4648 "/home/jens/Source/shotwell/src/Photo.vala"
 				old_editable_filesize = *_tmp25_;
@@ -36006,7 +36007,7 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 				_tmp39_ = old_editable_filesize;
 #line 4654 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp39_ >= ((gint64) 0)) {
-#line 36005 "Photo.c"
+#line 36006 "Photo.c"
 					GeeHashMap* _tmp40_ = NULL;
 					LibraryPhoto* _tmp41_ = NULL;
 					GeeMultiMap* _tmp42_ = NULL;
@@ -36026,7 +36027,7 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 					_tmp44_ = photo;
 #line 4656 "/home/jens/Source/shotwell/src/Photo.vala"
 					gee_multi_map_remove (_tmp42_, &_tmp43_, _tmp44_);
-#line 36025 "Photo.c"
+#line 36026 "Photo.c"
 				}
 #line 4659 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp45_ = photo;
@@ -36054,7 +36055,7 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 				_backing_photo_row_unref0 (_tmp53_);
 #line 4660 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp54_) {
-#line 36053 "Photo.c"
+#line 36054 "Photo.c"
 					LibraryPhoto* _tmp55_ = NULL;
 					BackingPhotoRow* _tmp56_ = NULL;
 					BackingPhotoRow* _tmp57_ = NULL;
@@ -36071,11 +36072,11 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 					_tmp50_ = _tmp58_;
 #line 4661 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp57_);
-#line 36070 "Photo.c"
+#line 36071 "Photo.c"
 				} else {
 #line 4662 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp50_ = (gint64) -1;
-#line 36074 "Photo.c"
+#line 36075 "Photo.c"
 				}
 #line 4660 "/home/jens/Source/shotwell/src/Photo.vala"
 				editable_filesize = _tmp50_;
@@ -36099,7 +36100,7 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 				_tmp65_ = editable_filesize;
 #line 4665 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp65_ >= ((gint64) 0)) {
-#line 36098 "Photo.c"
+#line 36099 "Photo.c"
 					GeeHashMap* _tmp66_ = NULL;
 					LibraryPhoto* _tmp67_ = NULL;
 					gint64 _tmp68_ = 0LL;
@@ -36122,11 +36123,11 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 					_tmp71_ = photo;
 #line 4667 "/home/jens/Source/shotwell/src/Photo.vala"
 					gee_multi_map_set (_tmp69_, &_tmp70_, _tmp71_);
-#line 36121 "Photo.c"
+#line 36122 "Photo.c"
 				}
 #line 4646 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_free0 (_tmp25_);
-#line 36125 "Photo.c"
+#line 36126 "Photo.c"
 			}
 #line 4641 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (photo);
@@ -36134,17 +36135,17 @@ static void library_photo_source_collection_real_items_altered (DataCollection* 
 			_alteration_unref0 (alteration);
 #line 4641 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (object);
-#line 36133 "Photo.c"
+#line 36134 "Photo.c"
 		}
 #line 4641 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_object_it);
-#line 36137 "Photo.c"
+#line 36138 "Photo.c"
 	}
 #line 4672 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp72_ = items;
 #line 4672 "/home/jens/Source/shotwell/src/Photo.vala"
 	DATA_COLLECTION_CLASS (library_photo_source_collection_parent_class)->items_altered (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), TYPE_DATA_COLLECTION, DataCollection), _tmp72_);
-#line 36143 "Photo.c"
+#line 36144 "Photo.c"
 }
 
 
@@ -36161,7 +36162,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 	_tmp0_ = gee_hash_multi_map_new (TYPE_TAG, (GBoxedCopyFunc) g_object_ref, g_object_unref, TYPE_LIBRARY_PHOTO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 #line 4677 "/home/jens/Source/shotwell/src/Photo.vala"
 	map = _tmp0_;
-#line 36160 "Photo.c"
+#line 36161 "Photo.c"
 	{
 		GeeIterator* _media_it = NULL;
 		GeeCollection* _tmp1_ = NULL;
@@ -36174,7 +36175,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 		_media_it = _tmp2_;
 #line 4678 "/home/jens/Source/shotwell/src/Photo.vala"
 		while (TRUE) {
-#line 36173 "Photo.c"
+#line 36174 "Photo.c"
 			GeeIterator* _tmp3_ = NULL;
 			gboolean _tmp4_ = FALSE;
 			MediaSource* media = NULL;
@@ -36205,7 +36206,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 			if (!_tmp4_) {
 #line 4678 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 36204 "Photo.c"
+#line 36205 "Photo.c"
 			}
 #line 4678 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = _media_it;
@@ -36237,7 +36238,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 			_tmp13_ = photo_metadata_has_hierarchical_keywords (_tmp12_);
 #line 4691 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp13_) {
-#line 36236 "Photo.c"
+#line 36237 "Photo.c"
 				PhotoMetadata* _tmp14_ = NULL;
 				GeeSet* _tmp15_ = NULL;
 				GeeSet* _tmp16_ = NULL;
@@ -36256,7 +36257,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 				htag_index = _tmp17_;
 #line 4692 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (_tmp16_);
-#line 36255 "Photo.c"
+#line 36256 "Photo.c"
 			}
 #line 4696 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp18_ = photo;
@@ -36270,7 +36271,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 			_g_object_unref0 (_tmp20_);
 #line 4696 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp21_) {
-#line 36269 "Photo.c"
+#line 36270 "Photo.c"
 				{
 					GeeIterator* _keyword_it = NULL;
 					LibraryPhoto* _tmp22_ = NULL;
@@ -36294,7 +36295,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 					_keyword_it = _tmp26_;
 #line 4697 "/home/jens/Source/shotwell/src/Photo.vala"
 					while (TRUE) {
-#line 36293 "Photo.c"
+#line 36294 "Photo.c"
 						GeeIterator* _tmp27_ = NULL;
 						gboolean _tmp28_ = FALSE;
 						gchar* keyword = NULL;
@@ -36317,7 +36318,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 						if (!_tmp28_) {
 #line 4697 "/home/jens/Source/shotwell/src/Photo.vala"
 							break;
-#line 36316 "Photo.c"
+#line 36317 "Photo.c"
 						}
 #line 4697 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp29_ = _keyword_it;
@@ -36329,7 +36330,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 						_tmp32_ = htag_index;
 #line 4698 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp32_ != NULL) {
-#line 36328 "Photo.c"
+#line 36329 "Photo.c"
 							HierarchicalTagIndex* _tmp33_ = NULL;
 							const gchar* _tmp34_ = NULL;
 							gboolean _tmp35_ = FALSE;
@@ -36341,11 +36342,11 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 							_tmp35_ = hierarchical_tag_index_is_tag_in_index (_tmp33_, _tmp34_);
 #line 4698 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp31_ = _tmp35_;
-#line 36340 "Photo.c"
+#line 36341 "Photo.c"
 						} else {
 #line 4698 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp31_ = FALSE;
-#line 36344 "Photo.c"
+#line 36345 "Photo.c"
 						}
 #line 4698 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp31_) {
@@ -36353,7 +36354,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 							_g_free0 (keyword);
 #line 4699 "/home/jens/Source/shotwell/src/Photo.vala"
 							continue;
-#line 36352 "Photo.c"
+#line 36353 "Photo.c"
 						}
 #line 4701 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp36_ = keyword;
@@ -36369,7 +36370,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 						_tmp40_ = hierarchical_tag_index_is_tag_in_index (_tmp38_, _tmp39_);
 #line 4703 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp40_) {
-#line 36368 "Photo.c"
+#line 36369 "Photo.c"
 							gchar* most_derived_path = NULL;
 							HierarchicalTagIndex* _tmp41_ = NULL;
 							const gchar* _tmp42_ = NULL;
@@ -36409,13 +36410,13 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 							_g_free0 (keyword);
 #line 4706 "/home/jens/Source/shotwell/src/Photo.vala"
 							continue;
-#line 36408 "Photo.c"
+#line 36409 "Photo.c"
 						}
 #line 4709 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp49_ = name;
 #line 4709 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp49_ != NULL) {
-#line 36414 "Photo.c"
+#line 36415 "Photo.c"
 							GeeHashMultiMap* _tmp50_ = NULL;
 							const gchar* _tmp51_ = NULL;
 							Tag* _tmp52_ = NULL;
@@ -36435,17 +36436,17 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 							gee_multi_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, GEE_TYPE_MULTI_MAP, GeeMultiMap), _tmp53_, _tmp54_);
 #line 4710 "/home/jens/Source/shotwell/src/Photo.vala"
 							_g_object_unref0 (_tmp53_);
-#line 36434 "Photo.c"
+#line 36435 "Photo.c"
 						}
 #line 4697 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_free0 (name);
 #line 4697 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_free0 (keyword);
-#line 36440 "Photo.c"
+#line 36441 "Photo.c"
 					}
 #line 4697 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_object_unref0 (_keyword_it);
-#line 36444 "Photo.c"
+#line 36445 "Photo.c"
 				}
 			}
 #line 4714 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -36454,7 +36455,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 			_tmp56_ = photo_metadata_has_hierarchical_keywords (_tmp55_);
 #line 4714 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp56_) {
-#line 36453 "Photo.c"
+#line 36454 "Photo.c"
 				{
 					GeeIterator* _path_it = NULL;
 					HierarchicalTagIndex* _tmp57_ = NULL;
@@ -36478,7 +36479,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 					_path_it = _tmp61_;
 #line 4715 "/home/jens/Source/shotwell/src/Photo.vala"
 					while (TRUE) {
-#line 36477 "Photo.c"
+#line 36478 "Photo.c"
 						GeeIterator* _tmp62_ = NULL;
 						gboolean _tmp63_ = FALSE;
 						gchar* path = NULL;
@@ -36496,7 +36497,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 						if (!_tmp63_) {
 #line 4715 "/home/jens/Source/shotwell/src/Photo.vala"
 							break;
-#line 36495 "Photo.c"
+#line 36496 "Photo.c"
 						}
 #line 4715 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp64_ = _path_it;
@@ -36514,7 +36515,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 						_tmp68_ = name;
 #line 4717 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (_tmp68_ != NULL) {
-#line 36513 "Photo.c"
+#line 36514 "Photo.c"
 							GeeHashMultiMap* _tmp69_ = NULL;
 							const gchar* _tmp70_ = NULL;
 							Tag* _tmp71_ = NULL;
@@ -36534,17 +36535,17 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 							gee_multi_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp69_, GEE_TYPE_MULTI_MAP, GeeMultiMap), _tmp72_, _tmp73_);
 #line 4718 "/home/jens/Source/shotwell/src/Photo.vala"
 							_g_object_unref0 (_tmp72_);
-#line 36533 "Photo.c"
+#line 36534 "Photo.c"
 						}
 #line 4715 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_free0 (name);
 #line 4715 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_free0 (path);
-#line 36539 "Photo.c"
+#line 36540 "Photo.c"
 					}
 #line 4715 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_object_unref0 (_path_it);
-#line 36543 "Photo.c"
+#line 36544 "Photo.c"
 				}
 			}
 #line 4678 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -36557,11 +36558,11 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 			_g_object_unref0 (photo);
 #line 4678 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (media);
-#line 36556 "Photo.c"
+#line 36557 "Photo.c"
 		}
 #line 4678 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_media_it);
-#line 36560 "Photo.c"
+#line 36561 "Photo.c"
 	}
 	{
 		GeeIterator* _media_it = NULL;
@@ -36575,7 +36576,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 		_media_it = _tmp75_;
 #line 4723 "/home/jens/Source/shotwell/src/Photo.vala"
 		while (TRUE) {
-#line 36574 "Photo.c"
+#line 36575 "Photo.c"
 			GeeIterator* _tmp76_ = NULL;
 			gboolean _tmp77_ = FALSE;
 			MediaSource* media = NULL;
@@ -36593,7 +36594,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 			if (!_tmp77_) {
 #line 4723 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 36592 "Photo.c"
+#line 36593 "Photo.c"
 			}
 #line 4723 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp78_ = _media_it;
@@ -36615,11 +36616,11 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 			_g_object_unref0 (photo);
 #line 4723 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (media);
-#line 36614 "Photo.c"
+#line 36615 "Photo.c"
 		}
 #line 4723 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_media_it);
-#line 36618 "Photo.c"
+#line 36619 "Photo.c"
 	}
 	{
 		GeeIterator* _tag_it = NULL;
@@ -36644,7 +36645,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 		_tag_it = _tmp87_;
 #line 4728 "/home/jens/Source/shotwell/src/Photo.vala"
 		while (TRUE) {
-#line 36643 "Photo.c"
+#line 36644 "Photo.c"
 			GeeIterator* _tmp88_ = NULL;
 			gboolean _tmp89_ = FALSE;
 			Tag* tag = NULL;
@@ -36663,7 +36664,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 			if (!_tmp89_) {
 #line 4728 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 36662 "Photo.c"
+#line 36663 "Photo.c"
 			}
 #line 4728 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp90_ = _tag_it;
@@ -36687,11 +36688,11 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 			_g_object_unref0 (_tmp96_);
 #line 4728 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (tag);
-#line 36686 "Photo.c"
+#line 36687 "Photo.c"
 		}
 #line 4728 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tag_it);
-#line 36690 "Photo.c"
+#line 36691 "Photo.c"
 	}
 #line 4731 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp97_ = media_sources;
@@ -36699,7 +36700,7 @@ static void library_photo_source_collection_real_postprocess_imported_media (Med
 	MEDIA_SOURCE_COLLECTION_CLASS (library_photo_source_collection_parent_class)->postprocess_imported_media (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), _tmp97_);
 #line 4676 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (map);
-#line 36698 "Photo.c"
+#line 36699 "Photo.c"
 }
 
 
@@ -36716,7 +36717,7 @@ static void library_photo_source_collection_real_notify_master_reimported (Libra
 	_tmp1_ = metadata;
 #line 4736 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (self, "master-reimported", _tmp0_, _tmp1_);
-#line 36715 "Photo.c"
+#line 36716 "Photo.c"
 }
 
 
@@ -36725,7 +36726,7 @@ void library_photo_source_collection_notify_master_reimported (LibraryPhotoSourc
 	g_return_if_fail (IS_LIBRARY_PHOTO_SOURCE_COLLECTION (self));
 #line 4735 "/home/jens/Source/shotwell/src/Photo.vala"
 	LIBRARY_PHOTO_SOURCE_COLLECTION_GET_CLASS (self)->notify_master_reimported (self, photo, metadata);
-#line 36724 "Photo.c"
+#line 36725 "Photo.c"
 }
 
 
@@ -36742,7 +36743,7 @@ static void library_photo_source_collection_real_notify_editable_reimported (Lib
 	_tmp1_ = metadata;
 #line 4741 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (self, "editable-reimported", _tmp0_, _tmp1_);
-#line 36741 "Photo.c"
+#line 36742 "Photo.c"
 }
 
 
@@ -36751,7 +36752,7 @@ void library_photo_source_collection_notify_editable_reimported (LibraryPhotoSou
 	g_return_if_fail (IS_LIBRARY_PHOTO_SOURCE_COLLECTION (self));
 #line 4740 "/home/jens/Source/shotwell/src/Photo.vala"
 	LIBRARY_PHOTO_SOURCE_COLLECTION_GET_CLASS (self)->notify_editable_reimported (self, photo, metadata);
-#line 36750 "Photo.c"
+#line 36751 "Photo.c"
 }
 
 
@@ -36768,7 +36769,7 @@ static void library_photo_source_collection_real_notify_source_reimported (Libra
 	_tmp1_ = metadata;
 #line 4746 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (self, "source-reimported", _tmp0_, _tmp1_);
-#line 36767 "Photo.c"
+#line 36768 "Photo.c"
 }
 
 
@@ -36777,7 +36778,7 @@ void library_photo_source_collection_notify_source_reimported (LibraryPhotoSourc
 	g_return_if_fail (IS_LIBRARY_PHOTO_SOURCE_COLLECTION (self));
 #line 4745 "/home/jens/Source/shotwell/src/Photo.vala"
 	LIBRARY_PHOTO_SOURCE_COLLECTION_GET_CLASS (self)->notify_source_reimported (self, photo, metadata);
-#line 36776 "Photo.c"
+#line 36777 "Photo.c"
 }
 
 
@@ -36794,7 +36795,7 @@ static void library_photo_source_collection_real_notify_baseline_reimported (Lib
 	_tmp1_ = metadata;
 #line 4751 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (self, "baseline-reimported", _tmp0_, _tmp1_);
-#line 36793 "Photo.c"
+#line 36794 "Photo.c"
 }
 
 
@@ -36803,7 +36804,7 @@ void library_photo_source_collection_notify_baseline_reimported (LibraryPhotoSou
 	g_return_if_fail (IS_LIBRARY_PHOTO_SOURCE_COLLECTION (self));
 #line 4750 "/home/jens/Source/shotwell/src/Photo.vala"
 	LIBRARY_PHOTO_SOURCE_COLLECTION_GET_CLASS (self)->notify_baseline_reimported (self, photo, metadata);
-#line 36802 "Photo.c"
+#line 36803 "Photo.c"
 }
 
 
@@ -36825,7 +36826,7 @@ static MediaSource* library_photo_source_collection_real_fetch_by_numeric_id (Me
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_MEDIA_SOURCE, MediaSource);
 #line 4755 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 36824 "Photo.c"
+#line 36825 "Photo.c"
 }
 
 
@@ -36844,7 +36845,7 @@ static void library_photo_source_collection_on_trashcan_contents_altered (Librar
 	_tmp1_ = removed;
 #line 4760 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), "trashcan-contents-altered", G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_COLLECTION, GeeCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 36843 "Photo.c"
+#line 36844 "Photo.c"
 }
 
 
@@ -36866,7 +36867,7 @@ static gboolean library_photo_source_collection_check_if_trashed_photo (LibraryP
 	result = _tmp1_;
 #line 4765 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 36865 "Photo.c"
+#line 36866 "Photo.c"
 }
 
 
@@ -36885,7 +36886,7 @@ static void library_photo_source_collection_on_offline_contents_altered (Library
 	_tmp1_ = removed;
 #line 4770 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), "offline-contents-altered", G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_COLLECTION, GeeCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 36884 "Photo.c"
+#line 36885 "Photo.c"
 }
 
 
@@ -36907,7 +36908,7 @@ static gboolean library_photo_source_collection_check_if_offline_photo (LibraryP
 	result = _tmp1_;
 #line 4775 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 36906 "Photo.c"
+#line 36907 "Photo.c"
 }
 
 
@@ -36930,7 +36931,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 	_tmp3_ = end;
 #line 1296 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp3_ == NULL) {
-#line 36929 "Photo.c"
+#line 36930 "Photo.c"
 		glong _tmp4_ = 0L;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp4_ = maxlen;
@@ -36938,7 +36939,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = _tmp4_;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 36937 "Photo.c"
+#line 36938 "Photo.c"
 	} else {
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -36950,7 +36951,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = (glong) (_tmp5_ - _tmp6_);
 #line 1299 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 36949 "Photo.c"
+#line 36950 "Photo.c"
 	}
 }
 
@@ -36974,21 +36975,21 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	_tmp1_ = offset;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp1_ >= ((glong) 0)) {
-#line 36973 "Photo.c"
+#line 36974 "Photo.c"
 		glong _tmp2_ = 0L;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = len;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = _tmp2_ >= ((glong) 0);
-#line 36979 "Photo.c"
+#line 36980 "Photo.c"
 	} else {
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = FALSE;
-#line 36983 "Photo.c"
+#line 36984 "Photo.c"
 	}
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp0_) {
-#line 36987 "Photo.c"
+#line 36988 "Photo.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 		glong _tmp5_ = 0L;
@@ -37000,7 +37001,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp5_ = string_strnlen ((gchar*) self, _tmp3_ + _tmp4_);
 #line 1310 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = _tmp5_;
-#line 36999 "Photo.c"
+#line 37000 "Photo.c"
 	} else {
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
@@ -37010,13 +37011,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp7_ = _tmp6_;
 #line 1312 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = (glong) _tmp7_;
-#line 37009 "Photo.c"
+#line 37010 "Photo.c"
 	}
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp8_ = offset;
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp8_ < ((glong) 0)) {
-#line 37015 "Photo.c"
+#line 37016 "Photo.c"
 		glong _tmp9_ = 0L;
 		glong _tmp10_ = 0L;
 		glong _tmp11_ = 0L;
@@ -37030,7 +37031,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp11_ = offset;
 #line 1317 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp11_ >= ((glong) 0), NULL);
-#line 37029 "Photo.c"
+#line 37030 "Photo.c"
 	} else {
 		glong _tmp12_ = 0L;
 		glong _tmp13_ = 0L;
@@ -37040,13 +37041,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp13_ = string_length;
 #line 1319 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp12_ <= _tmp13_, NULL);
-#line 37039 "Photo.c"
+#line 37040 "Photo.c"
 	}
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp14_ = len;
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp14_ < ((glong) 0)) {
-#line 37045 "Photo.c"
+#line 37046 "Photo.c"
 		glong _tmp15_ = 0L;
 		glong _tmp16_ = 0L;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -37055,7 +37056,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp16_ = offset;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		len = _tmp15_ - _tmp16_;
-#line 37054 "Photo.c"
+#line 37055 "Photo.c"
 	}
 #line 1324 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp17_ = offset;
@@ -37075,7 +37076,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	result = _tmp22_;
 #line 1325 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 37074 "Photo.c"
+#line 37075 "Photo.c"
 }
 
 
@@ -37121,7 +37122,7 @@ static MediaSource* library_photo_source_collection_real_fetch_by_source_id (Med
 	_g_free0 (numeric_only);
 #line 4782 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 37120 "Photo.c"
+#line 37121 "Photo.c"
 }
 
 
@@ -37153,7 +37154,7 @@ static GeeCollection* library_photo_source_collection_real_get_event_source_ids 
 	result = _tmp4_;
 #line 4786 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 37152 "Photo.c"
+#line 37153 "Photo.c"
 }
 
 
@@ -37176,7 +37177,7 @@ LibraryPhoto* library_photo_source_collection_fetch (LibraryPhotoSourceCollectio
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_LIBRARY_PHOTO, LibraryPhoto);
 #line 4790 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 37175 "Photo.c"
+#line 37176 "Photo.c"
 }
 
 
@@ -37199,7 +37200,7 @@ LibraryPhoto* library_photo_source_collection_fetch_by_editable_file (LibraryPho
 	result = (LibraryPhoto*) _tmp2_;
 #line 4794 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 37198 "Photo.c"
+#line 37199 "Photo.c"
 }
 
 
@@ -37222,7 +37223,7 @@ LibraryPhoto* library_photo_source_collection_fetch_by_raw_development_file (Lib
 	result = (LibraryPhoto*) _tmp2_;
 #line 4798 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 37221 "Photo.c"
+#line 37222 "Photo.c"
 }
 
 
@@ -37270,7 +37271,7 @@ static void library_photo_source_collection_compare_backing (LibraryPhotoSourceC
 	_backing_photo_row_unref0 (_tmp2_);
 #line 4804 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp5_) {
-#line 37269 "Photo.c"
+#line 37270 "Photo.c"
 		GeeCollection* _tmp6_ = NULL;
 		LibraryPhoto* _tmp7_ = NULL;
 #line 4805 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -37279,7 +37280,7 @@ static void library_photo_source_collection_compare_backing (LibraryPhotoSourceC
 		_tmp7_ = photo;
 #line 4805 "/home/jens/Source/shotwell/src/Photo.vala"
 		gee_collection_add (_tmp6_, _tmp7_);
-#line 37278 "Photo.c"
+#line 37279 "Photo.c"
 	}
 #line 4807 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = photo;
@@ -37291,7 +37292,7 @@ static void library_photo_source_collection_compare_backing (LibraryPhotoSourceC
 	_tmp11_ = editable;
 #line 4808 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp11_ != NULL) {
-#line 37290 "Photo.c"
+#line 37291 "Photo.c"
 		BackingPhotoRow* _tmp12_ = NULL;
 		GFileInfo* _tmp13_ = NULL;
 		gboolean _tmp14_ = FALSE;
@@ -37303,15 +37304,15 @@ static void library_photo_source_collection_compare_backing (LibraryPhotoSourceC
 		_tmp14_ = backing_photo_row_matches_file_info (_tmp12_, _tmp13_);
 #line 4808 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp10_ = _tmp14_;
-#line 37302 "Photo.c"
+#line 37303 "Photo.c"
 	} else {
 #line 4808 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp10_ = FALSE;
-#line 37306 "Photo.c"
+#line 37307 "Photo.c"
 	}
 #line 4808 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp10_) {
-#line 37310 "Photo.c"
+#line 37311 "Photo.c"
 		GeeCollection* _tmp15_ = NULL;
 		LibraryPhoto* _tmp16_ = NULL;
 #line 4809 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -37320,7 +37321,7 @@ static void library_photo_source_collection_compare_backing (LibraryPhotoSourceC
 		_tmp16_ = photo;
 #line 4809 "/home/jens/Source/shotwell/src/Photo.vala"
 		gee_collection_add (_tmp15_, _tmp16_);
-#line 37319 "Photo.c"
+#line 37320 "Photo.c"
 	}
 #line 4811 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp17_ = photo;
@@ -37332,7 +37333,7 @@ static void library_photo_source_collection_compare_backing (LibraryPhotoSourceC
 	_tmp19_ = development;
 #line 4812 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp19_ != NULL) {
-#line 37331 "Photo.c"
+#line 37332 "Photo.c"
 		{
 			GeeIterator* _row_it = NULL;
 			GeeCollection* _tmp20_ = NULL;
@@ -37345,7 +37346,7 @@ static void library_photo_source_collection_compare_backing (LibraryPhotoSourceC
 			_row_it = _tmp21_;
 #line 4813 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 37344 "Photo.c"
+#line 37345 "Photo.c"
 				GeeIterator* _tmp22_ = NULL;
 				gboolean _tmp23_ = FALSE;
 				BackingPhotoRow* row = NULL;
@@ -37362,7 +37363,7 @@ static void library_photo_source_collection_compare_backing (LibraryPhotoSourceC
 				if (!_tmp23_) {
 #line 4813 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 37361 "Photo.c"
+#line 37362 "Photo.c"
 				}
 #line 4813 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp24_ = _row_it;
@@ -37378,7 +37379,7 @@ static void library_photo_source_collection_compare_backing (LibraryPhotoSourceC
 				_tmp28_ = backing_photo_row_matches_file_info (_tmp26_, _tmp27_);
 #line 4814 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp28_) {
-#line 37377 "Photo.c"
+#line 37378 "Photo.c"
 					GeeCollection* _tmp29_ = NULL;
 					LibraryPhoto* _tmp30_ = NULL;
 #line 4815 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -37391,22 +37392,22 @@ static void library_photo_source_collection_compare_backing (LibraryPhotoSourceC
 					_backing_photo_row_unref0 (row);
 #line 4817 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 37390 "Photo.c"
+#line 37391 "Photo.c"
 				}
 #line 4813 "/home/jens/Source/shotwell/src/Photo.vala"
 				_backing_photo_row_unref0 (row);
-#line 37394 "Photo.c"
+#line 37395 "Photo.c"
 			}
 #line 4813 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_row_it);
-#line 37398 "Photo.c"
+#line 37399 "Photo.c"
 		}
 	}
 #line 4801 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (development);
 #line 4801 "/home/jens/Source/shotwell/src/Photo.vala"
 	_backing_photo_row_unref0 (editable);
-#line 37405 "Photo.c"
+#line 37406 "Photo.c"
 }
 
 
@@ -37421,7 +37422,7 @@ void library_photo_source_collection_fetch_by_matching_backing (LibraryPhotoSour
 	g_return_if_fail (GEE_IS_COLLECTION (matches_editable));
 #line 4825 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail (GEE_IS_COLLECTION (matched_development));
-#line 37420 "Photo.c"
+#line 37421 "Photo.c"
 	{
 		GeeIterator* _photo_it = NULL;
 		GeeMultiMap* _tmp0_ = NULL;
@@ -37451,7 +37452,7 @@ void library_photo_source_collection_fetch_by_matching_backing (LibraryPhotoSour
 		_photo_it = _tmp6_;
 #line 4827 "/home/jens/Source/shotwell/src/Photo.vala"
 		while (TRUE) {
-#line 37450 "Photo.c"
+#line 37451 "Photo.c"
 			GeeIterator* _tmp7_ = NULL;
 			gboolean _tmp8_ = FALSE;
 			LibraryPhoto* photo = NULL;
@@ -37470,7 +37471,7 @@ void library_photo_source_collection_fetch_by_matching_backing (LibraryPhotoSour
 			if (!_tmp8_) {
 #line 4827 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 37469 "Photo.c"
+#line 37470 "Photo.c"
 			}
 #line 4827 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp9_ = _photo_it;
@@ -37492,11 +37493,11 @@ void library_photo_source_collection_fetch_by_matching_backing (LibraryPhotoSour
 			library_photo_source_collection_compare_backing (self, _tmp11_, _tmp12_, _tmp13_, _tmp14_, _tmp15_);
 #line 4827 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (photo);
-#line 37491 "Photo.c"
+#line 37492 "Photo.c"
 		}
 #line 4827 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_photo_it);
-#line 37495 "Photo.c"
+#line 37496 "Photo.c"
 	}
 	{
 		GeeIterator* _media_it = NULL;
@@ -37518,7 +37519,7 @@ void library_photo_source_collection_fetch_by_matching_backing (LibraryPhotoSour
 		_media_it = _tmp19_;
 #line 4830 "/home/jens/Source/shotwell/src/Photo.vala"
 		while (TRUE) {
-#line 37517 "Photo.c"
+#line 37518 "Photo.c"
 			GeeIterator* _tmp20_ = NULL;
 			gboolean _tmp21_ = FALSE;
 			MediaSource* media = NULL;
@@ -37537,7 +37538,7 @@ void library_photo_source_collection_fetch_by_matching_backing (LibraryPhotoSour
 			if (!_tmp21_) {
 #line 4830 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 37536 "Photo.c"
+#line 37537 "Photo.c"
 			}
 #line 4830 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp22_ = _media_it;
@@ -37559,11 +37560,11 @@ void library_photo_source_collection_fetch_by_matching_backing (LibraryPhotoSour
 			library_photo_source_collection_compare_backing (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, TYPE_LIBRARY_PHOTO, LibraryPhoto), _tmp25_, _tmp26_, _tmp27_, _tmp28_);
 #line 4830 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (media);
-#line 37558 "Photo.c"
+#line 37559 "Photo.c"
 		}
 #line 4830 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_media_it);
-#line 37562 "Photo.c"
+#line 37563 "Photo.c"
 	}
 }
 
@@ -37574,7 +37575,7 @@ void library_photo_source_collection_get_basename_filesize_duplicate (LibraryPho
 	g_return_if_fail (IS_LIBRARY_PHOTO_SOURCE_COLLECTION (self));
 #line 4834 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail (basename != NULL);
-#line 37573 "Photo.c"
+#line 37574 "Photo.c"
 	{
 		GeeIterator* _photo_it = NULL;
 		GeeMultiMap* _tmp0_ = NULL;
@@ -37601,7 +37602,7 @@ void library_photo_source_collection_get_basename_filesize_duplicate (LibraryPho
 		_photo_it = _tmp5_;
 #line 4835 "/home/jens/Source/shotwell/src/Photo.vala"
 		while (TRUE) {
-#line 37600 "Photo.c"
+#line 37601 "Photo.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			LibraryPhoto* photo = NULL;
@@ -37622,7 +37623,7 @@ void library_photo_source_collection_get_basename_filesize_duplicate (LibraryPho
 			if (!_tmp7_) {
 #line 4835 "/home/jens/Source/shotwell/src/Photo.vala"
 				break;
-#line 37621 "Photo.c"
+#line 37622 "Photo.c"
 			}
 #line 4835 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp8_ = _photo_it;
@@ -37648,7 +37649,7 @@ void library_photo_source_collection_get_basename_filesize_duplicate (LibraryPho
 			_g_object_unref0 (_tmp12_);
 #line 4836 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_tmp16_) {
-#line 37647 "Photo.c"
+#line 37648 "Photo.c"
 				LibraryPhoto* _tmp17_ = NULL;
 				PhotoID _tmp18_ = {0};
 #line 4837 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -37663,15 +37664,15 @@ void library_photo_source_collection_get_basename_filesize_duplicate (LibraryPho
 				_g_object_unref0 (_photo_it);
 #line 4837 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 37662 "Photo.c"
+#line 37663 "Photo.c"
 			}
 #line 4835 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (photo);
-#line 37666 "Photo.c"
+#line 37667 "Photo.c"
 		}
 #line 4835 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_photo_it);
-#line 37670 "Photo.c"
+#line 37671 "Photo.c"
 	}
 #line 4840 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_id_init (&_tmp19_, PHOTO_ID_INVALID);
@@ -37679,7 +37680,7 @@ void library_photo_source_collection_get_basename_filesize_duplicate (LibraryPho
 	*result = _tmp19_;
 #line 4840 "/home/jens/Source/shotwell/src/Photo.vala"
 	return;
-#line 37678 "Photo.c"
+#line 37679 "Photo.c"
 }
 
 
@@ -37705,7 +37706,7 @@ gboolean library_photo_source_collection_has_basename_filesize_duplicate (Librar
 	result = _tmp3_;
 #line 4845 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 37704 "Photo.c"
+#line 37705 "Photo.c"
 }
 
 
@@ -37740,7 +37741,7 @@ LibraryPhoto* library_photo_source_collection_get_trashed_by_file (LibraryPhotoS
 	_tmp5_ = photo;
 #line 4850 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp5_ == NULL) {
-#line 37739 "Photo.c"
+#line 37740 "Photo.c"
 		MediaSourceHoldingTank* _tmp6_ = NULL;
 		LibraryPhotoSourceHoldingTank* _tmp7_ = NULL;
 		GFile* _tmp8_ = NULL;
@@ -37759,13 +37760,13 @@ LibraryPhoto* library_photo_source_collection_get_trashed_by_file (LibraryPhotoS
 		photo = G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_LIBRARY_PHOTO, LibraryPhoto);
 #line 4851 "/home/jens/Source/shotwell/src/Photo.vala"
 		_source_holding_tank_unref0 (_tmp7_);
-#line 37758 "Photo.c"
+#line 37759 "Photo.c"
 	}
 #line 4854 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = photo;
 #line 4854 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 37764 "Photo.c"
+#line 37765 "Photo.c"
 }
 
 
@@ -37796,7 +37797,7 @@ LibraryPhoto* library_photo_source_collection_get_trashed_by_md5 (LibraryPhotoSo
 	result = _tmp4_;
 #line 4858 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 37795 "Photo.c"
+#line 37796 "Photo.c"
 }
 
 
@@ -37831,7 +37832,7 @@ LibraryPhoto* library_photo_source_collection_get_offline_by_file (LibraryPhotoS
 	_tmp5_ = photo;
 #line 4863 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp5_ == NULL) {
-#line 37830 "Photo.c"
+#line 37831 "Photo.c"
 		MediaSourceHoldingTank* _tmp6_ = NULL;
 		LibraryPhotoSourceHoldingTank* _tmp7_ = NULL;
 		GFile* _tmp8_ = NULL;
@@ -37850,13 +37851,13 @@ LibraryPhoto* library_photo_source_collection_get_offline_by_file (LibraryPhotoS
 		photo = G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_LIBRARY_PHOTO, LibraryPhoto);
 #line 4864 "/home/jens/Source/shotwell/src/Photo.vala"
 		_source_holding_tank_unref0 (_tmp7_);
-#line 37849 "Photo.c"
+#line 37850 "Photo.c"
 	}
 #line 4867 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = photo;
 #line 4867 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 37855 "Photo.c"
+#line 37856 "Photo.c"
 }
 
 
@@ -37887,7 +37888,7 @@ LibraryPhoto* library_photo_source_collection_get_offline_by_md5 (LibraryPhotoSo
 	result = _tmp4_;
 #line 4871 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 37886 "Photo.c"
+#line 37887 "Photo.c"
 }
 
 
@@ -37913,7 +37914,7 @@ gint library_photo_source_collection_get_offline_count (LibraryPhotoSourceCollec
 	result = _tmp3_;
 #line 4875 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 37912 "Photo.c"
+#line 37913 "Photo.c"
 }
 
 
@@ -37960,11 +37961,11 @@ LibraryPhoto* library_photo_source_collection_get_state_by_file (LibraryPhotoSou
 		if (state) {
 #line 4883 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 37959 "Photo.c"
+#line 37960 "Photo.c"
 		}
 #line 4883 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 37963 "Photo.c"
+#line 37964 "Photo.c"
 	}
 #line 4886 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp3_ = file;
@@ -37986,11 +37987,11 @@ LibraryPhoto* library_photo_source_collection_get_state_by_file (LibraryPhotoSou
 		if (state) {
 #line 4890 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 37985 "Photo.c"
+#line 37986 "Photo.c"
 		}
 #line 4890 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 37989 "Photo.c"
+#line 37990 "Photo.c"
 	}
 #line 4893 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp6_ = file;
@@ -38012,11 +38013,11 @@ LibraryPhoto* library_photo_source_collection_get_state_by_file (LibraryPhotoSou
 		if (state) {
 #line 4897 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 38011 "Photo.c"
+#line 38012 "Photo.c"
 		}
 #line 4897 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 38015 "Photo.c"
+#line 38016 "Photo.c"
 	}
 #line 4900 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp9_ = file;
@@ -38028,7 +38029,7 @@ LibraryPhoto* library_photo_source_collection_get_state_by_file (LibraryPhotoSou
 	if (_tmp11_ == NULL) {
 #line 4900 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp10_);
-#line 38027 "Photo.c"
+#line 38028 "Photo.c"
 	}
 #line 4900 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (photo);
@@ -38046,11 +38047,11 @@ LibraryPhoto* library_photo_source_collection_get_state_by_file (LibraryPhotoSou
 		if (state) {
 #line 4904 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 38045 "Photo.c"
+#line 38046 "Photo.c"
 		}
 #line 4904 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 38049 "Photo.c"
+#line 38050 "Photo.c"
 	}
 #line 4907 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp13_ = file;
@@ -38062,7 +38063,7 @@ LibraryPhoto* library_photo_source_collection_get_state_by_file (LibraryPhotoSou
 	if (_tmp15_ == NULL) {
 #line 4907 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp14_);
-#line 38061 "Photo.c"
+#line 38062 "Photo.c"
 	}
 #line 4907 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (photo);
@@ -38080,11 +38081,11 @@ LibraryPhoto* library_photo_source_collection_get_state_by_file (LibraryPhotoSou
 		if (state) {
 #line 4911 "/home/jens/Source/shotwell/src/Photo.vala"
 			*state = _vala_state;
-#line 38079 "Photo.c"
+#line 38080 "Photo.c"
 		}
 #line 4911 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 38083 "Photo.c"
+#line 38084 "Photo.c"
 	}
 #line 4914 "/home/jens/Source/shotwell/src/Photo.vala"
 	_vala_state = LIBRARY_PHOTO_SOURCE_COLLECTION_STATE_UNKNOWN;
@@ -38096,11 +38097,11 @@ LibraryPhoto* library_photo_source_collection_get_state_by_file (LibraryPhotoSou
 	if (state) {
 #line 4916 "/home/jens/Source/shotwell/src/Photo.vala"
 		*state = _vala_state;
-#line 38095 "Photo.c"
+#line 38096 "Photo.c"
 	}
 #line 4916 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 38099 "Photo.c"
+#line 38100 "Photo.c"
 }
 
 
@@ -38133,7 +38134,7 @@ static gboolean library_photo_source_collection_real_has_backlink (SourceCollect
 		result = TRUE;
 #line 4921 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 38132 "Photo.c"
+#line 38133 "Photo.c"
 	}
 #line 4923 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = media_source_collection_get_trashcan (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
@@ -38153,7 +38154,7 @@ static gboolean library_photo_source_collection_real_has_backlink (SourceCollect
 		result = TRUE;
 #line 4924 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 38152 "Photo.c"
+#line 38153 "Photo.c"
 	}
 #line 4926 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp7_ = media_source_collection_get_offline_bin (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
@@ -38173,13 +38174,13 @@ static gboolean library_photo_source_collection_real_has_backlink (SourceCollect
 		result = TRUE;
 #line 4927 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 38172 "Photo.c"
+#line 38173 "Photo.c"
 	}
 #line 4929 "/home/jens/Source/shotwell/src/Photo.vala"
 	result = FALSE;
 #line 4929 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 38178 "Photo.c"
+#line 38179 "Photo.c"
 }
 
 
@@ -38220,7 +38221,7 @@ static void library_photo_source_collection_real_remove_backlink (SourceCollecti
 	_tmp6_ = backlink;
 #line 4936 "/home/jens/Source/shotwell/src/Photo.vala"
 	SOURCE_COLLECTION_CLASS (library_photo_source_collection_parent_class)->remove_backlink (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), TYPE_SOURCE_COLLECTION, SourceCollection), _tmp6_);
-#line 38219 "Photo.c"
+#line 38220 "Photo.c"
 }
 
 
@@ -38235,7 +38236,7 @@ static TransactionController* library_photo_source_collection_real_get_transacti
 	_tmp0_ = self->priv->_transaction_controller;
 #line 4454 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp0_ == NULL) {
-#line 38234 "Photo.c"
+#line 38235 "Photo.c"
 		MediaSourceTransactionController* _tmp1_ = NULL;
 #line 4455 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp1_ = media_source_transaction_controller_new (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
@@ -38243,7 +38244,7 @@ static TransactionController* library_photo_source_collection_real_get_transacti
 		_transaction_controller_unref0 (self->priv->_transaction_controller);
 #line 4455 "/home/jens/Source/shotwell/src/Photo.vala"
 		self->priv->_transaction_controller = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_TRANSACTION_CONTROLLER, TransactionController);
-#line 38242 "Photo.c"
+#line 38243 "Photo.c"
 	}
 #line 4457 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = self->priv->_transaction_controller;
@@ -38251,7 +38252,7 @@ static TransactionController* library_photo_source_collection_real_get_transacti
 	result = _tmp2_;
 #line 4457 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 38250 "Photo.c"
+#line 38251 "Photo.c"
 }
 
 
@@ -38260,7 +38261,7 @@ static void library_photo_source_collection_real_master_reimported (LibraryPhoto
 	g_return_if_fail (IS_LIBRARY_PHOTO (photo));
 #line 4475 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail ((metadata == NULL) || IS_PHOTO_METADATA (metadata));
-#line 38259 "Photo.c"
+#line 38260 "Photo.c"
 }
 
 
@@ -38279,19 +38280,19 @@ static void g_cclosure_user_marshal_VOID__OBJECT_MEDIA_METADATA (GClosure * clos
 		data1 = closure->data;
 #line 4442 "/home/jens/Source/shotwell/src/Photo.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 38278 "Photo.c"
+#line 38279 "Photo.c"
 	} else {
 #line 4442 "/home/jens/Source/shotwell/src/Photo.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 4442 "/home/jens/Source/shotwell/src/Photo.vala"
 		data2 = closure->data;
-#line 38284 "Photo.c"
+#line 38285 "Photo.c"
 	}
 #line 4442 "/home/jens/Source/shotwell/src/Photo.vala"
 	callback = (GMarshalFunc_VOID__OBJECT_MEDIA_METADATA) (marshal_data ? marshal_data : cc->callback);
 #line 4442 "/home/jens/Source/shotwell/src/Photo.vala"
 	callback (data1, g_value_get_object (param_values + 1), value_get_media_metadata (param_values + 2), data2);
-#line 38290 "Photo.c"
+#line 38291 "Photo.c"
 }
 
 
@@ -38300,7 +38301,7 @@ static void library_photo_source_collection_real_editable_reimported (LibraryPho
 	g_return_if_fail (IS_LIBRARY_PHOTO (photo));
 #line 4478 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail ((metadata == NULL) || IS_PHOTO_METADATA (metadata));
-#line 38299 "Photo.c"
+#line 38300 "Photo.c"
 }
 
 
@@ -38309,7 +38310,7 @@ static void library_photo_source_collection_real_baseline_reimported (LibraryPho
 	g_return_if_fail (IS_LIBRARY_PHOTO (photo));
 #line 4481 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail ((metadata == NULL) || IS_PHOTO_METADATA (metadata));
-#line 38308 "Photo.c"
+#line 38309 "Photo.c"
 }
 
 
@@ -38318,7 +38319,7 @@ static void library_photo_source_collection_real_source_reimported (LibraryPhoto
 	g_return_if_fail (IS_LIBRARY_PHOTO (photo));
 #line 4484 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail ((metadata == NULL) || IS_PHOTO_METADATA (metadata));
-#line 38317 "Photo.c"
+#line 38318 "Photo.c"
 }
 
 
@@ -38383,7 +38384,7 @@ static void library_photo_source_collection_class_init (LibraryPhotoSourceCollec
 	g_signal_new ("baseline_reimported", TYPE_LIBRARY_PHOTO_SOURCE_COLLECTION, G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (LibraryPhotoSourceCollectionClass, baseline_reimported), NULL, NULL, g_cclosure_user_marshal_VOID__OBJECT_MEDIA_METADATA, G_TYPE_NONE, 2, TYPE_LIBRARY_PHOTO, TYPE_PHOTO_METADATA);
 #line 4442 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_signal_new ("source_reimported", TYPE_LIBRARY_PHOTO_SOURCE_COLLECTION, G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (LibraryPhotoSourceCollectionClass, source_reimported), NULL, NULL, g_cclosure_user_marshal_VOID__OBJECT_MEDIA_METADATA, G_TYPE_NONE, 2, TYPE_LIBRARY_PHOTO, TYPE_PHOTO_METADATA);
-#line 38382 "Photo.c"
+#line 38383 "Photo.c"
 }
 
 
@@ -38422,7 +38423,7 @@ static void library_photo_source_collection_instance_init (LibraryPhotoSourceCol
 	_tmp5_ = gee_tree_multi_map_new (TYPE_LIBRARY_PHOTO, (GBoxedCopyFunc) g_object_ref, g_object_unref, G_TYPE_INT64, (GBoxedCopyFunc) _int64_dup, g_free, NULL, NULL, NULL, NULL, NULL, NULL);
 #line 4472 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->priv->photo_to_raw_development_filesize = G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GEE_TYPE_MULTI_MAP, GeeMultiMap);
-#line 38421 "Photo.c"
+#line 38422 "Photo.c"
 }
 
 
@@ -38446,7 +38447,7 @@ static void library_photo_source_collection_finalize (DataCollection* obj) {
 	_g_object_unref0 (self->priv->photo_to_raw_development_filesize);
 #line 4442 "/home/jens/Source/shotwell/src/Photo.vala"
 	DATA_COLLECTION_CLASS (library_photo_source_collection_parent_class)->finalize (obj);
-#line 38445 "Photo.c"
+#line 38446 "Photo.c"
 }
 
 
@@ -38465,7 +38466,7 @@ GType library_photo_source_collection_get_type (void) {
 static void _library_photo_generate_thumbnails_one_shot_callback (gpointer self) {
 #line 4964 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_generate_thumbnails ((LibraryPhoto*) self);
-#line 38464 "Photo.c"
+#line 38465 "Photo.c"
 }
 
 
@@ -38499,7 +38500,7 @@ static LibraryPhoto* library_photo_construct (GType object_type, PhotoRow* row) 
 	_tmp3_ = _tmp2_->flags;
 #line 4967 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((_tmp3_ & (LIBRARY_PHOTO_FLAG_TRASH | LIBRARY_PHOTO_FLAG_OFFLINE)) != ((guint64) 0)) {
-#line 38498 "Photo.c"
+#line 38499 "Photo.c"
 		LibraryPhotoSourceCollection* _tmp4_ = NULL;
 		PhotoRow* _tmp5_ = NULL;
 		const gchar* _tmp6_ = NULL;
@@ -38511,7 +38512,7 @@ static LibraryPhoto* library_photo_construct (GType object_type, PhotoRow* row) 
 		_tmp6_ = _tmp5_->backlinks;
 #line 4968 "/home/jens/Source/shotwell/src/Photo.vala"
 		data_source_rehydrate_backlinks (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_SOURCE, DataSource), G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_SOURCE_COLLECTION, SourceCollection), _tmp6_);
-#line 38510 "Photo.c"
+#line 38511 "Photo.c"
 	}
 #line 4970 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp7_ = row;
@@ -38519,7 +38520,7 @@ static LibraryPhoto* library_photo_construct (GType object_type, PhotoRow* row) 
 	_tmp8_ = _tmp7_->flags;
 #line 4970 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((_tmp8_ & (LIBRARY_PHOTO_FLAG_HIDDEN | LIBRARY_PHOTO_FLAG_FAVORITE)) != ((guint64) 0)) {
-#line 38518 "Photo.c"
+#line 38519 "Photo.c"
 		PhotoRow* _tmp9_ = NULL;
 		guint64 _tmp10_ = 0ULL;
 #line 4971 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -38528,18 +38529,18 @@ static LibraryPhoto* library_photo_construct (GType object_type, PhotoRow* row) 
 		_tmp10_ = _tmp9_->flags;
 #line 4971 "/home/jens/Source/shotwell/src/Photo.vala"
 		library_photo_upgrade_rating_flags (self, _tmp10_);
-#line 38527 "Photo.c"
+#line 38528 "Photo.c"
 	}
 #line 4959 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 38531 "Photo.c"
+#line 38532 "Photo.c"
 }
 
 
 static LibraryPhoto* library_photo_new (PhotoRow* row) {
 #line 4959 "/home/jens/Source/shotwell/src/Photo.vala"
 	return library_photo_construct (TYPE_LIBRARY_PHOTO, row);
-#line 38538 "Photo.c"
+#line 38539 "Photo.c"
 }
 
 
@@ -38589,7 +38590,7 @@ static LibraryPhoto* library_photo_construct_from_import_params (GType object_ty
 	_tmp8_ = _tmp7_->flags;
 #line 4981 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((_tmp8_ & (LIBRARY_PHOTO_FLAG_TRASH | LIBRARY_PHOTO_FLAG_OFFLINE)) != ((guint64) 0)) {
-#line 38588 "Photo.c"
+#line 38589 "Photo.c"
 		LibraryPhotoSourceCollection* _tmp9_ = NULL;
 		PhotoImportParams* _tmp10_ = NULL;
 		PhotoRow* _tmp11_ = NULL;
@@ -38604,7 +38605,7 @@ static LibraryPhoto* library_photo_construct_from_import_params (GType object_ty
 		_tmp12_ = _tmp11_->backlinks;
 #line 4982 "/home/jens/Source/shotwell/src/Photo.vala"
 		data_source_rehydrate_backlinks (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_SOURCE, DataSource), G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_SOURCE_COLLECTION, SourceCollection), _tmp12_);
-#line 38603 "Photo.c"
+#line 38604 "Photo.c"
 	}
 #line 4984 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp13_ = import_params;
@@ -38614,7 +38615,7 @@ static LibraryPhoto* library_photo_construct_from_import_params (GType object_ty
 	_tmp15_ = _tmp14_->flags;
 #line 4984 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((_tmp15_ & (LIBRARY_PHOTO_FLAG_HIDDEN | LIBRARY_PHOTO_FLAG_FAVORITE)) != ((guint64) 0)) {
-#line 38613 "Photo.c"
+#line 38614 "Photo.c"
 		PhotoImportParams* _tmp16_ = NULL;
 		PhotoRow* _tmp17_ = NULL;
 		guint64 _tmp18_ = 0ULL;
@@ -38626,18 +38627,18 @@ static LibraryPhoto* library_photo_construct_from_import_params (GType object_ty
 		_tmp18_ = _tmp17_->flags;
 #line 4985 "/home/jens/Source/shotwell/src/Photo.vala"
 		library_photo_upgrade_rating_flags (self, _tmp18_);
-#line 38625 "Photo.c"
+#line 38626 "Photo.c"
 	}
 #line 4974 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 38629 "Photo.c"
+#line 38630 "Photo.c"
 }
 
 
 static LibraryPhoto* library_photo_new_from_import_params (PhotoImportParams* import_params) {
 #line 4974 "/home/jens/Source/shotwell/src/Photo.vala"
 	return library_photo_construct_from_import_params (TYPE_LIBRARY_PHOTO, import_params);
-#line 38636 "Photo.c"
+#line 38637 "Photo.c"
 }
 
 
@@ -38706,19 +38707,19 @@ void library_photo_init (ProgressMonitor monitor, void* monitor_target) {
 	_tmp10_ = _tmp9_;
 #line 4999 "/home/jens/Source/shotwell/src/Photo.vala"
 	count = _tmp10_;
-#line 38705 "Photo.c"
+#line 38706 "Photo.c"
 	{
 		gint ctr = 0;
 #line 5000 "/home/jens/Source/shotwell/src/Photo.vala"
 		ctr = 0;
-#line 38710 "Photo.c"
+#line 38711 "Photo.c"
 		{
 			gboolean _tmp11_ = FALSE;
 #line 5000 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp11_ = TRUE;
 #line 5000 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 38717 "Photo.c"
+#line 38718 "Photo.c"
 				gint _tmp13_ = 0;
 				gint _tmp14_ = 0;
 				PhotoRow* row = NULL;
@@ -38736,13 +38737,13 @@ void library_photo_init (ProgressMonitor monitor, void* monitor_target) {
 				void* _tmp30__target = NULL;
 #line 5000 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (!_tmp11_) {
-#line 38735 "Photo.c"
+#line 38736 "Photo.c"
 					gint _tmp12_ = 0;
 #line 5000 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp12_ = ctr;
 #line 5000 "/home/jens/Source/shotwell/src/Photo.vala"
 					ctr = _tmp12_ + 1;
-#line 38741 "Photo.c"
+#line 38742 "Photo.c"
 				}
 #line 5000 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp11_ = FALSE;
@@ -38754,7 +38755,7 @@ void library_photo_init (ProgressMonitor monitor, void* monitor_target) {
 				if (!(_tmp13_ < _tmp14_)) {
 #line 5000 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 38753 "Photo.c"
+#line 38754 "Photo.c"
 				}
 #line 5001 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp15_ = all;
@@ -38780,7 +38781,7 @@ void library_photo_init (ProgressMonitor monitor, void* monitor_target) {
 				_tmp22_ = flags;
 #line 5005 "/home/jens/Source/shotwell/src/Photo.vala"
 				if ((_tmp22_ & LIBRARY_PHOTO_FLAG_TRASH) != ((guint64) 0)) {
-#line 38779 "Photo.c"
+#line 38780 "Photo.c"
 					GeeArrayList* _tmp23_ = NULL;
 					LibraryPhoto* _tmp24_ = NULL;
 #line 5006 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -38789,14 +38790,14 @@ void library_photo_init (ProgressMonitor monitor, void* monitor_target) {
 					_tmp24_ = photo;
 #line 5006 "/home/jens/Source/shotwell/src/Photo.vala"
 					gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp24_);
-#line 38788 "Photo.c"
+#line 38789 "Photo.c"
 				} else {
 					guint64 _tmp25_ = 0ULL;
 #line 5007 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp25_ = flags;
 #line 5007 "/home/jens/Source/shotwell/src/Photo.vala"
 					if ((_tmp25_ & LIBRARY_PHOTO_FLAG_OFFLINE) != ((guint64) 0)) {
-#line 38795 "Photo.c"
+#line 38796 "Photo.c"
 						GeeArrayList* _tmp26_ = NULL;
 						LibraryPhoto* _tmp27_ = NULL;
 #line 5008 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -38805,7 +38806,7 @@ void library_photo_init (ProgressMonitor monitor, void* monitor_target) {
 						_tmp27_ = photo;
 #line 5008 "/home/jens/Source/shotwell/src/Photo.vala"
 						gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp27_);
-#line 38804 "Photo.c"
+#line 38805 "Photo.c"
 					} else {
 						GeeArrayList* _tmp28_ = NULL;
 						LibraryPhoto* _tmp29_ = NULL;
@@ -38815,7 +38816,7 @@ void library_photo_init (ProgressMonitor monitor, void* monitor_target) {
 						_tmp29_ = photo;
 #line 5010 "/home/jens/Source/shotwell/src/Photo.vala"
 						gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp29_);
-#line 38814 "Photo.c"
+#line 38815 "Photo.c"
 					}
 				}
 #line 5012 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -38824,7 +38825,7 @@ void library_photo_init (ProgressMonitor monitor, void* monitor_target) {
 				_tmp30__target = monitor_target;
 #line 5012 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp30_ != NULL) {
-#line 38823 "Photo.c"
+#line 38824 "Photo.c"
 					ProgressMonitor _tmp31_ = NULL;
 					void* _tmp31__target = NULL;
 					gint _tmp32_ = 0;
@@ -38839,13 +38840,13 @@ void library_photo_init (ProgressMonitor monitor, void* monitor_target) {
 					_tmp33_ = count;
 #line 5013 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp31_ ((guint64) _tmp32_, (guint64) _tmp33_, TRUE, _tmp31__target);
-#line 38838 "Photo.c"
+#line 38839 "Photo.c"
 				}
 #line 5000 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (photo);
 #line 5000 "/home/jens/Source/shotwell/src/Photo.vala"
 				_photo_row_unref0 (row);
-#line 38844 "Photo.c"
+#line 38845 "Photo.c"
 			}
 		}
 	}
@@ -38879,14 +38880,14 @@ void library_photo_init (ProgressMonitor monitor, void* monitor_target) {
 	_g_object_unref0 (all_photos);
 #line 4988 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (all);
-#line 38878 "Photo.c"
+#line 38879 "Photo.c"
 }
 
 
 void library_photo_terminate (void) {
 #line 5022 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_terminate_photo ();
-#line 38885 "Photo.c"
+#line 38886 "Photo.c"
 }
 
 
@@ -38935,15 +38936,15 @@ ImportResult library_photo_import_create (PhotoImportParams* params, LibraryPhot
 		if (photo) {
 #line 5035 "/home/jens/Source/shotwell/src/Photo.vala"
 			*photo = _vala_photo;
-#line 38934 "Photo.c"
+#line 38935 "Photo.c"
 		} else {
 #line 5035 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_vala_photo);
-#line 38938 "Photo.c"
+#line 38939 "Photo.c"
 		}
 #line 5035 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 38942 "Photo.c"
+#line 38943 "Photo.c"
 	}
 #line 5039 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp7_ = params;
@@ -38959,15 +38960,15 @@ ImportResult library_photo_import_create (PhotoImportParams* params, LibraryPhot
 	if (photo) {
 #line 5041 "/home/jens/Source/shotwell/src/Photo.vala"
 		*photo = _vala_photo;
-#line 38958 "Photo.c"
+#line 38959 "Photo.c"
 	} else {
 #line 5041 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_vala_photo);
-#line 38962 "Photo.c"
+#line 38963 "Photo.c"
 	}
 #line 5041 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 38966 "Photo.c"
+#line 38967 "Photo.c"
 }
 
 
@@ -38975,7 +38976,7 @@ void library_photo_import_failed (LibraryPhoto* photo) {
 	GError * _inner_error_ = NULL;
 #line 5044 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail (IS_LIBRARY_PHOTO (photo));
-#line 38974 "Photo.c"
+#line 38975 "Photo.c"
 	{
 		PhotoTable* _tmp0_ = NULL;
 		PhotoTable* _tmp1_ = NULL;
@@ -38997,8 +38998,8 @@ void library_photo_import_failed (LibraryPhoto* photo) {
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5046 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 38996 "Photo.c"
-				goto __catch393_database_error;
+#line 38997 "Photo.c"
+				goto __catch406_database_error;
 			}
 #line 5046 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -39006,11 +39007,11 @@ void library_photo_import_failed (LibraryPhoto* photo) {
 			g_clear_error (&_inner_error_);
 #line 5046 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 39005 "Photo.c"
+#line 39006 "Photo.c"
 		}
 	}
-	goto __finally393;
-	__catch393_database_error:
+	goto __finally406;
+	__catch406_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -39024,9 +39025,9 @@ void library_photo_import_failed (LibraryPhoto* photo) {
 		app_window_database_error (_tmp4_);
 #line 5045 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 39023 "Photo.c"
+#line 39024 "Photo.c"
 	}
-	__finally393:
+	__finally406:
 #line 5045 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5045 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -39035,7 +39036,7 @@ void library_photo_import_failed (LibraryPhoto* photo) {
 		g_clear_error (&_inner_error_);
 #line 5045 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 39034 "Photo.c"
+#line 39035 "Photo.c"
 	}
 }
 
@@ -39059,7 +39060,7 @@ static void library_photo_real_notify_master_reimported (Photo* base, PhotoMetad
 	_tmp2_ = metadata;
 #line 5055 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_source_collection_notify_master_reimported (_tmp1_, self, _tmp2_);
-#line 39058 "Photo.c"
+#line 39059 "Photo.c"
 }
 
 
@@ -39082,7 +39083,7 @@ static void library_photo_real_notify_editable_reimported (Photo* base, PhotoMet
 	_tmp2_ = metadata;
 #line 5061 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_source_collection_notify_editable_reimported (_tmp1_, self, _tmp2_);
-#line 39081 "Photo.c"
+#line 39082 "Photo.c"
 }
 
 
@@ -39105,7 +39106,7 @@ static void library_photo_real_notify_source_reimported (Photo* base, PhotoMetad
 	_tmp2_ = metadata;
 #line 5067 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_source_collection_notify_source_reimported (_tmp1_, self, _tmp2_);
-#line 39104 "Photo.c"
+#line 39105 "Photo.c"
 }
 
 
@@ -39128,7 +39129,7 @@ static void library_photo_real_notify_baseline_reimported (Photo* base, PhotoMet
 	_tmp2_ = metadata;
 #line 5073 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_source_collection_notify_baseline_reimported (_tmp1_, self, _tmp2_);
-#line 39127 "Photo.c"
+#line 39128 "Photo.c"
 }
 
 
@@ -39136,18 +39137,18 @@ static void library_photo_generate_thumbnails (LibraryPhoto* self) {
 	GError * _inner_error_ = NULL;
 #line 5076 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_return_if_fail (IS_LIBRARY_PHOTO (self));
-#line 39135 "Photo.c"
+#line 39136 "Photo.c"
 	{
 #line 5078 "/home/jens/Source/shotwell/src/Photo.vala"
 		thumbnail_cache_import_from_source (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_THUMBNAIL_SOURCE, ThumbnailSource), TRUE, &_inner_error_);
 #line 5078 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 39141 "Photo.c"
-			goto __catch394_g_error;
+#line 39142 "Photo.c"
+			goto __catch407_g_error;
 		}
 	}
-	goto __finally394;
-	__catch394_g_error:
+	goto __finally407;
+	__catch407_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp0_ = NULL;
@@ -39172,9 +39173,9 @@ static void library_photo_generate_thumbnails (LibraryPhoto* self) {
 		_g_free0 (_tmp1_);
 #line 5077 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 39171 "Photo.c"
+#line 39172 "Photo.c"
 	}
-	__finally394:
+	__finally407:
 #line 5077 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5077 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -39183,11 +39184,11 @@ static void library_photo_generate_thumbnails (LibraryPhoto* self) {
 		g_clear_error (&_inner_error_);
 #line 5077 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 39182 "Photo.c"
+#line 39183 "Photo.c"
 	}
 #line 5084 "/home/jens/Source/shotwell/src/Photo.vala"
 	thumbnail_source_notify_thumbnail_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_THUMBNAIL_SOURCE, ThumbnailSource));
-#line 39186 "Photo.c"
+#line 39187 "Photo.c"
 }
 
 
@@ -39205,7 +39206,7 @@ GeeCollection* library_photo_get_import_keywords (LibraryPhoto* self) {
 	result = _tmp1_;
 #line 5089 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 39204 "Photo.c"
+#line 39205 "Photo.c"
 }
 
 
@@ -39216,7 +39217,7 @@ void library_photo_clear_import_keywords (LibraryPhoto* self) {
 	_g_object_unref0 (self->priv->import_keywords);
 #line 5093 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->priv->import_keywords = NULL;
-#line 39215 "Photo.c"
+#line 39216 "Photo.c"
 }
 
 
@@ -39233,7 +39234,7 @@ static void library_photo_real_notify_altered (DataObject* base, Alteration* alt
 	_tmp1_ = self->priv->block_thumbnail_generation;
 #line 5098 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp1_) {
-#line 39232 "Photo.c"
+#line 39233 "Photo.c"
 		Alteration* _tmp2_ = NULL;
 		gboolean _tmp3_ = FALSE;
 #line 5098 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -39242,27 +39243,27 @@ static void library_photo_real_notify_altered (DataObject* base, Alteration* alt
 		_tmp3_ = alteration_has_subject (_tmp2_, "image");
 #line 5098 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = _tmp3_;
-#line 39241 "Photo.c"
+#line 39242 "Photo.c"
 	} else {
 #line 5098 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = FALSE;
-#line 39245 "Photo.c"
+#line 39246 "Photo.c"
 	}
 #line 5098 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp0_) {
-#line 39249 "Photo.c"
+#line 39250 "Photo.c"
 		OneShotScheduler* _tmp4_ = NULL;
 #line 5099 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp4_ = self->priv->thumbnail_scheduler;
 #line 5099 "/home/jens/Source/shotwell/src/Photo.vala"
 		one_shot_scheduler_at_priority_idle (_tmp4_, G_PRIORITY_LOW);
-#line 39255 "Photo.c"
+#line 39256 "Photo.c"
 	}
 #line 5101 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp5_ = alteration;
 #line 5101 "/home/jens/Source/shotwell/src/Photo.vala"
 	DATA_OBJECT_CLASS (library_photo_parent_class)->notify_altered (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), TYPE_DATA_OBJECT, DataObject), _tmp5_);
-#line 39261 "Photo.c"
+#line 39262 "Photo.c"
 }
 
 
@@ -39287,7 +39288,7 @@ static GdkPixbuf* library_photo_real_get_preview_pixbuf (MediaSource* base, Scal
 		g_propagate_error (error, _inner_error_);
 #line 5105 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 39286 "Photo.c"
+#line 39287 "Photo.c"
 	}
 #line 5107 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp1_ = scaling_perform_on_pixbuf (scaling, pixbuf, GDK_INTERP_BILINEAR, TRUE);
@@ -39297,7 +39298,7 @@ static GdkPixbuf* library_photo_real_get_preview_pixbuf (MediaSource* base, Scal
 	_g_object_unref0 (pixbuf);
 #line 5107 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 39296 "Photo.c"
+#line 39297 "Photo.c"
 }
 
 
@@ -39315,7 +39316,7 @@ static void library_photo_real_rotate (Photo* base, Rotation rotation) {
 	PHOTO_CLASS (library_photo_parent_class)->rotate (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), _tmp0_);
 #line 5114 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->priv->block_thumbnail_generation = FALSE;
-#line 39314 "Photo.c"
+#line 39315 "Photo.c"
 	{
 		Rotation _tmp1_ = 0;
 #line 5122 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -39324,12 +39325,12 @@ static void library_photo_real_rotate (Photo* base, Rotation rotation) {
 		thumbnail_cache_rotate (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_THUMBNAIL_SOURCE, ThumbnailSource), _tmp1_, &_inner_error_);
 #line 5122 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 39323 "Photo.c"
-			goto __catch395_g_error;
+#line 39324 "Photo.c"
+			goto __catch408_g_error;
 		}
 	}
-	goto __finally395;
-	__catch395_g_error:
+	goto __finally408;
+	__catch408_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp2_ = NULL;
@@ -39354,9 +39355,9 @@ static void library_photo_real_rotate (Photo* base, Rotation rotation) {
 		_g_free0 (_tmp3_);
 #line 5121 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 39353 "Photo.c"
+#line 39354 "Photo.c"
 	}
-	__finally395:
+	__finally408:
 #line 5121 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5121 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -39365,11 +39366,11 @@ static void library_photo_real_rotate (Photo* base, Rotation rotation) {
 		g_clear_error (&_inner_error_);
 #line 5121 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 39364 "Photo.c"
+#line 39365 "Photo.c"
 	}
 #line 5128 "/home/jens/Source/shotwell/src/Photo.vala"
 	thumbnail_source_notify_thumbnail_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_THUMBNAIL_SOURCE, ThumbnailSource));
-#line 39368 "Photo.c"
+#line 39369 "Photo.c"
 }
 
 
@@ -39395,7 +39396,7 @@ static GdkPixbuf* library_photo_real_get_thumbnail (ThumbnailSource* base, gint 
 		g_propagate_error (error, _inner_error_);
 #line 5133 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 39394 "Photo.c"
+#line 39395 "Photo.c"
 	}
 #line 5133 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp3_ = _tmp0_;
@@ -39407,14 +39408,14 @@ static GdkPixbuf* library_photo_real_get_thumbnail (ThumbnailSource* base, gint 
 	_g_object_unref0 (_tmp0_);
 #line 5133 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 39406 "Photo.c"
+#line 39407 "Photo.c"
 }
 
 
 static void _library_photo_on_duplicate_progress_gfile_progress_callback (gint64 current_num_bytes, gint64 total_num_bytes, gpointer self) {
 #line 5145 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_on_duplicate_progress ((LibraryPhoto*) self, current_num_bytes, total_num_bytes);
-#line 39413 "Photo.c"
+#line 39414 "Photo.c"
 }
 
 
@@ -39441,7 +39442,7 @@ static void library_photo_duplicate_backing_photo (LibraryPhoto* self, BackingPh
 	if (_tmp1_ == NULL) {
 #line 5140 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = TRUE;
-#line 39440 "Photo.c"
+#line 39441 "Photo.c"
 	} else {
 		BackingPhotoRow* _tmp2_ = NULL;
 		const gchar* _tmp3_ = NULL;
@@ -39451,7 +39452,7 @@ static void library_photo_duplicate_backing_photo (LibraryPhoto* self, BackingPh
 		_tmp3_ = _tmp2_->filepath;
 #line 5140 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp0_ = _tmp3_ == NULL;
-#line 39450 "Photo.c"
+#line 39451 "Photo.c"
 	}
 #line 5140 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp0_) {
@@ -39459,7 +39460,7 @@ static void library_photo_duplicate_backing_photo (LibraryPhoto* self, BackingPh
 		*result = backing_id;
 #line 5141 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 39458 "Photo.c"
+#line 39459 "Photo.c"
 	}
 #line 5143 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = backing;
@@ -39475,7 +39476,7 @@ static void library_photo_duplicate_backing_photo (LibraryPhoto* self, BackingPh
 	_tmp8_ = g_file_query_exists (_tmp7_, NULL);
 #line 5144 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp8_) {
-#line 39474 "Photo.c"
+#line 39475 "Photo.c"
 		GFile* dupe_file = NULL;
 		GFile* _tmp9_ = NULL;
 		GFile* _tmp10_ = NULL;
@@ -39499,7 +39500,7 @@ static void library_photo_duplicate_backing_photo (LibraryPhoto* self, BackingPh
 			_g_object_unref0 (file);
 #line 5145 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 39498 "Photo.c"
+#line 39499 "Photo.c"
 		}
 #line 5148 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp11_ = dupe_file;
@@ -39523,13 +39524,13 @@ static void library_photo_duplicate_backing_photo (LibraryPhoto* self, BackingPh
 			_g_object_unref0 (file);
 #line 5148 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 39522 "Photo.c"
+#line 39523 "Photo.c"
 		}
 #line 5150 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp14_ = state;
 #line 5150 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp14_ != NULL) {
-#line 39528 "Photo.c"
+#line 39529 "Photo.c"
 			BackingPhotoTable* _tmp15_ = NULL;
 			BackingPhotoTable* _tmp16_ = NULL;
 			BackingPhotoRow* _tmp17_ = NULL;
@@ -39559,7 +39560,7 @@ static void library_photo_duplicate_backing_photo (LibraryPhoto* self, BackingPh
 				_g_object_unref0 (file);
 #line 5151 "/home/jens/Source/shotwell/src/Photo.vala"
 				return;
-#line 39558 "Photo.c"
+#line 39559 "Photo.c"
 			}
 #line 5152 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp18_ = state;
@@ -39567,7 +39568,7 @@ static void library_photo_duplicate_backing_photo (LibraryPhoto* self, BackingPh
 			_tmp19_ = _tmp18_->id;
 #line 5152 "/home/jens/Source/shotwell/src/Photo.vala"
 			backing_id = _tmp19_;
-#line 39566 "Photo.c"
+#line 39567 "Photo.c"
 		}
 #line 5144 "/home/jens/Source/shotwell/src/Photo.vala"
 		_backing_photo_row_unref0 (state);
@@ -39575,7 +39576,7 @@ static void library_photo_duplicate_backing_photo (LibraryPhoto* self, BackingPh
 		_detected_photo_information_unref0 (detected);
 #line 5144 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (dupe_file);
-#line 39574 "Photo.c"
+#line 39575 "Photo.c"
 	}
 #line 5156 "/home/jens/Source/shotwell/src/Photo.vala"
 	*result = backing_id;
@@ -39583,7 +39584,7 @@ static void library_photo_duplicate_backing_photo (LibraryPhoto* self, BackingPh
 	_g_object_unref0 (file);
 #line 5156 "/home/jens/Source/shotwell/src/Photo.vala"
 	return;
-#line 39582 "Photo.c"
+#line 39583 "Photo.c"
 }
 
 
@@ -39668,7 +39669,7 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 		g_propagate_error (error, _inner_error_);
 #line 5161 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 39667 "Photo.c"
+#line 39668 "Photo.c"
 	}
 #line 5164 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = photo_get_editable_photo_row (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo));
@@ -39690,7 +39691,7 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 		_g_object_unref0 (dupe_file);
 #line 5164 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 39689 "Photo.c"
+#line 39690 "Photo.c"
 	}
 #line 5165 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp8_ = photo_get_raw_development_photo_row (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), RAW_DEVELOPER_SHOTWELL);
@@ -39712,7 +39713,7 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 		_g_object_unref0 (dupe_file);
 #line 5165 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 39711 "Photo.c"
+#line 39712 "Photo.c"
 	}
 #line 5167 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp12_ = photo_get_raw_development_photo_row (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), RAW_DEVELOPER_CAMERA);
@@ -39734,7 +39735,7 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 		_g_object_unref0 (dupe_file);
 #line 5167 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 39733 "Photo.c"
+#line 39734 "Photo.c"
 	}
 #line 5169 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp16_ = photo_get_raw_development_photo_row (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), RAW_DEVELOPER_EMBEDDED);
@@ -39756,7 +39757,7 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 		_g_object_unref0 (dupe_file);
 #line 5169 "/home/jens/Source/shotwell/src/Photo.vala"
 		return NULL;
-#line 39755 "Photo.c"
+#line 39756 "Photo.c"
 	}
 #line 5173 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp20_ = photo_table_get_instance ();
@@ -39830,7 +39831,7 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 	_g_object_unref0 (_tmp44_);
 #line 5187 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp45_) {
-#line 39829 "Photo.c"
+#line 39830 "Photo.c"
 		LibraryPhoto* _tmp46_ = NULL;
 		Event* _tmp47_ = NULL;
 		Event* _tmp48_ = NULL;
@@ -39847,7 +39848,7 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 		event_attach (_tmp48_, G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, TYPE_MEDIA_SOURCE, MediaSource));
 #line 5188 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp48_);
-#line 39846 "Photo.c"
+#line 39847 "Photo.c"
 	}
 #line 5191 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp50_ = tag_global;
@@ -39859,7 +39860,7 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 	_tmp52_ = tags;
 #line 5192 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp52_ != NULL) {
-#line 39858 "Photo.c"
+#line 39859 "Photo.c"
 		{
 			GeeIterator* _tag_it = NULL;
 			GeeCollection* _tmp53_ = NULL;
@@ -39872,7 +39873,7 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 			_tag_it = _tmp54_;
 #line 5193 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 39871 "Photo.c"
+#line 39872 "Photo.c"
 				GeeIterator* _tmp55_ = NULL;
 				gboolean _tmp56_ = FALSE;
 				Tag* tag = NULL;
@@ -39888,7 +39889,7 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 				if (!_tmp56_) {
 #line 5193 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 39887 "Photo.c"
+#line 39888 "Photo.c"
 				}
 #line 5193 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp57_ = _tag_it;
@@ -39904,11 +39905,11 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 				tag_attach (_tmp59_, G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, TYPE_MEDIA_SOURCE, MediaSource));
 #line 5193 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (tag);
-#line 39903 "Photo.c"
+#line 39904 "Photo.c"
 			}
 #line 5193 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_tag_it);
-#line 39907 "Photo.c"
+#line 39908 "Photo.c"
 		}
 	}
 #line 5198 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -39921,7 +39922,7 @@ LibraryPhoto* library_photo_duplicate (LibraryPhoto* self, GError** error) {
 	_g_object_unref0 (dupe_file);
 #line 5198 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 39920 "Photo.c"
+#line 39921 "Photo.c"
 }
 
 
@@ -39930,7 +39931,7 @@ static void library_photo_on_duplicate_progress (LibraryPhoto* self, gint64 curr
 	g_return_if_fail (IS_LIBRARY_PHOTO (self));
 #line 5202 "/home/jens/Source/shotwell/src/Photo.vala"
 	spin_event_loop ();
-#line 39929 "Photo.c"
+#line 39930 "Photo.c"
 }
 
 
@@ -39947,7 +39948,7 @@ static void library_photo_upgrade_rating_flags (LibraryPhoto* self, guint64 flag
 		media_source_set_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource), RATING_REJECTED);
 #line 5208 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_remove_flags (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), LIBRARY_PHOTO_FLAG_HIDDEN, NULL);
-#line 39946 "Photo.c"
+#line 39947 "Photo.c"
 	}
 #line 5211 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp1_ = flags;
@@ -39957,7 +39958,7 @@ static void library_photo_upgrade_rating_flags (LibraryPhoto* self, guint64 flag
 		media_source_set_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource), RATING_FIVE);
 #line 5213 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_remove_flags (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), LIBRARY_PHOTO_FLAG_FAVORITE, NULL);
-#line 39956 "Photo.c"
+#line 39957 "Photo.c"
 	}
 }
 
@@ -39974,7 +39975,7 @@ static gboolean library_photo_real_is_trashed (MediaSource* base) {
 	result = _tmp0_;
 #line 5219 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 39973 "Photo.c"
+#line 39974 "Photo.c"
 }
 
 
@@ -39984,7 +39985,7 @@ static void library_photo_real_trash (MediaSource* base) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_LIBRARY_PHOTO, LibraryPhoto);
 #line 5223 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_add_flags (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), LIBRARY_PHOTO_FLAG_TRASH, NULL);
-#line 39983 "Photo.c"
+#line 39984 "Photo.c"
 }
 
 
@@ -39994,7 +39995,7 @@ static void library_photo_real_untrash (MediaSource* base) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_LIBRARY_PHOTO, LibraryPhoto);
 #line 5227 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_remove_flags (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), LIBRARY_PHOTO_FLAG_TRASH, NULL);
-#line 39993 "Photo.c"
+#line 39994 "Photo.c"
 }
 
 
@@ -40010,7 +40011,7 @@ static gboolean library_photo_real_is_offline (Monitorable* base) {
 	result = _tmp0_;
 #line 5231 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 40009 "Photo.c"
+#line 40010 "Photo.c"
 }
 
 
@@ -40020,7 +40021,7 @@ static void library_photo_real_mark_offline (Monitorable* base) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_LIBRARY_PHOTO, LibraryPhoto);
 #line 5235 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_add_flags (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), LIBRARY_PHOTO_FLAG_OFFLINE, NULL);
-#line 40019 "Photo.c"
+#line 40020 "Photo.c"
 }
 
 
@@ -40030,7 +40031,7 @@ static void library_photo_real_mark_online (Monitorable* base) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_LIBRARY_PHOTO, LibraryPhoto);
 #line 5239 "/home/jens/Source/shotwell/src/Photo.vala"
 	photo_remove_flags (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), LIBRARY_PHOTO_FLAG_OFFLINE, NULL);
-#line 40029 "Photo.c"
+#line 40030 "Photo.c"
 }
 
 
@@ -40046,7 +40047,7 @@ static gboolean library_photo_real_is_flagged (Flaggable* base) {
 	result = _tmp0_;
 #line 5243 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 40045 "Photo.c"
+#line 40046 "Photo.c"
 }
 
 
@@ -40064,7 +40065,7 @@ static void library_photo_real_mark_flagged (Flaggable* base) {
 	photo_add_flags (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), LIBRARY_PHOTO_FLAG_FLAGGED, _tmp1_);
 #line 5247 "/home/jens/Source/shotwell/src/Photo.vala"
 	_alteration_unref0 (_tmp1_);
-#line 40063 "Photo.c"
+#line 40064 "Photo.c"
 }
 
 
@@ -40082,7 +40083,7 @@ static void library_photo_real_mark_unflagged (Flaggable* base) {
 	photo_remove_flags (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), LIBRARY_PHOTO_FLAG_FLAGGED, _tmp1_);
 #line 5251 "/home/jens/Source/shotwell/src/Photo.vala"
 	_alteration_unref0 (_tmp1_);
-#line 40081 "Photo.c"
+#line 40082 "Photo.c"
 }
 
 
@@ -40105,7 +40106,7 @@ static gboolean library_photo_real_internal_delete_backing (DataSource* base, GE
 		g_propagate_error (error, _inner_error_);
 #line 5257 "/home/jens/Source/shotwell/src/Photo.vala"
 		return FALSE;
-#line 40104 "Photo.c"
+#line 40105 "Photo.c"
 	}
 #line 5257 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (!_tmp0_) {
@@ -40113,7 +40114,7 @@ static gboolean library_photo_real_internal_delete_backing (DataSource* base, GE
 		result = FALSE;
 #line 5258 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 40112 "Photo.c"
+#line 40113 "Photo.c"
 	}
 #line 5260 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp2_ = media_source_delete_original_file (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
@@ -40121,7 +40122,7 @@ static gboolean library_photo_real_internal_delete_backing (DataSource* base, GE
 	result = _tmp2_;
 #line 5260 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 40120 "Photo.c"
+#line 40121 "Photo.c"
 }
 
 
@@ -40138,7 +40139,7 @@ static void library_photo_real_destroy (DataSource* base) {
 	photo_id = _tmp0_;
 #line 5267 "/home/jens/Source/shotwell/src/Photo.vala"
 	thumbnail_cache_remove (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_THUMBNAIL_SOURCE, ThumbnailSource));
-#line 40137 "Photo.c"
+#line 40138 "Photo.c"
 	{
 		PhotoTable* _tmp1_ = NULL;
 		PhotoTable* _tmp2_ = NULL;
@@ -40157,8 +40158,8 @@ static void library_photo_real_destroy (DataSource* base) {
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5273 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 40156 "Photo.c"
-				goto __catch396_database_error;
+#line 40157 "Photo.c"
+				goto __catch409_database_error;
 			}
 #line 5273 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -40166,11 +40167,11 @@ static void library_photo_real_destroy (DataSource* base) {
 			g_clear_error (&_inner_error_);
 #line 5273 "/home/jens/Source/shotwell/src/Photo.vala"
 			return;
-#line 40165 "Photo.c"
+#line 40166 "Photo.c"
 		}
 	}
-	goto __finally396;
-	__catch396_database_error:
+	goto __finally409;
+	__catch409_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -40184,9 +40185,9 @@ static void library_photo_real_destroy (DataSource* base) {
 		app_window_database_error (_tmp4_);
 #line 5272 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_error_free0 (err);
-#line 40183 "Photo.c"
+#line 40184 "Photo.c"
 	}
-	__finally396:
+	__finally409:
 #line 5272 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5272 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -40195,11 +40196,11 @@ static void library_photo_real_destroy (DataSource* base) {
 		g_clear_error (&_inner_error_);
 #line 5272 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 40194 "Photo.c"
+#line 40195 "Photo.c"
 	}
 #line 5278 "/home/jens/Source/shotwell/src/Photo.vala"
 	DATA_SOURCE_CLASS (library_photo_parent_class)->destroy (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO, Photo), TYPE_DATA_SOURCE, DataSource));
-#line 40198 "Photo.c"
+#line 40199 "Photo.c"
 }
 
 
@@ -40229,7 +40230,7 @@ gboolean library_photo_has_nontrash_duplicate (GFile* file, const gchar* thumbna
 	result = _tmp5_;
 #line 5283 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 40228 "Photo.c"
+#line 40229 "Photo.c"
 }
 
 
@@ -40275,7 +40276,7 @@ void library_photo_get_nontrash_duplicate (GFile* file, const gchar* thumbnail_m
 	if (_tmp7_ == NULL) {
 #line 5290 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = TRUE;
-#line 40274 "Photo.c"
+#line 40275 "Photo.c"
 	} else {
 		PhotoID* _tmp8_ = NULL;
 		gint _tmp8__length1 = 0;
@@ -40285,11 +40286,11 @@ void library_photo_get_nontrash_duplicate (GFile* file, const gchar* thumbnail_m
 		_tmp8__length1 = ids_length1;
 #line 5290 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = _tmp8__length1 == 0;
-#line 40284 "Photo.c"
+#line 40285 "Photo.c"
 	}
 #line 5290 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp6_) {
-#line 40288 "Photo.c"
+#line 40289 "Photo.c"
 		PhotoID _tmp9_ = {0};
 #line 5291 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_id_init (&_tmp9_, PHOTO_ID_INVALID);
@@ -40299,13 +40300,13 @@ void library_photo_get_nontrash_duplicate (GFile* file, const gchar* thumbnail_m
 		ids = (g_free (ids), NULL);
 #line 5291 "/home/jens/Source/shotwell/src/Photo.vala"
 		return;
-#line 40298 "Photo.c"
+#line 40299 "Photo.c"
 	}
 #line 5293 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp10_ = ids;
 #line 5293 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp10__length1 = ids_length1;
-#line 40304 "Photo.c"
+#line 40305 "Photo.c"
 	{
 		PhotoID* id_collection = NULL;
 		gint id_collection_length1 = 0;
@@ -40317,11 +40318,11 @@ void library_photo_get_nontrash_duplicate (GFile* file, const gchar* thumbnail_m
 		id_collection_length1 = _tmp10__length1;
 #line 5293 "/home/jens/Source/shotwell/src/Photo.vala"
 		for (id_it = 0; id_it < _tmp10__length1; id_it = id_it + 1) {
-#line 40316 "Photo.c"
+#line 40317 "Photo.c"
 			PhotoID id = {0};
 #line 5293 "/home/jens/Source/shotwell/src/Photo.vala"
 			id = id_collection[id_it];
-#line 40320 "Photo.c"
+#line 40321 "Photo.c"
 			{
 				LibraryPhoto* photo = NULL;
 				LibraryPhotoSourceCollection* _tmp11_ = NULL;
@@ -40341,7 +40342,7 @@ void library_photo_get_nontrash_duplicate (GFile* file, const gchar* thumbnail_m
 				_tmp15_ = photo;
 #line 5295 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp15_ != NULL) {
-#line 40340 "Photo.c"
+#line 40341 "Photo.c"
 					LibraryPhoto* _tmp16_ = NULL;
 					gboolean _tmp17_ = FALSE;
 #line 5295 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -40350,11 +40351,11 @@ void library_photo_get_nontrash_duplicate (GFile* file, const gchar* thumbnail_m
 					_tmp17_ = media_source_is_trashed (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, TYPE_MEDIA_SOURCE, MediaSource));
 #line 5295 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp14_ = !_tmp17_;
-#line 40349 "Photo.c"
+#line 40350 "Photo.c"
 				} else {
 #line 5295 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp14_ = FALSE;
-#line 40353 "Photo.c"
+#line 40354 "Photo.c"
 				}
 #line 5295 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp14_) {
@@ -40366,11 +40367,11 @@ void library_photo_get_nontrash_duplicate (GFile* file, const gchar* thumbnail_m
 					ids = (g_free (ids), NULL);
 #line 5296 "/home/jens/Source/shotwell/src/Photo.vala"
 					return;
-#line 40365 "Photo.c"
+#line 40366 "Photo.c"
 				}
 #line 5293 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (photo);
-#line 40369 "Photo.c"
+#line 40370 "Photo.c"
 			}
 		}
 	}
@@ -40382,7 +40383,7 @@ void library_photo_get_nontrash_duplicate (GFile* file, const gchar* thumbnail_m
 	ids = (g_free (ids), NULL);
 #line 5299 "/home/jens/Source/shotwell/src/Photo.vala"
 	return;
-#line 40381 "Photo.c"
+#line 40382 "Photo.c"
 }
 
 
@@ -40427,7 +40428,7 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 	_tmp3_ = metadata;
 #line 5306 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp3_ == NULL) {
-#line 40426 "Photo.c"
+#line 40427 "Photo.c"
 		gboolean _tmp4_ = FALSE;
 		gboolean _tmp5_ = FALSE;
 		GeeList* _tmp6_ = NULL;
@@ -40437,7 +40438,7 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 		if (_tmp6_ != NULL) {
 #line 5307 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = TRUE;
-#line 40436 "Photo.c"
+#line 40437 "Photo.c"
 		} else {
 			GeeList* _tmp7_ = NULL;
 			gint _tmp8_ = 0;
@@ -40450,20 +40451,20 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 			_tmp9_ = _tmp8_;
 #line 5307 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp5_ = _tmp9_ > 0;
-#line 40449 "Photo.c"
+#line 40450 "Photo.c"
 		}
 #line 5307 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (_tmp5_) {
 #line 5307 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = TRUE;
-#line 40455 "Photo.c"
+#line 40456 "Photo.c"
 		} else {
 			Rating _tmp10_ = 0;
 #line 5307 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp10_ = media_source_get_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
 #line 5307 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp4_ = _tmp10_ != RATING_UNRATED;
-#line 40462 "Photo.c"
+#line 40463 "Photo.c"
 		}
 #line 5307 "/home/jens/Source/shotwell/src/Photo.vala"
 		result = _tmp4_;
@@ -40473,7 +40474,7 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 		_g_object_unref0 (tags);
 #line 5307 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 40472 "Photo.c"
+#line 40473 "Photo.c"
 	}
 #line 5309 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp11_ = media_source_get_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
@@ -40491,7 +40492,7 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 		_g_object_unref0 (tags);
 #line 5310 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 40490 "Photo.c"
+#line 40491 "Photo.c"
 	}
 #line 5312 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp14_ = metadata;
@@ -40503,7 +40504,7 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 	_tmp17_ = tags;
 #line 5313 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp17_ != NULL) {
-#line 40502 "Photo.c"
+#line 40503 "Photo.c"
 		GeeList* _tmp18_ = NULL;
 		gint _tmp19_ = 0;
 		gint _tmp20_ = 0;
@@ -40515,11 +40516,11 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 		_tmp20_ = _tmp19_;
 #line 5313 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp16_ = _tmp20_;
-#line 40514 "Photo.c"
+#line 40515 "Photo.c"
 	} else {
 #line 5313 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp16_ = 0;
-#line 40518 "Photo.c"
+#line 40519 "Photo.c"
 	}
 #line 5313 "/home/jens/Source/shotwell/src/Photo.vala"
 	tags_count = _tmp16_;
@@ -40527,7 +40528,7 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 	_tmp22_ = keywords;
 #line 5314 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp22_ != NULL) {
-#line 40526 "Photo.c"
+#line 40527 "Photo.c"
 		GeeSet* _tmp23_ = NULL;
 		gint _tmp24_ = 0;
 		gint _tmp25_ = 0;
@@ -40539,11 +40540,11 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 		_tmp25_ = _tmp24_;
 #line 5314 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp21_ = _tmp25_;
-#line 40538 "Photo.c"
+#line 40539 "Photo.c"
 	} else {
 #line 5314 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp21_ = 0;
-#line 40542 "Photo.c"
+#line 40543 "Photo.c"
 	}
 #line 5314 "/home/jens/Source/shotwell/src/Photo.vala"
 	keywords_count = _tmp21_;
@@ -40563,27 +40564,27 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 		_g_object_unref0 (tags);
 #line 5317 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 40562 "Photo.c"
+#line 40563 "Photo.c"
 	}
 #line 5319 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp29_ = tags;
 #line 5319 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp29_ != NULL) {
-#line 40568 "Photo.c"
+#line 40569 "Photo.c"
 		GeeSet* _tmp30_ = NULL;
 #line 5319 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp30_ = keywords;
 #line 5319 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp28_ = _tmp30_ != NULL;
-#line 40574 "Photo.c"
+#line 40575 "Photo.c"
 	} else {
 #line 5319 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp28_ = FALSE;
-#line 40578 "Photo.c"
+#line 40579 "Photo.c"
 	}
 #line 5319 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp28_) {
-#line 40582 "Photo.c"
+#line 40583 "Photo.c"
 		{
 			GeeList* _tag_list = NULL;
 			GeeList* _tmp31_ = NULL;
@@ -40611,7 +40612,7 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 			_tag_index = -1;
 #line 5320 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 40610 "Photo.c"
+#line 40611 "Photo.c"
 				gint _tmp36_ = 0;
 				gint _tmp37_ = 0;
 				gint _tmp38_ = 0;
@@ -40639,7 +40640,7 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 				if (!(_tmp37_ < _tmp38_)) {
 #line 5320 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 40638 "Photo.c"
+#line 40639 "Photo.c"
 				}
 #line 5320 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp39_ = _tag_list;
@@ -40685,15 +40686,15 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 					_g_object_unref0 (tags);
 #line 5322 "/home/jens/Source/shotwell/src/Photo.vala"
 					return result;
-#line 40684 "Photo.c"
+#line 40685 "Photo.c"
 				}
 #line 5320 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (tag);
-#line 40688 "Photo.c"
+#line 40689 "Photo.c"
 			}
 #line 5320 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_tag_list);
-#line 40692 "Photo.c"
+#line 40693 "Photo.c"
 		}
 	}
 #line 5326 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -40706,7 +40707,7 @@ static gboolean library_photo_real_has_user_generated_metadata (Photo* base) {
 	_g_object_unref0 (tags);
 #line 5326 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 40705 "Photo.c"
+#line 40706 "Photo.c"
 }
 
 
@@ -40732,7 +40733,7 @@ static void library_photo_real_set_user_metadata_for_export (Photo* base, PhotoM
 	_tmp2_ = photo_tags;
 #line 5331 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp2_ != NULL) {
-#line 40731 "Photo.c"
+#line 40732 "Photo.c"
 		GeeCollection* string_tags = NULL;
 		GeeArrayList* _tmp3_ = NULL;
 		PhotoMetadata* _tmp19_ = NULL;
@@ -40741,7 +40742,7 @@ static void library_photo_real_set_user_metadata_for_export (Photo* base, PhotoM
 		_tmp3_ = gee_array_list_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
 #line 5332 "/home/jens/Source/shotwell/src/Photo.vala"
 		string_tags = G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 40740 "Photo.c"
+#line 40741 "Photo.c"
 		{
 			GeeList* _tag_list = NULL;
 			GeeList* _tmp4_ = NULL;
@@ -40769,7 +40770,7 @@ static void library_photo_real_set_user_metadata_for_export (Photo* base, PhotoM
 			_tag_index = -1;
 #line 5333 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 40768 "Photo.c"
+#line 40769 "Photo.c"
 				gint _tmp9_ = 0;
 				gint _tmp10_ = 0;
 				gint _tmp11_ = 0;
@@ -40793,7 +40794,7 @@ static void library_photo_real_set_user_metadata_for_export (Photo* base, PhotoM
 				if (!(_tmp10_ < _tmp11_)) {
 #line 5333 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 40792 "Photo.c"
+#line 40793 "Photo.c"
 				}
 #line 5333 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp12_ = _tag_list;
@@ -40817,11 +40818,11 @@ static void library_photo_real_set_user_metadata_for_export (Photo* base, PhotoM
 				_g_free0 (_tmp18_);
 #line 5333 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (tag);
-#line 40816 "Photo.c"
+#line 40817 "Photo.c"
 			}
 #line 5333 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_tag_list);
-#line 40820 "Photo.c"
+#line 40821 "Photo.c"
 		}
 #line 5336 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp19_ = metadata;
@@ -40831,14 +40832,14 @@ static void library_photo_real_set_user_metadata_for_export (Photo* base, PhotoM
 		photo_metadata_set_keywords (_tmp19_, _tmp20_, PHOTO_METADATA_SET_OPTION_ALL_DOMAINS);
 #line 5331 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (string_tags);
-#line 40830 "Photo.c"
+#line 40831 "Photo.c"
 	} else {
 		PhotoMetadata* _tmp21_ = NULL;
 #line 5338 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp21_ = metadata;
 #line 5338 "/home/jens/Source/shotwell/src/Photo.vala"
 		photo_metadata_set_keywords (_tmp21_, NULL, PHOTO_METADATA_SET_OPTION_ALL_DOMAINS);
-#line 40837 "Photo.c"
+#line 40838 "Photo.c"
 	}
 #line 5340 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp22_ = metadata;
@@ -40848,7 +40849,7 @@ static void library_photo_real_set_user_metadata_for_export (Photo* base, PhotoM
 	photo_metadata_set_rating (_tmp22_, _tmp23_);
 #line 5329 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (photo_tags);
-#line 40847 "Photo.c"
+#line 40848 "Photo.c"
 }
 
 
@@ -40874,7 +40875,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 	_tmp1_ = photo_metadata_has_hierarchical_keywords (_tmp0_);
 #line 5346 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp1_) {
-#line 40873 "Photo.c"
+#line 40874 "Photo.c"
 		PhotoMetadata* _tmp2_ = NULL;
 		GeeSet* _tmp3_ = NULL;
 		GeeSet* _tmp4_ = NULL;
@@ -40893,7 +40894,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 		new_htag_index = _tmp5_;
 #line 5347 "/home/jens/Source/shotwell/src/Photo.vala"
 		_g_object_unref0 (_tmp4_);
-#line 40892 "Photo.c"
+#line 40893 "Photo.c"
 	}
 #line 5351 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp6_ = metadata;
@@ -40905,7 +40906,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 	_tmp8_ = keywords;
 #line 5352 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp8_ != NULL) {
-#line 40904 "Photo.c"
+#line 40905 "Photo.c"
 		{
 			GeeIterator* _keyword_it = NULL;
 			GeeCollection* _tmp9_ = NULL;
@@ -40918,7 +40919,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 			_keyword_it = _tmp10_;
 #line 5353 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 40917 "Photo.c"
+#line 40918 "Photo.c"
 				GeeIterator* _tmp11_ = NULL;
 				gboolean _tmp12_ = FALSE;
 				gchar* keyword = NULL;
@@ -40949,7 +40950,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 				if (!_tmp12_) {
 #line 5353 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 40948 "Photo.c"
+#line 40949 "Photo.c"
 				}
 #line 5353 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp13_ = _keyword_it;
@@ -40961,7 +40962,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 				_tmp16_ = new_htag_index;
 #line 5354 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp16_ != NULL) {
-#line 40960 "Photo.c"
+#line 40961 "Photo.c"
 					HierarchicalTagIndex* _tmp17_ = NULL;
 					const gchar* _tmp18_ = NULL;
 					gboolean _tmp19_ = FALSE;
@@ -40973,11 +40974,11 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 					_tmp19_ = hierarchical_tag_index_is_tag_in_index (_tmp17_, _tmp18_);
 #line 5354 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp15_ = _tmp19_;
-#line 40972 "Photo.c"
+#line 40973 "Photo.c"
 				} else {
 #line 5354 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp15_ = FALSE;
-#line 40976 "Photo.c"
+#line 40977 "Photo.c"
 				}
 #line 5354 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp15_) {
@@ -40985,7 +40986,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 					_g_free0 (keyword);
 #line 5355 "/home/jens/Source/shotwell/src/Photo.vala"
 					continue;
-#line 40984 "Photo.c"
+#line 40985 "Photo.c"
 				}
 #line 5357 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp20_ = keyword;
@@ -41007,7 +41008,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 				_tmp26_ = tag_source_collection_exists (_tmp24_, _tmp25_, FALSE);
 #line 5361 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp26_) {
-#line 41006 "Photo.c"
+#line 41007 "Photo.c"
 					const gchar* _tmp27_ = NULL;
 					Tag* _tmp28_ = NULL;
 					Tag* _tmp29_ = NULL;
@@ -41029,7 +41030,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 					_g_free0 (keyword);
 #line 5363 "/home/jens/Source/shotwell/src/Photo.vala"
 					continue;
-#line 41028 "Photo.c"
+#line 41029 "Photo.c"
 				}
 #line 5366 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp30_ = tag_global;
@@ -41039,7 +41040,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 				_tmp32_ = tag_source_collection_exists (_tmp30_, _tmp31_, FALSE);
 #line 5366 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp32_) {
-#line 41038 "Photo.c"
+#line 41039 "Photo.c"
 					const gchar* _tmp33_ = NULL;
 					Tag* _tmp34_ = NULL;
 					Tag* _tmp35_ = NULL;
@@ -41061,7 +41062,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 					_g_free0 (keyword);
 #line 5368 "/home/jens/Source/shotwell/src/Photo.vala"
 					continue;
-#line 41060 "Photo.c"
+#line 41061 "Photo.c"
 				}
 #line 5371 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp36_ = keyword;
@@ -41079,18 +41080,18 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 				_g_free0 (safe_keyword);
 #line 5353 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_free0 (keyword);
-#line 41078 "Photo.c"
+#line 41079 "Photo.c"
 			}
 #line 5353 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_keyword_it);
-#line 41082 "Photo.c"
+#line 41083 "Photo.c"
 		}
 	}
 #line 5375 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp39_ = new_htag_index;
 #line 5375 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp39_ != NULL) {
-#line 41089 "Photo.c"
+#line 41090 "Photo.c"
 		{
 			GeeIterator* _path_it = NULL;
 			HierarchicalTagIndex* _tmp40_ = NULL;
@@ -41114,7 +41115,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 			_path_it = _tmp44_;
 #line 5376 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 41113 "Photo.c"
+#line 41114 "Photo.c"
 				GeeIterator* _tmp45_ = NULL;
 				gboolean _tmp46_ = FALSE;
 				gchar* path = NULL;
@@ -41131,7 +41132,7 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 				if (!_tmp46_) {
 #line 5376 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 41130 "Photo.c"
+#line 41131 "Photo.c"
 				}
 #line 5376 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp47_ = _path_it;
@@ -41151,18 +41152,18 @@ static void library_photo_real_apply_user_metadata_for_reimport (Photo* base, Ph
 				_g_object_unref0 (_tmp51_);
 #line 5376 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_free0 (path);
-#line 41150 "Photo.c"
+#line 41151 "Photo.c"
 			}
 #line 5376 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_path_it);
-#line 41154 "Photo.c"
+#line 41155 "Photo.c"
 		}
 	}
 #line 5343 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (keywords);
 #line 5343 "/home/jens/Source/shotwell/src/Photo.vala"
 	_hierarchical_tag_index_unref0 (new_htag_index);
-#line 41161 "Photo.c"
+#line 41162 "Photo.c"
 }
 
 
@@ -41211,7 +41212,7 @@ static void library_photo_class_init (LibraryPhotoClass * klass) {
 	((PhotoClass *) klass)->apply_user_metadata_for_reimport = library_photo_real_apply_user_metadata_for_reimport;
 #line 4944 "/home/jens/Source/shotwell/src/Photo.vala"
 	G_OBJECT_CLASS (klass)->finalize = library_photo_finalize;
-#line 41210 "Photo.c"
+#line 41211 "Photo.c"
 }
 
 
@@ -41224,7 +41225,7 @@ static void library_photo_flaggable_interface_init (FlaggableIface * iface) {
 	iface->mark_flagged = (void (*)(Flaggable*)) library_photo_real_mark_flagged;
 #line 4944 "/home/jens/Source/shotwell/src/Photo.vala"
 	iface->mark_unflagged = (void (*)(Flaggable*)) library_photo_real_mark_unflagged;
-#line 41223 "Photo.c"
+#line 41224 "Photo.c"
 }
 
 
@@ -41241,7 +41242,7 @@ static void library_photo_monitorable_interface_init (MonitorableIface * iface) 
 	iface->set_master_file = (void (*)(Monitorable*, GFile*)) photo_set_master_file;
 #line 4944 "/home/jens/Source/shotwell/src/Photo.vala"
 	iface->set_master_timestamp = (void (*)(Monitorable*, GFileInfo*)) photo_set_master_timestamp;
-#line 41240 "Photo.c"
+#line 41241 "Photo.c"
 }
 
 
@@ -41252,7 +41253,7 @@ static void library_photo_instance_init (LibraryPhoto * self) {
 	self->priv->block_thumbnail_generation = FALSE;
 #line 4956 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->priv->thumbnail_scheduler = NULL;
-#line 41251 "Photo.c"
+#line 41252 "Photo.c"
 }
 
 
@@ -41266,7 +41267,7 @@ static void library_photo_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->import_keywords);
 #line 4944 "/home/jens/Source/shotwell/src/Photo.vala"
 	G_OBJECT_CLASS (library_photo_parent_class)->finalize (obj);
-#line 41265 "Photo.c"
+#line 41266 "Photo.c"
 }
 
 
@@ -41309,14 +41310,14 @@ LibraryPhotoSourceHoldingTank* library_photo_source_holding_tank_construct (GTyp
 	self = (LibraryPhotoSourceHoldingTank*) media_source_holding_tank_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), _tmp1_, _tmp1__target, _tmp2_, _tmp2__target);
 #line 5393 "/home/jens/Source/shotwell/src/Photo.vala"
 	return self;
-#line 41308 "Photo.c"
+#line 41309 "Photo.c"
 }
 
 
 LibraryPhotoSourceHoldingTank* library_photo_source_holding_tank_new (LibraryPhotoSourceCollection* sources, SourceHoldingTankCheckToKeep check_to_keep, void* check_to_keep_target, GetSourceDatabaseKey get_key, void* get_key_target) {
 #line 5393 "/home/jens/Source/shotwell/src/Photo.vala"
 	return library_photo_source_holding_tank_construct (TYPE_LIBRARY_PHOTO_SOURCE_HOLDING_TANK, sources, check_to_keep, check_to_keep_target, get_key, get_key_target);
-#line 41315 "Photo.c"
+#line 41316 "Photo.c"
 }
 
 
@@ -41354,7 +41355,7 @@ LibraryPhoto* library_photo_source_holding_tank_fetch_by_backing_file (LibraryPh
 		result = ret;
 #line 5402 "/home/jens/Source/shotwell/src/Photo.vala"
 		return result;
-#line 41353 "Photo.c"
+#line 41354 "Photo.c"
 	}
 #line 5404 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4_ = self->priv->development_file_map;
@@ -41368,21 +41369,21 @@ LibraryPhoto* library_photo_source_holding_tank_fetch_by_backing_file (LibraryPh
 	_g_object_unref0 (ret);
 #line 5404 "/home/jens/Source/shotwell/src/Photo.vala"
 	return result;
-#line 41367 "Photo.c"
+#line 41368 "Photo.c"
 }
 
 
 static void _library_photo_source_holding_tank_on_editable_replaced_photo_editable_replaced (Photo* _sender, GFile* old_file, GFile* new_file, gpointer self) {
 #line 5428 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_source_holding_tank_on_editable_replaced ((LibraryPhotoSourceHoldingTank*) self, _sender, old_file, new_file);
-#line 41374 "Photo.c"
+#line 41375 "Photo.c"
 }
 
 
 static void _library_photo_source_holding_tank_on_raw_development_modified_photo_raw_development_modified (Photo* _sender, gpointer self) {
 #line 5429 "/home/jens/Source/shotwell/src/Photo.vala"
 	library_photo_source_holding_tank_on_raw_development_modified ((LibraryPhotoSourceHoldingTank*) self, _sender);
-#line 41381 "Photo.c"
+#line 41382 "Photo.c"
 }
 
 
@@ -41402,7 +41403,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 	_tmp0_ = added;
 #line 5409 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp0_ != NULL) {
-#line 41401 "Photo.c"
+#line 41402 "Photo.c"
 		{
 			GeeIterator* _source_it = NULL;
 			GeeCollection* _tmp1_ = NULL;
@@ -41415,7 +41416,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 			_source_it = _tmp2_;
 #line 5410 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 41414 "Photo.c"
+#line 41415 "Photo.c"
 				GeeIterator* _tmp3_ = NULL;
 				gboolean _tmp4_ = FALSE;
 				DataSource* source = NULL;
@@ -41442,7 +41443,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 				if (!_tmp4_) {
 #line 5410 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 41441 "Photo.c"
+#line 41442 "Photo.c"
 				}
 #line 5410 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp5_ = _source_it;
@@ -41468,7 +41469,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 				_g_object_unref0 (_tmp11_);
 #line 5414 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp12_) {
-#line 41467 "Photo.c"
+#line 41468 "Photo.c"
 					GeeHashMap* _tmp13_ = NULL;
 					LibraryPhoto* _tmp14_ = NULL;
 					GFile* _tmp15_ = NULL;
@@ -41507,7 +41508,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 					gee_multi_map_set (_tmp18_, _tmp19_, _tmp22_);
 #line 5416 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_object_unref0 (_tmp22_);
-#line 41506 "Photo.c"
+#line 41507 "Photo.c"
 				}
 #line 5420 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp23_ = photo;
@@ -41519,7 +41520,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 				_tmp25_ = raw_files;
 #line 5421 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_tmp25_ != NULL) {
-#line 41518 "Photo.c"
+#line 41519 "Photo.c"
 					{
 						GeeIterator* _f_it = NULL;
 						GeeCollection* _tmp26_ = NULL;
@@ -41532,7 +41533,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 						_f_it = _tmp27_;
 #line 5422 "/home/jens/Source/shotwell/src/Photo.vala"
 						while (TRUE) {
-#line 41531 "Photo.c"
+#line 41532 "Photo.c"
 							GeeIterator* _tmp28_ = NULL;
 							gboolean _tmp29_ = FALSE;
 							GFile* f = NULL;
@@ -41552,7 +41553,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 							if (!_tmp29_) {
 #line 5422 "/home/jens/Source/shotwell/src/Photo.vala"
 								break;
-#line 41551 "Photo.c"
+#line 41552 "Photo.c"
 							}
 #line 5422 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp30_ = _f_it;
@@ -41578,11 +41579,11 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 							gee_multi_map_set (_tmp35_, _tmp36_, _tmp37_);
 #line 5422 "/home/jens/Source/shotwell/src/Photo.vala"
 							_g_object_unref0 (f);
-#line 41577 "Photo.c"
+#line 41578 "Photo.c"
 						}
 #line 5422 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_object_unref0 (_f_it);
-#line 41581 "Photo.c"
+#line 41582 "Photo.c"
 					}
 				}
 #line 5428 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -41599,18 +41600,18 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 				_g_object_unref0 (photo);
 #line 5410 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (source);
-#line 41598 "Photo.c"
+#line 41599 "Photo.c"
 			}
 #line 5410 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_source_it);
-#line 41602 "Photo.c"
+#line 41603 "Photo.c"
 		}
 	}
 #line 5433 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp40_ = removed;
 #line 5433 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp40_ != NULL) {
-#line 41609 "Photo.c"
+#line 41610 "Photo.c"
 		{
 			GeeIterator* _source_it = NULL;
 			GeeCollection* _tmp41_ = NULL;
@@ -41623,7 +41624,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 			_source_it = _tmp42_;
 #line 5434 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 41622 "Photo.c"
+#line 41623 "Photo.c"
 				GeeIterator* _tmp43_ = NULL;
 				gboolean _tmp44_ = FALSE;
 				DataSource* source = NULL;
@@ -41648,7 +41649,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 				if (!_tmp44_) {
 #line 5434 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 41647 "Photo.c"
+#line 41648 "Photo.c"
 				}
 #line 5434 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp45_ = _source_it;
@@ -41662,7 +41663,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 				_tmp48_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp47_, TYPE_LIBRARY_PHOTO, LibraryPhoto));
 #line 5435 "/home/jens/Source/shotwell/src/Photo.vala"
 				photo = _tmp48_;
-#line 41661 "Photo.c"
+#line 41662 "Photo.c"
 				{
 					GeeIterator* _f_it = NULL;
 					GeeMultiMap* _tmp49_ = NULL;
@@ -41689,7 +41690,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 					_f_it = _tmp54_;
 #line 5436 "/home/jens/Source/shotwell/src/Photo.vala"
 					while (TRUE) {
-#line 41688 "Photo.c"
+#line 41689 "Photo.c"
 						GeeIterator* _tmp55_ = NULL;
 						gboolean _tmp56_ = FALSE;
 						GFile* f = NULL;
@@ -41705,7 +41706,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 						if (!_tmp56_) {
 #line 5436 "/home/jens/Source/shotwell/src/Photo.vala"
 							break;
-#line 41704 "Photo.c"
+#line 41705 "Photo.c"
 						}
 #line 5436 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp57_ = _f_it;
@@ -41721,11 +41722,11 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 						gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp59_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp60_, NULL);
 #line 5436 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_object_unref0 (f);
-#line 41720 "Photo.c"
+#line 41721 "Photo.c"
 					}
 #line 5436 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_object_unref0 (_f_it);
-#line 41724 "Photo.c"
+#line 41725 "Photo.c"
 				}
 				{
 					GeeIterator* _f_it = NULL;
@@ -41753,7 +41754,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 					_f_it = _tmp66_;
 #line 5439 "/home/jens/Source/shotwell/src/Photo.vala"
 					while (TRUE) {
-#line 41752 "Photo.c"
+#line 41753 "Photo.c"
 						GeeIterator* _tmp67_ = NULL;
 						gboolean _tmp68_ = FALSE;
 						GFile* f = NULL;
@@ -41769,7 +41770,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 						if (!_tmp68_) {
 #line 5439 "/home/jens/Source/shotwell/src/Photo.vala"
 							break;
-#line 41768 "Photo.c"
+#line 41769 "Photo.c"
 						}
 #line 5439 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp69_ = _f_it;
@@ -41785,11 +41786,11 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 						gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp71_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp72_, NULL);
 #line 5439 "/home/jens/Source/shotwell/src/Photo.vala"
 						_g_object_unref0 (f);
-#line 41784 "Photo.c"
+#line 41785 "Photo.c"
 					}
 #line 5439 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_object_unref0 (_f_it);
-#line 41788 "Photo.c"
+#line 41789 "Photo.c"
 				}
 #line 5442 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp73_ = self->priv->reverse_editable_file_map;
@@ -41819,11 +41820,11 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 				_g_object_unref0 (photo);
 #line 5434 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (source);
-#line 41818 "Photo.c"
+#line 41819 "Photo.c"
 			}
 #line 5434 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_source_it);
-#line 41822 "Photo.c"
+#line 41823 "Photo.c"
 		}
 	}
 #line 5450 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -41832,7 +41833,7 @@ static void library_photo_source_holding_tank_real_notify_contents_altered (Sour
 	_tmp82_ = removed;
 #line 5450 "/home/jens/Source/shotwell/src/Photo.vala"
 	SOURCE_HOLDING_TANK_CLASS (library_photo_source_holding_tank_parent_class)->notify_contents_altered (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_HOLDING_TANK, MediaSourceHoldingTank), TYPE_SOURCE_HOLDING_TANK, SourceHoldingTank), _tmp81_, _tmp82_);
-#line 41831 "Photo.c"
+#line 41832 "Photo.c"
 }
 
 
@@ -41868,7 +41869,7 @@ static void library_photo_source_holding_tank_on_editable_replaced (LibraryPhoto
 	_tmp3_ = old_file;
 #line 5457 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp3_ != NULL) {
-#line 41867 "Photo.c"
+#line 41868 "Photo.c"
 		GeeHashMap* _tmp4_ = NULL;
 		GFile* _tmp5_ = NULL;
 		GeeMultiMap* _tmp6_ = NULL;
@@ -41888,13 +41889,13 @@ static void library_photo_source_holding_tank_on_editable_replaced (LibraryPhoto
 		_tmp8_ = old_file;
 #line 5459 "/home/jens/Source/shotwell/src/Photo.vala"
 		gee_multi_map_remove (_tmp6_, _tmp7_, _tmp8_);
-#line 41887 "Photo.c"
+#line 41888 "Photo.c"
 	}
 #line 5462 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp9_ = new_file;
 #line 5462 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp9_ != NULL) {
-#line 41893 "Photo.c"
+#line 41894 "Photo.c"
 		GeeHashMap* _tmp10_ = NULL;
 		GFile* _tmp11_ = NULL;
 		LibraryPhoto* _tmp12_ = NULL;
@@ -41906,7 +41907,7 @@ static void library_photo_source_holding_tank_on_editable_replaced (LibraryPhoto
 		_tmp12_ = photo;
 #line 5463 "/home/jens/Source/shotwell/src/Photo.vala"
 		gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp11_, _tmp12_);
-#line 41905 "Photo.c"
+#line 41906 "Photo.c"
 	}
 #line 5464 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp13_ = self->priv->reverse_editable_file_map;
@@ -41918,7 +41919,7 @@ static void library_photo_source_holding_tank_on_editable_replaced (LibraryPhoto
 	gee_multi_map_set (_tmp13_, _tmp14_, _tmp15_);
 #line 5453 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (photo);
-#line 41917 "Photo.c"
+#line 41918 "Photo.c"
 }
 
 
@@ -41956,7 +41957,7 @@ static void library_photo_source_holding_tank_on_raw_development_modified (Libra
 	_tmp5_ = gee_multi_map_contains (_tmp3_, _tmp4_);
 #line 5472 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp5_) {
-#line 41955 "Photo.c"
+#line 41956 "Photo.c"
 		GeeMultiMap* _tmp18_ = NULL;
 		LibraryPhoto* _tmp19_ = NULL;
 		{
@@ -41985,7 +41986,7 @@ static void library_photo_source_holding_tank_on_raw_development_modified (Libra
 			_f_it = _tmp11_;
 #line 5473 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 41984 "Photo.c"
+#line 41985 "Photo.c"
 				GeeIterator* _tmp12_ = NULL;
 				gboolean _tmp13_ = FALSE;
 				GFile* f = NULL;
@@ -42001,7 +42002,7 @@ static void library_photo_source_holding_tank_on_raw_development_modified (Libra
 				if (!_tmp13_) {
 #line 5473 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 42000 "Photo.c"
+#line 42001 "Photo.c"
 				}
 #line 5473 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp14_ = _f_it;
@@ -42017,11 +42018,11 @@ static void library_photo_source_holding_tank_on_raw_development_modified (Libra
 				gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp17_, NULL);
 #line 5473 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (f);
-#line 42016 "Photo.c"
+#line 42017 "Photo.c"
 			}
 #line 5473 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_f_it);
-#line 42020 "Photo.c"
+#line 42021 "Photo.c"
 		}
 #line 5475 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp18_ = self->priv->reverse_development_file_map;
@@ -42029,7 +42030,7 @@ static void library_photo_source_holding_tank_on_raw_development_modified (Libra
 		_tmp19_ = photo;
 #line 5475 "/home/jens/Source/shotwell/src/Photo.vala"
 		gee_multi_map_remove_all (_tmp18_, _tmp19_);
-#line 42028 "Photo.c"
+#line 42029 "Photo.c"
 	}
 #line 5479 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp20_ = photo;
@@ -42041,7 +42042,7 @@ static void library_photo_source_holding_tank_on_raw_development_modified (Libra
 	_tmp22_ = raw_list;
 #line 5480 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (_tmp22_ != NULL) {
-#line 42040 "Photo.c"
+#line 42041 "Photo.c"
 		{
 			GeeIterator* _f_it = NULL;
 			GeeCollection* _tmp23_ = NULL;
@@ -42054,7 +42055,7 @@ static void library_photo_source_holding_tank_on_raw_development_modified (Libra
 			_f_it = _tmp24_;
 #line 5481 "/home/jens/Source/shotwell/src/Photo.vala"
 			while (TRUE) {
-#line 42053 "Photo.c"
+#line 42054 "Photo.c"
 				GeeIterator* _tmp25_ = NULL;
 				gboolean _tmp26_ = FALSE;
 				GFile* f = NULL;
@@ -42074,7 +42075,7 @@ static void library_photo_source_holding_tank_on_raw_development_modified (Libra
 				if (!_tmp26_) {
 #line 5481 "/home/jens/Source/shotwell/src/Photo.vala"
 					break;
-#line 42073 "Photo.c"
+#line 42074 "Photo.c"
 				}
 #line 5481 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp27_ = _f_it;
@@ -42100,18 +42101,18 @@ static void library_photo_source_holding_tank_on_raw_development_modified (Libra
 				gee_multi_map_set (_tmp32_, _tmp33_, _tmp34_);
 #line 5481 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (f);
-#line 42099 "Photo.c"
+#line 42100 "Photo.c"
 			}
 #line 5481 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_object_unref0 (_f_it);
-#line 42103 "Photo.c"
+#line 42104 "Photo.c"
 		}
 	}
 #line 5467 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (raw_list);
 #line 5467 "/home/jens/Source/shotwell/src/Photo.vala"
 	_g_object_unref0 (photo);
-#line 42110 "Photo.c"
+#line 42111 "Photo.c"
 }
 
 
@@ -42124,7 +42125,7 @@ static void library_photo_source_holding_tank_class_init (LibraryPhotoSourceHold
 	g_type_class_add_private (klass, sizeof (LibraryPhotoSourceHoldingTankPrivate));
 #line 5383 "/home/jens/Source/shotwell/src/Photo.vala"
 	((SourceHoldingTankClass *) klass)->notify_contents_altered = library_photo_source_holding_tank_real_notify_contents_altered;
-#line 42123 "Photo.c"
+#line 42124 "Photo.c"
 }
 
 
@@ -42151,7 +42152,7 @@ static void library_photo_source_holding_tank_instance_init (LibraryPhotoSourceH
 	_tmp3_ = gee_hash_multi_map_new (TYPE_LIBRARY_PHOTO, (GBoxedCopyFunc) g_object_ref, g_object_unref, G_TYPE_FILE, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, _file_hash_gee_hash_data_func, NULL, NULL, _file_equal_gee_equal_data_func, NULL, NULL);
 #line 5390 "/home/jens/Source/shotwell/src/Photo.vala"
 	self->priv->reverse_development_file_map = G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_MULTI_MAP, GeeMultiMap);
-#line 42150 "Photo.c"
+#line 42151 "Photo.c"
 }
 
 
@@ -42169,7 +42170,7 @@ static void library_photo_source_holding_tank_finalize (SourceHoldingTank* obj) 
 	_g_object_unref0 (self->priv->reverse_development_file_map);
 #line 5383 "/home/jens/Source/shotwell/src/Photo.vala"
 	SOURCE_HOLDING_TANK_CLASS (library_photo_source_holding_tank_parent_class)->finalize (obj);
-#line 42168 "Photo.c"
+#line 42169 "Photo.c"
 }
 
 

@@ -691,7 +691,7 @@ static void _tag_page_on_remove_tag_from_photos_gtk_action_callback (GtkAction* 
 static void _vala_array_add136 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_DELETE_TAG_SIDEBAR_MENU _ ("_Delete")
 static void _vala_array_add137 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_RENAME_TAG_SIDEBAR_MENU _ ("_Rename...")
+#define RESOURCES_RENAME_TAG_SIDEBAR_MENU _ ("_Rename…")
 static void _vala_array_add138 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_NEW_CHILD_TAG_SIDEBAR_MENU _ ("_New")
 static void tag_page_on_new_child_tag_sidebar (TagPage* self);

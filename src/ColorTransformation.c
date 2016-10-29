@@ -146,6 +146,16 @@ typedef struct _SaturationTransformationClass SaturationTransformationClass;
 typedef struct _ExposureTransformation ExposureTransformation;
 typedef struct _ExposureTransformationClass ExposureTransformationClass;
 
+#define TYPE_CONTRAST_TRANSFORMATION (contrast_transformation_get_type ())
+#define CONTRAST_TRANSFORMATION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_CONTRAST_TRANSFORMATION, ContrastTransformation))
+#define CONTRAST_TRANSFORMATION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_CONTRAST_TRANSFORMATION, ContrastTransformationClass))
+#define IS_CONTRAST_TRANSFORMATION(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_CONTRAST_TRANSFORMATION))
+#define IS_CONTRAST_TRANSFORMATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_CONTRAST_TRANSFORMATION))
+#define CONTRAST_TRANSFORMATION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_CONTRAST_TRANSFORMATION, ContrastTransformationClass))
+
+typedef struct _ContrastTransformation ContrastTransformation;
+typedef struct _ContrastTransformationClass ContrastTransformationClass;
+
 #define TYPE_KEY_VALUE_MAP (key_value_map_get_type ())
 #define KEY_VALUE_MAP(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_KEY_VALUE_MAP, KeyValueMap))
 #define KEY_VALUE_MAP_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_KEY_VALUE_MAP, KeyValueMapClass))
@@ -177,6 +187,7 @@ typedef struct _TintTransformationPrivate TintTransformationPrivate;
 typedef struct _TemperatureTransformationPrivate TemperatureTransformationPrivate;
 typedef struct _SaturationTransformationPrivate SaturationTransformationPrivate;
 typedef struct _ExposureTransformationPrivate ExposureTransformationPrivate;
+typedef struct _ContrastTransformationPrivate ContrastTransformationPrivate;
 typedef struct _PixelTransformerPrivate PixelTransformerPrivate;
 typedef struct _ParamSpecPixelTransformer ParamSpecPixelTransformer;
 
@@ -254,7 +265,8 @@ typedef enum  {
 	PIXEL_TRANSFORMATION_TYPE_TEMPERATURE,
 	PIXEL_TRANSFORMATION_TYPE_TINT,
 	PIXEL_TRANSFORMATION_TYPE_SATURATION,
-	PIXEL_TRANSFORMATION_TYPE_EXPOSURE
+	PIXEL_TRANSFORMATION_TYPE_EXPOSURE,
+	PIXEL_TRANSFORMATION_TYPE_CONTRAST
 } PixelTransformationType;
 
 struct _PixelTransformationBundle {
@@ -373,6 +385,19 @@ struct _ExposureTransformationClass {
 };
 
 struct _ExposureTransformationPrivate {
+	gfloat parameter;
+};
+
+struct _ContrastTransformation {
+	RGBTransformation parent_instance;
+	ContrastTransformationPrivate * priv;
+};
+
+struct _ContrastTransformationClass {
+	RGBTransformationClass parent_class;
+};
+
+struct _ContrastTransformationPrivate {
 	gfloat parameter;
 };
 
@@ -543,6 +568,7 @@ static gpointer tint_transformation_parent_class = NULL;
 static gpointer temperature_transformation_parent_class = NULL;
 static gpointer saturation_transformation_parent_class = NULL;
 static gpointer exposure_transformation_parent_class = NULL;
+static gpointer contrast_transformation_parent_class = NULL;
 static gpointer pixel_transformer_parent_class = NULL;
 static gpointer rgb_histogram_parent_class = NULL;
 static gpointer intensity_histogram_parent_class = NULL;
@@ -628,6 +654,9 @@ GType saturation_transformation_get_type (void) G_GNUC_CONST;
 ExposureTransformation* exposure_transformation_new (gfloat client_parameter);
 ExposureTransformation* exposure_transformation_construct (GType object_type, gfloat client_parameter);
 GType exposure_transformation_get_type (void) G_GNUC_CONST;
+ContrastTransformation* contrast_transformation_new (gfloat client_parameter);
+ContrastTransformation* contrast_transformation_construct (GType object_type, gfloat client_parameter);
+GType contrast_transformation_get_type (void) G_GNUC_CONST;
 gpointer key_value_map_ref (gpointer instance);
 void key_value_map_unref (gpointer instance);
 GParamSpec* param_spec_key_value_map (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -653,6 +682,7 @@ gfloat temperature_transformation_get_parameter (TemperatureTransformation* self
 gfloat tint_transformation_get_parameter (TintTransformation* self);
 gfloat saturation_transformation_get_parameter (SaturationTransformation* self);
 gfloat exposure_transformation_get_parameter (ExposureTransformation* self);
+gfloat contrast_transformation_get_parameter (ContrastTransformation* self);
 gint pixel_transformation_bundle_get_count (PixelTransformationBundle* self);
 GeeIterable* pixel_transformation_bundle_get_transformations (PixelTransformationBundle* self);
 gboolean pixel_transformation_bundle_is_identity (PixelTransformationBundle* self);
@@ -740,6 +770,14 @@ enum  {
 #define EXPOSURE_TRANSFORMATION_MIN_PARAMETER (-16.0f)
 #define EXPOSURE_TRANSFORMATION_MAX_PARAMETER 16.0f
 static void exposure_transformation_finalize (PixelTransformation* obj);
+#define CONTRAST_TRANSFORMATION_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), TYPE_CONTRAST_TRANSFORMATION, ContrastTransformationPrivate))
+enum  {
+	CONTRAST_TRANSFORMATION_DUMMY_PROPERTY
+};
+#define CONTRAST_TRANSFORMATION_MIN_PARAMETER (-16.0f)
+#define CONTRAST_TRANSFORMATION_MAX_PARAMETER 16.0f
+#define CONTRAST_TRANSFORMATION_MAX_CONTRAST_ADJUSTMENT 0.5f
+static void contrast_transformation_finalize (PixelTransformation* obj);
 #define PIXEL_TRANSFORMER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), TYPE_PIXEL_TRANSFORMER, PixelTransformerPrivate))
 enum  {
 	PIXEL_TRANSFORMER_DUMMY_PROPERTY
@@ -871,7 +909,7 @@ void rgb_analytic_pixel_init (RGBAnalyticPixel *self) {
 	(*self).green = 0.0f;
 #line 17 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	(*self).blue = 0.0f;
-#line 875 "ColorTransformation.c"
+#line 913 "ColorTransformation.c"
 }
 
 
@@ -902,7 +940,7 @@ void rgb_analytic_pixel_init_from_components (RGBAnalyticPixel *self, gfloat red
 	_tmp5_ = CLAMP (_tmp4_, 0.0f, 1.0f);
 #line 24 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	(*self).blue = _tmp5_;
-#line 906 "ColorTransformation.c"
+#line 944 "ColorTransformation.c"
 }
 
 
@@ -924,7 +962,7 @@ void rgb_analytic_pixel_init_from_quantized_components (RGBAnalyticPixel *self, 
 	_tmp2_ = blue_quantized;
 #line 31 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	(*self).blue = ((gfloat) _tmp2_) * RGB_ANALYTIC_PIXEL_INV_255;
-#line 928 "ColorTransformation.c"
+#line 966 "ColorTransformation.c"
 }
 
 
@@ -963,7 +1001,7 @@ void rgb_analytic_pixel_init_from_hsv (RGBAnalyticPixel *self, HSVAnalyticPixel*
 	_tmp6_ = _tmp5_.blue;
 #line 38 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	(*self).blue = _tmp6_;
-#line 967 "ColorTransformation.c"
+#line 1005 "ColorTransformation.c"
 }
 
 
@@ -976,7 +1014,7 @@ guchar rgb_analytic_pixel_quantized_red (RGBAnalyticPixel *self) {
 	result = (guchar) (_tmp0_ * 255.0f);
 #line 42 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 980 "ColorTransformation.c"
+#line 1018 "ColorTransformation.c"
 }
 
 
@@ -989,7 +1027,7 @@ guchar rgb_analytic_pixel_quantized_green (RGBAnalyticPixel *self) {
 	result = (guchar) (_tmp0_ * 255.0f);
 #line 46 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 993 "ColorTransformation.c"
+#line 1031 "ColorTransformation.c"
 }
 
 
@@ -1002,7 +1040,7 @@ guchar rgb_analytic_pixel_quantized_blue (RGBAnalyticPixel *self) {
 	result = (guchar) (_tmp0_ * 255.0f);
 #line 50 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 1006 "ColorTransformation.c"
+#line 1044 "ColorTransformation.c"
 }
 
 
@@ -1021,7 +1059,7 @@ gboolean rgb_analytic_pixel_equals (RGBAnalyticPixel *self, RGBAnalyticPixel* rh
 	_tmp4_ = (*_tmp3_).red;
 #line 54 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp2_ == _tmp4_) {
-#line 1025 "ColorTransformation.c"
+#line 1063 "ColorTransformation.c"
 		gfloat _tmp5_ = 0.0F;
 		RGBAnalyticPixel* _tmp6_ = NULL;
 		gfloat _tmp7_ = 0.0F;
@@ -1033,15 +1071,15 @@ gboolean rgb_analytic_pixel_equals (RGBAnalyticPixel *self, RGBAnalyticPixel* rh
 		_tmp7_ = (*_tmp6_).green;
 #line 54 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = _tmp5_ == _tmp7_;
-#line 1037 "ColorTransformation.c"
+#line 1075 "ColorTransformation.c"
 	} else {
 #line 54 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = FALSE;
-#line 1041 "ColorTransformation.c"
+#line 1079 "ColorTransformation.c"
 	}
 #line 54 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp1_) {
-#line 1045 "ColorTransformation.c"
+#line 1083 "ColorTransformation.c"
 		gfloat _tmp8_ = 0.0F;
 		RGBAnalyticPixel* _tmp9_ = NULL;
 		gfloat _tmp10_ = 0.0F;
@@ -1053,17 +1091,17 @@ gboolean rgb_analytic_pixel_equals (RGBAnalyticPixel *self, RGBAnalyticPixel* rh
 		_tmp10_ = (*_tmp9_).blue;
 #line 54 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp0_ = _tmp8_ == _tmp10_;
-#line 1057 "ColorTransformation.c"
+#line 1095 "ColorTransformation.c"
 	} else {
 #line 54 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp0_ = FALSE;
-#line 1061 "ColorTransformation.c"
+#line 1099 "ColorTransformation.c"
 	}
 #line 54 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
 #line 54 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 1067 "ColorTransformation.c"
+#line 1105 "ColorTransformation.c"
 }
 
 
@@ -1082,7 +1120,7 @@ guint rgb_analytic_pixel_hash_code (RGBAnalyticPixel *self) {
 	result = ((((guint) (_tmp0_ * 255.0f)) << 16) + (((guint) (_tmp1_ * 255.0f)) << 8)) + ((guint) (_tmp2_ * 255.0f));
 #line 58 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 1086 "ColorTransformation.c"
+#line 1124 "ColorTransformation.c"
 }
 
 
@@ -1094,7 +1132,7 @@ void rgb_analytic_pixel_to_hsv (RGBAnalyticPixel *self, HSVAnalyticPixel* result
 	*result = _tmp0_;
 #line 63 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return;
-#line 1098 "ColorTransformation.c"
+#line 1136 "ColorTransformation.c"
 }
 
 
@@ -1106,14 +1144,14 @@ RGBAnalyticPixel* rgb_analytic_pixel_dup (const RGBAnalyticPixel* self) {
 	memcpy (dup, self, sizeof (RGBAnalyticPixel));
 #line 7 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return dup;
-#line 1110 "ColorTransformation.c"
+#line 1148 "ColorTransformation.c"
 }
 
 
 void rgb_analytic_pixel_free (RGBAnalyticPixel* self) {
 #line 7 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_free (self);
-#line 1117 "ColorTransformation.c"
+#line 1155 "ColorTransformation.c"
 }
 
 
@@ -1137,7 +1175,7 @@ void hsv_analytic_pixel_init (HSVAnalyticPixel *self) {
 	(*self).saturation = 0.0f;
 #line 77 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	(*self).light_value = 0.0f;
-#line 1141 "ColorTransformation.c"
+#line 1179 "ColorTransformation.c"
 }
 
 
@@ -1168,7 +1206,7 @@ void hsv_analytic_pixel_init_from_components (HSVAnalyticPixel *self, gfloat hue
 	_tmp5_ = CLAMP (_tmp4_, 0.0f, 1.0f);
 #line 84 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	(*self).light_value = _tmp5_;
-#line 1172 "ColorTransformation.c"
+#line 1210 "ColorTransformation.c"
 }
 
 
@@ -1190,7 +1228,7 @@ void hsv_analytic_pixel_init_from_quantized_components (HSVAnalyticPixel *self, 
 	_tmp2_ = light_value_quantized;
 #line 91 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	(*self).light_value = ((gfloat) _tmp2_) * HSV_ANALYTIC_PIXEL_INV_255;
-#line 1194 "ColorTransformation.c"
+#line 1232 "ColorTransformation.c"
 }
 
 
@@ -1271,7 +1309,7 @@ void hsv_analytic_pixel_init_from_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel*
 	_tmp18_ = max_component;
 #line 99 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp18_ != 0.0f) {
-#line 1275 "ColorTransformation.c"
+#line 1313 "ColorTransformation.c"
 		gfloat _tmp19_ = 0.0F;
 		gfloat _tmp20_ = 0.0F;
 		gfloat _tmp21_ = 0.0F;
@@ -1283,11 +1321,11 @@ void hsv_analytic_pixel_init_from_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel*
 		_tmp21_ = max_component;
 #line 99 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp17_ = (_tmp19_ - _tmp20_) / _tmp21_;
-#line 1287 "ColorTransformation.c"
+#line 1325 "ColorTransformation.c"
 	} else {
 #line 100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp17_ = 0.0f;
-#line 1291 "ColorTransformation.c"
+#line 1329 "ColorTransformation.c"
 	}
 #line 99 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	(*self).saturation = _tmp17_;
@@ -1297,7 +1335,7 @@ void hsv_analytic_pixel_init_from_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel*
 	if (_tmp22_ == 0.0f) {
 #line 103 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		(*self).hue = 0.0f;
-#line 1301 "ColorTransformation.c"
+#line 1339 "ColorTransformation.c"
 	} else {
 		gfloat delta = 0.0F;
 		gfloat _tmp23_ = 0.0F;
@@ -1322,7 +1360,7 @@ void hsv_analytic_pixel_init_from_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel*
 		_tmp27_ = max_component;
 #line 106 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (_tmp26_ == _tmp27_) {
-#line 1326 "ColorTransformation.c"
+#line 1364 "ColorTransformation.c"
 			RGBAnalyticPixel _tmp28_ = {0};
 			gfloat _tmp29_ = 0.0F;
 			RGBAnalyticPixel _tmp30_ = {0};
@@ -1340,7 +1378,7 @@ void hsv_analytic_pixel_init_from_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel*
 			_tmp32_ = delta;
 #line 107 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			(*self).hue = (_tmp29_ - _tmp31_) / _tmp32_;
-#line 1344 "ColorTransformation.c"
+#line 1382 "ColorTransformation.c"
 		} else {
 			RGBAnalyticPixel _tmp33_ = {0};
 			gfloat _tmp34_ = 0.0F;
@@ -1353,7 +1391,7 @@ void hsv_analytic_pixel_init_from_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel*
 			_tmp35_ = max_component;
 #line 108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (_tmp34_ == _tmp35_) {
-#line 1357 "ColorTransformation.c"
+#line 1395 "ColorTransformation.c"
 				RGBAnalyticPixel _tmp36_ = {0};
 				gfloat _tmp37_ = 0.0F;
 				RGBAnalyticPixel _tmp38_ = {0};
@@ -1371,7 +1409,7 @@ void hsv_analytic_pixel_init_from_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel*
 				_tmp40_ = delta;
 #line 109 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				(*self).hue = 2.0f + ((_tmp37_ - _tmp39_) / _tmp40_);
-#line 1375 "ColorTransformation.c"
+#line 1413 "ColorTransformation.c"
 			} else {
 				RGBAnalyticPixel _tmp41_ = {0};
 				gfloat _tmp42_ = 0.0F;
@@ -1384,7 +1422,7 @@ void hsv_analytic_pixel_init_from_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel*
 				_tmp43_ = max_component;
 #line 110 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp42_ == _tmp43_) {
-#line 1388 "ColorTransformation.c"
+#line 1426 "ColorTransformation.c"
 					RGBAnalyticPixel _tmp44_ = {0};
 					gfloat _tmp45_ = 0.0F;
 					RGBAnalyticPixel _tmp46_ = {0};
@@ -1402,7 +1440,7 @@ void hsv_analytic_pixel_init_from_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel*
 					_tmp48_ = delta;
 #line 111 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					(*self).hue = 4.0f + ((_tmp45_ - _tmp47_) / _tmp48_);
-#line 1406 "ColorTransformation.c"
+#line 1444 "ColorTransformation.c"
 				}
 			}
 		}
@@ -1414,19 +1452,19 @@ void hsv_analytic_pixel_init_from_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel*
 		_tmp50_ = (*self).hue;
 #line 115 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (_tmp50_ < 0.0f) {
-#line 1418 "ColorTransformation.c"
+#line 1456 "ColorTransformation.c"
 			gfloat _tmp51_ = 0.0F;
 #line 116 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp51_ = (*self).hue;
 #line 116 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			(*self).hue = _tmp51_ + 360.0f;
-#line 1424 "ColorTransformation.c"
+#line 1462 "ColorTransformation.c"
 		}
 #line 118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp52_ = (*self).hue;
 #line 118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		(*self).hue = _tmp52_ / 360.0f;
-#line 1430 "ColorTransformation.c"
+#line 1468 "ColorTransformation.c"
 	}
 #line 121 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp53_ = (*self).hue;
@@ -1446,7 +1484,7 @@ void hsv_analytic_pixel_init_from_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel*
 	_tmp58_ = CLAMP (_tmp57_, 0.0f, 1.0f);
 #line 123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	(*self).light_value = _tmp58_;
-#line 1450 "ColorTransformation.c"
+#line 1488 "ColorTransformation.c"
 }
 
 
@@ -1459,7 +1497,7 @@ void hsv_analytic_pixel_to_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel* result
 	_tmp0_ = (*self).saturation;
 #line 129 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp0_ == 0.0f) {
-#line 1463 "ColorTransformation.c"
+#line 1501 "ColorTransformation.c"
 		gfloat _tmp1_ = 0.0F;
 		gfloat _tmp2_ = 0.0F;
 		gfloat _tmp3_ = 0.0F;
@@ -1475,7 +1513,7 @@ void hsv_analytic_pixel_to_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel* result
 		_tmp3_ = (*self).light_value;
 #line 132 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_result_.blue = _tmp3_;
-#line 1479 "ColorTransformation.c"
+#line 1517 "ColorTransformation.c"
 	} else {
 		gfloat hue_denorm = 0.0F;
 		gfloat _tmp4_ = 0.0F;
@@ -1509,7 +1547,7 @@ void hsv_analytic_pixel_to_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel* result
 		if (_tmp5_ == 360.0f) {
 #line 136 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			hue_denorm = 0.0f;
-#line 1513 "ColorTransformation.c"
+#line 1551 "ColorTransformation.c"
 		}
 #line 138 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp6_ = hue_denorm;
@@ -1553,7 +1591,7 @@ void hsv_analytic_pixel_to_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel* result
 		switch (_tmp18_) {
 #line 148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			case 0:
-#line 1557 "ColorTransformation.c"
+#line 1595 "ColorTransformation.c"
 			{
 				gfloat _tmp19_ = 0.0F;
 				gfloat _tmp20_ = 0.0F;
@@ -1572,11 +1610,11 @@ void hsv_analytic_pixel_to_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel* result
 				_result_.blue = _tmp21_;
 #line 162 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 1576 "ColorTransformation.c"
+#line 1614 "ColorTransformation.c"
 			}
 #line 148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			case 1:
-#line 1580 "ColorTransformation.c"
+#line 1618 "ColorTransformation.c"
 			{
 				gfloat _tmp22_ = 0.0F;
 				gfloat _tmp23_ = 0.0F;
@@ -1595,11 +1633,11 @@ void hsv_analytic_pixel_to_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel* result
 				_result_.blue = _tmp24_;
 #line 168 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 1599 "ColorTransformation.c"
+#line 1637 "ColorTransformation.c"
 			}
 #line 148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			case 2:
-#line 1603 "ColorTransformation.c"
+#line 1641 "ColorTransformation.c"
 			{
 				gfloat _tmp25_ = 0.0F;
 				gfloat _tmp26_ = 0.0F;
@@ -1618,11 +1656,11 @@ void hsv_analytic_pixel_to_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel* result
 				_result_.blue = _tmp27_;
 #line 174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 1622 "ColorTransformation.c"
+#line 1660 "ColorTransformation.c"
 			}
 #line 148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			case 3:
-#line 1626 "ColorTransformation.c"
+#line 1664 "ColorTransformation.c"
 			{
 				gfloat _tmp28_ = 0.0F;
 				gfloat _tmp29_ = 0.0F;
@@ -1641,11 +1679,11 @@ void hsv_analytic_pixel_to_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel* result
 				_result_.blue = _tmp30_;
 #line 180 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 1645 "ColorTransformation.c"
+#line 1683 "ColorTransformation.c"
 			}
 #line 148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			case 4:
-#line 1649 "ColorTransformation.c"
+#line 1687 "ColorTransformation.c"
 			{
 				gfloat _tmp31_ = 0.0F;
 				gfloat _tmp32_ = 0.0F;
@@ -1664,11 +1702,11 @@ void hsv_analytic_pixel_to_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel* result
 				_result_.blue = _tmp33_;
 #line 186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 1668 "ColorTransformation.c"
+#line 1706 "ColorTransformation.c"
 			}
 #line 148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			case 5:
-#line 1672 "ColorTransformation.c"
+#line 1710 "ColorTransformation.c"
 			{
 				gfloat _tmp34_ = 0.0F;
 				gfloat _tmp35_ = 0.0F;
@@ -1687,14 +1725,14 @@ void hsv_analytic_pixel_to_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel* result
 				_result_.blue = _tmp36_;
 #line 192 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 1691 "ColorTransformation.c"
+#line 1729 "ColorTransformation.c"
 			}
 			default:
 			{
 #line 195 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				g_error ("ColorTransformation.vala:195: bad color hexant in HSV-to-RGB conversio" \
 "n");
-#line 1697 "ColorTransformation.c"
+#line 1735 "ColorTransformation.c"
 			}
 		}
 	}
@@ -1702,7 +1740,7 @@ void hsv_analytic_pixel_to_rgb (HSVAnalyticPixel *self, RGBAnalyticPixel* result
 	*result = _result_;
 #line 199 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return;
-#line 1705 "ColorTransformation.c"
+#line 1743 "ColorTransformation.c"
 }
 
 
@@ -1723,7 +1761,7 @@ gboolean hsv_analytic_pixel_equals (HSVAnalyticPixel *self, HSVAnalyticPixel* rh
 	_tmp4_ = _tmp3_.hue;
 #line 203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp2_ == _tmp4_) {
-#line 1726 "ColorTransformation.c"
+#line 1764 "ColorTransformation.c"
 		gfloat _tmp5_ = 0.0F;
 		HSVAnalyticPixel _tmp6_ = {0};
 		gfloat _tmp7_ = 0.0F;
@@ -1735,15 +1773,15 @@ gboolean hsv_analytic_pixel_equals (HSVAnalyticPixel *self, HSVAnalyticPixel* rh
 		_tmp7_ = _tmp6_.saturation;
 #line 203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = _tmp5_ == _tmp7_;
-#line 1738 "ColorTransformation.c"
+#line 1776 "ColorTransformation.c"
 	} else {
 #line 203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = FALSE;
-#line 1742 "ColorTransformation.c"
+#line 1780 "ColorTransformation.c"
 	}
 #line 203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp1_) {
-#line 1746 "ColorTransformation.c"
+#line 1784 "ColorTransformation.c"
 		gfloat _tmp8_ = 0.0F;
 		HSVAnalyticPixel _tmp9_ = {0};
 		gfloat _tmp10_ = 0.0F;
@@ -1755,17 +1793,17 @@ gboolean hsv_analytic_pixel_equals (HSVAnalyticPixel *self, HSVAnalyticPixel* rh
 		_tmp10_ = _tmp9_.light_value;
 #line 204 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp0_ = _tmp8_ == _tmp10_;
-#line 1758 "ColorTransformation.c"
+#line 1796 "ColorTransformation.c"
 	} else {
 #line 203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp0_ = FALSE;
-#line 1762 "ColorTransformation.c"
+#line 1800 "ColorTransformation.c"
 	}
 #line 203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
 #line 203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 1768 "ColorTransformation.c"
+#line 1806 "ColorTransformation.c"
 }
 
 
@@ -1784,7 +1822,7 @@ guint hsv_analytic_pixel_hash_code (HSVAnalyticPixel *self) {
 	result = ((((guint) (_tmp0_ * 255.0f)) << 16) + (((guint) (_tmp1_ * 255.0f)) << 8)) + ((guint) (_tmp2_ * 255.0f));
 #line 208 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 1787 "ColorTransformation.c"
+#line 1825 "ColorTransformation.c"
 }
 
 
@@ -1796,14 +1834,14 @@ HSVAnalyticPixel* hsv_analytic_pixel_dup (const HSVAnalyticPixel* self) {
 	memcpy (dup, self, sizeof (HSVAnalyticPixel));
 #line 67 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return dup;
-#line 1799 "ColorTransformation.c"
+#line 1837 "ColorTransformation.c"
 }
 
 
 void hsv_analytic_pixel_free (HSVAnalyticPixel* self) {
 #line 67 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_free (self);
-#line 1806 "ColorTransformation.c"
+#line 1844 "ColorTransformation.c"
 }
 
 
@@ -1845,7 +1883,7 @@ GType pixel_format_get_type (void) {
 GType pixel_transformation_type_get_type (void) {
 	static volatile gsize pixel_transformation_type_type_id__volatile = 0;
 	if (g_once_init_enter (&pixel_transformation_type_type_id__volatile)) {
-		static const GEnumValue values[] = {{PIXEL_TRANSFORMATION_TYPE_TONE_EXPANSION, "PIXEL_TRANSFORMATION_TYPE_TONE_EXPANSION", "tone-expansion"}, {PIXEL_TRANSFORMATION_TYPE_SHADOWS, "PIXEL_TRANSFORMATION_TYPE_SHADOWS", "shadows"}, {PIXEL_TRANSFORMATION_TYPE_HIGHLIGHTS, "PIXEL_TRANSFORMATION_TYPE_HIGHLIGHTS", "highlights"}, {PIXEL_TRANSFORMATION_TYPE_TEMPERATURE, "PIXEL_TRANSFORMATION_TYPE_TEMPERATURE", "temperature"}, {PIXEL_TRANSFORMATION_TYPE_TINT, "PIXEL_TRANSFORMATION_TYPE_TINT", "tint"}, {PIXEL_TRANSFORMATION_TYPE_SATURATION, "PIXEL_TRANSFORMATION_TYPE_SATURATION", "saturation"}, {PIXEL_TRANSFORMATION_TYPE_EXPOSURE, "PIXEL_TRANSFORMATION_TYPE_EXPOSURE", "exposure"}, {0, NULL, NULL}};
+		static const GEnumValue values[] = {{PIXEL_TRANSFORMATION_TYPE_TONE_EXPANSION, "PIXEL_TRANSFORMATION_TYPE_TONE_EXPANSION", "tone-expansion"}, {PIXEL_TRANSFORMATION_TYPE_SHADOWS, "PIXEL_TRANSFORMATION_TYPE_SHADOWS", "shadows"}, {PIXEL_TRANSFORMATION_TYPE_HIGHLIGHTS, "PIXEL_TRANSFORMATION_TYPE_HIGHLIGHTS", "highlights"}, {PIXEL_TRANSFORMATION_TYPE_TEMPERATURE, "PIXEL_TRANSFORMATION_TYPE_TEMPERATURE", "temperature"}, {PIXEL_TRANSFORMATION_TYPE_TINT, "PIXEL_TRANSFORMATION_TYPE_TINT", "tint"}, {PIXEL_TRANSFORMATION_TYPE_SATURATION, "PIXEL_TRANSFORMATION_TYPE_SATURATION", "saturation"}, {PIXEL_TRANSFORMATION_TYPE_EXPOSURE, "PIXEL_TRANSFORMATION_TYPE_EXPOSURE", "exposure"}, {PIXEL_TRANSFORMATION_TYPE_CONTRAST, "PIXEL_TRANSFORMATION_TYPE_CONTRAST", "contrast"}, {0, NULL, NULL}};
 		GType pixel_transformation_type_type_id;
 		pixel_transformation_type_type_id = g_enum_register_static ("PixelTransformationType", values);
 		g_once_init_leave (&pixel_transformation_type_type_id__volatile, pixel_transformation_type_type_id);
@@ -1856,25 +1894,25 @@ GType pixel_transformation_type_get_type (void) {
 
 PixelTransformationBundle* pixel_transformation_bundle_construct (GType object_type) {
 	PixelTransformationBundle* self = NULL;
-#line 239 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 240 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (PixelTransformationBundle*) g_type_create_instance (object_type);
-#line 239 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 240 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 1863 "ColorTransformation.c"
+#line 1901 "ColorTransformation.c"
 }
 
 
 PixelTransformationBundle* pixel_transformation_bundle_new (void) {
-#line 239 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 240 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return pixel_transformation_bundle_construct (TYPE_PIXEL_TRANSFORMATION_BUNDLE);
-#line 1870 "ColorTransformation.c"
+#line 1908 "ColorTransformation.c"
 }
 
 
 static gpointer _pixel_transformation_bundle_ref0 (gpointer self) {
-#line 243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self ? pixel_transformation_bundle_ref (self) : NULL;
-#line 1877 "ColorTransformation.c"
+#line 1915 "ColorTransformation.c"
 }
 
 
@@ -1882,45 +1920,45 @@ PixelTransformationBundle* pixel_transformation_bundle_get_copied_color_adjustme
 	PixelTransformationBundle* result = NULL;
 	PixelTransformationBundle* _tmp0_ = NULL;
 	PixelTransformationBundle* _tmp1_ = NULL;
-#line 243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = pixel_transformation_bundle_copied_color_adjustments;
-#line 243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = _pixel_transformation_bundle_ref0 (_tmp0_);
-#line 243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp1_;
-#line 243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 1893 "ColorTransformation.c"
+#line 1931 "ColorTransformation.c"
 }
 
 
 void pixel_transformation_bundle_set_copied_color_adjustments (PixelTransformationBundle* adjustments) {
 	PixelTransformationBundle* _tmp0_ = NULL;
 	PixelTransformationBundle* _tmp1_ = NULL;
-#line 246 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 247 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (adjustments));
-#line 247 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 248 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = adjustments;
-#line 247 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 248 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = _pixel_transformation_bundle_ref0 (_tmp0_);
-#line 247 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 248 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_bundle_unref0 (pixel_transformation_bundle_copied_color_adjustments);
-#line 247 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 248 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_copied_color_adjustments = _tmp1_;
-#line 1910 "ColorTransformation.c"
+#line 1948 "ColorTransformation.c"
 }
 
 
 gboolean pixel_transformation_bundle_has_copied_color_adjustments (void) {
 	gboolean result = FALSE;
 	PixelTransformationBundle* _tmp0_ = NULL;
-#line 251 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 252 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = pixel_transformation_bundle_copied_color_adjustments;
-#line 251 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 252 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_ != NULL;
-#line 251 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 252 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 1923 "ColorTransformation.c"
+#line 1961 "ColorTransformation.c"
 }
 
 
@@ -1929,21 +1967,21 @@ void pixel_transformation_bundle_set (PixelTransformationBundle* self, PixelTran
 	PixelTransformation* _tmp1_ = NULL;
 	PixelTransformationType _tmp2_ = 0;
 	PixelTransformation* _tmp3_ = NULL;
-#line 254 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (self));
-#line 254 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (transformation));
-#line 255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 256 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->map;
-#line 255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 256 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = transformation;
-#line 255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 256 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = pixel_transformation_get_transformation_type (_tmp1_);
-#line 255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 256 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = transformation;
-#line 255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 256 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) ((gint) _tmp2_)), _tmp3_);
-#line 1946 "ColorTransformation.c"
+#line 1984 "ColorTransformation.c"
 }
 
 
@@ -1962,65 +2000,75 @@ void pixel_transformation_bundle_set_to_identity (PixelTransformationBundle* sel
 	SaturationTransformation* _tmp11_ = NULL;
 	ExposureTransformation* _tmp12_ = NULL;
 	ExposureTransformation* _tmp13_ = NULL;
-#line 258 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	ContrastTransformation* _tmp14_ = NULL;
+	ContrastTransformation* _tmp15_ = NULL;
+#line 259 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (self));
-#line 259 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 260 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = expansion_transformation_new_from_extrema (0, 255);
-#line 259 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 260 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = _tmp0_;
-#line 259 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 260 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 259 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 260 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp1_);
-#line 260 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 261 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = shadow_detail_transformation_new (0.0f);
-#line 260 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 261 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = _tmp2_;
-#line 260 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 261 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 260 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 261 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp3_);
-#line 261 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = highlight_detail_transformation_new (0.0f);
-#line 261 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = _tmp4_;
-#line 261 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 261 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp5_);
-#line 262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = temperature_transformation_new (0.0f);
-#line 262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = _tmp6_;
-#line 262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp7_);
-#line 263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 264 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = tint_transformation_new (0.0f);
-#line 263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 264 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = _tmp8_;
-#line 263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 264 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 264 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp9_);
-#line 264 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 265 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = saturation_transformation_new (0.0f);
-#line 264 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 265 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp11_ = _tmp10_;
-#line 264 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 265 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 264 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 265 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp11_);
-#line 265 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 266 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp12_ = exposure_transformation_new (0.0f);
-#line 265 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 266 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp13_ = _tmp12_;
-#line 265 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 266 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 265 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 266 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp13_);
-#line 2023 "ColorTransformation.c"
+#line 267 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp14_ = contrast_transformation_new (0.0f);
+#line 267 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp15_ = _tmp14_;
+#line 267 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
+#line 267 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_pixel_transformation_unref0 (_tmp15_);
+#line 2071 "ColorTransformation.c"
 }
 
 
@@ -2053,123 +2101,139 @@ void pixel_transformation_bundle_load (PixelTransformationBundle* self, KeyValue
 	gfloat _tmp29_ = 0.0F;
 	ExposureTransformation* _tmp30_ = NULL;
 	ExposureTransformation* _tmp31_ = NULL;
-#line 268 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	KeyValueMap* _tmp32_ = NULL;
+	gfloat _tmp33_ = 0.0F;
+	ContrastTransformation* _tmp34_ = NULL;
+	ContrastTransformation* _tmp35_ = NULL;
+#line 270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (self));
-#line 268 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_KEY_VALUE_MAP (store));
-#line 269 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 271 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = store;
-#line 269 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 271 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = key_value_map_get_string (_tmp0_, "expansion", "-");
-#line 269 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 271 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	expansion_params_encoded = _tmp1_;
-#line 270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 272 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = expansion_params_encoded;
-#line 270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 272 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (g_strcmp0 (_tmp2_, "-") == 0) {
-#line 2070 "ColorTransformation.c"
+#line 2122 "ColorTransformation.c"
 		ExpansionTransformation* _tmp3_ = NULL;
 		ExpansionTransformation* _tmp4_ = NULL;
-#line 271 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 273 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = expansion_transformation_new_from_extrema (0, 255);
-#line 271 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 273 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4_ = _tmp3_;
-#line 271 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 273 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 271 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 273 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_pixel_transformation_unref0 (_tmp4_);
-#line 2081 "ColorTransformation.c"
+#line 2133 "ColorTransformation.c"
 	} else {
 		const gchar* _tmp5_ = NULL;
 		ExpansionTransformation* _tmp6_ = NULL;
 		ExpansionTransformation* _tmp7_ = NULL;
-#line 273 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_ = expansion_params_encoded;
-#line 273 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp6_ = expansion_transformation_new_from_string (_tmp5_);
-#line 273 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp7_ = _tmp6_;
-#line 273 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 273 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_pixel_transformation_unref0 (_tmp7_);
-#line 2096 "ColorTransformation.c"
+#line 2148 "ColorTransformation.c"
 	}
-#line 275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = store;
-#line 275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = key_value_map_get_float (_tmp8_, "shadows", 0.0f);
-#line 275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = shadow_detail_transformation_new (_tmp9_);
-#line 275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp11_ = _tmp10_;
-#line 275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp11_);
-#line 276 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp12_ = store;
-#line 276 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp13_ = key_value_map_get_float (_tmp12_, "highlights", 0.0f);
-#line 276 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp14_ = highlight_detail_transformation_new (_tmp13_);
-#line 276 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp15_ = _tmp14_;
-#line 276 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 276 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp15_);
-#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp16_ = store;
-#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp17_ = key_value_map_get_float (_tmp16_, "temperature", 0.0f);
-#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp18_ = temperature_transformation_new (_tmp17_);
-#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp19_ = _tmp18_;
-#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp19_);
-#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp20_ = store;
-#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp21_ = key_value_map_get_float (_tmp20_, "tint", 0.0f);
-#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp22_ = tint_transformation_new (_tmp21_);
-#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp23_ = _tmp22_;
-#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp23_);
-#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp24_ = store;
-#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp25_ = key_value_map_get_float (_tmp24_, "saturation", 0.0f);
-#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp26_ = saturation_transformation_new (_tmp25_);
-#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp27_ = _tmp26_;
-#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 279 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp27_);
-#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 282 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp28_ = store;
-#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 282 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp29_ = key_value_map_get_float (_tmp28_, "exposure", 0.0f);
-#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 282 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp30_ = exposure_transformation_new (_tmp29_);
-#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 282 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp31_ = _tmp30_;
-#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 282 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 282 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp31_);
-#line 268 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 283 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp32_ = store;
+#line 283 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp33_ = key_value_map_get_float (_tmp32_, "contrast", 0.0f);
+#line 283 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp34_ = contrast_transformation_new (_tmp33_);
+#line 283 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp35_ = _tmp34_;
+#line 283 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	pixel_transformation_bundle_set (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
+#line 283 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_pixel_transformation_unref0 (_tmp35_);
+#line 270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_g_free0 (expansion_params_encoded);
-#line 2172 "ColorTransformation.c"
+#line 2236 "ColorTransformation.c"
 }
 
 
@@ -2200,109 +2264,124 @@ KeyValueMap* pixel_transformation_bundle_save (PixelTransformationBundle* self, 
 	ExposureTransformation* new_exposure_trans = NULL;
 	PixelTransformation* _tmp15_ = NULL;
 	gfloat _tmp16_ = 0.0F;
-#line 283 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	ContrastTransformation* new_contrast_trans = NULL;
+	PixelTransformation* _tmp17_ = NULL;
+	gfloat _tmp18_ = 0.0F;
+#line 286 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (self), NULL);
-#line 283 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 286 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (group != NULL, NULL);
-#line 284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = group;
-#line 284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = key_value_map_new (_tmp0_);
-#line 284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	store = _tmp1_;
-#line 286 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 289 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = pixel_transformation_bundle_get_transformation (self, PIXEL_TRANSFORMATION_TYPE_TONE_EXPANSION);
-#line 286 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 289 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	new_expansion_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_EXPANSION_TRANSFORMATION, ExpansionTransformation);
-#line 288 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 291 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (new_expansion_trans != NULL, "new_expansion_trans != null");
-#line 289 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 292 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = pixel_transformation_to_string (G_TYPE_CHECK_INSTANCE_CAST (new_expansion_trans, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 289 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 292 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = _tmp3_;
-#line 289 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 292 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	key_value_map_set_string (store, "expansion", _tmp4_);
-#line 289 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 292 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_g_free0 (_tmp4_);
-#line 291 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 294 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = pixel_transformation_bundle_get_transformation (self, PIXEL_TRANSFORMATION_TYPE_SHADOWS);
-#line 291 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 294 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	new_shadows_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_SHADOW_DETAIL_TRANSFORMATION, ShadowDetailTransformation);
-#line 293 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 296 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (new_shadows_trans != NULL, "new_shadows_trans != null");
-#line 294 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 297 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = shadow_detail_transformation_get_parameter (new_shadows_trans);
-#line 294 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 297 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	key_value_map_set_float (store, "shadows", _tmp6_);
-#line 296 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 299 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = pixel_transformation_bundle_get_transformation (self, PIXEL_TRANSFORMATION_TYPE_HIGHLIGHTS);
-#line 296 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 299 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	new_highlight_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_HIGHLIGHT_DETAIL_TRANSFORMATION, HighlightDetailTransformation);
-#line 298 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 301 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (new_highlight_trans != NULL, "new_highlight_trans != null");
-#line 299 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 302 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = highlight_detail_transformation_get_parameter (new_highlight_trans);
-#line 299 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 302 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	key_value_map_set_float (store, "highlights", _tmp8_);
-#line 301 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 304 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = pixel_transformation_bundle_get_transformation (self, PIXEL_TRANSFORMATION_TYPE_TEMPERATURE);
-#line 301 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 304 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	new_temp_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_TEMPERATURE_TRANSFORMATION, TemperatureTransformation);
-#line 303 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (new_temp_trans != NULL, "new_temp_trans != null");
-#line 304 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 307 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = temperature_transformation_get_parameter (new_temp_trans);
-#line 304 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 307 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	key_value_map_set_float (store, "temperature", _tmp10_);
-#line 306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 309 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp11_ = pixel_transformation_bundle_get_transformation (self, PIXEL_TRANSFORMATION_TYPE_TINT);
-#line 306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 309 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	new_tint_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_TINT_TRANSFORMATION, TintTransformation);
-#line 308 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 311 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (new_tint_trans != NULL, "new_tint_trans != null");
-#line 309 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 312 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp12_ = tint_transformation_get_parameter (new_tint_trans);
-#line 309 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 312 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	key_value_map_set_float (store, "tint", _tmp12_);
-#line 311 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 314 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp13_ = pixel_transformation_bundle_get_transformation (self, PIXEL_TRANSFORMATION_TYPE_SATURATION);
-#line 311 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 314 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	new_sat_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, TYPE_SATURATION_TRANSFORMATION, SaturationTransformation);
-#line 313 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 316 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (new_sat_trans != NULL, "new_sat_trans != null");
-#line 314 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 317 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp14_ = saturation_transformation_get_parameter (new_sat_trans);
-#line 314 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 317 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	key_value_map_set_float (store, "saturation", _tmp14_);
-#line 316 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 319 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp15_ = pixel_transformation_bundle_get_transformation (self, PIXEL_TRANSFORMATION_TYPE_EXPOSURE);
-#line 316 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 319 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	new_exposure_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, TYPE_EXPOSURE_TRANSFORMATION, ExposureTransformation);
-#line 318 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (new_exposure_trans != NULL, "new_exposure_trans != null");
-#line 319 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 322 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp16_ = exposure_transformation_get_parameter (new_exposure_trans);
-#line 319 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 322 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	key_value_map_set_float (store, "exposure", _tmp16_);
-#line 321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 324 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp17_ = pixel_transformation_bundle_get_transformation (self, PIXEL_TRANSFORMATION_TYPE_CONTRAST);
+#line 324 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	new_contrast_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, TYPE_CONTRAST_TRANSFORMATION, ContrastTransformation);
+#line 326 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_vala_assert (new_contrast_trans != NULL, "new_contrast_trans != null");
+#line 327 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp18_ = contrast_transformation_get_parameter (new_contrast_trans);
+#line 327 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	key_value_map_set_float (store, "contrast", _tmp18_);
+#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = store;
-#line 321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_pixel_transformation_unref0 (new_contrast_trans);
+#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (new_exposure_trans);
-#line 321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (new_sat_trans);
-#line 321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (new_tint_trans);
-#line 321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (new_temp_trans);
-#line 321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (new_highlight_trans);
-#line 321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (new_shadows_trans);
-#line 321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (new_expansion_trans);
-#line 321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 2305 "ColorTransformation.c"
+#line 2384 "ColorTransformation.c"
 }
 
 
@@ -2311,19 +2390,19 @@ gint pixel_transformation_bundle_get_count (PixelTransformationBundle* self) {
 	GeeHashMap* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
 	gint _tmp2_ = 0;
-#line 324 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 332 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (self), 0);
-#line 325 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->map;
-#line 325 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = gee_abstract_map_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_MAP, GeeMap));
-#line 325 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = _tmp1_;
-#line 325 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp2_;
-#line 325 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 2326 "ColorTransformation.c"
+#line 2405 "ColorTransformation.c"
 }
 
 
@@ -2332,19 +2411,19 @@ PixelTransformation* pixel_transformation_bundle_get_transformation (PixelTransf
 	GeeHashMap* _tmp0_ = NULL;
 	PixelTransformationType _tmp1_ = 0;
 	gpointer _tmp2_ = NULL;
-#line 328 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 336 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (self), NULL);
-#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->map;
-#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = type;
-#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) ((gint) _tmp1_)));
-#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = (PixelTransformation*) _tmp2_;
-#line 329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 2347 "ColorTransformation.c"
+#line 2426 "ColorTransformation.c"
 }
 
 
@@ -2353,48 +2432,48 @@ GeeIterable* pixel_transformation_bundle_get_transformations (PixelTransformatio
 	GeeHashMap* _tmp0_ = NULL;
 	GeeCollection* _tmp1_ = NULL;
 	GeeCollection* _tmp2_ = NULL;
-#line 332 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 340 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (self), NULL);
-#line 333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 341 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->map;
-#line 333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 341 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = gee_abstract_map_get_values (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_MAP, GeeMap));
-#line 333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 341 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = _tmp1_;
-#line 333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 341 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GEE_TYPE_ITERABLE, GeeIterable);
-#line 333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 341 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 2368 "ColorTransformation.c"
+#line 2447 "ColorTransformation.c"
 }
 
 
 gboolean pixel_transformation_bundle_is_identity (PixelTransformationBundle* self) {
 	gboolean result = FALSE;
-#line 336 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 344 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (self), FALSE);
-#line 2376 "ColorTransformation.c"
+#line 2455 "ColorTransformation.c"
 	{
 		GeeIterator* _adjustment_it = NULL;
 		GeeIterable* _tmp0_ = NULL;
 		GeeIterable* _tmp1_ = NULL;
 		GeeIterator* _tmp2_ = NULL;
 		GeeIterator* _tmp3_ = NULL;
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp0_ = pixel_transformation_bundle_get_transformations (self);
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = _tmp0_;
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp2_ = gee_iterable_iterator (_tmp1_);
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = _tmp2_;
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_g_object_unref0 (_tmp1_);
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_adjustment_it = _tmp3_;
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		while (TRUE) {
-#line 2397 "ColorTransformation.c"
+#line 2476 "ColorTransformation.c"
 			GeeIterator* _tmp4_ = NULL;
 			gboolean _tmp5_ = FALSE;
 			PixelTransformation* adjustment = NULL;
@@ -2402,51 +2481,51 @@ gboolean pixel_transformation_bundle_is_identity (PixelTransformationBundle* sel
 			gpointer _tmp7_ = NULL;
 			PixelTransformation* _tmp8_ = NULL;
 			gboolean _tmp9_ = FALSE;
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp4_ = _adjustment_it;
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp5_ = gee_iterator_next (_tmp4_);
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!_tmp5_) {
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 2413 "ColorTransformation.c"
+#line 2492 "ColorTransformation.c"
 			}
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp6_ = _adjustment_it;
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp7_ = gee_iterator_get (_tmp6_);
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			adjustment = (PixelTransformation*) _tmp7_;
-#line 338 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 346 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp8_ = adjustment;
-#line 338 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 346 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp9_ = pixel_transformation_is_identity (_tmp8_);
-#line 338 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 346 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!_tmp9_) {
-#line 339 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				result = FALSE;
-#line 339 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_pixel_transformation_unref0 (adjustment);
-#line 339 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_g_object_unref0 (_adjustment_it);
-#line 339 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				return result;
-#line 2435 "ColorTransformation.c"
+#line 2514 "ColorTransformation.c"
 			}
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_pixel_transformation_unref0 (adjustment);
-#line 2439 "ColorTransformation.c"
+#line 2518 "ColorTransformation.c"
 		}
-#line 337 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_g_object_unref0 (_adjustment_it);
-#line 2443 "ColorTransformation.c"
+#line 2522 "ColorTransformation.c"
 	}
-#line 342 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 350 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = TRUE;
-#line 342 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 350 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 2449 "ColorTransformation.c"
+#line 2528 "ColorTransformation.c"
 }
 
 
@@ -2454,34 +2533,34 @@ PixelTransformer* pixel_transformation_bundle_generate_transformer (PixelTransfo
 	PixelTransformer* result = NULL;
 	PixelTransformer* transformer = NULL;
 	PixelTransformer* _tmp0_ = NULL;
-#line 345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 353 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (self), NULL);
-#line 346 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 354 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = pixel_transformer_new ();
-#line 346 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 354 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	transformer = _tmp0_;
-#line 2463 "ColorTransformation.c"
+#line 2542 "ColorTransformation.c"
 	{
 		GeeIterator* _transformation_it = NULL;
 		GeeIterable* _tmp1_ = NULL;
 		GeeIterable* _tmp2_ = NULL;
 		GeeIterator* _tmp3_ = NULL;
 		GeeIterator* _tmp4_ = NULL;
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = pixel_transformation_bundle_get_transformations (self);
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp2_ = _tmp1_;
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = gee_iterable_iterator (_tmp2_);
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4_ = _tmp3_;
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_g_object_unref0 (_tmp2_);
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_transformation_it = _tmp4_;
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		while (TRUE) {
-#line 2484 "ColorTransformation.c"
+#line 2563 "ColorTransformation.c"
 			GeeIterator* _tmp5_ = NULL;
 			gboolean _tmp6_ = FALSE;
 			PixelTransformation* transformation = NULL;
@@ -2489,41 +2568,41 @@ PixelTransformer* pixel_transformation_bundle_generate_transformer (PixelTransfo
 			gpointer _tmp8_ = NULL;
 			PixelTransformer* _tmp9_ = NULL;
 			PixelTransformation* _tmp10_ = NULL;
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp5_ = _transformation_it;
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp6_ = gee_iterator_next (_tmp5_);
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!_tmp6_) {
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 2500 "ColorTransformation.c"
+#line 2579 "ColorTransformation.c"
 			}
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp7_ = _transformation_it;
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp8_ = gee_iterator_get (_tmp7_);
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			transformation = (PixelTransformation*) _tmp8_;
-#line 348 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 356 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp9_ = transformer;
-#line 348 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 356 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp10_ = transformation;
-#line 348 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 356 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			pixel_transformer_attach_transformation (_tmp9_, _tmp10_);
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_pixel_transformation_unref0 (transformation);
-#line 2516 "ColorTransformation.c"
+#line 2595 "ColorTransformation.c"
 		}
-#line 347 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_g_object_unref0 (_transformation_it);
-#line 2520 "ColorTransformation.c"
+#line 2599 "ColorTransformation.c"
 	}
-#line 350 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = transformer;
-#line 350 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 2526 "ColorTransformation.c"
+#line 2605 "ColorTransformation.c"
 }
 
 
@@ -2531,34 +2610,34 @@ PixelTransformationBundle* pixel_transformation_bundle_copy (PixelTransformation
 	PixelTransformationBundle* result = NULL;
 	PixelTransformationBundle* bundle = NULL;
 	PixelTransformationBundle* _tmp0_ = NULL;
-#line 353 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 361 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (self), NULL);
-#line 354 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = pixel_transformation_bundle_new ();
-#line 354 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	bundle = _tmp0_;
-#line 2540 "ColorTransformation.c"
+#line 2619 "ColorTransformation.c"
 	{
 		GeeIterator* _transformation_it = NULL;
 		GeeIterable* _tmp1_ = NULL;
 		GeeIterable* _tmp2_ = NULL;
 		GeeIterator* _tmp3_ = NULL;
 		GeeIterator* _tmp4_ = NULL;
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = pixel_transformation_bundle_get_transformations (self);
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp2_ = _tmp1_;
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = gee_iterable_iterator (_tmp2_);
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4_ = _tmp3_;
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_g_object_unref0 (_tmp2_);
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_transformation_it = _tmp4_;
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		while (TRUE) {
-#line 2561 "ColorTransformation.c"
+#line 2640 "ColorTransformation.c"
 			GeeIterator* _tmp5_ = NULL;
 			gboolean _tmp6_ = FALSE;
 			PixelTransformation* transformation = NULL;
@@ -2566,232 +2645,232 @@ PixelTransformationBundle* pixel_transformation_bundle_copy (PixelTransformation
 			gpointer _tmp8_ = NULL;
 			PixelTransformationBundle* _tmp9_ = NULL;
 			PixelTransformation* _tmp10_ = NULL;
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp5_ = _transformation_it;
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp6_ = gee_iterator_next (_tmp5_);
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!_tmp6_) {
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 2577 "ColorTransformation.c"
+#line 2656 "ColorTransformation.c"
 			}
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp7_ = _transformation_it;
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp8_ = gee_iterator_get (_tmp7_);
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			transformation = (PixelTransformation*) _tmp8_;
-#line 356 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 364 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp9_ = bundle;
-#line 356 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 364 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp10_ = transformation;
-#line 356 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 364 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			pixel_transformation_bundle_set (_tmp9_, _tmp10_);
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_pixel_transformation_unref0 (transformation);
-#line 2593 "ColorTransformation.c"
+#line 2672 "ColorTransformation.c"
 		}
-#line 355 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_g_object_unref0 (_transformation_it);
-#line 2597 "ColorTransformation.c"
+#line 2676 "ColorTransformation.c"
 	}
-#line 358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 366 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = bundle;
-#line 358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 366 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 2603 "ColorTransformation.c"
+#line 2682 "ColorTransformation.c"
 }
 
 
 static void value_pixel_transformation_bundle_init (GValue* value) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	value->data[0].v_pointer = NULL;
-#line 2610 "ColorTransformation.c"
+#line 2689 "ColorTransformation.c"
 }
 
 
 static void value_pixel_transformation_bundle_free_value (GValue* value) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (value->data[0].v_pointer) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_bundle_unref (value->data[0].v_pointer);
-#line 2619 "ColorTransformation.c"
+#line 2698 "ColorTransformation.c"
 	}
 }
 
 
 static void value_pixel_transformation_bundle_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (src_value->data[0].v_pointer) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = pixel_transformation_bundle_ref (src_value->data[0].v_pointer);
-#line 2629 "ColorTransformation.c"
+#line 2708 "ColorTransformation.c"
 	} else {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 2633 "ColorTransformation.c"
+#line 2712 "ColorTransformation.c"
 	}
 }
 
 
 static gpointer value_pixel_transformation_bundle_peek_pointer (const GValue* value) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 2641 "ColorTransformation.c"
+#line 2720 "ColorTransformation.c"
 }
 
 
 static gchar* value_pixel_transformation_bundle_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (collect_values[0].v_pointer) {
-#line 2648 "ColorTransformation.c"
+#line 2727 "ColorTransformation.c"
 		PixelTransformationBundle* object;
 		object = collect_values[0].v_pointer;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2655 "ColorTransformation.c"
+#line 2734 "ColorTransformation.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2659 "ColorTransformation.c"
+#line 2738 "ColorTransformation.c"
 		}
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = pixel_transformation_bundle_ref (object);
-#line 2663 "ColorTransformation.c"
+#line 2742 "ColorTransformation.c"
 	} else {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 2667 "ColorTransformation.c"
+#line 2746 "ColorTransformation.c"
 	}
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 2671 "ColorTransformation.c"
+#line 2750 "ColorTransformation.c"
 }
 
 
 static gchar* value_pixel_transformation_bundle_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PixelTransformationBundle** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!object_p) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 2682 "ColorTransformation.c"
+#line 2761 "ColorTransformation.c"
 	}
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!value->data[0].v_pointer) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = NULL;
-#line 2688 "ColorTransformation.c"
+#line 2767 "ColorTransformation.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = value->data[0].v_pointer;
-#line 2692 "ColorTransformation.c"
+#line 2771 "ColorTransformation.c"
 	} else {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = pixel_transformation_bundle_ref (value->data[0].v_pointer);
-#line 2696 "ColorTransformation.c"
+#line 2775 "ColorTransformation.c"
 	}
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 2700 "ColorTransformation.c"
+#line 2779 "ColorTransformation.c"
 }
 
 
 GParamSpec* param_spec_pixel_transformation_bundle (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecPixelTransformationBundle* spec;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_PIXEL_TRANSFORMATION_BUNDLE), NULL);
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return G_PARAM_SPEC (spec);
-#line 2714 "ColorTransformation.c"
+#line 2793 "ColorTransformation.c"
 }
 
 
 gpointer value_get_pixel_transformation_bundle (const GValue* value) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PIXEL_TRANSFORMATION_BUNDLE), NULL);
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 2723 "ColorTransformation.c"
+#line 2802 "ColorTransformation.c"
 }
 
 
 void value_set_pixel_transformation_bundle (GValue* value, gpointer v_object) {
 	PixelTransformationBundle* old;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PIXEL_TRANSFORMATION_BUNDLE));
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PIXEL_TRANSFORMATION_BUNDLE));
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_bundle_ref (value->data[0].v_pointer);
-#line 2743 "ColorTransformation.c"
+#line 2822 "ColorTransformation.c"
 	} else {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 2747 "ColorTransformation.c"
+#line 2826 "ColorTransformation.c"
 	}
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_bundle_unref (old);
-#line 2753 "ColorTransformation.c"
+#line 2832 "ColorTransformation.c"
 	}
 }
 
 
 void value_take_pixel_transformation_bundle (GValue* value, gpointer v_object) {
 	PixelTransformationBundle* old;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PIXEL_TRANSFORMATION_BUNDLE));
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PIXEL_TRANSFORMATION_BUNDLE));
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 2772 "ColorTransformation.c"
+#line 2851 "ColorTransformation.c"
 	} else {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 2776 "ColorTransformation.c"
+#line 2855 "ColorTransformation.c"
 	}
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_bundle_unref (old);
-#line 2782 "ColorTransformation.c"
+#line 2861 "ColorTransformation.c"
 	}
 }
 
 
 static void pixel_transformation_bundle_class_init (PixelTransformationBundleClass * klass) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_parent_class = g_type_class_peek_parent (klass);
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationBundleClass *) klass)->finalize = pixel_transformation_bundle_finalize;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (PixelTransformationBundlePrivate));
-#line 2794 "ColorTransformation.c"
+#line 2873 "ColorTransformation.c"
 }
 
 
@@ -2803,31 +2882,31 @@ static void pixel_transformation_bundle_instance_init (PixelTransformationBundle
 	GDestroyNotify _tmp4_ = NULL;
 	GeeEqualDataFunc _tmp5_ = NULL;
 	GeeHashMap* _tmp6_ = NULL;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = PIXEL_TRANSFORMATION_BUNDLE_GET_PRIVATE (self);
-#line 236 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 237 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = gee_functions_get_hash_func_for (G_TYPE_INT, &_tmp0_, &_tmp1_);
-#line 236 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 237 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = gee_functions_get_equal_func_for (G_TYPE_INT, &_tmp3_, &_tmp4_);
-#line 236 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 237 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = gee_hash_map_new (G_TYPE_INT, NULL, NULL, TYPE_PIXEL_TRANSFORMATION, (GBoxedCopyFunc) pixel_transformation_ref, pixel_transformation_unref, _tmp2_, _tmp0_, _tmp1_, _tmp5_, _tmp3_, _tmp4_, NULL, NULL, NULL);
-#line 236 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 237 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->map = _tmp6_;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->ref_count = 1;
-#line 2818 "ColorTransformation.c"
+#line 2897 "ColorTransformation.c"
 }
 
 
 static void pixel_transformation_bundle_finalize (PixelTransformationBundle* obj) {
 	PixelTransformationBundle * self;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PIXEL_TRANSFORMATION_BUNDLE, PixelTransformationBundle);
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_signal_handlers_destroy (self);
-#line 236 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 237 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_g_object_unref0 (self->priv->map);
-#line 2830 "ColorTransformation.c"
+#line 2909 "ColorTransformation.c"
 }
 
 
@@ -2848,24 +2927,24 @@ GType pixel_transformation_bundle_get_type (void) {
 gpointer pixel_transformation_bundle_ref (gpointer instance) {
 	PixelTransformationBundle* self;
 	self = instance;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return instance;
-#line 2855 "ColorTransformation.c"
+#line 2934 "ColorTransformation.c"
 }
 
 
 void pixel_transformation_bundle_unref (gpointer instance) {
 	PixelTransformationBundle* self;
 	self = instance;
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		PIXEL_TRANSFORMATION_BUNDLE_GET_CLASS (self)->finalize (self);
-#line 233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 2868 "ColorTransformation.c"
+#line 2947 "ColorTransformation.c"
 	}
 }
 
@@ -2873,416 +2952,416 @@ void pixel_transformation_bundle_unref (gpointer instance) {
 PixelTransformation* pixel_transformation_construct (GType object_type, PixelTransformationType type) {
 	PixelTransformation* self = NULL;
 	PixelTransformationType _tmp0_ = 0;
-#line 365 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 373 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (PixelTransformation*) g_type_create_instance (object_type);
-#line 366 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 374 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = type;
-#line 366 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 374 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->type = _tmp0_;
-#line 365 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 373 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 2884 "ColorTransformation.c"
+#line 2963 "ColorTransformation.c"
 }
 
 
 PixelTransformationType pixel_transformation_get_transformation_type (PixelTransformation* self) {
 	PixelTransformationType result = 0;
 	PixelTransformationType _tmp0_ = 0;
-#line 369 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 377 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION (self), 0);
-#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 378 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->type;
-#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 378 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 378 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 2899 "ColorTransformation.c"
+#line 2978 "ColorTransformation.c"
 }
 
 
 static PixelFormat pixel_transformation_real_get_preferred_format (PixelTransformation* self) {
-#line 373 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 381 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_critical ("Type `%s' does not implement abstract method `pixel_transformation_get_preferred_format'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 373 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 381 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return 0;
-#line 2908 "ColorTransformation.c"
+#line 2987 "ColorTransformation.c"
 }
 
 
 PixelFormat pixel_transformation_get_preferred_format (PixelTransformation* self) {
-#line 373 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 381 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION (self), 0);
-#line 373 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 381 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return PIXEL_TRANSFORMATION_GET_CLASS (self)->get_preferred_format (self);
-#line 2917 "ColorTransformation.c"
+#line 2996 "ColorTransformation.c"
 }
 
 
 static CompositionMode pixel_transformation_real_get_composition_mode (PixelTransformation* self) {
 	CompositionMode result = 0;
-#line 376 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 384 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = COMPOSITION_MODE_NONE;
-#line 376 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 384 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 2927 "ColorTransformation.c"
+#line 3006 "ColorTransformation.c"
 }
 
 
 CompositionMode pixel_transformation_get_composition_mode (PixelTransformation* self) {
-#line 375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 383 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION (self), 0);
-#line 375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 383 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return PIXEL_TRANSFORMATION_GET_CLASS (self)->get_composition_mode (self);
-#line 2936 "ColorTransformation.c"
+#line 3015 "ColorTransformation.c"
 }
 
 
 static void pixel_transformation_real_compose_with (PixelTransformation* self, PixelTransformation* other) {
-#line 379 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 387 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (other));
-#line 380 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
-	g_error ("ColorTransformation.vala:380: %s", "PixelTransformation: compose_with( ): this type of pixel " "transformation doesn't support composition.");
-#line 2945 "ColorTransformation.c"
+#line 388 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	g_error ("ColorTransformation.vala:388: %s", "PixelTransformation: compose_with( ): this type of pixel " "transformation doesn't support composition.");
+#line 3024 "ColorTransformation.c"
 }
 
 
 void pixel_transformation_compose_with (PixelTransformation* self, PixelTransformation* other) {
-#line 379 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 387 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (self));
-#line 379 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 387 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	PIXEL_TRANSFORMATION_GET_CLASS (self)->compose_with (self, other);
-#line 2954 "ColorTransformation.c"
+#line 3033 "ColorTransformation.c"
 }
 
 
 static gboolean pixel_transformation_real_is_identity (PixelTransformation* self) {
 	gboolean result = FALSE;
-#line 385 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = TRUE;
-#line 385 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 2964 "ColorTransformation.c"
+#line 3043 "ColorTransformation.c"
 }
 
 
 gboolean pixel_transformation_is_identity (PixelTransformation* self) {
-#line 384 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION (self), FALSE);
-#line 384 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return PIXEL_TRANSFORMATION_GET_CLASS (self)->is_identity (self);
-#line 2973 "ColorTransformation.c"
+#line 3052 "ColorTransformation.c"
 }
 
 
 static void pixel_transformation_real_transform_pixel_hsv (PixelTransformation* self, HSVAnalyticPixel* p, HSVAnalyticPixel* result) {
 	HSVAnalyticPixel _tmp0_ = {0};
-#line 388 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (p != NULL);
-#line 389 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 397 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = *p;
-#line 389 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 397 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	*result = _tmp0_;
-#line 389 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 397 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return;
-#line 2987 "ColorTransformation.c"
+#line 3066 "ColorTransformation.c"
 }
 
 
 void pixel_transformation_transform_pixel_hsv (PixelTransformation* self, HSVAnalyticPixel* p, HSVAnalyticPixel* result) {
-#line 388 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (self));
-#line 388 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	PIXEL_TRANSFORMATION_GET_CLASS (self)->transform_pixel_hsv (self, p, result);
-#line 2996 "ColorTransformation.c"
+#line 3075 "ColorTransformation.c"
 }
 
 
 static void pixel_transformation_real_transform_pixel_rgb (PixelTransformation* self, RGBAnalyticPixel* p, RGBAnalyticPixel* result) {
 	RGBAnalyticPixel _tmp0_ = {0};
-#line 392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (p != NULL);
-#line 393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 401 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = *p;
-#line 393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 401 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	*result = _tmp0_;
-#line 393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 401 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return;
-#line 3010 "ColorTransformation.c"
+#line 3089 "ColorTransformation.c"
 }
 
 
 void pixel_transformation_transform_pixel_rgb (PixelTransformation* self, RGBAnalyticPixel* p, RGBAnalyticPixel* result) {
-#line 392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (self));
-#line 392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	PIXEL_TRANSFORMATION_GET_CLASS (self)->transform_pixel_rgb (self, p, result);
-#line 3019 "ColorTransformation.c"
+#line 3098 "ColorTransformation.c"
 }
 
 
 static gchar* pixel_transformation_real_to_string (PixelTransformation* self) {
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 397 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 405 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = g_strdup ("PixelTransformation");
-#line 397 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 405 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 397 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 405 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 3032 "ColorTransformation.c"
+#line 3111 "ColorTransformation.c"
 }
 
 
 gchar* pixel_transformation_to_string (PixelTransformation* self) {
-#line 396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 404 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION (self), NULL);
-#line 396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 404 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return PIXEL_TRANSFORMATION_GET_CLASS (self)->to_string (self);
-#line 3041 "ColorTransformation.c"
+#line 3120 "ColorTransformation.c"
 }
 
 
 static PixelTransformation* pixel_transformation_real_copy (PixelTransformation* self) {
-#line 400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 408 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_critical ("Type `%s' does not implement abstract method `pixel_transformation_copy'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 408 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 3050 "ColorTransformation.c"
+#line 3129 "ColorTransformation.c"
 }
 
 
 PixelTransformation* pixel_transformation_copy (PixelTransformation* self) {
-#line 400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 408 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION (self), NULL);
-#line 400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 408 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return PIXEL_TRANSFORMATION_GET_CLASS (self)->copy (self);
-#line 3059 "ColorTransformation.c"
+#line 3138 "ColorTransformation.c"
 }
 
 
 static void value_pixel_transformation_init (GValue* value) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	value->data[0].v_pointer = NULL;
-#line 3066 "ColorTransformation.c"
+#line 3145 "ColorTransformation.c"
 }
 
 
 static void value_pixel_transformation_free_value (GValue* value) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (value->data[0].v_pointer) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_unref (value->data[0].v_pointer);
-#line 3075 "ColorTransformation.c"
+#line 3154 "ColorTransformation.c"
 	}
 }
 
 
 static void value_pixel_transformation_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (src_value->data[0].v_pointer) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = pixel_transformation_ref (src_value->data[0].v_pointer);
-#line 3085 "ColorTransformation.c"
+#line 3164 "ColorTransformation.c"
 	} else {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 3089 "ColorTransformation.c"
+#line 3168 "ColorTransformation.c"
 	}
 }
 
 
 static gpointer value_pixel_transformation_peek_pointer (const GValue* value) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 3097 "ColorTransformation.c"
+#line 3176 "ColorTransformation.c"
 }
 
 
 static gchar* value_pixel_transformation_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (collect_values[0].v_pointer) {
-#line 3104 "ColorTransformation.c"
+#line 3183 "ColorTransformation.c"
 		PixelTransformation* object;
 		object = collect_values[0].v_pointer;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3111 "ColorTransformation.c"
+#line 3190 "ColorTransformation.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3115 "ColorTransformation.c"
+#line 3194 "ColorTransformation.c"
 		}
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = pixel_transformation_ref (object);
-#line 3119 "ColorTransformation.c"
+#line 3198 "ColorTransformation.c"
 	} else {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 3123 "ColorTransformation.c"
+#line 3202 "ColorTransformation.c"
 	}
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 3127 "ColorTransformation.c"
+#line 3206 "ColorTransformation.c"
 }
 
 
 static gchar* value_pixel_transformation_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PixelTransformation** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!object_p) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 3138 "ColorTransformation.c"
+#line 3217 "ColorTransformation.c"
 	}
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!value->data[0].v_pointer) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = NULL;
-#line 3144 "ColorTransformation.c"
+#line 3223 "ColorTransformation.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = value->data[0].v_pointer;
-#line 3148 "ColorTransformation.c"
+#line 3227 "ColorTransformation.c"
 	} else {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = pixel_transformation_ref (value->data[0].v_pointer);
-#line 3152 "ColorTransformation.c"
+#line 3231 "ColorTransformation.c"
 	}
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 3156 "ColorTransformation.c"
+#line 3235 "ColorTransformation.c"
 }
 
 
 GParamSpec* param_spec_pixel_transformation (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecPixelTransformation* spec;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_PIXEL_TRANSFORMATION), NULL);
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return G_PARAM_SPEC (spec);
-#line 3170 "ColorTransformation.c"
+#line 3249 "ColorTransformation.c"
 }
 
 
 gpointer value_get_pixel_transformation (const GValue* value) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PIXEL_TRANSFORMATION), NULL);
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 3179 "ColorTransformation.c"
+#line 3258 "ColorTransformation.c"
 }
 
 
 void value_set_pixel_transformation (GValue* value, gpointer v_object) {
 	PixelTransformation* old;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PIXEL_TRANSFORMATION));
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PIXEL_TRANSFORMATION));
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_ref (value->data[0].v_pointer);
-#line 3199 "ColorTransformation.c"
+#line 3278 "ColorTransformation.c"
 	} else {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 3203 "ColorTransformation.c"
+#line 3282 "ColorTransformation.c"
 	}
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_unref (old);
-#line 3209 "ColorTransformation.c"
+#line 3288 "ColorTransformation.c"
 	}
 }
 
 
 void value_take_pixel_transformation (GValue* value, gpointer v_object) {
 	PixelTransformation* old;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PIXEL_TRANSFORMATION));
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PIXEL_TRANSFORMATION));
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 3228 "ColorTransformation.c"
+#line 3307 "ColorTransformation.c"
 	} else {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 3232 "ColorTransformation.c"
+#line 3311 "ColorTransformation.c"
 	}
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_unref (old);
-#line 3238 "ColorTransformation.c"
+#line 3317 "ColorTransformation.c"
 	}
 }
 
 
 static void pixel_transformation_class_init (PixelTransformationClass * klass) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_parent_class = g_type_class_peek_parent (klass);
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->finalize = pixel_transformation_finalize;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (PixelTransformationPrivate));
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->get_preferred_format = pixel_transformation_real_get_preferred_format;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->get_composition_mode = pixel_transformation_real_get_composition_mode;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->compose_with = pixel_transformation_real_compose_with;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->is_identity = pixel_transformation_real_is_identity;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->transform_pixel_hsv = pixel_transformation_real_transform_pixel_hsv;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->transform_pixel_rgb = pixel_transformation_real_transform_pixel_rgb;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->to_string = pixel_transformation_real_to_string;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->copy = pixel_transformation_real_copy;
-#line 3266 "ColorTransformation.c"
+#line 3345 "ColorTransformation.c"
 }
 
 
 static void pixel_transformation_instance_init (PixelTransformation * self) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = PIXEL_TRANSFORMATION_GET_PRIVATE (self);
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->ref_count = 1;
-#line 3275 "ColorTransformation.c"
+#line 3354 "ColorTransformation.c"
 }
 
 
 static void pixel_transformation_finalize (PixelTransformation* obj) {
 	PixelTransformation * self;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PIXEL_TRANSFORMATION, PixelTransformation);
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_signal_handlers_destroy (self);
-#line 3285 "ColorTransformation.c"
+#line 3364 "ColorTransformation.c"
 }
 
 
@@ -3303,24 +3382,24 @@ GType pixel_transformation_get_type (void) {
 gpointer pixel_transformation_ref (gpointer instance) {
 	PixelTransformation* self;
 	self = instance;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return instance;
-#line 3310 "ColorTransformation.c"
+#line 3389 "ColorTransformation.c"
 }
 
 
 void pixel_transformation_unref (gpointer instance) {
 	PixelTransformation* self;
 	self = instance;
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		PIXEL_TRANSFORMATION_GET_CLASS (self)->finalize (self);
-#line 362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 3323 "ColorTransformation.c"
+#line 3402 "ColorTransformation.c"
 	}
 }
 
@@ -3329,93 +3408,93 @@ RGBTransformation* rgb_transformation_construct (GType object_type, PixelTransfo
 	RGBTransformation* self = NULL;
 	PixelTransformationType _tmp0_ = 0;
 	gfloat* _tmp1_ = NULL;
-#line 413 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 421 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = type;
-#line 413 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 421 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (RGBTransformation*) pixel_transformation_construct (object_type, _tmp0_);
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = g_new0 (gfloat, 16);
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[0] = 1.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[1] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[2] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[3] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[4] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[5] = 1.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[6] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[7] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[8] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[9] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[10] = 1.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[11] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[12] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[13] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[14] = 0.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[15] = 1.0f;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->matrix_entries = (g_free (self->matrix_entries), NULL);
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->matrix_entries = _tmp1_;
-#line 419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->matrix_entries_length1 = 16;
-#line 412 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 420 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 3378 "ColorTransformation.c"
+#line 3457 "ColorTransformation.c"
 }
 
 
 RGBTransformation* rgb_transformation_new (PixelTransformationType type) {
-#line 412 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 420 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return rgb_transformation_construct (TYPE_RGB_TRANSFORMATION, type);
-#line 3385 "ColorTransformation.c"
+#line 3464 "ColorTransformation.c"
 }
 
 
 static PixelFormat rgb_transformation_real_get_preferred_format (PixelTransformation* base) {
 	RGBTransformation * self;
 	PixelFormat result = 0;
-#line 426 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 434 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_RGB_TRANSFORMATION, RGBTransformation);
-#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 435 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = PIXEL_FORMAT_RGB;
-#line 427 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 435 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 3398 "ColorTransformation.c"
+#line 3477 "ColorTransformation.c"
 }
 
 
 static CompositionMode rgb_transformation_real_get_composition_mode (PixelTransformation* base) {
 	RGBTransformation * self;
 	CompositionMode result = 0;
-#line 430 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 438 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_RGB_TRANSFORMATION, RGBTransformation);
-#line 431 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 439 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = COMPOSITION_MODE_RGB_MATRIX;
-#line 431 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 439 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 3411 "ColorTransformation.c"
+#line 3490 "ColorTransformation.c"
 }
 
 
 static gpointer _pixel_transformation_ref0 (gpointer self) {
-#line 439 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 447 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self ? pixel_transformation_ref (self) : NULL;
-#line 3418 "ColorTransformation.c"
+#line 3497 "ColorTransformation.c"
 }
 
 
@@ -3928,1071 +4007,1071 @@ static void rgb_transformation_real_compose_with (PixelTransformation* base, Pix
 	gfloat _tmp356_ = 0.0F;
 	gboolean _tmp366_ = FALSE;
 	gboolean _tmp367_ = FALSE;
-#line 434 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 442 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_RGB_TRANSFORMATION, RGBTransformation);
-#line 434 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 442 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (other));
-#line 435 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 443 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = other;
-#line 435 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 443 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = pixel_transformation_get_composition_mode (_tmp0_);
-#line 435 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 443 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp1_ != COMPOSITION_MODE_RGB_MATRIX) {
-#line 436 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
-		g_error ("ColorTransformation.vala:436: %s", "RGBTransformation: compose_with( ): 'other' transformation " "does not support RGB_MATRIX composition mode");
-#line 3943 "ColorTransformation.c"
+#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		g_error ("ColorTransformation.vala:444: %s", "RGBTransformation: compose_with( ): 'other' transformation " "does not support RGB_MATRIX composition mode");
+#line 4022 "ColorTransformation.c"
 	}
-#line 439 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 447 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = other;
-#line 439 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 447 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = _pixel_transformation_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_RGB_TRANSFORMATION, RGBTransformation));
-#line 439 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 447 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	transform = _tmp3_;
-#line 441 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 449 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = g_new0 (gfloat, 16);
-#line 441 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 449 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result_matrix_entries = _tmp4_;
-#line 441 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 449 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result_matrix_entries_length1 = 16;
-#line 441 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 449 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_result_matrix_entries_size_ = result_matrix_entries_length1;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = result_matrix_entries;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5__length1 = result_matrix_entries_length1;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = transform;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = _tmp6_->matrix_entries;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7__length1 = _tmp6_->matrix_entries_length1;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = _tmp7_[0];
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = self->matrix_entries;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9__length1 = self->matrix_entries_length1;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = _tmp9_[0];
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp11_ = transform;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp12_ = _tmp11_->matrix_entries;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp12__length1 = _tmp11_->matrix_entries_length1;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp13_ = _tmp12_[1];
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp14_ = self->matrix_entries;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp14__length1 = self->matrix_entries_length1;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp15_ = _tmp14_[4];
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp16_ = transform;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp17_ = _tmp16_->matrix_entries;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp17__length1 = _tmp16_->matrix_entries_length1;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp18_ = _tmp17_[2];
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp19_ = self->matrix_entries;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp19__length1 = self->matrix_entries_length1;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp20_ = _tmp19_[8];
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp21_ = transform;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp22_ = _tmp21_->matrix_entries;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp22__length1 = _tmp21_->matrix_entries_length1;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp23_ = _tmp22_[3];
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp24_ = self->matrix_entries;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp24__length1 = self->matrix_entries_length1;
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp25_ = _tmp24_[12];
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_[0] = (((_tmp8_ * _tmp10_) + (_tmp13_ * _tmp15_)) + (_tmp18_ * _tmp20_)) + (_tmp23_ * _tmp25_);
-#line 444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 452 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp26_ = _tmp5_[0];
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp27_ = result_matrix_entries;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp27__length1 = result_matrix_entries_length1;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp28_ = transform;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp29_ = _tmp28_->matrix_entries;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp29__length1 = _tmp28_->matrix_entries_length1;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp30_ = _tmp29_[0];
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp31_ = self->matrix_entries;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp31__length1 = self->matrix_entries_length1;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp32_ = _tmp31_[1];
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp33_ = transform;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp34_ = _tmp33_->matrix_entries;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp34__length1 = _tmp33_->matrix_entries_length1;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp35_ = _tmp34_[1];
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp36_ = self->matrix_entries;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp36__length1 = self->matrix_entries_length1;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp37_ = _tmp36_[5];
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp38_ = transform;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp39_ = _tmp38_->matrix_entries;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp39__length1 = _tmp38_->matrix_entries_length1;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp40_ = _tmp39_[2];
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp41_ = self->matrix_entries;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp41__length1 = self->matrix_entries_length1;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp42_ = _tmp41_[9];
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp43_ = transform;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp44_ = _tmp43_->matrix_entries;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp44__length1 = _tmp43_->matrix_entries_length1;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp45_ = _tmp44_[3];
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp46_ = self->matrix_entries;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp46__length1 = self->matrix_entries_length1;
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp47_ = _tmp46_[13];
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp27_[1] = (((_tmp30_ * _tmp32_) + (_tmp35_ * _tmp37_)) + (_tmp40_ * _tmp42_)) + (_tmp45_ * _tmp47_);
-#line 450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp48_ = _tmp27_[1];
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp49_ = result_matrix_entries;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp49__length1 = result_matrix_entries_length1;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp50_ = transform;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp51_ = _tmp50_->matrix_entries;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp51__length1 = _tmp50_->matrix_entries_length1;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp52_ = _tmp51_[0];
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp53_ = self->matrix_entries;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp53__length1 = self->matrix_entries_length1;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp54_ = _tmp53_[2];
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp55_ = transform;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp56_ = _tmp55_->matrix_entries;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp56__length1 = _tmp55_->matrix_entries_length1;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp57_ = _tmp56_[1];
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp58_ = self->matrix_entries;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp58__length1 = self->matrix_entries_length1;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp59_ = _tmp58_[6];
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp60_ = transform;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp61_ = _tmp60_->matrix_entries;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp61__length1 = _tmp60_->matrix_entries_length1;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp62_ = _tmp61_[2];
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp63_ = self->matrix_entries;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp63__length1 = self->matrix_entries_length1;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp64_ = _tmp63_[10];
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp65_ = transform;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp66_ = _tmp65_->matrix_entries;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp66__length1 = _tmp65_->matrix_entries_length1;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp67_ = _tmp66_[3];
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp68_ = self->matrix_entries;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp68__length1 = self->matrix_entries_length1;
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp69_ = _tmp68_[14];
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp49_[2] = (((_tmp52_ * _tmp54_) + (_tmp57_ * _tmp59_)) + (_tmp62_ * _tmp64_)) + (_tmp67_ * _tmp69_);
-#line 456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp70_ = _tmp49_[2];
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp71_ = result_matrix_entries;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp71__length1 = result_matrix_entries_length1;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp72_ = transform;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp73_ = _tmp72_->matrix_entries;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp73__length1 = _tmp72_->matrix_entries_length1;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp74_ = _tmp73_[0];
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp75_ = self->matrix_entries;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp75__length1 = self->matrix_entries_length1;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp76_ = _tmp75_[3];
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp77_ = transform;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp78_ = _tmp77_->matrix_entries;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp78__length1 = _tmp77_->matrix_entries_length1;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp79_ = _tmp78_[1];
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp80_ = self->matrix_entries;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp80__length1 = self->matrix_entries_length1;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp81_ = _tmp80_[7];
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp82_ = transform;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp83_ = _tmp82_->matrix_entries;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp83__length1 = _tmp82_->matrix_entries_length1;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp84_ = _tmp83_[2];
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp85_ = self->matrix_entries;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp85__length1 = self->matrix_entries_length1;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp86_ = _tmp85_[11];
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp87_ = transform;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp88_ = _tmp87_->matrix_entries;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp88__length1 = _tmp87_->matrix_entries_length1;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp89_ = _tmp88_[3];
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp90_ = self->matrix_entries;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp90__length1 = self->matrix_entries_length1;
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp91_ = _tmp90_[15];
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp71_[3] = (((_tmp74_ * _tmp76_) + (_tmp79_ * _tmp81_)) + (_tmp84_ * _tmp86_)) + (_tmp89_ * _tmp91_);
-#line 462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp92_ = _tmp71_[3];
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp93_ = result_matrix_entries;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp93__length1 = result_matrix_entries_length1;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp94_ = transform;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp95_ = _tmp94_->matrix_entries;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp95__length1 = _tmp94_->matrix_entries_length1;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp96_ = _tmp95_[4];
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp97_ = self->matrix_entries;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp97__length1 = self->matrix_entries_length1;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp98_ = _tmp97_[0];
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp99_ = transform;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp100_ = _tmp99_->matrix_entries;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp100__length1 = _tmp99_->matrix_entries_length1;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp101_ = _tmp100_[5];
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp102_ = self->matrix_entries;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp102__length1 = self->matrix_entries_length1;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp103_ = _tmp102_[4];
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp104_ = transform;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp105_ = _tmp104_->matrix_entries;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp105__length1 = _tmp104_->matrix_entries_length1;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp106_ = _tmp105_[6];
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp107_ = self->matrix_entries;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp107__length1 = self->matrix_entries_length1;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp108_ = _tmp107_[8];
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp109_ = transform;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp110_ = _tmp109_->matrix_entries;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp110__length1 = _tmp109_->matrix_entries_length1;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp111_ = _tmp110_[7];
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp112_ = self->matrix_entries;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp112__length1 = self->matrix_entries_length1;
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp113_ = _tmp112_[12];
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp93_[4] = (((_tmp96_ * _tmp98_) + (_tmp101_ * _tmp103_)) + (_tmp106_ * _tmp108_)) + (_tmp111_ * _tmp113_);
-#line 469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp114_ = _tmp93_[4];
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp115_ = result_matrix_entries;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp115__length1 = result_matrix_entries_length1;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp116_ = transform;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp117_ = _tmp116_->matrix_entries;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp117__length1 = _tmp116_->matrix_entries_length1;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp118_ = _tmp117_[4];
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp119_ = self->matrix_entries;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp119__length1 = self->matrix_entries_length1;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp120_ = _tmp119_[1];
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp121_ = transform;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp122_ = _tmp121_->matrix_entries;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp122__length1 = _tmp121_->matrix_entries_length1;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp123_ = _tmp122_[5];
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp124_ = self->matrix_entries;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp124__length1 = self->matrix_entries_length1;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp125_ = _tmp124_[5];
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp126_ = transform;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp127_ = _tmp126_->matrix_entries;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp127__length1 = _tmp126_->matrix_entries_length1;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp128_ = _tmp127_[6];
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp129_ = self->matrix_entries;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp129__length1 = self->matrix_entries_length1;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp130_ = _tmp129_[9];
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp131_ = transform;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp132_ = _tmp131_->matrix_entries;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp132__length1 = _tmp131_->matrix_entries_length1;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp133_ = _tmp132_[7];
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp134_ = self->matrix_entries;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp134__length1 = self->matrix_entries_length1;
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp135_ = _tmp134_[13];
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp115_[5] = (((_tmp118_ * _tmp120_) + (_tmp123_ * _tmp125_)) + (_tmp128_ * _tmp130_)) + (_tmp133_ * _tmp135_);
-#line 475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 483 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp136_ = _tmp115_[5];
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp137_ = result_matrix_entries;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp137__length1 = result_matrix_entries_length1;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp138_ = transform;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp139_ = _tmp138_->matrix_entries;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp139__length1 = _tmp138_->matrix_entries_length1;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp140_ = _tmp139_[4];
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp141_ = self->matrix_entries;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp141__length1 = self->matrix_entries_length1;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp142_ = _tmp141_[2];
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp143_ = transform;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp144_ = _tmp143_->matrix_entries;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp144__length1 = _tmp143_->matrix_entries_length1;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp145_ = _tmp144_[5];
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp146_ = self->matrix_entries;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp146__length1 = self->matrix_entries_length1;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp147_ = _tmp146_[6];
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp148_ = transform;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp149_ = _tmp148_->matrix_entries;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp149__length1 = _tmp148_->matrix_entries_length1;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp150_ = _tmp149_[6];
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp151_ = self->matrix_entries;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp151__length1 = self->matrix_entries_length1;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp152_ = _tmp151_[10];
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp153_ = transform;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp154_ = _tmp153_->matrix_entries;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp154__length1 = _tmp153_->matrix_entries_length1;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp155_ = _tmp154_[7];
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp156_ = self->matrix_entries;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp156__length1 = self->matrix_entries_length1;
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp157_ = _tmp156_[14];
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp137_[6] = (((_tmp140_ * _tmp142_) + (_tmp145_ * _tmp147_)) + (_tmp150_ * _tmp152_)) + (_tmp155_ * _tmp157_);
-#line 481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp158_ = _tmp137_[6];
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp159_ = result_matrix_entries;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp159__length1 = result_matrix_entries_length1;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp160_ = transform;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp161_ = _tmp160_->matrix_entries;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp161__length1 = _tmp160_->matrix_entries_length1;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp162_ = _tmp161_[4];
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp163_ = self->matrix_entries;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp163__length1 = self->matrix_entries_length1;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp164_ = _tmp163_[3];
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp165_ = transform;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp166_ = _tmp165_->matrix_entries;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp166__length1 = _tmp165_->matrix_entries_length1;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp167_ = _tmp166_[5];
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp168_ = self->matrix_entries;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp168__length1 = self->matrix_entries_length1;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp169_ = _tmp168_[7];
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp170_ = transform;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp171_ = _tmp170_->matrix_entries;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp171__length1 = _tmp170_->matrix_entries_length1;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp172_ = _tmp171_[6];
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp173_ = self->matrix_entries;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp173__length1 = self->matrix_entries_length1;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp174_ = _tmp173_[11];
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp175_ = transform;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp176_ = _tmp175_->matrix_entries;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp176__length1 = _tmp175_->matrix_entries_length1;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp177_ = _tmp176_[7];
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp178_ = self->matrix_entries;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp178__length1 = self->matrix_entries_length1;
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp179_ = _tmp178_[15];
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp159_[7] = (((_tmp162_ * _tmp164_) + (_tmp167_ * _tmp169_)) + (_tmp172_ * _tmp174_)) + (_tmp177_ * _tmp179_);
-#line 487 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp180_ = _tmp159_[7];
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp181_ = result_matrix_entries;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp181__length1 = result_matrix_entries_length1;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp182_ = transform;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp183_ = _tmp182_->matrix_entries;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp183__length1 = _tmp182_->matrix_entries_length1;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp184_ = _tmp183_[8];
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp185_ = self->matrix_entries;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp185__length1 = self->matrix_entries_length1;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp186_ = _tmp185_[0];
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp187_ = transform;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp188_ = _tmp187_->matrix_entries;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp188__length1 = _tmp187_->matrix_entries_length1;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp189_ = _tmp188_[9];
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp190_ = self->matrix_entries;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp190__length1 = self->matrix_entries_length1;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp191_ = _tmp190_[4];
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp192_ = transform;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp193_ = _tmp192_->matrix_entries;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp193__length1 = _tmp192_->matrix_entries_length1;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp194_ = _tmp193_[10];
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp195_ = self->matrix_entries;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp195__length1 = self->matrix_entries_length1;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp196_ = _tmp195_[8];
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp197_ = transform;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp198_ = _tmp197_->matrix_entries;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp198__length1 = _tmp197_->matrix_entries_length1;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp199_ = _tmp198_[11];
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp200_ = self->matrix_entries;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp200__length1 = self->matrix_entries_length1;
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp201_ = _tmp200_[12];
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp181_[8] = (((_tmp184_ * _tmp186_) + (_tmp189_ * _tmp191_)) + (_tmp194_ * _tmp196_)) + (_tmp199_ * _tmp201_);
-#line 494 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp202_ = _tmp181_[8];
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp203_ = result_matrix_entries;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp203__length1 = result_matrix_entries_length1;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp204_ = transform;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp205_ = _tmp204_->matrix_entries;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp205__length1 = _tmp204_->matrix_entries_length1;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp206_ = _tmp205_[8];
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp207_ = self->matrix_entries;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp207__length1 = self->matrix_entries_length1;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp208_ = _tmp207_[1];
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp209_ = transform;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp210_ = _tmp209_->matrix_entries;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp210__length1 = _tmp209_->matrix_entries_length1;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp211_ = _tmp210_[9];
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp212_ = self->matrix_entries;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp212__length1 = self->matrix_entries_length1;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp213_ = _tmp212_[5];
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp214_ = transform;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp215_ = _tmp214_->matrix_entries;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp215__length1 = _tmp214_->matrix_entries_length1;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp216_ = _tmp215_[10];
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp217_ = self->matrix_entries;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp217__length1 = self->matrix_entries_length1;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp218_ = _tmp217_[9];
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp219_ = transform;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp220_ = _tmp219_->matrix_entries;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp220__length1 = _tmp219_->matrix_entries_length1;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp221_ = _tmp220_[11];
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp222_ = self->matrix_entries;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp222__length1 = self->matrix_entries_length1;
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp223_ = _tmp222_[13];
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp203_[9] = (((_tmp206_ * _tmp208_) + (_tmp211_ * _tmp213_)) + (_tmp216_ * _tmp218_)) + (_tmp221_ * _tmp223_);
-#line 500 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp224_ = _tmp203_[9];
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp225_ = result_matrix_entries;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp225__length1 = result_matrix_entries_length1;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp226_ = transform;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp227_ = _tmp226_->matrix_entries;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp227__length1 = _tmp226_->matrix_entries_length1;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp228_ = _tmp227_[8];
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp229_ = self->matrix_entries;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp229__length1 = self->matrix_entries_length1;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp230_ = _tmp229_[2];
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp231_ = transform;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp232_ = _tmp231_->matrix_entries;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp232__length1 = _tmp231_->matrix_entries_length1;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp233_ = _tmp232_[9];
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp234_ = self->matrix_entries;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp234__length1 = self->matrix_entries_length1;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp235_ = _tmp234_[6];
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp236_ = transform;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp237_ = _tmp236_->matrix_entries;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp237__length1 = _tmp236_->matrix_entries_length1;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp238_ = _tmp237_[10];
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp239_ = self->matrix_entries;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp239__length1 = self->matrix_entries_length1;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp240_ = _tmp239_[10];
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp241_ = transform;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp242_ = _tmp241_->matrix_entries;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp242__length1 = _tmp241_->matrix_entries_length1;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp243_ = _tmp242_[11];
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp244_ = self->matrix_entries;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp244__length1 = self->matrix_entries_length1;
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp245_ = _tmp244_[14];
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp225_[10] = (((_tmp228_ * _tmp230_) + (_tmp233_ * _tmp235_)) + (_tmp238_ * _tmp240_)) + (_tmp243_ * _tmp245_);
-#line 506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp246_ = _tmp225_[10];
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp247_ = result_matrix_entries;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp247__length1 = result_matrix_entries_length1;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp248_ = transform;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp249_ = _tmp248_->matrix_entries;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp249__length1 = _tmp248_->matrix_entries_length1;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp250_ = _tmp249_[8];
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp251_ = self->matrix_entries;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp251__length1 = self->matrix_entries_length1;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp252_ = _tmp251_[3];
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp253_ = transform;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp254_ = _tmp253_->matrix_entries;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp254__length1 = _tmp253_->matrix_entries_length1;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp255_ = _tmp254_[9];
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp256_ = self->matrix_entries;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp256__length1 = self->matrix_entries_length1;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp257_ = _tmp256_[7];
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp258_ = transform;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp259_ = _tmp258_->matrix_entries;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp259__length1 = _tmp258_->matrix_entries_length1;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp260_ = _tmp259_[10];
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp261_ = self->matrix_entries;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp261__length1 = self->matrix_entries_length1;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp262_ = _tmp261_[11];
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp263_ = transform;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp264_ = _tmp263_->matrix_entries;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp264__length1 = _tmp263_->matrix_entries_length1;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp265_ = _tmp264_[11];
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp266_ = self->matrix_entries;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp266__length1 = self->matrix_entries_length1;
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp267_ = _tmp266_[15];
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp247_[11] = (((_tmp250_ * _tmp252_) + (_tmp255_ * _tmp257_)) + (_tmp260_ * _tmp262_)) + (_tmp265_ * _tmp267_);
-#line 512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp268_ = _tmp247_[11];
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp269_ = result_matrix_entries;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp269__length1 = result_matrix_entries_length1;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp270_ = transform;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp271_ = _tmp270_->matrix_entries;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp271__length1 = _tmp270_->matrix_entries_length1;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp272_ = _tmp271_[12];
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp273_ = self->matrix_entries;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp273__length1 = self->matrix_entries_length1;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp274_ = _tmp273_[0];
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp275_ = transform;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp276_ = _tmp275_->matrix_entries;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp276__length1 = _tmp275_->matrix_entries_length1;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp277_ = _tmp276_[13];
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp278_ = self->matrix_entries;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp278__length1 = self->matrix_entries_length1;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp279_ = _tmp278_[4];
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp280_ = transform;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp281_ = _tmp280_->matrix_entries;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp281__length1 = _tmp280_->matrix_entries_length1;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp282_ = _tmp281_[14];
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp283_ = self->matrix_entries;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp283__length1 = self->matrix_entries_length1;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp284_ = _tmp283_[8];
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp285_ = transform;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp286_ = _tmp285_->matrix_entries;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp286__length1 = _tmp285_->matrix_entries_length1;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp287_ = _tmp286_[15];
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp288_ = self->matrix_entries;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp288__length1 = self->matrix_entries_length1;
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp289_ = _tmp288_[12];
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp269_[12] = (((_tmp272_ * _tmp274_) + (_tmp277_ * _tmp279_)) + (_tmp282_ * _tmp284_)) + (_tmp287_ * _tmp289_);
-#line 519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 527 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp290_ = _tmp269_[12];
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp291_ = result_matrix_entries;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp291__length1 = result_matrix_entries_length1;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp292_ = transform;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp293_ = _tmp292_->matrix_entries;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp293__length1 = _tmp292_->matrix_entries_length1;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp294_ = _tmp293_[12];
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp295_ = self->matrix_entries;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp295__length1 = self->matrix_entries_length1;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp296_ = _tmp295_[1];
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp297_ = transform;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp298_ = _tmp297_->matrix_entries;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp298__length1 = _tmp297_->matrix_entries_length1;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp299_ = _tmp298_[13];
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp300_ = self->matrix_entries;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp300__length1 = self->matrix_entries_length1;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp301_ = _tmp300_[5];
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp302_ = transform;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp303_ = _tmp302_->matrix_entries;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp303__length1 = _tmp302_->matrix_entries_length1;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp304_ = _tmp303_[14];
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp305_ = self->matrix_entries;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp305__length1 = self->matrix_entries_length1;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp306_ = _tmp305_[9];
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp307_ = transform;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp308_ = _tmp307_->matrix_entries;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp308__length1 = _tmp307_->matrix_entries_length1;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp309_ = _tmp308_[15];
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp310_ = self->matrix_entries;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp310__length1 = self->matrix_entries_length1;
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp311_ = _tmp310_[13];
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp291_[13] = (((_tmp294_ * _tmp296_) + (_tmp299_ * _tmp301_)) + (_tmp304_ * _tmp306_)) + (_tmp309_ * _tmp311_);
-#line 525 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp312_ = _tmp291_[13];
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp313_ = result_matrix_entries;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp313__length1 = result_matrix_entries_length1;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp314_ = transform;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp315_ = _tmp314_->matrix_entries;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp315__length1 = _tmp314_->matrix_entries_length1;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp316_ = _tmp315_[12];
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp317_ = self->matrix_entries;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp317__length1 = self->matrix_entries_length1;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp318_ = _tmp317_[2];
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp319_ = transform;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp320_ = _tmp319_->matrix_entries;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp320__length1 = _tmp319_->matrix_entries_length1;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp321_ = _tmp320_[13];
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp322_ = self->matrix_entries;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp322__length1 = self->matrix_entries_length1;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp323_ = _tmp322_[6];
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp324_ = transform;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp325_ = _tmp324_->matrix_entries;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp325__length1 = _tmp324_->matrix_entries_length1;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp326_ = _tmp325_[14];
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp327_ = self->matrix_entries;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp327__length1 = self->matrix_entries_length1;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp328_ = _tmp327_[10];
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp329_ = transform;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp330_ = _tmp329_->matrix_entries;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp330__length1 = _tmp329_->matrix_entries_length1;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp331_ = _tmp330_[15];
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp332_ = self->matrix_entries;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp332__length1 = self->matrix_entries_length1;
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp333_ = _tmp332_[14];
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp313_[14] = (((_tmp316_ * _tmp318_) + (_tmp321_ * _tmp323_)) + (_tmp326_ * _tmp328_)) + (_tmp331_ * _tmp333_);
-#line 531 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp334_ = _tmp313_[14];
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp335_ = result_matrix_entries;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp335__length1 = result_matrix_entries_length1;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp336_ = transform;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp337_ = _tmp336_->matrix_entries;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp337__length1 = _tmp336_->matrix_entries_length1;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp338_ = _tmp337_[12];
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp339_ = self->matrix_entries;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp339__length1 = self->matrix_entries_length1;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp340_ = _tmp339_[3];
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp341_ = transform;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp342_ = _tmp341_->matrix_entries;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp342__length1 = _tmp341_->matrix_entries_length1;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp343_ = _tmp342_[13];
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp344_ = self->matrix_entries;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp344__length1 = self->matrix_entries_length1;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp345_ = _tmp344_[7];
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp346_ = transform;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp347_ = _tmp346_->matrix_entries;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp347__length1 = _tmp346_->matrix_entries_length1;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp348_ = _tmp347_[14];
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp349_ = self->matrix_entries;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp349__length1 = self->matrix_entries_length1;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp350_ = _tmp349_[11];
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp351_ = transform;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp352_ = _tmp351_->matrix_entries;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp352__length1 = _tmp351_->matrix_entries_length1;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp353_ = _tmp352_[15];
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp354_ = self->matrix_entries;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp354__length1 = self->matrix_entries_length1;
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp355_ = _tmp354_[15];
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp335_[15] = (((_tmp338_ * _tmp340_) + (_tmp343_ * _tmp345_)) + (_tmp348_ * _tmp350_)) + (_tmp353_ * _tmp355_);
-#line 537 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 545 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp356_ = _tmp335_[15];
-#line 4983 "ColorTransformation.c"
+#line 5062 "ColorTransformation.c"
 	{
 		gint i = 0;
-#line 543 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 551 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 4988 "ColorTransformation.c"
+#line 5067 "ColorTransformation.c"
 		{
 			gboolean _tmp357_ = FALSE;
-#line 543 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 551 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp357_ = TRUE;
-#line 543 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 551 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 4995 "ColorTransformation.c"
+#line 5074 "ColorTransformation.c"
 				gint _tmp359_ = 0;
 				gfloat* _tmp360_ = NULL;
 				gint _tmp360__length1 = 0;
@@ -5002,74 +5081,74 @@ static void rgb_transformation_real_compose_with (PixelTransformation* base, Pix
 				gint _tmp363_ = 0;
 				gfloat _tmp364_ = 0.0F;
 				gfloat _tmp365_ = 0.0F;
-#line 543 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 551 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp357_) {
-#line 5007 "ColorTransformation.c"
+#line 5086 "ColorTransformation.c"
 					gint _tmp358_ = 0;
-#line 543 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 551 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp358_ = i;
-#line 543 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 551 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp358_ + 1;
-#line 5013 "ColorTransformation.c"
+#line 5092 "ColorTransformation.c"
 				}
-#line 543 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 551 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp357_ = FALSE;
-#line 543 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 551 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp359_ = i;
-#line 543 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 551 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp359_ < RGB_TRANSFORMATION_MATRIX_SIZE)) {
-#line 543 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 551 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 5023 "ColorTransformation.c"
+#line 5102 "ColorTransformation.c"
 				}
-#line 544 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 552 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp360_ = self->matrix_entries;
-#line 544 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 552 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp360__length1 = self->matrix_entries_length1;
-#line 544 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 552 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp361_ = i;
-#line 544 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 552 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp362_ = result_matrix_entries;
-#line 544 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 552 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp362__length1 = result_matrix_entries_length1;
-#line 544 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 552 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp363_ = i;
-#line 544 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 552 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp364_ = _tmp362_[_tmp363_];
-#line 544 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 552 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp360_[_tmp361_] = _tmp364_;
-#line 544 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 552 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp365_ = _tmp360_[_tmp361_];
-#line 5043 "ColorTransformation.c"
+#line 5122 "ColorTransformation.c"
 			}
 		}
 	}
-#line 546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp367_ = self->identity;
-#line 546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp367_) {
-#line 5051 "ColorTransformation.c"
+#line 5130 "ColorTransformation.c"
 		RGBTransformation* _tmp368_ = NULL;
 		gboolean _tmp369_ = FALSE;
-#line 546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp368_ = transform;
-#line 546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp369_ = _tmp368_->identity;
-#line 546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp366_ = _tmp369_;
-#line 5060 "ColorTransformation.c"
+#line 5139 "ColorTransformation.c"
 	} else {
-#line 546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp366_ = FALSE;
-#line 5064 "ColorTransformation.c"
+#line 5143 "ColorTransformation.c"
 	}
-#line 546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->identity = _tmp366_;
-#line 434 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 442 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result_matrix_entries = (g_free (result_matrix_entries), NULL);
-#line 434 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 442 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (transform);
-#line 5072 "ColorTransformation.c"
+#line 5151 "ColorTransformation.c"
 }
 
 
@@ -5078,21 +5157,21 @@ static void rgb_transformation_real_transform_pixel_hsv (PixelTransformation* ba
 	RGBAnalyticPixel _tmp0_ = {0};
 	RGBAnalyticPixel _tmp1_ = {0};
 	HSVAnalyticPixel _tmp2_ = {0};
-#line 549 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 557 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_RGB_TRANSFORMATION, RGBTransformation);
-#line 549 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 557 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (p != NULL);
-#line 550 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	hsv_analytic_pixel_to_rgb (p, &_tmp0_);
-#line 550 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_transform_pixel_rgb (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PIXEL_TRANSFORMATION, PixelTransformation), &_tmp0_, &_tmp1_);
-#line 550 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rgb_analytic_pixel_to_hsv (&_tmp1_, &_tmp2_);
-#line 550 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	*result = _tmp2_;
-#line 550 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return;
-#line 5095 "ColorTransformation.c"
+#line 5174 "ColorTransformation.c"
 }
 
 
@@ -5165,155 +5244,155 @@ static void rgb_transformation_real_transform_pixel_rgb (PixelTransformation* ba
 	gfloat _tmp49_ = 0.0F;
 	gfloat _tmp50_ = 0.0F;
 	RGBAnalyticPixel _tmp51_ = {0};
-#line 553 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 561 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_RGB_TRANSFORMATION, RGBTransformation);
-#line 553 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 561 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (p != NULL);
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = *p;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = _tmp0_.red;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = self->matrix_entries;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2__length1 = self->matrix_entries_length1;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = _tmp2_[0];
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = *p;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = _tmp4_.green;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = self->matrix_entries;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6__length1 = self->matrix_entries_length1;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = _tmp6_[1];
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = *p;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = _tmp8_.blue;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = self->matrix_entries;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10__length1 = self->matrix_entries_length1;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp11_ = _tmp10_[2];
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp12_ = self->matrix_entries;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp12__length1 = self->matrix_entries_length1;
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp13_ = _tmp12_[3];
-#line 554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 562 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	red_out = (((_tmp1_ * _tmp3_) + (_tmp5_ * _tmp7_)) + (_tmp9_ * _tmp11_)) + _tmp13_;
-#line 558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp14_ = red_out;
-#line 558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp15_ = CLAMP (_tmp14_, 0.0f, 1.0f);
-#line 558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	red_out = _tmp15_;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp16_ = *p;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp17_ = _tmp16_.red;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp18_ = self->matrix_entries;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp18__length1 = self->matrix_entries_length1;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp19_ = _tmp18_[4];
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp20_ = *p;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp21_ = _tmp20_.green;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp22_ = self->matrix_entries;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp22__length1 = self->matrix_entries_length1;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp23_ = _tmp22_[5];
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp24_ = *p;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp25_ = _tmp24_.blue;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp26_ = self->matrix_entries;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp26__length1 = self->matrix_entries_length1;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp27_ = _tmp26_[6];
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp28_ = self->matrix_entries;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp28__length1 = self->matrix_entries_length1;
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp29_ = _tmp28_[7];
-#line 560 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 568 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	green_out = (((_tmp17_ * _tmp19_) + (_tmp21_ * _tmp23_)) + (_tmp25_ * _tmp27_)) + _tmp29_;
-#line 564 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 572 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp30_ = green_out;
-#line 564 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 572 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp31_ = CLAMP (_tmp30_, 0.0f, 1.0f);
-#line 564 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 572 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	green_out = _tmp31_;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp32_ = *p;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp33_ = _tmp32_.red;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp34_ = self->matrix_entries;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp34__length1 = self->matrix_entries_length1;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp35_ = _tmp34_[8];
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp36_ = *p;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp37_ = _tmp36_.green;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp38_ = self->matrix_entries;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp38__length1 = self->matrix_entries_length1;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp39_ = _tmp38_[9];
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp40_ = *p;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp41_ = _tmp40_.blue;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp42_ = self->matrix_entries;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp42__length1 = self->matrix_entries_length1;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp43_ = _tmp42_[10];
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp44_ = self->matrix_entries;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp44__length1 = self->matrix_entries_length1;
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp45_ = _tmp44_[11];
-#line 566 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 574 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	blue_out = (((_tmp33_ * _tmp35_) + (_tmp37_ * _tmp39_)) + (_tmp41_ * _tmp43_)) + _tmp45_;
-#line 570 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 578 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp46_ = blue_out;
-#line 570 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 578 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp47_ = CLAMP (_tmp46_, 0.0f, 1.0f);
-#line 570 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 578 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	blue_out = _tmp47_;
-#line 572 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 580 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp48_ = red_out;
-#line 572 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 580 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp49_ = green_out;
-#line 572 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 580 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp50_ = blue_out;
-#line 572 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 580 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rgb_analytic_pixel_init_from_components (&_tmp51_, _tmp48_, _tmp49_, _tmp50_);
-#line 572 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 580 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	*result = _tmp51_;
-#line 572 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 580 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return;
-#line 5316 "ColorTransformation.c"
+#line 5395 "ColorTransformation.c"
 }
 
 
@@ -5321,15 +5400,15 @@ static gboolean rgb_transformation_real_is_identity (PixelTransformation* base) 
 	RGBTransformation * self;
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 575 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 583 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_RGB_TRANSFORMATION, RGBTransformation);
-#line 576 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 584 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->identity;
-#line 576 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 584 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 576 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 584 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 5332 "ColorTransformation.c"
+#line 5411 "ColorTransformation.c"
 }
 
 
@@ -5339,27 +5418,27 @@ static PixelTransformation* rgb_transformation_real_copy (PixelTransformation* b
 	RGBTransformation* _result_ = NULL;
 	PixelTransformationType _tmp0_ = 0;
 	RGBTransformation* _tmp1_ = NULL;
-#line 579 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 587 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_RGB_TRANSFORMATION, RGBTransformation);
-#line 580 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 588 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = pixel_transformation_get_transformation_type (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 580 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 588 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = rgb_transformation_new (_tmp0_);
-#line 580 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 588 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_result_ = _tmp1_;
-#line 5350 "ColorTransformation.c"
+#line 5429 "ColorTransformation.c"
 	{
 		gint i = 0;
-#line 582 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 5355 "ColorTransformation.c"
+#line 5434 "ColorTransformation.c"
 		{
 			gboolean _tmp2_ = FALSE;
-#line 582 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp2_ = TRUE;
-#line 582 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 5362 "ColorTransformation.c"
+#line 5441 "ColorTransformation.c"
 				gint _tmp4_ = 0;
 				RGBTransformation* _tmp5_ = NULL;
 				gfloat* _tmp6_ = NULL;
@@ -5370,97 +5449,97 @@ static PixelTransformation* rgb_transformation_real_copy (PixelTransformation* b
 				gint _tmp9_ = 0;
 				gfloat _tmp10_ = 0.0F;
 				gfloat _tmp11_ = 0.0F;
-#line 582 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp2_) {
-#line 5375 "ColorTransformation.c"
+#line 5454 "ColorTransformation.c"
 					gint _tmp3_ = 0;
-#line 582 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp3_ = i;
-#line 582 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp3_ + 1;
-#line 5381 "ColorTransformation.c"
+#line 5460 "ColorTransformation.c"
 				}
-#line 582 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp2_ = FALSE;
-#line 582 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp4_ = i;
-#line 582 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp4_ < RGB_TRANSFORMATION_MATRIX_SIZE)) {
-#line 582 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 5391 "ColorTransformation.c"
+#line 5470 "ColorTransformation.c"
 				}
-#line 583 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 591 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp5_ = _result_;
-#line 583 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 591 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp6_ = _tmp5_->matrix_entries;
-#line 583 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 591 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp6__length1 = _tmp5_->matrix_entries_length1;
-#line 583 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 591 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp7_ = i;
-#line 583 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 591 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp8_ = self->matrix_entries;
-#line 583 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 591 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp8__length1 = self->matrix_entries_length1;
-#line 583 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 591 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp9_ = i;
-#line 583 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 591 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp10_ = _tmp8_[_tmp9_];
-#line 583 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 591 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp6_[_tmp7_] = _tmp10_;
-#line 583 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 591 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp11_ = _tmp6_[_tmp7_];
-#line 5413 "ColorTransformation.c"
+#line 5492 "ColorTransformation.c"
 			}
 		}
 	}
-#line 586 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 594 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_result_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation);
-#line 586 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 594 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 5421 "ColorTransformation.c"
+#line 5500 "ColorTransformation.c"
 }
 
 
 static void rgb_transformation_class_init (RGBTransformationClass * klass) {
-#line 403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rgb_transformation_parent_class = g_type_class_peek_parent (klass);
-#line 403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->finalize = rgb_transformation_finalize;
-#line 403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->get_preferred_format = rgb_transformation_real_get_preferred_format;
-#line 403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->get_composition_mode = rgb_transformation_real_get_composition_mode;
-#line 403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->compose_with = rgb_transformation_real_compose_with;
-#line 403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->transform_pixel_hsv = rgb_transformation_real_transform_pixel_hsv;
-#line 403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->transform_pixel_rgb = rgb_transformation_real_transform_pixel_rgb;
-#line 403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->is_identity = rgb_transformation_real_is_identity;
-#line 403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->copy = rgb_transformation_real_copy;
-#line 5444 "ColorTransformation.c"
+#line 5523 "ColorTransformation.c"
 }
 
 
 static void rgb_transformation_instance_init (RGBTransformation * self) {
-#line 410 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 418 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->identity = TRUE;
-#line 5451 "ColorTransformation.c"
+#line 5530 "ColorTransformation.c"
 }
 
 
 static void rgb_transformation_finalize (PixelTransformation* obj) {
 	RGBTransformation * self;
-#line 403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_RGB_TRANSFORMATION, RGBTransformation);
-#line 406 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 414 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->matrix_entries = (g_free (self->matrix_entries), NULL);
-#line 403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	PIXEL_TRANSFORMATION_CLASS (rgb_transformation_parent_class)->finalize (obj);
-#line 5463 "ColorTransformation.c"
+#line 5542 "ColorTransformation.c"
 }
 
 
@@ -5479,26 +5558,26 @@ GType rgb_transformation_get_type (void) {
 HSVTransformation* hsv_transformation_construct (GType object_type, PixelTransformationType type) {
 	HSVTransformation* self = NULL;
 	PixelTransformationType _tmp0_ = 0;
-#line 592 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 600 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = type;
-#line 592 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 600 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (HSVTransformation*) pixel_transformation_construct (object_type, _tmp0_);
-#line 591 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 599 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 5488 "ColorTransformation.c"
+#line 5567 "ColorTransformation.c"
 }
 
 
 static PixelFormat hsv_transformation_real_get_preferred_format (PixelTransformation* base) {
 	HSVTransformation * self;
 	PixelFormat result = 0;
-#line 595 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 603 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_HSV_TRANSFORMATION, HSVTransformation);
-#line 596 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 604 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = PIXEL_FORMAT_HSV;
-#line 596 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 604 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 5501 "ColorTransformation.c"
+#line 5580 "ColorTransformation.c"
 }
 
 
@@ -5507,32 +5586,32 @@ static void hsv_transformation_real_transform_pixel_rgb (PixelTransformation* ba
 	HSVAnalyticPixel _tmp0_ = {0};
 	HSVAnalyticPixel _tmp1_ = {0};
 	RGBAnalyticPixel _tmp2_ = {0};
-#line 599 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 607 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_HSV_TRANSFORMATION, HSVTransformation);
-#line 599 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 607 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (p != NULL);
-#line 600 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 608 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rgb_analytic_pixel_to_hsv (p, &_tmp0_);
-#line 600 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 608 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_transform_pixel_hsv (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PIXEL_TRANSFORMATION, PixelTransformation), &_tmp0_, &_tmp1_);
-#line 600 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 608 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	hsv_analytic_pixel_to_rgb (&_tmp1_, &_tmp2_);
-#line 600 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 608 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	*result = _tmp2_;
-#line 600 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 608 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return;
-#line 5524 "ColorTransformation.c"
+#line 5603 "ColorTransformation.c"
 }
 
 
 static void hsv_transformation_class_init (HSVTransformationClass * klass) {
-#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 598 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	hsv_transformation_parent_class = g_type_class_peek_parent (klass);
-#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 598 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->get_preferred_format = hsv_transformation_real_get_preferred_format;
-#line 590 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 598 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->transform_pixel_rgb = hsv_transformation_real_transform_pixel_rgb;
-#line 5535 "ColorTransformation.c"
+#line 5614 "ColorTransformation.c"
 }
 
 
@@ -5557,19 +5636,19 @@ TintTransformation* tint_transformation_construct (GType object_type, gfloat cli
 	gfloat _tmp0_ = 0.0F;
 	gfloat _tmp1_ = 0.0F;
 	gfloat _tmp2_ = 0.0F;
-#line 612 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 620 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (TintTransformation*) rgb_transformation_construct (object_type, PIXEL_TRANSFORMATION_TYPE_TINT);
-#line 614 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 622 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = client_param;
-#line 614 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 622 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = CLAMP (_tmp0_, TINT_TRANSFORMATION_MIN_PARAMETER, TINT_TRANSFORMATION_MAX_PARAMETER);
-#line 614 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 622 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->parameter = _tmp1_;
-#line 616 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 624 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = self->priv->parameter;
-#line 616 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 624 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp2_ != 0.0f) {
-#line 5572 "ColorTransformation.c"
+#line 5651 "ColorTransformation.c"
 		gfloat adjusted_param = 0.0F;
 		gfloat _tmp3_ = 0.0F;
 		gfloat _tmp4_ = 0.0F;
@@ -5585,101 +5664,101 @@ TintTransformation* tint_transformation_construct (GType object_type, gfloat cli
 		gint _tmp11__length1 = 0;
 		gfloat _tmp12_ = 0.0F;
 		gfloat _tmp13_ = 0.0F;
-#line 617 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 625 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = self->priv->parameter;
-#line 617 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 625 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		adjusted_param = _tmp3_ / TINT_TRANSFORMATION_MAX_PARAMETER;
-#line 618 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 626 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4_ = adjusted_param;
-#line 618 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 626 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		adjusted_param = _tmp4_ * TINT_TRANSFORMATION_INTENSITY_FACTOR;
-#line 620 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 628 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 620 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 628 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 620 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 628 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp6_ = adjusted_param;
-#line 620 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 628 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_[11] -= _tmp6_ / 2;
-#line 620 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 628 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp7_ = _tmp5_[11];
-#line 621 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 629 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp8_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 621 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 629 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp8__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 621 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 629 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp9_ = adjusted_param;
-#line 621 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 629 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp8_[7] += _tmp9_;
-#line 621 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 629 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp10_ = _tmp8_[7];
-#line 622 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 630 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp11_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 622 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 630 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp11__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 622 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 630 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp12_ = adjusted_param;
-#line 622 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 630 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp11_[3] -= _tmp12_ / 2;
-#line 622 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 630 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp13_ = _tmp11_[3];
-#line 624 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 632 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->identity = FALSE;
-#line 5628 "ColorTransformation.c"
+#line 5707 "ColorTransformation.c"
 	}
-#line 611 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 619 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 5632 "ColorTransformation.c"
+#line 5711 "ColorTransformation.c"
 }
 
 
 TintTransformation* tint_transformation_new (gfloat client_param) {
-#line 611 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 619 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return tint_transformation_construct (TYPE_TINT_TRANSFORMATION, client_param);
-#line 5639 "ColorTransformation.c"
+#line 5718 "ColorTransformation.c"
 }
 
 
 gfloat tint_transformation_get_parameter (TintTransformation* self) {
 	gfloat result = 0.0F;
 	gfloat _tmp0_ = 0.0F;
-#line 628 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 636 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_TINT_TRANSFORMATION (self), 0.0F);
-#line 629 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 637 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->parameter;
-#line 629 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 637 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 629 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 637 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 5654 "ColorTransformation.c"
+#line 5733 "ColorTransformation.c"
 }
 
 
 static void tint_transformation_class_init (TintTransformationClass * klass) {
-#line 604 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 612 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	tint_transformation_parent_class = g_type_class_peek_parent (klass);
-#line 604 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 612 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->finalize = tint_transformation_finalize;
-#line 604 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 612 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (TintTransformationPrivate));
-#line 5665 "ColorTransformation.c"
+#line 5744 "ColorTransformation.c"
 }
 
 
 static void tint_transformation_instance_init (TintTransformation * self) {
-#line 604 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 612 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = TINT_TRANSFORMATION_GET_PRIVATE (self);
-#line 5672 "ColorTransformation.c"
+#line 5751 "ColorTransformation.c"
 }
 
 
 static void tint_transformation_finalize (PixelTransformation* obj) {
 	TintTransformation * self;
-#line 604 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 612 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_TINT_TRANSFORMATION, TintTransformation);
-#line 604 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 612 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	PIXEL_TRANSFORMATION_CLASS (tint_transformation_parent_class)->finalize (obj);
-#line 5682 "ColorTransformation.c"
+#line 5761 "ColorTransformation.c"
 }
 
 
@@ -5700,19 +5779,19 @@ TemperatureTransformation* temperature_transformation_construct (GType object_ty
 	gfloat _tmp0_ = 0.0F;
 	gfloat _tmp1_ = 0.0F;
 	gfloat _tmp2_ = 0.0F;
-#line 641 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 649 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (TemperatureTransformation*) rgb_transformation_construct (object_type, PIXEL_TRANSFORMATION_TYPE_TEMPERATURE);
-#line 643 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 651 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = client_parameter;
-#line 643 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 651 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = CLAMP (_tmp0_, TEMPERATURE_TRANSFORMATION_MIN_PARAMETER, TEMPERATURE_TRANSFORMATION_MAX_PARAMETER);
-#line 643 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 651 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->parameter = _tmp1_;
-#line 645 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 653 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = self->priv->parameter;
-#line 645 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 653 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp2_ != 0.0f) {
-#line 5715 "ColorTransformation.c"
+#line 5794 "ColorTransformation.c"
 		gfloat adjusted_param = 0.0F;
 		gfloat _tmp3_ = 0.0F;
 		gfloat _tmp4_ = 0.0F;
@@ -5728,101 +5807,101 @@ TemperatureTransformation* temperature_transformation_construct (GType object_ty
 		gint _tmp11__length1 = 0;
 		gfloat _tmp12_ = 0.0F;
 		gfloat _tmp13_ = 0.0F;
-#line 646 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 654 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = self->priv->parameter;
-#line 646 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 654 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		adjusted_param = _tmp3_ / TEMPERATURE_TRANSFORMATION_MAX_PARAMETER;
-#line 647 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 655 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4_ = adjusted_param;
-#line 647 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 655 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		adjusted_param = _tmp4_ * TEMPERATURE_TRANSFORMATION_INTENSITY_FACTOR;
-#line 649 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 657 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 649 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 657 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 649 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 657 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp6_ = adjusted_param;
-#line 649 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 657 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_[11] -= _tmp6_;
-#line 649 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 657 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp7_ = _tmp5_[11];
-#line 650 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 658 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp8_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 650 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 658 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp8__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 650 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 658 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp9_ = adjusted_param;
-#line 650 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 658 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp8_[7] += _tmp9_ / 2;
-#line 650 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 658 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp10_ = _tmp8_[7];
-#line 651 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 659 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp11_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 651 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 659 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp11__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 651 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 659 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp12_ = adjusted_param;
-#line 651 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 659 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp11_[3] += _tmp12_ / 2;
-#line 651 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 659 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp13_ = _tmp11_[3];
-#line 653 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 661 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->identity = FALSE;
-#line 5771 "ColorTransformation.c"
+#line 5850 "ColorTransformation.c"
 	}
-#line 640 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 648 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 5775 "ColorTransformation.c"
+#line 5854 "ColorTransformation.c"
 }
 
 
 TemperatureTransformation* temperature_transformation_new (gfloat client_parameter) {
-#line 640 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 648 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return temperature_transformation_construct (TYPE_TEMPERATURE_TRANSFORMATION, client_parameter);
-#line 5782 "ColorTransformation.c"
+#line 5861 "ColorTransformation.c"
 }
 
 
 gfloat temperature_transformation_get_parameter (TemperatureTransformation* self) {
 	gfloat result = 0.0F;
 	gfloat _tmp0_ = 0.0F;
-#line 657 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 665 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_TEMPERATURE_TRANSFORMATION (self), 0.0F);
-#line 658 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 666 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->parameter;
-#line 658 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 666 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 658 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 666 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 5797 "ColorTransformation.c"
+#line 5876 "ColorTransformation.c"
 }
 
 
 static void temperature_transformation_class_init (TemperatureTransformationClass * klass) {
-#line 633 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 641 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	temperature_transformation_parent_class = g_type_class_peek_parent (klass);
-#line 633 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 641 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->finalize = temperature_transformation_finalize;
-#line 633 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 641 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (TemperatureTransformationPrivate));
-#line 5808 "ColorTransformation.c"
+#line 5887 "ColorTransformation.c"
 }
 
 
 static void temperature_transformation_instance_init (TemperatureTransformation * self) {
-#line 633 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 641 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = TEMPERATURE_TRANSFORMATION_GET_PRIVATE (self);
-#line 5815 "ColorTransformation.c"
+#line 5894 "ColorTransformation.c"
 }
 
 
 static void temperature_transformation_finalize (PixelTransformation* obj) {
 	TemperatureTransformation * self;
-#line 633 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 641 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_TEMPERATURE_TRANSFORMATION, TemperatureTransformation);
-#line 633 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 641 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	PIXEL_TRANSFORMATION_CLASS (temperature_transformation_parent_class)->finalize (obj);
-#line 5825 "ColorTransformation.c"
+#line 5904 "ColorTransformation.c"
 }
 
 
@@ -5843,19 +5922,19 @@ SaturationTransformation* saturation_transformation_construct (GType object_type
 	gfloat _tmp0_ = 0.0F;
 	gfloat _tmp1_ = 0.0F;
 	gfloat _tmp2_ = 0.0F;
-#line 669 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 677 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (SaturationTransformation*) rgb_transformation_construct (object_type, PIXEL_TRANSFORMATION_TYPE_SATURATION);
-#line 671 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 679 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = client_parameter;
-#line 671 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 679 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = CLAMP (_tmp0_, SATURATION_TRANSFORMATION_MIN_PARAMETER, SATURATION_TRANSFORMATION_MAX_PARAMETER);
-#line 671 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 679 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->parameter = _tmp1_;
-#line 673 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 681 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = self->priv->parameter;
-#line 673 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 681 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp2_ != 0.0f) {
-#line 5858 "ColorTransformation.c"
+#line 5937 "ColorTransformation.c"
 		gfloat adjusted_param = 0.0F;
 		gfloat _tmp3_ = 0.0F;
 		gfloat _tmp4_ = 0.0F;
@@ -5908,187 +5987,187 @@ SaturationTransformation* saturation_transformation_construct (GType object_type
 		gfloat _tmp41_ = 0.0F;
 		gfloat _tmp42_ = 0.0F;
 		gfloat _tmp43_ = 0.0F;
-#line 674 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 682 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = self->priv->parameter;
-#line 674 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 682 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		adjusted_param = _tmp3_ / SATURATION_TRANSFORMATION_MAX_PARAMETER;
-#line 675 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 683 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4_ = adjusted_param;
-#line 675 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 683 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		adjusted_param = _tmp4_ + 1.0f;
-#line 677 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 685 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		one_third = 0.3333333f;
-#line 679 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 679 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 679 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp6_ = adjusted_param;
-#line 679 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp7_ = one_third;
-#line 679 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp8_ = adjusted_param;
-#line 679 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_[0] = ((1.0f - _tmp6_) * _tmp7_) + _tmp8_;
-#line 679 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp9_ = _tmp5_[0];
-#line 681 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp10_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 681 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp10__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 681 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp11_ = adjusted_param;
-#line 681 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp12_ = one_third;
-#line 681 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp10_[1] = (1.0f - _tmp11_) * _tmp12_;
-#line 681 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp13_ = _tmp10_[1];
-#line 682 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp14_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 682 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp14__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 682 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp15_ = adjusted_param;
-#line 682 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp16_ = one_third;
-#line 682 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp14_[2] = (1.0f - _tmp15_) * _tmp16_;
-#line 682 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp17_ = _tmp14_[2];
-#line 684 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 692 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp18_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 684 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 692 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp18__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 684 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 692 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp19_ = adjusted_param;
-#line 684 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 692 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp20_ = one_third;
-#line 684 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 692 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp18_[4] = (1.0f - _tmp19_) * _tmp20_;
-#line 684 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 692 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp21_ = _tmp18_[4];
-#line 685 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 693 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp22_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 685 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 693 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp22__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 685 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 693 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp23_ = adjusted_param;
-#line 685 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 693 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp24_ = one_third;
-#line 685 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 693 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp25_ = adjusted_param;
-#line 685 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 693 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp22_[5] = ((1.0f - _tmp23_) * _tmp24_) + _tmp25_;
-#line 685 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 693 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp26_ = _tmp22_[5];
-#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 695 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp27_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 695 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp27__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 695 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp28_ = adjusted_param;
-#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 695 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp29_ = one_third;
-#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 695 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp27_[6] = (1.0f - _tmp28_) * _tmp29_;
-#line 687 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 695 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp30_ = _tmp27_[6];
-#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 697 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp31_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 697 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp31__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 697 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp32_ = adjusted_param;
-#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 697 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp33_ = one_third;
-#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 697 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp31_[8] = (1.0f - _tmp32_) * _tmp33_;
-#line 689 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 697 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp34_ = _tmp31_[8];
-#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 698 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp35_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 698 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp35__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 698 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp36_ = adjusted_param;
-#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 698 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp37_ = one_third;
-#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 698 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp35_[9] = (1.0f - _tmp36_) * _tmp37_;
-#line 690 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 698 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp38_ = _tmp35_[9];
-#line 691 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 699 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp39_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 691 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 699 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp39__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 691 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 699 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp40_ = adjusted_param;
-#line 691 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 699 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp41_ = one_third;
-#line 691 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 699 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp42_ = adjusted_param;
-#line 691 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 699 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp39_[10] = ((1.0f - _tmp40_) * _tmp41_) + _tmp42_;
-#line 691 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 699 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp43_ = _tmp39_[10];
-#line 694 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 702 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->identity = FALSE;
-#line 6037 "ColorTransformation.c"
+#line 6116 "ColorTransformation.c"
 	}
-#line 668 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 676 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 6041 "ColorTransformation.c"
+#line 6120 "ColorTransformation.c"
 }
 
 
 SaturationTransformation* saturation_transformation_new (gfloat client_parameter) {
-#line 668 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 676 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return saturation_transformation_construct (TYPE_SATURATION_TRANSFORMATION, client_parameter);
-#line 6048 "ColorTransformation.c"
+#line 6127 "ColorTransformation.c"
 }
 
 
 gfloat saturation_transformation_get_parameter (SaturationTransformation* self) {
 	gfloat result = 0.0F;
 	gfloat _tmp0_ = 0.0F;
-#line 698 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 706 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_SATURATION_TRANSFORMATION (self), 0.0F);
-#line 699 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 707 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->parameter;
-#line 699 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 707 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 699 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 707 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 6063 "ColorTransformation.c"
+#line 6142 "ColorTransformation.c"
 }
 
 
 static void saturation_transformation_class_init (SaturationTransformationClass * klass) {
-#line 662 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 670 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	saturation_transformation_parent_class = g_type_class_peek_parent (klass);
-#line 662 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 670 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->finalize = saturation_transformation_finalize;
-#line 662 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 670 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (SaturationTransformationPrivate));
-#line 6074 "ColorTransformation.c"
+#line 6153 "ColorTransformation.c"
 }
 
 
 static void saturation_transformation_instance_init (SaturationTransformation * self) {
-#line 662 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 670 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = SATURATION_TRANSFORMATION_GET_PRIVATE (self);
-#line 6081 "ColorTransformation.c"
+#line 6160 "ColorTransformation.c"
 }
 
 
 static void saturation_transformation_finalize (PixelTransformation* obj) {
 	SaturationTransformation * self;
-#line 662 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 670 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_SATURATION_TRANSFORMATION, SaturationTransformation);
-#line 662 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 670 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	PIXEL_TRANSFORMATION_CLASS (saturation_transformation_parent_class)->finalize (obj);
-#line 6091 "ColorTransformation.c"
+#line 6170 "ColorTransformation.c"
 }
 
 
@@ -6109,19 +6188,19 @@ ExposureTransformation* exposure_transformation_construct (GType object_type, gf
 	gfloat _tmp0_ = 0.0F;
 	gfloat _tmp1_ = 0.0F;
 	gfloat _tmp2_ = 0.0F;
-#line 710 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 718 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (ExposureTransformation*) rgb_transformation_construct (object_type, PIXEL_TRANSFORMATION_TYPE_EXPOSURE);
-#line 712 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 720 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = client_parameter;
-#line 712 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 720 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = CLAMP (_tmp0_, EXPOSURE_TRANSFORMATION_MIN_PARAMETER, EXPOSURE_TRANSFORMATION_MAX_PARAMETER);
-#line 712 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 720 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->parameter = _tmp1_;
-#line 714 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 722 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = self->priv->parameter;
-#line 714 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 722 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp2_ != 0.0f) {
-#line 6124 "ColorTransformation.c"
+#line 6203 "ColorTransformation.c"
 		gfloat adjusted_param = 0.0F;
 		gfloat _tmp3_ = 0.0F;
 		gfloat* _tmp4_ = NULL;
@@ -6136,97 +6215,97 @@ ExposureTransformation* exposure_transformation_construct (GType object_type, gf
 		gint _tmp10__length1 = 0;
 		gfloat _tmp11_ = 0.0F;
 		gfloat _tmp12_ = 0.0F;
-#line 716 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 724 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = self->priv->parameter;
-#line 716 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 724 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		adjusted_param = ((_tmp3_ + 16.0f) / 32.0f) + 0.5f;
-#line 718 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 726 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 718 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 726 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 718 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 726 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_ = adjusted_param;
-#line 718 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 726 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4_[0] = _tmp5_;
-#line 718 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 726 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp6_ = _tmp4_[0];
-#line 719 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 727 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp7_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 719 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 727 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp7__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 719 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 727 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp8_ = adjusted_param;
-#line 719 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 727 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp7_[5] = _tmp8_;
-#line 719 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 727 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp9_ = _tmp7_[5];
-#line 720 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 728 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp10_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
-#line 720 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 728 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp10__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
-#line 720 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 728 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp11_ = adjusted_param;
-#line 720 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 728 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp10_[10] = _tmp11_;
-#line 720 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 728 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp12_ = _tmp10_[10];
-#line 722 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 730 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->identity = FALSE;
-#line 6175 "ColorTransformation.c"
+#line 6254 "ColorTransformation.c"
 	}
-#line 709 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 717 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 6179 "ColorTransformation.c"
+#line 6258 "ColorTransformation.c"
 }
 
 
 ExposureTransformation* exposure_transformation_new (gfloat client_parameter) {
-#line 709 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 717 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return exposure_transformation_construct (TYPE_EXPOSURE_TRANSFORMATION, client_parameter);
-#line 6186 "ColorTransformation.c"
+#line 6265 "ColorTransformation.c"
 }
 
 
 gfloat exposure_transformation_get_parameter (ExposureTransformation* self) {
 	gfloat result = 0.0F;
 	gfloat _tmp0_ = 0.0F;
-#line 726 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 734 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_EXPOSURE_TRANSFORMATION (self), 0.0F);
-#line 727 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 735 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->parameter;
-#line 727 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 735 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 727 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 735 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 6201 "ColorTransformation.c"
+#line 6280 "ColorTransformation.c"
 }
 
 
 static void exposure_transformation_class_init (ExposureTransformationClass * klass) {
-#line 703 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 711 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	exposure_transformation_parent_class = g_type_class_peek_parent (klass);
-#line 703 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 711 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->finalize = exposure_transformation_finalize;
-#line 703 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 711 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (ExposureTransformationPrivate));
-#line 6212 "ColorTransformation.c"
+#line 6291 "ColorTransformation.c"
 }
 
 
 static void exposure_transformation_instance_init (ExposureTransformation * self) {
-#line 703 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 711 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = EXPOSURE_TRANSFORMATION_GET_PRIVATE (self);
-#line 6219 "ColorTransformation.c"
+#line 6298 "ColorTransformation.c"
 }
 
 
 static void exposure_transformation_finalize (PixelTransformation* obj) {
 	ExposureTransformation * self;
-#line 703 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 711 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_EXPOSURE_TRANSFORMATION, ExposureTransformation);
-#line 703 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 711 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	PIXEL_TRANSFORMATION_CLASS (exposure_transformation_parent_class)->finalize (obj);
-#line 6229 "ColorTransformation.c"
+#line 6308 "ColorTransformation.c"
 }
 
 
@@ -6242,27 +6321,219 @@ GType exposure_transformation_get_type (void) {
 }
 
 
+ContrastTransformation* contrast_transformation_construct (GType object_type, gfloat client_parameter) {
+	ContrastTransformation* self = NULL;
+	gfloat _tmp0_ = 0.0F;
+	gfloat _tmp1_ = 0.0F;
+	gfloat _tmp2_ = 0.0F;
+#line 748 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	self = (ContrastTransformation*) rgb_transformation_construct (object_type, PIXEL_TRANSFORMATION_TYPE_CONTRAST);
+#line 750 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp0_ = client_parameter;
+#line 750 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp1_ = CLAMP (_tmp0_, CONTRAST_TRANSFORMATION_MIN_PARAMETER, CONTRAST_TRANSFORMATION_MAX_PARAMETER);
+#line 750 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	self->priv->parameter = _tmp1_;
+#line 752 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp2_ = self->priv->parameter;
+#line 752 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	if (_tmp2_ != 0.0f) {
+#line 6341 "ColorTransformation.c"
+		gfloat contrast_adjustment = 0.0F;
+		gfloat _tmp3_ = 0.0F;
+		gfloat component_coefficient = 0.0F;
+		gfloat _tmp4_ = 0.0F;
+		gfloat component_offset = 0.0F;
+		gfloat _tmp5_ = 0.0F;
+		gfloat* _tmp6_ = NULL;
+		gint _tmp6__length1 = 0;
+		gfloat _tmp7_ = 0.0F;
+		gfloat _tmp8_ = 0.0F;
+		gfloat* _tmp9_ = NULL;
+		gint _tmp9__length1 = 0;
+		gfloat _tmp10_ = 0.0F;
+		gfloat _tmp11_ = 0.0F;
+		gfloat* _tmp12_ = NULL;
+		gint _tmp12__length1 = 0;
+		gfloat _tmp13_ = 0.0F;
+		gfloat _tmp14_ = 0.0F;
+		gfloat* _tmp15_ = NULL;
+		gint _tmp15__length1 = 0;
+		gfloat _tmp16_ = 0.0F;
+		gfloat _tmp17_ = 0.0F;
+		gfloat* _tmp18_ = NULL;
+		gint _tmp18__length1 = 0;
+		gfloat _tmp19_ = 0.0F;
+		gfloat _tmp20_ = 0.0F;
+		gfloat* _tmp21_ = NULL;
+		gint _tmp21__length1 = 0;
+		gfloat _tmp22_ = 0.0F;
+		gfloat _tmp23_ = 0.0F;
+#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp3_ = self->priv->parameter;
+#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		contrast_adjustment = (_tmp3_ / 16.0f) * CONTRAST_TRANSFORMATION_MAX_CONTRAST_ADJUSTMENT;
+#line 755 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp4_ = contrast_adjustment;
+#line 755 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		component_coefficient = 1.0f + _tmp4_;
+#line 756 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp5_ = contrast_adjustment;
+#line 756 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		component_offset = _tmp5_ / (-2.0f);
+#line 758 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp6_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
+#line 758 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp6__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
+#line 758 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp7_ = component_coefficient;
+#line 758 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp6_[0] = _tmp7_;
+#line 758 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp8_ = _tmp6_[0];
+#line 759 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp9_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
+#line 759 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp9__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
+#line 759 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp10_ = component_coefficient;
+#line 759 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp9_[5] = _tmp10_;
+#line 759 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp11_ = _tmp9_[5];
+#line 760 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp12_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
+#line 760 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp12__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
+#line 760 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp13_ = component_coefficient;
+#line 760 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp12_[10] = _tmp13_;
+#line 760 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp14_ = _tmp12_[10];
+#line 762 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp15_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
+#line 762 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp15__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
+#line 762 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp16_ = component_offset;
+#line 762 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp15_[3] = _tmp16_;
+#line 762 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp17_ = _tmp15_[3];
+#line 763 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp18_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
+#line 763 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp18__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
+#line 763 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp19_ = component_offset;
+#line 763 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp18_[7] = _tmp19_;
+#line 763 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp20_ = _tmp18_[7];
+#line 764 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp21_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries;
+#line 764 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp21__length1 = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->matrix_entries_length1;
+#line 764 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp22_ = component_offset;
+#line 764 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp21_[11] = _tmp22_;
+#line 764 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		_tmp23_ = _tmp21_[11];
+#line 766 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_RGB_TRANSFORMATION, RGBTransformation)->identity = FALSE;
+#line 6446 "ColorTransformation.c"
+	}
+#line 747 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	return self;
+#line 6450 "ColorTransformation.c"
+}
+
+
+ContrastTransformation* contrast_transformation_new (gfloat client_parameter) {
+#line 747 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	return contrast_transformation_construct (TYPE_CONTRAST_TRANSFORMATION, client_parameter);
+#line 6457 "ColorTransformation.c"
+}
+
+
+gfloat contrast_transformation_get_parameter (ContrastTransformation* self) {
+	gfloat result = 0.0F;
+	gfloat _tmp0_ = 0.0F;
+#line 770 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	g_return_val_if_fail (IS_CONTRAST_TRANSFORMATION (self), 0.0F);
+#line 771 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp0_ = self->priv->parameter;
+#line 771 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	result = _tmp0_;
+#line 771 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	return result;
+#line 6472 "ColorTransformation.c"
+}
+
+
+static void contrast_transformation_class_init (ContrastTransformationClass * klass) {
+#line 739 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	contrast_transformation_parent_class = g_type_class_peek_parent (klass);
+#line 739 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	((PixelTransformationClass *) klass)->finalize = contrast_transformation_finalize;
+#line 739 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	g_type_class_add_private (klass, sizeof (ContrastTransformationPrivate));
+#line 6483 "ColorTransformation.c"
+}
+
+
+static void contrast_transformation_instance_init (ContrastTransformation * self) {
+#line 739 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	self->priv = CONTRAST_TRANSFORMATION_GET_PRIVATE (self);
+#line 6490 "ColorTransformation.c"
+}
+
+
+static void contrast_transformation_finalize (PixelTransformation* obj) {
+	ContrastTransformation * self;
+#line 739 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_CONTRAST_TRANSFORMATION, ContrastTransformation);
+#line 739 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	PIXEL_TRANSFORMATION_CLASS (contrast_transformation_parent_class)->finalize (obj);
+#line 6500 "ColorTransformation.c"
+}
+
+
+GType contrast_transformation_get_type (void) {
+	static volatile gsize contrast_transformation_type_id__volatile = 0;
+	if (g_once_init_enter (&contrast_transformation_type_id__volatile)) {
+		static const GTypeInfo g_define_type_info = { sizeof (ContrastTransformationClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) contrast_transformation_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (ContrastTransformation), 0, (GInstanceInitFunc) contrast_transformation_instance_init, NULL };
+		GType contrast_transformation_type_id;
+		contrast_transformation_type_id = g_type_register_static (TYPE_RGB_TRANSFORMATION, "ContrastTransformation", &g_define_type_info, 0);
+		g_once_init_leave (&contrast_transformation_type_id__volatile, contrast_transformation_type_id);
+	}
+	return contrast_transformation_type_id__volatile;
+}
+
+
 PixelTransformer* pixel_transformer_construct (GType object_type) {
 	PixelTransformer* self = NULL;
-#line 737 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (PixelTransformer*) g_type_create_instance (object_type);
-#line 737 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 6251 "ColorTransformation.c"
+#line 6522 "ColorTransformation.c"
 }
 
 
 PixelTransformer* pixel_transformer_new (void) {
-#line 737 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return pixel_transformer_construct (TYPE_PIXEL_TRANSFORMER);
-#line 6258 "ColorTransformation.c"
+#line 6529 "ColorTransformation.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 6265 "ColorTransformation.c"
+#line 6536 "ColorTransformation.c"
 }
 
 
@@ -6270,13 +6541,13 @@ PixelTransformer* pixel_transformer_copy (PixelTransformer* self) {
 	PixelTransformer* result = NULL;
 	PixelTransformer* clone = NULL;
 	PixelTransformer* _tmp0_ = NULL;
-#line 740 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 784 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMER (self), NULL);
-#line 741 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 785 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = pixel_transformer_new ();
-#line 741 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 785 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	clone = _tmp0_;
-#line 6279 "ColorTransformation.c"
+#line 6550 "ColorTransformation.c"
 	{
 		GeeArrayList* _transformation_list = NULL;
 		GeeArrayList* _tmp1_ = NULL;
@@ -6286,25 +6557,25 @@ PixelTransformer* pixel_transformer_copy (PixelTransformer* self) {
 		gint _tmp4_ = 0;
 		gint _tmp5_ = 0;
 		gint _transformation_index = 0;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = self->priv->transformations;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp2_ = _g_object_ref0 (_tmp1_);
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_transformation_list = _tmp2_;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = _transformation_list;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_ = _tmp4_;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_transformation_size = _tmp5_;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_transformation_index = -1;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		while (TRUE) {
-#line 6307 "ColorTransformation.c"
+#line 6578 "ColorTransformation.c"
 			gint _tmp6_ = 0;
 			gint _tmp7_ = 0;
 			gint _tmp8_ = 0;
@@ -6315,49 +6586,49 @@ PixelTransformer* pixel_transformer_copy (PixelTransformer* self) {
 			PixelTransformer* _tmp12_ = NULL;
 			GeeArrayList* _tmp13_ = NULL;
 			PixelTransformation* _tmp14_ = NULL;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp6_ = _transformation_index;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_transformation_index = _tmp6_ + 1;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp7_ = _transformation_index;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp8_ = _transformation_size;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!(_tmp7_ < _tmp8_)) {
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 6330 "ColorTransformation.c"
+#line 6601 "ColorTransformation.c"
 			}
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp9_ = _transformation_list;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp10_ = _transformation_index;
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp11_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp10_);
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			transformation = (PixelTransformation*) _tmp11_;
-#line 744 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 788 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp12_ = clone;
-#line 744 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 788 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp13_ = _tmp12_->priv->transformations;
-#line 744 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 788 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp14_ = transformation;
-#line 744 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 788 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp14_);
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_pixel_transformation_unref0 (transformation);
-#line 6350 "ColorTransformation.c"
+#line 6621 "ColorTransformation.c"
 		}
-#line 743 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 787 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_g_object_unref0 (_transformation_list);
-#line 6354 "ColorTransformation.c"
+#line 6625 "ColorTransformation.c"
 	}
-#line 746 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 790 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = clone;
-#line 746 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 790 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 6360 "ColorTransformation.c"
+#line 6631 "ColorTransformation.c"
 }
 
 
@@ -6367,41 +6638,41 @@ static void pixel_transformer_build_optimized_transformations (PixelTransformer*
 	gint _tmp2_ = 0;
 	PixelTransformation** _tmp3_ = NULL;
 	PixelTransformation* pre_trans = NULL;
-#line 749 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 793 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMER (self));
-#line 750 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->transformations;
-#line 750 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 750 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = _tmp1_;
-#line 750 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = g_new0 (PixelTransformation*, _tmp2_ + 1);
-#line 750 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations = (_vala_array_free (self->priv->optimized_transformations, self->priv->optimized_transformations_length1, (GDestroyNotify) pixel_transformation_unref), NULL);
-#line 750 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations = _tmp3_;
-#line 750 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations_length1 = _tmp2_;
-#line 750 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_optimized_transformations_size_ = self->priv->optimized_transformations_length1;
-#line 752 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 796 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pre_trans = NULL;
-#line 753 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 797 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_slots_used = 0;
-#line 6392 "ColorTransformation.c"
+#line 6663 "ColorTransformation.c"
 	{
 		gint i = 0;
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 6397 "ColorTransformation.c"
+#line 6668 "ColorTransformation.c"
 		{
 			gboolean _tmp4_ = FALSE;
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp4_ = TRUE;
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 6404 "ColorTransformation.c"
+#line 6675 "ColorTransformation.c"
 				gint _tmp6_ = 0;
 				GeeArrayList* _tmp7_ = NULL;
 				gint _tmp8_ = 0;
@@ -6418,139 +6689,139 @@ static void pixel_transformer_build_optimized_transformations (PixelTransformer*
 				gboolean _tmp21_ = FALSE;
 				gboolean _tmp22_ = FALSE;
 				PixelTransformation* _tmp23_ = NULL;
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp4_) {
-#line 6423 "ColorTransformation.c"
+#line 6694 "ColorTransformation.c"
 					gint _tmp5_ = 0;
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp5_ = i;
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp5_ + 1;
-#line 6429 "ColorTransformation.c"
+#line 6700 "ColorTransformation.c"
 				}
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp4_ = FALSE;
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp6_ = i;
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp7_ = self->priv->transformations;
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp8_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp9_ = _tmp8_;
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp6_ < _tmp9_)) {
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 6445 "ColorTransformation.c"
+#line 6716 "ColorTransformation.c"
 				}
-#line 755 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 799 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp10_ = self->priv->transformations;
-#line 755 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 799 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp11_ = i;
-#line 755 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 799 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp12_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp11_);
-#line 755 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 799 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				trans = (PixelTransformation*) _tmp12_;
-#line 757 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 801 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp13_ = trans;
-#line 757 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 801 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp14_ = pixel_transformation_is_identity (_tmp13_);
-#line 757 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 801 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp14_) {
-#line 758 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 802 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_pixel_transformation_unref0 (trans);
-#line 758 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 802 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					continue;
-#line 6465 "ColorTransformation.c"
+#line 6736 "ColorTransformation.c"
 				}
-#line 760 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 804 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				this_trans = NULL;
-#line 761 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 805 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp15_ = trans;
-#line 761 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 805 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp16_ = pixel_transformation_get_composition_mode (_tmp15_);
-#line 761 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 805 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp16_ == COMPOSITION_MODE_NONE) {
-#line 6475 "ColorTransformation.c"
+#line 6746 "ColorTransformation.c"
 					PixelTransformation* _tmp17_ = NULL;
 					PixelTransformation* _tmp18_ = NULL;
-#line 762 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 806 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp17_ = trans;
-#line 762 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 806 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp18_ = _pixel_transformation_ref0 (_tmp17_);
-#line 762 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 806 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_pixel_transformation_unref0 (this_trans);
-#line 762 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 806 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					this_trans = _tmp18_;
-#line 6486 "ColorTransformation.c"
+#line 6757 "ColorTransformation.c"
 				} else {
 					PixelTransformation* _tmp19_ = NULL;
 					PixelTransformation* _tmp20_ = NULL;
-#line 764 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 808 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp19_ = trans;
-#line 764 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 808 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp20_ = pixel_transformation_copy (_tmp19_);
-#line 764 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 808 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_pixel_transformation_unref0 (this_trans);
-#line 764 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 808 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					this_trans = _tmp20_;
-#line 6498 "ColorTransformation.c"
+#line 6769 "ColorTransformation.c"
 				}
-#line 766 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 810 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp23_ = pre_trans;
-#line 766 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 810 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp23_ != NULL) {
-#line 6504 "ColorTransformation.c"
+#line 6775 "ColorTransformation.c"
 					PixelTransformation* _tmp24_ = NULL;
 					CompositionMode _tmp25_ = 0;
-#line 766 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 810 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp24_ = this_trans;
-#line 766 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 810 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp25_ = pixel_transformation_get_composition_mode (_tmp24_);
-#line 766 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 810 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp22_ = _tmp25_ != COMPOSITION_MODE_NONE;
-#line 6513 "ColorTransformation.c"
+#line 6784 "ColorTransformation.c"
 				} else {
-#line 766 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 810 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp22_ = FALSE;
-#line 6517 "ColorTransformation.c"
+#line 6788 "ColorTransformation.c"
 				}
-#line 766 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 810 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp22_) {
-#line 6521 "ColorTransformation.c"
+#line 6792 "ColorTransformation.c"
 					PixelTransformation* _tmp26_ = NULL;
 					CompositionMode _tmp27_ = 0;
 					PixelTransformation* _tmp28_ = NULL;
 					CompositionMode _tmp29_ = 0;
-#line 767 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 811 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp26_ = this_trans;
-#line 767 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 811 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp27_ = pixel_transformation_get_composition_mode (_tmp26_);
-#line 767 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 811 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp28_ = pre_trans;
-#line 767 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 811 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp29_ = pixel_transformation_get_composition_mode (_tmp28_);
-#line 767 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 811 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp21_ = _tmp27_ == _tmp29_;
-#line 6536 "ColorTransformation.c"
+#line 6807 "ColorTransformation.c"
 				} else {
-#line 766 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 810 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp21_ = FALSE;
-#line 6540 "ColorTransformation.c"
+#line 6811 "ColorTransformation.c"
 				}
-#line 766 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 810 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp21_) {
-#line 6544 "ColorTransformation.c"
+#line 6815 "ColorTransformation.c"
 					PixelTransformation* _tmp30_ = NULL;
 					PixelTransformation* _tmp31_ = NULL;
-#line 768 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 812 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp30_ = pre_trans;
-#line 768 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 812 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp31_ = this_trans;
-#line 768 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 812 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					pixel_transformation_compose_with (_tmp30_, _tmp31_);
-#line 6553 "ColorTransformation.c"
+#line 6824 "ColorTransformation.c"
 				} else {
 					PixelTransformation** _tmp32_ = NULL;
 					gint _tmp32__length1 = 0;
@@ -6560,45 +6831,45 @@ static void pixel_transformer_build_optimized_transformations (PixelTransformer*
 					PixelTransformation* _tmp36_ = NULL;
 					PixelTransformation* _tmp37_ = NULL;
 					PixelTransformation* _tmp38_ = NULL;
-#line 770 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 814 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp32_ = self->priv->optimized_transformations;
-#line 770 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 814 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp32__length1 = self->priv->optimized_transformations_length1;
-#line 770 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 814 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp33_ = self->priv->optimized_slots_used;
-#line 770 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 814 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					self->priv->optimized_slots_used = _tmp33_ + 1;
-#line 770 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 814 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp34_ = this_trans;
-#line 770 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 814 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp35_ = _pixel_transformation_ref0 (_tmp34_);
-#line 770 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 814 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_pixel_transformation_unref0 (_tmp32_[_tmp33_]);
-#line 770 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 814 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp32_[_tmp33_] = _tmp35_;
-#line 770 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 814 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp36_ = _tmp32_[_tmp33_];
-#line 771 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 815 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp37_ = this_trans;
-#line 771 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 815 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp38_ = _pixel_transformation_ref0 (_tmp37_);
-#line 771 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 815 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_pixel_transformation_unref0 (pre_trans);
-#line 771 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 815 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					pre_trans = _tmp38_;
-#line 6589 "ColorTransformation.c"
+#line 6860 "ColorTransformation.c"
 				}
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_pixel_transformation_unref0 (this_trans);
-#line 754 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_pixel_transformation_unref0 (trans);
-#line 6595 "ColorTransformation.c"
+#line 6866 "ColorTransformation.c"
 			}
 		}
 	}
-#line 749 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 793 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (pre_trans);
-#line 6601 "ColorTransformation.c"
+#line 6872 "ColorTransformation.c"
 }
 
 
@@ -6608,31 +6879,31 @@ static void pixel_transformer_apply_transformations (PixelTransformer* self, RGB
 	RGBAnalyticPixel _tmp0_ = {0};
 	HSVAnalyticPixel p_hsv = {0};
 	PixelFormat _tmp21_ = 0;
-#line 776 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 820 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMER (self));
-#line 776 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 820 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (p != NULL);
-#line 777 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 821 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	current_format = PIXEL_FORMAT_RGB;
-#line 778 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 822 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = *p;
-#line 778 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 822 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	p_rgb = _tmp0_;
-#line 779 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	hsv_analytic_pixel_init (&p_hsv);
-#line 6623 "ColorTransformation.c"
+#line 6894 "ColorTransformation.c"
 	{
 		gint i = 0;
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 6628 "ColorTransformation.c"
+#line 6899 "ColorTransformation.c"
 		{
 			gboolean _tmp1_ = FALSE;
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp1_ = TRUE;
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 6635 "ColorTransformation.c"
+#line 6906 "ColorTransformation.c"
 				gint _tmp3_ = 0;
 				gint _tmp4_ = 0;
 				PixelTransformation* trans = NULL;
@@ -6643,199 +6914,199 @@ static void pixel_transformer_apply_transformations (PixelTransformer* self, RGB
 				PixelTransformation* _tmp8_ = NULL;
 				PixelTransformation* _tmp9_ = NULL;
 				PixelFormat _tmp10_ = 0;
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp1_) {
-#line 6648 "ColorTransformation.c"
+#line 6919 "ColorTransformation.c"
 					gint _tmp2_ = 0;
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp2_ = i;
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp2_ + 1;
-#line 6654 "ColorTransformation.c"
+#line 6925 "ColorTransformation.c"
 				}
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp1_ = FALSE;
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp3_ = i;
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp4_ = self->priv->optimized_slots_used;
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp3_ < _tmp4_)) {
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 6666 "ColorTransformation.c"
+#line 6937 "ColorTransformation.c"
 				}
-#line 782 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 826 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp5_ = self->priv->optimized_transformations;
-#line 782 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 826 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp5__length1 = self->priv->optimized_transformations_length1;
-#line 782 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 826 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp6_ = i;
-#line 782 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 826 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp7_ = _tmp5_[_tmp6_];
-#line 782 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 826 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp8_ = _pixel_transformation_ref0 (_tmp7_);
-#line 782 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 826 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				trans = _tmp8_;
-#line 783 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 827 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp9_ = trans;
-#line 783 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 827 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp10_ = pixel_transformation_get_preferred_format (_tmp9_);
-#line 783 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 827 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp10_ == PIXEL_FORMAT_RGB) {
-#line 6686 "ColorTransformation.c"
+#line 6957 "ColorTransformation.c"
 					PixelFormat _tmp11_ = 0;
 					PixelTransformation* _tmp13_ = NULL;
 					RGBAnalyticPixel _tmp14_ = {0};
 					RGBAnalyticPixel _tmp15_ = {0};
-#line 784 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 828 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp11_ = current_format;
-#line 784 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 828 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (_tmp11_ == PIXEL_FORMAT_HSV) {
-#line 6695 "ColorTransformation.c"
+#line 6966 "ColorTransformation.c"
 						RGBAnalyticPixel _tmp12_ = {0};
-#line 785 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 829 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						hsv_analytic_pixel_to_rgb (&p_hsv, &_tmp12_);
-#line 785 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 829 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						p_rgb = _tmp12_;
-#line 786 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 830 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						current_format = PIXEL_FORMAT_RGB;
-#line 6703 "ColorTransformation.c"
+#line 6974 "ColorTransformation.c"
 					}
-#line 788 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 832 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp13_ = trans;
-#line 788 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 832 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp14_ = p_rgb;
-#line 788 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 832 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					pixel_transformation_transform_pixel_rgb (_tmp13_, &_tmp14_, &_tmp15_);
-#line 788 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 832 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					p_rgb = _tmp15_;
-#line 6713 "ColorTransformation.c"
+#line 6984 "ColorTransformation.c"
 				} else {
 					PixelFormat _tmp16_ = 0;
 					PixelTransformation* _tmp18_ = NULL;
 					HSVAnalyticPixel _tmp19_ = {0};
 					HSVAnalyticPixel _tmp20_ = {0};
-#line 790 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 834 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp16_ = current_format;
-#line 790 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 834 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (_tmp16_ == PIXEL_FORMAT_RGB) {
-#line 6723 "ColorTransformation.c"
+#line 6994 "ColorTransformation.c"
 						HSVAnalyticPixel _tmp17_ = {0};
-#line 791 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 835 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						rgb_analytic_pixel_to_hsv (&p_rgb, &_tmp17_);
-#line 791 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 835 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						p_hsv = _tmp17_;
-#line 792 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 836 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						current_format = PIXEL_FORMAT_HSV;
-#line 6731 "ColorTransformation.c"
+#line 7002 "ColorTransformation.c"
 					}
-#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 838 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp18_ = trans;
-#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 838 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp19_ = p_hsv;
-#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 838 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					pixel_transformation_transform_pixel_hsv (_tmp18_, &_tmp19_, &_tmp20_);
-#line 794 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 838 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					p_hsv = _tmp20_;
-#line 6741 "ColorTransformation.c"
+#line 7012 "ColorTransformation.c"
 				}
-#line 781 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_pixel_transformation_unref0 (trans);
-#line 6745 "ColorTransformation.c"
+#line 7016 "ColorTransformation.c"
 			}
 		}
 	}
-#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 842 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp21_ = current_format;
-#line 798 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 842 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp21_ == PIXEL_FORMAT_HSV) {
-#line 6753 "ColorTransformation.c"
+#line 7024 "ColorTransformation.c"
 		RGBAnalyticPixel _tmp22_ = {0};
-#line 799 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 843 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		hsv_analytic_pixel_to_rgb (&p_hsv, &_tmp22_);
-#line 799 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 843 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		p_rgb = _tmp22_;
-#line 6759 "ColorTransformation.c"
+#line 7030 "ColorTransformation.c"
 	}
-#line 801 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 845 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	*result = p_rgb;
-#line 801 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 845 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return;
-#line 6765 "ColorTransformation.c"
+#line 7036 "ColorTransformation.c"
 }
 
 
 void pixel_transformer_attach_transformation (PixelTransformer* self, PixelTransformation* trans) {
 	GeeArrayList* _tmp0_ = NULL;
 	PixelTransformation* _tmp1_ = NULL;
-#line 807 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMER (self));
-#line 807 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (trans));
-#line 808 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 852 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->transformations;
-#line 808 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 852 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = trans;
-#line 808 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 852 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp1_);
-#line 809 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 853 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations = (_vala_array_free (self->priv->optimized_transformations, self->priv->optimized_transformations_length1, (GDestroyNotify) pixel_transformation_unref), NULL);
-#line 809 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 853 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations = NULL;
-#line 809 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 853 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations_length1 = 0;
-#line 809 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 853 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_optimized_transformations_size_ = self->priv->optimized_transformations_length1;
-#line 6790 "ColorTransformation.c"
+#line 7061 "ColorTransformation.c"
 }
 
 
 void pixel_transformer_detach_transformation (PixelTransformer* self, PixelTransformation* victim) {
 	GeeArrayList* _tmp0_ = NULL;
 	PixelTransformation* _tmp1_ = NULL;
-#line 814 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 858 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMER (self));
-#line 814 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 858 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (victim));
-#line 815 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 859 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->transformations;
-#line 815 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 859 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = victim;
-#line 815 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 859 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	gee_abstract_collection_remove (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp1_);
-#line 816 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 860 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations = (_vala_array_free (self->priv->optimized_transformations, self->priv->optimized_transformations_length1, (GDestroyNotify) pixel_transformation_unref), NULL);
-#line 816 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 860 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations = NULL;
-#line 816 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 860 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations_length1 = 0;
-#line 816 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 860 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_optimized_transformations_size_ = self->priv->optimized_transformations_length1;
-#line 6815 "ColorTransformation.c"
+#line 7086 "ColorTransformation.c"
 }
 
 
 void pixel_transformer_replace_transformation (PixelTransformer* self, PixelTransformation* old_trans, PixelTransformation* new_trans) {
-#line 821 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 865 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMER (self));
-#line 821 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 865 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (old_trans));
-#line 821 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 865 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (new_trans));
-#line 6826 "ColorTransformation.c"
+#line 7097 "ColorTransformation.c"
 	{
 		gint i = 0;
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 6831 "ColorTransformation.c"
+#line 7102 "ColorTransformation.c"
 		{
 			gboolean _tmp0_ = FALSE;
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp0_ = TRUE;
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 6838 "ColorTransformation.c"
+#line 7109 "ColorTransformation.c"
 				gint _tmp2_ = 0;
 				GeeArrayList* _tmp3_ = NULL;
 				gint _tmp4_ = 0;
@@ -6846,79 +7117,79 @@ void pixel_transformer_replace_transformation (PixelTransformer* self, PixelTran
 				PixelTransformation* _tmp9_ = NULL;
 				PixelTransformation* _tmp10_ = NULL;
 				gboolean _tmp11_ = FALSE;
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp0_) {
-#line 6851 "ColorTransformation.c"
+#line 7122 "ColorTransformation.c"
 					gint _tmp1_ = 0;
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp1_ = i;
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp1_ + 1;
-#line 6857 "ColorTransformation.c"
+#line 7128 "ColorTransformation.c"
 				}
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp0_ = FALSE;
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp2_ = i;
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp3_ = self->priv->transformations;
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp4_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp5_ = _tmp4_;
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp2_ < _tmp5_)) {
-#line 823 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 867 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 6873 "ColorTransformation.c"
+#line 7144 "ColorTransformation.c"
 				}
-#line 824 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 868 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp6_ = self->priv->transformations;
-#line 824 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 868 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp7_ = i;
-#line 824 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 868 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp8_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp7_);
-#line 824 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 868 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp9_ = (PixelTransformation*) _tmp8_;
-#line 824 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 868 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp10_ = old_trans;
-#line 824 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 868 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp11_ = _tmp9_ == _tmp10_;
-#line 824 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 868 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_pixel_transformation_unref0 (_tmp9_);
-#line 824 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 868 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp11_) {
-#line 6891 "ColorTransformation.c"
+#line 7162 "ColorTransformation.c"
 					GeeArrayList* _tmp12_ = NULL;
 					gint _tmp13_ = 0;
 					PixelTransformation* _tmp14_ = NULL;
-#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 869 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp12_ = self->priv->transformations;
-#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 869 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp13_ = i;
-#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 869 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp14_ = new_trans;
-#line 825 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 869 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					gee_abstract_list_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp13_, _tmp14_);
-#line 827 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 871 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					self->priv->optimized_transformations = (_vala_array_free (self->priv->optimized_transformations, self->priv->optimized_transformations_length1, (GDestroyNotify) pixel_transformation_unref), NULL);
-#line 827 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 871 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					self->priv->optimized_transformations = NULL;
-#line 827 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 871 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					self->priv->optimized_transformations_length1 = 0;
-#line 827 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 871 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					self->priv->_optimized_transformations_size_ = self->priv->optimized_transformations_length1;
-#line 828 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 872 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					return;
-#line 6913 "ColorTransformation.c"
+#line 7184 "ColorTransformation.c"
 				}
 			}
 		}
 	}
-#line 831 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
-	g_error ("ColorTransformation.vala:831: %s", "PixelTransformer: replace_transformation( ): old_trans is not present " \
+#line 875 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	g_error ("ColorTransformation.vala:875: %s", "PixelTransformer: replace_transformation( ): old_trans is not present " \
 "in " "transformation collection");
-#line 6920 "ColorTransformation.c"
+#line 7191 "ColorTransformation.c"
 }
 
 
@@ -6926,21 +7197,21 @@ void pixel_transformer_transform_pixbuf (PixelTransformer* self, GdkPixbuf* pixb
 	GdkPixbuf* _tmp0_ = NULL;
 	GdkPixbuf* _tmp1_ = NULL;
 	GCancellable* _tmp2_ = NULL;
-#line 835 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 879 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMER (self));
-#line 835 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 879 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
-#line 835 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 879 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail ((cancellable == NULL) || G_IS_CANCELLABLE (cancellable));
-#line 836 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 880 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = pixbuf;
-#line 836 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 880 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = pixbuf;
-#line 836 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 880 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = cancellable;
-#line 836 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 880 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformer_transform_to_other_pixbuf (self, _tmp0_, _tmp1_, _tmp2_);
-#line 6942 "ColorTransformation.c"
+#line 7213 "ColorTransformation.c"
 }
 
 
@@ -6965,69 +7236,69 @@ void pixel_transformer_transform_from_fp (PixelTransformer* self, gfloat** fp_pi
 	gint dest_pixels_length1 = 0;
 	gint _dest_pixels_size_ = 0;
 	gint cache_pixel_ticker = 0;
-#line 839 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 883 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMER (self));
-#line 839 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 883 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (GDK_IS_PIXBUF (dest));
-#line 840 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 884 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->optimized_transformations;
-#line 840 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 884 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0__length1 = self->priv->optimized_transformations_length1;
-#line 840 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 884 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp0_ == NULL) {
-#line 841 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 885 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformer_build_optimized_transformations (self);
-#line 6979 "ColorTransformation.c"
+#line 7250 "ColorTransformation.c"
 	}
-#line 843 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 887 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = dest;
-#line 843 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 887 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = gdk_pixbuf_get_width (_tmp1_);
-#line 843 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 887 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	dest_width = _tmp2_;
-#line 844 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 888 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = dest;
-#line 844 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 888 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = gdk_pixbuf_get_height (_tmp3_);
-#line 844 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 888 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	dest_height = _tmp4_;
-#line 845 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 889 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = dest;
-#line 845 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 889 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = gdk_pixbuf_get_n_channels (_tmp5_);
-#line 845 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 889 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	dest_num_channels = _tmp6_;
-#line 846 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 890 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = dest;
-#line 846 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 890 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = gdk_pixbuf_get_rowstride (_tmp7_);
-#line 846 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 890 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	dest_rowstride = _tmp8_;
-#line 847 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 891 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = dest;
-#line 847 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 891 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = gdk_pixbuf_get_pixels (_tmp9_);
-#line 847 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 891 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	dest_pixels = _tmp10_;
-#line 847 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 891 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	dest_pixels_length1 = -1;
-#line 847 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 891 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_dest_pixels_size_ = dest_pixels_length1;
-#line 849 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	cache_pixel_ticker = 0;
-#line 7017 "ColorTransformation.c"
+#line 7288 "ColorTransformation.c"
 	{
 		gint j = 0;
-#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		j = 0;
-#line 7022 "ColorTransformation.c"
+#line 7293 "ColorTransformation.c"
 		{
 			gboolean _tmp11_ = FALSE;
-#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp11_ = TRUE;
-#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 7029 "ColorTransformation.c"
+#line 7300 "ColorTransformation.c"
 				gint _tmp13_ = 0;
 				gint _tmp14_ = 0;
 				gint row_start_index = 0;
@@ -7037,58 +7308,58 @@ void pixel_transformer_transform_from_fp (PixelTransformer* self, gfloat** fp_pi
 				gint _tmp17_ = 0;
 				gint _tmp18_ = 0;
 				gint _tmp19_ = 0;
-#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp11_) {
-#line 7041 "ColorTransformation.c"
+#line 7312 "ColorTransformation.c"
 					gint _tmp12_ = 0;
-#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp12_ = j;
-#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					j = _tmp12_ + 1;
-#line 7047 "ColorTransformation.c"
+#line 7318 "ColorTransformation.c"
 				}
-#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp11_ = FALSE;
-#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp13_ = j;
-#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp14_ = dest_height;
-#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp13_ < _tmp14_)) {
-#line 851 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 7059 "ColorTransformation.c"
+#line 7330 "ColorTransformation.c"
 				}
-#line 852 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp15_ = j;
-#line 852 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp16_ = dest_rowstride;
-#line 852 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				row_start_index = _tmp15_ * _tmp16_;
-#line 853 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp17_ = row_start_index;
-#line 853 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp18_ = dest_width;
-#line 853 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp19_ = dest_num_channels;
-#line 853 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				row_end_index = _tmp17_ + (_tmp18_ * _tmp19_);
-#line 7075 "ColorTransformation.c"
+#line 7346 "ColorTransformation.c"
 				{
 					gint i = 0;
 					gint _tmp20_ = 0;
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp20_ = row_start_index;
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp20_;
-#line 7083 "ColorTransformation.c"
+#line 7354 "ColorTransformation.c"
 					{
 						gboolean _tmp21_ = FALSE;
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp21_ = TRUE;
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						while (TRUE) {
-#line 7090 "ColorTransformation.c"
+#line 7361 "ColorTransformation.c"
 							gint _tmp24_ = 0;
 							gint _tmp25_ = 0;
 							RGBAnalyticPixel pixel = {0};
@@ -7125,110 +7396,110 @@ void pixel_transformer_transform_from_fp (PixelTransformer* self, gfloat** fp_pi
 							RGBAnalyticPixel _tmp50_ = {0};
 							gfloat _tmp51_ = 0.0F;
 							guchar _tmp52_ = '\0';
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (!_tmp21_) {
-#line 7129 "ColorTransformation.c"
+#line 7400 "ColorTransformation.c"
 								gint _tmp22_ = 0;
 								gint _tmp23_ = 0;
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp22_ = i;
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp23_ = dest_num_channels;
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								i = _tmp22_ + _tmp23_;
-#line 7138 "ColorTransformation.c"
+#line 7409 "ColorTransformation.c"
 							}
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp21_ = FALSE;
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp24_ = i;
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp25_ = row_end_index;
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (!(_tmp24_ < _tmp25_)) {
-#line 854 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 898 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								break;
-#line 7150 "ColorTransformation.c"
+#line 7421 "ColorTransformation.c"
 							}
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp26_ = *fp_pixel_cache;
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp26__length1 = *fp_pixel_cache_length1;
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp27_ = cache_pixel_ticker;
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp28_ = _tmp26_[_tmp27_];
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp29_ = *fp_pixel_cache;
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp29__length1 = *fp_pixel_cache_length1;
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp30_ = cache_pixel_ticker;
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp31_ = _tmp29_[_tmp30_ + 1];
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp32_ = *fp_pixel_cache;
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp32__length1 = *fp_pixel_cache_length1;
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp33_ = cache_pixel_ticker;
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp34_ = _tmp32_[_tmp33_ + 2];
-#line 855 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 899 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							rgb_analytic_pixel_init_from_components (&pixel, _tmp28_, _tmp31_, _tmp34_);
-#line 860 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 904 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp35_ = cache_pixel_ticker;
-#line 860 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 904 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							cache_pixel_ticker = _tmp35_ + 3;
-#line 862 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 906 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp36_ = pixel;
-#line 862 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 906 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							pixel_transformer_apply_transformations (self, &_tmp36_, &_tmp37_);
-#line 862 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 906 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							pixel = _tmp37_;
-#line 864 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 908 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp38_ = dest_pixels;
-#line 864 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 908 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp38__length1 = dest_pixels_length1;
-#line 864 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 908 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp39_ = i;
-#line 864 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 908 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp40_ = pixel;
-#line 864 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 908 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp41_ = _tmp40_.red;
-#line 864 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 908 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp38_[_tmp39_] = (guchar) (_tmp41_ * 255.0f);
-#line 864 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 908 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp42_ = _tmp38_[_tmp39_];
-#line 865 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 909 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp43_ = dest_pixels;
-#line 865 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 909 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp43__length1 = dest_pixels_length1;
-#line 865 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 909 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp44_ = i;
-#line 865 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 909 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp45_ = pixel;
-#line 865 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 909 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp46_ = _tmp45_.green;
-#line 865 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 909 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp43_[_tmp44_ + 1] = (guchar) (_tmp46_ * 255.0f);
-#line 865 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 909 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp47_ = _tmp43_[_tmp44_ + 1];
-#line 866 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 910 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp48_ = dest_pixels;
-#line 866 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 910 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp48__length1 = dest_pixels_length1;
-#line 866 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 910 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp49_ = i;
-#line 866 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 910 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp50_ = pixel;
-#line 866 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 910 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp51_ = _tmp50_.blue;
-#line 866 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 910 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp48_[_tmp49_ + 2] = (guchar) (_tmp51_ * 255.0f);
-#line 866 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 910 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp52_ = _tmp48_[_tmp49_ + 2];
-#line 7230 "ColorTransformation.c"
+#line 7501 "ColorTransformation.c"
 						}
 					}
 				}
@@ -7284,144 +7555,144 @@ void pixel_transformer_transform_to_other_pixbuf (PixelTransformer* self, GdkPix
 	guint8* _tmp32_ = NULL;
 	gint dest_pixels_length1 = 0;
 	gint _dest_pixels_size_ = 0;
-#line 871 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 915 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMER (self));
-#line 871 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 915 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (GDK_IS_PIXBUF (source));
-#line 871 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 915 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (GDK_IS_PIXBUF (dest));
-#line 871 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 915 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail ((cancellable == NULL) || G_IS_CANCELLABLE (cancellable));
-#line 873 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 917 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = source;
-#line 873 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 917 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = gdk_pixbuf_get_width (_tmp0_);
-#line 873 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 917 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = _tmp1_;
-#line 873 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 917 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = dest;
-#line 873 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 917 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = gdk_pixbuf_get_width (_tmp3_);
-#line 873 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 917 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = _tmp4_;
-#line 873 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 917 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp2_ != _tmp5_) {
-#line 874 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
-		g_error ("ColorTransformation.vala:874: PixelTransformer: source and destination" \
+#line 918 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		g_error ("ColorTransformation.vala:918: PixelTransformer: source and destination" \
 " pixbufs must have the same width");
-#line 7310 "ColorTransformation.c"
+#line 7581 "ColorTransformation.c"
 	}
-#line 876 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 920 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = source;
-#line 876 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 920 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = gdk_pixbuf_get_height (_tmp6_);
-#line 876 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 920 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = _tmp7_;
-#line 876 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 920 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = dest;
-#line 876 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 920 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = gdk_pixbuf_get_height (_tmp9_);
-#line 876 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 920 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp11_ = _tmp10_;
-#line 876 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 920 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp8_ != _tmp11_) {
-#line 877 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
-		g_error ("ColorTransformation.vala:877: PixelTransformer: source and destination" \
+#line 921 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		g_error ("ColorTransformation.vala:921: PixelTransformer: source and destination" \
 " pixbufs must have the same height");
-#line 7328 "ColorTransformation.c"
+#line 7599 "ColorTransformation.c"
 	}
-#line 879 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp12_ = source;
-#line 879 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp13_ = gdk_pixbuf_get_n_channels (_tmp12_);
-#line 879 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp14_ = _tmp13_;
-#line 879 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp15_ = dest;
-#line 879 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp16_ = gdk_pixbuf_get_n_channels (_tmp15_);
-#line 879 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp17_ = _tmp16_;
-#line 879 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp14_ != _tmp17_) {
-#line 880 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
-		g_error ("ColorTransformation.vala:880: %s", "PixelTransformer: source and destination pixbufs must have the same nu" \
+#line 924 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+		g_error ("ColorTransformation.vala:924: %s", "PixelTransformer: source and destination pixbufs must have the same nu" \
 "mber " "of channels");
-#line 7346 "ColorTransformation.c"
+#line 7617 "ColorTransformation.c"
 	}
-#line 883 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 927 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp18_ = self->priv->optimized_transformations;
-#line 883 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 927 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp18__length1 = self->priv->optimized_transformations_length1;
-#line 883 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 927 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp18_ == NULL) {
-#line 884 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 928 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformer_build_optimized_transformations (self);
-#line 7356 "ColorTransformation.c"
+#line 7627 "ColorTransformation.c"
 	}
-#line 886 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 930 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp19_ = source;
-#line 886 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 930 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp20_ = gdk_pixbuf_get_n_channels (_tmp19_);
-#line 886 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 930 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	n_channels = _tmp20_;
-#line 887 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 931 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp21_ = source;
-#line 887 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 931 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp22_ = gdk_pixbuf_get_rowstride (_tmp21_);
-#line 887 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 931 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rowstride = _tmp22_;
-#line 888 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 932 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp23_ = source;
-#line 888 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 932 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp24_ = gdk_pixbuf_get_width (_tmp23_);
-#line 888 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 932 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	width = _tmp24_;
-#line 889 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 933 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp25_ = source;
-#line 889 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 933 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp26_ = gdk_pixbuf_get_height (_tmp25_);
-#line 889 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 933 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	height = _tmp26_;
-#line 890 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 934 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp27_ = n_channels;
-#line 890 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 934 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp28_ = width;
-#line 890 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 934 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rowbytes = _tmp27_ * _tmp28_;
-#line 891 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 935 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp29_ = source;
-#line 891 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 935 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp30_ = gdk_pixbuf_get_pixels (_tmp29_);
-#line 891 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 935 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	source_pixels = _tmp30_;
-#line 891 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 935 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	source_pixels_length1 = -1;
-#line 891 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 935 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_source_pixels_size_ = source_pixels_length1;
-#line 892 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 936 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp31_ = dest;
-#line 892 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 936 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp32_ = gdk_pixbuf_get_pixels (_tmp31_);
-#line 892 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 936 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	dest_pixels = _tmp32_;
-#line 892 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 936 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	dest_pixels_length1 = -1;
-#line 892 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 936 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_dest_pixels_size_ = dest_pixels_length1;
-#line 7408 "ColorTransformation.c"
+#line 7679 "ColorTransformation.c"
 	{
 		gint j = 0;
-#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		j = 0;
-#line 7413 "ColorTransformation.c"
+#line 7684 "ColorTransformation.c"
 		{
 			gboolean _tmp33_ = FALSE;
-#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp33_ = TRUE;
-#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 7420 "ColorTransformation.c"
+#line 7691 "ColorTransformation.c"
 				gint _tmp35_ = 0;
 				gint _tmp36_ = 0;
 				gint row_start_index = 0;
@@ -7432,56 +7703,56 @@ void pixel_transformer_transform_to_other_pixbuf (PixelTransformer* self, GdkPix
 				gint _tmp40_ = 0;
 				gboolean _tmp70_ = FALSE;
 				GCancellable* _tmp71_ = NULL;
-#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp33_) {
-#line 7433 "ColorTransformation.c"
+#line 7704 "ColorTransformation.c"
 					gint _tmp34_ = 0;
-#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp34_ = j;
-#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					j = _tmp34_ + 1;
-#line 7439 "ColorTransformation.c"
+#line 7710 "ColorTransformation.c"
 				}
-#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp33_ = FALSE;
-#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp35_ = j;
-#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp36_ = height;
-#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp35_ < _tmp36_)) {
-#line 893 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 7451 "ColorTransformation.c"
+#line 7722 "ColorTransformation.c"
 				}
-#line 894 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 938 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp37_ = j;
-#line 894 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 938 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp38_ = rowstride;
-#line 894 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 938 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				row_start_index = _tmp37_ * _tmp38_;
-#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 939 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp39_ = row_start_index;
-#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 939 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp40_ = rowbytes;
-#line 895 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 939 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				row_end_index = _tmp39_ + _tmp40_;
-#line 7465 "ColorTransformation.c"
+#line 7736 "ColorTransformation.c"
 				{
 					gint i = 0;
 					gint _tmp41_ = 0;
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp41_ = row_start_index;
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp41_;
-#line 7473 "ColorTransformation.c"
+#line 7744 "ColorTransformation.c"
 					{
 						gboolean _tmp42_ = FALSE;
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp42_ = TRUE;
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						while (TRUE) {
-#line 7480 "ColorTransformation.c"
+#line 7751 "ColorTransformation.c"
 							gint _tmp45_ = 0;
 							gint _tmp46_ = 0;
 							RGBAnalyticPixel current_pixel = {0};
@@ -7514,127 +7785,127 @@ void pixel_transformer_transform_to_other_pixbuf (PixelTransformer* self, GdkPix
 							gint _tmp67_ = 0;
 							guchar _tmp68_ = '\0';
 							guchar _tmp69_ = '\0';
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (!_tmp42_) {
-#line 7515 "ColorTransformation.c"
+#line 7786 "ColorTransformation.c"
 								gint _tmp43_ = 0;
 								gint _tmp44_ = 0;
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp43_ = i;
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp44_ = n_channels;
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								i = _tmp43_ + _tmp44_;
-#line 7524 "ColorTransformation.c"
+#line 7795 "ColorTransformation.c"
 							}
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp42_ = FALSE;
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp45_ = i;
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp46_ = row_end_index;
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (!(_tmp45_ < _tmp46_)) {
-#line 896 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								break;
-#line 7536 "ColorTransformation.c"
+#line 7807 "ColorTransformation.c"
 							}
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp47_ = source_pixels;
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp47__length1 = source_pixels_length1;
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp48_ = i;
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp49_ = _tmp47_[_tmp48_];
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp50_ = source_pixels;
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp50__length1 = source_pixels_length1;
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp51_ = i;
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp52_ = _tmp50_[_tmp51_ + 1];
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp53_ = source_pixels;
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp53__length1 = source_pixels_length1;
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp54_ = i;
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp55_ = _tmp53_[_tmp54_ + 2];
-#line 897 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							rgb_analytic_pixel_init_from_quantized_components (&current_pixel, _tmp49_, _tmp52_, _tmp55_);
-#line 900 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 944 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp56_ = current_pixel;
-#line 900 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 944 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							pixel_transformer_apply_transformations (self, &_tmp56_, &_tmp57_);
-#line 900 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 944 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							current_pixel = _tmp57_;
-#line 902 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp58_ = dest_pixels;
-#line 902 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp58__length1 = dest_pixels_length1;
-#line 902 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp59_ = i;
-#line 902 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp60_ = rgb_analytic_pixel_quantized_red (&current_pixel);
-#line 902 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp58_[_tmp59_] = _tmp60_;
-#line 902 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp61_ = _tmp58_[_tmp59_];
-#line 903 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp62_ = dest_pixels;
-#line 903 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp62__length1 = dest_pixels_length1;
-#line 903 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp63_ = i;
-#line 903 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp64_ = rgb_analytic_pixel_quantized_green (&current_pixel);
-#line 903 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp62_[_tmp63_ + 1] = _tmp64_;
-#line 903 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp65_ = _tmp62_[_tmp63_ + 1];
-#line 904 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 948 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp66_ = dest_pixels;
-#line 904 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 948 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp66__length1 = dest_pixels_length1;
-#line 904 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 948 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp67_ = i;
-#line 904 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 948 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp68_ = rgb_analytic_pixel_quantized_blue (&current_pixel);
-#line 904 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 948 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp66_[_tmp67_ + 2] = _tmp68_;
-#line 904 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 948 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp69_ = _tmp66_[_tmp67_ + 2];
-#line 7606 "ColorTransformation.c"
+#line 7877 "ColorTransformation.c"
 						}
 					}
 				}
-#line 907 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 951 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp71_ = cancellable;
-#line 907 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 951 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp71_ != NULL) {
-#line 7614 "ColorTransformation.c"
+#line 7885 "ColorTransformation.c"
 					GCancellable* _tmp72_ = NULL;
 					gboolean _tmp73_ = FALSE;
-#line 907 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 951 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp72_ = cancellable;
-#line 907 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 951 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp73_ = g_cancellable_is_cancelled (_tmp72_);
-#line 907 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 951 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp70_ = _tmp73_;
-#line 7623 "ColorTransformation.c"
+#line 7894 "ColorTransformation.c"
 				} else {
-#line 907 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 951 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp70_ = FALSE;
-#line 7627 "ColorTransformation.c"
+#line 7898 "ColorTransformation.c"
 				}
-#line 907 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 951 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp70_) {
-#line 908 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 952 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					return;
-#line 7633 "ColorTransformation.c"
+#line 7904 "ColorTransformation.c"
 				}
 			}
 		}
@@ -7643,229 +7914,229 @@ void pixel_transformer_transform_to_other_pixbuf (PixelTransformer* self, GdkPix
 
 
 static void value_pixel_transformer_init (GValue* value) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	value->data[0].v_pointer = NULL;
-#line 7644 "ColorTransformation.c"
+#line 7915 "ColorTransformation.c"
 }
 
 
 static void value_pixel_transformer_free_value (GValue* value) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (value->data[0].v_pointer) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformer_unref (value->data[0].v_pointer);
-#line 7653 "ColorTransformation.c"
+#line 7924 "ColorTransformation.c"
 	}
 }
 
 
 static void value_pixel_transformer_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (src_value->data[0].v_pointer) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = pixel_transformer_ref (src_value->data[0].v_pointer);
-#line 7663 "ColorTransformation.c"
+#line 7934 "ColorTransformation.c"
 	} else {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 7667 "ColorTransformation.c"
+#line 7938 "ColorTransformation.c"
 	}
 }
 
 
 static gpointer value_pixel_transformer_peek_pointer (const GValue* value) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 7675 "ColorTransformation.c"
+#line 7946 "ColorTransformation.c"
 }
 
 
 static gchar* value_pixel_transformer_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (collect_values[0].v_pointer) {
-#line 7682 "ColorTransformation.c"
+#line 7953 "ColorTransformation.c"
 		PixelTransformer* object;
 		object = collect_values[0].v_pointer;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 7689 "ColorTransformation.c"
+#line 7960 "ColorTransformation.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 7693 "ColorTransformation.c"
+#line 7964 "ColorTransformation.c"
 		}
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = pixel_transformer_ref (object);
-#line 7697 "ColorTransformation.c"
+#line 7968 "ColorTransformation.c"
 	} else {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 7701 "ColorTransformation.c"
+#line 7972 "ColorTransformation.c"
 	}
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 7705 "ColorTransformation.c"
+#line 7976 "ColorTransformation.c"
 }
 
 
 static gchar* value_pixel_transformer_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PixelTransformer** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!object_p) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 7716 "ColorTransformation.c"
+#line 7987 "ColorTransformation.c"
 	}
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!value->data[0].v_pointer) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = NULL;
-#line 7722 "ColorTransformation.c"
+#line 7993 "ColorTransformation.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = value->data[0].v_pointer;
-#line 7726 "ColorTransformation.c"
+#line 7997 "ColorTransformation.c"
 	} else {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = pixel_transformer_ref (value->data[0].v_pointer);
-#line 7730 "ColorTransformation.c"
+#line 8001 "ColorTransformation.c"
 	}
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 7734 "ColorTransformation.c"
+#line 8005 "ColorTransformation.c"
 }
 
 
 GParamSpec* param_spec_pixel_transformer (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecPixelTransformer* spec;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_PIXEL_TRANSFORMER), NULL);
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return G_PARAM_SPEC (spec);
-#line 7748 "ColorTransformation.c"
+#line 8019 "ColorTransformation.c"
 }
 
 
 gpointer value_get_pixel_transformer (const GValue* value) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PIXEL_TRANSFORMER), NULL);
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 7757 "ColorTransformation.c"
+#line 8028 "ColorTransformation.c"
 }
 
 
 void value_set_pixel_transformer (GValue* value, gpointer v_object) {
 	PixelTransformer* old;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PIXEL_TRANSFORMER));
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PIXEL_TRANSFORMER));
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformer_ref (value->data[0].v_pointer);
-#line 7777 "ColorTransformation.c"
+#line 8048 "ColorTransformation.c"
 	} else {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 7781 "ColorTransformation.c"
+#line 8052 "ColorTransformation.c"
 	}
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformer_unref (old);
-#line 7787 "ColorTransformation.c"
+#line 8058 "ColorTransformation.c"
 	}
 }
 
 
 void value_take_pixel_transformer (GValue* value, gpointer v_object) {
 	PixelTransformer* old;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PIXEL_TRANSFORMER));
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PIXEL_TRANSFORMER));
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 7806 "ColorTransformation.c"
+#line 8077 "ColorTransformation.c"
 	} else {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 7810 "ColorTransformation.c"
+#line 8081 "ColorTransformation.c"
 	}
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformer_unref (old);
-#line 7816 "ColorTransformation.c"
+#line 8087 "ColorTransformation.c"
 	}
 }
 
 
 static void pixel_transformer_class_init (PixelTransformerClass * klass) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformer_parent_class = g_type_class_peek_parent (klass);
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformerClass *) klass)->finalize = pixel_transformer_finalize;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (PixelTransformerPrivate));
-#line 7828 "ColorTransformation.c"
+#line 8099 "ColorTransformation.c"
 }
 
 
 static void pixel_transformer_instance_init (PixelTransformer * self) {
 	GeeArrayList* _tmp0_ = NULL;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = PIXEL_TRANSFORMER_GET_PRIVATE (self);
-#line 732 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 776 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = gee_array_list_new (TYPE_PIXEL_TRANSFORMATION, (GBoxedCopyFunc) pixel_transformation_ref, pixel_transformation_unref, NULL, NULL, NULL);
-#line 732 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 776 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->transformations = _tmp0_;
-#line 734 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 778 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations = NULL;
-#line 734 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 778 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations_length1 = 0;
-#line 734 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 778 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_optimized_transformations_size_ = self->priv->optimized_transformations_length1;
-#line 735 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 779 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_slots_used = 0;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->ref_count = 1;
-#line 7850 "ColorTransformation.c"
+#line 8121 "ColorTransformation.c"
 }
 
 
 static void pixel_transformer_finalize (PixelTransformer* obj) {
 	PixelTransformer * self;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PIXEL_TRANSFORMER, PixelTransformer);
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_signal_handlers_destroy (self);
-#line 732 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 776 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_g_object_unref0 (self->priv->transformations);
-#line 734 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 778 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->optimized_transformations = (_vala_array_free (self->priv->optimized_transformations, self->priv->optimized_transformations_length1, (GDestroyNotify) pixel_transformation_unref), NULL);
-#line 7864 "ColorTransformation.c"
+#line 8135 "ColorTransformation.c"
 }
 
 
@@ -7886,24 +8157,24 @@ GType pixel_transformer_get_type (void) {
 gpointer pixel_transformer_ref (gpointer instance) {
 	PixelTransformer* self;
 	self = instance;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return instance;
-#line 7889 "ColorTransformation.c"
+#line 8160 "ColorTransformation.c"
 }
 
 
 void pixel_transformer_unref (gpointer instance) {
 	PixelTransformer* self;
 	self = instance;
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		PIXEL_TRANSFORMER_GET_CLASS (self)->finalize (self);
-#line 731 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 775 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 7902 "ColorTransformation.c"
+#line 8173 "ColorTransformation.c"
 	}
 }
 
@@ -7927,57 +8198,57 @@ RGBHistogram* rgb_histogram_construct (GType object_type, GdkPixbuf* pixbuf) {
 	guint8* _tmp10_ = NULL;
 	gint pixel_data_length1 = 0;
 	gint _pixel_data_size_ = 0;
-#line 930 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 974 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
-#line 930 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 974 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (RGBHistogram*) g_type_create_instance (object_type);
-#line 931 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 975 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = pixbuf;
-#line 931 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 975 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = gdk_pixbuf_get_bits_per_sample (_tmp0_);
-#line 931 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 975 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	sample_bytes = _tmp1_ / 8;
-#line 932 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 976 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = sample_bytes;
-#line 932 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 976 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = pixbuf;
-#line 932 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 976 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = gdk_pixbuf_get_n_channels (_tmp3_);
-#line 932 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 976 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_bytes = _tmp2_ * _tmp4_;
-#line 933 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 977 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = pixel_bytes;
-#line 933 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 977 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = pixbuf;
-#line 933 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 977 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = gdk_pixbuf_get_width (_tmp6_);
-#line 933 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 977 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = _tmp7_;
-#line 933 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 977 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	row_length_bytes = _tmp5_ * _tmp8_;
-#line 935 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 979 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = pixbuf;
-#line 935 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 979 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = gdk_pixbuf_get_pixels (_tmp9_);
-#line 935 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 979 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_data = _tmp10_;
-#line 935 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 979 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_data_length1 = -1;
-#line 935 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 979 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_data_size_ = pixel_data_length1;
-#line 7964 "ColorTransformation.c"
+#line 8235 "ColorTransformation.c"
 	{
 		gint y = 0;
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		y = 0;
-#line 7969 "ColorTransformation.c"
+#line 8240 "ColorTransformation.c"
 		{
 			gboolean _tmp11_ = FALSE;
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp11_ = TRUE;
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 7976 "ColorTransformation.c"
+#line 8247 "ColorTransformation.c"
 				gint _tmp13_ = 0;
 				GdkPixbuf* _tmp14_ = NULL;
 				gint _tmp15_ = 0;
@@ -7996,63 +8267,63 @@ RGBHistogram* rgb_histogram_construct (GType object_type, GdkPixbuf* pixbuf) {
 				gint _tmp24_ = 0;
 				gint _tmp25_ = 0;
 				gint _tmp26_ = 0;
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp11_) {
-#line 7997 "ColorTransformation.c"
+#line 8268 "ColorTransformation.c"
 					gint _tmp12_ = 0;
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp12_ = y;
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					y = _tmp12_ + 1;
-#line 8003 "ColorTransformation.c"
+#line 8274 "ColorTransformation.c"
 				}
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp11_ = FALSE;
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp13_ = y;
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp14_ = pixbuf;
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp15_ = gdk_pixbuf_get_height (_tmp14_);
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp16_ = _tmp15_;
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp13_ < _tmp16_)) {
-#line 937 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 8019 "ColorTransformation.c"
+#line 8290 "ColorTransformation.c"
 				}
-#line 938 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 982 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp17_ = y;
-#line 938 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 982 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp18_ = pixbuf;
-#line 938 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 982 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp19_ = gdk_pixbuf_get_rowstride (_tmp18_);
-#line 938 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 982 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp20_ = _tmp19_;
-#line 938 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 982 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				row_start_offset = _tmp17_ * _tmp20_;
-#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 984 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp21_ = row_start_offset;
-#line 940 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 984 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				r_offset = _tmp21_;
-#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 985 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp22_ = row_start_offset;
-#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 985 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp23_ = sample_bytes;
-#line 941 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 985 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				g_offset = _tmp22_ + _tmp23_;
-#line 942 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 986 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp24_ = row_start_offset;
-#line 942 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 986 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp25_ = sample_bytes;
-#line 942 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 986 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp26_ = sample_bytes;
-#line 942 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 986 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				b_offset = (_tmp24_ + _tmp25_) + _tmp26_;
-#line 944 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 988 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				while (TRUE) {
-#line 8051 "ColorTransformation.c"
+#line 8322 "ColorTransformation.c"
 					gint _tmp27_ = 0;
 					gint _tmp28_ = 0;
 					gint _tmp29_ = 0;
@@ -8083,99 +8354,99 @@ RGBHistogram* rgb_histogram_construct (GType object_type, GdkPixbuf* pixbuf) {
 					gint _tmp48_ = 0;
 					gint _tmp49_ = 0;
 					gint _tmp50_ = 0;
-#line 944 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 988 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp27_ = b_offset;
-#line 944 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 988 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp28_ = row_start_offset;
-#line 944 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 988 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp29_ = row_length_bytes;
-#line 944 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 988 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (!(_tmp27_ < (_tmp28_ + _tmp29_))) {
-#line 944 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 988 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						break;
-#line 8092 "ColorTransformation.c"
+#line 8363 "ColorTransformation.c"
 					}
-#line 945 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp30_ = self->priv->red_counts;
-#line 945 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp30__length1 = self->priv->red_counts_length1;
-#line 945 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp31_ = pixel_data;
-#line 945 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp31__length1 = pixel_data_length1;
-#line 945 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp32_ = r_offset;
-#line 945 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp33_ = _tmp31_[_tmp32_];
-#line 945 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp30_[_tmp33_] += 1;
-#line 945 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp34_ = _tmp30_[_tmp33_];
-#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp35_ = self->priv->green_counts;
-#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp35__length1 = self->priv->green_counts_length1;
-#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp36_ = pixel_data;
-#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp36__length1 = pixel_data_length1;
-#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp37_ = g_offset;
-#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp38_ = _tmp36_[_tmp37_];
-#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp35_[_tmp38_] += 1;
-#line 946 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp39_ = _tmp35_[_tmp38_];
-#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp40_ = self->priv->blue_counts;
-#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp40__length1 = self->priv->blue_counts_length1;
-#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp41_ = pixel_data;
-#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp41__length1 = pixel_data_length1;
-#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp42_ = b_offset;
-#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp43_ = _tmp41_[_tmp42_];
-#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp40_[_tmp43_] += 1;
-#line 947 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp44_ = _tmp40_[_tmp43_];
-#line 949 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 993 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp45_ = r_offset;
-#line 949 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 993 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp46_ = pixel_bytes;
-#line 949 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 993 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					r_offset = _tmp45_ + _tmp46_;
-#line 950 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 994 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp47_ = g_offset;
-#line 950 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 994 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp48_ = pixel_bytes;
-#line 950 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 994 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					g_offset = _tmp47_ + _tmp48_;
-#line 951 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 995 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp49_ = b_offset;
-#line 951 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 995 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp50_ = pixel_bytes;
-#line 951 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 995 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					b_offset = _tmp49_ + _tmp50_;
-#line 8160 "ColorTransformation.c"
+#line 8431 "ColorTransformation.c"
 				}
 			}
 		}
 	}
-#line 930 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 974 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 8167 "ColorTransformation.c"
+#line 8438 "ColorTransformation.c"
 }
 
 
 RGBHistogram* rgb_histogram_new (GdkPixbuf* pixbuf) {
-#line 930 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 974 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return rgb_histogram_construct (TYPE_RGB_HISTOGRAM, pixbuf);
-#line 8174 "ColorTransformation.c"
+#line 8445 "ColorTransformation.c"
 }
 
 
@@ -8190,67 +8461,67 @@ static gint rgb_histogram_correct_snap_to_quantization (RGBHistogram* self, gint
 	gint _tmp54__length1 = 0;
 	gint _tmp55_ = 0;
 	gint _tmp56_ = 0;
-#line 956 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1000 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_RGB_HISTOGRAM (self), 0);
-#line 957 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1001 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = buckets;
-#line 957 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1001 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0__length1 = buckets_length1;
-#line 957 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1001 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (_tmp0__length1 == 256, "buckets.length == 256");
-#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1002 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = i;
-#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1002 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp2_ >= 0) {
-#line 8201 "ColorTransformation.c"
+#line 8472 "ColorTransformation.c"
 		gint _tmp3_ = 0;
-#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1002 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = i;
-#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1002 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = _tmp3_ <= 255;
-#line 8207 "ColorTransformation.c"
+#line 8478 "ColorTransformation.c"
 	} else {
-#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1002 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = FALSE;
-#line 8211 "ColorTransformation.c"
+#line 8482 "ColorTransformation.c"
 	}
-#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1002 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (_tmp1_, "(i >= 0) && (i <= 255)");
-#line 960 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = i;
-#line 960 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp4_ == 0) {
-#line 8219 "ColorTransformation.c"
+#line 8490 "ColorTransformation.c"
 		gint* _tmp5_ = NULL;
 		gint _tmp5__length1 = 0;
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
-#line 961 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1005 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_ = buckets;
-#line 961 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1005 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5__length1 = buckets_length1;
-#line 961 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1005 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp6_ = i;
-#line 961 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1005 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp7_ = _tmp5_[_tmp6_];
-#line 961 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1005 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (_tmp7_ > 0) {
-#line 8234 "ColorTransformation.c"
+#line 8505 "ColorTransformation.c"
 			gint* _tmp8_ = NULL;
 			gint _tmp8__length1 = 0;
 			gint _tmp9_ = 0;
 			gint _tmp10_ = 0;
-#line 962 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp8_ = buckets;
-#line 962 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp8__length1 = buckets_length1;
-#line 962 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp9_ = i;
-#line 962 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp10_ = _tmp8_[_tmp9_ + 1];
-#line 962 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (_tmp10_ > 0) {
-#line 8249 "ColorTransformation.c"
+#line 8520 "ColorTransformation.c"
 				gint* _tmp11_ = NULL;
 				gint _tmp11__length1 = 0;
 				gint _tmp12_ = 0;
@@ -8259,82 +8530,82 @@ static gint rgb_histogram_correct_snap_to_quantization (RGBHistogram* self, gint
 				gint _tmp14__length1 = 0;
 				gint _tmp15_ = 0;
 				gint _tmp16_ = 0;
-#line 963 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1007 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp11_ = buckets;
-#line 963 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1007 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp11__length1 = buckets_length1;
-#line 963 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1007 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp12_ = i;
-#line 963 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1007 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp13_ = _tmp11_[_tmp12_];
-#line 963 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1007 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp14_ = buckets;
-#line 963 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1007 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp14__length1 = buckets_length1;
-#line 963 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1007 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp15_ = i;
-#line 963 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1007 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp16_ = _tmp14_[_tmp15_ + 1];
-#line 963 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1007 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp13_ > (2 * _tmp16_)) {
-#line 8276 "ColorTransformation.c"
+#line 8547 "ColorTransformation.c"
 					gint* _tmp17_ = NULL;
 					gint _tmp17__length1 = 0;
 					gint _tmp18_ = 0;
 					gint _tmp19_ = 0;
-#line 964 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp17_ = buckets;
-#line 964 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp17__length1 = buckets_length1;
-#line 964 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp18_ = i;
-#line 964 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp19_ = _tmp17_[_tmp18_ + 1];
-#line 964 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					result = _tmp19_;
-#line 964 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					return result;
-#line 8293 "ColorTransformation.c"
+#line 8564 "ColorTransformation.c"
 				}
 			}
 		}
 	} else {
 		gint _tmp20_ = 0;
-#line 965 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1009 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp20_ = i;
-#line 965 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1009 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (_tmp20_ == 255) {
-#line 8303 "ColorTransformation.c"
+#line 8574 "ColorTransformation.c"
 			gint* _tmp21_ = NULL;
 			gint _tmp21__length1 = 0;
 			gint _tmp22_ = 0;
 			gint _tmp23_ = 0;
-#line 966 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp21_ = buckets;
-#line 966 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp21__length1 = buckets_length1;
-#line 966 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp22_ = i;
-#line 966 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp23_ = _tmp21_[_tmp22_];
-#line 966 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (_tmp23_ > 0) {
-#line 8318 "ColorTransformation.c"
+#line 8589 "ColorTransformation.c"
 				gint* _tmp24_ = NULL;
 				gint _tmp24__length1 = 0;
 				gint _tmp25_ = 0;
 				gint _tmp26_ = 0;
-#line 967 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1011 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp24_ = buckets;
-#line 967 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1011 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp24__length1 = buckets_length1;
-#line 967 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1011 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp25_ = i;
-#line 967 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1011 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp26_ = _tmp24_[_tmp25_ - 1];
-#line 967 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1011 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp26_ > 0) {
-#line 8333 "ColorTransformation.c"
+#line 8604 "ColorTransformation.c"
 					gint* _tmp27_ = NULL;
 					gint _tmp27__length1 = 0;
 					gint _tmp28_ = 0;
@@ -8343,42 +8614,42 @@ static gint rgb_histogram_correct_snap_to_quantization (RGBHistogram* self, gint
 					gint _tmp30__length1 = 0;
 					gint _tmp31_ = 0;
 					gint _tmp32_ = 0;
-#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp27_ = buckets;
-#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp27__length1 = buckets_length1;
-#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp28_ = i;
-#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp29_ = _tmp27_[_tmp28_];
-#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp30_ = buckets;
-#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp30__length1 = buckets_length1;
-#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp31_ = i;
-#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp32_ = _tmp30_[_tmp31_ - 1];
-#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (_tmp29_ > (2 * _tmp32_)) {
-#line 8360 "ColorTransformation.c"
+#line 8631 "ColorTransformation.c"
 						gint* _tmp33_ = NULL;
 						gint _tmp33__length1 = 0;
 						gint _tmp34_ = 0;
 						gint _tmp35_ = 0;
-#line 969 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1013 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp33_ = buckets;
-#line 969 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1013 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp33__length1 = buckets_length1;
-#line 969 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1013 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp34_ = i;
-#line 969 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1013 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp35_ = _tmp33_[_tmp34_ - 1];
-#line 969 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1013 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						result = _tmp35_;
-#line 969 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1013 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						return result;
-#line 8377 "ColorTransformation.c"
+#line 8648 "ColorTransformation.c"
 					}
 				}
 			}
@@ -8387,17 +8658,17 @@ static gint rgb_histogram_correct_snap_to_quantization (RGBHistogram* self, gint
 			gint _tmp36__length1 = 0;
 			gint _tmp37_ = 0;
 			gint _tmp38_ = 0;
-#line 971 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp36_ = buckets;
-#line 971 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp36__length1 = buckets_length1;
-#line 971 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp37_ = i;
-#line 971 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp38_ = _tmp36_[_tmp37_];
-#line 971 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (_tmp38_ > 0) {
-#line 8396 "ColorTransformation.c"
+#line 8667 "ColorTransformation.c"
 				gint* _tmp39_ = NULL;
 				gint _tmp39__length1 = 0;
 				gint _tmp40_ = 0;
@@ -8410,33 +8681,33 @@ static gint rgb_histogram_correct_snap_to_quantization (RGBHistogram* self, gint
 				gint _tmp45__length1 = 0;
 				gint _tmp46_ = 0;
 				gint _tmp47_ = 0;
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp39_ = buckets;
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp39__length1 = buckets_length1;
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp40_ = i;
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp41_ = _tmp39_[_tmp40_];
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp42_ = buckets;
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp42__length1 = buckets_length1;
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp43_ = i;
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp44_ = _tmp42_[_tmp43_ - 1];
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp45_ = buckets;
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp45__length1 = buckets_length1;
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp46_ = i;
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp47_ = _tmp45_[_tmp46_ + 1];
-#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1016 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp41_ > ((_tmp44_ + _tmp47_) / 2)) {
-#line 8435 "ColorTransformation.c"
+#line 8706 "ColorTransformation.c"
 					gint* _tmp48_ = NULL;
 					gint _tmp48__length1 = 0;
 					gint _tmp49_ = 0;
@@ -8445,44 +8716,44 @@ static gint rgb_histogram_correct_snap_to_quantization (RGBHistogram* self, gint
 					gint _tmp51__length1 = 0;
 					gint _tmp52_ = 0;
 					gint _tmp53_ = 0;
-#line 973 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp48_ = buckets;
-#line 973 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp48__length1 = buckets_length1;
-#line 973 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp49_ = i;
-#line 973 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp50_ = _tmp48_[_tmp49_ - 1];
-#line 973 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp51_ = buckets;
-#line 973 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp51__length1 = buckets_length1;
-#line 973 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp52_ = i;
-#line 973 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp53_ = _tmp51_[_tmp52_ + 1];
-#line 973 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					result = (_tmp50_ + _tmp53_) / 2;
-#line 973 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					return result;
-#line 8464 "ColorTransformation.c"
+#line 8735 "ColorTransformation.c"
 				}
 			}
 		}
 	}
-#line 976 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1020 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp54_ = buckets;
-#line 976 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1020 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp54__length1 = buckets_length1;
-#line 976 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1020 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp55_ = i;
-#line 976 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1020 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp56_ = _tmp54_[_tmp55_];
-#line 976 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1020 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp56_;
-#line 976 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1020 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 8481 "ColorTransformation.c"
+#line 8752 "ColorTransformation.c"
 }
 
 
@@ -8497,124 +8768,124 @@ static gint rgb_histogram_correct_snap_from_quantization (RGBHistogram* self, gi
 	gint _tmp27__length1 = 0;
 	gint _tmp28_ = 0;
 	gint _tmp29_ = 0;
-#line 979 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_RGB_HISTOGRAM (self), 0);
-#line 980 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1024 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = buckets;
-#line 980 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1024 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0__length1 = buckets_length1;
-#line 980 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1024 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (_tmp0__length1 == 256, "buckets.length == 256");
-#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1025 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = i;
-#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1025 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp2_ >= 0) {
-#line 8508 "ColorTransformation.c"
+#line 8779 "ColorTransformation.c"
 		gint _tmp3_ = 0;
-#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1025 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = i;
-#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1025 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = _tmp3_ <= 255;
-#line 8514 "ColorTransformation.c"
+#line 8785 "ColorTransformation.c"
 	} else {
-#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1025 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = FALSE;
-#line 8518 "ColorTransformation.c"
+#line 8789 "ColorTransformation.c"
 	}
-#line 981 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1025 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (_tmp1_, "(i >= 0) && (i <= 255)");
-#line 983 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1027 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = i;
-#line 983 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1027 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp4_ == 0) {
-#line 8526 "ColorTransformation.c"
+#line 8797 "ColorTransformation.c"
 		gint* _tmp5_ = NULL;
 		gint _tmp5__length1 = 0;
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
-#line 984 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_ = buckets;
-#line 984 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5__length1 = buckets_length1;
-#line 984 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp6_ = i;
-#line 984 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp7_ = _tmp5_[_tmp6_];
-#line 984 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		result = _tmp7_;
-#line 984 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		return result;
-#line 8543 "ColorTransformation.c"
+#line 8814 "ColorTransformation.c"
 	} else {
 		gint _tmp8_ = 0;
-#line 985 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1029 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp8_ = i;
-#line 985 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1029 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (_tmp8_ == 255) {
-#line 8550 "ColorTransformation.c"
+#line 8821 "ColorTransformation.c"
 			gint* _tmp9_ = NULL;
 			gint _tmp9__length1 = 0;
 			gint _tmp10_ = 0;
 			gint _tmp11_ = 0;
-#line 986 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1030 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp9_ = buckets;
-#line 986 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1030 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp9__length1 = buckets_length1;
-#line 986 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1030 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp10_ = i;
-#line 986 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1030 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp11_ = _tmp9_[_tmp10_];
-#line 986 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1030 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			result = _tmp11_;
-#line 986 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1030 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return result;
-#line 8567 "ColorTransformation.c"
+#line 8838 "ColorTransformation.c"
 		} else {
 			gint* _tmp12_ = NULL;
 			gint _tmp12__length1 = 0;
 			gint _tmp13_ = 0;
 			gint _tmp14_ = 0;
-#line 988 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1032 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp12_ = buckets;
-#line 988 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1032 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp12__length1 = buckets_length1;
-#line 988 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1032 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp13_ = i;
-#line 988 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1032 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp14_ = _tmp12_[_tmp13_];
-#line 988 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1032 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (_tmp14_ == 0) {
-#line 8583 "ColorTransformation.c"
+#line 8854 "ColorTransformation.c"
 				gint* _tmp15_ = NULL;
 				gint _tmp15__length1 = 0;
 				gint _tmp16_ = 0;
 				gint _tmp17_ = 0;
-#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1033 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp15_ = buckets;
-#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1033 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp15__length1 = buckets_length1;
-#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1033 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp16_ = i;
-#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1033 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp17_ = _tmp15_[_tmp16_ - 1];
-#line 989 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1033 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp17_ > 0) {
-#line 8598 "ColorTransformation.c"
+#line 8869 "ColorTransformation.c"
 					gint* _tmp18_ = NULL;
 					gint _tmp18__length1 = 0;
 					gint _tmp19_ = 0;
 					gint _tmp20_ = 0;
-#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1034 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp18_ = buckets;
-#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1034 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp18__length1 = buckets_length1;
-#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1034 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp19_ = i;
-#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1034 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp20_ = _tmp18_[_tmp19_ + 1];
-#line 990 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1034 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (_tmp20_ > 0) {
-#line 8613 "ColorTransformation.c"
+#line 8884 "ColorTransformation.c"
 						gint* _tmp21_ = NULL;
 						gint _tmp21__length1 = 0;
 						gint _tmp22_ = 0;
@@ -8623,45 +8894,45 @@ static gint rgb_histogram_correct_snap_from_quantization (RGBHistogram* self, gi
 						gint _tmp24__length1 = 0;
 						gint _tmp25_ = 0;
 						gint _tmp26_ = 0;
-#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1035 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp21_ = buckets;
-#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1035 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp21__length1 = buckets_length1;
-#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1035 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp22_ = i;
-#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1035 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp23_ = _tmp21_[_tmp22_ - 1];
-#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1035 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp24_ = buckets;
-#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1035 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp24__length1 = buckets_length1;
-#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1035 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp25_ = i;
-#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1035 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp26_ = _tmp24_[_tmp25_ + 1];
-#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1035 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						result = (_tmp23_ + _tmp26_) / 2;
-#line 991 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1035 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						return result;
-#line 8642 "ColorTransformation.c"
+#line 8913 "ColorTransformation.c"
 					}
 				}
 			}
 		}
 	}
-#line 994 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1038 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp27_ = buckets;
-#line 994 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1038 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp27__length1 = buckets_length1;
-#line 994 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1038 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp28_ = i;
-#line 994 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1038 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp29_ = _tmp27_[_tmp28_];
-#line 994 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1038 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp29_;
-#line 994 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1038 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 8660 "ColorTransformation.c"
+#line 8931 "ColorTransformation.c"
 }
 
 
@@ -8830,359 +9101,359 @@ static void rgb_histogram_smooth_extrema (RGBHistogram* self, gint** count_data,
 	gint _tmp106__length1 = 0;
 	gint _tmp107_ = 0;
 	gint _tmp108_ = 0;
-#line 997 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1041 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_RGB_HISTOGRAM (self));
-#line 998 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1042 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = *count_data;
-#line 998 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1042 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0__length1 = *count_data_length1;
-#line 998 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1042 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (_tmp0__length1 == 256, "count_data.length == 256");
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = *count_data;
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1__length1 = *count_data_length1;
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = *count_data;
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2__length1 = *count_data_length1;
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = _tmp2_[0];
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = *count_data;
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4__length1 = *count_data_length1;
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = _tmp4_[1];
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = *count_data;
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6__length1 = *count_data_length1;
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = _tmp6_[2];
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_[0] = (((5 * _tmp3_) + (3 * _tmp5_)) + (2 * _tmp7_)) / 10;
-#line 1004 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1048 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = _tmp1_[0];
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = *count_data;
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9__length1 = *count_data_length1;
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = *count_data;
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10__length1 = *count_data_length1;
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp11_ = _tmp10_[0];
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp12_ = *count_data;
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp12__length1 = *count_data_length1;
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp13_ = _tmp12_[1];
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp14_ = *count_data;
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp14__length1 = *count_data_length1;
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp15_ = _tmp14_[2];
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp16_ = *count_data;
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp16__length1 = *count_data_length1;
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp17_ = _tmp16_[3];
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_[1] = ((((3 * _tmp11_) + (5 * _tmp13_)) + (3 * _tmp15_)) + (2 * _tmp17_)) / 13;
-#line 1006 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1050 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp18_ = _tmp9_[1];
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp19_ = *count_data;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp19__length1 = *count_data_length1;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp20_ = *count_data;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp20__length1 = *count_data_length1;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp21_ = _tmp20_[0];
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp22_ = *count_data;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp22__length1 = *count_data_length1;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp23_ = _tmp22_[1];
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp24_ = *count_data;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp24__length1 = *count_data_length1;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp25_ = _tmp24_[2];
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp26_ = *count_data;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp26__length1 = *count_data_length1;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp27_ = _tmp26_[3];
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp28_ = *count_data;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp28__length1 = *count_data_length1;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp29_ = _tmp28_[4];
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp19_[2] = (((((2 * _tmp21_) + (3 * _tmp23_)) + (5 * _tmp25_)) + (3 * _tmp27_)) + (2 * _tmp29_)) / 15;
-#line 1008 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1052 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp30_ = _tmp19_[2];
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp31_ = *count_data;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp31__length1 = *count_data_length1;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp32_ = *count_data;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp32__length1 = *count_data_length1;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp33_ = _tmp32_[1];
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp34_ = *count_data;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp34__length1 = *count_data_length1;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp35_ = _tmp34_[2];
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp36_ = *count_data;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp36__length1 = *count_data_length1;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp37_ = _tmp36_[3];
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp38_ = *count_data;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp38__length1 = *count_data_length1;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp39_ = _tmp38_[4];
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp40_ = *count_data;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp40__length1 = *count_data_length1;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp41_ = _tmp40_[5];
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp31_[3] = (((((2 * _tmp33_) + (3 * _tmp35_)) + (5 * _tmp37_)) + (3 * _tmp39_)) + (2 * _tmp41_)) / 15;
-#line 1010 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp42_ = _tmp31_[3];
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp43_ = *count_data;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp43__length1 = *count_data_length1;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp44_ = *count_data;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp44__length1 = *count_data_length1;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp45_ = _tmp44_[2];
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp46_ = *count_data;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp46__length1 = *count_data_length1;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp47_ = _tmp46_[3];
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp48_ = *count_data;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp48__length1 = *count_data_length1;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp49_ = _tmp48_[4];
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp50_ = *count_data;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp50__length1 = *count_data_length1;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp51_ = _tmp50_[5];
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp52_ = *count_data;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp52__length1 = *count_data_length1;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp53_ = _tmp52_[6];
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp43_[4] = (((((2 * _tmp45_) + (3 * _tmp47_)) + (5 * _tmp49_)) + (3 * _tmp51_)) + (2 * _tmp53_)) / 15;
-#line 1012 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp54_ = _tmp43_[4];
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp55_ = *count_data;
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp55__length1 = *count_data_length1;
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp56_ = *count_data;
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp56__length1 = *count_data_length1;
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp57_ = _tmp56_[255];
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp58_ = *count_data;
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp58__length1 = *count_data_length1;
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp59_ = _tmp58_[254];
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp60_ = *count_data;
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp60__length1 = *count_data_length1;
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp61_ = _tmp60_[253];
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp55_[255] = (((5 * _tmp57_) + (3 * _tmp59_)) + (2 * _tmp61_)) / 10;
-#line 1015 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1059 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp62_ = _tmp55_[255];
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp63_ = *count_data;
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp63__length1 = *count_data_length1;
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp64_ = *count_data;
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp64__length1 = *count_data_length1;
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp65_ = _tmp64_[255];
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp66_ = *count_data;
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp66__length1 = *count_data_length1;
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp67_ = _tmp66_[254];
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp68_ = *count_data;
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp68__length1 = *count_data_length1;
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp69_ = _tmp68_[253];
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp70_ = *count_data;
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp70__length1 = *count_data_length1;
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp71_ = _tmp70_[252];
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp63_[254] = ((((3 * _tmp65_) + (5 * _tmp67_)) + (3 * _tmp69_)) + (2 * _tmp71_)) / 13;
-#line 1017 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp72_ = _tmp63_[254];
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp73_ = *count_data;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp73__length1 = *count_data_length1;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp74_ = *count_data;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp74__length1 = *count_data_length1;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp75_ = _tmp74_[255];
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp76_ = *count_data;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp76__length1 = *count_data_length1;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp77_ = _tmp76_[254];
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp78_ = *count_data;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp78__length1 = *count_data_length1;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp79_ = _tmp78_[253];
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp80_ = *count_data;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp80__length1 = *count_data_length1;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp81_ = _tmp80_[252];
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp82_ = *count_data;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp82__length1 = *count_data_length1;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp83_ = _tmp82_[251];
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp73_[253] = (((((2 * _tmp75_) + (3 * _tmp77_)) + (5 * _tmp79_)) + (3 * _tmp81_)) + (2 * _tmp83_)) / 15;
-#line 1019 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1063 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp84_ = _tmp73_[253];
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp85_ = *count_data;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp85__length1 = *count_data_length1;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp86_ = *count_data;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp86__length1 = *count_data_length1;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp87_ = _tmp86_[254];
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp88_ = *count_data;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp88__length1 = *count_data_length1;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp89_ = _tmp88_[253];
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp90_ = *count_data;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp90__length1 = *count_data_length1;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp91_ = _tmp90_[252];
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp92_ = *count_data;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp92__length1 = *count_data_length1;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp93_ = _tmp92_[251];
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp94_ = *count_data;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp94__length1 = *count_data_length1;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp95_ = _tmp94_[250];
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp85_[252] = (((((2 * _tmp87_) + (3 * _tmp89_)) + (5 * _tmp91_)) + (3 * _tmp93_)) + (2 * _tmp95_)) / 15;
-#line 1021 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1065 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp96_ = _tmp85_[252];
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp97_ = *count_data;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp97__length1 = *count_data_length1;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp98_ = *count_data;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp98__length1 = *count_data_length1;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp99_ = _tmp98_[253];
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp100_ = *count_data;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp100__length1 = *count_data_length1;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp101_ = _tmp100_[252];
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp102_ = *count_data;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp102__length1 = *count_data_length1;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp103_ = _tmp102_[251];
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp104_ = *count_data;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp104__length1 = *count_data_length1;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp105_ = _tmp104_[250];
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp106_ = *count_data;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp106__length1 = *count_data_length1;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp107_ = _tmp106_[249];
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp97_[251] = (((((2 * _tmp99_) + (3 * _tmp101_)) + (5 * _tmp103_)) + (3 * _tmp105_)) + (2 * _tmp107_)) / 15;
-#line 1023 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1067 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp108_ = _tmp97_[251];
-#line 9181 "ColorTransformation.c"
+#line 9452 "ColorTransformation.c"
 }
 
 
@@ -9210,119 +9481,119 @@ static void rgb_histogram_prepare_qualitative_counts (RGBHistogram* self) {
 	gint _tmp87_ = 0;
 	gint constrained_max_qual_count = 0;
 	gint _tmp88_ = 0;
-#line 1027 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1071 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_RGB_HISTOGRAM (self));
-#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1072 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = self->priv->qualitative_red_counts;
-#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1072 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2__length1 = self->priv->qualitative_red_counts_length1;
-#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1072 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp2_ != NULL) {
-#line 9217 "ColorTransformation.c"
+#line 9488 "ColorTransformation.c"
 		gint* _tmp3_ = NULL;
 		gint _tmp3__length1 = 0;
-#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1072 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = self->priv->qualitative_green_counts;
-#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1072 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3__length1 = self->priv->qualitative_green_counts_length1;
-#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1072 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = _tmp3_ != NULL;
-#line 9226 "ColorTransformation.c"
+#line 9497 "ColorTransformation.c"
 	} else {
-#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1072 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = FALSE;
-#line 9230 "ColorTransformation.c"
+#line 9501 "ColorTransformation.c"
 	}
-#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1072 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp1_) {
-#line 9234 "ColorTransformation.c"
+#line 9505 "ColorTransformation.c"
 		gint* _tmp4_ = NULL;
 		gint _tmp4__length1 = 0;
-#line 1029 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4_ = self->priv->qualitative_blue_counts;
-#line 1029 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4__length1 = self->priv->qualitative_blue_counts_length1;
-#line 1029 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp0_ = _tmp4_ != NULL;
-#line 9243 "ColorTransformation.c"
+#line 9514 "ColorTransformation.c"
 	} else {
-#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1072 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp0_ = FALSE;
-#line 9247 "ColorTransformation.c"
+#line 9518 "ColorTransformation.c"
 	}
-#line 1028 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1072 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp0_) {
-#line 1030 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		return;
-#line 9253 "ColorTransformation.c"
+#line 9524 "ColorTransformation.c"
 	}
-#line 1032 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1076 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = g_new0 (gint, 256);
-#line 1032 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1076 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_red_counts = (g_free (self->priv->qualitative_red_counts), NULL);
-#line 1032 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1076 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_red_counts = _tmp5_;
-#line 1032 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1076 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_red_counts_length1 = 256;
-#line 1032 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1076 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_qualitative_red_counts_size_ = self->priv->qualitative_red_counts_length1;
-#line 1033 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1077 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = g_new0 (gint, 256);
-#line 1033 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1077 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_green_counts = (g_free (self->priv->qualitative_green_counts), NULL);
-#line 1033 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1077 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_green_counts = _tmp6_;
-#line 1033 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1077 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_green_counts_length1 = 256;
-#line 1033 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1077 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_qualitative_green_counts_size_ = self->priv->qualitative_green_counts_length1;
-#line 1034 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1078 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = g_new0 (gint, 256);
-#line 1034 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1078 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_blue_counts = (g_free (self->priv->qualitative_blue_counts), NULL);
-#line 1034 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1078 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_blue_counts = _tmp7_;
-#line 1034 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1078 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_blue_counts_length1 = 256;
-#line 1034 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1078 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_qualitative_blue_counts_size_ = self->priv->qualitative_blue_counts_length1;
-#line 1036 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1080 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = g_new0 (gint, 256);
-#line 1036 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1080 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	temp_red_counts = _tmp8_;
-#line 1036 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1080 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	temp_red_counts_length1 = 256;
-#line 1036 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1080 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_temp_red_counts_size_ = temp_red_counts_length1;
-#line 1037 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1081 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = g_new0 (gint, 256);
-#line 1037 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1081 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	temp_green_counts = _tmp9_;
-#line 1037 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1081 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	temp_green_counts_length1 = 256;
-#line 1037 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1081 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_temp_green_counts_size_ = temp_green_counts_length1;
-#line 1038 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1082 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = g_new0 (gint, 256);
-#line 1038 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1082 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	temp_blue_counts = _tmp10_;
-#line 1038 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1082 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	temp_blue_counts_length1 = 256;
-#line 1038 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1082 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_temp_blue_counts_size_ = temp_blue_counts_length1;
-#line 9309 "ColorTransformation.c"
+#line 9580 "ColorTransformation.c"
 	{
 		gint i = 0;
-#line 1044 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1088 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 9314 "ColorTransformation.c"
+#line 9585 "ColorTransformation.c"
 		{
 			gboolean _tmp11_ = FALSE;
-#line 1044 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1088 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp11_ = TRUE;
-#line 1044 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1088 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 9321 "ColorTransformation.c"
+#line 9592 "ColorTransformation.c"
 				gint _tmp13_ = 0;
 				gint* _tmp14_ = NULL;
 				gint _tmp14__length1 = 0;
@@ -9348,96 +9619,96 @@ static void rgb_histogram_prepare_qualitative_counts (RGBHistogram* self) {
 				gint _tmp29_ = 0;
 				gint _tmp30_ = 0;
 				gint _tmp31_ = 0;
-#line 1044 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1088 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp11_) {
-#line 9349 "ColorTransformation.c"
+#line 9620 "ColorTransformation.c"
 					gint _tmp12_ = 0;
-#line 1044 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1088 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp12_ = i;
-#line 1044 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1088 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp12_ + 1;
-#line 9355 "ColorTransformation.c"
+#line 9626 "ColorTransformation.c"
 				}
-#line 1044 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1088 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp11_ = FALSE;
-#line 1044 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1088 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp13_ = i;
-#line 1044 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1088 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp13_ < 256)) {
-#line 1044 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1088 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 9365 "ColorTransformation.c"
+#line 9636 "ColorTransformation.c"
 				}
-#line 1045 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1089 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp14_ = self->priv->qualitative_red_counts;
-#line 1045 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1089 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp14__length1 = self->priv->qualitative_red_counts_length1;
-#line 1045 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1089 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp15_ = i;
-#line 1045 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1089 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp16_ = self->priv->red_counts;
-#line 1045 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1089 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp16__length1 = self->priv->red_counts_length1;
-#line 1045 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1089 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp17_ = i;
-#line 1045 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1089 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp18_ = rgb_histogram_correct_snap_from_quantization (self, _tmp16_, _tmp16__length1, _tmp17_);
-#line 1045 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1089 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp14_[_tmp15_] = _tmp18_;
-#line 1045 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1089 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp19_ = _tmp14_[_tmp15_];
-#line 1047 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1091 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp20_ = self->priv->qualitative_green_counts;
-#line 1047 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1091 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp20__length1 = self->priv->qualitative_green_counts_length1;
-#line 1047 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1091 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp21_ = i;
-#line 1047 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1091 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp22_ = self->priv->green_counts;
-#line 1047 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1091 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp22__length1 = self->priv->green_counts_length1;
-#line 1047 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1091 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp23_ = i;
-#line 1047 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1091 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp24_ = rgb_histogram_correct_snap_from_quantization (self, _tmp22_, _tmp22__length1, _tmp23_);
-#line 1047 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1091 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp20_[_tmp21_] = _tmp24_;
-#line 1047 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1091 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp25_ = _tmp20_[_tmp21_];
-#line 1049 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1093 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp26_ = self->priv->qualitative_blue_counts;
-#line 1049 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1093 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp26__length1 = self->priv->qualitative_blue_counts_length1;
-#line 1049 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1093 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp27_ = i;
-#line 1049 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1093 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp28_ = self->priv->blue_counts;
-#line 1049 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1093 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp28__length1 = self->priv->blue_counts_length1;
-#line 1049 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1093 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp29_ = i;
-#line 1049 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1093 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp30_ = rgb_histogram_correct_snap_from_quantization (self, _tmp28_, _tmp28__length1, _tmp29_);
-#line 1049 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1093 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp26_[_tmp27_] = _tmp30_;
-#line 1049 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1093 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp31_ = _tmp26_[_tmp27_];
-#line 9421 "ColorTransformation.c"
+#line 9692 "ColorTransformation.c"
 			}
 		}
 	}
 	{
 		gint i = 0;
-#line 1053 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1097 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 9429 "ColorTransformation.c"
+#line 9700 "ColorTransformation.c"
 		{
 			gboolean _tmp32_ = FALSE;
-#line 1053 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1097 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp32_ = TRUE;
-#line 1053 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1097 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 9436 "ColorTransformation.c"
+#line 9707 "ColorTransformation.c"
 				gint _tmp34_ = 0;
 				gint* _tmp35_ = NULL;
 				gint _tmp35__length1 = 0;
@@ -9463,96 +9734,96 @@ static void rgb_histogram_prepare_qualitative_counts (RGBHistogram* self) {
 				gint _tmp50_ = 0;
 				gint _tmp51_ = 0;
 				gint _tmp52_ = 0;
-#line 1053 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1097 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp32_) {
-#line 9464 "ColorTransformation.c"
+#line 9735 "ColorTransformation.c"
 					gint _tmp33_ = 0;
-#line 1053 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1097 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp33_ = i;
-#line 1053 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1097 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp33_ + 1;
-#line 9470 "ColorTransformation.c"
+#line 9741 "ColorTransformation.c"
 				}
-#line 1053 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1097 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp32_ = FALSE;
-#line 1053 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1097 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp34_ = i;
-#line 1053 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1097 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp34_ < 256)) {
-#line 1053 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1097 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 9480 "ColorTransformation.c"
+#line 9751 "ColorTransformation.c"
 				}
-#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1098 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp35_ = temp_red_counts;
-#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1098 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp35__length1 = temp_red_counts_length1;
-#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1098 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp36_ = i;
-#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1098 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp37_ = self->priv->qualitative_red_counts;
-#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1098 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp37__length1 = self->priv->qualitative_red_counts_length1;
-#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1098 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp38_ = i;
-#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1098 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp39_ = _tmp37_[_tmp38_];
-#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1098 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp35_[_tmp36_] = _tmp39_;
-#line 1054 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1098 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp40_ = _tmp35_[_tmp36_];
-#line 1055 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp41_ = temp_green_counts;
-#line 1055 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp41__length1 = temp_green_counts_length1;
-#line 1055 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp42_ = i;
-#line 1055 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp43_ = self->priv->qualitative_green_counts;
-#line 1055 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp43__length1 = self->priv->qualitative_green_counts_length1;
-#line 1055 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp44_ = i;
-#line 1055 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp45_ = _tmp43_[_tmp44_];
-#line 1055 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp41_[_tmp42_] = _tmp45_;
-#line 1055 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp46_ = _tmp41_[_tmp42_];
-#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp47_ = temp_blue_counts;
-#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp47__length1 = temp_blue_counts_length1;
-#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp48_ = i;
-#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp49_ = self->priv->qualitative_blue_counts;
-#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp49__length1 = self->priv->qualitative_blue_counts_length1;
-#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp50_ = i;
-#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp51_ = _tmp49_[_tmp50_];
-#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp47_[_tmp48_] = _tmp51_;
-#line 1056 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp52_ = _tmp47_[_tmp48_];
-#line 9536 "ColorTransformation.c"
+#line 9807 "ColorTransformation.c"
 			}
 		}
 	}
 	{
 		gint i = 0;
-#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 9544 "ColorTransformation.c"
+#line 9815 "ColorTransformation.c"
 		{
 			gboolean _tmp53_ = FALSE;
-#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp53_ = TRUE;
-#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 9551 "ColorTransformation.c"
+#line 9822 "ColorTransformation.c"
 				gint _tmp55_ = 0;
 				gint* _tmp56_ = NULL;
 				gint _tmp56__length1 = 0;
@@ -9578,99 +9849,99 @@ static void rgb_histogram_prepare_qualitative_counts (RGBHistogram* self) {
 				gint _tmp71_ = 0;
 				gint _tmp72_ = 0;
 				gint _tmp73_ = 0;
-#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp53_) {
-#line 9579 "ColorTransformation.c"
+#line 9850 "ColorTransformation.c"
 					gint _tmp54_ = 0;
-#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp54_ = i;
-#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp54_ + 1;
-#line 9585 "ColorTransformation.c"
+#line 9856 "ColorTransformation.c"
 				}
-#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp53_ = FALSE;
-#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp55_ = i;
-#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp55_ < 256)) {
-#line 1061 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 9595 "ColorTransformation.c"
+#line 9866 "ColorTransformation.c"
 				}
-#line 1062 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1106 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp56_ = self->priv->qualitative_red_counts;
-#line 1062 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1106 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp56__length1 = self->priv->qualitative_red_counts_length1;
-#line 1062 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1106 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp57_ = i;
-#line 1062 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1106 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp58_ = temp_red_counts;
-#line 1062 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1106 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp58__length1 = temp_red_counts_length1;
-#line 1062 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1106 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp59_ = i;
-#line 1062 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1106 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp60_ = rgb_histogram_correct_snap_to_quantization (self, _tmp58_, _tmp58__length1, _tmp59_);
-#line 1062 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1106 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp56_[_tmp57_] = _tmp60_;
-#line 1062 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1106 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp61_ = _tmp56_[_tmp57_];
-#line 1064 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp62_ = self->priv->qualitative_green_counts;
-#line 1064 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp62__length1 = self->priv->qualitative_green_counts_length1;
-#line 1064 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp63_ = i;
-#line 1064 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp64_ = temp_green_counts;
-#line 1064 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp64__length1 = temp_green_counts_length1;
-#line 1064 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp65_ = i;
-#line 1064 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp66_ = rgb_histogram_correct_snap_to_quantization (self, _tmp64_, _tmp64__length1, _tmp65_);
-#line 1064 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp62_[_tmp63_] = _tmp66_;
-#line 1064 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp67_ = _tmp62_[_tmp63_];
-#line 1066 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1110 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp68_ = self->priv->qualitative_blue_counts;
-#line 1066 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1110 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp68__length1 = self->priv->qualitative_blue_counts_length1;
-#line 1066 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1110 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp69_ = i;
-#line 1066 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1110 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp70_ = temp_blue_counts;
-#line 1066 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1110 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp70__length1 = temp_blue_counts_length1;
-#line 1066 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1110 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp71_ = i;
-#line 1066 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1110 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp72_ = rgb_histogram_correct_snap_to_quantization (self, _tmp70_, _tmp70__length1, _tmp71_);
-#line 1066 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1110 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp68_[_tmp69_] = _tmp72_;
-#line 1066 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1110 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp73_ = _tmp68_[_tmp69_];
-#line 9651 "ColorTransformation.c"
+#line 9922 "ColorTransformation.c"
 			}
 		}
 	}
-#line 1072 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1116 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	mean_qual_count = 0;
-#line 9657 "ColorTransformation.c"
+#line 9928 "ColorTransformation.c"
 	{
 		gint i = 0;
-#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1117 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 9662 "ColorTransformation.c"
+#line 9933 "ColorTransformation.c"
 		{
 			gboolean _tmp74_ = FALSE;
-#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1117 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp74_ = TRUE;
-#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1117 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 9669 "ColorTransformation.c"
+#line 9940 "ColorTransformation.c"
 				gint _tmp76_ = 0;
 				gint _tmp77_ = 0;
 				gint* _tmp78_ = NULL;
@@ -9685,79 +9956,79 @@ static void rgb_histogram_prepare_qualitative_counts (RGBHistogram* self) {
 				gint _tmp84__length1 = 0;
 				gint _tmp85_ = 0;
 				gint _tmp86_ = 0;
-#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1117 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp74_) {
-#line 9686 "ColorTransformation.c"
+#line 9957 "ColorTransformation.c"
 					gint _tmp75_ = 0;
-#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1117 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp75_ = i;
-#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1117 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp75_ + 1;
-#line 9692 "ColorTransformation.c"
+#line 9963 "ColorTransformation.c"
 				}
-#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1117 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp74_ = FALSE;
-#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1117 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp76_ = i;
-#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1117 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp76_ < 256)) {
-#line 1073 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1117 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 9702 "ColorTransformation.c"
+#line 9973 "ColorTransformation.c"
 				}
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp77_ = mean_qual_count;
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp78_ = self->priv->qualitative_red_counts;
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp78__length1 = self->priv->qualitative_red_counts_length1;
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp79_ = i;
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp80_ = _tmp78_[_tmp79_];
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp81_ = self->priv->qualitative_green_counts;
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp81__length1 = self->priv->qualitative_green_counts_length1;
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp82_ = i;
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp83_ = _tmp81_[_tmp82_];
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp84_ = self->priv->qualitative_blue_counts;
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp84__length1 = self->priv->qualitative_blue_counts_length1;
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp85_ = i;
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp86_ = _tmp84_[_tmp85_];
-#line 1074 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				mean_qual_count = _tmp77_ + ((_tmp80_ + _tmp83_) + _tmp86_);
-#line 9732 "ColorTransformation.c"
+#line 10003 "ColorTransformation.c"
 			}
 		}
 	}
-#line 1077 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1121 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp87_ = mean_qual_count;
-#line 1077 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1121 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	mean_qual_count = _tmp87_ / (256 * 3);
-#line 1078 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1122 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp88_ = mean_qual_count;
-#line 1078 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1122 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	constrained_max_qual_count = 8 * _tmp88_;
-#line 9744 "ColorTransformation.c"
+#line 10015 "ColorTransformation.c"
 	{
 		gint i = 0;
-#line 1079 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 9749 "ColorTransformation.c"
+#line 10020 "ColorTransformation.c"
 		{
 			gboolean _tmp89_ = FALSE;
-#line 1079 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp89_ = TRUE;
-#line 1079 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 9756 "ColorTransformation.c"
+#line 10027 "ColorTransformation.c"
 				gint _tmp91_ = 0;
 				gint* _tmp92_ = NULL;
 				gint _tmp92__length1 = 0;
@@ -9774,138 +10045,138 @@ static void rgb_histogram_prepare_qualitative_counts (RGBHistogram* self) {
 				gint _tmp109_ = 0;
 				gint _tmp110_ = 0;
 				gint _tmp111_ = 0;
-#line 1079 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp89_) {
-#line 9775 "ColorTransformation.c"
+#line 10046 "ColorTransformation.c"
 					gint _tmp90_ = 0;
-#line 1079 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp90_ = i;
-#line 1079 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp90_ + 1;
-#line 9781 "ColorTransformation.c"
+#line 10052 "ColorTransformation.c"
 				}
-#line 1079 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp89_ = FALSE;
-#line 1079 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp91_ = i;
-#line 1079 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp91_ < 256)) {
-#line 1079 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 9791 "ColorTransformation.c"
+#line 10062 "ColorTransformation.c"
 				}
-#line 1080 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1124 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp92_ = self->priv->qualitative_red_counts;
-#line 1080 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1124 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp92__length1 = self->priv->qualitative_red_counts_length1;
-#line 1080 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1124 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp93_ = i;
-#line 1080 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1124 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp94_ = _tmp92_[_tmp93_];
-#line 1080 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1124 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp95_ = constrained_max_qual_count;
-#line 1080 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1124 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp94_ > _tmp95_) {
-#line 9805 "ColorTransformation.c"
+#line 10076 "ColorTransformation.c"
 					gint* _tmp96_ = NULL;
 					gint _tmp96__length1 = 0;
 					gint _tmp97_ = 0;
 					gint _tmp98_ = 0;
 					gint _tmp99_ = 0;
-#line 1081 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1125 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp96_ = self->priv->qualitative_red_counts;
-#line 1081 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1125 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp96__length1 = self->priv->qualitative_red_counts_length1;
-#line 1081 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1125 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp97_ = i;
-#line 1081 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1125 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp98_ = constrained_max_qual_count;
-#line 1081 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1125 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp96_[_tmp97_] = _tmp98_;
-#line 1081 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1125 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp99_ = _tmp96_[_tmp97_];
-#line 9823 "ColorTransformation.c"
+#line 10094 "ColorTransformation.c"
 				}
-#line 1083 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1127 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp100_ = self->priv->qualitative_green_counts;
-#line 1083 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1127 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp100__length1 = self->priv->qualitative_green_counts_length1;
-#line 1083 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1127 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp101_ = i;
-#line 1083 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1127 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp102_ = _tmp100_[_tmp101_];
-#line 1083 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1127 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp103_ = constrained_max_qual_count;
-#line 1083 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1127 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp102_ > _tmp103_) {
-#line 9837 "ColorTransformation.c"
+#line 10108 "ColorTransformation.c"
 					gint* _tmp104_ = NULL;
 					gint _tmp104__length1 = 0;
 					gint _tmp105_ = 0;
 					gint _tmp106_ = 0;
 					gint _tmp107_ = 0;
-#line 1084 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1128 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp104_ = self->priv->qualitative_green_counts;
-#line 1084 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1128 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp104__length1 = self->priv->qualitative_green_counts_length1;
-#line 1084 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1128 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp105_ = i;
-#line 1084 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1128 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp106_ = constrained_max_qual_count;
-#line 1084 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1128 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp104_[_tmp105_] = _tmp106_;
-#line 1084 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1128 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp107_ = _tmp104_[_tmp105_];
-#line 9855 "ColorTransformation.c"
+#line 10126 "ColorTransformation.c"
 				}
-#line 1086 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp108_ = self->priv->qualitative_blue_counts;
-#line 1086 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp108__length1 = self->priv->qualitative_blue_counts_length1;
-#line 1086 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp109_ = i;
-#line 1086 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp110_ = _tmp108_[_tmp109_];
-#line 1086 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp111_ = constrained_max_qual_count;
-#line 1086 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (_tmp110_ > _tmp111_) {
-#line 9869 "ColorTransformation.c"
+#line 10140 "ColorTransformation.c"
 					gint* _tmp112_ = NULL;
 					gint _tmp112__length1 = 0;
 					gint _tmp113_ = 0;
 					gint _tmp114_ = 0;
 					gint _tmp115_ = 0;
-#line 1087 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1131 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp112_ = self->priv->qualitative_blue_counts;
-#line 1087 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1131 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp112__length1 = self->priv->qualitative_blue_counts_length1;
-#line 1087 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1131 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp113_ = i;
-#line 1087 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1131 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp114_ = constrained_max_qual_count;
-#line 1087 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1131 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp112_[_tmp113_] = _tmp114_;
-#line 1087 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1131 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp115_ = _tmp112_[_tmp113_];
-#line 9887 "ColorTransformation.c"
+#line 10158 "ColorTransformation.c"
 				}
 			}
 		}
 	}
-#line 1090 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1134 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rgb_histogram_smooth_extrema (self, &self->priv->qualitative_red_counts, &self->priv->qualitative_red_counts_length1);
-#line 1091 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1135 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rgb_histogram_smooth_extrema (self, &self->priv->qualitative_green_counts, &self->priv->qualitative_green_counts_length1);
-#line 1092 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1136 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rgb_histogram_smooth_extrema (self, &self->priv->qualitative_blue_counts, &self->priv->qualitative_blue_counts_length1);
-#line 1027 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1071 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	temp_blue_counts = (g_free (temp_blue_counts), NULL);
-#line 1027 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1071 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	temp_green_counts = (g_free (temp_green_counts), NULL);
-#line 1027 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1071 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	temp_red_counts = (g_free (temp_red_counts), NULL);
-#line 9904 "ColorTransformation.c"
+#line 10175 "ColorTransformation.c"
 }
 
 
@@ -9914,13 +10185,13 @@ GdkPixbuf* rgb_histogram_get_graphic (RGBHistogram* self) {
 	GdkPixbuf* _tmp0_ = NULL;
 	GdkPixbuf* _tmp121_ = NULL;
 	GdkPixbuf* _tmp122_ = NULL;
-#line 1095 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1139 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_RGB_HISTOGRAM (self), NULL);
-#line 1096 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1140 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->graphic;
-#line 1096 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1140 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp0_ == NULL) {
-#line 9919 "ColorTransformation.c"
+#line 10190 "ColorTransformation.c"
 		gint max_count = 0;
 		GdkPixbuf* _tmp25_ = NULL;
 		gint rowstride = 0;
@@ -9942,23 +10213,23 @@ GdkPixbuf* rgb_histogram_get_graphic (RGBHistogram* self) {
 		gint pixel_data_length1 = 0;
 		gint _pixel_data_size_ = 0;
 		gint _tmp37_ = 0;
-#line 1097 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1141 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		rgb_histogram_prepare_qualitative_counts (self);
-#line 1098 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1142 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		max_count = 0;
-#line 9945 "ColorTransformation.c"
+#line 10216 "ColorTransformation.c"
 		{
 			gint i = 0;
-#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			i = 0;
-#line 9950 "ColorTransformation.c"
+#line 10221 "ColorTransformation.c"
 			{
 				gboolean _tmp1_ = FALSE;
-#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp1_ = TRUE;
-#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				while (TRUE) {
-#line 9957 "ColorTransformation.c"
+#line 10228 "ColorTransformation.c"
 					gint _tmp3_ = 0;
 					gint* _tmp4_ = NULL;
 					gint _tmp4__length1 = 0;
@@ -9975,177 +10246,177 @@ GdkPixbuf* rgb_histogram_get_graphic (RGBHistogram* self) {
 					gint _tmp19_ = 0;
 					gint _tmp20_ = 0;
 					gint _tmp21_ = 0;
-#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (!_tmp1_) {
-#line 9976 "ColorTransformation.c"
+#line 10247 "ColorTransformation.c"
 						gint _tmp2_ = 0;
-#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp2_ = i;
-#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						i = _tmp2_ + 1;
-#line 9982 "ColorTransformation.c"
+#line 10253 "ColorTransformation.c"
 					}
-#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp1_ = FALSE;
-#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp3_ = i;
-#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (!(_tmp3_ < 256)) {
-#line 1099 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						break;
-#line 9992 "ColorTransformation.c"
+#line 10263 "ColorTransformation.c"
 					}
-#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1144 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp4_ = self->priv->qualitative_red_counts;
-#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1144 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp4__length1 = self->priv->qualitative_red_counts_length1;
-#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1144 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp5_ = i;
-#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1144 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp6_ = _tmp4_[_tmp5_];
-#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1144 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp7_ = max_count;
-#line 1100 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1144 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (_tmp6_ > _tmp7_) {
-#line 10006 "ColorTransformation.c"
+#line 10277 "ColorTransformation.c"
 						gint* _tmp8_ = NULL;
 						gint _tmp8__length1 = 0;
 						gint _tmp9_ = 0;
 						gint _tmp10_ = 0;
-#line 1101 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1145 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp8_ = self->priv->qualitative_red_counts;
-#line 1101 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1145 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp8__length1 = self->priv->qualitative_red_counts_length1;
-#line 1101 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1145 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp9_ = i;
-#line 1101 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1145 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp10_ = _tmp8_[_tmp9_];
-#line 1101 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1145 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						max_count = _tmp10_;
-#line 10021 "ColorTransformation.c"
+#line 10292 "ColorTransformation.c"
 					}
-#line 1102 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1146 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp11_ = self->priv->qualitative_green_counts;
-#line 1102 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1146 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp11__length1 = self->priv->qualitative_green_counts_length1;
-#line 1102 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1146 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp12_ = i;
-#line 1102 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1146 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp13_ = _tmp11_[_tmp12_];
-#line 1102 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1146 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp14_ = max_count;
-#line 1102 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1146 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (_tmp13_ > _tmp14_) {
-#line 10035 "ColorTransformation.c"
+#line 10306 "ColorTransformation.c"
 						gint* _tmp15_ = NULL;
 						gint _tmp15__length1 = 0;
 						gint _tmp16_ = 0;
 						gint _tmp17_ = 0;
-#line 1103 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1147 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp15_ = self->priv->qualitative_green_counts;
-#line 1103 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1147 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp15__length1 = self->priv->qualitative_green_counts_length1;
-#line 1103 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1147 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp16_ = i;
-#line 1103 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1147 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp17_ = _tmp15_[_tmp16_];
-#line 1103 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1147 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						max_count = _tmp17_;
-#line 10050 "ColorTransformation.c"
+#line 10321 "ColorTransformation.c"
 					}
-#line 1104 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp18_ = self->priv->qualitative_blue_counts;
-#line 1104 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp18__length1 = self->priv->qualitative_blue_counts_length1;
-#line 1104 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp19_ = i;
-#line 1104 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp20_ = _tmp18_[_tmp19_];
-#line 1104 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp21_ = max_count;
-#line 1104 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (_tmp20_ > _tmp21_) {
-#line 10064 "ColorTransformation.c"
+#line 10335 "ColorTransformation.c"
 						gint* _tmp22_ = NULL;
 						gint _tmp22__length1 = 0;
 						gint _tmp23_ = 0;
 						gint _tmp24_ = 0;
-#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1149 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp22_ = self->priv->qualitative_blue_counts;
-#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1149 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp22__length1 = self->priv->qualitative_blue_counts_length1;
-#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1149 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp23_ = i;
-#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1149 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp24_ = _tmp22_[_tmp23_];
-#line 1105 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1149 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						max_count = _tmp24_;
-#line 10079 "ColorTransformation.c"
+#line 10350 "ColorTransformation.c"
 					}
 				}
 			}
 		}
-#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1152 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp25_ = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, RGB_HISTOGRAM_GRAPHIC_WIDTH, RGB_HISTOGRAM_GRAPHIC_HEIGHT);
-#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1152 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_g_object_unref0 (self->priv->graphic);
-#line 1108 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1152 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		self->priv->graphic = _tmp25_;
-#line 1111 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1155 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp26_ = self->priv->graphic;
-#line 1111 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1155 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp27_ = gdk_pixbuf_get_rowstride (_tmp26_);
-#line 1111 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1155 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp28_ = _tmp27_;
-#line 1111 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1155 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		rowstride = _tmp28_;
-#line 1112 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1156 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp29_ = self->priv->graphic;
-#line 1112 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1156 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp30_ = gdk_pixbuf_get_bits_per_sample (_tmp29_);
-#line 1112 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1156 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		sample_bytes = _tmp30_ / 8;
-#line 1113 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp31_ = sample_bytes;
-#line 1113 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp32_ = self->priv->graphic;
-#line 1113 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp33_ = gdk_pixbuf_get_n_channels (_tmp32_);
-#line 1113 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_bytes = _tmp31_ * _tmp33_;
-#line 1115 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1159 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp34_ = max_count;
-#line 1115 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1159 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		scale_bar = (0.98 * ((gdouble) RGB_HISTOGRAM_GRAPHIC_HEIGHT)) / ((gdouble) _tmp34_);
-#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1162 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp35_ = self->priv->graphic;
-#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1162 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp36_ = gdk_pixbuf_get_pixels (_tmp35_);
-#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1162 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_data = _tmp36_;
-#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1162 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_data_length1 = -1;
-#line 1118 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1162 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_pixel_data_size_ = pixel_data_length1;
-#line 1122 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1166 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp37_ = max_count;
-#line 1122 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1166 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (_tmp37_ == 0) {
-#line 10130 "ColorTransformation.c"
+#line 10401 "ColorTransformation.c"
 			GdkPixbuf* _tmp51_ = NULL;
 			GdkPixbuf* _tmp52_ = NULL;
 			{
 				gint i = 0;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				i = 0;
-#line 10137 "ColorTransformation.c"
+#line 10408 "ColorTransformation.c"
 				{
 					gboolean _tmp38_ = FALSE;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp38_ = TRUE;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					while (TRUE) {
-#line 10144 "ColorTransformation.c"
+#line 10415 "ColorTransformation.c"
 						gint _tmp40_ = 0;
 						gint _tmp41_ = 0;
 						GdkPixbuf* _tmp42_ = NULL;
@@ -10158,76 +10429,76 @@ GdkPixbuf* rgb_histogram_get_graphic (RGBHistogram* self) {
 						gint _tmp48__length1 = 0;
 						gint _tmp49_ = 0;
 						guchar _tmp50_ = '\0';
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						if (!_tmp38_) {
-#line 10159 "ColorTransformation.c"
+#line 10430 "ColorTransformation.c"
 							gint _tmp39_ = 0;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp39_ = i;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							i = _tmp39_ + 1;
-#line 10165 "ColorTransformation.c"
+#line 10436 "ColorTransformation.c"
 						}
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp38_ = FALSE;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp40_ = i;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp41_ = pixel_bytes;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp42_ = self->priv->graphic;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp43_ = gdk_pixbuf_get_width (_tmp42_);
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp44_ = _tmp43_;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp45_ = self->priv->graphic;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp46_ = gdk_pixbuf_get_height (_tmp45_);
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp47_ = _tmp46_;
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						if (!(_tmp40_ < ((_tmp41_ * _tmp44_) * _tmp47_))) {
-#line 1123 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							break;
-#line 10189 "ColorTransformation.c"
+#line 10460 "ColorTransformation.c"
 						}
-#line 1124 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1168 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp48_ = pixel_data;
-#line 1124 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1168 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp48__length1 = pixel_data_length1;
-#line 1124 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1168 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp49_ = i;
-#line 1124 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1168 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp48_[_tmp49_] = RGB_HISTOGRAM_UNMARKED_BACKGROUND;
-#line 1124 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1168 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp50_ = _tmp48_[_tmp49_];
-#line 10201 "ColorTransformation.c"
+#line 10472 "ColorTransformation.c"
 					}
 				}
 			}
-#line 1126 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1170 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp51_ = self->priv->graphic;
-#line 1126 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1170 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp52_ = _g_object_ref0 (_tmp51_);
-#line 1126 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1170 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			result = _tmp52_;
-#line 1126 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1170 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return result;
-#line 10213 "ColorTransformation.c"
+#line 10484 "ColorTransformation.c"
 		}
 		{
 			gint x = 0;
-#line 1129 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			x = 0;
-#line 10219 "ColorTransformation.c"
+#line 10490 "ColorTransformation.c"
 			{
 				gboolean _tmp53_ = FALSE;
-#line 1129 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp53_ = TRUE;
-#line 1129 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				while (TRUE) {
-#line 10226 "ColorTransformation.c"
+#line 10497 "ColorTransformation.c"
 					gint _tmp55_ = 0;
 					gint red_bar_height = 0;
 					gint* _tmp56_ = NULL;
@@ -10259,94 +10530,94 @@ GdkPixbuf* rgb_histogram_get_graphic (RGBHistogram* self) {
 					gint _tmp74_ = 0;
 					gint _tmp75_ = 0;
 					gint _tmp76_ = 0;
-#line 1129 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (!_tmp53_) {
-#line 10260 "ColorTransformation.c"
+#line 10531 "ColorTransformation.c"
 						gint _tmp54_ = 0;
-#line 1129 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp54_ = x;
-#line 1129 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						x = _tmp54_ + 1;
-#line 10266 "ColorTransformation.c"
+#line 10537 "ColorTransformation.c"
 					}
-#line 1129 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp53_ = FALSE;
-#line 1129 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp55_ = x;
-#line 1129 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					if (!(_tmp55_ < 256)) {
-#line 1129 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						break;
-#line 10276 "ColorTransformation.c"
+#line 10547 "ColorTransformation.c"
 					}
-#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp56_ = self->priv->qualitative_red_counts;
-#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp56__length1 = self->priv->qualitative_red_counts_length1;
-#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp57_ = x;
-#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp58_ = _tmp56_[_tmp57_];
-#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp59_ = scale_bar;
-#line 1130 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					red_bar_height = (gint) (((gdouble) _tmp58_) * _tmp59_);
-#line 1132 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1176 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp60_ = self->priv->qualitative_green_counts;
-#line 1132 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1176 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp60__length1 = self->priv->qualitative_green_counts_length1;
-#line 1132 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1176 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp61_ = x;
-#line 1132 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1176 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp62_ = _tmp60_[_tmp61_];
-#line 1132 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1176 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp63_ = scale_bar;
-#line 1132 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1176 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					green_bar_height = (gint) (((gdouble) _tmp62_) * _tmp63_);
-#line 1134 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1178 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp64_ = self->priv->qualitative_blue_counts;
-#line 1134 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1178 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp64__length1 = self->priv->qualitative_blue_counts_length1;
-#line 1134 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1178 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp65_ = x;
-#line 1134 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1178 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp66_ = _tmp64_[_tmp65_];
-#line 1134 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1178 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp67_ = scale_bar;
-#line 1134 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1178 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					blue_bar_height = (gint) (((gdouble) _tmp66_) * _tmp67_);
-#line 1137 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1181 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp68_ = red_bar_height;
-#line 1137 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1181 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp69_ = green_bar_height;
-#line 1137 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1181 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp70_ = MAX (_tmp68_, _tmp69_);
-#line 1137 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1181 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp71_ = blue_bar_height;
-#line 1137 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1181 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp72_ = MAX (_tmp70_, _tmp71_);
-#line 1137 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1181 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					max_bar_height = _tmp72_;
-#line 1140 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1184 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					y = RGB_HISTOGRAM_GRAPHIC_HEIGHT - 1;
-#line 1141 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1185 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp73_ = x;
-#line 1141 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1185 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp74_ = pixel_bytes;
-#line 1141 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1185 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp75_ = y;
-#line 1141 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1185 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp76_ = rowstride;
-#line 1141 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1185 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					pixel_index = (_tmp73_ * _tmp74_) + (_tmp75_ * _tmp76_);
-#line 10338 "ColorTransformation.c"
+#line 10609 "ColorTransformation.c"
 					{
 						gboolean _tmp77_ = FALSE;
-#line 1142 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp77_ = TRUE;
-#line 1142 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						while (TRUE) {
-#line 10345 "ColorTransformation.c"
+#line 10616 "ColorTransformation.c"
 							gint _tmp79_ = 0;
 							gint _tmp80_ = 0;
 							guchar* _tmp81_ = NULL;
@@ -10369,143 +10640,143 @@ GdkPixbuf* rgb_histogram_get_graphic (RGBHistogram* self) {
 							gint _tmp101_ = 0;
 							gint _tmp105_ = 0;
 							gint _tmp106_ = 0;
-#line 1142 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (!_tmp77_) {
-#line 10370 "ColorTransformation.c"
+#line 10641 "ColorTransformation.c"
 								gint _tmp78_ = 0;
-#line 1142 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp78_ = y;
-#line 1142 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								y = _tmp78_ - 1;
-#line 10376 "ColorTransformation.c"
+#line 10647 "ColorTransformation.c"
 							}
-#line 1142 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp77_ = FALSE;
-#line 1142 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp79_ = y;
-#line 1142 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp80_ = max_bar_height;
-#line 1142 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (!(_tmp79_ >= (RGB_HISTOGRAM_GRAPHIC_HEIGHT - _tmp80_))) {
-#line 1142 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								break;
-#line 10388 "ColorTransformation.c"
+#line 10659 "ColorTransformation.c"
 							}
-#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp81_ = pixel_data;
-#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp81__length1 = pixel_data_length1;
-#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp82_ = pixel_index;
-#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp81_[_tmp82_] = RGB_HISTOGRAM_MARKED_BACKGROUND;
-#line 1143 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp83_ = _tmp81_[_tmp82_];
-#line 1144 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1188 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp84_ = pixel_data;
-#line 1144 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1188 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp84__length1 = pixel_data_length1;
-#line 1144 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1188 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp85_ = pixel_index;
-#line 1144 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1188 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp84_[_tmp85_ + 1] = RGB_HISTOGRAM_MARKED_BACKGROUND;
-#line 1144 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1188 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp86_ = _tmp84_[_tmp85_ + 1];
-#line 1145 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1189 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp87_ = pixel_data;
-#line 1145 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1189 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp87__length1 = pixel_data_length1;
-#line 1145 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1189 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp88_ = pixel_index;
-#line 1145 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1189 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp87_[_tmp88_ + 2] = RGB_HISTOGRAM_MARKED_BACKGROUND;
-#line 1145 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1189 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp89_ = _tmp87_[_tmp88_ + 2];
-#line 1147 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1191 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp90_ = y;
-#line 1147 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1191 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp91_ = red_bar_height;
-#line 1147 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1191 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (_tmp90_ >= ((RGB_HISTOGRAM_GRAPHIC_HEIGHT - _tmp91_) - 1)) {
-#line 10426 "ColorTransformation.c"
+#line 10697 "ColorTransformation.c"
 								guchar* _tmp92_ = NULL;
 								gint _tmp92__length1 = 0;
 								gint _tmp93_ = 0;
 								guchar _tmp94_ = '\0';
-#line 1148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1192 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp92_ = pixel_data;
-#line 1148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1192 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp92__length1 = pixel_data_length1;
-#line 1148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1192 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp93_ = pixel_index;
-#line 1148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1192 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp92_[_tmp93_] = RGB_HISTOGRAM_MARKED_FOREGROUND;
-#line 1148 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1192 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp94_ = _tmp92_[_tmp93_];
-#line 10441 "ColorTransformation.c"
+#line 10712 "ColorTransformation.c"
 							}
-#line 1149 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1193 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp95_ = y;
-#line 1149 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1193 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp96_ = green_bar_height;
-#line 1149 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1193 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (_tmp95_ >= ((RGB_HISTOGRAM_GRAPHIC_HEIGHT - _tmp96_) - 1)) {
-#line 10449 "ColorTransformation.c"
+#line 10720 "ColorTransformation.c"
 								guchar* _tmp97_ = NULL;
 								gint _tmp97__length1 = 0;
 								gint _tmp98_ = 0;
 								guchar _tmp99_ = '\0';
-#line 1150 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1194 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp97_ = pixel_data;
-#line 1150 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1194 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp97__length1 = pixel_data_length1;
-#line 1150 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1194 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp98_ = pixel_index;
-#line 1150 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1194 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp97_[_tmp98_ + 1] = RGB_HISTOGRAM_MARKED_FOREGROUND;
-#line 1150 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1194 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp99_ = _tmp97_[_tmp98_ + 1];
-#line 10464 "ColorTransformation.c"
+#line 10735 "ColorTransformation.c"
 							}
-#line 1151 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1195 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp100_ = y;
-#line 1151 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1195 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp101_ = blue_bar_height;
-#line 1151 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1195 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (_tmp100_ >= ((RGB_HISTOGRAM_GRAPHIC_HEIGHT - _tmp101_) - 1)) {
-#line 10472 "ColorTransformation.c"
+#line 10743 "ColorTransformation.c"
 								guchar* _tmp102_ = NULL;
 								gint _tmp102__length1 = 0;
 								gint _tmp103_ = 0;
 								guchar _tmp104_ = '\0';
-#line 1152 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1196 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp102_ = pixel_data;
-#line 1152 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1196 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp102__length1 = pixel_data_length1;
-#line 1152 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1196 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp103_ = pixel_index;
-#line 1152 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1196 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp102_[_tmp103_ + 2] = RGB_HISTOGRAM_MARKED_FOREGROUND;
-#line 1152 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1196 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp104_ = _tmp102_[_tmp103_ + 2];
-#line 10487 "ColorTransformation.c"
+#line 10758 "ColorTransformation.c"
 							}
-#line 1154 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp105_ = pixel_index;
-#line 1154 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp106_ = rowstride;
-#line 1154 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							pixel_index = _tmp105_ - _tmp106_;
-#line 10495 "ColorTransformation.c"
+#line 10766 "ColorTransformation.c"
 						}
 					}
 					{
 						gboolean _tmp107_ = FALSE;
-#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1201 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp107_ = TRUE;
-#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1201 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						while (TRUE) {
-#line 10504 "ColorTransformation.c"
+#line 10775 "ColorTransformation.c"
 							gint _tmp109_ = 0;
 							guchar* _tmp110_ = NULL;
 							gint _tmp110__length1 = 0;
@@ -10521,269 +10792,269 @@ GdkPixbuf* rgb_histogram_get_graphic (RGBHistogram* self) {
 							guchar _tmp118_ = '\0';
 							gint _tmp119_ = 0;
 							gint _tmp120_ = 0;
-#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1201 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (!_tmp107_) {
-#line 10522 "ColorTransformation.c"
+#line 10793 "ColorTransformation.c"
 								gint _tmp108_ = 0;
-#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1201 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp108_ = y;
-#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1201 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								y = _tmp108_ - 1;
-#line 10528 "ColorTransformation.c"
+#line 10799 "ColorTransformation.c"
 							}
-#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1201 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp107_ = FALSE;
-#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1201 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp109_ = y;
-#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1201 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (!(_tmp109_ >= 0)) {
-#line 1157 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1201 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								break;
-#line 10538 "ColorTransformation.c"
+#line 10809 "ColorTransformation.c"
 							}
-#line 1158 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1202 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp110_ = pixel_data;
-#line 1158 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1202 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp110__length1 = pixel_data_length1;
-#line 1158 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1202 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp111_ = pixel_index;
-#line 1158 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1202 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp110_[_tmp111_] = RGB_HISTOGRAM_UNMARKED_BACKGROUND;
-#line 1158 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1202 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp112_ = _tmp110_[_tmp111_];
-#line 1159 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp113_ = pixel_data;
-#line 1159 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp113__length1 = pixel_data_length1;
-#line 1159 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp114_ = pixel_index;
-#line 1159 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp113_[_tmp114_ + 1] = RGB_HISTOGRAM_UNMARKED_BACKGROUND;
-#line 1159 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1203 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp115_ = _tmp113_[_tmp114_ + 1];
-#line 1160 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1204 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp116_ = pixel_data;
-#line 1160 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1204 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp116__length1 = pixel_data_length1;
-#line 1160 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1204 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp117_ = pixel_index;
-#line 1160 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1204 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp116_[_tmp117_ + 2] = RGB_HISTOGRAM_UNMARKED_BACKGROUND;
-#line 1160 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1204 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp118_ = _tmp116_[_tmp117_ + 2];
-#line 1162 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1206 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp119_ = pixel_index;
-#line 1162 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1206 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp120_ = rowstride;
-#line 1162 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1206 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							pixel_index = _tmp119_ - _tmp120_;
-#line 10576 "ColorTransformation.c"
+#line 10847 "ColorTransformation.c"
 						}
 					}
 				}
 			}
 		}
 	}
-#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp121_ = self->priv->graphic;
-#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp122_ = _g_object_ref0 (_tmp121_);
-#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp122_;
-#line 1167 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 10591 "ColorTransformation.c"
+#line 10862 "ColorTransformation.c"
 }
 
 
 static void value_rgb_histogram_init (GValue* value) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	value->data[0].v_pointer = NULL;
-#line 10598 "ColorTransformation.c"
+#line 10869 "ColorTransformation.c"
 }
 
 
 static void value_rgb_histogram_free_value (GValue* value) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (value->data[0].v_pointer) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		rgb_histogram_unref (value->data[0].v_pointer);
-#line 10607 "ColorTransformation.c"
+#line 10878 "ColorTransformation.c"
 	}
 }
 
 
 static void value_rgb_histogram_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (src_value->data[0].v_pointer) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = rgb_histogram_ref (src_value->data[0].v_pointer);
-#line 10617 "ColorTransformation.c"
+#line 10888 "ColorTransformation.c"
 	} else {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 10621 "ColorTransformation.c"
+#line 10892 "ColorTransformation.c"
 	}
 }
 
 
 static gpointer value_rgb_histogram_peek_pointer (const GValue* value) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 10629 "ColorTransformation.c"
+#line 10900 "ColorTransformation.c"
 }
 
 
 static gchar* value_rgb_histogram_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (collect_values[0].v_pointer) {
-#line 10636 "ColorTransformation.c"
+#line 10907 "ColorTransformation.c"
 		RGBHistogram* object;
 		object = collect_values[0].v_pointer;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 10643 "ColorTransformation.c"
+#line 10914 "ColorTransformation.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 10647 "ColorTransformation.c"
+#line 10918 "ColorTransformation.c"
 		}
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = rgb_histogram_ref (object);
-#line 10651 "ColorTransformation.c"
+#line 10922 "ColorTransformation.c"
 	} else {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 10655 "ColorTransformation.c"
+#line 10926 "ColorTransformation.c"
 	}
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 10659 "ColorTransformation.c"
+#line 10930 "ColorTransformation.c"
 }
 
 
 static gchar* value_rgb_histogram_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	RGBHistogram** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!object_p) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 10670 "ColorTransformation.c"
+#line 10941 "ColorTransformation.c"
 	}
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!value->data[0].v_pointer) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = NULL;
-#line 10676 "ColorTransformation.c"
+#line 10947 "ColorTransformation.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = value->data[0].v_pointer;
-#line 10680 "ColorTransformation.c"
+#line 10951 "ColorTransformation.c"
 	} else {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = rgb_histogram_ref (value->data[0].v_pointer);
-#line 10684 "ColorTransformation.c"
+#line 10955 "ColorTransformation.c"
 	}
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 10688 "ColorTransformation.c"
+#line 10959 "ColorTransformation.c"
 }
 
 
 GParamSpec* param_spec_rgb_histogram (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecRGBHistogram* spec;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_RGB_HISTOGRAM), NULL);
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return G_PARAM_SPEC (spec);
-#line 10702 "ColorTransformation.c"
+#line 10973 "ColorTransformation.c"
 }
 
 
 gpointer value_get_rgb_histogram (const GValue* value) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_RGB_HISTOGRAM), NULL);
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 10711 "ColorTransformation.c"
+#line 10982 "ColorTransformation.c"
 }
 
 
 void value_set_rgb_histogram (GValue* value, gpointer v_object) {
 	RGBHistogram* old;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_RGB_HISTOGRAM));
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_RGB_HISTOGRAM));
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		rgb_histogram_ref (value->data[0].v_pointer);
-#line 10731 "ColorTransformation.c"
+#line 11002 "ColorTransformation.c"
 	} else {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 10735 "ColorTransformation.c"
+#line 11006 "ColorTransformation.c"
 	}
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		rgb_histogram_unref (old);
-#line 10741 "ColorTransformation.c"
+#line 11012 "ColorTransformation.c"
 	}
 }
 
 
 void value_take_rgb_histogram (GValue* value, gpointer v_object) {
 	RGBHistogram* old;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_RGB_HISTOGRAM));
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_RGB_HISTOGRAM));
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 10760 "ColorTransformation.c"
+#line 11031 "ColorTransformation.c"
 	} else {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 10764 "ColorTransformation.c"
+#line 11035 "ColorTransformation.c"
 	}
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		rgb_histogram_unref (old);
-#line 10770 "ColorTransformation.c"
+#line 11041 "ColorTransformation.c"
 	}
 }
 
 
 static void rgb_histogram_class_init (RGBHistogramClass * klass) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rgb_histogram_parent_class = g_type_class_peek_parent (klass);
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((RGBHistogramClass *) klass)->finalize = rgb_histogram_finalize;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (RGBHistogramPrivate));
-#line 10782 "ColorTransformation.c"
+#line 11053 "ColorTransformation.c"
 }
 
 
@@ -10791,79 +11062,79 @@ static void rgb_histogram_instance_init (RGBHistogram * self) {
 	gint* _tmp0_ = NULL;
 	gint* _tmp1_ = NULL;
 	gint* _tmp2_ = NULL;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = RGB_HISTOGRAM_GET_PRIVATE (self);
-#line 922 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 966 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = g_new0 (gint, 256);
-#line 922 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 966 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->red_counts = _tmp0_;
-#line 922 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 966 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->red_counts_length1 = 256;
-#line 922 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 966 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_red_counts_size_ = self->priv->red_counts_length1;
-#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 967 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = g_new0 (gint, 256);
-#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 967 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->green_counts = _tmp1_;
-#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 967 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->green_counts_length1 = 256;
-#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 967 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_green_counts_size_ = self->priv->green_counts_length1;
-#line 924 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = g_new0 (gint, 256);
-#line 924 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->blue_counts = _tmp2_;
-#line 924 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->blue_counts_length1 = 256;
-#line 924 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_blue_counts_size_ = self->priv->blue_counts_length1;
-#line 925 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 969 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_red_counts = NULL;
-#line 925 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 969 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_red_counts_length1 = 0;
-#line 925 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 969 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_qualitative_red_counts_size_ = self->priv->qualitative_red_counts_length1;
-#line 926 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 970 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_green_counts = NULL;
-#line 926 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 970 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_green_counts_length1 = 0;
-#line 926 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 970 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_qualitative_green_counts_size_ = self->priv->qualitative_green_counts_length1;
-#line 927 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 971 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_blue_counts = NULL;
-#line 927 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 971 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_blue_counts_length1 = 0;
-#line 927 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 971 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_qualitative_blue_counts_size_ = self->priv->qualitative_blue_counts_length1;
-#line 928 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->graphic = NULL;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->ref_count = 1;
-#line 10838 "ColorTransformation.c"
+#line 11109 "ColorTransformation.c"
 }
 
 
 static void rgb_histogram_finalize (RGBHistogram* obj) {
 	RGBHistogram * self;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_RGB_HISTOGRAM, RGBHistogram);
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_signal_handlers_destroy (self);
-#line 922 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 966 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->red_counts = (g_free (self->priv->red_counts), NULL);
-#line 923 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 967 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->green_counts = (g_free (self->priv->green_counts), NULL);
-#line 924 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 968 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->blue_counts = (g_free (self->priv->blue_counts), NULL);
-#line 925 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 969 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_red_counts = (g_free (self->priv->qualitative_red_counts), NULL);
-#line 926 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 970 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_green_counts = (g_free (self->priv->qualitative_green_counts), NULL);
-#line 927 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 971 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->qualitative_blue_counts = (g_free (self->priv->qualitative_blue_counts), NULL);
-#line 928 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 972 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_g_object_unref0 (self->priv->graphic);
-#line 10862 "ColorTransformation.c"
+#line 11133 "ColorTransformation.c"
 }
 
 
@@ -10884,24 +11155,24 @@ GType rgb_histogram_get_type (void) {
 gpointer rgb_histogram_ref (gpointer instance) {
 	RGBHistogram* self;
 	self = instance;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return instance;
-#line 10887 "ColorTransformation.c"
+#line 11158 "ColorTransformation.c"
 }
 
 
 void rgb_histogram_unref (gpointer instance) {
 	RGBHistogram* self;
 	self = instance;
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		RGB_HISTOGRAM_GET_CLASS (self)->finalize (self);
-#line 914 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 958 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 10900 "ColorTransformation.c"
+#line 11171 "ColorTransformation.c"
 	}
 }
 
@@ -10936,63 +11207,63 @@ IntensityHistogram* intensity_histogram_construct (GType object_type, GdkPixbuf*
 	gint _tmp45_ = 0;
 	gint _tmp46_ = 0;
 	gfloat accumulator = 0.0F;
-#line 1176 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1220 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
-#line 1176 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1220 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (IntensityHistogram*) g_type_create_instance (object_type);
-#line 1177 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1221 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = pixbuf;
-#line 1177 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1221 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = gdk_pixbuf_get_n_channels (_tmp0_);
-#line 1177 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1221 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	n_channels = _tmp1_;
-#line 1178 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1222 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = pixbuf;
-#line 1178 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1222 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = gdk_pixbuf_get_rowstride (_tmp2_);
-#line 1178 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1222 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rowstride = _tmp3_;
-#line 1179 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1223 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = pixbuf;
-#line 1179 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1223 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = gdk_pixbuf_get_width (_tmp4_);
-#line 1179 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1223 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	width = _tmp5_;
-#line 1180 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1224 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = pixbuf;
-#line 1180 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1224 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = gdk_pixbuf_get_height (_tmp6_);
-#line 1180 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1224 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	height = _tmp7_;
-#line 1181 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1225 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = n_channels;
-#line 1181 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1225 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = width;
-#line 1181 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1225 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	rowbytes = _tmp8_ * _tmp9_;
-#line 1182 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = pixbuf;
-#line 1182 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp11_ = gdk_pixbuf_get_pixels (_tmp10_);
-#line 1182 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixels = _tmp11_;
-#line 1182 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixels_length1 = -1;
-#line 1182 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixels_size_ = pixels_length1;
-#line 10979 "ColorTransformation.c"
+#line 11250 "ColorTransformation.c"
 	{
 		gint j = 0;
-#line 1183 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		j = 0;
-#line 10984 "ColorTransformation.c"
+#line 11255 "ColorTransformation.c"
 		{
 			gboolean _tmp12_ = FALSE;
-#line 1183 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp12_ = TRUE;
-#line 1183 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 10991 "ColorTransformation.c"
+#line 11262 "ColorTransformation.c"
 				gint _tmp14_ = 0;
 				gint _tmp15_ = 0;
 				gint row_start_index = 0;
@@ -11001,56 +11272,56 @@ IntensityHistogram* intensity_histogram_construct (GType object_type, GdkPixbuf*
 				gint row_end_index = 0;
 				gint _tmp18_ = 0;
 				gint _tmp19_ = 0;
-#line 1183 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp12_) {
-#line 11002 "ColorTransformation.c"
+#line 11273 "ColorTransformation.c"
 					gint _tmp13_ = 0;
-#line 1183 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp13_ = j;
-#line 1183 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					j = _tmp13_ + 1;
-#line 11008 "ColorTransformation.c"
+#line 11279 "ColorTransformation.c"
 				}
-#line 1183 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp12_ = FALSE;
-#line 1183 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp14_ = j;
-#line 1183 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp15_ = height;
-#line 1183 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp14_ < _tmp15_)) {
-#line 1183 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 11020 "ColorTransformation.c"
+#line 11291 "ColorTransformation.c"
 				}
-#line 1184 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1228 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp16_ = j;
-#line 1184 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1228 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp17_ = rowstride;
-#line 1184 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1228 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				row_start_index = _tmp16_ * _tmp17_;
-#line 1185 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1229 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp18_ = row_start_index;
-#line 1185 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1229 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp19_ = rowbytes;
-#line 1185 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1229 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				row_end_index = _tmp18_ + _tmp19_;
-#line 11034 "ColorTransformation.c"
+#line 11305 "ColorTransformation.c"
 				{
 					gint i = 0;
 					gint _tmp20_ = 0;
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp20_ = row_start_index;
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp20_;
-#line 11042 "ColorTransformation.c"
+#line 11313 "ColorTransformation.c"
 					{
 						gboolean _tmp21_ = FALSE;
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						_tmp21_ = TRUE;
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 						while (TRUE) {
-#line 11049 "ColorTransformation.c"
+#line 11320 "ColorTransformation.c"
 							gint _tmp24_ = 0;
 							gint _tmp25_ = 0;
 							RGBAnalyticPixel pix_rgb = {0};
@@ -11075,113 +11346,113 @@ IntensityHistogram* intensity_histogram_construct (GType object_type, GdkPixbuf*
 							gint _tmp38__length1 = 0;
 							gint _tmp39_ = 0;
 							gint _tmp40_ = 0;
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (!_tmp21_) {
-#line 11076 "ColorTransformation.c"
+#line 11347 "ColorTransformation.c"
 								gint _tmp22_ = 0;
 								gint _tmp23_ = 0;
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp22_ = i;
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								_tmp23_ = n_channels;
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								i = _tmp22_ + _tmp23_;
-#line 11085 "ColorTransformation.c"
+#line 11356 "ColorTransformation.c"
 							}
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp21_ = FALSE;
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp24_ = i;
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp25_ = row_end_index;
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							if (!(_tmp24_ < _tmp25_)) {
-#line 1186 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 								break;
-#line 11097 "ColorTransformation.c"
+#line 11368 "ColorTransformation.c"
 							}
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp26_ = pixels;
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp26__length1 = pixels_length1;
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp27_ = i;
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp28_ = _tmp26_[_tmp27_];
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp29_ = pixels;
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp29__length1 = pixels_length1;
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp30_ = i;
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp31_ = _tmp29_[_tmp30_ + 1];
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp32_ = pixels;
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp32__length1 = pixels_length1;
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp33_ = i;
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp34_ = _tmp32_[_tmp33_ + 2];
-#line 1187 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							rgb_analytic_pixel_init_from_quantized_components (&pix_rgb, _tmp28_, _tmp31_, _tmp34_);
-#line 1189 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp35_ = pix_rgb;
-#line 1189 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1233 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							hsv_analytic_pixel_init_from_rgb (&pix_hsi, &_tmp35_);
-#line 1190 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp36_ = pix_hsi;
-#line 1190 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp37_ = _tmp36_.light_value;
-#line 1190 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							quantized_light_value = (gint) (_tmp37_ * 255.0f);
-#line 1191 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1235 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp38_ = self->priv->counts;
-#line 1191 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1235 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp38__length1 = self->priv->counts_length1;
-#line 1191 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1235 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp39_ = quantized_light_value;
-#line 1191 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1235 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp38_[_tmp39_] += 1;
-#line 1191 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1235 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 							_tmp40_ = _tmp38_[_tmp39_];
-#line 11145 "ColorTransformation.c"
+#line 11416 "ColorTransformation.c"
 						}
 					}
 				}
 			}
 		}
 	}
-#line 1195 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1239 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp41_ = pixbuf;
-#line 1195 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1239 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp42_ = gdk_pixbuf_get_width (_tmp41_);
-#line 1195 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1239 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp43_ = _tmp42_;
-#line 1195 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1239 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp44_ = pixbuf;
-#line 1195 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1239 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp45_ = gdk_pixbuf_get_height (_tmp44_);
-#line 1195 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1239 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp46_ = _tmp45_;
-#line 1195 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1239 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_count = (gfloat) (_tmp43_ * _tmp46_);
-#line 1196 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1240 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	accumulator = 0.0f;
-#line 11168 "ColorTransformation.c"
+#line 11439 "ColorTransformation.c"
 	{
 		gint i = 0;
-#line 1197 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 11173 "ColorTransformation.c"
+#line 11444 "ColorTransformation.c"
 		{
 			gboolean _tmp47_ = FALSE;
-#line 1197 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp47_ = TRUE;
-#line 1197 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 11180 "ColorTransformation.c"
+#line 11451 "ColorTransformation.c"
 				gint _tmp49_ = 0;
 				gfloat* _tmp50_ = NULL;
 				gint _tmp50__length1 = 0;
@@ -11202,84 +11473,84 @@ IntensityHistogram* intensity_histogram_construct (GType object_type, GdkPixbuf*
 				gint _tmp62_ = 0;
 				gfloat _tmp63_ = 0.0F;
 				gfloat _tmp64_ = 0.0F;
-#line 1197 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp47_) {
-#line 11203 "ColorTransformation.c"
+#line 11474 "ColorTransformation.c"
 					gint _tmp48_ = 0;
-#line 1197 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp48_ = i;
-#line 1197 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp48_ + 1;
-#line 11209 "ColorTransformation.c"
+#line 11480 "ColorTransformation.c"
 				}
-#line 1197 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp47_ = FALSE;
-#line 1197 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp49_ = i;
-#line 1197 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp49_ < 256)) {
-#line 1197 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 11219 "ColorTransformation.c"
+#line 11490 "ColorTransformation.c"
 				}
-#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1242 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp50_ = self->priv->probabilities;
-#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1242 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp50__length1 = self->priv->probabilities_length1;
-#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1242 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp51_ = i;
-#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1242 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp52_ = self->priv->counts;
-#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1242 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp52__length1 = self->priv->counts_length1;
-#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1242 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp53_ = i;
-#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1242 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp54_ = _tmp52_[_tmp53_];
-#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1242 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp55_ = pixel_count;
-#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1242 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp50_[_tmp51_] = ((gfloat) _tmp54_) / _tmp55_;
-#line 1198 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1242 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp56_ = _tmp50_[_tmp51_];
-#line 1199 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp57_ = accumulator;
-#line 1199 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp58_ = self->priv->probabilities;
-#line 1199 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp58__length1 = self->priv->probabilities_length1;
-#line 1199 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp59_ = i;
-#line 1199 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp60_ = _tmp58_[_tmp59_];
-#line 1199 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				accumulator = _tmp57_ + _tmp60_;
-#line 1200 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp61_ = self->priv->cumulative_probabilities;
-#line 1200 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp61__length1 = self->priv->cumulative_probabilities_length1;
-#line 1200 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp62_ = i;
-#line 1200 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp63_ = accumulator;
-#line 1200 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp61_[_tmp62_] = _tmp63_;
-#line 1200 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp64_ = _tmp61_[_tmp62_];
-#line 11265 "ColorTransformation.c"
+#line 11536 "ColorTransformation.c"
 			}
 		}
 	}
-#line 1176 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1220 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 11271 "ColorTransformation.c"
+#line 11542 "ColorTransformation.c"
 }
 
 
 IntensityHistogram* intensity_histogram_new (GdkPixbuf* pixbuf) {
-#line 1176 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1220 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return intensity_histogram_construct (TYPE_INTENSITY_HISTOGRAM, pixbuf);
-#line 11278 "ColorTransformation.c"
+#line 11549 "ColorTransformation.c"
 }
 
 
@@ -11291,218 +11562,218 @@ gfloat intensity_histogram_get_cumulative_probability (IntensityHistogram* self,
 	gint _tmp2__length1 = 0;
 	gint _tmp3_ = 0;
 	gfloat _tmp4_ = 0.0F;
-#line 1204 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1248 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_INTENSITY_HISTOGRAM (self), 0.0F);
-#line 1206 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1250 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = level;
-#line 1206 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1250 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = CLAMP (_tmp0_, 0, 255);
-#line 1206 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1250 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	level = _tmp1_;
-#line 1207 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1251 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = self->priv->cumulative_probabilities;
-#line 1207 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1251 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2__length1 = self->priv->cumulative_probabilities_length1;
-#line 1207 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1251 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = level;
-#line 1207 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1251 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = _tmp2_[_tmp3_];
-#line 1207 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1251 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp4_;
-#line 1207 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1251 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 11310 "ColorTransformation.c"
+#line 11581 "ColorTransformation.c"
 }
 
 
 static void value_intensity_histogram_init (GValue* value) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	value->data[0].v_pointer = NULL;
-#line 11317 "ColorTransformation.c"
+#line 11588 "ColorTransformation.c"
 }
 
 
 static void value_intensity_histogram_free_value (GValue* value) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (value->data[0].v_pointer) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		intensity_histogram_unref (value->data[0].v_pointer);
-#line 11326 "ColorTransformation.c"
+#line 11597 "ColorTransformation.c"
 	}
 }
 
 
 static void value_intensity_histogram_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (src_value->data[0].v_pointer) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = intensity_histogram_ref (src_value->data[0].v_pointer);
-#line 11336 "ColorTransformation.c"
+#line 11607 "ColorTransformation.c"
 	} else {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 11340 "ColorTransformation.c"
+#line 11611 "ColorTransformation.c"
 	}
 }
 
 
 static gpointer value_intensity_histogram_peek_pointer (const GValue* value) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 11348 "ColorTransformation.c"
+#line 11619 "ColorTransformation.c"
 }
 
 
 static gchar* value_intensity_histogram_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (collect_values[0].v_pointer) {
-#line 11355 "ColorTransformation.c"
+#line 11626 "ColorTransformation.c"
 		IntensityHistogram* object;
 		object = collect_values[0].v_pointer;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 11362 "ColorTransformation.c"
+#line 11633 "ColorTransformation.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 11366 "ColorTransformation.c"
+#line 11637 "ColorTransformation.c"
 		}
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = intensity_histogram_ref (object);
-#line 11370 "ColorTransformation.c"
+#line 11641 "ColorTransformation.c"
 	} else {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 11374 "ColorTransformation.c"
+#line 11645 "ColorTransformation.c"
 	}
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 11378 "ColorTransformation.c"
+#line 11649 "ColorTransformation.c"
 }
 
 
 static gchar* value_intensity_histogram_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	IntensityHistogram** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!object_p) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 11389 "ColorTransformation.c"
+#line 11660 "ColorTransformation.c"
 	}
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!value->data[0].v_pointer) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = NULL;
-#line 11395 "ColorTransformation.c"
+#line 11666 "ColorTransformation.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = value->data[0].v_pointer;
-#line 11399 "ColorTransformation.c"
+#line 11670 "ColorTransformation.c"
 	} else {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = intensity_histogram_ref (value->data[0].v_pointer);
-#line 11403 "ColorTransformation.c"
+#line 11674 "ColorTransformation.c"
 	}
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 11407 "ColorTransformation.c"
+#line 11678 "ColorTransformation.c"
 }
 
 
 GParamSpec* param_spec_intensity_histogram (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecIntensityHistogram* spec;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_INTENSITY_HISTOGRAM), NULL);
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return G_PARAM_SPEC (spec);
-#line 11421 "ColorTransformation.c"
+#line 11692 "ColorTransformation.c"
 }
 
 
 gpointer value_get_intensity_histogram (const GValue* value) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_INTENSITY_HISTOGRAM), NULL);
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 11430 "ColorTransformation.c"
+#line 11701 "ColorTransformation.c"
 }
 
 
 void value_set_intensity_histogram (GValue* value, gpointer v_object) {
 	IntensityHistogram* old;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_INTENSITY_HISTOGRAM));
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_INTENSITY_HISTOGRAM));
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		intensity_histogram_ref (value->data[0].v_pointer);
-#line 11450 "ColorTransformation.c"
+#line 11721 "ColorTransformation.c"
 	} else {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 11454 "ColorTransformation.c"
+#line 11725 "ColorTransformation.c"
 	}
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		intensity_histogram_unref (old);
-#line 11460 "ColorTransformation.c"
+#line 11731 "ColorTransformation.c"
 	}
 }
 
 
 void value_take_intensity_histogram (GValue* value, gpointer v_object) {
 	IntensityHistogram* old;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_INTENSITY_HISTOGRAM));
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_INTENSITY_HISTOGRAM));
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 11479 "ColorTransformation.c"
+#line 11750 "ColorTransformation.c"
 	} else {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 11483 "ColorTransformation.c"
+#line 11754 "ColorTransformation.c"
 	}
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		intensity_histogram_unref (old);
-#line 11489 "ColorTransformation.c"
+#line 11760 "ColorTransformation.c"
 	}
 }
 
 
 static void intensity_histogram_class_init (IntensityHistogramClass * klass) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	intensity_histogram_parent_class = g_type_class_peek_parent (klass);
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((IntensityHistogramClass *) klass)->finalize = intensity_histogram_finalize;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (IntensityHistogramPrivate));
-#line 11501 "ColorTransformation.c"
+#line 11772 "ColorTransformation.c"
 }
 
 
@@ -11510,51 +11781,51 @@ static void intensity_histogram_instance_init (IntensityHistogram * self) {
 	gint* _tmp0_ = NULL;
 	gfloat* _tmp1_ = NULL;
 	gfloat* _tmp2_ = NULL;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = INTENSITY_HISTOGRAM_GET_PRIVATE (self);
-#line 1172 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1216 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = g_new0 (gint, 256);
-#line 1172 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1216 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->counts = _tmp0_;
-#line 1172 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1216 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->counts_length1 = 256;
-#line 1172 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1216 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_counts_size_ = self->priv->counts_length1;
-#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1217 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = g_new0 (gfloat, 256);
-#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1217 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->probabilities = _tmp1_;
-#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1217 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->probabilities_length1 = 256;
-#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1217 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_probabilities_size_ = self->priv->probabilities_length1;
-#line 1174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1218 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = g_new0 (gfloat, 256);
-#line 1174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1218 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->cumulative_probabilities = _tmp2_;
-#line 1174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1218 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->cumulative_probabilities_length1 = 256;
-#line 1174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1218 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_cumulative_probabilities_size_ = self->priv->cumulative_probabilities_length1;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->ref_count = 1;
-#line 11537 "ColorTransformation.c"
+#line 11808 "ColorTransformation.c"
 }
 
 
 static void intensity_histogram_finalize (IntensityHistogram* obj) {
 	IntensityHistogram * self;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_INTENSITY_HISTOGRAM, IntensityHistogram);
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_signal_handlers_destroy (self);
-#line 1172 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1216 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->counts = (g_free (self->priv->counts), NULL);
-#line 1173 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1217 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->probabilities = (g_free (self->priv->probabilities), NULL);
-#line 1174 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1218 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->cumulative_probabilities = (g_free (self->priv->cumulative_probabilities), NULL);
-#line 11553 "ColorTransformation.c"
+#line 11824 "ColorTransformation.c"
 }
 
 
@@ -11575,24 +11846,24 @@ GType intensity_histogram_get_type (void) {
 gpointer intensity_histogram_ref (gpointer instance) {
 	IntensityHistogram* self;
 	self = instance;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return instance;
-#line 11578 "ColorTransformation.c"
+#line 11849 "ColorTransformation.c"
 }
 
 
 void intensity_histogram_unref (gpointer instance) {
 	IntensityHistogram* self;
 	self = instance;
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		INTENSITY_HISTOGRAM_GET_CLASS (self)->finalize (self);
-#line 1171 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1215 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 11591 "ColorTransformation.c"
+#line 11862 "ColorTransformation.c"
 	}
 }
 
@@ -11602,111 +11873,111 @@ ExpansionTransformation* expansion_transformation_construct (GType object_type, 
 	gfloat* _tmp0_ = NULL;
 	gfloat LOW_KINK_MASS = 0.0F;
 	gfloat HIGH_KINK_MASS = 0.0F;
-#line 1219 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_INTENSITY_HISTOGRAM (histogram), NULL);
-#line 1220 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1264 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (ExpansionTransformation*) hsv_transformation_construct (object_type, PIXEL_TRANSFORMATION_TYPE_TONE_EXPANSION);
-#line 1222 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1266 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = g_new0 (gfloat, 256);
-#line 1222 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1266 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = (g_free (self->priv->remap_table), NULL);
-#line 1222 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1266 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = _tmp0_;
-#line 1222 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1266 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table_length1 = 256;
-#line 1222 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1266 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_remap_table_size_ = self->priv->remap_table_length1;
-#line 1224 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1268 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	LOW_KINK_MASS = EXPANSION_TRANSFORMATION_LOW_DISCARD_MASS;
-#line 1225 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1269 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->low_kink = 0;
-#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	while (TRUE) {
-#line 11621 "ColorTransformation.c"
+#line 11892 "ColorTransformation.c"
 		IntensityHistogram* _tmp1_ = NULL;
 		gint _tmp2_ = 0;
 		gfloat _tmp3_ = 0.0F;
 		gfloat _tmp4_ = 0.0F;
 		gint _tmp5_ = 0;
-#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = histogram;
-#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp2_ = self->priv->low_kink;
-#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp3_ = intensity_histogram_get_cumulative_probability (_tmp1_, _tmp2_);
-#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp4_ = LOW_KINK_MASS;
-#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (!(_tmp3_ < _tmp4_)) {
-#line 1226 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			break;
-#line 11639 "ColorTransformation.c"
+#line 11910 "ColorTransformation.c"
 		}
-#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1271 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp5_ = self->priv->low_kink;
-#line 1227 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1271 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		self->priv->low_kink = _tmp5_ + 1;
-#line 11645 "ColorTransformation.c"
+#line 11916 "ColorTransformation.c"
 	}
-#line 1229 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1273 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	HIGH_KINK_MASS = 1.0f - EXPANSION_TRANSFORMATION_HIGH_DISCARD_MASS;
-#line 1230 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1274 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->high_kink = 255;
-#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	while (TRUE) {
-#line 11653 "ColorTransformation.c"
+#line 11924 "ColorTransformation.c"
 		gboolean _tmp6_ = FALSE;
 		IntensityHistogram* _tmp7_ = NULL;
 		gint _tmp8_ = 0;
 		gfloat _tmp9_ = 0.0F;
 		gfloat _tmp10_ = 0.0F;
 		gint _tmp12_ = 0;
-#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp7_ = histogram;
-#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp8_ = self->priv->high_kink;
-#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp9_ = intensity_histogram_get_cumulative_probability (_tmp7_, _tmp8_);
-#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp10_ = HIGH_KINK_MASS;
-#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (_tmp9_ > _tmp10_) {
-#line 11670 "ColorTransformation.c"
+#line 11941 "ColorTransformation.c"
 			gint _tmp11_ = 0;
-#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp11_ = self->priv->high_kink;
-#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp6_ = _tmp11_ > 0;
-#line 11676 "ColorTransformation.c"
+#line 11947 "ColorTransformation.c"
 		} else {
-#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp6_ = FALSE;
-#line 11680 "ColorTransformation.c"
+#line 11951 "ColorTransformation.c"
 		}
-#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (!_tmp6_) {
-#line 1231 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			break;
-#line 11686 "ColorTransformation.c"
+#line 11957 "ColorTransformation.c"
 		}
-#line 1232 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1276 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp12_ = self->priv->high_kink;
-#line 1232 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1276 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		self->priv->high_kink = _tmp12_ - 1;
-#line 11692 "ColorTransformation.c"
+#line 11963 "ColorTransformation.c"
 	}
-#line 1234 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	expansion_transformation_build_remap_table (self);
-#line 1219 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 11698 "ColorTransformation.c"
+#line 11969 "ColorTransformation.c"
 }
 
 
 ExpansionTransformation* expansion_transformation_new (IntensityHistogram* histogram) {
-#line 1219 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return expansion_transformation_construct (TYPE_EXPANSION_TRANSFORMATION, histogram);
-#line 11705 "ColorTransformation.c"
+#line 11976 "ColorTransformation.c"
 }
 
 
@@ -11720,74 +11991,74 @@ ExpansionTransformation* expansion_transformation_construct_from_extrema (GType 
 	gint _tmp5_ = 0;
 	gint _tmp9_ = 0;
 	gint _tmp10_ = 0;
-#line 1238 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1282 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (ExpansionTransformation*) hsv_transformation_construct (object_type, PIXEL_TRANSFORMATION_TYPE_TONE_EXPANSION);
-#line 1240 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = white_point;
-#line 1240 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = CLAMP (_tmp0_, 0, 255);
-#line 1240 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	white_point = _tmp1_;
-#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1285 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = black_point;
-#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1285 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = CLAMP (_tmp2_, 0, 255);
-#line 1241 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1285 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	black_point = _tmp3_;
-#line 1243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = black_point;
-#line 1243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = white_point;
-#line 1243 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp4_ == _tmp5_) {
-#line 11739 "ColorTransformation.c"
+#line 12010 "ColorTransformation.c"
 		gint _tmp6_ = 0;
-#line 1244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1288 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp6_ = black_point;
-#line 1244 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1288 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (_tmp6_ == 0) {
-#line 1245 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1289 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			white_point = 1;
-#line 11747 "ColorTransformation.c"
+#line 12018 "ColorTransformation.c"
 		} else {
 			gint _tmp7_ = 0;
-#line 1246 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1290 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp7_ = white_point;
-#line 1246 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1290 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (_tmp7_ == 255) {
-#line 1247 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1291 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				black_point = 254;
-#line 11756 "ColorTransformation.c"
+#line 12027 "ColorTransformation.c"
 			} else {
 				gint _tmp8_ = 0;
-#line 1249 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1293 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp8_ = white_point;
-#line 1249 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1293 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				black_point = _tmp8_ - 1;
-#line 11763 "ColorTransformation.c"
+#line 12034 "ColorTransformation.c"
 			}
 		}
 	}
-#line 1252 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1296 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = black_point;
-#line 1252 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1296 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->low_kink = _tmp9_;
-#line 1253 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1297 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = white_point;
-#line 1253 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1297 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->high_kink = _tmp10_;
-#line 1255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1299 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	expansion_transformation_build_remap_table (self);
-#line 1237 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 11779 "ColorTransformation.c"
+#line 12050 "ColorTransformation.c"
 }
 
 
 ExpansionTransformation* expansion_transformation_new_from_extrema (gint black_point, gint white_point) {
-#line 1237 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return expansion_transformation_construct_from_extrema (TYPE_EXPANSION_TRANSFORMATION, black_point, white_point);
-#line 11786 "ColorTransformation.c"
+#line 12057 "ColorTransformation.c"
 }
 
 
@@ -11810,7 +12081,7 @@ static gchar* string_chug (const gchar* self) {
 	result = _result_;
 #line 1202 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 11809 "ColorTransformation.c"
+#line 12080 "ColorTransformation.c"
 }
 
 
@@ -11833,7 +12104,7 @@ static gchar* string_chomp (const gchar* self) {
 	result = _result_;
 #line 1194 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 11832 "ColorTransformation.c"
+#line 12103 "ColorTransformation.c"
 }
 
 
@@ -11849,50 +12120,50 @@ ExpansionTransformation* expansion_transformation_construct_from_string (GType o
 	gint num_captured = 0;
 	const gchar* _tmp7_ = NULL;
 	gint _tmp8_ = 0;
-#line 1258 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1302 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (encoded_transformation != NULL, NULL);
-#line 1259 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1303 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (ExpansionTransformation*) hsv_transformation_construct (object_type, PIXEL_TRANSFORMATION_TYPE_TONE_EXPANSION);
-#line 1261 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1305 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = encoded_transformation;
-#line 1261 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1305 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_strcanon (_tmp0_, "0123456789. ", ' ');
-#line 1262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = encoded_transformation;
-#line 1262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = string_chug (_tmp1_);
-#line 1262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = _tmp2_;
-#line 1262 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_g_free0 (_tmp3_);
-#line 1263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1307 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = encoded_transformation;
-#line 1263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1307 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = string_chomp (_tmp4_);
-#line 1263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1307 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = _tmp5_;
-#line 1263 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1307 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_g_free0 (_tmp6_);
-#line 1265 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1309 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = encoded_transformation;
-#line 1265 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1309 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = sscanf (_tmp7_, "%d %d", &self->priv->low_kink, &self->priv->high_kink);
-#line 1265 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1309 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	num_captured = _tmp8_;
-#line 1268 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1312 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_vala_assert (num_captured == 2, "num_captured == 2");
-#line 1270 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1314 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	expansion_transformation_build_remap_table (self);
-#line 1258 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1302 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 11884 "ColorTransformation.c"
+#line 12155 "ColorTransformation.c"
 }
 
 
 ExpansionTransformation* expansion_transformation_new_from_string (const gchar* encoded_transformation) {
-#line 1258 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1302 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return expansion_transformation_construct_from_string (TYPE_EXPANSION_TRANSFORMATION, encoded_transformation);
-#line 11891 "ColorTransformation.c"
+#line 12162 "ColorTransformation.c"
 }
 
 
@@ -11911,108 +12182,108 @@ static void expansion_transformation_build_remap_table (ExpansionTransformation*
 	gfloat _tmp7_ = 0.0F;
 	gfloat _tmp8_ = 0.0F;
 	gint i = 0;
-#line 1273 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1317 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (IS_EXPANSION_TRANSFORMATION (self));
-#line 1274 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1318 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->remap_table;
-#line 1274 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1318 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0__length1 = self->priv->remap_table_length1;
-#line 1274 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1318 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp0_ == NULL) {
-#line 11918 "ColorTransformation.c"
+#line 12189 "ColorTransformation.c"
 		gfloat* _tmp1_ = NULL;
-#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1319 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = g_new0 (gfloat, 256);
-#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1319 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		self->priv->remap_table = (g_free (self->priv->remap_table), NULL);
-#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1319 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		self->priv->remap_table = _tmp1_;
-#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1319 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		self->priv->remap_table_length1 = 256;
-#line 1275 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1319 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		self->priv->_remap_table_size_ = self->priv->remap_table_length1;
-#line 11930 "ColorTransformation.c"
+#line 12201 "ColorTransformation.c"
 	}
-#line 1277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = self->priv->low_kink;
-#line 1277 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	low_kink_f = ((gfloat) _tmp2_) / 255.0f;
-#line 1278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1322 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = self->priv->high_kink;
-#line 1278 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1322 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	high_kink_f = ((gfloat) _tmp3_) / 255.0f;
-#line 1280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1324 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = high_kink_f;
-#line 1280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1324 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = low_kink_f;
-#line 1280 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1324 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	slope = 1.0f / (_tmp4_ - _tmp5_);
-#line 1281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1325 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = low_kink_f;
-#line 1281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1325 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = high_kink_f;
-#line 1281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1325 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = low_kink_f;
-#line 1281 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1325 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	intercept = -(_tmp6_ / (_tmp7_ - _tmp8_));
-#line 1283 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1327 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	i = 0;
-#line 11956 "ColorTransformation.c"
+#line 12227 "ColorTransformation.c"
 	{
 		gboolean _tmp9_ = FALSE;
-#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1328 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp9_ = TRUE;
-#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1328 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		while (TRUE) {
-#line 11963 "ColorTransformation.c"
+#line 12234 "ColorTransformation.c"
 			gint _tmp11_ = 0;
 			gint _tmp12_ = 0;
 			gfloat* _tmp13_ = NULL;
 			gint _tmp13__length1 = 0;
 			gint _tmp14_ = 0;
 			gfloat _tmp15_ = 0.0F;
-#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1328 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!_tmp9_) {
-#line 11972 "ColorTransformation.c"
+#line 12243 "ColorTransformation.c"
 				gint _tmp10_ = 0;
-#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1328 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp10_ = i;
-#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1328 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				i = _tmp10_ + 1;
-#line 11978 "ColorTransformation.c"
+#line 12249 "ColorTransformation.c"
 			}
-#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1328 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp9_ = FALSE;
-#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1328 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp11_ = i;
-#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1328 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp12_ = self->priv->low_kink;
-#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1328 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!(_tmp11_ <= _tmp12_)) {
-#line 1284 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1328 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 11990 "ColorTransformation.c"
+#line 12261 "ColorTransformation.c"
 			}
-#line 1285 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp13_ = self->priv->remap_table;
-#line 1285 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp13__length1 = self->priv->remap_table_length1;
-#line 1285 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp14_ = i;
-#line 1285 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp13_[_tmp14_] = 0.0f;
-#line 1285 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1329 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp15_ = _tmp13_[_tmp14_];
-#line 12002 "ColorTransformation.c"
+#line 12273 "ColorTransformation.c"
 		}
 	}
 	{
 		gboolean _tmp16_ = FALSE;
-#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1331 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp16_ = TRUE;
-#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1331 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		while (TRUE) {
-#line 12011 "ColorTransformation.c"
+#line 12282 "ColorTransformation.c"
 			gint _tmp18_ = 0;
 			gint _tmp19_ = 0;
 			gfloat* _tmp20_ = NULL;
@@ -12022,90 +12293,90 @@ static void expansion_transformation_build_remap_table (ExpansionTransformation*
 			gint _tmp23_ = 0;
 			gfloat _tmp24_ = 0.0F;
 			gfloat _tmp25_ = 0.0F;
-#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1331 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!_tmp16_) {
-#line 12023 "ColorTransformation.c"
+#line 12294 "ColorTransformation.c"
 				gint _tmp17_ = 0;
-#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1331 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp17_ = i;
-#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1331 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				i = _tmp17_ + 1;
-#line 12029 "ColorTransformation.c"
+#line 12300 "ColorTransformation.c"
 			}
-#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1331 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp16_ = FALSE;
-#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1331 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp18_ = i;
-#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1331 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp19_ = self->priv->high_kink;
-#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1331 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!(_tmp18_ < _tmp19_)) {
-#line 1287 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1331 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 12041 "ColorTransformation.c"
+#line 12312 "ColorTransformation.c"
 			}
-#line 1288 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1332 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp20_ = self->priv->remap_table;
-#line 1288 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1332 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp20__length1 = self->priv->remap_table_length1;
-#line 1288 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1332 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp21_ = i;
-#line 1288 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1332 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp22_ = slope;
-#line 1288 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1332 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp23_ = i;
-#line 1288 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1332 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp24_ = intercept;
-#line 1288 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1332 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp20_[_tmp21_] = (_tmp22_ * (((gfloat) _tmp23_) / 255.0f)) + _tmp24_;
-#line 1288 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1332 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp25_ = _tmp20_[_tmp21_];
-#line 12059 "ColorTransformation.c"
+#line 12330 "ColorTransformation.c"
 		}
 	}
 	{
 		gboolean _tmp26_ = FALSE;
-#line 1290 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1334 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp26_ = TRUE;
-#line 1290 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1334 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		while (TRUE) {
-#line 12068 "ColorTransformation.c"
+#line 12339 "ColorTransformation.c"
 			gint _tmp28_ = 0;
 			gfloat* _tmp29_ = NULL;
 			gint _tmp29__length1 = 0;
 			gint _tmp30_ = 0;
 			gfloat _tmp31_ = 0.0F;
-#line 1290 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1334 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!_tmp26_) {
-#line 12076 "ColorTransformation.c"
+#line 12347 "ColorTransformation.c"
 				gint _tmp27_ = 0;
-#line 1290 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1334 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp27_ = i;
-#line 1290 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1334 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				i = _tmp27_ + 1;
-#line 12082 "ColorTransformation.c"
+#line 12353 "ColorTransformation.c"
 			}
-#line 1290 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1334 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp26_ = FALSE;
-#line 1290 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1334 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp28_ = i;
-#line 1290 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1334 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!(_tmp28_ < 256)) {
-#line 1290 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1334 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 12092 "ColorTransformation.c"
+#line 12363 "ColorTransformation.c"
 			}
-#line 1291 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1335 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp29_ = self->priv->remap_table;
-#line 1291 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1335 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp29__length1 = self->priv->remap_table_length1;
-#line 1291 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1335 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp30_ = i;
-#line 1291 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1335 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp29_[_tmp30_] = 1.0f;
-#line 1291 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1335 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp31_ = _tmp29_[_tmp30_];
-#line 12104 "ColorTransformation.c"
+#line 12375 "ColorTransformation.c"
 		}
 	}
 }
@@ -12124,41 +12395,41 @@ static void expansion_transformation_real_transform_pixel_hsv (PixelTransformati
 	HSVAnalyticPixel _tmp5_ = {0};
 	gfloat _tmp6_ = 0.0F;
 	gfloat _tmp7_ = 0.0F;
-#line 1294 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1338 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EXPANSION_TRANSFORMATION, ExpansionTransformation);
-#line 1294 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1338 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (pixel != NULL);
-#line 1295 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1339 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = *pixel;
-#line 1295 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1339 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = _tmp0_.light_value;
-#line 1295 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1339 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	remap_index = (gint) (_tmp1_ * 255.0f);
-#line 1297 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1341 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = *pixel;
-#line 1297 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1341 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_result_ = _tmp2_;
-#line 1298 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1342 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = self->priv->remap_table;
-#line 1298 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1342 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3__length1 = self->priv->remap_table_length1;
-#line 1298 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1342 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = _tmp3_[remap_index];
-#line 1298 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1342 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_result_.light_value = _tmp4_;
-#line 1300 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1344 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = _result_;
-#line 1300 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1344 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = _tmp5_.light_value;
-#line 1300 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1344 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = CLAMP (_tmp6_, 0.0f, 1.0f);
-#line 1300 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1344 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_result_.light_value = _tmp7_;
-#line 1302 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1346 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	*result = _result_;
-#line 1302 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1346 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return;
-#line 12157 "ColorTransformation.c"
+#line 12428 "ColorTransformation.c"
 }
 
 
@@ -12168,49 +12439,49 @@ static gchar* expansion_transformation_real_to_string (PixelTransformation* base
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
 	gchar* _tmp2_ = NULL;
-#line 1305 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1349 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EXPANSION_TRANSFORMATION, ExpansionTransformation);
-#line 1306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1350 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->low_kink;
-#line 1306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1350 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = self->priv->high_kink;
-#line 1306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1350 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = g_strdup_printf ("{ %d, %d }", _tmp0_, _tmp1_);
-#line 1306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1350 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp2_;
-#line 1306 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1350 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 12179 "ColorTransformation.c"
+#line 12450 "ColorTransformation.c"
 }
 
 
 gint expansion_transformation_get_white_point (ExpansionTransformation* self) {
 	gint result = 0;
 	gint _tmp0_ = 0;
-#line 1309 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1353 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_EXPANSION_TRANSFORMATION (self), 0);
-#line 1310 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1354 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->high_kink;
-#line 1310 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1354 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 1310 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1354 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 12194 "ColorTransformation.c"
+#line 12465 "ColorTransformation.c"
 }
 
 
 gint expansion_transformation_get_black_point (ExpansionTransformation* self) {
 	gint result = 0;
 	gint _tmp0_ = 0;
-#line 1313 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1357 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_EXPANSION_TRANSFORMATION (self), 0);
-#line 1314 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->low_kink;
-#line 1314 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 1314 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 12209 "ColorTransformation.c"
+#line 12480 "ColorTransformation.c"
 }
 
 
@@ -12219,29 +12490,29 @@ static gboolean expansion_transformation_real_is_identity (PixelTransformation* 
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
 	gint _tmp1_ = 0;
-#line 1317 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1361 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EXPANSION_TRANSFORMATION, ExpansionTransformation);
-#line 1318 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = self->priv->low_kink;
-#line 1318 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp1_ == 0) {
-#line 12224 "ColorTransformation.c"
+#line 12495 "ColorTransformation.c"
 		gint _tmp2_ = 0;
-#line 1318 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp2_ = self->priv->high_kink;
-#line 1318 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp0_ = _tmp2_ == 255;
-#line 12230 "ColorTransformation.c"
+#line 12501 "ColorTransformation.c"
 	} else {
-#line 1318 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp0_ = FALSE;
-#line 12234 "ColorTransformation.c"
+#line 12505 "ColorTransformation.c"
 	}
-#line 1318 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 1318 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 12240 "ColorTransformation.c"
+#line 12511 "ColorTransformation.c"
 }
 
 
@@ -12251,63 +12522,63 @@ static PixelTransformation* expansion_transformation_real_copy (PixelTransformat
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
 	ExpansionTransformation* _tmp2_ = NULL;
-#line 1321 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1365 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EXPANSION_TRANSFORMATION, ExpansionTransformation);
-#line 1322 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1366 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->low_kink;
-#line 1322 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1366 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = self->priv->high_kink;
-#line 1322 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1366 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = expansion_transformation_new_from_extrema (_tmp0_, _tmp1_);
-#line 1322 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1366 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation);
-#line 1322 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1366 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 12262 "ColorTransformation.c"
+#line 12533 "ColorTransformation.c"
 }
 
 
 static void expansion_transformation_class_init (ExpansionTransformationClass * klass) {
-#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	expansion_transformation_parent_class = g_type_class_peek_parent (klass);
-#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->finalize = expansion_transformation_finalize;
-#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (ExpansionTransformationPrivate));
-#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->transform_pixel_hsv = expansion_transformation_real_transform_pixel_hsv;
-#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->to_string = expansion_transformation_real_to_string;
-#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->is_identity = expansion_transformation_real_is_identity;
-#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->copy = expansion_transformation_real_copy;
-#line 12281 "ColorTransformation.c"
+#line 12552 "ColorTransformation.c"
 }
 
 
 static void expansion_transformation_instance_init (ExpansionTransformation * self) {
-#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = EXPANSION_TRANSFORMATION_GET_PRIVATE (self);
-#line 1212 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1256 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = NULL;
-#line 1212 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1256 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table_length1 = 0;
-#line 1212 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1256 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_remap_table_size_ = self->priv->remap_table_length1;
-#line 12294 "ColorTransformation.c"
+#line 12565 "ColorTransformation.c"
 }
 
 
 static void expansion_transformation_finalize (PixelTransformation* obj) {
 	ExpansionTransformation * self;
-#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_EXPANSION_TRANSFORMATION, ExpansionTransformation);
-#line 1212 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1256 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = (g_free (self->priv->remap_table), NULL);
-#line 1211 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1255 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	PIXEL_TRANSFORMATION_CLASS (expansion_transformation_parent_class)->finalize (obj);
-#line 12306 "ColorTransformation.c"
+#line 12577 "ColorTransformation.c"
 }
 
 
@@ -12334,49 +12605,49 @@ ShadowDetailTransformation* shadow_detail_transformation_construct (GType object
 	HermiteGammaApproximationFunction* func = NULL;
 	HermiteGammaApproximationFunction* _tmp4_ = NULL;
 	gfloat* _tmp5_ = NULL;
-#line 1339 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1383 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (ShadowDetailTransformation*) hsv_transformation_construct (object_type, PIXEL_TRANSFORMATION_TYPE_SHADOWS);
-#line 1341 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1385 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = user_intensity;
-#line 1341 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1385 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->intensity = _tmp0_;
-#line 1342 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1386 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = self->priv->intensity;
-#line 1342 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1386 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = CLAMP (_tmp1_ / SHADOW_DETAIL_TRANSFORMATION_MAX_PARAMETER, 0.0f, 1.0f);
-#line 1342 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1386 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	intensity_adj = _tmp2_;
-#line 1344 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1388 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = intensity_adj;
-#line 1344 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1388 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	effect_shift = SHADOW_DETAIL_TRANSFORMATION_MAX_EFFECT_SHIFT * _tmp3_;
-#line 1345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1389 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = hermite_gamma_approximation_function_new (SHADOW_DETAIL_TRANSFORMATION_TONAL_WIDTH);
-#line 1345 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1389 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	func = _tmp4_;
-#line 1348 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = g_new0 (gfloat, 256);
-#line 1348 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = (g_free (self->priv->remap_table), NULL);
-#line 1348 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = _tmp5_;
-#line 1348 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table_length1 = 256;
-#line 1348 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_remap_table_size_ = self->priv->remap_table_length1;
-#line 12363 "ColorTransformation.c"
+#line 12634 "ColorTransformation.c"
 	{
 		gint i = 0;
-#line 1349 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 12368 "ColorTransformation.c"
+#line 12639 "ColorTransformation.c"
 		{
 			gboolean _tmp6_ = FALSE;
-#line 1349 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp6_ = TRUE;
-#line 1349 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 12375 "ColorTransformation.c"
+#line 12646 "ColorTransformation.c"
 				gint _tmp8_ = 0;
 				gfloat x = 0.0F;
 				gint _tmp9_ = 0;
@@ -12393,74 +12664,74 @@ ShadowDetailTransformation* shadow_detail_transformation_construct (GType object
 				gfloat _tmp18_ = 0.0F;
 				gfloat _tmp19_ = 0.0F;
 				gfloat _tmp20_ = 0.0F;
-#line 1349 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp6_) {
-#line 12394 "ColorTransformation.c"
+#line 12665 "ColorTransformation.c"
 					gint _tmp7_ = 0;
-#line 1349 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp7_ = i;
-#line 1349 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp7_ + 1;
-#line 12400 "ColorTransformation.c"
+#line 12671 "ColorTransformation.c"
 				}
-#line 1349 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp6_ = FALSE;
-#line 1349 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp8_ = i;
-#line 1349 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp8_ < 256)) {
-#line 1349 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1393 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 12410 "ColorTransformation.c"
+#line 12681 "ColorTransformation.c"
 				}
-#line 1350 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1394 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp9_ = i;
-#line 1350 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1394 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				x = ((gfloat) _tmp9_) / 255.0f;
-#line 1351 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1395 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp10_ = func;
-#line 1351 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1395 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp11_ = x;
-#line 1351 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1395 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp12_ = hermite_gamma_approximation_function_evaluate (_tmp10_, _tmp11_);
-#line 1351 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1395 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				weight = _tmp12_;
-#line 1352 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp13_ = self->priv->remap_table;
-#line 1352 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp13__length1 = self->priv->remap_table_length1;
-#line 1352 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp14_ = i;
-#line 1352 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp15_ = weight;
-#line 1352 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp16_ = x;
-#line 1352 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp17_ = effect_shift;
-#line 1352 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp18_ = weight;
-#line 1352 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp19_ = x;
-#line 1352 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp13_[_tmp14_] = (_tmp15_ * (_tmp16_ + _tmp17_)) + ((1.0f - _tmp18_) * _tmp19_);
-#line 1352 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1396 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp20_ = _tmp13_[_tmp14_];
-#line 12444 "ColorTransformation.c"
+#line 12715 "ColorTransformation.c"
 			}
 		}
 	}
-#line 1338 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1382 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_hermite_gamma_approximation_function_unref0 (func);
-#line 1338 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1382 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 12452 "ColorTransformation.c"
+#line 12723 "ColorTransformation.c"
 }
 
 
 ShadowDetailTransformation* shadow_detail_transformation_new (gfloat user_intensity) {
-#line 1338 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1382 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return shadow_detail_transformation_construct (TYPE_SHADOW_DETAIL_TRANSFORMATION, user_intensity);
-#line 12459 "ColorTransformation.c"
+#line 12730 "ColorTransformation.c"
 }
 
 
@@ -12474,33 +12745,33 @@ static void shadow_detail_transformation_real_transform_pixel_hsv (PixelTransfor
 	gfloat _tmp3_ = 0.0F;
 	gfloat _tmp4_ = 0.0F;
 	gfloat _tmp5_ = 0.0F;
-#line 1356 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SHADOW_DETAIL_TRANSFORMATION, ShadowDetailTransformation);
-#line 1356 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (pixel != NULL);
-#line 1357 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1401 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = *pixel;
-#line 1357 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1401 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_result_ = _tmp0_;
-#line 1358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1402 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = self->priv->remap_table;
-#line 1358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1402 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1__length1 = self->priv->remap_table_length1;
-#line 1358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1402 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = *pixel;
-#line 1358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1402 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = _tmp2_.light_value;
-#line 1358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1402 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = _tmp1_[(gint) (_tmp3_ * 255.0f)];
-#line 1358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1402 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = CLAMP (_tmp4_, 0.0f, 1.0f);
-#line 1358 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1402 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_result_.light_value = _tmp5_;
-#line 1359 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	*result = _result_;
-#line 1359 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1403 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return;
-#line 12499 "ColorTransformation.c"
+#line 12770 "ColorTransformation.c"
 }
 
 
@@ -12509,17 +12780,17 @@ static PixelTransformation* shadow_detail_transformation_real_copy (PixelTransfo
 	PixelTransformation* result = NULL;
 	gfloat _tmp0_ = 0.0F;
 	ShadowDetailTransformation* _tmp1_ = NULL;
-#line 1362 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1406 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SHADOW_DETAIL_TRANSFORMATION, ShadowDetailTransformation);
-#line 1363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1407 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->intensity;
-#line 1363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1407 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = shadow_detail_transformation_new (_tmp0_);
-#line 1363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1407 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation);
-#line 1363 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1407 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 12518 "ColorTransformation.c"
+#line 12789 "ColorTransformation.c"
 }
 
 
@@ -12527,74 +12798,74 @@ static gboolean shadow_detail_transformation_real_is_identity (PixelTransformati
 	ShadowDetailTransformation * self;
 	gboolean result = FALSE;
 	gfloat _tmp0_ = 0.0F;
-#line 1366 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1410 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SHADOW_DETAIL_TRANSFORMATION, ShadowDetailTransformation);
-#line 1367 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->intensity;
-#line 1367 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_ == 0.0f;
-#line 1367 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1411 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 12534 "ColorTransformation.c"
+#line 12805 "ColorTransformation.c"
 }
 
 
 gfloat shadow_detail_transformation_get_parameter (ShadowDetailTransformation* self) {
 	gfloat result = 0.0F;
 	gfloat _tmp0_ = 0.0F;
-#line 1370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1414 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_SHADOW_DETAIL_TRANSFORMATION (self), 0.0F);
-#line 1371 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1415 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->intensity;
-#line 1371 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1415 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 1371 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1415 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 12549 "ColorTransformation.c"
+#line 12820 "ColorTransformation.c"
 }
 
 
 static void shadow_detail_transformation_class_init (ShadowDetailTransformationClass * klass) {
-#line 1326 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	shadow_detail_transformation_parent_class = g_type_class_peek_parent (klass);
-#line 1326 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->finalize = shadow_detail_transformation_finalize;
-#line 1326 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (ShadowDetailTransformationPrivate));
-#line 1326 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->transform_pixel_hsv = shadow_detail_transformation_real_transform_pixel_hsv;
-#line 1326 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->copy = shadow_detail_transformation_real_copy;
-#line 1326 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->is_identity = shadow_detail_transformation_real_is_identity;
-#line 12566 "ColorTransformation.c"
+#line 12837 "ColorTransformation.c"
 }
 
 
 static void shadow_detail_transformation_instance_init (ShadowDetailTransformation * self) {
-#line 1326 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = SHADOW_DETAIL_TRANSFORMATION_GET_PRIVATE (self);
-#line 1332 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1376 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->intensity = 0.0f;
-#line 1333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1377 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = NULL;
-#line 1333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1377 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table_length1 = 0;
-#line 1333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1377 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_remap_table_size_ = self->priv->remap_table_length1;
-#line 12581 "ColorTransformation.c"
+#line 12852 "ColorTransformation.c"
 }
 
 
 static void shadow_detail_transformation_finalize (PixelTransformation* obj) {
 	ShadowDetailTransformation * self;
-#line 1326 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_SHADOW_DETAIL_TRANSFORMATION, ShadowDetailTransformation);
-#line 1333 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1377 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = (g_free (self->priv->remap_table), NULL);
-#line 1326 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1370 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	PIXEL_TRANSFORMATION_CLASS (shadow_detail_transformation_parent_class)->finalize (obj);
-#line 12593 "ColorTransformation.c"
+#line 12864 "ColorTransformation.c"
 }
 
 
@@ -12615,59 +12886,59 @@ HermiteGammaApproximationFunction* hermite_gamma_approximation_function_construc
 	gfloat _tmp0_ = 0.0F;
 	gfloat _tmp1_ = 0.0F;
 	gfloat _tmp2_ = 0.0F;
-#line 1379 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (HermiteGammaApproximationFunction*) g_type_create_instance (object_type);
-#line 1380 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1424 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = user_interval_upper;
-#line 1380 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1424 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = CLAMP (_tmp0_, 0.1f, 1.0f);
-#line 1380 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1424 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->nonzero_interval_upper = _tmp1_;
-#line 1381 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1425 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = self->priv->nonzero_interval_upper;
-#line 1381 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1425 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->x_scale = 1.0f / _tmp2_;
-#line 1379 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 12628 "ColorTransformation.c"
+#line 12899 "ColorTransformation.c"
 }
 
 
 HermiteGammaApproximationFunction* hermite_gamma_approximation_function_new (gfloat user_interval_upper) {
-#line 1379 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return hermite_gamma_approximation_function_construct (TYPE_HERMITE_GAMMA_APPROXIMATION_FUNCTION, user_interval_upper);
-#line 12635 "ColorTransformation.c"
+#line 12906 "ColorTransformation.c"
 }
 
 
 gfloat hermite_gamma_approximation_function_evaluate (HermiteGammaApproximationFunction* self, gfloat x) {
 	gfloat result = 0.0F;
 	gfloat _tmp0_ = 0.0F;
-#line 1384 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1428 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_HERMITE_GAMMA_APPROXIMATION_FUNCTION (self), 0.0F);
-#line 1385 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1429 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = x;
-#line 1385 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1429 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp0_ < 0.0f) {
-#line 1386 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1430 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		result = 0.0f;
-#line 1386 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1430 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		return result;
-#line 12652 "ColorTransformation.c"
+#line 12923 "ColorTransformation.c"
 	} else {
 		gfloat _tmp1_ = 0.0F;
 		gfloat _tmp2_ = 0.0F;
-#line 1387 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1431 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp1_ = x;
-#line 1387 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1431 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp2_ = self->priv->nonzero_interval_upper;
-#line 1387 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1431 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (_tmp1_ > _tmp2_) {
-#line 1388 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1432 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			result = 0.0f;
-#line 1388 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1432 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return result;
-#line 12666 "ColorTransformation.c"
+#line 12937 "ColorTransformation.c"
 		} else {
 			gfloat indep_var = 0.0F;
 			gfloat _tmp3_ = 0.0F;
@@ -12681,251 +12952,251 @@ gfloat hermite_gamma_approximation_function_evaluate (HermiteGammaApproximationF
 			gfloat _tmp10_ = 0.0F;
 			gfloat _tmp11_ = 0.0F;
 			gfloat _tmp12_ = 0.0F;
-#line 1390 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1434 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp3_ = self->priv->x_scale;
-#line 1390 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1434 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp4_ = x;
-#line 1390 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1434 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			indep_var = _tmp3_ * _tmp4_;
-#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1436 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp5_ = indep_var;
-#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1436 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp6_ = indep_var;
-#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1436 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp7_ = indep_var;
-#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1436 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp8_ = indep_var;
-#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1436 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp9_ = indep_var;
-#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1436 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp10_ = indep_var;
-#line 1392 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1436 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			dep_var = 6.0f * ((((_tmp5_ * _tmp6_) * _tmp7_) - (2.0f * (_tmp8_ * _tmp9_))) + _tmp10_);
-#line 1395 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1439 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp11_ = dep_var;
-#line 1395 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1439 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp12_ = CLAMP (_tmp11_, 0.0f, 1.0f);
-#line 1395 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1439 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			result = _tmp12_;
-#line 1395 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1439 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return result;
-#line 12708 "ColorTransformation.c"
+#line 12979 "ColorTransformation.c"
 		}
 	}
 }
 
 
 static void value_hermite_gamma_approximation_function_init (GValue* value) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	value->data[0].v_pointer = NULL;
-#line 12717 "ColorTransformation.c"
+#line 12988 "ColorTransformation.c"
 }
 
 
 static void value_hermite_gamma_approximation_function_free_value (GValue* value) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (value->data[0].v_pointer) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		hermite_gamma_approximation_function_unref (value->data[0].v_pointer);
-#line 12726 "ColorTransformation.c"
+#line 12997 "ColorTransformation.c"
 	}
 }
 
 
 static void value_hermite_gamma_approximation_function_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (src_value->data[0].v_pointer) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = hermite_gamma_approximation_function_ref (src_value->data[0].v_pointer);
-#line 12736 "ColorTransformation.c"
+#line 13007 "ColorTransformation.c"
 	} else {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 12740 "ColorTransformation.c"
+#line 13011 "ColorTransformation.c"
 	}
 }
 
 
 static gpointer value_hermite_gamma_approximation_function_peek_pointer (const GValue* value) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 12748 "ColorTransformation.c"
+#line 13019 "ColorTransformation.c"
 }
 
 
 static gchar* value_hermite_gamma_approximation_function_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (collect_values[0].v_pointer) {
-#line 12755 "ColorTransformation.c"
+#line 13026 "ColorTransformation.c"
 		HermiteGammaApproximationFunction* object;
 		object = collect_values[0].v_pointer;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 12762 "ColorTransformation.c"
+#line 13033 "ColorTransformation.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 12766 "ColorTransformation.c"
+#line 13037 "ColorTransformation.c"
 		}
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = hermite_gamma_approximation_function_ref (object);
-#line 12770 "ColorTransformation.c"
+#line 13041 "ColorTransformation.c"
 	} else {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 12774 "ColorTransformation.c"
+#line 13045 "ColorTransformation.c"
 	}
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 12778 "ColorTransformation.c"
+#line 13049 "ColorTransformation.c"
 }
 
 
 static gchar* value_hermite_gamma_approximation_function_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	HermiteGammaApproximationFunction** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!object_p) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 12789 "ColorTransformation.c"
+#line 13060 "ColorTransformation.c"
 	}
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (!value->data[0].v_pointer) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = NULL;
-#line 12795 "ColorTransformation.c"
+#line 13066 "ColorTransformation.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = value->data[0].v_pointer;
-#line 12799 "ColorTransformation.c"
+#line 13070 "ColorTransformation.c"
 	} else {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		*object_p = hermite_gamma_approximation_function_ref (value->data[0].v_pointer);
-#line 12803 "ColorTransformation.c"
+#line 13074 "ColorTransformation.c"
 	}
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return NULL;
-#line 12807 "ColorTransformation.c"
+#line 13078 "ColorTransformation.c"
 }
 
 
 GParamSpec* param_spec_hermite_gamma_approximation_function (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecHermiteGammaApproximationFunction* spec;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_HERMITE_GAMMA_APPROXIMATION_FUNCTION), NULL);
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return G_PARAM_SPEC (spec);
-#line 12821 "ColorTransformation.c"
+#line 13092 "ColorTransformation.c"
 }
 
 
 gpointer value_get_hermite_gamma_approximation_function (const GValue* value) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_HERMITE_GAMMA_APPROXIMATION_FUNCTION), NULL);
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return value->data[0].v_pointer;
-#line 12830 "ColorTransformation.c"
+#line 13101 "ColorTransformation.c"
 }
 
 
 void value_set_hermite_gamma_approximation_function (GValue* value, gpointer v_object) {
 	HermiteGammaApproximationFunction* old;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_HERMITE_GAMMA_APPROXIMATION_FUNCTION));
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_HERMITE_GAMMA_APPROXIMATION_FUNCTION));
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		hermite_gamma_approximation_function_ref (value->data[0].v_pointer);
-#line 12850 "ColorTransformation.c"
+#line 13121 "ColorTransformation.c"
 	} else {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 12854 "ColorTransformation.c"
+#line 13125 "ColorTransformation.c"
 	}
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		hermite_gamma_approximation_function_unref (old);
-#line 12860 "ColorTransformation.c"
+#line 13131 "ColorTransformation.c"
 	}
 }
 
 
 void value_take_hermite_gamma_approximation_function (GValue* value, gpointer v_object) {
 	HermiteGammaApproximationFunction* old;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_HERMITE_GAMMA_APPROXIMATION_FUNCTION));
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	old = value->data[0].v_pointer;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (v_object) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_HERMITE_GAMMA_APPROXIMATION_FUNCTION));
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = v_object;
-#line 12879 "ColorTransformation.c"
+#line 13150 "ColorTransformation.c"
 	} else {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		value->data[0].v_pointer = NULL;
-#line 12883 "ColorTransformation.c"
+#line 13154 "ColorTransformation.c"
 	}
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (old) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		hermite_gamma_approximation_function_unref (old);
-#line 12889 "ColorTransformation.c"
+#line 13160 "ColorTransformation.c"
 	}
 }
 
 
 static void hermite_gamma_approximation_function_class_init (HermiteGammaApproximationFunctionClass * klass) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	hermite_gamma_approximation_function_parent_class = g_type_class_peek_parent (klass);
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((HermiteGammaApproximationFunctionClass *) klass)->finalize = hermite_gamma_approximation_function_finalize;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (HermiteGammaApproximationFunctionPrivate));
-#line 12901 "ColorTransformation.c"
+#line 13172 "ColorTransformation.c"
 }
 
 
 static void hermite_gamma_approximation_function_instance_init (HermiteGammaApproximationFunction * self) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = HERMITE_GAMMA_APPROXIMATION_FUNCTION_GET_PRIVATE (self);
-#line 1376 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1420 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->x_scale = 1.0f;
-#line 1377 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1421 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->nonzero_interval_upper = 1.0f;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->ref_count = 1;
-#line 12914 "ColorTransformation.c"
+#line 13185 "ColorTransformation.c"
 }
 
 
 static void hermite_gamma_approximation_function_finalize (HermiteGammaApproximationFunction* obj) {
 	HermiteGammaApproximationFunction * self;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_HERMITE_GAMMA_APPROXIMATION_FUNCTION, HermiteGammaApproximationFunction);
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_signal_handlers_destroy (self);
-#line 12924 "ColorTransformation.c"
+#line 13195 "ColorTransformation.c"
 }
 
 
@@ -12946,24 +13217,24 @@ GType hermite_gamma_approximation_function_get_type (void) {
 gpointer hermite_gamma_approximation_function_ref (gpointer instance) {
 	HermiteGammaApproximationFunction* self;
 	self = instance;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return instance;
-#line 12949 "ColorTransformation.c"
+#line 13220 "ColorTransformation.c"
 }
 
 
 void hermite_gamma_approximation_function_unref (gpointer instance) {
 	HermiteGammaApproximationFunction* self;
 	self = instance;
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		HERMITE_GAMMA_APPROXIMATION_FUNCTION_GET_CLASS (self)->finalize (self);
-#line 1375 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 12962 "ColorTransformation.c"
+#line 13233 "ColorTransformation.c"
 	}
 }
 
@@ -12979,49 +13250,49 @@ HighlightDetailTransformation* highlight_detail_transformation_construct (GType 
 	HermiteGammaApproximationFunction* func = NULL;
 	HermiteGammaApproximationFunction* _tmp4_ = NULL;
 	gfloat* _tmp5_ = NULL;
-#line 1413 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1457 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = (HighlightDetailTransformation*) hsv_transformation_construct (object_type, PIXEL_TRANSFORMATION_TYPE_HIGHLIGHTS);
-#line 1415 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1459 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = user_intensity;
-#line 1415 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1459 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->intensity = _tmp0_;
-#line 1416 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1460 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = self->priv->intensity;
-#line 1416 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1460 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = CLAMP (_tmp1_ / HIGHLIGHT_DETAIL_TRANSFORMATION_MIN_PARAMETER, 0.0f, 1.0f);
-#line 1416 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1460 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	intensity_adj = _tmp2_;
-#line 1418 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = intensity_adj;
-#line 1418 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1462 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	effect_shift = HIGHLIGHT_DETAIL_TRANSFORMATION_MAX_EFFECT_SHIFT * _tmp3_;
-#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1463 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = hermite_gamma_approximation_function_new (HIGHLIGHT_DETAIL_TRANSFORMATION_TONAL_WIDTH);
-#line 1419 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1463 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	func = _tmp4_;
-#line 1422 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1466 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = g_new0 (gfloat, 256);
-#line 1422 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1466 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = (g_free (self->priv->remap_table), NULL);
-#line 1422 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1466 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = _tmp5_;
-#line 1422 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1466 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table_length1 = 256;
-#line 1422 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1466 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_remap_table_size_ = self->priv->remap_table_length1;
-#line 13008 "ColorTransformation.c"
+#line 13279 "ColorTransformation.c"
 	{
 		gint i = 0;
-#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1467 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		i = 0;
-#line 13013 "ColorTransformation.c"
+#line 13284 "ColorTransformation.c"
 		{
 			gboolean _tmp6_ = FALSE;
-#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1467 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp6_ = TRUE;
-#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1467 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 13020 "ColorTransformation.c"
+#line 13291 "ColorTransformation.c"
 				gint _tmp8_ = 0;
 				gfloat x = 0.0F;
 				gint _tmp9_ = 0;
@@ -13038,74 +13309,74 @@ HighlightDetailTransformation* highlight_detail_transformation_construct (GType 
 				gfloat _tmp18_ = 0.0F;
 				gfloat _tmp19_ = 0.0F;
 				gfloat _tmp20_ = 0.0F;
-#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1467 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp6_) {
-#line 13039 "ColorTransformation.c"
+#line 13310 "ColorTransformation.c"
 					gint _tmp7_ = 0;
-#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1467 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp7_ = i;
-#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1467 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					i = _tmp7_ + 1;
-#line 13045 "ColorTransformation.c"
+#line 13316 "ColorTransformation.c"
 				}
-#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1467 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp6_ = FALSE;
-#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1467 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp8_ = i;
-#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1467 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp8_ < 256)) {
-#line 1423 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1467 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 13055 "ColorTransformation.c"
+#line 13326 "ColorTransformation.c"
 				}
-#line 1424 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1468 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp9_ = i;
-#line 1424 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1468 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				x = ((gfloat) _tmp9_) / 255.0f;
-#line 1425 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp10_ = func;
-#line 1425 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp11_ = x;
-#line 1425 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp12_ = hermite_gamma_approximation_function_evaluate (_tmp10_, 1.0f - _tmp11_);
-#line 1425 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1469 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				weight = _tmp12_;
-#line 1426 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp13_ = self->priv->remap_table;
-#line 1426 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp13__length1 = self->priv->remap_table_length1;
-#line 1426 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp14_ = i;
-#line 1426 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp15_ = weight;
-#line 1426 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp16_ = x;
-#line 1426 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp17_ = effect_shift;
-#line 1426 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp18_ = weight;
-#line 1426 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp19_ = x;
-#line 1426 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp13_[_tmp14_] = (_tmp15_ * (_tmp16_ - _tmp17_)) + ((1.0f - _tmp18_) * _tmp19_);
-#line 1426 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp20_ = _tmp13_[_tmp14_];
-#line 13089 "ColorTransformation.c"
+#line 13360 "ColorTransformation.c"
 			}
 		}
 	}
-#line 1412 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_hermite_gamma_approximation_function_unref0 (func);
-#line 1412 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return self;
-#line 13097 "ColorTransformation.c"
+#line 13368 "ColorTransformation.c"
 }
 
 
 HighlightDetailTransformation* highlight_detail_transformation_new (gfloat user_intensity) {
-#line 1412 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1456 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return highlight_detail_transformation_construct (TYPE_HIGHLIGHT_DETAIL_TRANSFORMATION, user_intensity);
-#line 13104 "ColorTransformation.c"
+#line 13375 "ColorTransformation.c"
 }
 
 
@@ -13119,33 +13390,33 @@ static void highlight_detail_transformation_real_transform_pixel_hsv (PixelTrans
 	gfloat _tmp3_ = 0.0F;
 	gfloat _tmp4_ = 0.0F;
 	gfloat _tmp5_ = 0.0F;
-#line 1430 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1474 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_HIGHLIGHT_DETAIL_TRANSFORMATION, HighlightDetailTransformation);
-#line 1430 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1474 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_if_fail (pixel != NULL);
-#line 1431 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = *pixel;
-#line 1431 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_result_ = _tmp0_;
-#line 1432 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1476 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = self->priv->remap_table;
-#line 1432 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1476 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1__length1 = self->priv->remap_table_length1;
-#line 1432 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1476 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = *pixel;
-#line 1432 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1476 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = _tmp2_.light_value;
-#line 1432 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1476 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = _tmp1_[(gint) (_tmp3_ * 255.0f)];
-#line 1432 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1476 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = CLAMP (_tmp4_, 0.0f, 1.0f);
-#line 1432 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1476 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_result_.light_value = _tmp5_;
-#line 1433 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	*result = _result_;
-#line 1433 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1477 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return;
-#line 13144 "ColorTransformation.c"
+#line 13415 "ColorTransformation.c"
 }
 
 
@@ -13154,17 +13425,17 @@ static PixelTransformation* highlight_detail_transformation_real_copy (PixelTran
 	PixelTransformation* result = NULL;
 	gfloat _tmp0_ = 0.0F;
 	HighlightDetailTransformation* _tmp1_ = NULL;
-#line 1436 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1480 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_HIGHLIGHT_DETAIL_TRANSFORMATION, HighlightDetailTransformation);
-#line 1437 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->intensity;
-#line 1437 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = highlight_detail_transformation_new (_tmp0_);
-#line 1437 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation);
-#line 1437 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1481 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 13163 "ColorTransformation.c"
+#line 13434 "ColorTransformation.c"
 }
 
 
@@ -13172,74 +13443,74 @@ static gboolean highlight_detail_transformation_real_is_identity (PixelTransform
 	HighlightDetailTransformation * self;
 	gboolean result = FALSE;
 	gfloat _tmp0_ = 0.0F;
-#line 1440 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1484 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_HIGHLIGHT_DETAIL_TRANSFORMATION, HighlightDetailTransformation);
-#line 1441 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1485 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->intensity;
-#line 1441 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1485 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_ == 0.0f;
-#line 1441 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1485 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 13179 "ColorTransformation.c"
+#line 13450 "ColorTransformation.c"
 }
 
 
 gfloat highlight_detail_transformation_get_parameter (HighlightDetailTransformation* self) {
 	gfloat result = 0.0F;
 	gfloat _tmp0_ = 0.0F;
-#line 1444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1488 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (IS_HIGHLIGHT_DETAIL_TRANSFORMATION (self), 0.0F);
-#line 1445 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = self->priv->intensity;
-#line 1445 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = _tmp0_;
-#line 1445 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 13194 "ColorTransformation.c"
+#line 13465 "ColorTransformation.c"
 }
 
 
 static void highlight_detail_transformation_class_init (HighlightDetailTransformationClass * klass) {
-#line 1400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	highlight_detail_transformation_parent_class = g_type_class_peek_parent (klass);
-#line 1400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->finalize = highlight_detail_transformation_finalize;
-#line 1400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_type_class_add_private (klass, sizeof (HighlightDetailTransformationPrivate));
-#line 1400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->transform_pixel_hsv = highlight_detail_transformation_real_transform_pixel_hsv;
-#line 1400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->copy = highlight_detail_transformation_real_copy;
-#line 1400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	((PixelTransformationClass *) klass)->is_identity = highlight_detail_transformation_real_is_identity;
-#line 13211 "ColorTransformation.c"
+#line 13482 "ColorTransformation.c"
 }
 
 
 static void highlight_detail_transformation_instance_init (HighlightDetailTransformation * self) {
-#line 1400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv = HIGHLIGHT_DETAIL_TRANSFORMATION_GET_PRIVATE (self);
-#line 1406 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1450 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->intensity = 0.0f;
-#line 1407 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1451 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = NULL;
-#line 1407 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1451 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table_length1 = 0;
-#line 1407 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1451 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->_remap_table_size_ = self->priv->remap_table_length1;
-#line 13226 "ColorTransformation.c"
+#line 13497 "ColorTransformation.c"
 }
 
 
 static void highlight_detail_transformation_finalize (PixelTransformation* obj) {
 	HighlightDetailTransformation * self;
-#line 1400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_HIGHLIGHT_DETAIL_TRANSFORMATION, HighlightDetailTransformation);
-#line 1407 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1451 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	self->priv->remap_table = (g_free (self->priv->remap_table), NULL);
-#line 1400 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1444 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	PIXEL_TRANSFORMATION_CLASS (highlight_detail_transformation_parent_class)->finalize (obj);
-#line 13238 "ColorTransformation.c"
+#line 13509 "ColorTransformation.c"
 }
 
 
@@ -13288,124 +13559,127 @@ PixelTransformationBundle* auto_enhance_create_auto_enhance_adjustments (GdkPixb
 	ExposureTransformation* _tmp56_ = NULL;
 	ExposureTransformation* _tmp57_ = NULL;
 	PixelTransformationBundle* _tmp58_ = NULL;
-	SaturationTransformation* _tmp59_ = NULL;
-	SaturationTransformation* _tmp60_ = NULL;
-#line 1458 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	ContrastTransformation* _tmp59_ = NULL;
+	ContrastTransformation* _tmp60_ = NULL;
+	PixelTransformationBundle* _tmp61_ = NULL;
+	SaturationTransformation* _tmp62_ = NULL;
+	SaturationTransformation* _tmp63_ = NULL;
+#line 1502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
-#line 1459 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1503 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp0_ = pixel_transformation_bundle_new ();
-#line 1459 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1503 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	adjustments = _tmp0_;
-#line 1461 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1505 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp1_ = pixbuf;
-#line 1461 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1505 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp2_ = intensity_histogram_new (_tmp1_);
-#line 1461 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1505 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	analysis_histogram = _tmp2_;
-#line 1464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp3_ = analysis_histogram;
-#line 1464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp4_ = intensity_histogram_get_cumulative_probability (_tmp3_, AUTO_ENHANCE_SHADOW_DETECT_MAX_INTENSITY);
-#line 1464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp5_ = analysis_histogram;
-#line 1464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp6_ = intensity_histogram_get_cumulative_probability (_tmp5_, AUTO_ENHANCE_SHADOW_DETECT_MIN_INTENSITY);
-#line 1464 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1508 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pct_in_range = 100.0f * (_tmp4_ - _tmp6_);
-#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp7_ = analysis_histogram;
-#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp8_ = intensity_histogram_get_cumulative_probability (_tmp7_, AUTO_ENHANCE_SHADOW_DETECT_MIN_INTENSITY);
-#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp9_ = analysis_histogram;
-#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp10_ = intensity_histogram_get_cumulative_probability (_tmp9_, AUTO_ENHANCE_SHADOW_DETECT_MAX_INTENSITY);
-#line 1470 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	shadow_range_mean_prob_val = (_tmp8_ + _tmp10_) * 0.5f;
-#line 1473 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1517 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	shadow_mean_intensity = AUTO_ENHANCE_SHADOW_DETECT_MIN_INTENSITY;
-#line 13323 "ColorTransformation.c"
+#line 13597 "ColorTransformation.c"
 	{
 		gboolean _tmp11_ = FALSE;
-#line 1474 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1518 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp11_ = TRUE;
-#line 1474 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1518 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		while (TRUE) {
-#line 13330 "ColorTransformation.c"
+#line 13604 "ColorTransformation.c"
 			gint _tmp13_ = 0;
 			IntensityHistogram* _tmp14_ = NULL;
 			gint _tmp15_ = 0;
 			gfloat _tmp16_ = 0.0F;
 			gfloat _tmp17_ = 0.0F;
-#line 1474 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1518 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!_tmp11_) {
-#line 13338 "ColorTransformation.c"
+#line 13612 "ColorTransformation.c"
 				gint _tmp12_ = 0;
-#line 1474 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1518 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp12_ = shadow_mean_intensity;
-#line 1474 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1518 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				shadow_mean_intensity = _tmp12_ + 1;
-#line 13344 "ColorTransformation.c"
+#line 13618 "ColorTransformation.c"
 			}
-#line 1474 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1518 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp11_ = FALSE;
-#line 1474 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1518 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp13_ = shadow_mean_intensity;
-#line 1474 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1518 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (!(_tmp13_ <= AUTO_ENHANCE_SHADOW_DETECT_MAX_INTENSITY)) {
-#line 1474 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1518 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 13354 "ColorTransformation.c"
+#line 13628 "ColorTransformation.c"
 			}
-#line 1475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp14_ = analysis_histogram;
-#line 1475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp15_ = shadow_mean_intensity;
-#line 1475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp16_ = intensity_histogram_get_cumulative_probability (_tmp14_, _tmp15_);
-#line 1475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp17_ = shadow_range_mean_prob_val;
-#line 1475 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1519 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			if (_tmp16_ >= _tmp17_) {
-#line 1476 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1520 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				break;
-#line 13368 "ColorTransformation.c"
+#line 13642 "ColorTransformation.c"
 			}
 		}
 	}
-#line 1484 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1528 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp19_ = pct_in_range;
-#line 1484 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1528 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp19_ > 40.0f) {
-#line 1484 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1528 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp18_ = TRUE;
-#line 13378 "ColorTransformation.c"
+#line 13652 "ColorTransformation.c"
 	} else {
 		gboolean _tmp20_ = FALSE;
 		gfloat _tmp21_ = 0.0F;
-#line 1484 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1528 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp21_ = pct_in_range;
-#line 1484 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1528 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		if (_tmp21_ > 20.0f) {
-#line 13386 "ColorTransformation.c"
+#line 13660 "ColorTransformation.c"
 			gint _tmp22_ = 0;
-#line 1484 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1528 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp22_ = shadow_mean_intensity;
-#line 1484 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1528 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp20_ = _tmp22_ < AUTO_ENHANCE_EMPIRICAL_DARK;
-#line 13392 "ColorTransformation.c"
+#line 13666 "ColorTransformation.c"
 		} else {
-#line 1484 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1528 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp20_ = FALSE;
-#line 13396 "ColorTransformation.c"
+#line 13670 "ColorTransformation.c"
 		}
-#line 1484 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1528 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp18_ = _tmp20_;
-#line 13400 "ColorTransformation.c"
+#line 13674 "ColorTransformation.c"
 	}
-#line 1484 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1528 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	if (_tmp18_) {
-#line 13404 "ColorTransformation.c"
+#line 13678 "ColorTransformation.c"
 		gfloat shadow_trans_effect_size = 0.0F;
 		gint _tmp23_ = 0;
 		gfloat _tmp24_ = 0.0F;
@@ -13418,87 +13692,87 @@ PixelTransformationBundle* auto_enhance_create_auto_enhance_adjustments (GdkPixb
 		gint _tmp36_ = 0;
 		ExpansionTransformation* _tmp37_ = NULL;
 		ExpansionTransformation* _tmp38_ = NULL;
-#line 1485 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1529 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp23_ = shadow_mean_intensity;
-#line 1485 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1529 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		shadow_trans_effect_size = ((((gfloat) AUTO_ENHANCE_SHADOW_DETECT_MAX_INTENSITY) - ((gfloat) _tmp23_)) / ((gfloat) AUTO_ENHANCE_SHADOW_DETECT_INTENSITY_RANGE)) * SHADOW_DETAIL_TRANSFORMATION_MAX_PARAMETER;
-#line 1489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp24_ = shadow_trans_effect_size;
-#line 1489 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1533 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		shadow_trans_effect_size = _tmp24_ * AUTO_ENHANCE_SHADOW_AGGRESSIVENESS_MUL;
-#line 1491 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1535 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp25_ = adjustments;
-#line 1491 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1535 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp26_ = shadow_trans_effect_size;
-#line 1491 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1535 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp27_ = shadow_detail_transformation_new (_tmp26_);
-#line 1491 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1535 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp28_ = _tmp27_;
-#line 1491 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1535 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_bundle_set (_tmp25_, G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 1491 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1535 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_pixel_transformation_unref0 (_tmp28_);
-#line 1495 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1539 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		discard_point = 255;
-#line 13439 "ColorTransformation.c"
+#line 13713 "ColorTransformation.c"
 		{
 			gboolean _tmp29_ = FALSE;
-#line 1496 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1540 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			_tmp29_ = TRUE;
-#line 1496 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1540 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 			while (TRUE) {
-#line 13446 "ColorTransformation.c"
+#line 13720 "ColorTransformation.c"
 				gint _tmp31_ = 0;
 				IntensityHistogram* _tmp32_ = NULL;
 				gint _tmp33_ = 0;
 				gfloat _tmp34_ = 0.0F;
-#line 1496 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1540 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!_tmp29_) {
-#line 13453 "ColorTransformation.c"
+#line 13727 "ColorTransformation.c"
 					gint _tmp30_ = 0;
-#line 1496 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1540 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					_tmp30_ = discard_point;
-#line 1496 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1540 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					discard_point = _tmp30_ - 1;
-#line 13459 "ColorTransformation.c"
+#line 13733 "ColorTransformation.c"
 				}
-#line 1496 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1540 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp29_ = FALSE;
-#line 1496 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1540 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp31_ = discard_point;
-#line 1496 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1540 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if (!(_tmp31_ > -1)) {
-#line 1496 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1540 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 13469 "ColorTransformation.c"
+#line 13743 "ColorTransformation.c"
 				}
-#line 1497 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1541 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp32_ = analysis_histogram;
-#line 1497 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1541 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp33_ = discard_point;
-#line 1497 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1541 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				_tmp34_ = intensity_histogram_get_cumulative_probability (_tmp32_, _tmp33_);
-#line 1497 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1541 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 				if ((1.0f - _tmp34_) > AUTO_ENHANCE_SHADOW_MODE_HIGH_DISCARD_MASS) {
-#line 1499 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1543 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 					break;
-#line 13481 "ColorTransformation.c"
+#line 13755 "ColorTransformation.c"
 				}
 			}
 		}
-#line 1502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp35_ = adjustments;
-#line 1502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp36_ = discard_point;
-#line 1502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp37_ = expansion_transformation_new_from_extrema (0, _tmp36_);
-#line 1502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp38_ = _tmp37_;
-#line 1502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_bundle_set (_tmp35_, G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 1502 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1546 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_pixel_transformation_unref0 (_tmp38_);
-#line 13497 "ColorTransformation.c"
+#line 13771 "ColorTransformation.c"
 	} else {
 		PixelTransformationBundle* _tmp39_ = NULL;
 		IntensityHistogram* _tmp40_ = NULL;
@@ -13507,87 +13781,97 @@ PixelTransformationBundle* auto_enhance_create_auto_enhance_adjustments (GdkPixb
 		PixelTransformationBundle* _tmp43_ = NULL;
 		ShadowDetailTransformation* _tmp44_ = NULL;
 		ShadowDetailTransformation* _tmp45_ = NULL;
-#line 1505 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1549 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp39_ = adjustments;
-#line 1505 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1549 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp40_ = analysis_histogram;
-#line 1505 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1549 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp41_ = expansion_transformation_new (_tmp40_);
-#line 1505 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1549 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp42_ = _tmp41_;
-#line 1505 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1549 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_bundle_set (_tmp39_, G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 1505 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1549 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_pixel_transformation_unref0 (_tmp42_);
-#line 1506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1550 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp43_ = adjustments;
-#line 1506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1550 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp44_ = shadow_detail_transformation_new ((gfloat) 0);
-#line 1506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1550 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_tmp45_ = _tmp44_;
-#line 1506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1550 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		pixel_transformation_bundle_set (_tmp43_, G_TYPE_CHECK_INSTANCE_CAST (_tmp45_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 1506 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1550 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 		_pixel_transformation_unref0 (_tmp45_);
-#line 13528 "ColorTransformation.c"
+#line 13802 "ColorTransformation.c"
 	}
-#line 1510 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp46_ = adjustments;
-#line 1510 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp47_ = highlight_detail_transformation_new (0.0f);
-#line 1510 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp48_ = _tmp47_;
-#line 1510 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (_tmp46_, G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 1510 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1554 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp48_);
-#line 1511 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1555 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp49_ = adjustments;
-#line 1511 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1555 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp50_ = temperature_transformation_new (0.0f);
-#line 1511 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1555 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp51_ = _tmp50_;
-#line 1511 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1555 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (_tmp49_, G_TYPE_CHECK_INSTANCE_CAST (_tmp51_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 1511 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1555 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp51_);
-#line 1512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1556 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp52_ = adjustments;
-#line 1512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1556 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp53_ = tint_transformation_new (0.0f);
-#line 1512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1556 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp54_ = _tmp53_;
-#line 1512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1556 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (_tmp52_, G_TYPE_CHECK_INSTANCE_CAST (_tmp54_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 1512 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1556 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp54_);
-#line 1513 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1557 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp55_ = adjustments;
-#line 1513 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1557 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp56_ = exposure_transformation_new (0.0f);
-#line 1513 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1557 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp57_ = _tmp56_;
-#line 1513 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1557 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (_tmp55_, G_TYPE_CHECK_INSTANCE_CAST (_tmp57_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 1513 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1557 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp57_);
-#line 1514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp58_ = adjustments;
-#line 1514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
-	_tmp59_ = saturation_transformation_new (0.0f);
-#line 1514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp59_ = contrast_transformation_new (0.0f);
+#line 1558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_tmp60_ = _tmp59_;
-#line 1514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	pixel_transformation_bundle_set (_tmp58_, G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 1514 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1558 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_pixel_transformation_unref0 (_tmp60_);
-#line 1516 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1559 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp61_ = adjustments;
+#line 1559 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp62_ = saturation_transformation_new (0.0f);
+#line 1559 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_tmp63_ = _tmp62_;
+#line 1559 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	pixel_transformation_bundle_set (_tmp61_, G_TYPE_CHECK_INSTANCE_CAST (_tmp63_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
+#line 1559 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+	_pixel_transformation_unref0 (_tmp63_);
+#line 1561 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	result = adjustments;
-#line 1516 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1561 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	_intensity_histogram_unref0 (analysis_histogram);
-#line 1516 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
+#line 1561 "/home/jens/Source/shotwell/src/ColorTransformation.vala"
 	return result;
-#line 13586 "ColorTransformation.c"
+#line 13870 "ColorTransformation.c"
 }
 
 

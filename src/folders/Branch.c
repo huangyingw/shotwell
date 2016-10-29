@@ -558,7 +558,7 @@ static void _vala_folders_sidebar_entry_set_property (GObject * object, guint pr
 
 
 static void _folders_branch_on_media_contents_altered_data_collection_contents_altered (DataCollection* _sender, GeeIterable* added, GeeIterable* removed, gpointer self) {
-#line 28 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 31 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	folders_branch_on_media_contents_altered ((FoldersBranch*) self, added, removed);
 #line 564 "Branch.c"
 }
@@ -602,16 +602,16 @@ FoldersBranch* folders_branch_construct (GType object_type) {
 #line 13 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = _tmp0_;
 #line 13 "/home/jens/Source/shotwell/src/folders/Branch.vala"
-	self = (FoldersBranch*) sidebar_branch_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, SIDEBAR_TYPE_ENTRY, SidebarEntry), SIDEBAR_BRANCH_OPTIONS_STARTUP_OPEN_GROUPING, _folders_branch_comparator_gcompare_func, NULL);
+	self = (FoldersBranch*) sidebar_branch_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, SIDEBAR_TYPE_ENTRY, SidebarEntry), SIDEBAR_BRANCH_OPTIONS_STARTUP_OPEN_GROUPING | SIDEBAR_BRANCH_OPTIONS_HIDE_IF_EMPTY, _folders_branch_comparator_gcompare_func, NULL);
 #line 13 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_object_unref0 (_tmp1_);
-#line 15 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 18 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp2_ = g_get_home_dir ();
-#line 15 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 18 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp3_ = g_file_new_for_path (_tmp2_);
-#line 15 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 18 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_object_unref0 (self->priv->home_dir);
-#line 15 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 18 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self->priv->home_dir = _tmp3_;
 #line 617 "Branch.c"
 	{
@@ -622,25 +622,25 @@ FoldersBranch* folders_branch_construct (GType object_type) {
 		GeeCollection* _tmp7_ = NULL;
 		GeeIterator* _tmp8_ = NULL;
 		GeeIterator* _tmp9_ = NULL;
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp4_ = media_collection_registry_get_instance ();
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp5_ = _tmp4_;
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp6_ = media_collection_registry_get_all (_tmp5_);
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp7_ = _tmp6_;
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp8_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp9_ = _tmp8_;
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_g_object_unref0 (_tmp7_);
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_media_collection_registry_unref0 (_tmp5_);
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_sources_it = _tmp9_;
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		while (TRUE) {
 #line 646 "Branch.c"
 			GeeIterator* _tmp10_ = NULL;
@@ -652,41 +652,41 @@ FoldersBranch* folders_branch_construct (GType object_type) {
 			GeeCollection* _tmp15_ = NULL;
 			GeeCollection* _tmp16_ = NULL;
 			MediaSourceCollection* _tmp17_ = NULL;
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp10_ = _sources_it;
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp11_ = gee_iterator_next (_tmp10_);
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			if (!_tmp11_) {
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				break;
 #line 664 "Branch.c"
 			}
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp12_ = _sources_it;
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp13_ = gee_iterator_get (_tmp12_);
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			sources = (MediaSourceCollection*) _tmp13_;
-#line 19 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 22 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp14_ = sources;
-#line 19 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 22 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp15_ = data_collection_get_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_DATA_COLLECTION, DataCollection));
-#line 19 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 22 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp16_ = _tmp15_;
-#line 19 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 22 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			folders_branch_on_media_contents_altered (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, GEE_TYPE_ITERABLE, GeeIterable), NULL);
-#line 19 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 22 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_g_object_unref0 (_tmp16_);
-#line 22 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 25 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp17_ = sources;
-#line 22 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 25 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, TYPE_DATA_COLLECTION, DataCollection), "contents-altered", (GCallback) _folders_branch_on_media_contents_altered_data_collection_contents_altered, self, 0);
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_data_collection_unref0 (sources);
 #line 688 "Branch.c"
 		}
-#line 17 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 20 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_g_object_unref0 (_sources_it);
 #line 692 "Branch.c"
 	}
@@ -717,43 +717,43 @@ static gint folders_branch_comparator (SidebarEntry* a, SidebarEntry* b) {
 	const gchar* _tmp8_ = NULL;
 	gint _tmp9_ = 0;
 	gint _tmp10_ = 0;
-#line 31 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 34 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_val_if_fail (SIDEBAR_IS_ENTRY (a), 0);
-#line 31 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 34 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_val_if_fail (SIDEBAR_IS_ENTRY (b), 0);
-#line 32 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = a;
-#line 32 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = b;
-#line 32 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	if (_tmp0_ == _tmp1_) {
-#line 33 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 36 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		result = 0;
-#line 33 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 36 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		return result;
 #line 735 "Branch.c"
 	}
-#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 38 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp2_ = g_strcmp0;
-#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 38 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp3_ = a;
-#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 38 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp4_ = folders_sidebar_entry_get_collation (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry));
-#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 38 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp5_ = _tmp4_;
-#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 38 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp6_ = b;
-#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 38 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp7_ = folders_sidebar_entry_get_collation (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry));
-#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 38 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp8_ = _tmp7_;
-#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 38 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp9_ = _tmp2_ (_tmp5_, _tmp8_);
-#line 35 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 38 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	coll_key_equality = _tmp9_;
-#line 38 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp10_ = coll_key_equality;
-#line 38 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	if (_tmp10_ == 0) {
 #line 759 "Branch.c"
 		GCompareFunc _tmp11_ = NULL;
@@ -765,37 +765,37 @@ static gint folders_branch_comparator (SidebarEntry* a, SidebarEntry* b) {
 		gchar* _tmp17_ = NULL;
 		gint _tmp18_ = 0;
 		gint _tmp19_ = 0;
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp11_ = g_strcmp0;
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp12_ = a;
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp13_ = sidebar_simple_page_entry_get_sidebar_name (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry), SIDEBAR_TYPE_SIMPLE_PAGE_ENTRY, SidebarSimplePageEntry));
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp14_ = _tmp13_;
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp15_ = b;
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp16_ = sidebar_simple_page_entry_get_sidebar_name (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry), SIDEBAR_TYPE_SIMPLE_PAGE_ENTRY, SidebarSimplePageEntry));
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp17_ = _tmp16_;
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp18_ = _tmp11_ (_tmp14_, _tmp17_);
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp19_ = _tmp18_;
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_g_free0 (_tmp17_);
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_g_free0 (_tmp14_);
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		result = _tmp19_;
-#line 41 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 44 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		return result;
 #line 795 "Branch.c"
 	}
-#line 45 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 48 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	result = coll_key_equality;
-#line 45 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 48 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return result;
 #line 801 "Branch.c"
 }
@@ -804,28 +804,28 @@ static gint folders_branch_comparator (SidebarEntry* a, SidebarEntry* b) {
 static void folders_branch_on_master_source_replaced (FoldersBranch* self, MediaSource* media_source, GFile* old_file, GFile* new_file) {
 	GFile* _tmp0_ = NULL;
 	MediaSource* _tmp1_ = NULL;
-#line 48 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 51 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (FOLDERS_IS_BRANCH (self));
-#line 48 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 51 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (IS_MEDIA_SOURCE (media_source));
-#line 48 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 51 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (G_IS_FILE (old_file));
-#line 48 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 51 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (G_IS_FILE (new_file));
-#line 49 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 52 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = old_file;
-#line 49 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 52 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	folders_branch_remove_entry (self, _tmp0_);
-#line 50 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 53 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = media_source;
-#line 50 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 53 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	folders_branch_add_entry (self, _tmp1_);
 #line 824 "Branch.c"
 }
 
 
 static void _folders_branch_on_master_source_replaced_media_source_master_replaced (MediaSource* _sender, GFile* old_file, GFile* new_file, gpointer self) {
-#line 57 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 60 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	folders_branch_on_master_source_replaced ((FoldersBranch*) self, _sender, old_file, new_file);
 #line 831 "Branch.c"
 }
@@ -834,28 +834,28 @@ static void _folders_branch_on_master_source_replaced_media_source_master_replac
 static void folders_branch_on_media_contents_altered (FoldersBranch* self, GeeIterable* added, GeeIterable* removed) {
 	GeeIterable* _tmp0_ = NULL;
 	GeeIterable* _tmp9_ = NULL;
-#line 53 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 56 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (FOLDERS_IS_BRANCH (self));
-#line 53 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 56 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail ((added == NULL) || GEE_IS_ITERABLE (added));
-#line 53 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 56 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail ((removed == NULL) || GEE_IS_ITERABLE (removed));
-#line 54 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 57 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = added;
-#line 54 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 57 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	if (_tmp0_ != NULL) {
 #line 848 "Branch.c"
 		{
 			GeeIterator* _object_it = NULL;
 			GeeIterable* _tmp1_ = NULL;
 			GeeIterator* _tmp2_ = NULL;
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp1_ = added;
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp2_ = gee_iterable_iterator (_tmp1_);
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_object_it = _tmp2_;
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			while (TRUE) {
 #line 861 "Branch.c"
 				GeeIterator* _tmp3_ = NULL;
@@ -865,55 +865,55 @@ static void folders_branch_on_media_contents_altered (FoldersBranch* self, GeeIt
 				gpointer _tmp6_ = NULL;
 				DataObject* _tmp7_ = NULL;
 				DataObject* _tmp8_ = NULL;
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp3_ = _object_it;
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp4_ = gee_iterator_next (_tmp3_);
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				if (!_tmp4_) {
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					break;
 #line 877 "Branch.c"
 				}
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp5_ = _object_it;
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp6_ = gee_iterator_get (_tmp5_);
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				object = (DataObject*) _tmp6_;
-#line 56 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 59 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp7_ = object;
-#line 56 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 59 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				folders_branch_add_entry (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 57 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 60 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp8_ = object;
-#line 57 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 60 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, TYPE_MEDIA_SOURCE, MediaSource), "master-replaced", (GCallback) _folders_branch_on_master_source_replaced_media_source_master_replaced, self, 0);
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_g_object_unref0 (object);
 #line 895 "Branch.c"
 			}
-#line 55 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 58 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_g_object_unref0 (_object_it);
 #line 899 "Branch.c"
 		}
 	}
-#line 61 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 64 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp9_ = removed;
-#line 61 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 64 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	if (_tmp9_ != NULL) {
 #line 906 "Branch.c"
 		{
 			GeeIterator* _object_it = NULL;
 			GeeIterable* _tmp10_ = NULL;
 			GeeIterator* _tmp11_ = NULL;
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp10_ = removed;
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp11_ = gee_iterable_iterator (_tmp10_);
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_object_it = _tmp11_;
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			while (TRUE) {
 #line 919 "Branch.c"
 				GeeIterator* _tmp12_ = NULL;
@@ -926,43 +926,43 @@ static void folders_branch_on_media_contents_altered (FoldersBranch* self, GeeIt
 				GFile* _tmp18_ = NULL;
 				DataObject* _tmp19_ = NULL;
 				guint _tmp20_ = 0U;
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp12_ = _object_it;
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp13_ = gee_iterator_next (_tmp12_);
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				if (!_tmp13_) {
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					break;
 #line 938 "Branch.c"
 				}
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp14_ = _object_it;
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp15_ = gee_iterator_get (_tmp14_);
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				object = (DataObject*) _tmp15_;
-#line 63 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 66 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp16_ = object;
-#line 63 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 66 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp17_ = media_source_get_file (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 63 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 66 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp18_ = _tmp17_;
-#line 63 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 66 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				folders_branch_remove_entry (self, _tmp18_);
-#line 63 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 66 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_g_object_unref0 (_tmp18_);
-#line 64 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 67 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp19_ = object;
-#line 64 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 67 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				g_signal_parse_name ("master-replaced", TYPE_MEDIA_SOURCE, &_tmp20_, NULL, FALSE);
-#line 64 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 67 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, TYPE_MEDIA_SOURCE, MediaSource), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp20_, 0, NULL, (GCallback) _folders_branch_on_master_source_replaced_media_source_master_replaced, self);
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_g_object_unref0 (object);
 #line 964 "Branch.c"
 			}
-#line 62 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 65 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_g_object_unref0 (_object_it);
 #line 968 "Branch.c"
 		}
@@ -971,7 +971,7 @@ static void folders_branch_on_media_contents_altered (FoldersBranch* self, GeeIt
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 93 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 96 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return self ? g_object_ref (self) : NULL;
 #line 977 "Branch.c"
 }
@@ -987,27 +987,27 @@ static void folders_branch_add_entry (FoldersBranch* self, MediaSource* media) {
 	GFile* _tmp3_ = NULL;
 	GFile* _tmp4_ = NULL;
 	FoldersSidebarEntry* parent_entry = NULL;
-#line 69 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 72 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (FOLDERS_IS_BRANCH (self));
-#line 69 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 72 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (IS_MEDIA_SOURCE (media));
-#line 70 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 73 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = media;
-#line 70 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 73 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = media_source_get_file (_tmp0_);
-#line 70 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 73 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	file = _tmp1_;
-#line 72 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 75 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp2_ = gee_array_list_new (G_TYPE_FILE, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 72 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 75 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	elements = _tmp2_;
-#line 75 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 78 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp3_ = file;
-#line 75 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 78 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp4_ = g_file_get_parent (_tmp3_);
-#line 75 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 78 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	parent = _tmp4_;
-#line 76 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 79 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	while (TRUE) {
 #line 1013 "Branch.c"
 		GFile* _tmp5_ = NULL;
@@ -1021,51 +1021,51 @@ static void folders_branch_add_entry (FoldersBranch* self, MediaSource* media) {
 		GFile* _tmp13_ = NULL;
 		GFile* _tmp14_ = NULL;
 		GFile* _tmp15_ = NULL;
-#line 76 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 79 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp5_ = parent;
-#line 76 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 79 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		if (!(_tmp5_ != NULL)) {
-#line 76 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 79 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			break;
 #line 1031 "Branch.c"
 		}
-#line 78 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 81 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp6_ = parent;
-#line 78 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 81 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp7_ = self->priv->home_dir;
-#line 78 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 81 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp8_ = g_file_get_parent (_tmp7_);
-#line 78 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 81 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp9_ = _tmp8_;
-#line 78 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 81 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp10_ = g_file_equal (_tmp6_, _tmp9_);
-#line 78 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 81 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp11_ = _tmp10_;
-#line 78 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 81 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_g_object_unref0 (_tmp9_);
-#line 78 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 81 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		if (_tmp11_) {
-#line 79 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 82 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			break;
 #line 1051 "Branch.c"
 		}
-#line 81 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 84 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp12_ = elements;
-#line 81 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 84 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp13_ = parent;
-#line 81 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 84 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp13_);
-#line 83 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 86 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp14_ = parent;
-#line 83 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 86 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp15_ = g_file_get_parent (_tmp14_);
-#line 83 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 86 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_g_object_unref0 (parent);
-#line 83 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 86 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		parent = _tmp15_;
 #line 1067 "Branch.c"
 	}
-#line 88 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	parent_entry = NULL;
 #line 1071 "Branch.c"
 	{
@@ -1073,20 +1073,20 @@ static void folders_branch_add_entry (FoldersBranch* self, MediaSource* media) {
 		GeeArrayList* _tmp16_ = NULL;
 		gint _tmp17_ = 0;
 		gint _tmp18_ = 0;
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp16_ = elements;
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp17_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp18_ = _tmp17_;
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		ctr = _tmp18_ - 1;
 #line 1085 "Branch.c"
 		{
 			gboolean _tmp19_ = FALSE;
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp19_ = TRUE;
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			while (TRUE) {
 #line 1092 "Branch.c"
 				gint _tmp21_ = 0;
@@ -1102,53 +1102,53 @@ static void folders_branch_add_entry (FoldersBranch* self, MediaSource* media) {
 				gpointer _tmp29_ = NULL;
 				FoldersSidebarEntry* _tmp30_ = NULL;
 				gint _tmp42_ = 0;
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				if (!_tmp19_) {
 #line 1108 "Branch.c"
 					gint _tmp20_ = 0;
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_tmp20_ = ctr;
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					ctr = _tmp20_ - 1;
 #line 1114 "Branch.c"
 				}
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp19_ = FALSE;
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp21_ = ctr;
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				if (!(_tmp21_ >= 0)) {
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					break;
 #line 1124 "Branch.c"
 				}
-#line 90 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 93 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp22_ = elements;
-#line 90 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 93 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp23_ = ctr;
-#line 90 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 93 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp24_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp23_);
-#line 90 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 93 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				parent_dir = (GFile*) _tmp24_;
-#line 93 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 96 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp25_ = parent_entry;
-#line 93 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 96 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp26_ = _g_object_ref0 (_tmp25_);
-#line 93 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 96 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				old_parent_entry = _tmp26_;
-#line 95 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 98 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp27_ = self->priv->entries;
-#line 95 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 98 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp28_ = parent_dir;
-#line 95 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 98 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp29_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp28_);
-#line 95 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 98 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_g_object_unref0 (parent_entry);
-#line 95 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 98 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				parent_entry = (FoldersSidebarEntry*) _tmp29_;
-#line 96 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 99 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp30_ = parent_entry;
-#line 96 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 99 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				if (_tmp30_ == NULL) {
 #line 1154 "Branch.c"
 					GFile* _tmp31_ = NULL;
@@ -1159,89 +1159,89 @@ static void folders_branch_add_entry (FoldersBranch* self, MediaSource* media) {
 					SidebarEntry* _tmp36_ = NULL;
 					FoldersSidebarEntry* _tmp37_ = NULL;
 					FoldersSidebarEntry* _tmp41_ = NULL;
-#line 97 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_tmp31_ = parent_dir;
-#line 97 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_tmp32_ = folders_sidebar_entry_new (_tmp31_);
-#line 97 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_g_object_unref0 (parent_entry);
-#line 97 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					parent_entry = _tmp32_;
-#line 98 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 101 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_tmp33_ = self->priv->entries;
-#line 98 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 101 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_tmp34_ = parent_dir;
-#line 98 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 101 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_tmp35_ = parent_entry;
-#line 98 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 101 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp34_, _tmp35_);
-#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 103 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_tmp37_ = old_parent_entry;
-#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 103 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					if (_tmp37_ == NULL) {
 #line 1183 "Branch.c"
 						SidebarEntry* _tmp38_ = NULL;
-#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 103 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 						_tmp38_ = sidebar_branch_get_root (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch));
-#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 103 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 						_g_object_unref0 (_tmp36_);
-#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 103 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 						_tmp36_ = _tmp38_;
 #line 1191 "Branch.c"
 					} else {
 						FoldersSidebarEntry* _tmp39_ = NULL;
 						SidebarEntry* _tmp40_ = NULL;
-#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 103 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 						_tmp39_ = old_parent_entry;
-#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 103 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 						_tmp40_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, SIDEBAR_TYPE_ENTRY, SidebarEntry));
-#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 103 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 						_g_object_unref0 (_tmp36_);
-#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 103 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 						_tmp36_ = _tmp40_;
 #line 1203 "Branch.c"
 					}
-#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 103 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_tmp41_ = parent_entry;
-#line 100 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 103 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					sidebar_branch_graft (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), _tmp36_, G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, SIDEBAR_TYPE_ENTRY, SidebarEntry), NULL);
-#line 96 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 99 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_g_object_unref0 (_tmp36_);
 #line 1211 "Branch.c"
 				}
-#line 104 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 107 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp42_ = ctr;
-#line 104 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 107 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				if (_tmp42_ == 0) {
 #line 1217 "Branch.c"
 					FoldersSidebarEntry* _tmp43_ = NULL;
 					gint _tmp44_ = 0;
 					gint _tmp45_ = 0;
-#line 105 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 108 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_tmp43_ = parent_entry;
-#line 105 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 108 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_tmp44_ = folders_sidebar_entry_get_count (_tmp43_);
-#line 105 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 108 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					_tmp45_ = _tmp44_;
-#line 105 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 108 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 					folders_sidebar_entry_set_count (_tmp43_, _tmp45_ + 1);
 #line 1229 "Branch.c"
 				}
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_g_object_unref0 (old_parent_entry);
-#line 89 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 92 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_g_object_unref0 (parent_dir);
 #line 1235 "Branch.c"
 			}
 		}
 	}
-#line 69 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 72 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_object_unref0 (parent_entry);
-#line 69 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 72 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_object_unref0 (parent);
-#line 69 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 72 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_object_unref0 (elements);
-#line 69 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 72 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_object_unref0 (file);
 #line 1247 "Branch.c"
 }
@@ -1269,94 +1269,94 @@ static void folders_branch_remove_entry (FoldersBranch* self, GFile* file) {
 	FoldersSidebarEntry* _tmp18_ = NULL;
 	FoldersSidebarEntry* _tmp19_ = NULL;
 	FoldersSidebarEntry* _tmp40_ = NULL;
-#line 109 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 112 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (FOLDERS_IS_BRANCH (self));
-#line 109 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 112 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 110 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 113 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = self->priv->entries;
-#line 110 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 113 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = file;
-#line 110 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 113 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp2_ = g_file_get_parent (_tmp1_);
-#line 110 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 113 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp3_ = _tmp2_;
-#line 110 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 113 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp4_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp3_);
-#line 110 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 113 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp5_ = (FoldersSidebarEntry*) _tmp4_;
-#line 110 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 113 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_object_unref0 (_tmp3_);
-#line 110 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 113 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	folder_entry = _tmp5_;
-#line 111 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 114 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp6_ = folder_entry;
-#line 111 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 114 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	if (_tmp6_ == NULL) {
-#line 112 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 115 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_g_object_unref0 (folder_entry);
-#line 112 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 115 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		return;
 #line 1301 "Branch.c"
 	}
-#line 114 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp7_ = folder_entry;
-#line 114 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp8_ = folders_sidebar_entry_get_count (_tmp7_);
-#line 114 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp9_ = _tmp8_;
-#line 114 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_vala_assert (_tmp9_ > 0, "folder_entry.count > 0");
-#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp11_ = folder_entry;
-#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp12_ = folder_entry;
-#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp13_ = folders_sidebar_entry_get_count (_tmp12_);
-#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp14_ = _tmp13_;
-#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	folders_sidebar_entry_set_count (_tmp12_, _tmp14_ - 1);
-#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	if ((_tmp14_ - 1) > 0) {
-#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp10_ = TRUE;
 #line 1325 "Branch.c"
 	} else {
 		FoldersSidebarEntry* _tmp15_ = NULL;
 		gint _tmp16_ = 0;
-#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp15_ = folder_entry;
-#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp16_ = sidebar_branch_get_child_count (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, SIDEBAR_TYPE_ENTRY, SidebarEntry));
-#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp10_ = _tmp16_ > 0;
 #line 1335 "Branch.c"
 	}
-#line 117 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	if (_tmp10_) {
-#line 118 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 121 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_g_object_unref0 (folder_entry);
-#line 118 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 121 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		return;
 #line 1343 "Branch.c"
 	}
-#line 121 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 124 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp17_ = folder_entry;
-#line 121 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 124 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp18_ = _g_object_ref0 (_tmp17_);
-#line 121 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 124 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	prune_point = _tmp18_;
-#line 122 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 125 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp19_ = prune_point;
-#line 122 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 125 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_vala_assert (_tmp19_ != NULL, "prune_point != null");
 #line 1355 "Branch.c"
 	{
 		gboolean _tmp20_ = FALSE;
-#line 124 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 127 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp20_ = TRUE;
-#line 124 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 127 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		while (TRUE) {
 #line 1362 "Branch.c"
 			gboolean removed = FALSE;
@@ -1375,107 +1375,107 @@ static void folders_branch_remove_entry (FoldersBranch* self, GFile* file) {
 			FoldersSidebarEntry* _tmp32_ = NULL;
 			FoldersSidebarEntry* _tmp38_ = NULL;
 			FoldersSidebarEntry* _tmp39_ = NULL;
-#line 124 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 127 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			if (!_tmp20_) {
 #line 1381 "Branch.c"
 			}
-#line 124 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 127 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp20_ = FALSE;
-#line 125 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp21_ = self->priv->entries;
-#line 125 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp22_ = prune_point;
-#line 125 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp23_ = folders_sidebar_entry_get_dir (_tmp22_);
-#line 125 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp24_ = _tmp23_;
-#line 125 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp25_ = gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp24_, NULL);
-#line 125 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			removed = _tmp25_;
-#line 126 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp26_ = removed;
-#line 126 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_vala_assert (_tmp26_, "removed");
-#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 131 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp27_ = prune_point;
-#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 131 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp28_ = sidebar_branch_get_parent (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, SIDEBAR_TYPE_ENTRY, SidebarEntry));
-#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 131 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp29_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp28_, FOLDERS_TYPE_SIDEBAR_ENTRY) ? ((FoldersSidebarEntry*) _tmp28_) : NULL;
-#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 131 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			if (_tmp29_ == NULL) {
-#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 131 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_g_object_unref0 (_tmp28_);
 #line 1411 "Branch.c"
 			}
-#line 128 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 131 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			parent = _tmp29_;
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp32_ = parent;
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			if (_tmp32_ == NULL) {
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp31_ = TRUE;
 #line 1421 "Branch.c"
 			} else {
 				FoldersSidebarEntry* _tmp33_ = NULL;
 				gint _tmp34_ = 0;
 				gint _tmp35_ = 0;
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp33_ = parent;
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp34_ = folders_sidebar_entry_get_count (_tmp33_);
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp35_ = _tmp34_;
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp31_ = _tmp35_ != 0;
 #line 1434 "Branch.c"
 			}
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			if (_tmp31_) {
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp30_ = TRUE;
 #line 1440 "Branch.c"
 			} else {
 				FoldersSidebarEntry* _tmp36_ = NULL;
 				gint _tmp37_ = 0;
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp36_ = parent;
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp37_ = sidebar_branch_get_child_count (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, SIDEBAR_TYPE_ENTRY, SidebarEntry));
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_tmp30_ = _tmp37_ > 1;
 #line 1450 "Branch.c"
 			}
-#line 129 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			if (_tmp30_) {
-#line 130 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 133 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				_g_object_unref0 (parent);
-#line 130 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 133 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				break;
 #line 1458 "Branch.c"
 			}
-#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 135 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp38_ = parent;
-#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 135 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp39_ = _g_object_ref0 (_tmp38_);
-#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 135 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_g_object_unref0 (prune_point);
-#line 132 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 135 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			prune_point = _tmp39_;
-#line 124 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 127 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_g_object_unref0 (parent);
 #line 1470 "Branch.c"
 		}
 	}
-#line 135 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 138 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp40_ = prune_point;
-#line 135 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 138 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	sidebar_branch_prune (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, SIDEBAR_TYPE_ENTRY, SidebarEntry));
-#line 109 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 112 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_object_unref0 (prune_point);
-#line 109 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 112 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_object_unref0 (folder_entry);
 #line 1481 "Branch.c"
 }
@@ -1517,25 +1517,25 @@ static void folders_branch_finalize (GObject* obj) {
 		GeeCollection* _tmp3_ = NULL;
 		GeeIterator* _tmp4_ = NULL;
 		GeeIterator* _tmp5_ = NULL;
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp0_ = media_collection_registry_get_instance ();
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp1_ = _tmp0_;
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp2_ = media_collection_registry_get_all (_tmp1_);
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp3_ = _tmp2_;
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp4_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp5_ = _tmp4_;
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_g_object_unref0 (_tmp3_);
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_media_collection_registry_unref0 (_tmp1_);
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_sources_it = _tmp5_;
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		while (TRUE) {
 #line 1541 "Branch.c"
 			GeeIterator* _tmp6_ = NULL;
@@ -1545,33 +1545,33 @@ static void folders_branch_finalize (GObject* obj) {
 			gpointer _tmp9_ = NULL;
 			MediaSourceCollection* _tmp10_ = NULL;
 			guint _tmp11_ = 0U;
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp6_ = _sources_it;
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp7_ = gee_iterator_next (_tmp6_);
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			if (!_tmp7_) {
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 				break;
 #line 1557 "Branch.c"
 			}
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp8_ = _sources_it;
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp9_ = gee_iterator_get (_tmp8_);
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			sources = (MediaSourceCollection*) _tmp9_;
-#line 28 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 31 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp10_ = sources;
-#line 28 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 31 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			g_signal_parse_name ("contents-altered", TYPE_DATA_COLLECTION, &_tmp11_, NULL, FALSE);
-#line 28 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 31 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, TYPE_DATA_COLLECTION, DataCollection), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp11_, 0, NULL, (GCallback) _folders_branch_on_media_contents_altered_data_collection_contents_altered, self);
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_data_collection_unref0 (sources);
 #line 1573 "Branch.c"
 		}
-#line 27 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 30 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_g_object_unref0 (_sources_it);
 #line 1577 "Branch.c"
 	}
@@ -1600,25 +1600,25 @@ GType folders_branch_get_type (void) {
 FoldersRoot* folders_root_construct (GType object_type) {
 	FoldersRoot * self = NULL;
 	const gchar* _tmp0_ = NULL;
-#line 141 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 144 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = _ ("Folders");
-#line 141 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 144 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self = (FoldersRoot*) sidebar_header_construct (object_type, _tmp0_, TRUE);
-#line 140 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 143 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return self;
 #line 1610 "Branch.c"
 }
 
 
 FoldersRoot* folders_root_new (void) {
-#line 140 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 143 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return folders_root_construct (FOLDERS_TYPE_ROOT);
 #line 1617 "Branch.c"
 }
 
 
 static void folders_root_class_init (FoldersRootClass * klass) {
-#line 139 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 142 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	folders_root_parent_class = g_type_class_peek_parent (klass);
 #line 1624 "Branch.c"
 }
@@ -1648,38 +1648,38 @@ FoldersSidebarEntry* folders_sidebar_entry_construct (GType object_type, GFile* 
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
 	gchar* _tmp5_ = NULL;
-#line 166 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 169 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_val_if_fail (G_IS_FILE (dir), NULL);
-#line 166 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 169 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self = (FoldersSidebarEntry*) sidebar_simple_page_entry_construct (object_type);
-#line 167 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 170 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = dir;
-#line 167 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 170 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	folders_sidebar_entry_set_dir (self, _tmp0_);
-#line 168 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 171 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = dir;
-#line 168 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 171 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp2_ = g_file_get_path (_tmp1_);
-#line 168 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 171 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp3_ = _tmp2_;
-#line 168 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 171 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp4_ = g_utf8_collate_key_for_filename (_tmp3_, (gssize) -1);
-#line 168 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 171 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp5_ = _tmp4_;
-#line 168 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 171 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	folders_sidebar_entry_set_collation (self, _tmp5_);
-#line 168 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 171 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_free0 (_tmp5_);
-#line 168 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 171 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_free0 (_tmp3_);
-#line 166 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 169 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return self;
 #line 1678 "Branch.c"
 }
 
 
 FoldersSidebarEntry* folders_sidebar_entry_new (GFile* dir) {
-#line 166 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 169 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return folders_sidebar_entry_construct (FOLDERS_TYPE_SIDEBAR_ENTRY, dir);
 #line 1685 "Branch.c"
 }
@@ -1690,15 +1690,15 @@ static gchar* folders_sidebar_entry_real_get_sidebar_name (SidebarSimplePageEntr
 	gchar* result = NULL;
 	GFile* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 171 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 174 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry);
-#line 172 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 175 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = self->priv->_dir;
-#line 172 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 175 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = g_file_get_basename (_tmp0_);
-#line 172 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 175 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	result = _tmp1_;
-#line 172 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 175 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return result;
 #line 1704 "Branch.c"
 }
@@ -1711,34 +1711,34 @@ static gchar* folders_sidebar_entry_real_get_sidebar_icon (SidebarSimplePageEntr
 	gint _tmp1_ = 0;
 	gint _tmp2_ = 0;
 	gchar* _tmp5_ = NULL;
-#line 175 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 178 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry);
-#line 176 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 179 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = folders_sidebar_entry_get_count (self);
-#line 176 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 179 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp2_ = _tmp1_;
-#line 176 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 179 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	if (_tmp2_ == 0) {
 #line 1723 "Branch.c"
 		const gchar* _tmp3_ = NULL;
-#line 176 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 179 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp3_ = folders_icon;
-#line 176 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 179 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp0_ = _tmp3_;
 #line 1729 "Branch.c"
 	} else {
 		const gchar* _tmp4_ = NULL;
-#line 176 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 179 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp4_ = folders_have_photos_icon;
-#line 176 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 179 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp0_ = _tmp4_;
 #line 1736 "Branch.c"
 	}
-#line 176 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 179 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp5_ = g_strdup (_tmp0_);
-#line 176 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 179 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	result = _tmp5_;
-#line 176 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 179 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return result;
 #line 1744 "Branch.c"
 }
@@ -1749,15 +1749,15 @@ static gchar* folders_sidebar_entry_real_to_string (SidebarSimplePageEntry* base
 	gchar* result = NULL;
 	GFile* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 179 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 182 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry);
-#line 180 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 183 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = self->priv->_dir;
-#line 180 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 183 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 180 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 183 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	result = _tmp1_;
-#line 180 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 183 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return result;
 #line 1763 "Branch.c"
 }
@@ -1766,11 +1766,11 @@ static gchar* folders_sidebar_entry_real_to_string (SidebarSimplePageEntry* base
 static gboolean folders_sidebar_entry_real_expand_on_select (SidebarExpandableEntry* base) {
 	FoldersSidebarEntry * self;
 	gboolean result = FALSE;
-#line 183 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry);
-#line 184 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 187 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	result = TRUE;
-#line 184 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 187 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return result;
 #line 1776 "Branch.c"
 }
@@ -1781,17 +1781,17 @@ static Page* folders_sidebar_entry_real_create_page (SidebarSimplePageEntry* bas
 	Page* result = NULL;
 	GFile* _tmp0_ = NULL;
 	FoldersPage* _tmp1_ = NULL;
-#line 187 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 190 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry);
-#line 188 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 191 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = self->priv->_dir;
-#line 188 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 191 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = folders_page_new (_tmp0_);
-#line 188 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 191 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_object_ref_sink (_tmp1_);
-#line 188 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 191 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_PAGE, Page);
-#line 188 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 191 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return result;
 #line 1797 "Branch.c"
 }
@@ -1800,13 +1800,13 @@ static Page* folders_sidebar_entry_real_create_page (SidebarSimplePageEntry* bas
 GFile* folders_sidebar_entry_get_dir (FoldersSidebarEntry* self) {
 	GFile* result;
 	GFile* _tmp0_ = NULL;
-#line 146 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_val_if_fail (FOLDERS_IS_SIDEBAR_ENTRY (self), NULL);
-#line 146 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = self->priv->_dir;
-#line 146 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	result = _tmp0_;
-#line 146 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return result;
 #line 1812 "Branch.c"
 }
@@ -1815,17 +1815,17 @@ GFile* folders_sidebar_entry_get_dir (FoldersSidebarEntry* self) {
 static void folders_sidebar_entry_set_dir (FoldersSidebarEntry* self, GFile* value) {
 	GFile* _tmp0_ = NULL;
 	GFile* _tmp1_ = NULL;
-#line 146 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (FOLDERS_IS_SIDEBAR_ENTRY (self));
-#line 146 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = value;
-#line 146 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 146 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_object_unref0 (self->priv->_dir);
-#line 146 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self->priv->_dir = _tmp1_;
-#line 146 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_object_notify ((GObject *) self, "dir");
 #line 1831 "Branch.c"
 }
@@ -1834,13 +1834,13 @@ static void folders_sidebar_entry_set_dir (FoldersSidebarEntry* self, GFile* val
 const gchar* folders_sidebar_entry_get_collation (FoldersSidebarEntry* self) {
 	const gchar* result;
 	const gchar* _tmp0_ = NULL;
-#line 147 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_val_if_fail (FOLDERS_IS_SIDEBAR_ENTRY (self), NULL);
-#line 147 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = self->priv->_collation;
-#line 147 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	result = _tmp0_;
-#line 147 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return result;
 #line 1846 "Branch.c"
 }
@@ -1849,17 +1849,17 @@ const gchar* folders_sidebar_entry_get_collation (FoldersSidebarEntry* self) {
 static void folders_sidebar_entry_set_collation (FoldersSidebarEntry* self, const gchar* value) {
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 147 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (FOLDERS_IS_SIDEBAR_ENTRY (self));
-#line 147 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = value;
-#line 147 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 147 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_free0 (self->priv->_collation);
-#line 147 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self->priv->_collation = _tmp1_;
-#line 147 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_object_notify ((GObject *) self, "collation");
 #line 1865 "Branch.c"
 }
@@ -1868,13 +1868,13 @@ static void folders_sidebar_entry_set_collation (FoldersSidebarEntry* self, cons
 gint folders_sidebar_entry_get_count (FoldersSidebarEntry* self) {
 	gint result;
 	gint _tmp0_ = 0;
-#line 151 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 154 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_val_if_fail (FOLDERS_IS_SIDEBAR_ENTRY (self), 0);
-#line 152 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 155 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = self->priv->_count;
-#line 152 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 155 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	result = _tmp0_;
-#line 152 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 155 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	return result;
 #line 1880 "Branch.c"
 }
@@ -1887,123 +1887,123 @@ void folders_sidebar_entry_set_count (FoldersSidebarEntry* self, gint value) {
 	gboolean _tmp2_ = FALSE;
 	gboolean _tmp3_ = FALSE;
 	gint _tmp4_ = 0;
-#line 155 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 158 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_return_if_fail (FOLDERS_IS_SIDEBAR_ENTRY (self));
-#line 156 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 159 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp0_ = self->priv->_count;
-#line 156 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 159 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	prev_count = _tmp0_;
-#line 157 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp1_ = value;
-#line 157 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self->priv->_count = _tmp1_;
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_tmp4_ = prev_count;
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	if (_tmp4_ == 0) {
 #line 1905 "Branch.c"
 		gint _tmp5_ = 0;
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp5_ = self->priv->_count;
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp3_ = _tmp5_ == 1;
 #line 1911 "Branch.c"
 	} else {
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp3_ = FALSE;
 #line 1915 "Branch.c"
 	}
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	if (_tmp3_) {
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp2_ = TRUE;
 #line 1921 "Branch.c"
 	} else {
 		gboolean _tmp6_ = FALSE;
 		gint _tmp7_ = 0;
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp7_ = prev_count;
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		if (_tmp7_ == 1) {
 #line 1929 "Branch.c"
 			gint _tmp8_ = 0;
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp8_ = self->priv->_count;
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp6_ = _tmp8_ == 0;
 #line 1935 "Branch.c"
 		} else {
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 			_tmp6_ = FALSE;
 #line 1939 "Branch.c"
 		}
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp2_ = _tmp6_;
 #line 1943 "Branch.c"
 	}
-#line 160 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 163 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	if (_tmp2_) {
 #line 1947 "Branch.c"
 		gchar* _tmp9_ = NULL;
 		gchar* _tmp10_ = NULL;
-#line 161 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 164 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp9_ = sidebar_simple_page_entry_get_sidebar_icon (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_SIMPLE_PAGE_ENTRY, SidebarSimplePageEntry));
-#line 161 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 164 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_tmp10_ = _tmp9_;
-#line 161 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 164 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_ENTRY, SidebarEntry), "sidebar-icon-changed", _tmp10_);
-#line 161 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 164 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		_g_free0 (_tmp10_);
 #line 1958 "Branch.c"
 	}
-#line 155 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 158 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_object_notify ((GObject *) self, "count");
 #line 1962 "Branch.c"
 }
 
 
 static void folders_sidebar_entry_class_init (FoldersSidebarEntryClass * klass) {
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	folders_sidebar_entry_parent_class = g_type_class_peek_parent (klass);
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_type_class_add_private (klass, sizeof (FoldersSidebarEntryPrivate));
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	((SidebarSimplePageEntryClass *) klass)->get_sidebar_name = folders_sidebar_entry_real_get_sidebar_name;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	((SidebarSimplePageEntryClass *) klass)->get_sidebar_icon = folders_sidebar_entry_real_get_sidebar_icon;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	((SidebarSimplePageEntryClass *) klass)->to_string = folders_sidebar_entry_real_to_string;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	((SidebarSimplePageEntryClass *) klass)->create_page = folders_sidebar_entry_real_create_page;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	G_OBJECT_CLASS (klass)->get_property = _vala_folders_sidebar_entry_get_property;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	G_OBJECT_CLASS (klass)->set_property = _vala_folders_sidebar_entry_set_property;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	G_OBJECT_CLASS (klass)->finalize = folders_sidebar_entry_finalize;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_object_class_install_property (G_OBJECT_CLASS (klass), FOLDERS_SIDEBAR_ENTRY_DIR, g_param_spec_object ("dir", "dir", "dir", G_TYPE_FILE, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_object_class_install_property (G_OBJECT_CLASS (klass), FOLDERS_SIDEBAR_ENTRY_COLLATION, g_param_spec_string ("collation", "collation", "collation", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	g_object_class_install_property (G_OBJECT_CLASS (klass), FOLDERS_SIDEBAR_ENTRY_COUNT, g_param_spec_int ("count", "count", "count", G_MININT, G_MAXINT, 0, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
 #line 1991 "Branch.c"
 }
 
 
 static void folders_sidebar_entry_sidebar_expandable_entry_interface_init (SidebarExpandableEntryIface * iface) {
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	folders_sidebar_entry_sidebar_expandable_entry_parent_iface = g_type_interface_peek_parent (iface);
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	iface->expand_on_select = (gboolean (*)(SidebarExpandableEntry*)) folders_sidebar_entry_real_expand_on_select;
 #line 2000 "Branch.c"
 }
 
 
 static void folders_sidebar_entry_instance_init (FoldersSidebarEntry * self) {
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self->priv = FOLDERS_SIDEBAR_ENTRY_GET_PRIVATE (self);
-#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 152 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self->priv->_count = 0;
 #line 2009 "Branch.c"
 }
@@ -2011,13 +2011,13 @@ static void folders_sidebar_entry_instance_init (FoldersSidebarEntry * self) {
 
 static void folders_sidebar_entry_finalize (GObject* obj) {
 	FoldersSidebarEntry * self;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry);
-#line 146 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_object_unref0 (self->priv->_dir);
-#line 147 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	_g_free0 (self->priv->_collation);
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	G_OBJECT_CLASS (folders_sidebar_entry_parent_class)->finalize (obj);
 #line 2023 "Branch.c"
 }
@@ -2040,31 +2040,31 @@ GType folders_sidebar_entry_get_type (void) {
 static void _vala_folders_sidebar_entry_get_property (GObject * object, guint property_id, GValue * value, GParamSpec * pspec) {
 	FoldersSidebarEntry * self;
 	self = G_TYPE_CHECK_INSTANCE_CAST (object, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry);
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	switch (property_id) {
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		case FOLDERS_SIDEBAR_ENTRY_DIR:
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		g_value_set_object (value, folders_sidebar_entry_get_dir (self));
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		break;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		case FOLDERS_SIDEBAR_ENTRY_COLLATION:
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		g_value_set_string (value, folders_sidebar_entry_get_collation (self));
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		break;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		case FOLDERS_SIDEBAR_ENTRY_COUNT:
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		g_value_set_int (value, folders_sidebar_entry_get_count (self));
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		break;
 #line 2064 "Branch.c"
 		default:
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		break;
 #line 2070 "Branch.c"
 	}
@@ -2074,31 +2074,31 @@ static void _vala_folders_sidebar_entry_get_property (GObject * object, guint pr
 static void _vala_folders_sidebar_entry_set_property (GObject * object, guint property_id, const GValue * value, GParamSpec * pspec) {
 	FoldersSidebarEntry * self;
 	self = G_TYPE_CHECK_INSTANCE_CAST (object, FOLDERS_TYPE_SIDEBAR_ENTRY, FoldersSidebarEntry);
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 	switch (property_id) {
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		case FOLDERS_SIDEBAR_ENTRY_DIR:
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		folders_sidebar_entry_set_dir (self, g_value_get_object (value));
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		break;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		case FOLDERS_SIDEBAR_ENTRY_COLLATION:
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		folders_sidebar_entry_set_collation (self, g_value_get_string (value));
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		break;
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		case FOLDERS_SIDEBAR_ENTRY_COUNT:
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		folders_sidebar_entry_set_count (self, g_value_get_int (value));
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		break;
 #line 2098 "Branch.c"
 		default:
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-#line 145 "/home/jens/Source/shotwell/src/folders/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/folders/Branch.vala"
 		break;
 #line 2104 "Branch.c"
 	}

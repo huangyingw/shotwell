@@ -829,8 +829,8 @@ enum  {
 };
 #define PUBLISHING_GALLERY3_GALLERY_PUBLISHER_BAD_FILE_MSG _ ("\n" \
 "\n" \
-"The file \"%s\" may not be supported by or may be too large for this i" \
-"nstance of Gallery3.")
+"The file “%s” may not be supported by or may be too large for this ins" \
+"tance of Gallery3.")
 #define PUBLISHING_GALLERY3_GALLERY_PUBLISHER_BAD_MOVIE_MSG _ ("\n" \
 "Note that Gallery3 only supports the video types that Flowplayer does.")
 PublishingGallery3Session* publishing_gallery3_session_new (void);
@@ -7320,7 +7320,7 @@ static void publishing_gallery3_gallery_publisher_do_show_publishing_options_pan
 #line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/GalleryConnector.vala"
 		_tmp4_ = self->priv->host;
 #line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/GalleryConnector.vala"
-		_tmp5_ = _ ("A file required for publishing is unavailable. Publishing to %s can't " \
+		_tmp5_ = _ ("A file required for publishing is unavailable. Publishing to %s can’t " \
 "continue.");
 #line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/GalleryConnector.vala"
 		_tmp6_ = g_strdup_printf (_tmp5_, PUBLISHING_GALLERY3_SERVICE_NAME);
@@ -11459,7 +11459,7 @@ PublishingGallery3CredentialsPane* publishing_gallery3_credentials_pane_construc
 #line 1771 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/GalleryConnector.vala"
 		_tmp4_ = host;
 #line 1771 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/GalleryConnector.vala"
-		_tmp5_ = _ ("A file required for publishing is unavailable. Publishing to %s can't " \
+		_tmp5_ = _ ("A file required for publishing is unavailable. Publishing to %s can’t " \
 "continue.");
 #line 1771 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/GalleryConnector.vala"
 		_tmp6_ = g_strdup_printf (_tmp5_, PUBLISHING_GALLERY3_SERVICE_NAME);

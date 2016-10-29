@@ -175,7 +175,8 @@ plugins_common_libshotwell_plugin_common_la_DEPENDENCIES =  \
 	$(am__DEPENDENCIES_1)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_plugins_common_libshotwell_plugin_common_la_OBJECTS = plugins/common/plugins_common_libshotwell_plugin_common_la-RESTSupport.lo \
-	plugins/common/plugins_common_libshotwell_plugin_common_la-Resources.lo
+	plugins/common/plugins_common_libshotwell_plugin_common_la-Resources.lo \
+	plugins/common/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.lo
 plugins_common_libshotwell_plugin_common_la_OBJECTS =  \
 	$(am_plugins_common_libshotwell_plugin_common_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -583,6 +584,7 @@ am__dist_noinst_DATA_DIST = plugins/shotwell-publishing/facebook.png \
 	plugins/shotwell-publishing/picasa_publishing_options_pane.ui \
 	plugins/shotwell-publishing/piwigo_authentication_pane.ui \
 	plugins/shotwell-publishing/piwigo_publishing_options_pane.ui \
+	plugins/shotwell-publishing/piwigo_ssl_failure_pane.ui \
 	plugins/shotwell-publishing/youtube_publishing_options_pane.ui \
 	plugins/shotwell-publishing/org.gnome.Shotwell.Publishing.gresource.xml \
 	plugins/shotwell-publishing-extras/gallery3.png \
@@ -660,6 +662,7 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	build-aux/config.rpath build-aux/config.sub build-aux/depcomp \
 	build-aux/install-sh build-aux/ltmain.sh build-aux/missing \
 	plugins/common/RESTSupport.c plugins/common/Resources.c \
+	plugins/common/WebAuthenticationPane.c \
 	plugins/shotwell-data-imports/FSpotDatabase.c \
 	plugins/shotwell-data-imports/FSpotDatabaseBehavior.c \
 	plugins/shotwell-data-imports/FSpotDatabaseTable.c \
@@ -1051,6 +1054,7 @@ lib_LTLIBRARIES = \
 plugins_common_libshotwell_plugin_common_la_SOURCES = \
 	plugins/common/RESTSupport.vala \
 	plugins/common/Resources.vala \
+	plugins/common/WebAuthenticationPane.vala \
 	plugins/shotwell-plugin-dev-1.0.vapi
 
 plugins_common_libshotwell_plugin_common_la_VALAFLAGS = \
@@ -1067,6 +1071,7 @@ plugins_common_libshotwell_plugin_common_la_VALAFLAGS = \
 
 plugins_common_libshotwell_plugin_common_la_CFLAGS = \
 	$(PLUGIN_CFLAGS) \
+	-Wno-incompatible-pointer-types -Wno-discarded-qualifiers \
 	-DGETTEXT_PACKAGE='"$(GETTEXT_PACKAGE)"' \
 	-I $(top_srcdir)/plugins -I$(top_builddir)/plugins
 
@@ -1123,6 +1128,7 @@ dist_noinst_DATA = $(NULL) plugins/shotwell-publishing/facebook.png \
 	plugins/shotwell-publishing/picasa_publishing_options_pane.ui \
 	plugins/shotwell-publishing/piwigo_authentication_pane.ui \
 	plugins/shotwell-publishing/piwigo_publishing_options_pane.ui \
+	plugins/shotwell-publishing/piwigo_ssl_failure_pane.ui \
 	plugins/shotwell-publishing/youtube_publishing_options_pane.ui \
 	plugins/shotwell-publishing/org.gnome.Shotwell.Publishing.gresource.xml \
 	$(am__append_4) \
@@ -1140,10 +1146,11 @@ MOSTLYCLEANFILES = $(NULL) plugins/shotwell-publishing/resource.c \
 
 # --enable-checking needs to come first to not trigger
 #  https://debbugs.gnu.org/cgi/bugreport.cgi?bug=18734
-COMMON_VALAFLAGS = --enable-checking --target-glib=2.32 --thread \
+COMMON_VALAFLAGS = --enable-checking --target-glib=2.40 --thread \
 	--fatal-warnings --enable-experimental --enable-deprecated \
 	$(am__append_2)
 COMMON_CFLAGS = -I$(top_srcdir)/vapi -D_PREFIX='"$(prefix)"' \
+	-Wno-incompatible-pointer-types -Wno-discarded-qualifiers \
 	-D_VERSION='"$(VERSION)"' \
 	-DGETTEXT_PACKAGE='"$(GETTEXT_PACKAGE)"' \
 	-D_LANG_SUPPORT_DIR='"$(prefix)/share/locale"' \
@@ -1167,7 +1174,7 @@ shotwell_VALAFLAGS = $(COMMON_VALAFLAGS) \
 	--vapidir $(abs_top_srcdir)/vapi \
 	--pkg libgphoto2 --pkg posix --pkg libraw --pkg gexiv2 \
 	--pkg libexif --pkg gudev-1.0 --pkg gstreamer-1.0 \
-	--pkg gstreamer-pbutils-1.0 \
+	--pkg gstreamer-pbutils-1.0 --pkg misc \
 	$(UNITY_VALAFLAGS) \
 	$(COMMON_VALAFLAGS_POST)
 
@@ -1395,12 +1402,16 @@ plugins_shotwell_publishing_shotwell_publishing_la_VALAFLAGS = \
 	--pkg shotwell-plugin-dev-1.0 \
 	--pkg libxml-2.0 \
 	--pkg webkit2gtk-4.0 \
+	--pkg gcr-3 \
+	--pkg gcr-ui-3 \
 	--vapidir $(abs_top_srcdir)/plugins
 
 plugins_shotwell_publishing_shotwell_publishing_la_CFLAGS = \
 	-DPLUGIN_RESOURCE_PATH='"/org/gnome/Shotwell/Publishing"' \
 	$(PLUGIN_CFLAGS) \
 	$(COMMON_CFLAGS) \
+	-DGCR_API_SUBJECT_TO_CHANGE \
+	$(PUBLISHING_CFLAGS) \
 	-I $(top_srcdir)/plugins
 
 plugins_shotwell_publishing_shotwell_publishing_la_LDFLAGS = \
@@ -1684,6 +1695,9 @@ plugins/common/plugins_common_libshotwell_plugin_common_la-RESTSupport.lo:  \
 	plugins/common/$(am__dirstamp) \
 	plugins/common/$(DEPDIR)/$(am__dirstamp)
 plugins/common/plugins_common_libshotwell_plugin_common_la-Resources.lo:  \
+	plugins/common/$(am__dirstamp) \
+	plugins/common/$(DEPDIR)/$(am__dirstamp)
+plugins/common/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.lo:  \
 	plugins/common/$(am__dirstamp) \
 	plugins/common/$(DEPDIR)/$(am__dirstamp)
 
@@ -2629,6 +2643,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-RESTSupport.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-Resources.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@plugins/shotwell-data-imports/$(DEPDIR)/plugins_shotwell_data_imports_shotwell_data_imports_la-FSpotDatabase.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@plugins/shotwell-data-imports/$(DEPDIR)/plugins_shotwell_data_imports_shotwell_data_imports_la-FSpotDatabaseBehavior.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@plugins/shotwell-data-imports/$(DEPDIR)/plugins_shotwell_data_imports_shotwell_data_imports_la-FSpotDatabaseTable.Plo@am__quote@
@@ -2903,6 +2918,13 @@ plugins/common/plugins_common_libshotwell_plugin_common_la-Resources.lo: plugins
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='plugins/common/Resources.c' object='plugins/common/plugins_common_libshotwell_plugin_common_la-Resources.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_common_libshotwell_plugin_common_la_CFLAGS) $(CFLAGS) -c -o plugins/common/plugins_common_libshotwell_plugin_common_la-Resources.lo `test -f 'plugins/common/Resources.c' || echo '$(srcdir)/'`plugins/common/Resources.c
+
+plugins/common/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.lo: plugins/common/WebAuthenticationPane.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_common_libshotwell_plugin_common_la_CFLAGS) $(CFLAGS) -MT plugins/common/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.lo -MD -MP -MF plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.Tpo -c -o plugins/common/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.lo `test -f 'plugins/common/WebAuthenticationPane.c' || echo '$(srcdir)/'`plugins/common/WebAuthenticationPane.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.Tpo plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='plugins/common/WebAuthenticationPane.c' object='plugins/common/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_common_libshotwell_plugin_common_la_CFLAGS) $(CFLAGS) -c -o plugins/common/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.lo `test -f 'plugins/common/WebAuthenticationPane.c' || echo '$(srcdir)/'`plugins/common/WebAuthenticationPane.c
 
 plugins/shotwell-data-imports/plugins_shotwell_data_imports_shotwell_data_imports_la-FSpotDatabaseBehavior.lo: plugins/shotwell-data-imports/FSpotDatabaseBehavior.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_shotwell_data_imports_shotwell_data_imports_la_CFLAGS) $(CFLAGS) -MT plugins/shotwell-data-imports/plugins_shotwell_data_imports_shotwell_data_imports_la-FSpotDatabaseBehavior.lo -MD -MP -MF plugins/shotwell-data-imports/$(DEPDIR)/plugins_shotwell_data_imports_shotwell_data_imports_la-FSpotDatabaseBehavior.Tpo -c -o plugins/shotwell-data-imports/plugins_shotwell_data_imports_shotwell_data_imports_la-FSpotDatabaseBehavior.lo `test -f 'plugins/shotwell-data-imports/FSpotDatabaseBehavior.c' || echo '$(srcdir)/'`plugins/shotwell-data-imports/FSpotDatabaseBehavior.c
@@ -6867,6 +6889,35 @@ $(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp: thumbnailer/shotwel
 	$(AM_V_at)rm -f $@ && echo stamp > $@-t
 	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(thumbnailer_shotwell_video_thumbnailer_VALAFLAGS) $(VALAFLAGS) -C thumbnailer/shotwell-video-thumbnailer.vala
 	$(AM_V_at)mv -f $@-t $@
+$(srcdir)/plugins/shotwell-publishing-extras/GalleryConnector.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing-extras/RajcePublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing-extras/shotwell-publishing-extras.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing-extras/TumblrPublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing-extras/YandexPublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
+	fi
+$(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp: plugins/shotwell-publishing-extras/GalleryConnector.vala plugins/shotwell-publishing-extras/RajcePublishing.vala plugins/shotwell-publishing-extras/shotwell-publishing-extras.vala plugins/shotwell-publishing-extras/TumblrPublishing.vala plugins/shotwell-publishing-extras/YandexPublishing.vala plugins/shotwell-plugin-common.vapi
+	$(AM_V_at)rm -f $@ && echo stamp > $@-t
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-publishing-extras/GalleryConnector.vala plugins/shotwell-publishing-extras/RajcePublishing.vala plugins/shotwell-publishing-extras/shotwell-publishing-extras.vala plugins/shotwell-publishing-extras/TumblrPublishing.vala plugins/shotwell-publishing-extras/YandexPublishing.vala plugins/shotwell-plugin-common.vapi
+	$(AM_V_at)mv -f $@-t $@
 $(srcdir)/plugins/shotwell-data-imports/FSpotDatabaseBehavior.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
 	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
 	@if test -f $@; then :; else \
@@ -6951,9 +7002,72 @@ $(srcdir)/plugins/common/Resources.c: $(srcdir)/plugins_common_libshotwell_plugi
 	@if test -f $@; then :; else \
 	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; \
 	fi
-$(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp: plugins/common/RESTSupport.vala plugins/common/Resources.vala plugins/shotwell-plugin-dev-1.0.vapi
+$(srcdir)/plugins/common/WebAuthenticationPane.c: $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; \
+	fi
+$(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp: plugins/common/RESTSupport.vala plugins/common/Resources.vala plugins/common/WebAuthenticationPane.vala plugins/shotwell-plugin-dev-1.0.vapi
 	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_common_libshotwell_plugin_common_la_VALAFLAGS) $(VALAFLAGS) -C plugins/common/RESTSupport.vala plugins/common/Resources.vala plugins/shotwell-plugin-dev-1.0.vapi
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_common_libshotwell_plugin_common_la_VALAFLAGS) $(VALAFLAGS) -C plugins/common/RESTSupport.vala plugins/common/Resources.vala plugins/common/WebAuthenticationPane.vala plugins/shotwell-plugin-dev-1.0.vapi
+	$(AM_V_at)mv -f $@-t $@
+$(srcdir)/plugins/shotwell-publishing/shotwell-publishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing/FacebookPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing/PicasaPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing/FlickrPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing/YouTubePublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing/PiwigoPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp: plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi
+	$(AM_V_at)rm -f $@ && echo stamp > $@-t
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_publishing_shotwell_publishing_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi
+	$(AM_V_at)mv -f $@-t $@
+$(srcdir)/src/plugins/SpitInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src/plugins/TransitionsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src/plugins/PublishingInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src/plugins/DataImportsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src_plugins_libplugin_la_vala.stamp: src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
+	$(AM_V_at)rm -f $@ && echo stamp > $@-t
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(src_plugins_libplugin_la_VALAFLAGS) $(VALAFLAGS) -C src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
 	$(AM_V_at)mv -f $@-t $@
 $(srcdir)/plugins/shotwell-transitions/BlindsEffect.c: $(srcdir)/plugins_shotwell_transitions_shotwell_transitions_la_vala.stamp
 	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_transitions_shotwell_transitions_la_vala.stamp; fi
@@ -7013,93 +7127,6 @@ $(srcdir)/plugins/shotwell-transitions/StripesEffect.c: $(srcdir)/plugins_shotwe
 $(srcdir)/plugins_shotwell_transitions_shotwell_transitions_la_vala.stamp: plugins/shotwell-transitions/BlindsEffect.vala plugins/shotwell-transitions/ChessEffect.vala plugins/shotwell-transitions/CircleEffect.vala plugins/shotwell-transitions/CirclesEffect.vala plugins/shotwell-transitions/ClockEffect.vala plugins/shotwell-transitions/CrumbleEffect.vala plugins/shotwell-transitions/FadeEffect.vala plugins/shotwell-transitions/shotwell-transitions.vala plugins/shotwell-transitions/SlideEffect.vala plugins/shotwell-transitions/SquaresEffect.vala plugins/shotwell-transitions/StripesEffect.vala plugins/shotwell-plugin-common.vapi
 	$(AM_V_at)rm -f $@ && echo stamp > $@-t
 	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_transitions_shotwell_transitions_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-transitions/BlindsEffect.vala plugins/shotwell-transitions/ChessEffect.vala plugins/shotwell-transitions/CircleEffect.vala plugins/shotwell-transitions/CirclesEffect.vala plugins/shotwell-transitions/ClockEffect.vala plugins/shotwell-transitions/CrumbleEffect.vala plugins/shotwell-transitions/FadeEffect.vala plugins/shotwell-transitions/shotwell-transitions.vala plugins/shotwell-transitions/SlideEffect.vala plugins/shotwell-transitions/SquaresEffect.vala plugins/shotwell-transitions/StripesEffect.vala plugins/shotwell-plugin-common.vapi
-	$(AM_V_at)mv -f $@-t $@
-$(srcdir)/src/plugins/SpitInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src/plugins/TransitionsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src/plugins/PublishingInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src/plugins/DataImportsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src_plugins_libplugin_la_vala.stamp: src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
-	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(src_plugins_libplugin_la_VALAFLAGS) $(VALAFLAGS) -C src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
-	$(AM_V_at)mv -f $@-t $@
-$(srcdir)/plugins/shotwell-publishing-extras/GalleryConnector.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing-extras/RajcePublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing-extras/shotwell-publishing-extras.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing-extras/TumblrPublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing-extras/YandexPublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
-	fi
-$(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp: plugins/shotwell-publishing-extras/GalleryConnector.vala plugins/shotwell-publishing-extras/RajcePublishing.vala plugins/shotwell-publishing-extras/shotwell-publishing-extras.vala plugins/shotwell-publishing-extras/TumblrPublishing.vala plugins/shotwell-publishing-extras/YandexPublishing.vala plugins/shotwell-plugin-common.vapi
-	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-publishing-extras/GalleryConnector.vala plugins/shotwell-publishing-extras/RajcePublishing.vala plugins/shotwell-publishing-extras/shotwell-publishing-extras.vala plugins/shotwell-publishing-extras/TumblrPublishing.vala plugins/shotwell-publishing-extras/YandexPublishing.vala plugins/shotwell-plugin-common.vapi
-	$(AM_V_at)mv -f $@-t $@
-$(srcdir)/plugins/shotwell-publishing/shotwell-publishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing/FacebookPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing/PicasaPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing/FlickrPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing/YouTubePublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing/PiwigoPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp: plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi
-	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_publishing_shotwell_publishing_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi
 	$(AM_V_at)mv -f $@-t $@
 
 mostlyclean-libtool:
@@ -7535,6 +7562,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 	-rm -f $(srcdir)/plugins/common/RESTSupport.c
 	-rm -f $(srcdir)/plugins/common/Resources.c
+	-rm -f $(srcdir)/plugins/common/WebAuthenticationPane.c
 	-rm -f $(srcdir)/plugins/shotwell-data-imports/FSpotDatabase.c
 	-rm -f $(srcdir)/plugins/shotwell-data-imports/FSpotDatabaseBehavior.c
 	-rm -f $(srcdir)/plugins/shotwell-data-imports/FSpotDatabaseTable.c
@@ -7777,6 +7805,7 @@ maintainer-clean-generic:
 	-rm -f $(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp
 	-rm -f plugins/common/RESTSupport.c
 	-rm -f plugins/common/Resources.c
+	-rm -f plugins/common/WebAuthenticationPane.c
 	-rm -f plugins/shotwell-data-imports/FSpotDatabase.c
 	-rm -f plugins/shotwell-data-imports/FSpotDatabaseBehavior.c
 	-rm -f plugins/shotwell-data-imports/FSpotDatabaseTable.c

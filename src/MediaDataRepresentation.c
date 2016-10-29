@@ -2081,14 +2081,14 @@ gboolean media_source_delete_original_file (MediaSource* self) {
 #line 102 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2084 "MediaDataRepresentation.c"
-			goto __catch549_g_error;
+			goto __catch562_g_error;
 		}
 #line 102 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 		ret = _tmp1_;
 #line 2089 "MediaDataRepresentation.c"
 	}
-	goto __finally549;
-	__catch549_g_error:
+	goto __finally562;
+	__catch562_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp4_ = NULL;
@@ -2119,7 +2119,7 @@ gboolean media_source_delete_original_file (MediaSource* self) {
 		_g_error_free0 (err);
 #line 2120 "MediaDataRepresentation.c"
 	}
-	__finally549:
+	__finally562:
 #line 101 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 101 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
@@ -2239,7 +2239,7 @@ gboolean media_source_delete_original_file (MediaSource* self) {
 #line 119 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2241 "MediaDataRepresentation.c"
-					goto __catch550_g_error;
+					goto __catch563_g_error;
 				}
 #line 119 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 				if (!_tmp29_) {
@@ -2248,8 +2248,8 @@ gboolean media_source_delete_original_file (MediaSource* self) {
 #line 2248 "MediaDataRepresentation.c"
 				}
 			}
-			goto __finally550;
-			__catch550_g_error:
+			goto __finally563;
+			__catch563_g_error:
 			{
 				GError* err = NULL;
 				GFile* _tmp32_ = NULL;
@@ -2281,7 +2281,7 @@ gboolean media_source_delete_original_file (MediaSource* self) {
 				break;
 #line 2282 "MediaDataRepresentation.c"
 			}
-			__finally550:
+			__finally563:
 #line 118 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 118 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
@@ -2308,7 +2308,7 @@ gboolean media_source_delete_original_file (MediaSource* self) {
 #line 128 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2310 "MediaDataRepresentation.c"
-					goto __catch551_g_error;
+					goto __catch564_g_error;
 				}
 #line 129 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 				_tmp38_ = parent;
@@ -2322,8 +2322,8 @@ gboolean media_source_delete_original_file (MediaSource* self) {
 				_g_free0 (_tmp40_);
 #line 2323 "MediaDataRepresentation.c"
 			}
-			goto __finally551;
-			__catch551_g_error:
+			goto __finally564;
+			__catch564_g_error:
 			{
 				GError* err = NULL;
 				GFile* _tmp41_ = NULL;
@@ -2354,7 +2354,7 @@ gboolean media_source_delete_original_file (MediaSource* self) {
 				_g_error_free0 (err);
 #line 2354 "MediaDataRepresentation.c"
 			}
-			__finally551:
+			__finally564:
 #line 127 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 127 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
@@ -6399,7 +6399,7 @@ void media_source_collection_remove_from_app (MediaSourceCollection* self, GeeCo
 #line 704 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
 #line 6400 "MediaDataRepresentation.c"
-					goto __catch552_database_error;
+					goto __catch565_database_error;
 				}
 #line 704 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 				_aggregate_progress_monitor_unref0 (agg_monitor);
@@ -6422,8 +6422,8 @@ void media_source_collection_remove_from_app (MediaSourceCollection* self, GeeCo
 #line 6421 "MediaDataRepresentation.c"
 			}
 		}
-		goto __finally552;
-		__catch552_database_error:
+		goto __finally565;
+		__catch565_database_error:
 		{
 			GError* err = NULL;
 			GError* _tmp78_ = NULL;
@@ -6439,7 +6439,7 @@ void media_source_collection_remove_from_app (MediaSourceCollection* self, GeeCo
 			_g_error_free0 (err);
 #line 6439 "MediaDataRepresentation.c"
 		}
-		__finally552:
+		__finally565:
 #line 703 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 703 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
@@ -6564,11 +6564,11 @@ void media_source_collection_delete_backing_files (MediaSourceCollection* self, 
 #line 721 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6565 "MediaDataRepresentation.c"
-					goto __catch553_g_error;
+					goto __catch566_g_error;
 				}
 			}
-			goto __finally553;
-			__catch553_g_error:
+			goto __finally566;
+			__catch566_g_error:
 			{
 				GError* err = NULL;
 				GFile* _tmp12_ = NULL;
@@ -6598,7 +6598,7 @@ void media_source_collection_delete_backing_files (MediaSourceCollection* self, 
 				_g_error_free0 (err);
 #line 6598 "MediaDataRepresentation.c"
 			}
-			__finally553:
+			__finally566:
 #line 720 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 720 "/home/jens/Source/shotwell/src/MediaDataRepresentation.vala"

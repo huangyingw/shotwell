@@ -1480,7 +1480,7 @@ static gboolean exporter_process_queue (Exporter* self) {
 #line 230 "/home/jens/Source/shotwell/src/Exporter.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1483 "Exporter.c"
-						goto __catch467_g_error;
+						goto __catch480_g_error;
 					}
 #line 230 "/home/jens/Source/shotwell/src/Exporter.vala"
 					_tmp43_ = _tmp36_;
@@ -1494,8 +1494,8 @@ static gboolean exporter_process_queue (Exporter* self) {
 					_g_object_unref0 (_tmp36_);
 #line 1496 "Exporter.c"
 				}
-				goto __finally467;
-				__catch467_g_error:
+				goto __finally480;
+				__catch480_g_error:
 				{
 					GError* err = NULL;
 					const gchar* _tmp44_ = NULL;
@@ -1556,7 +1556,7 @@ static gboolean exporter_process_queue (Exporter* self) {
 					break;
 #line 1558 "Exporter.c"
 				}
-				__finally467:
+				__finally480:
 #line 228 "/home/jens/Source/shotwell/src/Exporter.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 228 "/home/jens/Source/shotwell/src/Exporter.vala"
@@ -2054,7 +2054,7 @@ static void exporter_export_job_real_execute (BackgroundJob* base) {
 #line 97 "/home/jens/Source/shotwell/src/Exporter.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2057 "Exporter.c"
-				goto __catch468_g_error;
+				goto __catch481_g_error;
 			}
 		} else {
 			MediaSource* _tmp9_ = NULL;
@@ -2074,13 +2074,13 @@ static void exporter_export_job_real_execute (BackgroundJob* base) {
 #line 99 "/home/jens/Source/shotwell/src/Exporter.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2077 "Exporter.c"
-					goto __catch468_g_error;
+					goto __catch481_g_error;
 				}
 			}
 		}
 	}
-	goto __finally468;
-	__catch468_g_error:
+	goto __finally481;
+	__catch481_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp12_ = NULL;
@@ -2101,7 +2101,7 @@ static void exporter_export_job_real_execute (BackgroundJob* base) {
 		_g_error_free0 (err);
 #line 2103 "Exporter.c"
 	}
-	__finally468:
+	__finally481:
 #line 95 "/home/jens/Source/shotwell/src/Exporter.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 95 "/home/jens/Source/shotwell/src/Exporter.vala"
@@ -2452,7 +2452,7 @@ static ExporterOverwrite exporter_ui_on_export_overwrite (ExporterUI* self, Expo
 #line 316 "/home/jens/Source/shotwell/src/Exporter.vala"
 	gtk_window_set_modal (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_window_get_type (), GtkWindow), FALSE);
 #line 317 "/home/jens/Source/shotwell/src/Exporter.vala"
-	_tmp1_ = _ ("File %s already exists.  Replace?");
+	_tmp1_ = _ ("File %s already exists. Replace?");
 #line 317 "/home/jens/Source/shotwell/src/Exporter.vala"
 	_tmp2_ = file;
 #line 317 "/home/jens/Source/shotwell/src/Exporter.vala"

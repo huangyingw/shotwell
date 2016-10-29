@@ -61,7 +61,7 @@ internal const string USER_VISIBLE_NAME = "Facebook";
 internal const string APPLICATION_ID = "1612018629063184";
 internal const string DEFAULT_ALBUM_NAME = _("Shotwell Connect");
 internal const string SERVICE_WELCOME_MESSAGE =
-    _("You are not currently logged into Facebook.\n\nIf you don't yet have a Facebook account, you can create one during the login process. During login, Shotwell Connect may ask you for permission to upload photos and publish to your feed. These permissions are required for Shotwell Connect to function.");
+    _("You are not currently logged into Facebook.\n\nIf you don’t yet have a Facebook account, you can create one during the login process. During login, Shotwell Connect may ask you for permission to upload photos and publish to your feed. These permissions are required for Shotwell Connect to function.");
 internal const string RESTART_ERROR_MESSAGE =
     _("You have already logged in and out of Facebook during this Shotwell session.\nTo continue publishing to Facebook, quit and restart Shotwell, then try publishing again.");
 internal const string USER_AGENT = "Java/1.6.0_16";
@@ -252,7 +252,7 @@ public class FacebookPublisher : Spit.Publishing.Publisher, GLib.Object {
         debug("ACTION: testing connection to Facebook endpoint.");
         host.set_service_locked(true);
         
-        host.install_static_message_pane(_("Testing connection to Facebook..."));
+        host.install_static_message_pane(_("Testing connection to Facebook…"));
         
         GraphMessage endpoint_test_message = graph_session.new_endpoint_test();
         endpoint_test_message.completed.connect(on_endpoint_test_completed);
@@ -345,7 +345,7 @@ public class FacebookPublisher : Spit.Publishing.Publisher, GLib.Object {
         debug("ACTION: creating a new album named \"%s\".\n", publishing_params.new_album_name);
         
         host.set_service_locked(true);
-        host.install_static_message_pane(_("Creating album..."));
+        host.install_static_message_pane(_("Creating album…"));
         
         GraphMessage create_album_message = graph_session.new_create_album(
             publishing_params.new_album_name, publishing_params.privacy_object);
@@ -371,7 +371,7 @@ public class FacebookPublisher : Spit.Publishing.Publisher, GLib.Object {
             warning("Could not parse UI file! Error: %s.", e.message);
             host.post_error(
                 new Spit.Publishing.PublishingError.LOCAL_FILE_ERROR(
-                    _("A file required for publishing is unavailable. Publishing to Facebook can't continue.")));
+                    _("A file required for publishing is unavailable. Publishing to Facebook can’t continue.")));
             return;
         }
         
@@ -811,30 +811,14 @@ public class FacebookPublisher : Spit.Publishing.Publisher, GLib.Object {
     }
 }
 
-internal class WebAuthenticationPane : Spit.Publishing.DialogPane, Object {
-    private WebKit.WebView webview = null;
-    private Gtk.Box pane_widget = null;
-    private Gtk.ScrolledWindow webview_frame = null;
+internal class WebAuthenticationPane : Shotwell.Plugins.Common.WebAuthenticationPane {
     private static bool cache_dirty = false;
 
     public signal void login_succeeded(string success_url);
     public signal void login_failed();
 
     public WebAuthenticationPane() {
-        pane_widget = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-
-        webview_frame = new Gtk.ScrolledWindow(null, null);
-        webview_frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN);
-        webview_frame.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
-
-        webview = new WebKit.WebView();
-        webview.get_settings().enable_plugins = false;
-
-        webview.load_changed.connect(on_page_load_changed);
-        webview.context_menu.connect(() => { return true; });
-
-        webview_frame.add(webview);
-        pane_widget.pack_start(webview_frame, true, true, 0);
+        Object (login_uri : get_login_url ());
     }
 
     private class LocaleLookup {
@@ -858,7 +842,7 @@ internal class WebAuthenticationPane : Spit.Publishing.DialogPane, Object {
         
     }
     
-    private LocaleLookup[] locale_lookup_table = {
+    private static LocaleLookup[] locale_lookup_table = {
         new LocaleLookup( "es", "es-la", "ES", "es-es" ),
         new LocaleLookup( "en", "en-gb", "US", "en-us" ),
         new LocaleLookup( "fr", "fr-fr", "CA", "fr-ca" ),
@@ -906,7 +890,7 @@ internal class WebAuthenticationPane : Spit.Publishing.DialogPane, Object {
         new LocaleLookup( "ml", "ml-in" )
     };
     
-    private string get_system_locale_as_facebook_locale() {
+    private static string get_system_locale_as_facebook_locale() {
         unowned string? raw_system_locale = Intl.setlocale(LocaleCategory.ALL, "");
         if (raw_system_locale == null || raw_system_locale == "")
             return "www";
@@ -938,15 +922,14 @@ internal class WebAuthenticationPane : Spit.Publishing.DialogPane, Object {
         return "www";
     }
 
-    private string get_login_url() {
-        string facebook_locale = get_system_locale_as_facebook_locale();
+    private static string get_login_url() {
+        var facebook_locale = get_system_locale_as_facebook_locale();
+
         return "https://%s.facebook.com/dialog/oauth?client_id=%s&redirect_uri=https://www.facebook.com/connect/login_success.html&display=popup&scope=publish_actions,user_photos,user_videos&response_type=token".printf(facebook_locale, APPLICATION_ID);
     }
 
-    private void on_page_load() {
-        pane_widget.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.LEFT_PTR));
-
-        string loaded_url = webview.uri.dup();
+    public override void on_page_load() {
+        string loaded_url = get_view ().uri.dup();
         debug("loaded url: " + loaded_url);
 
         // strip parameters from the loaded url
@@ -959,7 +942,7 @@ internal class WebAuthenticationPane : Spit.Publishing.DialogPane, Object {
         // were we redirected to the facebook login success page?
         if (loaded_url.contains("login_success")) {
             cache_dirty = true;
-            login_succeeded(webview.uri);
+            login_succeeded(get_view ().uri);
             return;
         }
 
@@ -970,41 +953,8 @@ internal class WebAuthenticationPane : Spit.Publishing.DialogPane, Object {
         }
     }
 
-    private void on_load_started() {
-        pane_widget.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.WATCH));
-    }
-
-    private void on_page_load_changed (WebKit.LoadEvent load_event) {
-        switch (load_event) {
-            case WebKit.LoadEvent.STARTED:
-            case WebKit.LoadEvent.REDIRECTED:
-                on_load_started();
-                break;
-            case WebKit.LoadEvent.FINISHED:
-                on_page_load();
-                break;
-        }
-
-        return;
-    }
-
     public static bool is_cache_dirty() {
         return cache_dirty;
-    }
-
-    public Gtk.Widget get_widget() {
-        return pane_widget;
-    }
-
-    public Spit.Publishing.DialogPane.GeometryOptions get_preferred_geometry() {
-        return Spit.Publishing.DialogPane.GeometryOptions.NONE;
-    }
-
-    public void on_pane_installed() {
-        webview.load_uri(get_login_url());
-    }
-
-    public void on_pane_uninstalled() {
     }
 }
 
@@ -1466,8 +1416,8 @@ internal class GraphSession {
     private GraphMessage? current_message;
     
     public GraphSession() {
-        this.soup_session = new Soup.SessionAsync();
-        this.soup_session.request_unqueued.connect(on_request_unqueued);
+        this.soup_session = new Soup.Session ();
+        this.soup_session.request_unqueued.connect (on_request_unqueued);
         this.soup_session.timeout = 15;
         this.access_token = null;
         this.current_message = null;
@@ -1475,7 +1425,7 @@ internal class GraphSession {
     }
 
     ~GraphSession() {
-         soup_session.request_unqueued.disconnect(on_request_unqueued);
+         soup_session.request_unqueued.disconnect (on_request_unqueued);
      }
     
     private void manage_message(GraphMessage msg) {

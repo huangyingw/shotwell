@@ -72,6 +72,13 @@ ShotwellThumbnailer* shotwell_thumbnailer_construct (GType object_type);
 static void shotwell_thumbnailer_finalize (ShotwellThumbnailer* obj);
 
 
+static gpointer _g_object_ref0 (gpointer self) {
+#line 25 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	return self ? g_object_ref (self) : NULL;
+#line 79 "shotwell-video-thumbnailer.c"
+}
+
+
 gint shotwell_thumbnailer_main (gchar** args, int args_length1) {
 	gint result = 0;
 	GstElement* pipeline = NULL;
@@ -84,425 +91,521 @@ gint shotwell_thumbnailer_main (gchar** args, int args_length1) {
 	gint64 duration = 0LL;
 	gint64 position = 0LL;
 	GstStateChangeReturn ret = 0;
-	gchar** _tmp0_ = NULL;
-	gint _tmp0__length1 = 0;
-	gchar** _tmp4_ = NULL;
-	gint _tmp4__length1 = 0;
-	const gchar* _tmp5_ = NULL;
-	gchar* _tmp6_ = NULL;
-	gchar* _tmp7_ = NULL;
-	gchar* _tmp8_ = NULL;
-	gchar* _tmp9_ = NULL;
-	gchar* _tmp10_ = NULL;
+	GstRegistry* registry = NULL;
+	GstRegistry* _tmp0_ = NULL;
+	GstRegistry* _tmp1_ = NULL;
+	GstPluginFeature* feature = NULL;
+	GstRegistry* _tmp2_ = NULL;
+	GstPluginFeature* _tmp3_ = NULL;
+	GstPluginFeature* _tmp4_ = NULL;
+	GstRegistry* _tmp7_ = NULL;
+	GstPluginFeature* _tmp8_ = NULL;
+	GstPluginFeature* _tmp9_ = NULL;
+	gchar** _tmp12_ = NULL;
+	gint _tmp12__length1 = 0;
+	gchar** _tmp16_ = NULL;
+	gint _tmp16__length1 = 0;
+	const gchar* _tmp17_ = NULL;
+	gchar* _tmp18_ = NULL;
+	gchar* _tmp19_ = NULL;
+	gchar* _tmp20_ = NULL;
+	gchar* _tmp21_ = NULL;
+	gchar* _tmp22_ = NULL;
 	GError * _inner_error_ = NULL;
 #line 23 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	gst_init (&args_length1, &args);
 #line 25 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_tmp0_ = args;
+	_tmp0_ = gst_registry_get ();
 #line 25 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_tmp0__length1 = args_length1;
+	_tmp1_ = _g_object_ref0 (_tmp0_);
 #line 25 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	if (_tmp0__length1 != 2) {
-#line 107 "shotwell-video-thumbnailer.c"
-		FILE* _tmp1_ = NULL;
-		gchar** _tmp2_ = NULL;
-		gint _tmp2__length1 = 0;
-		const gchar* _tmp3_ = NULL;
-#line 26 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp1_ = stdout;
-#line 26 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp2_ = args;
-#line 26 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp2__length1 = args_length1;
-#line 26 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp3_ = _tmp2_[0];
-#line 26 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		fprintf (_tmp1_, "usage: %s [filename]\n Writes video thumbnail to stdout\n", _tmp3_);
+	registry = _tmp1_;
 #line 27 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		result = 1;
+	_tmp2_ = registry;
 #line 27 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		pngdata = (g_free (pngdata), NULL);
+	_tmp3_ = gst_registry_find_feature (_tmp2_, "vaapidecodebin", gst_element_factory_get_type ());
 #line 27 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_g_object_unref0 (pixbuf);
-#line 27 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_g_free0 (descr);
-#line 27 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_g_object_unref0 (sink);
-#line 27 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_g_object_unref0 (pipeline);
-#line 27 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		return result;
-#line 136 "shotwell-video-thumbnailer.c"
+	feature = _tmp3_;
+#line 29 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp4_ = feature;
+#line 29 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	if (_tmp4_ != NULL) {
+#line 134 "shotwell-video-thumbnailer.c"
+		GstRegistry* _tmp5_ = NULL;
+		GstPluginFeature* _tmp6_ = NULL;
+#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp5_ = registry;
+#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp6_ = feature;
+#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		gst_registry_remove_feature (_tmp5_, _tmp6_);
+#line 143 "shotwell-video-thumbnailer.c"
 	}
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_tmp4_ = args;
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_tmp4__length1 = args_length1;
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_tmp5_ = _tmp4_[1];
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_tmp6_ = g_strdup_printf ("filesrc location=\"%s\" ! decodebin ! videoconvert ! videoscale ! ", _tmp5_);
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_tmp7_ = _tmp6_;
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_tmp8_ = g_strdup_printf ("%s ! gdkpixbufsink name=sink", SHOTWELL_THUMBNAILER_caps_string);
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_tmp9_ = _tmp8_;
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_tmp10_ = g_strconcat (_tmp7_, _tmp9_, NULL);
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp7_ = registry;
+#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp8_ = gst_registry_find_feature (_tmp7_, "vaapidecode", gst_element_factory_get_type ());
+#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_g_object_unref0 (feature);
+#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	feature = _tmp8_;
+#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp9_ = feature;
+#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	if (_tmp9_ != NULL) {
+#line 157 "shotwell-video-thumbnailer.c"
+		GstRegistry* _tmp10_ = NULL;
+		GstPluginFeature* _tmp11_ = NULL;
+#line 36 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp10_ = registry;
+#line 36 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp11_ = feature;
+#line 36 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		gst_registry_remove_feature (_tmp10_, _tmp11_);
+#line 166 "shotwell-video-thumbnailer.c"
+	}
+#line 39 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp12_ = args;
+#line 39 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp12__length1 = args_length1;
+#line 39 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	if (_tmp12__length1 != 2) {
+#line 174 "shotwell-video-thumbnailer.c"
+		FILE* _tmp13_ = NULL;
+		gchar** _tmp14_ = NULL;
+		gint _tmp14__length1 = 0;
+		const gchar* _tmp15_ = NULL;
+#line 40 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp13_ = stdout;
+#line 40 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp14_ = args;
+#line 40 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp14__length1 = args_length1;
+#line 40 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp15_ = _tmp14_[0];
+#line 40 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		fprintf (_tmp13_, "usage: %s [filename]\n Writes video thumbnail to stdout\n", _tmp15_);
+#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		result = 1;
+#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_g_object_unref0 (feature);
+#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_g_object_unref0 (registry);
+#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		pngdata = (g_free (pngdata), NULL);
+#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_g_object_unref0 (pixbuf);
+#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_g_free0 (descr);
+#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_g_object_unref0 (sink);
+#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_g_object_unref0 (pipeline);
+#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		return result;
+#line 207 "shotwell-video-thumbnailer.c"
+	}
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp16_ = args;
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp16__length1 = args_length1;
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp17_ = _tmp16_[1];
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp18_ = g_strdup_printf ("filesrc location=\"%s\" ! decodebin ! videoconvert ! videoscale ! ", _tmp17_);
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp19_ = _tmp18_;
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp20_ = g_strdup_printf ("%s ! gdkpixbufsink name=sink", SHOTWELL_THUMBNAILER_caps_string);
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp21_ = _tmp20_;
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_tmp22_ = g_strconcat (_tmp19_, _tmp21_, NULL);
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	_g_free0 (descr);
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	descr = _tmp10_;
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_g_free0 (_tmp9_);
-#line 30 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-	_g_free0 (_tmp7_);
-#line 162 "shotwell-video-thumbnailer.c"
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	descr = _tmp22_;
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_g_free0 (_tmp21_);
+#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_g_free0 (_tmp19_);
+#line 233 "shotwell-video-thumbnailer.c"
 	{
-		GstElement* _tmp11_ = NULL;
-		const gchar* _tmp12_ = NULL;
-		GstElement* _tmp13_ = NULL;
-		GstElement* _tmp14_ = NULL;
-		GstElement* _tmp15_ = NULL;
-		GstElement* _tmp16_ = NULL;
-		GstElement* _tmp17_ = NULL;
-		GstStateChangeReturn _tmp18_ = 0;
-		GstStateChangeReturn _tmp19_ = 0;
 		GstElement* _tmp23_ = NULL;
-		GstStateChangeReturn _tmp24_ = 0;
-		GstStateChangeReturn _tmp25_ = 0;
+		const gchar* _tmp24_ = NULL;
+		GstElement* _tmp25_ = NULL;
+		GstElement* _tmp26_ = NULL;
 		GstElement* _tmp27_ = NULL;
-		gint64 _tmp28_ = 0LL;
-		gboolean _tmp29_ = FALSE;
-		GstElement* _tmp31_ = NULL;
-		gint64 _tmp32_ = 0LL;
-		GstElement* _tmp33_ = NULL;
-		GstStateChangeReturn _tmp34_ = 0;
-		GstStateChangeReturn _tmp35_ = 0;
-		GstElement* _tmp37_ = NULL;
-		GdkPixbuf* _tmp38_ = NULL;
-		guint8* _tmp39_ = NULL;
-		gsize _tmp40_;
-		FILE* _tmp41_ = NULL;
-		guint8* _tmp42_ = NULL;
-		gint _tmp42__length1 = 0;
+		GstElement* _tmp28_ = NULL;
+		GstElement* _tmp29_ = NULL;
+		GstStateChangeReturn _tmp30_ = 0;
+		GstStateChangeReturn _tmp31_ = 0;
+		GstElement* _tmp35_ = NULL;
+		GstStateChangeReturn _tmp36_ = 0;
+		GstStateChangeReturn _tmp37_ = 0;
+		GstElement* _tmp39_ = NULL;
+		gint64 _tmp40_ = 0LL;
+		gboolean _tmp41_ = FALSE;
 		GstElement* _tmp43_ = NULL;
-#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp12_ = descr;
-#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp13_ = gst_parse_launch_full (_tmp12_, NULL, GST_PARSE_FLAG_NONE, &_inner_error_);
-#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		g_object_ref_sink (_tmp13_);
-#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp11_ = _tmp13_;
-#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		gint64 _tmp44_ = 0LL;
+		GstElement* _tmp45_ = NULL;
+		GstStateChangeReturn _tmp46_ = 0;
+		GstStateChangeReturn _tmp47_ = 0;
+		GstElement* _tmp49_ = NULL;
+		GdkPixbuf* _tmp50_ = NULL;
+		guint8* _tmp51_ = NULL;
+		gsize _tmp52_;
+		FILE* _tmp53_ = NULL;
+		guint8* _tmp54_ = NULL;
+		gint _tmp54__length1 = 0;
+		GstElement* _tmp55_ = NULL;
+#line 49 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp24_ = descr;
+#line 49 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp25_ = gst_parse_launch_full (_tmp24_, NULL, GST_PARSE_FLAG_NONE, &_inner_error_);
+#line 49 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		g_object_ref_sink (_tmp25_);
+#line 49 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp23_ = _tmp25_;
+#line 49 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 202 "shotwell-video-thumbnailer.c"
+#line 273 "shotwell-video-thumbnailer.c"
 			goto __catch0_g_error;
 		}
-#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp14_ = _tmp11_;
-#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp11_ = NULL;
-#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		g_object_ref_sink (_tmp14_);
-#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 49 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp26_ = _tmp23_;
+#line 49 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp23_ = NULL;
+#line 49 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		g_object_ref_sink (_tmp26_);
+#line 49 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_g_object_unref0 (pipeline);
-#line 35 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		pipeline = _tmp14_;
-#line 38 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp15_ = pipeline;
-#line 38 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp16_ = gst_bin_get_by_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gst_bin_get_type (), GstBin), "sink");
-#line 38 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 49 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		pipeline = _tmp26_;
+#line 52 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp27_ = pipeline;
+#line 52 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp28_ = gst_bin_get_by_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gst_bin_get_type (), GstBin), "sink");
+#line 52 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_g_object_unref0 (sink);
-#line 38 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		sink = _tmp16_;
-#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp17_ = pipeline;
-#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp18_ = gst_element_set_state (_tmp17_, GST_STATE_PAUSED);
-#line 41 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		ret = _tmp18_;
-#line 42 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp19_ = ret;
-#line 42 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		if (_tmp19_ == GST_STATE_CHANGE_FAILURE) {
-#line 233 "shotwell-video-thumbnailer.c"
-			FILE* _tmp20_ = NULL;
-#line 43 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			_tmp20_ = stderr;
-#line 43 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			fprintf (_tmp20_, "Failed to play the file: couldn't set state\n");
-#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 52 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		sink = _tmp28_;
+#line 55 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp29_ = pipeline;
+#line 55 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp30_ = gst_element_set_state (_tmp29_, GST_STATE_PAUSED);
+#line 55 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		ret = _tmp30_;
+#line 56 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp31_ = ret;
+#line 56 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		if (_tmp31_ == GST_STATE_CHANGE_FAILURE) {
+#line 304 "shotwell-video-thumbnailer.c"
+			FILE* _tmp32_ = NULL;
+#line 57 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_tmp32_ = stderr;
+#line 57 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			fprintf (_tmp32_, "Failed to play the file: couldn't set state\n");
+#line 58 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			result = 3;
-#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			_g_object_unref0 (_tmp11_);
-#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 58 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (_tmp23_);
+#line 58 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (feature);
+#line 58 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (registry);
+#line 58 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			pngdata = (g_free (pngdata), NULL);
-#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 58 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (pixbuf);
-#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 58 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_free0 (descr);
-#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 58 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (sink);
-#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 58 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (pipeline);
-#line 44 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 58 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			return result;
-#line 255 "shotwell-video-thumbnailer.c"
+#line 330 "shotwell-video-thumbnailer.c"
 		} else {
-			GstStateChangeReturn _tmp21_ = 0;
-#line 45 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			_tmp21_ = ret;
-#line 45 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			if (_tmp21_ == GST_STATE_CHANGE_NO_PREROLL) {
-#line 262 "shotwell-video-thumbnailer.c"
-				FILE* _tmp22_ = NULL;
-#line 46 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-				_tmp22_ = stderr;
-#line 46 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-				fprintf (_tmp22_, "Live sources not supported yet.\n");
-#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			GstStateChangeReturn _tmp33_ = 0;
+#line 59 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_tmp33_ = ret;
+#line 59 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			if (_tmp33_ == GST_STATE_CHANGE_NO_PREROLL) {
+#line 337 "shotwell-video-thumbnailer.c"
+				FILE* _tmp34_ = NULL;
+#line 60 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+				_tmp34_ = stderr;
+#line 60 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+				fprintf (_tmp34_, "Live sources not supported yet.\n");
+#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 				result = 4;
-#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-				_g_object_unref0 (_tmp11_);
-#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+				_g_object_unref0 (_tmp23_);
+#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+				_g_object_unref0 (feature);
+#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+				_g_object_unref0 (registry);
+#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 				pngdata = (g_free (pngdata), NULL);
-#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 				_g_object_unref0 (pixbuf);
-#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 				_g_free0 (descr);
-#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 				_g_object_unref0 (sink);
-#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 				_g_object_unref0 (pipeline);
-#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 				return result;
-#line 284 "shotwell-video-thumbnailer.c"
+#line 363 "shotwell-video-thumbnailer.c"
 			}
 		}
-#line 53 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp23_ = pipeline;
-#line 53 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp24_ = gst_element_get_state (_tmp23_, NULL, NULL, (GstClockTime) (5 * GST_SECOND));
-#line 53 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		ret = _tmp24_;
-#line 54 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp25_ = ret;
-#line 54 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		if (_tmp25_ == GST_STATE_CHANGE_FAILURE) {
-#line 297 "shotwell-video-thumbnailer.c"
-			FILE* _tmp26_ = NULL;
-#line 55 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			_tmp26_ = stderr;
-#line 55 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			fprintf (_tmp26_, "Failed to play the file: couldn't get state.\n");
-#line 56 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 67 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp35_ = pipeline;
+#line 67 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp36_ = gst_element_get_state (_tmp35_, NULL, NULL, (GstClockTime) (5 * GST_SECOND));
+#line 67 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		ret = _tmp36_;
+#line 68 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp37_ = ret;
+#line 68 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		if (_tmp37_ == GST_STATE_CHANGE_FAILURE) {
+#line 376 "shotwell-video-thumbnailer.c"
+			FILE* _tmp38_ = NULL;
+#line 69 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_tmp38_ = stderr;
+#line 69 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			fprintf (_tmp38_, "Failed to play the file: couldn't get state.\n");
+#line 70 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			result = 3;
-#line 56 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			_g_object_unref0 (_tmp11_);
-#line 56 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 70 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (_tmp23_);
+#line 70 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (feature);
+#line 70 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (registry);
+#line 70 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			pngdata = (g_free (pngdata), NULL);
-#line 56 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 70 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (pixbuf);
-#line 56 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 70 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_free0 (descr);
-#line 56 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 70 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (sink);
-#line 56 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 70 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (pipeline);
-#line 56 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 70 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			return result;
-#line 319 "shotwell-video-thumbnailer.c"
+#line 402 "shotwell-video-thumbnailer.c"
 		}
-#line 60 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp27_ = pipeline;
-#line 60 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp29_ = gst_element_query_duration (_tmp27_, GST_FORMAT_TIME, &_tmp28_);
-#line 60 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		duration = _tmp28_;
-#line 60 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		if (!_tmp29_) {
-#line 329 "shotwell-video-thumbnailer.c"
-			FILE* _tmp30_ = NULL;
-#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			_tmp30_ = stderr;
-#line 61 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			fprintf (_tmp30_, "Failed to query file for duration\n");
-#line 62 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 74 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp39_ = pipeline;
+#line 74 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp41_ = gst_element_query_duration (_tmp39_, GST_FORMAT_TIME, &_tmp40_);
+#line 74 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		duration = _tmp40_;
+#line 74 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		if (!_tmp41_) {
+#line 412 "shotwell-video-thumbnailer.c"
+			FILE* _tmp42_ = NULL;
+#line 75 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_tmp42_ = stderr;
+#line 75 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			fprintf (_tmp42_, "Failed to query file for duration\n");
+#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			result = 3;
-#line 62 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			_g_object_unref0 (_tmp11_);
-#line 62 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (_tmp23_);
+#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (feature);
+#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (registry);
+#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			pngdata = (g_free (pngdata), NULL);
-#line 62 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (pixbuf);
-#line 62 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_free0 (descr);
-#line 62 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (sink);
-#line 62 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (pipeline);
-#line 62 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			return result;
-#line 351 "shotwell-video-thumbnailer.c"
+#line 438 "shotwell-video-thumbnailer.c"
 		}
-#line 65 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 79 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		position = (gint64) (1 * GST_SECOND);
-#line 71 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp31_ = pipeline;
-#line 71 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp32_ = position;
-#line 71 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		gst_element_seek_simple (_tmp31_, GST_FORMAT_TIME, GST_SEEK_FLAG_KEY_UNIT | GST_SEEK_FLAG_FLUSH, _tmp32_);
-#line 73 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp33_ = pipeline;
-#line 73 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp34_ = gst_element_get_state (_tmp33_, NULL, NULL, (GstClockTime) (5 * GST_SECOND));
-#line 73 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		ret = _tmp34_;
-#line 74 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp35_ = ret;
-#line 74 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		if (_tmp35_ == GST_STATE_CHANGE_FAILURE) {
-#line 371 "shotwell-video-thumbnailer.c"
-			FILE* _tmp36_ = NULL;
-#line 75 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			_tmp36_ = stderr;
-#line 75 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			fprintf (_tmp36_, "Failed to play the file: couldn't get state.\n");
-#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 85 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp43_ = pipeline;
+#line 85 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp44_ = position;
+#line 85 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		gst_element_seek_simple (_tmp43_, GST_FORMAT_TIME, GST_SEEK_FLAG_KEY_UNIT | GST_SEEK_FLAG_FLUSH, _tmp44_);
+#line 87 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp45_ = pipeline;
+#line 87 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp46_ = gst_element_get_state (_tmp45_, NULL, NULL, (GstClockTime) (5 * GST_SECOND));
+#line 87 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		ret = _tmp46_;
+#line 88 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp47_ = ret;
+#line 88 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		if (_tmp47_ == GST_STATE_CHANGE_FAILURE) {
+#line 458 "shotwell-video-thumbnailer.c"
+			FILE* _tmp48_ = NULL;
+#line 89 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_tmp48_ = stderr;
+#line 89 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			fprintf (_tmp48_, "Failed to play the file: couldn't get state.\n");
+#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			result = 3;
-#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			_g_object_unref0 (_tmp11_);
-#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (_tmp23_);
+#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (feature);
+#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (registry);
+#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			pngdata = (g_free (pngdata), NULL);
-#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (pixbuf);
-#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_free0 (descr);
-#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (sink);
-#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			_g_object_unref0 (pipeline);
-#line 76 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			return result;
-#line 393 "shotwell-video-thumbnailer.c"
+#line 484 "shotwell-video-thumbnailer.c"
 		}
-#line 79 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp37_ = sink;
-#line 79 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		g_object_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, G_TYPE_OBJECT, GObject), "last-pixbuf", &pixbuf, NULL);
-#line 82 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp38_ = pixbuf;
-#line 82 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		gdk_pixbuf_save_to_buffer (_tmp38_, (gchar**) (&_tmp39_), &_tmp40_, "png", &_inner_error_, NULL);
-#line 82 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 93 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp49_ = sink;
+#line 93 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		g_object_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, G_TYPE_OBJECT, GObject), "last-pixbuf", &pixbuf, NULL);
+#line 96 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp50_ = pixbuf;
+#line 96 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		gdk_pixbuf_save_to_buffer (_tmp50_, (gchar**) (&_tmp51_), &_tmp52_, "png", &_inner_error_, NULL);
+#line 96 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		pngdata = (g_free (pngdata), NULL);
-#line 82 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		pngdata = _tmp39_;
-#line 82 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		pngdata_length1 = _tmp40_;
-#line 82 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 96 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		pngdata = _tmp51_;
+#line 96 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		pngdata_length1 = _tmp52_;
+#line 96 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_pngdata_size_ = pngdata_length1;
-#line 82 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 96 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 82 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-			_g_object_unref0 (_tmp11_);
-#line 415 "shotwell-video-thumbnailer.c"
+#line 96 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+			_g_object_unref0 (_tmp23_);
+#line 506 "shotwell-video-thumbnailer.c"
 			goto __catch0_g_error;
 		}
-#line 83 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp41_ = stdout;
-#line 83 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp42_ = pngdata;
-#line 83 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp42__length1 = pngdata_length1;
-#line 83 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		fwrite (_tmp42_, (gsize) 1, _tmp42__length1, _tmp41_);
-#line 86 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp43_ = pipeline;
-#line 86 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		gst_element_set_state (_tmp43_, GST_STATE_NULL);
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_g_object_unref0 (_tmp11_);
-#line 432 "shotwell-video-thumbnailer.c"
+#line 97 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp53_ = stdout;
+#line 97 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp54_ = pngdata;
+#line 97 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp54__length1 = pngdata_length1;
+#line 97 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		fwrite (_tmp54_, (gsize) 1, _tmp54__length1, _tmp53_);
+#line 100 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp55_ = pipeline;
+#line 100 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		gst_element_set_state (_tmp55_, GST_STATE_NULL);
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_g_object_unref0 (_tmp23_);
+#line 523 "shotwell-video-thumbnailer.c"
 	}
 	goto __finally0;
 	__catch0_g_error:
 	{
 		GError* e = NULL;
-		FILE* _tmp44_ = NULL;
-		GError* _tmp45_ = NULL;
-		const gchar* _tmp46_ = NULL;
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		FILE* _tmp56_ = NULL;
+		GError* _tmp57_ = NULL;
+		const gchar* _tmp58_ = NULL;
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		e = _inner_error_;
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_inner_error_ = NULL;
-#line 89 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp44_ = stderr;
-#line 89 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp45_ = e;
-#line 89 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		_tmp46_ = _tmp45_->message;
-#line 89 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
-		fprintf (_tmp44_, "%s", _tmp46_);
-#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 103 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp56_ = stderr;
+#line 103 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp57_ = e;
+#line 103 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_tmp58_ = _tmp57_->message;
+#line 103 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		fprintf (_tmp56_, "%s", _tmp58_);
+#line 104 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		result = 2;
-#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 104 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_g_error_free0 (e);
-#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 104 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_g_object_unref0 (feature);
+#line 104 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_g_object_unref0 (registry);
+#line 104 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		pngdata = (g_free (pngdata), NULL);
-#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 104 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_g_object_unref0 (pixbuf);
-#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 104 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_g_free0 (descr);
-#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 104 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_g_object_unref0 (sink);
-#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 104 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_g_object_unref0 (pipeline);
-#line 90 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 104 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		return result;
-#line 469 "shotwell-video-thumbnailer.c"
+#line 564 "shotwell-video-thumbnailer.c"
 	}
 	__finally0:
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_g_object_unref0 (feature);
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+		_g_object_unref0 (registry);
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		pngdata = (g_free (pngdata), NULL);
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_g_object_unref0 (pixbuf);
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_g_free0 (descr);
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_g_object_unref0 (sink);
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		_g_object_unref0 (pipeline);
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		g_clear_error (&_inner_error_);
-#line 33 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 47 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		return 0;
-#line 490 "shotwell-video-thumbnailer.c"
+#line 589 "shotwell-video-thumbnailer.c"
 	}
-#line 93 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 107 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	result = 0;
-#line 93 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 107 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_g_object_unref0 (feature);
+#line 107 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+	_g_object_unref0 (registry);
+#line 107 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	pngdata = (g_free (pngdata), NULL);
-#line 93 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 107 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	_g_object_unref0 (pixbuf);
-#line 93 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 107 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	_g_free0 (descr);
-#line 93 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 107 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	_g_object_unref0 (sink);
-#line 93 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 107 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	_g_object_unref0 (pipeline);
-#line 93 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
+#line 107 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	return result;
-#line 506 "shotwell-video-thumbnailer.c"
+#line 609 "shotwell-video-thumbnailer.c"
 }
 
 
@@ -515,7 +618,7 @@ int main (int argc, char ** argv) {
 #endif
 #line 15 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	return shotwell_thumbnailer_main (argv, argc);
-#line 519 "shotwell-video-thumbnailer.c"
+#line 622 "shotwell-video-thumbnailer.c"
 }
 
 
@@ -525,21 +628,21 @@ ShotwellThumbnailer* shotwell_thumbnailer_construct (GType object_type) {
 	self = (ShotwellThumbnailer*) g_type_create_instance (object_type);
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	return self;
-#line 529 "shotwell-video-thumbnailer.c"
+#line 632 "shotwell-video-thumbnailer.c"
 }
 
 
 ShotwellThumbnailer* shotwell_thumbnailer_new (void) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	return shotwell_thumbnailer_construct (TYPE_SHOTWELL_THUMBNAILER);
-#line 536 "shotwell-video-thumbnailer.c"
+#line 639 "shotwell-video-thumbnailer.c"
 }
 
 
 static void value_shotwell_thumbnailer_init (GValue* value) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	value->data[0].v_pointer = NULL;
-#line 543 "shotwell-video-thumbnailer.c"
+#line 646 "shotwell-video-thumbnailer.c"
 }
 
 
@@ -548,7 +651,7 @@ static void value_shotwell_thumbnailer_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		shotwell_thumbnailer_unref (value->data[0].v_pointer);
-#line 552 "shotwell-video-thumbnailer.c"
+#line 655 "shotwell-video-thumbnailer.c"
 	}
 }
 
@@ -558,11 +661,11 @@ static void value_shotwell_thumbnailer_copy_value (const GValue* src_value, GVal
 	if (src_value->data[0].v_pointer) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		dest_value->data[0].v_pointer = shotwell_thumbnailer_ref (src_value->data[0].v_pointer);
-#line 562 "shotwell-video-thumbnailer.c"
+#line 665 "shotwell-video-thumbnailer.c"
 	} else {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 566 "shotwell-video-thumbnailer.c"
+#line 669 "shotwell-video-thumbnailer.c"
 	}
 }
 
@@ -570,37 +673,37 @@ static void value_shotwell_thumbnailer_copy_value (const GValue* src_value, GVal
 static gpointer value_shotwell_thumbnailer_peek_pointer (const GValue* value) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	return value->data[0].v_pointer;
-#line 574 "shotwell-video-thumbnailer.c"
+#line 677 "shotwell-video-thumbnailer.c"
 }
 
 
 static gchar* value_shotwell_thumbnailer_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	if (collect_values[0].v_pointer) {
-#line 581 "shotwell-video-thumbnailer.c"
+#line 684 "shotwell-video-thumbnailer.c"
 		ShotwellThumbnailer* object;
 		object = collect_values[0].v_pointer;
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 588 "shotwell-video-thumbnailer.c"
+#line 691 "shotwell-video-thumbnailer.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 592 "shotwell-video-thumbnailer.c"
+#line 695 "shotwell-video-thumbnailer.c"
 		}
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		value->data[0].v_pointer = shotwell_thumbnailer_ref (object);
-#line 596 "shotwell-video-thumbnailer.c"
+#line 699 "shotwell-video-thumbnailer.c"
 	} else {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		value->data[0].v_pointer = NULL;
-#line 600 "shotwell-video-thumbnailer.c"
+#line 703 "shotwell-video-thumbnailer.c"
 	}
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	return NULL;
-#line 604 "shotwell-video-thumbnailer.c"
+#line 707 "shotwell-video-thumbnailer.c"
 }
 
 
@@ -611,25 +714,25 @@ static gchar* value_shotwell_thumbnailer_lcopy_value (const GValue* value, guint
 	if (!object_p) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 615 "shotwell-video-thumbnailer.c"
+#line 718 "shotwell-video-thumbnailer.c"
 	}
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	if (!value->data[0].v_pointer) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		*object_p = NULL;
-#line 621 "shotwell-video-thumbnailer.c"
+#line 724 "shotwell-video-thumbnailer.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		*object_p = value->data[0].v_pointer;
-#line 625 "shotwell-video-thumbnailer.c"
+#line 728 "shotwell-video-thumbnailer.c"
 	} else {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		*object_p = shotwell_thumbnailer_ref (value->data[0].v_pointer);
-#line 629 "shotwell-video-thumbnailer.c"
+#line 732 "shotwell-video-thumbnailer.c"
 	}
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	return NULL;
-#line 633 "shotwell-video-thumbnailer.c"
+#line 736 "shotwell-video-thumbnailer.c"
 }
 
 
@@ -643,7 +746,7 @@ GParamSpec* param_spec_shotwell_thumbnailer (const gchar* name, const gchar* nic
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	return G_PARAM_SPEC (spec);
-#line 647 "shotwell-video-thumbnailer.c"
+#line 750 "shotwell-video-thumbnailer.c"
 }
 
 
@@ -652,7 +755,7 @@ gpointer value_get_shotwell_thumbnailer (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_SHOTWELL_THUMBNAILER), NULL);
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	return value->data[0].v_pointer;
-#line 656 "shotwell-video-thumbnailer.c"
+#line 759 "shotwell-video-thumbnailer.c"
 }
 
 
@@ -672,17 +775,17 @@ void value_set_shotwell_thumbnailer (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		shotwell_thumbnailer_ref (value->data[0].v_pointer);
-#line 676 "shotwell-video-thumbnailer.c"
+#line 779 "shotwell-video-thumbnailer.c"
 	} else {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		value->data[0].v_pointer = NULL;
-#line 680 "shotwell-video-thumbnailer.c"
+#line 783 "shotwell-video-thumbnailer.c"
 	}
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	if (old) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		shotwell_thumbnailer_unref (old);
-#line 686 "shotwell-video-thumbnailer.c"
+#line 789 "shotwell-video-thumbnailer.c"
 	}
 }
 
@@ -701,17 +804,17 @@ void value_take_shotwell_thumbnailer (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		value->data[0].v_pointer = v_object;
-#line 705 "shotwell-video-thumbnailer.c"
+#line 808 "shotwell-video-thumbnailer.c"
 	} else {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		value->data[0].v_pointer = NULL;
-#line 709 "shotwell-video-thumbnailer.c"
+#line 812 "shotwell-video-thumbnailer.c"
 	}
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	if (old) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		shotwell_thumbnailer_unref (old);
-#line 715 "shotwell-video-thumbnailer.c"
+#line 818 "shotwell-video-thumbnailer.c"
 	}
 }
 
@@ -721,14 +824,14 @@ static void shotwell_thumbnailer_class_init (ShotwellThumbnailerClass * klass) {
 	shotwell_thumbnailer_parent_class = g_type_class_peek_parent (klass);
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	((ShotwellThumbnailerClass *) klass)->finalize = shotwell_thumbnailer_finalize;
-#line 725 "shotwell-video-thumbnailer.c"
+#line 828 "shotwell-video-thumbnailer.c"
 }
 
 
 static void shotwell_thumbnailer_instance_init (ShotwellThumbnailer * self) {
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	self->ref_count = 1;
-#line 732 "shotwell-video-thumbnailer.c"
+#line 835 "shotwell-video-thumbnailer.c"
 }
 
 
@@ -738,7 +841,7 @@ static void shotwell_thumbnailer_finalize (ShotwellThumbnailer* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_SHOTWELL_THUMBNAILER, ShotwellThumbnailer);
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	g_signal_handlers_destroy (self);
-#line 742 "shotwell-video-thumbnailer.c"
+#line 845 "shotwell-video-thumbnailer.c"
 }
 
 
@@ -763,7 +866,7 @@ gpointer shotwell_thumbnailer_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 	return instance;
-#line 767 "shotwell-video-thumbnailer.c"
+#line 870 "shotwell-video-thumbnailer.c"
 }
 
 
@@ -776,7 +879,7 @@ void shotwell_thumbnailer_unref (gpointer instance) {
 		SHOTWELL_THUMBNAILER_GET_CLASS (self)->finalize (self);
 #line 12 "/home/jens/Source/shotwell/thumbnailer/shotwell-video-thumbnailer.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 780 "shotwell-video-thumbnailer.c"
+#line 883 "shotwell-video-thumbnailer.c"
 	}
 }
 
