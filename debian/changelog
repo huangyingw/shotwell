@@ -1,3 +1,9 @@
+shotwell (0.24.1-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 19 Oct 2016 05:16:18 +0200
+
 shotwell (0.24.0-1) unstable; urgency=medium
 
   * New upstream release (Closes: #824164, #825788).
