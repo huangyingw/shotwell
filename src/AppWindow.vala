@@ -506,7 +506,7 @@ public abstract class AppWindow : PageWindow {
         
         Gtk.ActionEntry help_report_problem = { "CommonHelpReportProblem", null, TRANSLATABLE, null, 
             TRANSLATABLE, on_help_report_problem };
-        help_report_problem.label = _("_Report a Problem...");
+        help_report_problem.label = _("_Report a Problem…");
         actions += help_report_problem;
 
         Gtk.ActionEntry undo = { "CommonUndo", Resources.UNDO_MENU, TRANSLATABLE, "<Ctrl>Z",
@@ -653,7 +653,7 @@ public abstract class AppWindow : PageWindow {
     }
     
     public static void database_error(DatabaseError err) {
-        panic(_("A fatal error occurred when accessing Shotwell's library.  Shotwell cannot continue.\n\n%s").printf(
+        panic(_("A fatal error occurred when accessing Shotwell’s library. Shotwell cannot continue.\n\n%s").printf(
             err.message));
     }
     

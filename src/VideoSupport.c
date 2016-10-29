@@ -2322,7 +2322,7 @@ ImportResult video_reader_prepare_for_import (VideoImportParams* params) {
 #line 89 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2325 "VideoSupport.c"
-			goto __catch482_g_error;
+			goto __catch495_g_error;
 		}
 #line 89 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp6_ = _tmp3_;
@@ -2336,8 +2336,8 @@ ImportResult video_reader_prepare_for_import (VideoImportParams* params) {
 		_g_object_unref0 (_tmp3_);
 #line 2338 "VideoSupport.c"
 	}
-	goto __finally482;
-	__catch482_g_error:
+	goto __finally495;
+	__catch495_g_error:
 	{
 		GError* err = NULL;
 #line 88 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -2356,7 +2356,7 @@ ImportResult video_reader_prepare_for_import (VideoImportParams* params) {
 		return result;
 #line 2358 "VideoSupport.c"
 	}
-	__finally482:
+	__finally495:
 #line 88 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 88 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -2475,7 +2475,7 @@ ImportResult video_reader_prepare_for_import (VideoImportParams* params) {
 #line 119 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_inner_error_->domain == VIDEO_ERROR) {
 #line 2478 "VideoSupport.c"
-				goto __catch483_video_error;
+				goto __catch496_video_error;
 			}
 #line 119 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (preview_frame);
@@ -2501,8 +2501,8 @@ ImportResult video_reader_prepare_for_import (VideoImportParams* params) {
 		clip_duration = _tmp26_;
 #line 2503 "VideoSupport.c"
 	}
-	goto __finally483;
-	__catch483_video_error:
+	goto __finally496;
+	__catch496_video_error:
 	{
 		GError* err = NULL;
 		GError* _tmp29_ = NULL;
@@ -2555,7 +2555,7 @@ ImportResult video_reader_prepare_for_import (VideoImportParams* params) {
 		_g_error_free0 (err);
 #line 2556 "VideoSupport.c"
 	}
-	__finally483:
+	__finally496:
 #line 118 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 118 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -2604,7 +2604,7 @@ ImportResult video_reader_prepare_for_import (VideoImportParams* params) {
 #line 132 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2606 "VideoSupport.c"
-			goto __catch484_g_error;
+			goto __catch497_g_error;
 		}
 #line 133 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp33_ = metadata;
@@ -2700,8 +2700,8 @@ ImportResult video_reader_prepare_for_import (VideoImportParams* params) {
 		_media_metadata_unref0 (metadata);
 #line 2701 "VideoSupport.c"
 	}
-	goto __finally484;
-	__catch484_g_error:
+	goto __finally497;
+	__catch497_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp51_ = NULL;
@@ -2720,7 +2720,7 @@ ImportResult video_reader_prepare_for_import (VideoImportParams* params) {
 		_g_error_free0 (err);
 #line 2721 "VideoSupport.c"
 	}
-	__finally484:
+	__finally497:
 #line 131 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 131 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -3093,7 +3093,7 @@ static void video_reader_read_internal (VideoReader* self, GError** error) {
 #line 190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3095 "VideoSupport.c"
-			goto __catch485_g_error;
+			goto __catch498_g_error;
 		}
 #line 191 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp9_ = d;
@@ -3116,7 +3116,7 @@ static void video_reader_read_internal (VideoReader* self, GError** error) {
 #line 191 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (d);
 #line 3118 "VideoSupport.c"
-			goto __catch485_g_error;
+			goto __catch498_g_error;
 		}
 #line 193 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp15_ = info;
@@ -3209,8 +3209,8 @@ static void video_reader_read_internal (VideoReader* self, GError** error) {
 		_g_object_unref0 (d);
 #line 3210 "VideoSupport.c"
 	}
-	goto __finally485;
-	__catch485_g_error:
+	goto __finally498;
+	__catch498_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp35_ = NULL;
@@ -3250,9 +3250,9 @@ static void video_reader_read_internal (VideoReader* self, GError** error) {
 #line 208 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_error_free0 (e);
 #line 3252 "VideoSupport.c"
-		goto __finally485;
+		goto __finally498;
 	}
-	__finally485:
+	__finally498:
 #line 189 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 189 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -3410,7 +3410,7 @@ static GdkPixbuf* video_reader_thumbnailer (VideoReader* self, const gchar* vide
 #line 231 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3412 "VideoSupport.c"
-			goto __catch486_g_error;
+			goto __catch499_g_error;
 		}
 #line 234 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp14_ = self->priv->thumbnailer_pid;
@@ -3418,8 +3418,8 @@ static GdkPixbuf* video_reader_thumbnailer (VideoReader* self, const gchar* vide
 		g_debug ("VideoSupport.vala:234: Spawned thumbnailer, child pid: %d", (gint) _tmp14_);
 #line 3419 "VideoSupport.c"
 	}
-	goto __finally486;
-	__catch486_g_error:
+	goto __finally499;
+	__catch499_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp15_ = NULL;
@@ -3457,7 +3457,7 @@ static GdkPixbuf* video_reader_thumbnailer (VideoReader* self, const gchar* vide
 		return result;
 #line 3458 "VideoSupport.c"
 	}
-	__finally486:
+	__finally499:
 #line 230 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 230 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -3500,7 +3500,7 @@ static GdkPixbuf* video_reader_thumbnailer (VideoReader* self, const gchar* vide
 #line 249 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (unix_input);
 #line 3502 "VideoSupport.c"
-			goto __catch487_g_error;
+			goto __catch500_g_error;
 		}
 #line 249 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp24_ = _tmp21_;
@@ -3516,8 +3516,8 @@ static GdkPixbuf* video_reader_thumbnailer (VideoReader* self, const gchar* vide
 		_g_object_unref0 (unix_input);
 #line 3517 "VideoSupport.c"
 	}
-	goto __finally487;
-	__catch487_g_error:
+	goto __finally500;
+	__catch500_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp25_ = NULL;
@@ -3540,7 +3540,7 @@ static GdkPixbuf* video_reader_thumbnailer (VideoReader* self, const gchar* vide
 		_g_error_free0 (e);
 #line 3541 "VideoSupport.c"
 	}
-	__finally487:
+	__finally500:
 #line 247 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 247 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -4223,15 +4223,12 @@ Video* video_new (VideoRow* row) {
 
 
 void video_init (ProgressMonitor monitor, void* monitor_target) {
-	gchar** fake_args = NULL;
-	gchar** _tmp0_ = NULL;
-	gint fake_args_length1 = 0;
-	gint _fake_args_size_ = 0;
-	gchar** fake_unowned_args = NULL;
-	gchar** _tmp1_ = NULL;
-	gint _tmp1__length1 = 0;
-	gint fake_unowned_args_length1 = 0;
-	gint _fake_unowned_args_size_ = 0;
+	gchar** args = NULL;
+	gint args_length1 = 0;
+	gint _args_size_ = 0;
+	GstRegistry* registry = NULL;
+	GstRegistry* _tmp0_ = NULL;
+	GstRegistry* _tmp1_ = NULL;
 	gint saved_state = 0;
 	ConfigFacade* _tmp2_ = NULL;
 	ConfigFacade* _tmp3_ = NULL;
@@ -4240,30 +4237,37 @@ void video_init (ProgressMonitor monitor, void* monitor_target) {
 	GstRegistry* _tmp6_ = NULL;
 	guint32 _tmp7_ = 0U;
 	gint _tmp8_ = 0;
-	VideoSourceCollection* _tmp11_ = NULL;
+	GstPluginFeature* feature = NULL;
+	GstRegistry* _tmp11_ = NULL;
+	GstPluginFeature* _tmp12_ = NULL;
+	GstPluginFeature* _tmp13_ = NULL;
+	GstRegistry* _tmp16_ = NULL;
+	GstPluginFeature* _tmp17_ = NULL;
+	GstPluginFeature* _tmp18_ = NULL;
+	VideoSourceCollection* _tmp21_ = NULL;
 	GeeArrayList* all = NULL;
-	VideoTable* _tmp12_ = NULL;
-	VideoTable* _tmp13_ = NULL;
-	GeeArrayList* _tmp14_ = NULL;
-	GeeArrayList* _tmp15_ = NULL;
+	VideoTable* _tmp22_ = NULL;
+	VideoTable* _tmp23_ = NULL;
+	GeeArrayList* _tmp24_ = NULL;
+	GeeArrayList* _tmp25_ = NULL;
 	GeeArrayList* all_videos = NULL;
-	GeeArrayList* _tmp16_ = NULL;
+	GeeArrayList* _tmp26_ = NULL;
 	GeeArrayList* trashed_videos = NULL;
-	GeeArrayList* _tmp17_ = NULL;
+	GeeArrayList* _tmp27_ = NULL;
 	GeeArrayList* offline_videos = NULL;
-	GeeArrayList* _tmp18_ = NULL;
+	GeeArrayList* _tmp28_ = NULL;
 	gint count = 0;
-	GeeArrayList* _tmp19_ = NULL;
-	gint _tmp20_ = 0;
-	gint _tmp21_ = 0;
-	VideoSourceCollection* _tmp48_ = NULL;
-	GeeArrayList* _tmp49_ = NULL;
-	VideoSourceCollection* _tmp50_ = NULL;
-	GeeArrayList* _tmp51_ = NULL;
-	VideoSourceCollection* _tmp52_ = NULL;
-	GeeArrayList* _tmp53_ = NULL;
-	GeeCollection* _tmp54_ = NULL;
-	GeeCollection* _tmp55_ = NULL;
+	GeeArrayList* _tmp29_ = NULL;
+	gint _tmp30_ = 0;
+	gint _tmp31_ = 0;
+	VideoSourceCollection* _tmp58_ = NULL;
+	GeeArrayList* _tmp59_ = NULL;
+	VideoSourceCollection* _tmp60_ = NULL;
+	GeeArrayList* _tmp61_ = NULL;
+	VideoSourceCollection* _tmp62_ = NULL;
+	GeeArrayList* _tmp63_ = NULL;
+	GeeCollection* _tmp64_ = NULL;
+	GeeCollection* _tmp65_ = NULL;
 #line 364 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_interpreter_state_changed = FALSE;
 #line 365 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -4273,25 +4277,19 @@ void video_init (ProgressMonitor monitor, void* monitor_target) {
 #line 367 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_offline_regen_complete = FALSE;
 #line 371 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp0_ = g_new0 (gchar*, 0 + 1);
+	args = NULL;
 #line 371 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	fake_args = _tmp0_;
+	args_length1 = 0;
 #line 371 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	fake_args_length1 = 0;
-#line 371 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_fake_args_size_ = fake_args_length1;
+	_args_size_ = args_length1;
 #line 372 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp1_ = fake_args;
-#line 372 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp1__length1 = fake_args_length1;
-#line 372 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	fake_unowned_args = _tmp1_;
-#line 372 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	fake_unowned_args_length1 = _tmp1__length1;
-#line 372 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_fake_unowned_args_size_ = fake_unowned_args_length1;
-#line 373 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	gst_init (&fake_unowned_args_length1, &fake_unowned_args);
+	gst_init (&args_length1, &args);
+#line 374 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp0_ = gst_registry_get ();
+#line 374 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp1_ = _g_object_ref0 (_tmp0_);
+#line 374 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	registry = _tmp1_;
 #line 375 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = config_facade_get_instance ();
 #line 375 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -4305,7 +4303,7 @@ void video_init (ProgressMonitor monitor, void* monitor_target) {
 #line 375 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	saved_state = _tmp5_;
 #line 376 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp6_ = gst_registry_get ();
+	_tmp6_ = registry;
 #line 376 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp7_ = gst_registry_get_feature_list_cookie (_tmp6_);
 #line 376 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -4319,7 +4317,7 @@ void video_init (ProgressMonitor monitor, void* monitor_target) {
 "l video thumbnails are out of date");
 #line 379 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_interpreter_state_changed = TRUE;
-#line 4321 "VideoSupport.c"
+#line 4319 "VideoSupport.c"
 	} else {
 		gint _tmp9_ = 0;
 		gint _tmp10_ = 0;
@@ -4334,222 +4332,266 @@ void video_init (ProgressMonitor monitor, void* monitor_target) {
 " may be out of date");
 #line 382 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			video_interpreter_state_changed = TRUE;
-#line 4335 "VideoSupport.c"
+#line 4333 "VideoSupport.c"
 		}
 	}
-#line 385 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp11_ = video_source_collection_new ();
-#line 385 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 391 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp11_ = registry;
+#line 391 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp12_ = gst_registry_find_feature (_tmp11_, "vaapidecodebin", gst_element_factory_get_type ());
+#line 391 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	feature = _tmp12_;
+#line 393 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp13_ = feature;
+#line 393 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	if (_tmp13_ != NULL) {
+#line 4346 "VideoSupport.c"
+		GstRegistry* _tmp14_ = NULL;
+		GstPluginFeature* _tmp15_ = NULL;
+#line 394 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		_tmp14_ = registry;
+#line 394 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		_tmp15_ = feature;
+#line 394 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		gst_registry_remove_feature (_tmp14_, _tmp15_);
+#line 4355 "VideoSupport.c"
+	}
+#line 397 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp16_ = registry;
+#line 397 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp17_ = gst_registry_find_feature (_tmp16_, "vaapidecode", gst_element_factory_get_type ());
+#line 397 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_g_object_unref0 (feature);
+#line 397 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	feature = _tmp17_;
+#line 399 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp18_ = feature;
+#line 399 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	if (_tmp18_ != NULL) {
+#line 4369 "VideoSupport.c"
+		GstRegistry* _tmp19_ = NULL;
+		GstPluginFeature* _tmp20_ = NULL;
+#line 400 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		_tmp19_ = registry;
+#line 400 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		_tmp20_ = feature;
+#line 400 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		gst_registry_remove_feature (_tmp19_, _tmp20_);
+#line 4378 "VideoSupport.c"
+	}
+#line 403 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp21_ = video_source_collection_new ();
+#line 403 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_data_collection_unref0 (video_global);
-#line 385 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	video_global = _tmp11_;
-#line 387 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp12_ = video_table_get_instance ();
-#line 387 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp13_ = _tmp12_;
-#line 387 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp14_ = video_table_get_all (_tmp13_);
-#line 387 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp15_ = _tmp14_;
-#line 387 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_database_table_unref0 (_tmp13_);
-#line 387 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	all = _tmp15_;
-#line 388 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp16_ = gee_array_list_new (TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 388 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	all_videos = _tmp16_;
-#line 389 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp17_ = gee_array_list_new (TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 389 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	trashed_videos = _tmp17_;
-#line 390 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp18_ = gee_array_list_new (TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 390 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	offline_videos = _tmp18_;
-#line 391 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp19_ = all;
-#line 391 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp20_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 391 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp21_ = _tmp20_;
-#line 391 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	count = _tmp21_;
-#line 4376 "VideoSupport.c"
+#line 403 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	video_global = _tmp21_;
+#line 405 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp22_ = video_table_get_instance ();
+#line 405 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp23_ = _tmp22_;
+#line 405 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp24_ = video_table_get_all (_tmp23_);
+#line 405 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp25_ = _tmp24_;
+#line 405 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_database_table_unref0 (_tmp23_);
+#line 405 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	all = _tmp25_;
+#line 406 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp26_ = gee_array_list_new (TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
+#line 406 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	all_videos = _tmp26_;
+#line 407 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp27_ = gee_array_list_new (TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
+#line 407 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	trashed_videos = _tmp27_;
+#line 408 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp28_ = gee_array_list_new (TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
+#line 408 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	offline_videos = _tmp28_;
+#line 409 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp29_ = all;
+#line 409 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp30_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 409 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp31_ = _tmp30_;
+#line 409 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	count = _tmp31_;
+#line 4418 "VideoSupport.c"
 	{
 		gint ctr = 0;
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		ctr = 0;
-#line 4381 "VideoSupport.c"
-		{
-			gboolean _tmp22_ = FALSE;
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-			_tmp22_ = TRUE;
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-			while (TRUE) {
-#line 4388 "VideoSupport.c"
-				gint _tmp24_ = 0;
-				gint _tmp25_ = 0;
-				Video* video = NULL;
-				GeeArrayList* _tmp26_ = NULL;
-				gint _tmp27_ = 0;
-				gpointer _tmp28_ = NULL;
-				VideoRow* _tmp29_ = NULL;
-				Video* _tmp30_ = NULL;
-				Video* _tmp31_ = NULL;
-				gboolean _tmp32_ = FALSE;
-				Video* _tmp34_ = NULL;
-				gboolean _tmp35_ = FALSE;
-				ProgressMonitor _tmp44_ = NULL;
-				void* _tmp44__target = NULL;
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				if (!_tmp22_) {
-#line 4405 "VideoSupport.c"
-					gint _tmp23_ = 0;
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					_tmp23_ = ctr;
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					ctr = _tmp23_ + 1;
-#line 4411 "VideoSupport.c"
-				}
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp22_ = FALSE;
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp24_ = ctr;
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp25_ = count;
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				if (!(_tmp24_ < _tmp25_)) {
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					break;
 #line 4423 "VideoSupport.c"
+		{
+			gboolean _tmp32_ = FALSE;
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+			_tmp32_ = TRUE;
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+			while (TRUE) {
+#line 4430 "VideoSupport.c"
+				gint _tmp34_ = 0;
+				gint _tmp35_ = 0;
+				Video* video = NULL;
+				GeeArrayList* _tmp36_ = NULL;
+				gint _tmp37_ = 0;
+				gpointer _tmp38_ = NULL;
+				VideoRow* _tmp39_ = NULL;
+				Video* _tmp40_ = NULL;
+				Video* _tmp41_ = NULL;
+				gboolean _tmp42_ = FALSE;
+				Video* _tmp44_ = NULL;
+				gboolean _tmp45_ = FALSE;
+				ProgressMonitor _tmp54_ = NULL;
+				void* _tmp54__target = NULL;
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				if (!_tmp32_) {
+#line 4447 "VideoSupport.c"
+					gint _tmp33_ = 0;
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					_tmp33_ = ctr;
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					ctr = _tmp33_ + 1;
+#line 4453 "VideoSupport.c"
 				}
-#line 393 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp26_ = all;
-#line 393 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp27_ = ctr;
-#line 393 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp28_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp27_);
-#line 393 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp29_ = (VideoRow*) _tmp28_;
-#line 393 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp30_ = video_new (_tmp29_);
-#line 393 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp31_ = _tmp30_;
-#line 393 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_video_row_unref0 (_tmp29_);
-#line 393 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				video = _tmp31_;
-#line 395 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp32_ = video_interpreter_state_changed;
-#line 395 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				if (_tmp32_) {
-#line 4445 "VideoSupport.c"
-					Video* _tmp33_ = NULL;
-#line 396 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					_tmp33_ = video;
-#line 396 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					video_set_is_interpretable (_tmp33_, FALSE);
-#line 4451 "VideoSupport.c"
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp32_ = FALSE;
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp34_ = ctr;
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp35_ = count;
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				if (!(_tmp34_ < _tmp35_)) {
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					break;
+#line 4465 "VideoSupport.c"
 				}
-#line 398 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp34_ = video;
-#line 398 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp35_ = media_source_is_trashed (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 398 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				if (_tmp35_) {
-#line 4459 "VideoSupport.c"
-					GeeArrayList* _tmp36_ = NULL;
-					Video* _tmp37_ = NULL;
-#line 399 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					_tmp36_ = trashed_videos;
-#line 399 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					_tmp37_ = video;
-#line 399 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp37_);
-#line 4468 "VideoSupport.c"
-				} else {
-					Video* _tmp38_ = NULL;
-					gboolean _tmp39_ = FALSE;
-#line 400 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					_tmp38_ = video;
-#line 400 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					_tmp39_ = media_source_is_offline (G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 400 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					if (_tmp39_) {
-#line 4478 "VideoSupport.c"
-						GeeArrayList* _tmp40_ = NULL;
-						Video* _tmp41_ = NULL;
-#line 401 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-						_tmp40_ = offline_videos;
-#line 401 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-						_tmp41_ = video;
-#line 401 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-						gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp41_);
+#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp36_ = all;
+#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp37_ = ctr;
+#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp38_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp37_);
+#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp39_ = (VideoRow*) _tmp38_;
+#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp40_ = video_new (_tmp39_);
+#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp41_ = _tmp40_;
+#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_video_row_unref0 (_tmp39_);
+#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				video = _tmp41_;
+#line 413 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp42_ = video_interpreter_state_changed;
+#line 413 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				if (_tmp42_) {
 #line 4487 "VideoSupport.c"
+					Video* _tmp43_ = NULL;
+#line 414 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					_tmp43_ = video;
+#line 414 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					video_set_is_interpretable (_tmp43_, FALSE);
+#line 4493 "VideoSupport.c"
+				}
+#line 416 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp44_ = video;
+#line 416 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp45_ = media_source_is_trashed (G_TYPE_CHECK_INSTANCE_CAST (_tmp44_, TYPE_MEDIA_SOURCE, MediaSource));
+#line 416 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				if (_tmp45_) {
+#line 4501 "VideoSupport.c"
+					GeeArrayList* _tmp46_ = NULL;
+					Video* _tmp47_ = NULL;
+#line 417 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					_tmp46_ = trashed_videos;
+#line 417 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					_tmp47_ = video;
+#line 417 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp47_);
+#line 4510 "VideoSupport.c"
+				} else {
+					Video* _tmp48_ = NULL;
+					gboolean _tmp49_ = FALSE;
+#line 418 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					_tmp48_ = video;
+#line 418 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					_tmp49_ = media_source_is_offline (G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, TYPE_MEDIA_SOURCE, MediaSource));
+#line 418 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					if (_tmp49_) {
+#line 4520 "VideoSupport.c"
+						GeeArrayList* _tmp50_ = NULL;
+						Video* _tmp51_ = NULL;
+#line 419 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+						_tmp50_ = offline_videos;
+#line 419 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+						_tmp51_ = video;
+#line 419 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+						gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp51_);
+#line 4529 "VideoSupport.c"
 					} else {
-						GeeArrayList* _tmp42_ = NULL;
-						Video* _tmp43_ = NULL;
-#line 403 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-						_tmp42_ = all_videos;
-#line 403 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-						_tmp43_ = video;
-#line 403 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-						gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp43_);
-#line 4497 "VideoSupport.c"
+						GeeArrayList* _tmp52_ = NULL;
+						Video* _tmp53_ = NULL;
+#line 421 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+						_tmp52_ = all_videos;
+#line 421 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+						_tmp53_ = video;
+#line 421 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+						gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp52_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp53_);
+#line 4539 "VideoSupport.c"
 					}
 				}
-#line 405 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp44_ = monitor;
-#line 405 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				_tmp44__target = monitor_target;
-#line 405 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				if (_tmp44_ != NULL) {
-#line 4506 "VideoSupport.c"
-					ProgressMonitor _tmp45_ = NULL;
-					void* _tmp45__target = NULL;
-					gint _tmp46_ = 0;
-					gint _tmp47_ = 0;
-#line 406 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					_tmp45_ = monitor;
-#line 406 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					_tmp45__target = monitor_target;
-#line 406 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					_tmp46_ = ctr;
-#line 406 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					_tmp47_ = count;
-#line 406 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-					_tmp45_ ((guint64) _tmp46_, (guint64) _tmp47_, TRUE, _tmp45__target);
-#line 4521 "VideoSupport.c"
+#line 423 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp54_ = monitor;
+#line 423 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				_tmp54__target = monitor_target;
+#line 423 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				if (_tmp54_ != NULL) {
+#line 4548 "VideoSupport.c"
+					ProgressMonitor _tmp55_ = NULL;
+					void* _tmp55__target = NULL;
+					gint _tmp56_ = 0;
+					gint _tmp57_ = 0;
+#line 424 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					_tmp55_ = monitor;
+#line 424 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					_tmp55__target = monitor_target;
+#line 424 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					_tmp56_ = ctr;
+#line 424 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					_tmp57_ = count;
+#line 424 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+					_tmp55_ ((guint64) _tmp56_, (guint64) _tmp57_, TRUE, _tmp55__target);
+#line 4563 "VideoSupport.c"
 				}
-#line 392 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_object_unref0 (video);
-#line 4525 "VideoSupport.c"
+#line 4567 "VideoSupport.c"
 			}
 		}
 	}
-#line 409 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp48_ = video_global;
-#line 409 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp49_ = trashed_videos;
-#line 409 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	media_source_collection_add_many_to_trash (G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp50_ = video_global;
-#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp51_ = offline_videos;
-#line 410 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	media_source_collection_add_many_to_offline (G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp51_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp52_ = video_global;
-#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp53_ = all_videos;
-#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp54_ = data_collection_add_many (G_TYPE_CHECK_INSTANCE_CAST (_tmp52_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp53_, GEE_TYPE_COLLECTION, GeeCollection), NULL, NULL);
-#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp55_ = _tmp54_;
-#line 411 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_g_object_unref0 (_tmp55_);
+#line 427 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp58_ = video_global;
+#line 427 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp59_ = trashed_videos;
+#line 427 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	media_source_collection_add_many_to_trash (G_TYPE_CHECK_INSTANCE_CAST (_tmp58_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp59_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 428 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp60_ = video_global;
+#line 428 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp61_ = offline_videos;
+#line 428 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	media_source_collection_add_many_to_offline (G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp61_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 429 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp62_ = video_global;
+#line 429 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp63_ = all_videos;
+#line 429 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp64_ = data_collection_add_many (G_TYPE_CHECK_INSTANCE_CAST (_tmp62_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp63_, GEE_TYPE_COLLECTION, GeeCollection), NULL, NULL);
+#line 429 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp65_ = _tmp64_;
+#line 429 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_g_object_unref0 (_tmp65_);
 #line 360 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (offline_videos);
 #line 360 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -4559,21 +4601,23 @@ void video_init (ProgressMonitor monitor, void* monitor_target) {
 #line 360 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (all);
 #line 360 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	fake_args = (_vala_array_free (fake_args, fake_args_length1, (GDestroyNotify) g_free), NULL);
-#line 4561 "VideoSupport.c"
+	_g_object_unref0 (feature);
+#line 360 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_g_object_unref0 (registry);
+#line 4605 "VideoSupport.c"
 }
 
 
 gboolean video_has_interpreter_state_changed (void) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 415 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 433 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video_interpreter_state_changed;
-#line 415 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 433 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp0_;
-#line 415 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 433 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 4574 "VideoSupport.c"
+#line 4618 "VideoSupport.c"
 }
 
 
@@ -4581,39 +4625,39 @@ void video_notify_normal_thumbs_regenerated (void) {
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
 	gboolean _tmp2_ = FALSE;
-#line 419 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 437 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video_normal_regen_complete;
-#line 419 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 437 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp0_) {
-#line 420 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 438 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 4588 "VideoSupport.c"
+#line 4632 "VideoSupport.c"
 	}
-#line 422 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	g_message ("VideoSupport.vala:422: normal video thumbnail regeneration completed");
-#line 424 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 440 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	g_message ("VideoSupport.vala:440: normal video thumbnail regeneration completed");
+#line 442 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_normal_regen_complete = TRUE;
-#line 425 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 443 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = video_normal_regen_complete;
-#line 425 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 443 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp2_) {
-#line 4598 "VideoSupport.c"
+#line 4642 "VideoSupport.c"
 		gboolean _tmp3_ = FALSE;
-#line 425 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 443 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp3_ = video_offline_regen_complete;
-#line 425 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 443 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = _tmp3_;
-#line 4604 "VideoSupport.c"
+#line 4648 "VideoSupport.c"
 	} else {
-#line 425 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 443 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = FALSE;
-#line 4608 "VideoSupport.c"
+#line 4652 "VideoSupport.c"
 	}
-#line 425 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 443 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp1_) {
-#line 426 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 444 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_save_interpreter_state ();
-#line 4614 "VideoSupport.c"
+#line 4658 "VideoSupport.c"
 	}
 }
 
@@ -4622,69 +4666,69 @@ void video_notify_offline_thumbs_regenerated (void) {
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
 	gboolean _tmp2_ = FALSE;
-#line 430 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 448 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video_offline_regen_complete;
-#line 430 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 448 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp0_) {
-#line 431 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 449 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 4629 "VideoSupport.c"
+#line 4673 "VideoSupport.c"
 	}
-#line 433 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	g_message ("VideoSupport.vala:433: offline video thumbnail regeneration completed");
-#line 435 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 451 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	g_message ("VideoSupport.vala:451: offline video thumbnail regeneration completed");
+#line 453 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_offline_regen_complete = TRUE;
-#line 436 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 454 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = video_normal_regen_complete;
-#line 436 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 454 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp2_) {
-#line 4639 "VideoSupport.c"
+#line 4683 "VideoSupport.c"
 		gboolean _tmp3_ = FALSE;
-#line 436 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 454 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp3_ = video_offline_regen_complete;
-#line 436 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 454 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = _tmp3_;
-#line 4645 "VideoSupport.c"
+#line 4689 "VideoSupport.c"
 	} else {
-#line 436 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 454 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = FALSE;
-#line 4649 "VideoSupport.c"
+#line 4693 "VideoSupport.c"
 	}
-#line 436 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 454 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp1_) {
-#line 437 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 455 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_save_interpreter_state ();
-#line 4655 "VideoSupport.c"
+#line 4699 "VideoSupport.c"
 	}
 }
 
 
 static void video_save_interpreter_state (void) {
 	gboolean _tmp0_ = FALSE;
-#line 441 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 459 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video_interpreter_state_changed;
-#line 441 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 459 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp0_) {
-#line 4666 "VideoSupport.c"
+#line 4710 "VideoSupport.c"
 		ConfigFacade* _tmp1_ = NULL;
 		ConfigFacade* _tmp2_ = NULL;
 		gint _tmp3_ = 0;
-#line 442 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-		g_message ("VideoSupport.vala:442: saving video interpreter state to configuration" \
+#line 460 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		g_message ("VideoSupport.vala:460: saving video interpreter state to configuration" \
 " system");
-#line 444 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 462 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = config_facade_get_instance ();
-#line 444 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 462 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp2_ = _tmp1_;
-#line 444 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 462 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp3_ = video_current_state;
-#line 444 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 462 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		configuration_facade_set_video_interpreter_state_cookie (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp3_);
-#line 444 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 462 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_tmp2_);
-#line 445 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 463 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_interpreter_state_changed = FALSE;
-#line 4684 "VideoSupport.c"
+#line 4728 "VideoSupport.c"
 	}
 }
 
@@ -4719,27 +4763,27 @@ ExporterUI* video_export_many (GeeCollection* videos, ExporterCompletionCallback
 	ExporterCompletionCallback _tmp51_ = NULL;
 	void* _tmp51__target = NULL;
 	GError * _inner_error_ = NULL;
-#line 452 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 470 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (GEE_IS_COLLECTION (videos), NULL);
-#line 454 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 472 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = videos;
-#line 454 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 472 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = gee_collection_get_size (_tmp0_);
-#line 454 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 472 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = _tmp1_;
-#line 454 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 472 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp2_ == 0) {
-#line 455 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 473 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		result = NULL;
-#line 455 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 473 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return result;
-#line 4733 "VideoSupport.c"
+#line 4777 "VideoSupport.c"
 	}
-#line 458 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 476 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = export_in_place;
-#line 458 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 476 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp3_) {
-#line 4739 "VideoSupport.c"
+#line 4783 "VideoSupport.c"
 		ExporterUI* temp_exporter = NULL;
 		GeeCollection* _tmp4_ = NULL;
 		Scaling _tmp5_ = {0};
@@ -4751,47 +4795,47 @@ ExporterUI* video_export_many (GeeCollection* videos, ExporterCompletionCallback
 		ExporterUI* _tmp11_ = NULL;
 		ExporterCompletionCallback _tmp12_ = NULL;
 		void* _tmp12__target = NULL;
-#line 459 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp4_ = videos;
-#line 459 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		scaling_for_original (&_tmp5_);
-#line 459 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		export_format_parameters_unmodified (&_tmp6_);
-#line 459 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp7_ = exporter_new_for_temp_file (_tmp4_, &_tmp5_, &_tmp6_);
-#line 459 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp8_ = _tmp7_;
-#line 459 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp9_ = exporter_ui_new (_tmp8_);
-#line 459 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp10_ = _tmp9_;
-#line 459 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_tmp8_);
-#line 459 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		temp_exporter = _tmp10_;
-#line 461 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 479 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp11_ = temp_exporter;
-#line 461 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 479 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp12_ = done;
-#line 461 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 479 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp12__target = done_target;
-#line 461 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 479 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		exporter_ui_export (_tmp11_, _tmp12_, _tmp12__target);
-#line 462 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 480 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		result = temp_exporter;
-#line 462 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 480 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return result;
-#line 4781 "VideoSupport.c"
+#line 4825 "VideoSupport.c"
 	}
-#line 466 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 484 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp13_ = videos;
-#line 466 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 484 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp14_ = gee_collection_get_size (_tmp13_);
-#line 466 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 484 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp15_ = _tmp14_;
-#line 466 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 484 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp15_ == 1) {
-#line 4791 "VideoSupport.c"
+#line 4835 "VideoSupport.c"
 		Video* video = NULL;
 		GFile* save_as = NULL;
 		Video* _tmp24_ = NULL;
@@ -4800,22 +4844,22 @@ ExporterUI* video_export_many (GeeCollection* videos, ExporterCompletionCallback
 		GFile* _tmp27_ = NULL;
 		GFile* _tmp28_ = NULL;
 		GFile* _tmp29_ = NULL;
-#line 467 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 485 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video = NULL;
-#line 4802 "VideoSupport.c"
+#line 4846 "VideoSupport.c"
 		{
 			GeeIterator* _v_it = NULL;
 			GeeCollection* _tmp16_ = NULL;
 			GeeIterator* _tmp17_ = NULL;
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp16_ = videos;
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp17_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_v_it = _tmp17_;
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			while (TRUE) {
-#line 4815 "VideoSupport.c"
+#line 4859 "VideoSupport.c"
 				GeeIterator* _tmp18_ = NULL;
 				gboolean _tmp19_ = FALSE;
 				Video* v = NULL;
@@ -4823,67 +4867,67 @@ ExporterUI* video_export_many (GeeCollection* videos, ExporterCompletionCallback
 				gpointer _tmp21_ = NULL;
 				Video* _tmp22_ = NULL;
 				Video* _tmp23_ = NULL;
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp18_ = _v_it;
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp19_ = gee_iterator_next (_tmp18_);
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (!_tmp19_) {
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					break;
-#line 4831 "VideoSupport.c"
+#line 4875 "VideoSupport.c"
 				}
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp20_ = _v_it;
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp21_ = gee_iterator_get (_tmp20_);
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				v = (Video*) _tmp21_;
-#line 469 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 487 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp22_ = v;
-#line 469 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 487 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp23_ = _g_object_ref0 (_tmp22_);
-#line 469 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 487 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_object_unref0 (video);
-#line 469 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 487 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video = _tmp23_;
-#line 470 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 488 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_object_unref0 (v);
-#line 470 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 488 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				break;
-#line 4851 "VideoSupport.c"
+#line 4895 "VideoSupport.c"
 			}
-#line 468 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (_v_it);
-#line 4855 "VideoSupport.c"
+#line 4899 "VideoSupport.c"
 		}
-#line 473 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 491 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp24_ = video;
-#line 473 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 491 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp25_ = media_source_get_basename (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 473 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 491 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp26_ = _tmp25_;
-#line 473 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 491 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp27_ = export_ui_choose_file (_tmp26_);
-#line 473 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 491 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp28_ = _tmp27_;
-#line 473 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 491 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_free0 (_tmp26_);
-#line 473 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 491 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		save_as = _tmp28_;
-#line 474 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 492 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp29_ = save_as;
-#line 474 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 492 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (_tmp29_ == NULL) {
-#line 475 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 493 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = NULL;
-#line 475 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 493 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (save_as);
-#line 475 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 493 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (video);
-#line 475 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 493 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 4883 "VideoSupport.c"
+#line 4927 "VideoSupport.c"
 		}
 		{
 			AppWindow* _tmp30_ = NULL;
@@ -4892,270 +4936,270 @@ ExporterUI* video_export_many (GeeCollection* videos, ExporterCompletionCallback
 			GFile* _tmp33_ = NULL;
 			AppWindow* _tmp34_ = NULL;
 			AppWindow* _tmp35_ = NULL;
-#line 478 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 496 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp30_ = app_window_get_instance ();
-#line 478 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 496 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp31_ = _tmp30_;
-#line 478 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 496 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			page_window_set_busy_cursor (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, TYPE_PAGE_WINDOW, PageWindow));
-#line 478 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 496 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (_tmp31_);
-#line 479 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 497 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp32_ = video;
-#line 479 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 497 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp33_ = save_as;
-#line 479 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 497 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			video_export (_tmp32_, _tmp33_, &_inner_error_);
-#line 479 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 497 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4908 "VideoSupport.c"
-				goto __catch488_g_error;
+#line 4952 "VideoSupport.c"
+				goto __catch501_g_error;
 			}
-#line 480 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 498 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp34_ = app_window_get_instance ();
-#line 480 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 498 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp35_ = _tmp34_;
-#line 480 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 498 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			page_window_set_normal_cursor (G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, TYPE_PAGE_WINDOW, PageWindow));
-#line 480 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 498 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (_tmp35_);
-#line 4919 "VideoSupport.c"
+#line 4963 "VideoSupport.c"
 		}
-		goto __finally488;
-		__catch488_g_error:
+		goto __finally501;
+		__catch501_g_error:
 		{
 			GError* err = NULL;
 			AppWindow* _tmp36_ = NULL;
 			AppWindow* _tmp37_ = NULL;
 			GFile* _tmp38_ = NULL;
-#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 495 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			err = _inner_error_;
-#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 495 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_inner_error_ = NULL;
-#line 482 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 500 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp36_ = app_window_get_instance ();
-#line 482 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 500 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp37_ = _tmp36_;
-#line 482 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 500 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			page_window_set_normal_cursor (G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, TYPE_PAGE_WINDOW, PageWindow));
-#line 482 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 500 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (_tmp37_);
-#line 483 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 501 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp38_ = save_as;
-#line 483 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 501 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			export_error_dialog (_tmp38_, FALSE);
-#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 495 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_error_free0 (err);
-#line 4946 "VideoSupport.c"
+#line 4990 "VideoSupport.c"
 		}
-		__finally488:
-#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		__finally501:
+#line 495 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 495 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (save_as);
-#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 495 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (video);
-#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 495 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 495 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 477 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 495 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return NULL;
-#line 4961 "VideoSupport.c"
+#line 5005 "VideoSupport.c"
 		}
-#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		result = NULL;
-#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (save_as);
-#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (video);
-#line 486 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return result;
-#line 4971 "VideoSupport.c"
+#line 5015 "VideoSupport.c"
 	}
-#line 490 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 508 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp39_ = _ ("Export Videos");
-#line 490 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 508 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp40_ = export_ui_choose_dir (_tmp39_);
-#line 490 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 508 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	export_dir = _tmp40_;
-#line 491 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 509 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp41_ = export_dir;
-#line 491 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 509 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp41_ == NULL) {
-#line 492 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 510 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		result = NULL;
-#line 492 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 510 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (export_dir);
-#line 492 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 510 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return result;
-#line 4989 "VideoSupport.c"
+#line 5033 "VideoSupport.c"
 	}
-#line 494 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp42_ = videos;
-#line 494 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp43_ = export_dir;
-#line 494 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	scaling_for_original (&_tmp44_);
-#line 494 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	export_format_parameters_unmodified (&_tmp45_);
-#line 494 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp46_ = exporter_new (_tmp42_, _tmp43_, &_tmp44_, &_tmp45_, FALSE);
-#line 494 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp47_ = _tmp46_;
-#line 494 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp48_ = exporter_ui_new (_tmp47_);
-#line 494 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp49_ = _tmp48_;
-#line 494 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (_tmp47_);
-#line 494 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	exporter = _tmp49_;
-#line 496 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp50_ = exporter;
-#line 496 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp51_ = done;
-#line 496 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp51__target = done_target;
-#line 496 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	exporter_ui_export (_tmp50_, _tmp51_, _tmp51__target);
-#line 498 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 516 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = exporter;
-#line 498 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 516 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (export_dir);
-#line 498 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 516 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 5025 "VideoSupport.c"
+#line 5069 "VideoSupport.c"
 }
 
 
 static void video_real_commit_backlinks (DataSource* base, SourceCollection* sources, const gchar* backlinks) {
 	Video * self;
 	GError * _inner_error_ = NULL;
-#line 501 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 519 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 501 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 519 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail ((sources == NULL) || IS_SOURCE_COLLECTION (sources));
-#line 5036 "VideoSupport.c"
+#line 5080 "VideoSupport.c"
 	{
 		VideoTable* _tmp0_ = NULL;
 		VideoTable* _tmp1_ = NULL;
 		VideoID _tmp2_ = {0};
 		const gchar* _tmp3_ = NULL;
-#line 503 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 521 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = video_table_get_instance ();
-#line 503 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 521 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = _tmp0_;
-#line 503 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 521 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_get_video_id (self, &_tmp2_);
-#line 503 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 521 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp3_ = backlinks;
-#line 503 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 521 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_table_update_backlinks (_tmp1_, &_tmp2_, _tmp3_, &_inner_error_);
-#line 503 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 521 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_database_table_unref0 (_tmp1_);
-#line 503 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 521 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 503 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 521 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 5058 "VideoSupport.c"
-				goto __catch489_database_error;
+#line 5102 "VideoSupport.c"
+				goto __catch502_database_error;
 			}
-#line 503 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 521 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 503 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 521 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 503 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 521 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 5067 "VideoSupport.c"
+#line 5111 "VideoSupport.c"
 		}
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 522 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 522 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 5075 "VideoSupport.c"
+#line 5119 "VideoSupport.c"
 			{
 				VideoRow* _tmp5_ = NULL;
 				const gchar* _tmp6_ = NULL;
 				gchar* _tmp7_ = NULL;
-#line 505 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 523 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp5_ = self->priv->backing_row;
-#line 505 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 523 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp6_ = backlinks;
-#line 505 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 523 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp7_ = g_strdup (_tmp6_);
-#line 505 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 523 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_free0 (_tmp5_->backlinks);
-#line 505 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 523 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp5_->backlinks = _tmp7_;
-#line 5090 "VideoSupport.c"
+#line 5134 "VideoSupport.c"
 			}
-			__finally490:
+			__finally503:
 			{
 				VideoRow* _tmp8_ = NULL;
-#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 522 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp8_ = self->priv->backing_row;
-#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 522 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 5099 "VideoSupport.c"
+#line 5143 "VideoSupport.c"
 			}
-#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 522 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 522 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
-#line 5105 "VideoSupport.c"
-					goto __catch489_database_error;
+#line 5149 "VideoSupport.c"
+					goto __catch502_database_error;
 				}
-#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 522 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 522 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 504 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 522 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 5114 "VideoSupport.c"
+#line 5158 "VideoSupport.c"
 			}
 		}
 	}
-	goto __finally489;
-	__catch489_database_error:
+	goto __finally502;
+	__catch502_database_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp9_ = NULL;
 		gchar* _tmp10_ = NULL;
 		GError* _tmp11_ = NULL;
 		const gchar* _tmp12_ = NULL;
-#line 502 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 520 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		err = _inner_error_;
-#line 502 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 520 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_inner_error_ = NULL;
-#line 508 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp9_ = data_object_to_string (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject));
-#line 508 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp10_ = _tmp9_;
-#line 508 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp11_ = err;
-#line 508 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp12_ = _tmp11_->message;
-#line 508 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-		g_warning ("VideoSupport.vala:508: Unable to update link state for %s: %s", _tmp10_, _tmp12_);
-#line 508 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		g_warning ("VideoSupport.vala:526: Unable to update link state for %s: %s", _tmp10_, _tmp12_);
+#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_free0 (_tmp10_);
-#line 502 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 520 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_error_free0 (err);
-#line 5144 "VideoSupport.c"
+#line 5188 "VideoSupport.c"
 	}
-	__finally489:
-#line 502 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	__finally502:
+#line 520 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 502 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 520 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 502 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 520 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 502 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 520 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 5155 "VideoSupport.c"
+#line 5199 "VideoSupport.c"
 	}
 }
 
@@ -5164,18 +5208,18 @@ static gboolean video_real_set_event_id (MediaSource* base, EventID* event_id) {
 	Video * self;
 	gboolean result = FALSE;
 	GError * _inner_error_ = NULL;
-#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 530 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 512 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 530 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (event_id != NULL, FALSE);
-#line 5168 "VideoSupport.c"
+#line 5212 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 513 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 531 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 513 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 531 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 5175 "VideoSupport.c"
+#line 5219 "VideoSupport.c"
 		{
 			gboolean committed = FALSE;
 			VideoTable* _tmp1_ = NULL;
@@ -5186,70 +5230,70 @@ static gboolean video_real_set_event_id (MediaSource* base, EventID* event_id) {
 			gboolean _tmp6_ = FALSE;
 			gboolean _tmp7_ = FALSE;
 			gboolean _tmp8_ = FALSE;
-#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 532 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = video_table_get_instance ();
-#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 532 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_;
-#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 532 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = self->priv->backing_row;
-#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 532 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = _tmp3_->video_id;
-#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 532 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = *event_id;
-#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 532 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp6_ = video_table_set_event (_tmp2_, &_tmp4_, &_tmp5_);
-#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 532 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp7_ = _tmp6_;
-#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 532 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_database_table_unref0 (_tmp2_);
-#line 514 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 532 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			committed = _tmp7_;
-#line 516 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 534 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp8_ = committed;
-#line 516 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 534 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_tmp8_) {
-#line 5208 "VideoSupport.c"
+#line 5252 "VideoSupport.c"
 				VideoRow* _tmp9_ = NULL;
 				EventID _tmp10_ = {0};
-#line 517 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 535 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp9_ = self->priv->backing_row;
-#line 517 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 535 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp10_ = *event_id;
-#line 517 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 535 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp9_->event_id = _tmp10_;
-#line 5217 "VideoSupport.c"
+#line 5261 "VideoSupport.c"
 			}
-#line 519 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = committed;
-#line 5221 "VideoSupport.c"
+#line 5265 "VideoSupport.c"
 			{
 				VideoRow* _tmp11_ = NULL;
-#line 513 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 531 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp11_ = self->priv->backing_row;
-#line 513 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 531 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 5228 "VideoSupport.c"
+#line 5272 "VideoSupport.c"
 			}
-#line 519 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 5232 "VideoSupport.c"
+#line 5276 "VideoSupport.c"
 		}
-		__finally491:
+		__finally504:
 		{
 			VideoRow* _tmp12_ = NULL;
-#line 513 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 531 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp12_ = self->priv->backing_row;
-#line 513 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 531 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 5241 "VideoSupport.c"
+#line 5285 "VideoSupport.c"
 		}
-#line 513 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 531 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 513 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 531 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 513 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 531 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return FALSE;
-#line 5249 "VideoSupport.c"
+#line 5293 "VideoSupport.c"
 	}
 }
 
@@ -5264,44 +5308,44 @@ gboolean video_is_duplicate (GFile* file, const gchar* full_md5) {
 	const gchar* _tmp6_ = NULL;
 	gboolean _tmp7_ = FALSE;
 	gboolean _tmp8_ = FALSE;
-#line 523 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 541 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail ((file == NULL) || G_IS_FILE (file), FALSE);
-#line 524 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 542 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = file;
-#line 524 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 542 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp1_ != NULL) {
-#line 524 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 542 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = TRUE;
-#line 5272 "VideoSupport.c"
+#line 5316 "VideoSupport.c"
 	} else {
 		const gchar* _tmp2_ = NULL;
-#line 524 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 542 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp2_ = full_md5;
-#line 524 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 542 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = _tmp2_ != NULL;
-#line 5279 "VideoSupport.c"
+#line 5323 "VideoSupport.c"
 	}
-#line 524 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 542 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_vala_assert (_tmp0_, "file != null || full_md5 != null");
-#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = video_table_get_instance ();
-#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp4_ = _tmp3_;
-#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp5_ = file;
-#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp6_ = full_md5;
-#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp7_ = video_table_has_duplicate (_tmp4_, _tmp5_, _tmp6_);
-#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp8_ = _tmp7_;
-#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_database_table_unref0 (_tmp4_);
-#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp8_;
-#line 526 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 5301 "VideoSupport.c"
+#line 5345 "VideoSupport.c"
 }
 
 
@@ -5312,13 +5356,13 @@ ImportResult video_import_create (VideoImportParams* params, Video** video) {
 	VideoRow* _tmp9_ = NULL;
 	Video* _tmp10_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 532 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 550 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO_IMPORT_PARAMS (params), 0);
-#line 533 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (_vala_video);
-#line 533 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_vala_video = NULL;
-#line 5318 "VideoSupport.c"
+#line 5362 "VideoSupport.c"
 	{
 		VideoID _tmp0_ = {0};
 		VideoTable* _tmp1_ = NULL;
@@ -5328,188 +5372,188 @@ ImportResult video_import_create (VideoImportParams* params, Video** video) {
 		VideoID _tmp5_ = {0};
 		VideoID _tmp6_ = {0};
 		gboolean _tmp7_ = FALSE;
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = video_table_get_instance ();
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp2_ = _tmp1_;
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp3_ = params;
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp4_ = _tmp3_->row;
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_table_add (_tmp2_, _tmp4_, &_tmp5_, &_inner_error_);
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp6_ = _tmp5_;
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_database_table_unref0 (_tmp2_);
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = _tmp6_;
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 5348 "VideoSupport.c"
-				goto __catch492_database_error;
+#line 5392 "VideoSupport.c"
+				goto __catch505_database_error;
 			}
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return 0;
-#line 5357 "VideoSupport.c"
+#line 5401 "VideoSupport.c"
 		}
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp7_ = video_id_is_invalid (&_tmp0_);
-#line 537 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 555 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (_tmp7_) {
-#line 538 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 556 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = IMPORT_RESULT_DATABASE_ERROR;
-#line 538 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 556 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (video) {
-#line 538 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 556 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				*video = _vala_video;
-#line 5369 "VideoSupport.c"
+#line 5413 "VideoSupport.c"
 			} else {
-#line 538 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 556 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_object_unref0 (_vala_video);
-#line 5373 "VideoSupport.c"
+#line 5417 "VideoSupport.c"
 			}
-#line 538 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 556 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 5377 "VideoSupport.c"
+#line 5421 "VideoSupport.c"
 		}
 	}
-	goto __finally492;
-	__catch492_database_error:
+	goto __finally505;
+	__catch505_database_error:
 	{
 		GError* err = NULL;
-#line 536 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 554 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		err = _inner_error_;
-#line 536 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 554 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_inner_error_ = NULL;
-#line 540 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 558 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		result = IMPORT_RESULT_DATABASE_ERROR;
-#line 540 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 558 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_error_free0 (err);
-#line 540 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 558 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (video) {
-#line 540 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 558 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			*video = _vala_video;
-#line 5396 "VideoSupport.c"
+#line 5440 "VideoSupport.c"
 		} else {
-#line 540 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 558 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (_vala_video);
-#line 5400 "VideoSupport.c"
+#line 5444 "VideoSupport.c"
 		}
-#line 540 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 558 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return result;
-#line 5404 "VideoSupport.c"
+#line 5448 "VideoSupport.c"
 	}
-	__finally492:
-#line 536 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	__finally505:
+#line 554 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 536 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 554 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 536 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 554 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 536 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 554 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return 0;
-#line 5415 "VideoSupport.c"
+#line 5459 "VideoSupport.c"
 	}
-#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 562 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp8_ = params;
-#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 562 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp9_ = _tmp8_->row;
-#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 562 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp10_ = video_new (_tmp9_);
-#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 562 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (_vala_video);
-#line 544 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 562 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_vala_video = _tmp10_;
-#line 546 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 564 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = IMPORT_RESULT_SUCCESS;
-#line 546 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 564 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (video) {
-#line 546 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 564 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		*video = _vala_video;
-#line 5433 "VideoSupport.c"
+#line 5477 "VideoSupport.c"
 	} else {
-#line 546 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 564 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_vala_video);
-#line 5437 "VideoSupport.c"
+#line 5481 "VideoSupport.c"
 	}
-#line 546 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 564 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 5441 "VideoSupport.c"
+#line 5485 "VideoSupport.c"
 }
 
 
 void video_import_failed (Video* video) {
 	GError * _inner_error_ = NULL;
-#line 549 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 567 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO (video));
-#line 5449 "VideoSupport.c"
+#line 5493 "VideoSupport.c"
 	{
 		VideoTable* _tmp0_ = NULL;
 		VideoTable* _tmp1_ = NULL;
 		Video* _tmp2_ = NULL;
 		VideoID _tmp3_ = {0};
-#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 569 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = video_table_get_instance ();
-#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 569 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = _tmp0_;
-#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 569 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp2_ = video;
-#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 569 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_get_video_id (_tmp2_, &_tmp3_);
-#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 569 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_table_remove (_tmp1_, &_tmp3_, &_inner_error_);
-#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 569 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_database_table_unref0 (_tmp1_);
-#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 569 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 569 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 5471 "VideoSupport.c"
-				goto __catch493_database_error;
+#line 5515 "VideoSupport.c"
+				goto __catch506_database_error;
 			}
-#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 569 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 569 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 551 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 569 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 5480 "VideoSupport.c"
+#line 5524 "VideoSupport.c"
 		}
 	}
-	goto __finally493;
-	__catch493_database_error:
+	goto __finally506;
+	__catch506_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
-#line 550 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		err = _inner_error_;
-#line 550 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_inner_error_ = NULL;
-#line 553 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 571 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp4_ = err;
-#line 553 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 571 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		app_window_database_error (_tmp4_);
-#line 550 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_error_free0 (err);
-#line 5498 "VideoSupport.c"
+#line 5542 "VideoSupport.c"
 	}
-	__finally493:
-#line 550 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	__finally506:
+#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 550 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 550 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 550 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 5509 "VideoSupport.c"
+#line 5553 "VideoSupport.c"
 	}
 }
 
@@ -5524,24 +5568,24 @@ static BackingFileState** video_real_get_backing_files_state (MediaSource* base,
 	BackingFileState** _tmp13_ = NULL;
 	gint _tmp13__length1 = 0;
 	GError * _inner_error_ = NULL;
-#line 557 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 575 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 558 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 576 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = g_new0 (BackingFileState*, 1 + 1);
-#line 558 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 576 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	backing = _tmp0_;
-#line 558 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 576 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	backing_length1 = 1;
-#line 558 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 576 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_backing_size_ = backing_length1;
-#line 5534 "VideoSupport.c"
+#line 5578 "VideoSupport.c"
 	{
 		VideoRow* _tmp1_ = NULL;
-#line 559 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 577 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = self->priv->backing_row;
-#line 559 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 577 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 5541 "VideoSupport.c"
+#line 5585 "VideoSupport.c"
 		{
 			VideoRow* _tmp2_ = NULL;
 			const gchar* _tmp3_ = NULL;
@@ -5553,69 +5597,69 @@ static BackingFileState** video_real_get_backing_files_state (MediaSource* base,
 			const gchar* _tmp9_ = NULL;
 			BackingFileState* _tmp10_ = NULL;
 			BackingFileState* _tmp11_ = NULL;
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = self->priv->backing_row;
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = _tmp2_->filepath;
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = _tmp4_->filesize;
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp6_ = self->priv->backing_row;
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp7_ = _tmp6_->timestamp;
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp8_ = self->priv->backing_row;
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp9_ = _tmp8_->md5;
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp10_ = backing_file_state_new (_tmp3_, _tmp5_, _tmp7_, _tmp9_);
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_backing_file_state_unref0 (backing[0]);
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			backing[0] = _tmp10_;
-#line 560 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp11_ = backing[0];
-#line 5577 "VideoSupport.c"
+#line 5621 "VideoSupport.c"
 		}
-		__finally494:
+		__finally507:
 		{
 			VideoRow* _tmp12_ = NULL;
-#line 559 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 577 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp12_ = self->priv->backing_row;
-#line 559 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 577 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 5586 "VideoSupport.c"
+#line 5630 "VideoSupport.c"
 		}
-#line 559 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 577 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 559 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 577 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			backing = (_vala_array_free (backing, backing_length1, (GDestroyNotify) backing_file_state_unref), NULL);
-#line 559 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 577 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 559 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 577 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 559 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 577 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return NULL;
-#line 5598 "VideoSupport.c"
+#line 5642 "VideoSupport.c"
 		}
 	}
-#line 564 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 582 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp13_ = backing;
-#line 564 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 582 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp13__length1 = backing_length1;
-#line 564 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 582 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (result_length1) {
-#line 564 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 582 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		*result_length1 = _tmp13__length1;
-#line 5609 "VideoSupport.c"
+#line 5653 "VideoSupport.c"
 	}
-#line 564 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 582 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp13_;
-#line 564 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 582 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 5615 "VideoSupport.c"
+#line 5659 "VideoSupport.c"
 }
 
 
@@ -5627,33 +5671,33 @@ static GdkPixbuf* video_real_get_thumbnail (ThumbnailSource* base, gint scale, G
 	GdkPixbuf* _tmp2_ = NULL;
 	GdkPixbuf* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 567 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 585 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 586 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = scale;
-#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 586 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = thumbnail_cache_fetch (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_THUMBNAIL_SOURCE, ThumbnailSource), _tmp1_, &_inner_error_);
-#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 586 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = _tmp2_;
-#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 586 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 586 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_propagate_error (error, _inner_error_);
-#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 586 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return NULL;
-#line 5641 "VideoSupport.c"
+#line 5685 "VideoSupport.c"
 	}
-#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 586 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = _tmp0_;
-#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 586 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = NULL;
-#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 586 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp3_;
-#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 586 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (_tmp0_);
-#line 568 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 586 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 5653 "VideoSupport.c"
+#line 5697 "VideoSupport.c"
 }
 
 
@@ -5661,57 +5705,57 @@ static gchar* video_real_get_master_md5 (MediaSource* base) {
 	Video * self;
 	gchar* result = NULL;
 	GError * _inner_error_ = NULL;
-#line 571 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 589 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 5663 "VideoSupport.c"
+#line 5707 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 572 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 590 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 572 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 590 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 5670 "VideoSupport.c"
+#line 5714 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			const gchar* _tmp2_ = NULL;
 			gchar* _tmp3_ = NULL;
-#line 573 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 591 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 573 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 591 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->md5;
-#line 573 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 591 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = g_strdup (_tmp2_);
-#line 573 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 591 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = _tmp3_;
-#line 5683 "VideoSupport.c"
+#line 5727 "VideoSupport.c"
 			{
 				VideoRow* _tmp4_ = NULL;
-#line 572 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 590 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp4_ = self->priv->backing_row;
-#line 572 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 590 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 5690 "VideoSupport.c"
+#line 5734 "VideoSupport.c"
 			}
-#line 573 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 591 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 5694 "VideoSupport.c"
+#line 5738 "VideoSupport.c"
 		}
-		__finally495:
+		__finally508:
 		{
 			VideoRow* _tmp5_ = NULL;
-#line 572 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 590 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = self->priv->backing_row;
-#line 572 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 590 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 5703 "VideoSupport.c"
+#line 5747 "VideoSupport.c"
 		}
-#line 572 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 590 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 572 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 590 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 572 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 590 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return NULL;
-#line 5711 "VideoSupport.c"
+#line 5755 "VideoSupport.c"
 	}
 }
 
@@ -5723,31 +5767,31 @@ static GdkPixbuf* video_real_get_preview_pixbuf (MediaSource* base, Scaling* sca
 	GdkPixbuf* _tmp0_ = NULL;
 	GdkPixbuf* _tmp1_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 577 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 595 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 577 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 595 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (scaling != NULL, NULL);
-#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 596 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = thumbnail_source_get_thumbnail (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_THUMBNAIL_SOURCE, ThumbnailSource), (gint) THUMBNAIL_CACHE_SIZE_BIG, &_inner_error_);
-#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 596 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	pixbuf = _tmp0_;
-#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 596 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 596 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_propagate_error (error, _inner_error_);
-#line 578 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 596 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return NULL;
-#line 5737 "VideoSupport.c"
+#line 5781 "VideoSupport.c"
 	}
-#line 580 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 598 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = scaling_perform_on_pixbuf (scaling, pixbuf, GDK_INTERP_NEAREST, TRUE);
-#line 580 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 598 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp1_;
-#line 580 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 598 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (pixbuf);
-#line 580 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 598 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 5747 "VideoSupport.c"
+#line 5791 "VideoSupport.c"
 }
 
 
@@ -5764,69 +5808,69 @@ static GdkPixbuf* video_real_create_thumbnail (ThumbnailSource* base, gint scale
 	GdkPixbuf* _tmp5_ = NULL;
 	GdkPixbuf* _tmp6_ = NULL;
 	GdkPixbuf* _tmp7_ = NULL;
-#line 583 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 601 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 584 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 602 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = media_source_get_file (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
-#line 584 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 602 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = _tmp0_;
-#line 584 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 602 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = video_reader_new (_tmp1_);
-#line 584 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 602 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = _tmp2_;
-#line 584 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 602 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (_tmp1_);
-#line 584 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 602 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	reader = _tmp3_;
-#line 585 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 603 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp4_ = reader;
-#line 585 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 603 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp5_ = video_reader_read_preview_frame (_tmp4_);
-#line 585 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 603 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	frame = _tmp5_;
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp7_ = frame;
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp7_ != NULL) {
-#line 5788 "VideoSupport.c"
+#line 5832 "VideoSupport.c"
 		GdkPixbuf* _tmp8_ = NULL;
 		GdkPixbuf* _tmp9_ = NULL;
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp8_ = frame;
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp9_ = _g_object_ref0 (_tmp8_);
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_tmp6_);
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp6_ = _tmp9_;
-#line 5799 "VideoSupport.c"
+#line 5843 "VideoSupport.c"
 	} else {
 		GdkPixbuf* _tmp10_ = NULL;
 		GdkPixbuf* _tmp11_ = NULL;
 		GdkPixbuf* _tmp12_ = NULL;
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp10_ = resources_get_noninterpretable_badge_pixbuf ();
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp11_ = _tmp10_;
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp12_ = gdk_pixbuf_copy (_tmp11_);
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_tmp6_);
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp6_ = _tmp12_;
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_tmp11_);
-#line 5816 "VideoSupport.c"
+#line 5860 "VideoSupport.c"
 	}
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp6_;
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (frame);
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_video_reader_unref0 (reader);
-#line 587 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 5826 "VideoSupport.c"
+#line 5870 "VideoSupport.c"
 }
 
 
@@ -5834,15 +5878,15 @@ static gchar* video_real_get_typename (DataSource* base) {
 	Video * self;
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 590 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 608 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 591 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = g_strdup (VIDEO_TYPENAME);
-#line 591 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp0_;
-#line 591 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 5842 "VideoSupport.c"
+#line 5886 "VideoSupport.c"
 }
 
 
@@ -5851,71 +5895,71 @@ static gint64 video_real_get_instance_id (DataSource* base) {
 	gint64 result = 0LL;
 	VideoID _tmp0_ = {0};
 	gint64 _tmp1_ = 0LL;
-#line 594 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 612 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 595 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 613 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_get_video_id (self, &_tmp0_);
-#line 595 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 613 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = _tmp0_.id;
-#line 595 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 613 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp1_;
-#line 595 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 613 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 5861 "VideoSupport.c"
+#line 5905 "VideoSupport.c"
 }
 
 
 static void video_real_get_import_id (MediaSource* base, ImportID* result) {
 	Video * self;
 	GError * _inner_error_ = NULL;
-#line 598 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 616 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 5870 "VideoSupport.c"
+#line 5914 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 599 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 599 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 5877 "VideoSupport.c"
+#line 5921 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			ImportID _tmp2_ = {0};
-#line 600 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 618 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 600 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 618 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->import_id;
-#line 600 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 618 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			*result = _tmp2_;
-#line 5887 "VideoSupport.c"
+#line 5931 "VideoSupport.c"
 			{
 				VideoRow* _tmp3_ = NULL;
-#line 599 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 599 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 5894 "VideoSupport.c"
+#line 5938 "VideoSupport.c"
 			}
-#line 600 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 618 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 5898 "VideoSupport.c"
+#line 5942 "VideoSupport.c"
 		}
-		__finally496:
+		__finally509:
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 599 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 599 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 5907 "VideoSupport.c"
+#line 5951 "VideoSupport.c"
 		}
-#line 599 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 599 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 599 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 5915 "VideoSupport.c"
+#line 5959 "VideoSupport.c"
 	}
 }
 
@@ -5924,15 +5968,15 @@ static PhotoFileFormat video_real_get_preferred_thumbnail_format (ThumbnailSourc
 	Video * self;
 	PhotoFileFormat result = 0;
 	PhotoFileFormat _tmp0_ = 0;
-#line 604 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 623 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = photo_file_format_get_system_default_format ();
-#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 623 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp0_;
-#line 605 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 623 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 5932 "VideoSupport.c"
+#line 5976 "VideoSupport.c"
 }
 
 
@@ -5940,57 +5984,57 @@ static gchar* video_real_get_title (MediaSource* base) {
 	Video * self;
 	gchar* result = NULL;
 	GError * _inner_error_ = NULL;
-#line 608 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 626 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 5942 "VideoSupport.c"
+#line 5986 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 627 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 627 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 5949 "VideoSupport.c"
+#line 5993 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			const gchar* _tmp2_ = NULL;
 			gchar* _tmp3_ = NULL;
-#line 610 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 628 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 610 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 628 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->title;
-#line 610 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 628 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = g_strdup (_tmp2_);
-#line 610 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 628 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = _tmp3_;
-#line 5962 "VideoSupport.c"
+#line 6006 "VideoSupport.c"
 			{
 				VideoRow* _tmp4_ = NULL;
-#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 627 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp4_ = self->priv->backing_row;
-#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 627 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 5969 "VideoSupport.c"
+#line 6013 "VideoSupport.c"
 			}
-#line 610 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 628 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 5973 "VideoSupport.c"
+#line 6017 "VideoSupport.c"
 		}
-		__finally497:
+		__finally510:
 		{
 			VideoRow* _tmp5_ = NULL;
-#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 627 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = self->priv->backing_row;
-#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 627 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 5982 "VideoSupport.c"
+#line 6026 "VideoSupport.c"
 		}
-#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 627 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 627 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 609 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 627 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return NULL;
-#line 5990 "VideoSupport.c"
+#line 6034 "VideoSupport.c"
 	}
 }
 
@@ -6003,22 +6047,22 @@ static void video_real_set_title (MediaSource* base, const gchar* title) {
 	Alteration* _tmp20_ = NULL;
 	Alteration* _tmp21_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 614 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 632 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 615 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 633 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = title;
-#line 615 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 633 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = media_source_prep_title (_tmp0_);
-#line 615 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 633 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	new_title = _tmp1_;
-#line 6011 "VideoSupport.c"
+#line 6055 "VideoSupport.c"
 	{
 		VideoRow* _tmp2_ = NULL;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp2_ = self->priv->backing_row;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 6018 "VideoSupport.c"
+#line 6062 "VideoSupport.c"
 		{
 			VideoRow* _tmp3_ = NULL;
 			const gchar* _tmp4_ = NULL;
@@ -6026,28 +6070,28 @@ static void video_real_set_title (MediaSource* base, const gchar* title) {
 			VideoRow* _tmp16_ = NULL;
 			const gchar* _tmp17_ = NULL;
 			gchar* _tmp18_ = NULL;
-#line 618 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = self->priv->backing_row;
-#line 618 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = _tmp3_->title;
-#line 618 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = new_title;
-#line 618 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (g_strcmp0 (_tmp4_, _tmp5_) == 0) {
-#line 6034 "VideoSupport.c"
+#line 6078 "VideoSupport.c"
 				{
 					VideoRow* _tmp6_ = NULL;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp6_ = self->priv->backing_row;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6041 "VideoSupport.c"
+#line 6085 "VideoSupport.c"
 				}
-#line 619 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 637 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_free0 (new_title);
-#line 619 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 637 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 6047 "VideoSupport.c"
+#line 6091 "VideoSupport.c"
 			}
 			{
 				VideoTable* _tmp7_ = NULL;
@@ -6055,143 +6099,143 @@ static void video_real_set_title (MediaSource* base, const gchar* title) {
 				VideoRow* _tmp9_ = NULL;
 				VideoID _tmp10_ = {0};
 				const gchar* _tmp11_ = NULL;
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp7_ = video_table_get_instance ();
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp8_ = _tmp7_;
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp9_ = self->priv->backing_row;
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp10_ = _tmp9_->video_id;
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp11_ = new_title;
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_table_set_title (_tmp8_, &_tmp10_, _tmp11_, &_inner_error_);
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_database_table_unref0 (_tmp8_);
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
-#line 6073 "VideoSupport.c"
-						goto __catch499_database_error;
+#line 6117 "VideoSupport.c"
+						goto __catch512_database_error;
 					}
 					{
 						VideoRow* _tmp12_ = NULL;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						_tmp12_ = self->priv->backing_row;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6082 "VideoSupport.c"
+#line 6126 "VideoSupport.c"
 					}
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_g_free0 (new_title);
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_clear_error (&_inner_error_);
-#line 622 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 640 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					return;
-#line 6092 "VideoSupport.c"
+#line 6136 "VideoSupport.c"
 				}
 			}
-			goto __finally499;
-			__catch499_database_error:
+			goto __finally512;
+			__catch512_database_error:
 			{
 				GError* e = NULL;
 				GError* _tmp13_ = NULL;
-#line 621 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 639 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				e = _inner_error_;
-#line 621 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 639 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_inner_error_ = NULL;
-#line 624 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 642 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp13_ = e;
-#line 624 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 642 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				app_window_database_error (_tmp13_);
-#line 625 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 643 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_error_free0 (e);
-#line 6110 "VideoSupport.c"
+#line 6154 "VideoSupport.c"
 				{
 					VideoRow* _tmp14_ = NULL;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp14_ = self->priv->backing_row;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6117 "VideoSupport.c"
+#line 6161 "VideoSupport.c"
 				}
-#line 625 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 643 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_free0 (new_title);
-#line 625 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 643 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 6123 "VideoSupport.c"
+#line 6167 "VideoSupport.c"
 			}
-			__finally499:
-#line 621 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+			__finally512:
+#line 639 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6128 "VideoSupport.c"
+#line 6172 "VideoSupport.c"
 				{
 					VideoRow* _tmp15_ = NULL;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp15_ = self->priv->backing_row;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6135 "VideoSupport.c"
+#line 6179 "VideoSupport.c"
 				}
-#line 621 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 639 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_free0 (new_title);
-#line 621 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 639 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 621 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 639 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 621 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 639 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 6145 "VideoSupport.c"
+#line 6189 "VideoSupport.c"
 			}
-#line 629 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 647 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp16_ = self->priv->backing_row;
-#line 629 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 647 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp17_ = new_title;
-#line 629 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 647 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp18_ = g_strdup (_tmp17_);
-#line 629 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 647 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_free0 (_tmp16_->title);
-#line 629 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 647 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp16_->title = _tmp18_;
-#line 6157 "VideoSupport.c"
+#line 6201 "VideoSupport.c"
 		}
-		__finally498:
+		__finally511:
 		{
 			VideoRow* _tmp19_ = NULL;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp19_ = self->priv->backing_row;
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6166 "VideoSupport.c"
+#line 6210 "VideoSupport.c"
 		}
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_free0 (new_title);
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 617 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 6178 "VideoSupport.c"
+#line 6222 "VideoSupport.c"
 		}
 	}
-#line 632 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 650 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp20_ = alteration_new ("metadata", "name");
-#line 632 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 650 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp21_ = _tmp20_;
-#line 632 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 650 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp21_);
-#line 632 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 650 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_alteration_unref0 (_tmp21_);
-#line 614 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 632 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_free0 (new_title);
-#line 6191 "VideoSupport.c"
+#line 6235 "VideoSupport.c"
 }
 
 
@@ -6199,57 +6243,57 @@ static gchar* video_real_get_comment (MediaSource* base) {
 	Video * self;
 	gchar* result = NULL;
 	GError * _inner_error_ = NULL;
-#line 635 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 653 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 6201 "VideoSupport.c"
+#line 6245 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 654 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 654 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 6208 "VideoSupport.c"
+#line 6252 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			const gchar* _tmp2_ = NULL;
 			gchar* _tmp3_ = NULL;
-#line 637 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 655 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 637 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 655 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->comment;
-#line 637 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 655 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = g_strdup (_tmp2_);
-#line 637 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 655 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = _tmp3_;
-#line 6221 "VideoSupport.c"
+#line 6265 "VideoSupport.c"
 			{
 				VideoRow* _tmp4_ = NULL;
-#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 654 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp4_ = self->priv->backing_row;
-#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 654 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6228 "VideoSupport.c"
+#line 6272 "VideoSupport.c"
 			}
-#line 637 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 655 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 6232 "VideoSupport.c"
+#line 6276 "VideoSupport.c"
 		}
-		__finally500:
+		__finally513:
 		{
 			VideoRow* _tmp5_ = NULL;
-#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 654 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = self->priv->backing_row;
-#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 654 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6241 "VideoSupport.c"
+#line 6285 "VideoSupport.c"
 		}
-#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 654 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 654 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 636 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 654 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return NULL;
-#line 6249 "VideoSupport.c"
+#line 6293 "VideoSupport.c"
 	}
 }
 
@@ -6263,22 +6307,22 @@ static gboolean video_real_set_comment (MediaSource* base, const gchar* comment)
 	Alteration* _tmp20_ = NULL;
 	Alteration* _tmp21_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 641 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 659 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 642 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 660 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = comment;
-#line 642 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 660 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = media_source_prep_title (_tmp0_);
-#line 642 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 660 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	new_comment = _tmp1_;
-#line 6271 "VideoSupport.c"
+#line 6315 "VideoSupport.c"
 	{
 		VideoRow* _tmp2_ = NULL;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp2_ = self->priv->backing_row;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 6278 "VideoSupport.c"
+#line 6322 "VideoSupport.c"
 		{
 			VideoRow* _tmp3_ = NULL;
 			const gchar* _tmp4_ = NULL;
@@ -6286,30 +6330,30 @@ static gboolean video_real_set_comment (MediaSource* base, const gchar* comment)
 			VideoRow* _tmp16_ = NULL;
 			const gchar* _tmp17_ = NULL;
 			gchar* _tmp18_ = NULL;
-#line 645 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 663 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = self->priv->backing_row;
-#line 645 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 663 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = _tmp3_->comment;
-#line 645 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 663 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = new_comment;
-#line 645 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 663 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (g_strcmp0 (_tmp4_, _tmp5_) == 0) {
-#line 646 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 664 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				result = TRUE;
-#line 6296 "VideoSupport.c"
+#line 6340 "VideoSupport.c"
 				{
 					VideoRow* _tmp6_ = NULL;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp6_ = self->priv->backing_row;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6303 "VideoSupport.c"
+#line 6347 "VideoSupport.c"
 				}
-#line 646 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 664 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_free0 (new_comment);
-#line 646 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 664 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return result;
-#line 6309 "VideoSupport.c"
+#line 6353 "VideoSupport.c"
 			}
 			{
 				VideoTable* _tmp7_ = NULL;
@@ -6317,149 +6361,149 @@ static gboolean video_real_set_comment (MediaSource* base, const gchar* comment)
 				VideoRow* _tmp9_ = NULL;
 				VideoID _tmp10_ = {0};
 				const gchar* _tmp11_ = NULL;
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp7_ = video_table_get_instance ();
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp8_ = _tmp7_;
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp9_ = self->priv->backing_row;
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp10_ = _tmp9_->video_id;
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp11_ = new_comment;
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_table_set_comment (_tmp8_, &_tmp10_, _tmp11_, &_inner_error_);
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_database_table_unref0 (_tmp8_);
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
-#line 6335 "VideoSupport.c"
-						goto __catch502_database_error;
+#line 6379 "VideoSupport.c"
+						goto __catch515_database_error;
 					}
 					{
 						VideoRow* _tmp12_ = NULL;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						_tmp12_ = self->priv->backing_row;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6344 "VideoSupport.c"
+#line 6388 "VideoSupport.c"
 					}
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_g_free0 (new_comment);
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_clear_error (&_inner_error_);
-#line 649 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					return FALSE;
-#line 6354 "VideoSupport.c"
+#line 6398 "VideoSupport.c"
 				}
 			}
-			goto __finally502;
-			__catch502_database_error:
+			goto __finally515;
+			__catch515_database_error:
 			{
 				GError* e = NULL;
 				GError* _tmp13_ = NULL;
-#line 648 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				e = _inner_error_;
-#line 648 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_inner_error_ = NULL;
-#line 651 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 669 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp13_ = e;
-#line 651 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 669 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				app_window_database_error (_tmp13_);
-#line 652 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 670 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				result = FALSE;
-#line 652 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 670 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_error_free0 (e);
-#line 6374 "VideoSupport.c"
+#line 6418 "VideoSupport.c"
 				{
 					VideoRow* _tmp14_ = NULL;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp14_ = self->priv->backing_row;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6381 "VideoSupport.c"
+#line 6425 "VideoSupport.c"
 				}
-#line 652 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 670 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_free0 (new_comment);
-#line 652 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 670 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return result;
-#line 6387 "VideoSupport.c"
+#line 6431 "VideoSupport.c"
 			}
-			__finally502:
-#line 648 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+			__finally515:
+#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6392 "VideoSupport.c"
+#line 6436 "VideoSupport.c"
 				{
 					VideoRow* _tmp15_ = NULL;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp15_ = self->priv->backing_row;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6399 "VideoSupport.c"
+#line 6443 "VideoSupport.c"
 				}
-#line 648 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_free0 (new_comment);
-#line 648 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 648 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 648 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return FALSE;
-#line 6409 "VideoSupport.c"
+#line 6453 "VideoSupport.c"
 			}
-#line 656 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 674 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp16_ = self->priv->backing_row;
-#line 656 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 674 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp17_ = new_comment;
-#line 656 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 674 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp18_ = g_strdup (_tmp17_);
-#line 656 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 674 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_free0 (_tmp16_->comment);
-#line 656 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 674 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp16_->comment = _tmp18_;
-#line 6421 "VideoSupport.c"
+#line 6465 "VideoSupport.c"
 		}
-		__finally501:
+		__finally514:
 		{
 			VideoRow* _tmp19_ = NULL;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp19_ = self->priv->backing_row;
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6430 "VideoSupport.c"
+#line 6474 "VideoSupport.c"
 		}
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_free0 (new_comment);
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 644 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 662 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return FALSE;
-#line 6442 "VideoSupport.c"
+#line 6486 "VideoSupport.c"
 		}
 	}
-#line 659 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp20_ = alteration_new ("metadata", "comment");
-#line 659 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp21_ = _tmp20_;
-#line 659 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp21_);
-#line 659 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_alteration_unref0 (_tmp21_);
-#line 661 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 679 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = TRUE;
-#line 661 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 679 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_free0 (new_comment);
-#line 661 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 679 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 6459 "VideoSupport.c"
+#line 6503 "VideoSupport.c"
 }
 
 
@@ -6467,54 +6511,54 @@ static Rating video_real_get_rating (MediaSource* base) {
 	Video * self;
 	Rating result = 0;
 	GError * _inner_error_ = NULL;
-#line 665 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 683 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 6469 "VideoSupport.c"
+#line 6513 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 6476 "VideoSupport.c"
+#line 6520 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			Rating _tmp2_ = 0;
-#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 685 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 685 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->rating;
-#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 685 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = _tmp2_;
-#line 6486 "VideoSupport.c"
+#line 6530 "VideoSupport.c"
 			{
 				VideoRow* _tmp3_ = NULL;
-#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6493 "VideoSupport.c"
+#line 6537 "VideoSupport.c"
 			}
-#line 667 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 685 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 6497 "VideoSupport.c"
+#line 6541 "VideoSupport.c"
 		}
-		__finally503:
+		__finally516:
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6506 "VideoSupport.c"
+#line 6550 "VideoSupport.c"
 		}
-#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 666 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return 0;
-#line 6514 "VideoSupport.c"
+#line 6558 "VideoSupport.c"
 	}
 }
 
@@ -6524,234 +6568,234 @@ static void video_real_set_rating (MediaSource* base, Rating rating) {
 	Alteration* _tmp19_ = NULL;
 	Alteration* _tmp20_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 671 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 689 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 6526 "VideoSupport.c"
+#line 6570 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 6533 "VideoSupport.c"
+#line 6577 "VideoSupport.c"
 		{
 			gboolean _tmp1_ = FALSE;
 			Rating _tmp2_ = 0;
 			gboolean _tmp3_ = FALSE;
 			VideoRow* _tmp16_ = NULL;
 			Rating _tmp17_ = 0;
-#line 673 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = rating;
-#line 673 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = rating_is_valid (_tmp2_);
-#line 673 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (!_tmp3_) {
-#line 673 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp1_ = TRUE;
-#line 6548 "VideoSupport.c"
+#line 6592 "VideoSupport.c"
 			} else {
 				Rating _tmp4_ = 0;
 				VideoRow* _tmp5_ = NULL;
 				Rating _tmp6_ = 0;
-#line 673 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp4_ = rating;
-#line 673 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp5_ = self->priv->backing_row;
-#line 673 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp6_ = _tmp5_->rating;
-#line 673 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp1_ = _tmp4_ == _tmp6_;
-#line 6561 "VideoSupport.c"
+#line 6605 "VideoSupport.c"
 			}
-#line 673 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_tmp1_) {
-#line 6565 "VideoSupport.c"
+#line 6609 "VideoSupport.c"
 				{
 					VideoRow* _tmp7_ = NULL;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp7_ = self->priv->backing_row;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6572 "VideoSupport.c"
+#line 6616 "VideoSupport.c"
 				}
-#line 674 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 692 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 6576 "VideoSupport.c"
+#line 6620 "VideoSupport.c"
 			}
 			{
 				VideoTable* _tmp8_ = NULL;
 				VideoTable* _tmp9_ = NULL;
 				VideoID _tmp10_ = {0};
 				Rating _tmp11_ = 0;
-#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 695 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp8_ = video_table_get_instance ();
-#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 695 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp9_ = _tmp8_;
-#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 695 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_get_video_id (self, &_tmp10_);
-#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 695 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp11_ = rating;
-#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 695 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_table_set_rating (_tmp9_, &_tmp10_, _tmp11_, &_inner_error_);
-#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 695 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_database_table_unref0 (_tmp9_);
-#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 695 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 695 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
-#line 6599 "VideoSupport.c"
-						goto __catch505_database_error;
+#line 6643 "VideoSupport.c"
+						goto __catch518_database_error;
 					}
 					{
 						VideoRow* _tmp12_ = NULL;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						_tmp12_ = self->priv->backing_row;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6608 "VideoSupport.c"
+#line 6652 "VideoSupport.c"
 					}
-#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 695 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 695 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_clear_error (&_inner_error_);
-#line 677 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 695 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					return;
-#line 6616 "VideoSupport.c"
+#line 6660 "VideoSupport.c"
 				}
 			}
-			goto __finally505;
-			__catch505_database_error:
+			goto __finally518;
+			__catch518_database_error:
 			{
 				GError* e = NULL;
 				GError* _tmp13_ = NULL;
-#line 676 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 694 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				e = _inner_error_;
-#line 676 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 694 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_inner_error_ = NULL;
-#line 679 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 697 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp13_ = e;
-#line 679 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 697 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				app_window_database_error (_tmp13_);
-#line 680 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 698 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_error_free0 (e);
-#line 6634 "VideoSupport.c"
+#line 6678 "VideoSupport.c"
 				{
 					VideoRow* _tmp14_ = NULL;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp14_ = self->priv->backing_row;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6641 "VideoSupport.c"
+#line 6685 "VideoSupport.c"
 				}
-#line 680 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 698 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 6645 "VideoSupport.c"
+#line 6689 "VideoSupport.c"
 			}
-			__finally505:
-#line 676 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+			__finally518:
+#line 694 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6650 "VideoSupport.c"
+#line 6694 "VideoSupport.c"
 				{
 					VideoRow* _tmp15_ = NULL;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp15_ = self->priv->backing_row;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6657 "VideoSupport.c"
+#line 6701 "VideoSupport.c"
 				}
-#line 676 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 694 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 676 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 694 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 676 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 694 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 6665 "VideoSupport.c"
+#line 6709 "VideoSupport.c"
 			}
-#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 702 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp16_ = self->priv->backing_row;
-#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 702 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp17_ = rating;
-#line 684 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 702 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp16_->rating = _tmp17_;
-#line 6673 "VideoSupport.c"
+#line 6717 "VideoSupport.c"
 		}
-		__finally504:
+		__finally517:
 		{
 			VideoRow* _tmp18_ = NULL;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp18_ = self->priv->backing_row;
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6682 "VideoSupport.c"
+#line 6726 "VideoSupport.c"
 		}
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 672 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 6692 "VideoSupport.c"
+#line 6736 "VideoSupport.c"
 		}
 	}
-#line 687 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 705 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp19_ = alteration_new ("metadata", "rating");
-#line 687 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 705 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp20_ = _tmp19_;
-#line 687 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 705 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp20_);
-#line 687 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 705 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_alteration_unref0 (_tmp20_);
-#line 6703 "VideoSupport.c"
+#line 6747 "VideoSupport.c"
 }
 
 
 static void video_real_increase_rating (MediaSource* base) {
 	Video * self;
 	GError * _inner_error_ = NULL;
-#line 690 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 708 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 6712 "VideoSupport.c"
+#line 6756 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 709 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 709 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 6719 "VideoSupport.c"
+#line 6763 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			Rating _tmp2_ = 0;
 			Rating _tmp3_ = 0;
-#line 692 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 710 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 692 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 710 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->rating;
-#line 692 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 710 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = rating_increase (_tmp2_);
-#line 692 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 710 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			media_source_set_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource), _tmp3_);
-#line 6732 "VideoSupport.c"
+#line 6776 "VideoSupport.c"
 		}
-		__finally506:
+		__finally519:
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 709 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 709 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6741 "VideoSupport.c"
+#line 6785 "VideoSupport.c"
 		}
-#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 709 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 709 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 709 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 691 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 709 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 6751 "VideoSupport.c"
+#line 6795 "VideoSupport.c"
 		}
 	}
 }
@@ -6760,48 +6804,48 @@ static void video_real_increase_rating (MediaSource* base) {
 static void video_real_decrease_rating (MediaSource* base) {
 	Video * self;
 	GError * _inner_error_ = NULL;
-#line 696 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 714 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 6762 "VideoSupport.c"
+#line 6806 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 697 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 715 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 697 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 715 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 6769 "VideoSupport.c"
+#line 6813 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			Rating _tmp2_ = 0;
 			Rating _tmp3_ = 0;
-#line 698 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 716 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 698 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 716 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->rating;
-#line 698 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 716 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = rating_decrease (_tmp2_);
-#line 698 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 716 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			media_source_set_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource), _tmp3_);
-#line 6782 "VideoSupport.c"
+#line 6826 "VideoSupport.c"
 		}
-		__finally507:
+		__finally520:
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 697 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 715 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 697 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 715 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6791 "VideoSupport.c"
+#line 6835 "VideoSupport.c"
 		}
-#line 697 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 715 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 697 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 715 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 697 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 715 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 697 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 715 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 6801 "VideoSupport.c"
+#line 6845 "VideoSupport.c"
 		}
 	}
 }
@@ -6811,15 +6855,15 @@ static gboolean video_real_is_trashed (MediaSource* base) {
 	Video * self;
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 702 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 720 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 703 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 721 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video_is_flag_set (self, VIDEO_FLAG_TRASH);
-#line 703 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 721 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp0_;
-#line 703 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 721 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 6819 "VideoSupport.c"
+#line 6863 "VideoSupport.c"
 }
 
 
@@ -6827,25 +6871,25 @@ static gboolean video_real_is_offline (Monitorable* base) {
 	Video * self;
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 706 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 724 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 707 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 725 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video_is_flag_set (self, VIDEO_FLAG_OFFLINE);
-#line 707 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 725 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp0_;
-#line 707 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 725 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 6835 "VideoSupport.c"
+#line 6879 "VideoSupport.c"
 }
 
 
 static void video_real_mark_offline (Monitorable* base) {
 	Video * self;
-#line 710 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 728 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 711 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 729 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_add_flags (self, VIDEO_FLAG_OFFLINE, NULL);
-#line 6845 "VideoSupport.c"
+#line 6889 "VideoSupport.c"
 }
 
 
@@ -6853,61 +6897,61 @@ static void video_real_mark_online (Monitorable* base) {
 	Video * self;
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
-#line 714 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 732 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 715 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 733 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_remove_flags (self, VIDEO_FLAG_OFFLINE, NULL);
-#line 717 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 735 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = video_get_is_interpretable (self);
-#line 717 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 735 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (!_tmp1_) {
-#line 6861 "VideoSupport.c"
+#line 6905 "VideoSupport.c"
 		gboolean _tmp2_ = FALSE;
-#line 717 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 735 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp2_ = video_has_interpreter_state_changed ();
-#line 717 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 735 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = _tmp2_;
-#line 6867 "VideoSupport.c"
+#line 6911 "VideoSupport.c"
 	} else {
-#line 717 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 735 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = FALSE;
-#line 6871 "VideoSupport.c"
+#line 6915 "VideoSupport.c"
 	}
-#line 717 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 735 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp0_) {
-#line 6875 "VideoSupport.c"
+#line 6919 "VideoSupport.c"
 		VideoInterpretableResults* _tmp3_ = NULL;
 		VideoInterpretableResults* _tmp4_ = NULL;
-#line 718 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 736 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp3_ = video_check_is_interpretable (self);
-#line 718 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 736 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp4_ = _tmp3_;
-#line 718 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 736 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_interpretable_results_foreground_finish (_tmp4_);
-#line 718 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 736 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_video_interpretable_results_unref0 (_tmp4_);
-#line 6886 "VideoSupport.c"
+#line 6930 "VideoSupport.c"
 	}
 }
 
 
 static void video_real_trash (MediaSource* base) {
 	Video * self;
-#line 721 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 739 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 722 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 740 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_add_flags (self, VIDEO_FLAG_TRASH, NULL);
-#line 6897 "VideoSupport.c"
+#line 6941 "VideoSupport.c"
 }
 
 
 static void video_real_untrash (MediaSource* base) {
 	Video * self;
-#line 725 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 743 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 726 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 744 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_remove_flags (self, VIDEO_FLAG_TRASH, NULL);
-#line 6907 "VideoSupport.c"
+#line 6951 "VideoSupport.c"
 }
 
 
@@ -6915,15 +6959,15 @@ static gboolean video_real_is_flagged (Flaggable* base) {
 	Video * self;
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 729 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 747 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 730 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video_is_flag_set (self, VIDEO_FLAG_FLAGGED);
-#line 730 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp0_;
-#line 730 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 6923 "VideoSupport.c"
+#line 6967 "VideoSupport.c"
 }
 
 
@@ -6931,17 +6975,17 @@ static void video_real_mark_flagged (Flaggable* base) {
 	Video * self;
 	Alteration* _tmp0_ = NULL;
 	Alteration* _tmp1_ = NULL;
-#line 733 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 751 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 734 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 752 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = alteration_new ("metadata", "flagged");
-#line 734 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 752 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = _tmp0_;
-#line 734 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 752 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_add_flags (self, VIDEO_FLAG_FLAGGED, _tmp1_);
-#line 734 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 752 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_alteration_unref0 (_tmp1_);
-#line 6941 "VideoSupport.c"
+#line 6985 "VideoSupport.c"
 }
 
 
@@ -6949,71 +6993,71 @@ static void video_real_mark_unflagged (Flaggable* base) {
 	Video * self;
 	Alteration* _tmp0_ = NULL;
 	Alteration* _tmp1_ = NULL;
-#line 737 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 755 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 738 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 756 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = alteration_new ("metadata", "flagged");
-#line 738 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 756 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = _tmp0_;
-#line 738 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 756 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_remove_flags (self, VIDEO_FLAG_FLAGGED, _tmp1_);
-#line 738 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 756 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_alteration_unref0 (_tmp1_);
-#line 6959 "VideoSupport.c"
+#line 7003 "VideoSupport.c"
 }
 
 
 static void video_real_get_event_id (MediaSource* base, EventID* result) {
 	Video * self;
 	GError * _inner_error_ = NULL;
-#line 741 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 759 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 6968 "VideoSupport.c"
+#line 7012 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 742 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 742 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 6975 "VideoSupport.c"
+#line 7019 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			EventID _tmp2_ = {0};
-#line 743 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 761 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 743 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 761 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->event_id;
-#line 743 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 761 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			*result = _tmp2_;
-#line 6985 "VideoSupport.c"
+#line 7029 "VideoSupport.c"
 			{
 				VideoRow* _tmp3_ = NULL;
-#line 742 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 742 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 6992 "VideoSupport.c"
+#line 7036 "VideoSupport.c"
 			}
-#line 743 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 761 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 6996 "VideoSupport.c"
+#line 7040 "VideoSupport.c"
 		}
-		__finally508:
+		__finally521:
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 742 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 742 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7005 "VideoSupport.c"
+#line 7049 "VideoSupport.c"
 		}
-#line 742 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 742 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 742 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 7013 "VideoSupport.c"
+#line 7057 "VideoSupport.c"
 	}
 }
 
@@ -7022,16 +7066,16 @@ static gchar* video_real_to_string (DataObject* base) {
 	Video * self;
 	gchar* result = NULL;
 	GError * _inner_error_ = NULL;
-#line 747 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 765 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 7024 "VideoSupport.c"
+#line 7068 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7031 "VideoSupport.c"
+#line 7075 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			VideoID _tmp2_ = {0};
@@ -7042,111 +7086,111 @@ static gchar* video_real_to_string (DataObject* base) {
 			const gchar* _tmp7_ = NULL;
 			gchar* _tmp8_ = NULL;
 			gchar* _tmp9_ = NULL;
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->video_id;
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = _tmp2_.id;
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = g_strdup_printf ("%" G_GINT64_FORMAT, _tmp3_);
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = _tmp4_;
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp6_ = self->priv->backing_row;
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp7_ = _tmp6_->filepath;
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp8_ = g_strdup_printf ("[%s] %s", _tmp5_, _tmp7_);
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp9_ = _tmp8_;
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_free0 (_tmp5_);
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = _tmp9_;
-#line 7064 "VideoSupport.c"
+#line 7108 "VideoSupport.c"
 			{
 				VideoRow* _tmp10_ = NULL;
-#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp10_ = self->priv->backing_row;
-#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7071 "VideoSupport.c"
+#line 7115 "VideoSupport.c"
 			}
-#line 749 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 7075 "VideoSupport.c"
+#line 7119 "VideoSupport.c"
 		}
-		__finally509:
+		__finally522:
 		{
 			VideoRow* _tmp11_ = NULL;
-#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp11_ = self->priv->backing_row;
-#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7084 "VideoSupport.c"
+#line 7128 "VideoSupport.c"
 		}
-#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 748 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return NULL;
-#line 7092 "VideoSupport.c"
+#line 7136 "VideoSupport.c"
 	}
 }
 
 
 void video_get_video_id (Video* self, VideoID* result) {
 	GError * _inner_error_ = NULL;
-#line 753 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 771 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO (self));
-#line 7101 "VideoSupport.c"
+#line 7145 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 754 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 754 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7108 "VideoSupport.c"
+#line 7152 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			VideoID _tmp2_ = {0};
-#line 755 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 773 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 755 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 773 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->video_id;
-#line 755 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 773 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			*result = _tmp2_;
-#line 7118 "VideoSupport.c"
+#line 7162 "VideoSupport.c"
 			{
 				VideoRow* _tmp3_ = NULL;
-#line 754 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 754 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7125 "VideoSupport.c"
+#line 7169 "VideoSupport.c"
 			}
-#line 755 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 773 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 7129 "VideoSupport.c"
+#line 7173 "VideoSupport.c"
 		}
-		__finally510:
+		__finally523:
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 754 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 754 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7138 "VideoSupport.c"
+#line 7182 "VideoSupport.c"
 		}
-#line 754 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 754 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 754 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 7146 "VideoSupport.c"
+#line 7190 "VideoSupport.c"
 	}
 }
 
@@ -7155,54 +7199,54 @@ static time_t video_real_get_exposure_time (Dateable* base) {
 	Video * self;
 	time_t result = 0;
 	GError * _inner_error_ = NULL;
-#line 759 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 777 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 7157 "VideoSupport.c"
+#line 7201 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 778 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 778 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7164 "VideoSupport.c"
+#line 7208 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			time_t _tmp2_ = 0;
-#line 761 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 761 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->exposure_time;
-#line 761 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = _tmp2_;
-#line 7174 "VideoSupport.c"
+#line 7218 "VideoSupport.c"
 			{
 				VideoRow* _tmp3_ = NULL;
-#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 778 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 778 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7181 "VideoSupport.c"
+#line 7225 "VideoSupport.c"
 			}
-#line 761 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 7185 "VideoSupport.c"
+#line 7229 "VideoSupport.c"
 		}
-		__finally511:
+		__finally524:
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 778 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 778 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7194 "VideoSupport.c"
+#line 7238 "VideoSupport.c"
 		}
-#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 778 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 778 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 760 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 778 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return 0;
-#line 7202 "VideoSupport.c"
+#line 7246 "VideoSupport.c"
 	}
 }
 
@@ -7212,16 +7256,16 @@ static void video_real_set_exposure_time (Dateable* base, time_t time) {
 	Alteration* _tmp12_ = NULL;
 	Alteration* _tmp13_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 765 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 783 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 7214 "VideoSupport.c"
+#line 7258 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 784 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 784 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7221 "VideoSupport.c"
+#line 7265 "VideoSupport.c"
 		{
 			VideoRow* _tmp9_ = NULL;
 			time_t _tmp10_ = 0;
@@ -7231,165 +7275,165 @@ static void video_real_set_exposure_time (Dateable* base, time_t time) {
 				VideoRow* _tmp3_ = NULL;
 				VideoID _tmp4_ = {0};
 				time_t _tmp5_ = 0;
-#line 768 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 786 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp1_ = video_table_get_instance ();
-#line 768 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 786 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp2_ = _tmp1_;
-#line 768 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 786 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 768 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 786 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp4_ = _tmp3_->video_id;
-#line 768 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 786 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp5_ = time;
-#line 768 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 786 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_table_set_exposure_time (_tmp2_, &_tmp4_, _tmp5_, &_inner_error_);
-#line 768 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 786 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_database_table_unref0 (_tmp2_);
-#line 768 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 786 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7247 "VideoSupport.c"
-					goto __catch513_g_error;
+#line 7291 "VideoSupport.c"
+					goto __catch526_g_error;
 				}
 			}
-			goto __finally513;
-			__catch513_g_error:
+			goto __finally526;
+			__catch526_g_error:
 			{
 				GError* e = NULL;
 				GError* _tmp6_ = NULL;
 				const gchar* _tmp7_ = NULL;
-#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 785 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				e = _inner_error_;
-#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 785 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_inner_error_ = NULL;
-#line 770 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 788 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp6_ = e;
-#line 770 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 788 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp7_ = _tmp6_->message;
-#line 770 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-				g_debug ("VideoSupport.vala:770: Warning - %s", _tmp7_);
-#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 788 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+				g_debug ("VideoSupport.vala:788: Warning - %s", _tmp7_);
+#line 785 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_error_free0 (e);
-#line 7269 "VideoSupport.c"
+#line 7313 "VideoSupport.c"
 			}
-			__finally513:
-#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+			__finally526:
+#line 785 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7274 "VideoSupport.c"
+#line 7318 "VideoSupport.c"
 				{
 					VideoRow* _tmp8_ = NULL;
-#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 784 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp8_ = self->priv->backing_row;
-#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 784 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7281 "VideoSupport.c"
+#line 7325 "VideoSupport.c"
 				}
-#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 785 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 785 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 767 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 785 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 7289 "VideoSupport.c"
+#line 7333 "VideoSupport.c"
 			}
-#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 790 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp9_ = self->priv->backing_row;
-#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 790 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp10_ = time;
-#line 772 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 790 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp9_->exposure_time = _tmp10_;
-#line 7297 "VideoSupport.c"
+#line 7341 "VideoSupport.c"
 		}
-		__finally512:
+		__finally525:
 		{
 			VideoRow* _tmp11_ = NULL;
-#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 784 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp11_ = self->priv->backing_row;
-#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 784 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7306 "VideoSupport.c"
+#line 7350 "VideoSupport.c"
 		}
-#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 784 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 784 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 784 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 766 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 784 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 7316 "VideoSupport.c"
+#line 7360 "VideoSupport.c"
 		}
 	}
-#line 775 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp12_ = alteration_new ("metadata", "exposure-time");
-#line 775 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp13_ = _tmp12_;
-#line 775 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp13_);
-#line 775 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_alteration_unref0 (_tmp13_);
-#line 7327 "VideoSupport.c"
+#line 7371 "VideoSupport.c"
 }
 
 
 void video_get_frame_dimensions (Video* self, Dimensions* result) {
 	GError * _inner_error_ = NULL;
-#line 778 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 796 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO (self));
-#line 7335 "VideoSupport.c"
+#line 7379 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 797 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 797 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7342 "VideoSupport.c"
+#line 7386 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			gint _tmp2_ = 0;
 			VideoRow* _tmp3_ = NULL;
 			gint _tmp4_ = 0;
 			Dimensions _tmp5_ = {0};
-#line 780 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 798 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 780 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 798 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->width;
-#line 780 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 798 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = self->priv->backing_row;
-#line 780 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 798 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = _tmp3_->height;
-#line 780 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 798 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			dimensions_init (&_tmp5_, _tmp2_, _tmp4_);
-#line 780 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 798 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			*result = _tmp5_;
-#line 7361 "VideoSupport.c"
+#line 7405 "VideoSupport.c"
 			{
 				VideoRow* _tmp6_ = NULL;
-#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 797 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp6_ = self->priv->backing_row;
-#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 797 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7368 "VideoSupport.c"
+#line 7412 "VideoSupport.c"
 			}
-#line 780 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 798 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 7372 "VideoSupport.c"
+#line 7416 "VideoSupport.c"
 		}
-		__finally514:
+		__finally527:
 		{
 			VideoRow* _tmp7_ = NULL;
-#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 797 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp7_ = self->priv->backing_row;
-#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 797 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7381 "VideoSupport.c"
+#line 7425 "VideoSupport.c"
 		}
-#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 797 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 797 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 779 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 797 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 7389 "VideoSupport.c"
+#line 7433 "VideoSupport.c"
 	}
 }
 
@@ -7397,15 +7441,15 @@ void video_get_frame_dimensions (Video* self, Dimensions* result) {
 static void video_real_get_dimensions (MediaSource* base, PhotoException disallowed_steps, Dimensions* result) {
 	Video * self;
 	Dimensions _tmp0_ = {0};
-#line 784 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 802 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 785 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 803 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_get_frame_dimensions (self, &_tmp0_);
-#line 785 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 803 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	*result = _tmp0_;
-#line 785 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 803 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return;
-#line 7405 "VideoSupport.c"
+#line 7449 "VideoSupport.c"
 }
 
 
@@ -7413,15 +7457,15 @@ static guint64 video_real_get_filesize (MediaSource* base) {
 	Video * self;
 	guint64 result = 0ULL;
 	guint64 _tmp0_ = 0ULL;
-#line 788 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 806 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 789 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 807 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = media_source_get_master_filesize (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
-#line 789 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 807 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp0_;
-#line 789 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 807 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 7421 "VideoSupport.c"
+#line 7465 "VideoSupport.c"
 }
 
 
@@ -7429,54 +7473,54 @@ static guint64 video_real_get_master_filesize (MediaSource* base) {
 	Video * self;
 	guint64 result = 0ULL;
 	GError * _inner_error_ = NULL;
-#line 792 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 810 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 7431 "VideoSupport.c"
+#line 7475 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 811 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 811 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7438 "VideoSupport.c"
+#line 7482 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			gint64 _tmp2_ = 0LL;
-#line 794 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 794 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->filesize;
-#line 794 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = (guint64) _tmp2_;
-#line 7448 "VideoSupport.c"
+#line 7492 "VideoSupport.c"
 			{
 				VideoRow* _tmp3_ = NULL;
-#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 811 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 811 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7455 "VideoSupport.c"
+#line 7499 "VideoSupport.c"
 			}
-#line 794 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 7459 "VideoSupport.c"
+#line 7503 "VideoSupport.c"
 		}
-		__finally515:
+		__finally528:
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 811 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 811 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7468 "VideoSupport.c"
+#line 7512 "VideoSupport.c"
 		}
-#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 811 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 811 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 793 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 811 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return 0ULL;
-#line 7476 "VideoSupport.c"
+#line 7520 "VideoSupport.c"
 	}
 }
 
@@ -7485,54 +7529,54 @@ static time_t video_real_get_timestamp (MediaSource* base) {
 	Video * self;
 	time_t result = 0;
 	GError * _inner_error_ = NULL;
-#line 798 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 816 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 7487 "VideoSupport.c"
+#line 7531 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 799 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 817 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 799 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 817 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7494 "VideoSupport.c"
+#line 7538 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			time_t _tmp2_ = 0;
-#line 800 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 818 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 800 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 818 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->timestamp;
-#line 800 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 818 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = _tmp2_;
-#line 7504 "VideoSupport.c"
+#line 7548 "VideoSupport.c"
 			{
 				VideoRow* _tmp3_ = NULL;
-#line 799 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 817 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 799 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 817 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7511 "VideoSupport.c"
+#line 7555 "VideoSupport.c"
 			}
-#line 800 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 818 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 7515 "VideoSupport.c"
+#line 7559 "VideoSupport.c"
 		}
-		__finally516:
+		__finally529:
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 799 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 817 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 799 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 817 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7524 "VideoSupport.c"
+#line 7568 "VideoSupport.c"
 		}
-#line 799 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 817 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 799 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 817 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 799 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 817 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return 0;
-#line 7532 "VideoSupport.c"
+#line 7576 "VideoSupport.c"
 	}
 }
 
@@ -7545,25 +7589,25 @@ static void video_real_set_master_timestamp (Monitorable* base, GFileInfo* info)
 	Alteration* _tmp19_ = NULL;
 	Alteration* _tmp20_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 804 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 822 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 804 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 822 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 805 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 823 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = info;
-#line 805 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 823 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_file_info_get_modification_time (_tmp0_, &_tmp1_);
-#line 805 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 823 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	time_val = _tmp1_;
-#line 7555 "VideoSupport.c"
+#line 7599 "VideoSupport.c"
 	{
 		{
 			VideoRow* _tmp2_ = NULL;
-#line 808 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = self->priv->backing_row;
-#line 808 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7563 "VideoSupport.c"
+#line 7607 "VideoSupport.c"
 			{
 				VideoRow* _tmp3_ = NULL;
 				time_t _tmp4_ = 0;
@@ -7578,182 +7622,182 @@ static void video_real_set_master_timestamp (Monitorable* base, GFileInfo* info)
 				VideoRow* _tmp14_ = NULL;
 				GTimeVal _tmp15_ = {0};
 				glong _tmp16_ = 0L;
-#line 809 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 827 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 809 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 827 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp4_ = _tmp3_->timestamp;
-#line 809 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 827 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp5_ = time_val;
-#line 809 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 827 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp6_ = _tmp5_.tv_sec;
-#line 809 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 827 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (_tmp4_ == ((time_t) _tmp6_)) {
-#line 7588 "VideoSupport.c"
+#line 7632 "VideoSupport.c"
 					{
 						VideoRow* _tmp7_ = NULL;
-#line 808 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						_tmp7_ = self->priv->backing_row;
-#line 808 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7595 "VideoSupport.c"
+#line 7639 "VideoSupport.c"
 					}
-#line 810 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 828 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					return;
-#line 7599 "VideoSupport.c"
+#line 7643 "VideoSupport.c"
 				}
-#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 830 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp8_ = video_table_get_instance ();
-#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 830 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp9_ = _tmp8_;
-#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 830 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp10_ = self->priv->backing_row;
-#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 830 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp11_ = _tmp10_->video_id;
-#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 830 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp12_ = time_val;
-#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 830 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp13_ = _tmp12_.tv_sec;
-#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 830 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_table_set_timestamp (_tmp9_, &_tmp11_, (time_t) _tmp13_, &_inner_error_);
-#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 830 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_database_table_unref0 (_tmp9_);
-#line 812 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 830 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7619 "VideoSupport.c"
-					goto __finally518;
+#line 7663 "VideoSupport.c"
+					goto __finally531;
 				}
-#line 813 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 831 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp14_ = self->priv->backing_row;
-#line 813 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 831 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp15_ = time_val;
-#line 813 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 831 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp16_ = _tmp15_.tv_sec;
-#line 813 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 831 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp14_->timestamp = (time_t) _tmp16_;
-#line 7630 "VideoSupport.c"
+#line 7674 "VideoSupport.c"
 			}
-			__finally518:
+			__finally531:
 			{
 				VideoRow* _tmp17_ = NULL;
-#line 808 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp17_ = self->priv->backing_row;
-#line 808 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7639 "VideoSupport.c"
+#line 7683 "VideoSupport.c"
 			}
-#line 808 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 808 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
-#line 7645 "VideoSupport.c"
-					goto __catch517_database_error;
+#line 7689 "VideoSupport.c"
+					goto __catch530_database_error;
 				}
-#line 808 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 808 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 808 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 7654 "VideoSupport.c"
+#line 7698 "VideoSupport.c"
 			}
 		}
 	}
-	goto __finally517;
-	__catch517_database_error:
+	goto __finally530;
+	__catch530_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp18_ = NULL;
-#line 807 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		err = _inner_error_;
-#line 807 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_inner_error_ = NULL;
-#line 816 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 834 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp18_ = err;
-#line 816 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 834 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		app_window_database_error (_tmp18_);
-#line 818 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 836 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_error_free0 (err);
-#line 818 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 836 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 7675 "VideoSupport.c"
+#line 7719 "VideoSupport.c"
 	}
-	__finally517:
-#line 807 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	__finally530:
+#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 807 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 807 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 807 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 7686 "VideoSupport.c"
+#line 7730 "VideoSupport.c"
 	}
-#line 821 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 839 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp19_ = alteration_new ("metadata", "master-timestamp");
-#line 821 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 839 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp20_ = _tmp19_;
-#line 821 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 839 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp20_);
-#line 821 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 839 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_alteration_unref0 (_tmp20_);
-#line 7696 "VideoSupport.c"
+#line 7740 "VideoSupport.c"
 }
 
 
 gchar* video_get_filename (Video* self) {
 	gchar* result = NULL;
 	GError * _inner_error_ = NULL;
-#line 824 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 842 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO (self), NULL);
-#line 7705 "VideoSupport.c"
+#line 7749 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 843 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 843 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7712 "VideoSupport.c"
+#line 7756 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			const gchar* _tmp2_ = NULL;
 			gchar* _tmp3_ = NULL;
-#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 844 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 844 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->filepath;
-#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 844 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = g_strdup (_tmp2_);
-#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 844 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = _tmp3_;
-#line 7725 "VideoSupport.c"
+#line 7769 "VideoSupport.c"
 			{
 				VideoRow* _tmp4_ = NULL;
-#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 843 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp4_ = self->priv->backing_row;
-#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 843 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7732 "VideoSupport.c"
+#line 7776 "VideoSupport.c"
 			}
-#line 826 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 844 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 7736 "VideoSupport.c"
+#line 7780 "VideoSupport.c"
 		}
-		__finally519:
+		__finally532:
 		{
 			VideoRow* _tmp5_ = NULL;
-#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 843 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = self->priv->backing_row;
-#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 843 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7745 "VideoSupport.c"
+#line 7789 "VideoSupport.c"
 		}
-#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 843 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 843 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 825 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 843 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return NULL;
-#line 7753 "VideoSupport.c"
+#line 7797 "VideoSupport.c"
 	}
 }
 
@@ -7765,23 +7809,23 @@ static GFile* video_real_get_file (MediaSource* base) {
 	gchar* _tmp1_ = NULL;
 	GFile* _tmp2_ = NULL;
 	GFile* _tmp3_ = NULL;
-#line 830 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 848 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 831 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 849 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video_get_filename (self);
-#line 831 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 849 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = _tmp0_;
-#line 831 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 849 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = g_file_new_for_path (_tmp1_);
-#line 831 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 849 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = _tmp2_;
-#line 831 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 849 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_free0 (_tmp1_);
-#line 831 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 849 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp3_;
-#line 831 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 849 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 7781 "VideoSupport.c"
+#line 7825 "VideoSupport.c"
 }
 
 
@@ -7789,15 +7833,15 @@ static GFile* video_real_get_master_file (MediaSource* base) {
 	Video * self;
 	GFile* result = NULL;
 	GFile* _tmp0_ = NULL;
-#line 834 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 852 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 835 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 853 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = media_source_get_file (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
-#line 835 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 853 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp0_;
-#line 835 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 853 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 7797 "VideoSupport.c"
+#line 7841 "VideoSupport.c"
 }
 
 
@@ -7809,93 +7853,93 @@ void video_export (Video* self, GFile* dest_file, GError** error) {
 	GFile* _tmp3_ = NULL;
 	GFile* _tmp4_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 838 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 856 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO (self));
-#line 838 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 856 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (G_IS_FILE (dest_file));
-#line 839 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video_get_filename (self);
-#line 839 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = _tmp0_;
-#line 839 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = g_file_new_for_path (_tmp1_);
-#line 839 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = _tmp2_;
-#line 839 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_free0 (_tmp1_);
-#line 839 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	source_file = _tmp3_;
-#line 840 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 858 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp4_ = dest_file;
-#line 840 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 858 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_file_copy (source_file, _tmp4_, G_FILE_COPY_OVERWRITE | G_FILE_COPY_TARGET_DEFAULT_PERMS, NULL, NULL, NULL, &_inner_error_);
-#line 840 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 858 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 840 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 858 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_propagate_error (error, _inner_error_);
-#line 840 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 858 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (source_file);
-#line 840 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 858 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 7837 "VideoSupport.c"
+#line 7881 "VideoSupport.c"
 	}
-#line 838 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 856 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (source_file);
-#line 7841 "VideoSupport.c"
+#line 7885 "VideoSupport.c"
 }
 
 
 gdouble video_get_clip_duration (Video* self) {
 	gdouble result = 0.0;
 	GError * _inner_error_ = NULL;
-#line 844 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 862 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO (self), 0.0);
-#line 7850 "VideoSupport.c"
+#line 7894 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 845 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 863 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 845 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 863 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7857 "VideoSupport.c"
+#line 7901 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			gdouble _tmp2_ = 0.0;
-#line 846 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 864 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 846 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 864 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->clip_duration;
-#line 846 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 864 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = _tmp2_;
-#line 7867 "VideoSupport.c"
+#line 7911 "VideoSupport.c"
 			{
 				VideoRow* _tmp3_ = NULL;
-#line 845 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 863 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 845 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 863 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7874 "VideoSupport.c"
+#line 7918 "VideoSupport.c"
 			}
-#line 846 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 864 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 7878 "VideoSupport.c"
+#line 7922 "VideoSupport.c"
 		}
-		__finally520:
+		__finally533:
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 845 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 863 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 845 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 863 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7887 "VideoSupport.c"
+#line 7931 "VideoSupport.c"
 		}
-#line 845 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 863 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 845 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 863 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 845 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 863 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return 0.0;
-#line 7895 "VideoSupport.c"
+#line 7939 "VideoSupport.c"
 	}
 }
 
@@ -7903,123 +7947,123 @@ gdouble video_get_clip_duration (Video* self) {
 gboolean video_get_is_interpretable (Video* self) {
 	gboolean result = FALSE;
 	GError * _inner_error_ = NULL;
-#line 850 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 868 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO (self), FALSE);
-#line 7905 "VideoSupport.c"
+#line 7949 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 851 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 869 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 851 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 869 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7912 "VideoSupport.c"
+#line 7956 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			gboolean _tmp2_ = FALSE;
-#line 852 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 870 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 852 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 870 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->is_interpretable;
-#line 852 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 870 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = _tmp2_;
-#line 7922 "VideoSupport.c"
+#line 7966 "VideoSupport.c"
 			{
 				VideoRow* _tmp3_ = NULL;
-#line 851 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 869 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 851 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 869 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7929 "VideoSupport.c"
+#line 7973 "VideoSupport.c"
 			}
-#line 852 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 870 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 7933 "VideoSupport.c"
+#line 7977 "VideoSupport.c"
 		}
-		__finally521:
+		__finally534:
 		{
 			VideoRow* _tmp4_ = NULL;
-#line 851 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 869 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = self->priv->backing_row;
-#line 851 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 869 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7942 "VideoSupport.c"
+#line 7986 "VideoSupport.c"
 		}
-#line 851 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 869 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 851 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 869 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 851 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 869 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return FALSE;
-#line 7950 "VideoSupport.c"
+#line 7994 "VideoSupport.c"
 	}
 }
 
 
 static void video_set_is_interpretable (Video* self, gboolean is_interpretable) {
 	GError * _inner_error_ = NULL;
-#line 856 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 874 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO (self));
-#line 7959 "VideoSupport.c"
+#line 8003 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 7966 "VideoSupport.c"
+#line 8010 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			gboolean _tmp2_ = FALSE;
 			gboolean _tmp3_ = FALSE;
 			VideoRow* _tmp5_ = NULL;
 			gboolean _tmp6_ = FALSE;
-#line 858 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 876 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 858 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 876 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->is_interpretable;
-#line 858 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 876 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = is_interpretable;
-#line 858 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 876 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_tmp2_ == _tmp3_) {
-#line 7981 "VideoSupport.c"
+#line 8025 "VideoSupport.c"
 				{
 					VideoRow* _tmp4_ = NULL;
-#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp4_ = self->priv->backing_row;
-#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 7988 "VideoSupport.c"
+#line 8032 "VideoSupport.c"
 				}
-#line 859 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 877 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 7992 "VideoSupport.c"
+#line 8036 "VideoSupport.c"
 			}
-#line 861 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 879 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = self->priv->backing_row;
-#line 861 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 879 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp6_ = is_interpretable;
-#line 861 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 879 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_->is_interpretable = _tmp6_;
-#line 8000 "VideoSupport.c"
+#line 8044 "VideoSupport.c"
 		}
-		__finally522:
+		__finally535:
 		{
 			VideoRow* _tmp7_ = NULL;
-#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp7_ = self->priv->backing_row;
-#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8009 "VideoSupport.c"
+#line 8053 "VideoSupport.c"
 		}
-#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 857 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 8019 "VideoSupport.c"
+#line 8063 "VideoSupport.c"
 		}
 	}
 	{
@@ -8027,61 +8071,61 @@ static void video_set_is_interpretable (Video* self, gboolean is_interpretable) 
 		VideoTable* _tmp9_ = NULL;
 		VideoID _tmp10_ = {0};
 		gboolean _tmp11_ = FALSE;
-#line 865 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp8_ = video_table_get_instance ();
-#line 865 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp9_ = _tmp8_;
-#line 865 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_get_video_id (self, &_tmp10_);
-#line 865 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp11_ = is_interpretable;
-#line 865 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_table_update_is_interpretable (_tmp9_, &_tmp10_, _tmp11_, &_inner_error_);
-#line 865 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_database_table_unref0 (_tmp9_);
-#line 865 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 865 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 8043 "VideoSupport.c"
-				goto __catch523_database_error;
+#line 8087 "VideoSupport.c"
+				goto __catch536_database_error;
 			}
-#line 865 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 865 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 865 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 8052 "VideoSupport.c"
+#line 8096 "VideoSupport.c"
 		}
 	}
-	goto __finally523;
-	__catch523_database_error:
+	goto __finally536;
+	__catch536_database_error:
 	{
 		GError* e = NULL;
 		GError* _tmp12_ = NULL;
-#line 864 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		e = _inner_error_;
-#line 864 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_inner_error_ = NULL;
-#line 867 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 885 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp12_ = e;
-#line 867 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 885 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		app_window_database_error (_tmp12_);
-#line 864 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_error_free0 (e);
-#line 8070 "VideoSupport.c"
+#line 8114 "VideoSupport.c"
 	}
-	__finally523:
-#line 864 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	__finally536:
+#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 864 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 864 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 864 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 8081 "VideoSupport.c"
+#line 8125 "VideoSupport.c"
 	}
 }
 
@@ -8108,235 +8152,235 @@ VideoInterpretableResults* video_check_is_interpretable (Video* self) {
 	GdkPixbuf* _tmp27_ = NULL;
 	GdkPixbuf* _tmp28_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 874 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 892 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO (self), NULL);
-#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 893 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video_interpretable_results_new (self);
-#line 875 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 893 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	results = _tmp0_;
-#line 877 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 895 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	clip_duration = -1.0;
-#line 878 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 896 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	preview_frame = NULL;
-#line 880 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 898 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = media_source_get_file (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
-#line 880 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 898 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = _tmp1_;
-#line 880 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 898 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = video_reader_new (_tmp2_);
-#line 880 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 898 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp4_ = _tmp3_;
-#line 880 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 898 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (_tmp2_);
-#line 880 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 898 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	backing_file_reader = _tmp4_;
-#line 8130 "VideoSupport.c"
+#line 8174 "VideoSupport.c"
 	{
 		gdouble _tmp5_ = 0.0;
 		VideoReader* _tmp6_ = NULL;
 		gdouble _tmp7_ = 0.0;
 		VideoReader* _tmp8_ = NULL;
 		GdkPixbuf* _tmp9_ = NULL;
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp6_ = backing_file_reader;
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp7_ = video_reader_read_clip_duration (_tmp6_, &_inner_error_);
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp5_ = _tmp7_;
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_inner_error_->domain == VIDEO_ERROR) {
-#line 8147 "VideoSupport.c"
-				goto __catch524_video_error;
+#line 8191 "VideoSupport.c"
+				goto __catch537_video_error;
 			}
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_video_reader_unref0 (backing_file_reader);
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (preview_frame);
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_video_interpretable_results_unref0 (results);
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return NULL;
-#line 8162 "VideoSupport.c"
+#line 8206 "VideoSupport.c"
 		}
-#line 882 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 900 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		clip_duration = _tmp5_;
-#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 901 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp8_ = backing_file_reader;
-#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 901 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp9_ = video_reader_read_preview_frame (_tmp8_);
-#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 901 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (preview_frame);
-#line 883 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 901 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		preview_frame = _tmp9_;
-#line 8174 "VideoSupport.c"
+#line 8218 "VideoSupport.c"
 	}
-	goto __finally524;
-	__catch524_video_error:
+	goto __finally537;
+	__catch537_video_error:
 	{
 		GError* e = NULL;
 		VideoInterpretableResults* _tmp10_ = NULL;
 		gboolean _tmp11_ = FALSE;
 		VideoInterpretableResults* _tmp12_ = NULL;
-#line 881 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 899 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		e = _inner_error_;
-#line 881 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 899 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_inner_error_ = NULL;
-#line 887 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 905 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp10_ = results;
-#line 887 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 905 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp11_ = video_get_is_interpretable (self);
-#line 887 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 905 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp10_->update_interpretable = _tmp11_;
-#line 888 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 906 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp12_ = results;
-#line 888 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 906 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp12_->is_interpretable = FALSE;
-#line 890 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 908 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		result = results;
-#line 890 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 908 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_error_free0 (e);
-#line 890 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 908 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_video_reader_unref0 (backing_file_reader);
-#line 890 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 908 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (preview_frame);
-#line 890 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 908 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return result;
-#line 8207 "VideoSupport.c"
+#line 8251 "VideoSupport.c"
 	}
-	__finally524:
-#line 881 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	__finally537:
+#line 899 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 881 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 899 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_video_reader_unref0 (backing_file_reader);
-#line 881 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 899 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (preview_frame);
-#line 881 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 899 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_video_interpretable_results_unref0 (results);
-#line 881 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 899 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 881 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 899 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 881 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 899 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return NULL;
-#line 8224 "VideoSupport.c"
+#line 8268 "VideoSupport.c"
 	}
-#line 894 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 912 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp13_ = video_get_is_interpretable (self);
-#line 894 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 912 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp13_) {
-#line 8230 "VideoSupport.c"
+#line 8274 "VideoSupport.c"
 		VideoInterpretableResults* _tmp14_ = NULL;
 		VideoInterpretableResults* _tmp15_ = NULL;
-#line 895 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 913 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp14_ = results;
-#line 895 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 913 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp14_->update_interpretable = FALSE;
-#line 896 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 914 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp15_ = results;
-#line 896 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 914 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp15_->is_interpretable = TRUE;
-#line 898 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 916 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		result = results;
-#line 898 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 916 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_video_reader_unref0 (backing_file_reader);
-#line 898 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 916 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (preview_frame);
-#line 898 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 916 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return result;
-#line 8249 "VideoSupport.c"
+#line 8293 "VideoSupport.c"
 	}
-#line 901 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 919 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp16_ = media_source_get_file (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
-#line 901 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 919 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp17_ = _tmp16_;
-#line 901 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 919 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp18_ = g_file_get_basename (_tmp17_);
-#line 901 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 919 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp19_ = _tmp18_;
-#line 901 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	g_debug ("VideoSupport.vala:901: video %s has become interpretable", _tmp19_);
-#line 901 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 919 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	g_debug ("VideoSupport.vala:919: video %s has become interpretable", _tmp19_);
+#line 919 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_free0 (_tmp19_);
-#line 901 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 919 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (_tmp17_);
-#line 8265 "VideoSupport.c"
+#line 8309 "VideoSupport.c"
 	{
 		VideoRow* _tmp20_ = NULL;
-#line 904 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 922 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp20_ = self->priv->backing_row;
-#line 904 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 922 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 8272 "VideoSupport.c"
+#line 8316 "VideoSupport.c"
 		{
 			VideoRow* _tmp21_ = NULL;
 			gdouble _tmp22_ = 0.0;
-#line 905 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 923 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp21_ = self->priv->backing_row;
-#line 905 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 923 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp22_ = clip_duration;
-#line 905 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 923 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp21_->clip_duration = _tmp22_;
-#line 8282 "VideoSupport.c"
+#line 8326 "VideoSupport.c"
 		}
-		__finally525:
+		__finally538:
 		{
 			VideoRow* _tmp23_ = NULL;
-#line 904 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 922 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp23_ = self->priv->backing_row;
-#line 904 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 922 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8291 "VideoSupport.c"
+#line 8335 "VideoSupport.c"
 		}
-#line 904 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 922 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 904 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 922 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_video_reader_unref0 (backing_file_reader);
-#line 904 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 922 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (preview_frame);
-#line 904 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 922 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_video_interpretable_results_unref0 (results);
-#line 904 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 922 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 904 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 922 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 904 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 922 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return NULL;
-#line 8307 "VideoSupport.c"
+#line 8351 "VideoSupport.c"
 		}
 	}
-#line 908 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 926 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp24_ = results;
-#line 908 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 926 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp24_->update_interpretable = TRUE;
-#line 909 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 927 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp25_ = results;
-#line 909 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 927 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp25_->is_interpretable = TRUE;
-#line 910 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 928 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp26_ = results;
-#line 910 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 928 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp27_ = preview_frame;
-#line 910 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 928 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp28_ = _g_object_ref0 (_tmp27_);
-#line 910 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 928 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (_tmp26_->new_thumbnail);
-#line 910 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 928 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp26_->new_thumbnail = _tmp28_;
-#line 912 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 930 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = results;
-#line 912 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 930 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_video_reader_unref0 (backing_file_reader);
-#line 912 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 930 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (preview_frame);
-#line 912 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 930 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 8336 "VideoSupport.c"
+#line 8380 "VideoSupport.c"
 }
 
 
@@ -8345,81 +8389,81 @@ static void video_real_destroy (DataSource* base) {
 	VideoID video_id = {0};
 	VideoID _tmp0_ = {0};
 	GError * _inner_error_ = NULL;
-#line 915 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 933 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 916 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 934 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_get_video_id (self, &_tmp0_);
-#line 916 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 934 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_id = _tmp0_;
-#line 918 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 936 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	thumbnail_cache_remove (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_THUMBNAIL_SOURCE, ThumbnailSource));
-#line 8353 "VideoSupport.c"
+#line 8397 "VideoSupport.c"
 	{
 		VideoTable* _tmp1_ = NULL;
 		VideoTable* _tmp2_ = NULL;
 		VideoID _tmp3_ = {0};
-#line 921 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = video_table_get_instance ();
-#line 921 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp2_ = _tmp1_;
-#line 921 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp3_ = video_id;
-#line 921 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_table_remove (_tmp2_, &_tmp3_, &_inner_error_);
-#line 921 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_database_table_unref0 (_tmp2_);
-#line 921 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 921 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 8372 "VideoSupport.c"
-				goto __catch526_database_error;
+#line 8416 "VideoSupport.c"
+				goto __catch539_database_error;
 			}
-#line 921 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 921 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 921 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 8381 "VideoSupport.c"
+#line 8425 "VideoSupport.c"
 		}
 	}
-	goto __finally526;
-	__catch526_database_error:
+	goto __finally539;
+	__catch539_database_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
-#line 920 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 938 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		err = _inner_error_;
-#line 920 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 938 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_inner_error_ = NULL;
-#line 923 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 941 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp4_ = data_object_to_string (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject));
-#line 923 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 941 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp5_ = _tmp4_;
-#line 923 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-		g_error ("VideoSupport.vala:923: failed to remove video %s from video table", _tmp5_);
-#line 923 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 941 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		g_error ("VideoSupport.vala:941: failed to remove video %s from video table", _tmp5_);
+#line 941 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_free0 (_tmp5_);
-#line 920 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 938 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_error_free0 (err);
-#line 8404 "VideoSupport.c"
+#line 8448 "VideoSupport.c"
 	}
-	__finally526:
-#line 920 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	__finally539:
+#line 938 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 920 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 938 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 920 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 938 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 920 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 938 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 8415 "VideoSupport.c"
+#line 8459 "VideoSupport.c"
 	}
-#line 926 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 944 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	DATA_SOURCE_CLASS (video_parent_class)->destroy (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_VIDEO_SOURCE, VideoSource), TYPE_DATA_SOURCE, DataSource));
-#line 8419 "VideoSupport.c"
+#line 8463 "VideoSupport.c"
 }
 
 
@@ -8432,39 +8476,39 @@ static gboolean video_real_internal_delete_backing (DataSource* base, GError** e
 	gboolean _tmp2_ = FALSE;
 	gboolean _tmp3_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 929 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 947 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 930 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 948 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = media_source_delete_original_file (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
-#line 930 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 948 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	ret = _tmp0_;
-#line 933 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = DATA_SOURCE_CLASS (video_parent_class)->internal_delete_backing (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_VIDEO_SOURCE, VideoSource), TYPE_DATA_SOURCE, DataSource), &_inner_error_);
-#line 933 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = _tmp3_;
-#line 933 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 933 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_propagate_error (error, _inner_error_);
-#line 933 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return FALSE;
-#line 8448 "VideoSupport.c"
+#line 8492 "VideoSupport.c"
 	}
-#line 933 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp2_) {
-#line 933 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = ret;
-#line 8454 "VideoSupport.c"
+#line 8498 "VideoSupport.c"
 	} else {
-#line 933 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = FALSE;
-#line 8458 "VideoSupport.c"
+#line 8502 "VideoSupport.c"
 	}
-#line 933 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp1_;
-#line 933 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 8464 "VideoSupport.c"
+#line 8508 "VideoSupport.c"
 }
 
 
@@ -8473,41 +8517,41 @@ static void video_notify_flags_altered (Video* self, Alteration* additional_alte
 	Alteration* _tmp0_ = NULL;
 	Alteration* _tmp1_ = NULL;
 	Alteration* _tmp5_ = NULL;
-#line 936 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 954 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO (self));
-#line 936 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 954 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail ((additional_alteration == NULL) || IS_ALTERATION (additional_alteration));
-#line 937 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 955 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = alteration_new ("metadata", "flags");
-#line 937 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 955 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	alteration = _tmp0_;
-#line 938 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 956 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = additional_alteration;
-#line 938 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 956 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp1_ != NULL) {
-#line 8485 "VideoSupport.c"
+#line 8529 "VideoSupport.c"
 		Alteration* _tmp2_ = NULL;
 		Alteration* _tmp3_ = NULL;
 		Alteration* _tmp4_ = NULL;
-#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 957 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp2_ = alteration;
-#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 957 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp3_ = additional_alteration;
-#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 957 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp4_ = alteration_compress (_tmp2_, _tmp3_);
-#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 957 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_alteration_unref0 (alteration);
-#line 939 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 957 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		alteration = _tmp4_;
-#line 8499 "VideoSupport.c"
+#line 8543 "VideoSupport.c"
 	}
-#line 941 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 959 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp5_ = alteration;
-#line 941 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 959 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp5_);
-#line 936 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 954 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_alteration_unref0 (alteration);
-#line 8507 "VideoSupport.c"
+#line 8551 "VideoSupport.c"
 }
 
 
@@ -8516,18 +8560,18 @@ guint64 video_add_flags (Video* self, guint64 flags_to_add, Alteration* addition
 	guint64 new_flags = 0ULL;
 	Alteration* _tmp24_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 944 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 962 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO (self), 0ULL);
-#line 944 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 962 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail ((additional_alteration == NULL) || IS_ALTERATION (additional_alteration), 0ULL);
-#line 8520 "VideoSupport.c"
+#line 8564 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 8527 "VideoSupport.c"
+#line 8571 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			guint64 _tmp2_ = 0ULL;
@@ -8538,180 +8582,180 @@ guint64 video_add_flags (Video* self, guint64 flags_to_add, Alteration* addition
 			guint64 _tmp7_ = 0ULL;
 			VideoRow* _tmp21_ = NULL;
 			guint64 _tmp22_ = 0ULL;
-#line 947 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 965 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 947 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 965 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->flags;
-#line 947 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 965 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = flags_to_add;
-#line 947 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 965 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = media_source_internal_add_flags (_tmp2_, _tmp3_);
-#line 947 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 965 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			new_flags = _tmp4_;
-#line 948 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 966 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = self->priv->backing_row;
-#line 948 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 966 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp6_ = _tmp5_->flags;
-#line 948 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 966 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp7_ = new_flags;
-#line 948 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 966 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_tmp6_ == _tmp7_) {
-#line 8556 "VideoSupport.c"
+#line 8600 "VideoSupport.c"
 				VideoRow* _tmp8_ = NULL;
 				guint64 _tmp9_ = 0ULL;
-#line 949 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 967 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp8_ = self->priv->backing_row;
-#line 949 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 967 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp9_ = _tmp8_->flags;
-#line 949 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 967 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				result = _tmp9_;
-#line 8565 "VideoSupport.c"
+#line 8609 "VideoSupport.c"
 				{
 					VideoRow* _tmp10_ = NULL;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp10_ = self->priv->backing_row;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8572 "VideoSupport.c"
+#line 8616 "VideoSupport.c"
 				}
-#line 949 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 967 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return result;
-#line 8576 "VideoSupport.c"
+#line 8620 "VideoSupport.c"
 			}
 			{
 				VideoTable* _tmp11_ = NULL;
 				VideoTable* _tmp12_ = NULL;
 				VideoID _tmp13_ = {0};
 				guint64 _tmp14_ = 0ULL;
-#line 952 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp11_ = video_table_get_instance ();
-#line 952 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp12_ = _tmp11_;
-#line 952 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_get_video_id (self, &_tmp13_);
-#line 952 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp14_ = new_flags;
-#line 952 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_table_set_flags (_tmp12_, &_tmp13_, _tmp14_, &_inner_error_);
-#line 952 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_database_table_unref0 (_tmp12_);
-#line 952 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 952 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
-#line 8599 "VideoSupport.c"
-						goto __catch528_database_error;
+#line 8643 "VideoSupport.c"
+						goto __catch541_database_error;
 					}
 					{
 						VideoRow* _tmp15_ = NULL;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						_tmp15_ = self->priv->backing_row;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8608 "VideoSupport.c"
+#line 8652 "VideoSupport.c"
 					}
-#line 952 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 952 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_clear_error (&_inner_error_);
-#line 952 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					return 0ULL;
-#line 8616 "VideoSupport.c"
+#line 8660 "VideoSupport.c"
 				}
 			}
-			goto __finally528;
-			__catch528_database_error:
+			goto __finally541;
+			__catch541_database_error:
 			{
 				GError* e = NULL;
 				GError* _tmp16_ = NULL;
 				VideoRow* _tmp17_ = NULL;
 				guint64 _tmp18_ = 0ULL;
-#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 969 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				e = _inner_error_;
-#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 969 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_inner_error_ = NULL;
-#line 954 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 972 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp16_ = e;
-#line 954 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 972 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				app_window_database_error (_tmp16_);
-#line 955 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 973 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp17_ = self->priv->backing_row;
-#line 955 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 973 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp18_ = _tmp17_->flags;
-#line 955 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 973 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				result = _tmp18_;
-#line 955 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 973 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_error_free0 (e);
-#line 8642 "VideoSupport.c"
+#line 8686 "VideoSupport.c"
 				{
 					VideoRow* _tmp19_ = NULL;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp19_ = self->priv->backing_row;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8649 "VideoSupport.c"
+#line 8693 "VideoSupport.c"
 				}
-#line 955 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 973 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return result;
-#line 8653 "VideoSupport.c"
+#line 8697 "VideoSupport.c"
 			}
-			__finally528:
-#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+			__finally541:
+#line 969 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 8658 "VideoSupport.c"
+#line 8702 "VideoSupport.c"
 				{
 					VideoRow* _tmp20_ = NULL;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp20_ = self->priv->backing_row;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8665 "VideoSupport.c"
+#line 8709 "VideoSupport.c"
 				}
-#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 969 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 969 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 951 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 969 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return 0ULL;
-#line 8673 "VideoSupport.c"
+#line 8717 "VideoSupport.c"
 			}
-#line 958 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 976 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp21_ = self->priv->backing_row;
-#line 958 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 976 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp22_ = new_flags;
-#line 958 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 976 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp21_->flags = _tmp22_;
-#line 8681 "VideoSupport.c"
+#line 8725 "VideoSupport.c"
 		}
-		__finally527:
+		__finally540:
 		{
 			VideoRow* _tmp23_ = NULL;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp23_ = self->priv->backing_row;
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8690 "VideoSupport.c"
+#line 8734 "VideoSupport.c"
 		}
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 946 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 964 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return 0ULL;
-#line 8700 "VideoSupport.c"
+#line 8744 "VideoSupport.c"
 		}
 	}
-#line 961 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 979 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp24_ = additional_alteration;
-#line 961 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 979 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_notify_flags_altered (self, _tmp24_);
-#line 963 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 981 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = new_flags;
-#line 963 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 981 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 8711 "VideoSupport.c"
+#line 8755 "VideoSupport.c"
 }
 
 
@@ -8720,18 +8764,18 @@ guint64 video_remove_flags (Video* self, guint64 flags_to_remove, Alteration* ad
 	guint64 new_flags = 0ULL;
 	Alteration* _tmp24_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 966 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 984 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO (self), 0ULL);
-#line 966 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 984 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail ((additional_alteration == NULL) || IS_ALTERATION (additional_alteration), 0ULL);
-#line 8724 "VideoSupport.c"
+#line 8768 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 8731 "VideoSupport.c"
+#line 8775 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			guint64 _tmp2_ = 0ULL;
@@ -8742,240 +8786,240 @@ guint64 video_remove_flags (Video* self, guint64 flags_to_remove, Alteration* ad
 			guint64 _tmp7_ = 0ULL;
 			VideoRow* _tmp21_ = NULL;
 			guint64 _tmp22_ = 0ULL;
-#line 969 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 987 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 969 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 987 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->flags;
-#line 969 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 987 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = flags_to_remove;
-#line 969 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 987 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = media_source_internal_remove_flags (_tmp2_, _tmp3_);
-#line 969 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 987 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			new_flags = _tmp4_;
-#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 988 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = self->priv->backing_row;
-#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 988 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp6_ = _tmp5_->flags;
-#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 988 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp7_ = new_flags;
-#line 970 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 988 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_tmp6_ == _tmp7_) {
-#line 8760 "VideoSupport.c"
+#line 8804 "VideoSupport.c"
 				VideoRow* _tmp8_ = NULL;
 				guint64 _tmp9_ = 0ULL;
-#line 971 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp8_ = self->priv->backing_row;
-#line 971 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp9_ = _tmp8_->flags;
-#line 971 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				result = _tmp9_;
-#line 8769 "VideoSupport.c"
+#line 8813 "VideoSupport.c"
 				{
 					VideoRow* _tmp10_ = NULL;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp10_ = self->priv->backing_row;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8776 "VideoSupport.c"
+#line 8820 "VideoSupport.c"
 				}
-#line 971 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return result;
-#line 8780 "VideoSupport.c"
+#line 8824 "VideoSupport.c"
 			}
 			{
 				VideoTable* _tmp11_ = NULL;
 				VideoTable* _tmp12_ = NULL;
 				VideoID _tmp13_ = {0};
 				guint64 _tmp14_ = 0ULL;
-#line 974 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 992 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp11_ = video_table_get_instance ();
-#line 974 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 992 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp12_ = _tmp11_;
-#line 974 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 992 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_get_video_id (self, &_tmp13_);
-#line 974 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 992 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp14_ = new_flags;
-#line 974 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 992 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_table_set_flags (_tmp12_, &_tmp13_, _tmp14_, &_inner_error_);
-#line 974 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 992 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_database_table_unref0 (_tmp12_);
-#line 974 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 992 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 974 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 992 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
-#line 8803 "VideoSupport.c"
-						goto __catch530_database_error;
+#line 8847 "VideoSupport.c"
+						goto __catch543_database_error;
 					}
 					{
 						VideoRow* _tmp15_ = NULL;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						_tmp15_ = self->priv->backing_row;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8812 "VideoSupport.c"
+#line 8856 "VideoSupport.c"
 					}
-#line 974 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 992 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 974 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 992 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_clear_error (&_inner_error_);
-#line 974 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 992 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					return 0ULL;
-#line 8820 "VideoSupport.c"
+#line 8864 "VideoSupport.c"
 				}
 			}
-			goto __finally530;
-			__catch530_database_error:
+			goto __finally543;
+			__catch543_database_error:
 			{
 				GError* e = NULL;
 				GError* _tmp16_ = NULL;
 				VideoRow* _tmp17_ = NULL;
 				guint64 _tmp18_ = 0ULL;
-#line 973 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 991 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				e = _inner_error_;
-#line 973 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 991 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_inner_error_ = NULL;
-#line 976 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 994 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp16_ = e;
-#line 976 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 994 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				app_window_database_error (_tmp16_);
-#line 977 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 995 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp17_ = self->priv->backing_row;
-#line 977 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 995 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp18_ = _tmp17_->flags;
-#line 977 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 995 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				result = _tmp18_;
-#line 977 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 995 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_error_free0 (e);
-#line 8846 "VideoSupport.c"
+#line 8890 "VideoSupport.c"
 				{
 					VideoRow* _tmp19_ = NULL;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp19_ = self->priv->backing_row;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8853 "VideoSupport.c"
+#line 8897 "VideoSupport.c"
 				}
-#line 977 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 995 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return result;
-#line 8857 "VideoSupport.c"
+#line 8901 "VideoSupport.c"
 			}
-			__finally530:
-#line 973 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+			__finally543:
+#line 991 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 8862 "VideoSupport.c"
+#line 8906 "VideoSupport.c"
 				{
 					VideoRow* _tmp20_ = NULL;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_tmp20_ = self->priv->backing_row;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8869 "VideoSupport.c"
+#line 8913 "VideoSupport.c"
 				}
-#line 973 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 991 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 973 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 991 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 973 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 991 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return 0ULL;
-#line 8877 "VideoSupport.c"
+#line 8921 "VideoSupport.c"
 			}
-#line 980 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp21_ = self->priv->backing_row;
-#line 980 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp22_ = new_flags;
-#line 980 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp21_->flags = _tmp22_;
-#line 8885 "VideoSupport.c"
+#line 8929 "VideoSupport.c"
 		}
-		__finally529:
+		__finally542:
 		{
 			VideoRow* _tmp23_ = NULL;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp23_ = self->priv->backing_row;
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8894 "VideoSupport.c"
+#line 8938 "VideoSupport.c"
 		}
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 968 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 986 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return 0ULL;
-#line 8904 "VideoSupport.c"
+#line 8948 "VideoSupport.c"
 		}
 	}
-#line 983 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1001 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp24_ = additional_alteration;
-#line 983 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1001 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_notify_flags_altered (self, _tmp24_);
-#line 985 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1003 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = new_flags;
-#line 985 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1003 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 8915 "VideoSupport.c"
+#line 8959 "VideoSupport.c"
 }
 
 
 gboolean video_is_flag_set (Video* self, guint64 flag) {
 	gboolean result = FALSE;
 	GError * _inner_error_ = NULL;
-#line 988 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1006 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO (self), FALSE);
-#line 8924 "VideoSupport.c"
+#line 8968 "VideoSupport.c"
 	{
 		VideoRow* _tmp0_ = NULL;
-#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1007 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->backing_row;
-#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1007 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 8931 "VideoSupport.c"
+#line 8975 "VideoSupport.c"
 		{
 			VideoRow* _tmp1_ = NULL;
 			guint64 _tmp2_ = 0ULL;
 			guint64 _tmp3_ = 0ULL;
 			gboolean _tmp4_ = FALSE;
-#line 990 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1008 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = self->priv->backing_row;
-#line 990 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1008 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = _tmp1_->flags;
-#line 990 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1008 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp3_ = flag;
-#line 990 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1008 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = media_source_internal_is_flag_set (_tmp2_, _tmp3_);
-#line 990 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1008 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			result = _tmp4_;
-#line 8947 "VideoSupport.c"
+#line 8991 "VideoSupport.c"
 			{
 				VideoRow* _tmp5_ = NULL;
-#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1007 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp5_ = self->priv->backing_row;
-#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1007 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8954 "VideoSupport.c"
+#line 8998 "VideoSupport.c"
 			}
-#line 990 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1008 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return result;
-#line 8958 "VideoSupport.c"
+#line 9002 "VideoSupport.c"
 		}
-		__finally531:
+		__finally544:
 		{
 			VideoRow* _tmp6_ = NULL;
-#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1007 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp6_ = self->priv->backing_row;
-#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1007 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 8967 "VideoSupport.c"
+#line 9011 "VideoSupport.c"
 		}
-#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1007 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1007 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 989 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1007 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return FALSE;
-#line 8975 "VideoSupport.c"
+#line 9019 "VideoSupport.c"
 	}
 }
 
@@ -8994,27 +9038,27 @@ static void video_real_set_master_file (Monitorable* base, GFile* file) {
 	Alteration* _tmp25_ = NULL;
 	Alteration* _tmp26_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 994 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1012 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO, Video);
-#line 994 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1012 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 995 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1013 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = file;
-#line 995 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1013 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 995 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1013 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	new_filepath = _tmp1_;
-#line 996 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1014 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	old_filepath = NULL;
-#line 9006 "VideoSupport.c"
+#line 9050 "VideoSupport.c"
 	{
 		{
 			VideoRow* _tmp2_ = NULL;
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = self->priv->backing_row;
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			g_rec_mutex_lock (&self->priv->__lock_backing_row);
-#line 9014 "VideoSupport.c"
+#line 9058 "VideoSupport.c"
 			{
 				VideoRow* _tmp3_ = NULL;
 				const gchar* _tmp4_ = NULL;
@@ -9030,169 +9074,169 @@ static void video_real_set_master_file (Monitorable* base, GFile* file) {
 				VideoRow* _tmp15_ = NULL;
 				const gchar* _tmp16_ = NULL;
 				gchar* _tmp17_ = NULL;
-#line 999 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1017 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = self->priv->backing_row;
-#line 999 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1017 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp4_ = _tmp3_->filepath;
-#line 999 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1017 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp5_ = new_filepath;
-#line 999 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1017 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (g_strcmp0 (_tmp4_, _tmp5_) == 0) {
-#line 9038 "VideoSupport.c"
+#line 9082 "VideoSupport.c"
 					{
 						VideoRow* _tmp6_ = NULL;
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						_tmp6_ = self->priv->backing_row;
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 						g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 9045 "VideoSupport.c"
+#line 9089 "VideoSupport.c"
 					}
-#line 1000 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1018 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_g_free0 (old_filepath);
-#line 1000 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1018 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					_g_free0 (new_filepath);
-#line 1000 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1018 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					return;
-#line 9053 "VideoSupport.c"
+#line 9097 "VideoSupport.c"
 				}
-#line 1002 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp7_ = self->priv->backing_row;
-#line 1002 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp8_ = _tmp7_->filepath;
-#line 1002 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp9_ = g_strdup (_tmp8_);
-#line 1002 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_free0 (old_filepath);
-#line 1002 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				old_filepath = _tmp9_;
-#line 1004 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1022 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp10_ = video_table_get_instance ();
-#line 1004 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1022 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp11_ = _tmp10_;
-#line 1004 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1022 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp12_ = self->priv->backing_row;
-#line 1004 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1022 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp13_ = _tmp12_->video_id;
-#line 1004 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1022 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp14_ = new_filepath;
-#line 1004 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1022 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_table_set_filepath (_tmp11_, &_tmp13_, _tmp14_, &_inner_error_);
-#line 1004 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1022 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_database_table_unref0 (_tmp11_);
-#line 1004 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1022 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 9081 "VideoSupport.c"
-					goto __finally533;
+#line 9125 "VideoSupport.c"
+					goto __finally546;
 				}
-#line 1005 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1023 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp15_ = self->priv->backing_row;
-#line 1005 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1023 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp16_ = new_filepath;
-#line 1005 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1023 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp17_ = g_strdup (_tmp16_);
-#line 1005 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1023 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_free0 (_tmp15_->filepath);
-#line 1005 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1023 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp15_->filepath = _tmp17_;
-#line 9094 "VideoSupport.c"
+#line 9138 "VideoSupport.c"
 			}
-			__finally533:
+			__finally546:
 			{
 				VideoRow* _tmp18_ = NULL;
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp18_ = self->priv->backing_row;
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_rec_mutex_unlock (&self->priv->__lock_backing_row);
-#line 9103 "VideoSupport.c"
+#line 9147 "VideoSupport.c"
 			}
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
-#line 9109 "VideoSupport.c"
-					goto __catch532_database_error;
+#line 9153 "VideoSupport.c"
+					goto __catch545_database_error;
 				}
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_free0 (old_filepath);
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_free0 (new_filepath);
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 998 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 9122 "VideoSupport.c"
+#line 9166 "VideoSupport.c"
 			}
 		}
 	}
-	goto __finally532;
-	__catch532_database_error:
+	goto __finally545;
+	__catch545_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp19_ = NULL;
-#line 997 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1015 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		err = _inner_error_;
-#line 997 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1015 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_inner_error_ = NULL;
-#line 1008 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1026 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp19_ = err;
-#line 1008 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1026 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		app_window_database_error (_tmp19_);
-#line 1010 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1028 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_error_free0 (err);
-#line 1010 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1028 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_free0 (old_filepath);
-#line 1010 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1028 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_free0 (new_filepath);
-#line 1010 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1028 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 9147 "VideoSupport.c"
+#line 9191 "VideoSupport.c"
 	}
-	__finally532:
-#line 997 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	__finally545:
+#line 1015 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 997 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1015 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_free0 (old_filepath);
-#line 997 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1015 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_free0 (new_filepath);
-#line 997 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1015 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 997 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1015 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 997 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1015 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 9162 "VideoSupport.c"
+#line 9206 "VideoSupport.c"
 	}
-#line 1013 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1031 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp20_ = old_filepath;
-#line 1013 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1031 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_vala_assert (_tmp20_ != NULL, "old_filepath != null");
-#line 1014 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1032 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp21_ = old_filepath;
-#line 1014 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1032 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp22_ = g_file_new_for_path (_tmp21_);
-#line 1014 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1032 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp23_ = _tmp22_;
-#line 1014 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1032 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp24_ = file;
-#line 1014 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1032 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	media_source_notify_master_replaced (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource), _tmp23_, _tmp24_);
-#line 1014 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1032 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (_tmp23_);
-#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1034 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp25_ = alteration_new_from_list ("backing:master,metadata:name");
-#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1034 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp26_ = _tmp25_;
-#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1034 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	data_object_notify_altered (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_OBJECT, DataObject), _tmp26_);
-#line 1016 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1034 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_alteration_unref0 (_tmp26_);
-#line 994 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1012 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_free0 (old_filepath);
-#line 994 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1012 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_free0 (new_filepath);
-#line 9192 "VideoSupport.c"
+#line 9236 "VideoSupport.c"
 }
 
 
@@ -9207,45 +9251,45 @@ VideoMetadata* video_read_metadata (Video* self, GError** error) {
 	VideoMetadata* _tmp6_ = NULL;
 	VideoMetadata* _tmp7_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1019 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1037 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO (self), NULL);
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = media_source_get_file (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource));
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = _tmp1_;
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = video_reader_new (_tmp2_);
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp4_ = _tmp3_;
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp5_ = video_reader_read_metadata (_tmp4_, &_inner_error_);
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp6_ = _tmp5_;
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_video_reader_unref0 (_tmp4_);
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (_tmp2_);
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = _tmp6_;
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_propagate_error (error, _inner_error_);
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return NULL;
-#line 9233 "VideoSupport.c"
+#line 9277 "VideoSupport.c"
 	}
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp7_ = _tmp0_;
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = NULL;
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp7_;
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_media_metadata_unref0 (_tmp0_);
-#line 1020 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1038 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 9245 "VideoSupport.c"
+#line 9289 "VideoSupport.c"
 }
 
 
@@ -9267,14 +9311,14 @@ VideoInterpretableResults* video_interpretable_results_construct (GType object_t
 	self->video = _tmp1_;
 #line 320 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return self;
-#line 9267 "VideoSupport.c"
+#line 9311 "VideoSupport.c"
 }
 
 
 VideoInterpretableResults* video_interpretable_results_new (Video* video) {
 #line 320 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return video_interpretable_results_construct (VIDEO_TYPE_INTERPRETABLE_RESULTS, video);
-#line 9274 "VideoSupport.c"
+#line 9318 "VideoSupport.c"
 }
 
 
@@ -9288,7 +9332,7 @@ void video_interpretable_results_foreground_finish (VideoInterpretableResults* s
 	_tmp0_ = self->update_interpretable;
 #line 325 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp0_) {
-#line 9288 "VideoSupport.c"
+#line 9332 "VideoSupport.c"
 		Video* _tmp1_ = NULL;
 		gboolean _tmp2_ = FALSE;
 #line 326 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -9297,13 +9341,13 @@ void video_interpretable_results_foreground_finish (VideoInterpretableResults* s
 		_tmp2_ = self->is_interpretable;
 #line 326 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_set_is_interpretable (_tmp1_, _tmp2_);
-#line 9297 "VideoSupport.c"
+#line 9341 "VideoSupport.c"
 	}
 #line 328 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = self->new_thumbnail;
 #line 328 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp3_ != NULL) {
-#line 9303 "VideoSupport.c"
+#line 9347 "VideoSupport.c"
 		{
 			Video* _tmp4_ = NULL;
 			GdkPixbuf* _tmp5_ = NULL;
@@ -9318,8 +9362,8 @@ void video_interpretable_results_foreground_finish (VideoInterpretableResults* s
 			thumbnail_cache_replace (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_THUMBNAIL_SOURCE, ThumbnailSource), THUMBNAIL_CACHE_SIZE_BIG, _tmp5_, &_inner_error_);
 #line 330 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 9318 "VideoSupport.c"
-				goto __catch534_g_error;
+#line 9362 "VideoSupport.c"
+				goto __catch547_g_error;
 			}
 #line 331 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp6_ = self->video;
@@ -9329,17 +9373,17 @@ void video_interpretable_results_foreground_finish (VideoInterpretableResults* s
 			thumbnail_cache_replace (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_THUMBNAIL_SOURCE, ThumbnailSource), THUMBNAIL_CACHE_SIZE_MEDIUM, _tmp7_, &_inner_error_);
 #line 331 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 9329 "VideoSupport.c"
-				goto __catch534_g_error;
+#line 9373 "VideoSupport.c"
+				goto __catch547_g_error;
 			}
 #line 333 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp8_ = self->video;
 #line 333 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			thumbnail_source_notify_thumbnail_altered (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, TYPE_THUMBNAIL_SOURCE, ThumbnailSource));
-#line 9336 "VideoSupport.c"
+#line 9380 "VideoSupport.c"
 		}
-		goto __finally534;
-		__catch534_g_error:
+		goto __finally547;
+		__catch547_g_error:
 		{
 			GError* err = NULL;
 			Video* _tmp9_ = NULL;
@@ -9367,9 +9411,9 @@ void video_interpretable_results_foreground_finish (VideoInterpretableResults* s
 			_g_free0 (_tmp11_);
 #line 329 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_error_free0 (err);
-#line 9367 "VideoSupport.c"
+#line 9411 "VideoSupport.c"
 		}
-		__finally534:
+		__finally547:
 #line 329 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 329 "/home/jens/Source/shotwell/src/VideoSupport.vala"
@@ -9378,7 +9422,7 @@ void video_interpretable_results_foreground_finish (VideoInterpretableResults* s
 			g_clear_error (&_inner_error_);
 #line 329 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return;
-#line 9378 "VideoSupport.c"
+#line 9422 "VideoSupport.c"
 		}
 	}
 }
@@ -9387,7 +9431,7 @@ void video_interpretable_results_foreground_finish (VideoInterpretableResults* s
 static void video_value_interpretable_results_init (GValue* value) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	value->data[0].v_pointer = NULL;
-#line 9387 "VideoSupport.c"
+#line 9431 "VideoSupport.c"
 }
 
 
@@ -9396,7 +9440,7 @@ static void video_value_interpretable_results_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_interpretable_results_unref (value->data[0].v_pointer);
-#line 9396 "VideoSupport.c"
+#line 9440 "VideoSupport.c"
 	}
 }
 
@@ -9406,11 +9450,11 @@ static void video_value_interpretable_results_copy_value (const GValue* src_valu
 	if (src_value->data[0].v_pointer) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		dest_value->data[0].v_pointer = video_interpretable_results_ref (src_value->data[0].v_pointer);
-#line 9406 "VideoSupport.c"
+#line 9450 "VideoSupport.c"
 	} else {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 9410 "VideoSupport.c"
+#line 9454 "VideoSupport.c"
 	}
 }
 
@@ -9418,37 +9462,37 @@ static void video_value_interpretable_results_copy_value (const GValue* src_valu
 static gpointer video_value_interpretable_results_peek_pointer (const GValue* value) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return value->data[0].v_pointer;
-#line 9418 "VideoSupport.c"
+#line 9462 "VideoSupport.c"
 }
 
 
 static gchar* video_value_interpretable_results_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (collect_values[0].v_pointer) {
-#line 9425 "VideoSupport.c"
+#line 9469 "VideoSupport.c"
 		VideoInterpretableResults* object;
 		object = collect_values[0].v_pointer;
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9432 "VideoSupport.c"
+#line 9476 "VideoSupport.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9436 "VideoSupport.c"
+#line 9480 "VideoSupport.c"
 		}
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		value->data[0].v_pointer = video_interpretable_results_ref (object);
-#line 9440 "VideoSupport.c"
+#line 9484 "VideoSupport.c"
 	} else {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 9444 "VideoSupport.c"
+#line 9488 "VideoSupport.c"
 	}
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return NULL;
-#line 9448 "VideoSupport.c"
+#line 9492 "VideoSupport.c"
 }
 
 
@@ -9459,25 +9503,25 @@ static gchar* video_value_interpretable_results_lcopy_value (const GValue* value
 	if (!object_p) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 9459 "VideoSupport.c"
+#line 9503 "VideoSupport.c"
 	}
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (!value->data[0].v_pointer) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		*object_p = NULL;
-#line 9465 "VideoSupport.c"
+#line 9509 "VideoSupport.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		*object_p = value->data[0].v_pointer;
-#line 9469 "VideoSupport.c"
+#line 9513 "VideoSupport.c"
 	} else {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		*object_p = video_interpretable_results_ref (value->data[0].v_pointer);
-#line 9473 "VideoSupport.c"
+#line 9517 "VideoSupport.c"
 	}
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return NULL;
-#line 9477 "VideoSupport.c"
+#line 9521 "VideoSupport.c"
 }
 
 
@@ -9491,7 +9535,7 @@ GParamSpec* video_param_spec_interpretable_results (const gchar* name, const gch
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return G_PARAM_SPEC (spec);
-#line 9491 "VideoSupport.c"
+#line 9535 "VideoSupport.c"
 }
 
 
@@ -9500,7 +9544,7 @@ gpointer video_value_get_interpretable_results (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, VIDEO_TYPE_INTERPRETABLE_RESULTS), NULL);
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return value->data[0].v_pointer;
-#line 9500 "VideoSupport.c"
+#line 9544 "VideoSupport.c"
 }
 
 
@@ -9520,17 +9564,17 @@ void video_value_set_interpretable_results (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_interpretable_results_ref (value->data[0].v_pointer);
-#line 9520 "VideoSupport.c"
+#line 9564 "VideoSupport.c"
 	} else {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 9524 "VideoSupport.c"
+#line 9568 "VideoSupport.c"
 	}
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (old) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_interpretable_results_unref (old);
-#line 9530 "VideoSupport.c"
+#line 9574 "VideoSupport.c"
 	}
 }
 
@@ -9549,17 +9593,17 @@ void video_value_take_interpretable_results (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		value->data[0].v_pointer = v_object;
-#line 9549 "VideoSupport.c"
+#line 9593 "VideoSupport.c"
 	} else {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 9553 "VideoSupport.c"
+#line 9597 "VideoSupport.c"
 	}
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (old) {
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		video_interpretable_results_unref (old);
-#line 9559 "VideoSupport.c"
+#line 9603 "VideoSupport.c"
 	}
 }
 
@@ -9569,7 +9613,7 @@ static void video_interpretable_results_class_init (VideoInterpretableResultsCla
 	video_interpretable_results_parent_class = g_type_class_peek_parent (klass);
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	((VideoInterpretableResultsClass *) klass)->finalize = video_interpretable_results_finalize;
-#line 9569 "VideoSupport.c"
+#line 9613 "VideoSupport.c"
 }
 
 
@@ -9582,7 +9626,7 @@ static void video_interpretable_results_instance_init (VideoInterpretableResults
 	self->new_thumbnail = NULL;
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self->ref_count = 1;
-#line 9582 "VideoSupport.c"
+#line 9626 "VideoSupport.c"
 }
 
 
@@ -9596,7 +9640,7 @@ static void video_interpretable_results_finalize (VideoInterpretableResults* obj
 	_g_object_unref0 (self->video);
 #line 318 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (self->new_thumbnail);
-#line 9596 "VideoSupport.c"
+#line 9640 "VideoSupport.c"
 }
 
 
@@ -9621,7 +9665,7 @@ gpointer video_interpretable_results_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return instance;
-#line 9621 "VideoSupport.c"
+#line 9665 "VideoSupport.c"
 }
 
 
@@ -9634,7 +9678,7 @@ void video_interpretable_results_unref (gpointer instance) {
 		VIDEO_INTERPRETABLE_RESULTS_GET_CLASS (self)->finalize (self);
 #line 314 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 9634 "VideoSupport.c"
+#line 9678 "VideoSupport.c"
 	}
 }
 
@@ -9718,7 +9762,7 @@ static void video_class_init (VideoClass * klass) {
 	((DataSourceClass *) klass)->internal_delete_backing = video_real_internal_delete_backing;
 #line 307 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	G_OBJECT_CLASS (klass)->finalize = video_finalize;
-#line 9718 "VideoSupport.c"
+#line 9762 "VideoSupport.c"
 }
 
 
@@ -9731,7 +9775,7 @@ static void video_flaggable_interface_init (FlaggableIface * iface) {
 	iface->mark_flagged = (void (*)(Flaggable*)) video_real_mark_flagged;
 #line 307 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	iface->mark_unflagged = (void (*)(Flaggable*)) video_real_mark_unflagged;
-#line 9731 "VideoSupport.c"
+#line 9775 "VideoSupport.c"
 }
 
 
@@ -9748,7 +9792,7 @@ static void video_monitorable_interface_init (MonitorableIface * iface) {
 	iface->set_master_timestamp = (void (*)(Monitorable*, GFileInfo*)) video_real_set_master_timestamp;
 #line 307 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	iface->set_master_file = (void (*)(Monitorable*, GFile*)) video_real_set_master_file;
-#line 9748 "VideoSupport.c"
+#line 9792 "VideoSupport.c"
 }
 
 
@@ -9759,7 +9803,7 @@ static void video_dateable_interface_init (DateableIface * iface) {
 	iface->get_exposure_time = (time_t (*)(Dateable*)) video_real_get_exposure_time;
 #line 307 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	iface->set_exposure_time = (void (*)(Dateable*, time_t)) video_real_set_exposure_time;
-#line 9759 "VideoSupport.c"
+#line 9803 "VideoSupport.c"
 }
 
 
@@ -9768,7 +9812,7 @@ static void video_instance_init (Video * self) {
 	self->priv = VIDEO_GET_PRIVATE (self);
 #line 348 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_rec_mutex_init (&self->priv->__lock_backing_row);
-#line 9768 "VideoSupport.c"
+#line 9812 "VideoSupport.c"
 }
 
 
@@ -9782,7 +9826,7 @@ static void video_finalize (GObject* obj) {
 	_video_row_unref0 (self->priv->backing_row);
 #line 307 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	G_OBJECT_CLASS (video_parent_class)->finalize (obj);
-#line 9782 "VideoSupport.c"
+#line 9826 "VideoSupport.c"
 }
 
 
@@ -9819,44 +9863,44 @@ GType video_source_collection_state_get_type (void) {
 static gint _uint64_compare_gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self) {
 	gint result;
 	result = uint64_compare ((guint64*) a, (guint64*) b);
-#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1060 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 9821 "VideoSupport.c"
+#line 9865 "VideoSupport.c"
 }
 
 
 static guint64* _uint64_dup (guint64* self) {
 	guint64* dup;
-#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1060 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	dup = g_new0 (guint64, 1);
-#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1060 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	memcpy (dup, self, sizeof (guint64));
-#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1060 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return dup;
-#line 9833 "VideoSupport.c"
+#line 9877 "VideoSupport.c"
 }
 
 
 static gint64 _video_source_collection_get_video_key_get_source_database_key (DataSource* source, gpointer self) {
 	gint64 result;
 	result = video_source_collection_get_video_key (source);
-#line 1046 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1064 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 9842 "VideoSupport.c"
+#line 9886 "VideoSupport.c"
 }
 
 
 static void _video_source_collection_on_trashcan_contents_altered_source_holding_tank_contents_altered (SourceHoldingTank* _sender, GeeCollection* added, GeeCollection* removed, gpointer self) {
-#line 1048 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1066 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_source_collection_on_trashcan_contents_altered ((VideoSourceCollection*) self, added, removed);
-#line 9849 "VideoSupport.c"
+#line 9893 "VideoSupport.c"
 }
 
 
 static void _video_source_collection_on_offline_contents_altered_source_holding_tank_contents_altered (SourceHoldingTank* _sender, GeeCollection* added, GeeCollection* removed, gpointer self) {
-#line 1049 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1067 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_source_collection_on_offline_contents_altered ((VideoSourceCollection*) self, added, removed);
-#line 9856 "VideoSupport.c"
+#line 9900 "VideoSupport.c"
 }
 
 
@@ -9866,43 +9910,43 @@ VideoSourceCollection* video_source_collection_construct (GType object_type) {
 	MediaSourceHoldingTank* _tmp1_ = NULL;
 	MediaSourceHoldingTank* _tmp2_ = NULL;
 	MediaSourceHoldingTank* _tmp3_ = NULL;
-#line 1046 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1064 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = (VideoSourceCollection*) media_source_collection_construct (object_type, "VideoSourceCollection", _video_source_collection_get_video_key_get_source_database_key, NULL);
-#line 1048 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1066 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = media_source_collection_get_trashcan (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
-#line 1048 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1066 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = _tmp0_;
-#line 1048 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1066 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_SOURCE_HOLDING_TANK, SourceHoldingTank), "contents-altered", (GCallback) _video_source_collection_on_trashcan_contents_altered_source_holding_tank_contents_altered, self);
-#line 1048 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1066 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_source_holding_tank_unref0 (_tmp1_);
-#line 1049 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1067 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = media_source_collection_get_offline_bin (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
-#line 1049 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1067 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = _tmp2_;
-#line 1049 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1067 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_SOURCE_HOLDING_TANK, SourceHoldingTank), "contents-altered", (GCallback) _video_source_collection_on_offline_contents_altered_source_holding_tank_contents_altered, self);
-#line 1049 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1067 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_source_holding_tank_unref0 (_tmp3_);
-#line 1045 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1063 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return self;
-#line 9886 "VideoSupport.c"
+#line 9930 "VideoSupport.c"
 }
 
 
 VideoSourceCollection* video_source_collection_new (void) {
-#line 1045 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1063 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return video_source_collection_construct (TYPE_VIDEO_SOURCE_COLLECTION);
-#line 9893 "VideoSupport.c"
+#line 9937 "VideoSupport.c"
 }
 
 
 static gboolean _video_source_collection_is_video_trashed_source_holding_tank_check_to_keep (DataSource* source, Alteration* alteration, gpointer self) {
 	gboolean result;
 	result = video_source_collection_is_video_trashed (source);
-#line 1053 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1071 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 9902 "VideoSupport.c"
+#line 9946 "VideoSupport.c"
 }
 
 
@@ -9910,24 +9954,24 @@ static MediaSourceHoldingTank* video_source_collection_real_create_trashcan (Med
 	VideoSourceCollection * self;
 	MediaSourceHoldingTank* result = NULL;
 	MediaSourceHoldingTank* _tmp0_ = NULL;
-#line 1052 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1070 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
-#line 1053 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1071 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = media_source_holding_tank_new (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), _video_source_collection_is_video_trashed_source_holding_tank_check_to_keep, NULL, _video_source_collection_get_video_key_get_source_database_key, NULL);
-#line 1053 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1071 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp0_;
-#line 1053 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1071 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 9918 "VideoSupport.c"
+#line 9962 "VideoSupport.c"
 }
 
 
 static gboolean _video_source_collection_is_video_offline_source_holding_tank_check_to_keep (DataSource* source, Alteration* alteration, gpointer self) {
 	gboolean result;
 	result = video_source_collection_is_video_offline (source);
-#line 1057 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1075 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 9927 "VideoSupport.c"
+#line 9971 "VideoSupport.c"
 }
 
 
@@ -9935,15 +9979,15 @@ static MediaSourceHoldingTank* video_source_collection_real_create_offline_bin (
 	VideoSourceCollection * self;
 	MediaSourceHoldingTank* result = NULL;
 	MediaSourceHoldingTank* _tmp0_ = NULL;
-#line 1056 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1074 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
-#line 1057 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1075 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = media_source_holding_tank_new (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), _video_source_collection_is_video_offline_source_holding_tank_check_to_keep, NULL, _video_source_collection_get_video_key_get_source_database_key, NULL);
-#line 1057 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1075 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp0_;
-#line 1057 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1075 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 9943 "VideoSupport.c"
+#line 9987 "VideoSupport.c"
 }
 
 
@@ -9952,21 +9996,21 @@ static MediaMonitor* video_source_collection_real_create_media_monitor (MediaSou
 	MediaMonitor* result = NULL;
 	GCancellable* _tmp0_ = NULL;
 	VideoMonitor* _tmp1_ = NULL;
-#line 1060 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1078 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
-#line 1060 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1078 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_WORKERS (workers), NULL);
-#line 1060 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1078 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (G_IS_CANCELLABLE (cancellable), NULL);
-#line 1061 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = cancellable;
-#line 1061 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = video_monitor_new (_tmp0_);
-#line 1061 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_MEDIA_MONITOR, MediaMonitor);
-#line 1061 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 9966 "VideoSupport.c"
+#line 10010 "VideoSupport.c"
 }
 
 
@@ -9974,17 +10018,17 @@ static gboolean video_source_collection_real_holds_type_of_source (SourceCollect
 	VideoSourceCollection * self;
 	gboolean result = FALSE;
 	DataSource* _tmp0_ = NULL;
-#line 1064 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1082 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
-#line 1064 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1082 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_DATA_SOURCE (source), FALSE);
-#line 1065 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1083 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = source;
-#line 1065 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1083 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_VIDEO);
-#line 1065 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1083 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 9984 "VideoSupport.c"
+#line 10028 "VideoSupport.c"
 }
 
 
@@ -9992,15 +10036,15 @@ static gchar* video_source_collection_real_get_typename (MediaSourceCollection* 
 	VideoSourceCollection * self;
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 1068 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1086 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
-#line 1069 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1087 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = g_strdup (VIDEO_TYPENAME);
-#line 1069 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1087 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp0_;
-#line 1069 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1087 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 10000 "VideoSupport.c"
+#line 10044 "VideoSupport.c"
 }
 
 
@@ -10009,57 +10053,57 @@ static gboolean video_source_collection_real_is_file_recognized (MediaSourceColl
 	gboolean result = FALSE;
 	GFile* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 1072 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1090 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
-#line 1072 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1090 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
-#line 1073 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1091 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = file;
-#line 1073 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1091 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = video_reader_is_supported_video_file (_tmp0_);
-#line 1073 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1091 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp1_;
-#line 1073 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1091 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 10021 "VideoSupport.c"
+#line 10065 "VideoSupport.c"
 }
 
 
 static void video_source_collection_on_trashcan_contents_altered (VideoSourceCollection* self, GeeCollection* added, GeeCollection* removed) {
 	GeeCollection* _tmp0_ = NULL;
 	GeeCollection* _tmp1_ = NULL;
-#line 1076 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1094 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO_SOURCE_COLLECTION (self));
-#line 1076 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1094 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail ((added == NULL) || GEE_IS_COLLECTION (added));
-#line 1076 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1094 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail ((removed == NULL) || GEE_IS_COLLECTION (removed));
-#line 1078 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1096 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = added;
-#line 1078 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1096 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = removed;
-#line 1078 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1096 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), "trashcan-contents-altered", G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_COLLECTION, GeeCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 10040 "VideoSupport.c"
+#line 10084 "VideoSupport.c"
 }
 
 
 static void video_source_collection_on_offline_contents_altered (VideoSourceCollection* self, GeeCollection* added, GeeCollection* removed) {
 	GeeCollection* _tmp0_ = NULL;
 	GeeCollection* _tmp1_ = NULL;
-#line 1082 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1100 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO_SOURCE_COLLECTION (self));
-#line 1082 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1100 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail ((added == NULL) || GEE_IS_COLLECTION (added));
-#line 1082 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1100 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail ((removed == NULL) || GEE_IS_COLLECTION (removed));
-#line 1084 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1102 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = added;
-#line 1084 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1102 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = removed;
-#line 1084 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1102 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), "offline-contents-altered", G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_COLLECTION, GeeCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 10059 "VideoSupport.c"
+#line 10103 "VideoSupport.c"
 }
 
 
@@ -10069,19 +10113,19 @@ static MediaSource* video_source_collection_real_fetch_by_numeric_id (MediaSourc
 	gint64 _tmp0_ = 0LL;
 	VideoID _tmp1_ = {0};
 	Video* _tmp2_ = NULL;
-#line 1088 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1106 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
-#line 1089 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1107 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = numeric_id;
-#line 1089 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1107 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_id_init (&_tmp1_, _tmp0_);
-#line 1089 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1107 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = video_source_collection_fetch (self, &_tmp1_);
-#line 1089 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1107 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_MEDIA_SOURCE, MediaSource);
-#line 1089 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1107 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 10081 "VideoSupport.c"
+#line 10125 "VideoSupport.c"
 }
 
 
@@ -10094,29 +10138,29 @@ gint64 video_source_collection_get_video_key (DataSource* source) {
 	VideoID _tmp2_ = {0};
 	VideoID _tmp3_ = {0};
 	gint64 _tmp4_ = 0LL;
-#line 1092 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1110 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_DATA_SOURCE (source), 0LL);
-#line 1093 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1111 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = source;
-#line 1093 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1111 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_VIDEO, Video));
-#line 1093 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1111 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video = _tmp1_;
-#line 1094 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1112 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_get_video_id (video, &_tmp2_);
-#line 1094 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1112 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_id = _tmp2_;
-#line 1096 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1114 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = video_id;
-#line 1096 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1114 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp4_ = _tmp3_.id;
-#line 1096 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1114 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp4_;
-#line 1096 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1114 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (video);
-#line 1096 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1114 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 10116 "VideoSupport.c"
+#line 10160 "VideoSupport.c"
 }
 
 
@@ -10124,17 +10168,17 @@ gboolean video_source_collection_is_video_trashed (DataSource* source) {
 	gboolean result = FALSE;
 	DataSource* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 1099 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1117 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_DATA_SOURCE (source), FALSE);
-#line 1100 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1118 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = source;
-#line 1100 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1118 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = media_source_is_trashed (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_VIDEO, Video), TYPE_MEDIA_SOURCE, MediaSource));
-#line 1100 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1118 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp1_;
-#line 1100 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1118 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 10134 "VideoSupport.c"
+#line 10178 "VideoSupport.c"
 }
 
 
@@ -10142,17 +10186,17 @@ gboolean video_source_collection_is_video_offline (DataSource* source) {
 	gboolean result = FALSE;
 	DataSource* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 1103 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1121 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_DATA_SOURCE (source), FALSE);
-#line 1104 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1122 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = source;
-#line 1104 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1122 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = media_source_is_offline (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_VIDEO, Video), TYPE_MEDIA_SOURCE, MediaSource));
-#line 1104 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1122 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp1_;
-#line 1104 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1122 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 10152 "VideoSupport.c"
+#line 10196 "VideoSupport.c"
 }
 
 
@@ -10161,21 +10205,21 @@ Video* video_source_collection_fetch (VideoSourceCollection* self, VideoID* vide
 	VideoID _tmp0_ = {0};
 	gint64 _tmp1_ = 0LL;
 	DataSource* _tmp2_ = NULL;
-#line 1107 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO_SOURCE_COLLECTION (self), NULL);
-#line 1107 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (video_id != NULL, NULL);
-#line 1108 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1126 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = *video_id;
-#line 1108 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1126 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = _tmp0_.id;
-#line 1108 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1126 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = database_source_collection_fetch_by_key (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_SOURCE_COLLECTION, DatabaseSourceCollection), _tmp1_);
-#line 1108 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1126 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_VIDEO, Video);
-#line 1108 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1126 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 10175 "VideoSupport.c"
+#line 10219 "VideoSupport.c"
 }
 
 
@@ -10187,27 +10231,27 @@ static GeeCollection* video_source_collection_real_get_event_source_ids (MediaSo
 	EventID _tmp2_ = {0};
 	GeeArrayList* _tmp3_ = NULL;
 	GeeCollection* _tmp4_ = NULL;
-#line 1111 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1129 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
-#line 1111 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1129 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (event_id != NULL, NULL);
-#line 1112 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video_table_get_instance ();
-#line 1112 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = _tmp0_;
-#line 1112 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = *event_id;
-#line 1112 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = video_table_get_event_source_ids (_tmp1_, &_tmp2_);
-#line 1112 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp4_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 1112 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_database_table_unref0 (_tmp1_);
-#line 1112 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp4_;
-#line 1112 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 10207 "VideoSupport.c"
+#line 10251 "VideoSupport.c"
 }
 
 
@@ -10228,113 +10272,113 @@ Video* video_source_collection_get_state_by_file (VideoSourceCollection* self, G
 	GFile* _tmp10_ = NULL;
 	MediaSource* _tmp11_ = NULL;
 	Video* _tmp12_ = NULL;
-#line 1115 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1133 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO_SOURCE_COLLECTION (self), NULL);
-#line 1115 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1133 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (G_IS_FILE (file), NULL);
-#line 1116 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1134 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = file;
-#line 1116 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1134 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = media_source_collection_fetch_by_master_file (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), _tmp0_);
-#line 1116 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1134 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_VIDEO, Video);
-#line 1117 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1135 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = video;
-#line 1117 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1135 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp2_ != NULL) {
-#line 1118 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1136 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_vala_state = VIDEO_SOURCE_COLLECTION_STATE_ONLINE;
-#line 1120 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1138 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		result = video;
-#line 1120 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1138 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (state) {
-#line 1120 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1138 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			*state = _vala_state;
-#line 10250 "VideoSupport.c"
+#line 10294 "VideoSupport.c"
 		}
-#line 1120 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1138 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return result;
-#line 10254 "VideoSupport.c"
+#line 10298 "VideoSupport.c"
 	}
-#line 1123 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1141 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = media_source_collection_get_trashcan (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
-#line 1123 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1141 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp4_ = _tmp3_;
-#line 1123 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1141 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp5_ = file;
-#line 1123 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1141 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp6_ = media_source_holding_tank_fetch_by_master_file (_tmp4_, _tmp5_);
-#line 1123 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1141 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (video);
-#line 1123 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1141 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video = G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_VIDEO, Video);
-#line 1123 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1141 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_source_holding_tank_unref0 (_tmp4_);
-#line 1124 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1142 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp7_ = video;
-#line 1124 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1142 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp7_ != NULL) {
-#line 1125 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1143 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_vala_state = VIDEO_SOURCE_COLLECTION_STATE_TRASH;
-#line 1127 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1145 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		result = video;
-#line 1127 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1145 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		if (state) {
-#line 1127 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1145 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			*state = _vala_state;
-#line 10282 "VideoSupport.c"
+#line 10326 "VideoSupport.c"
 		}
-#line 1127 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1145 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return result;
-#line 10286 "VideoSupport.c"
-	}
-#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp8_ = media_source_collection_get_offline_bin (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
-#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp9_ = _tmp8_;
-#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp10_ = file;
-#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp11_ = media_source_holding_tank_fetch_by_master_file (_tmp9_, _tmp10_);
-#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_g_object_unref0 (video);
-#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	video = G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_VIDEO, Video);
-#line 1130 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_source_holding_tank_unref0 (_tmp9_);
-#line 1131 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_tmp12_ = video;
-#line 1131 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	if (_tmp12_ != NULL) {
-#line 1132 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-		_vala_state = VIDEO_SOURCE_COLLECTION_STATE_OFFLINE;
-#line 1134 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-		result = video;
-#line 1134 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-		if (state) {
-#line 1134 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-			*state = _vala_state;
-#line 10314 "VideoSupport.c"
-		}
-#line 1134 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-		return result;
-#line 10318 "VideoSupport.c"
-	}
-#line 1137 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_vala_state = VIDEO_SOURCE_COLLECTION_STATE_UNKNOWN;
-#line 1139 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	result = NULL;
-#line 1139 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_g_object_unref0 (video);
-#line 1139 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	if (state) {
-#line 1139 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-		*state = _vala_state;
 #line 10330 "VideoSupport.c"
 	}
-#line 1139 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1148 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp8_ = media_source_collection_get_offline_bin (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
+#line 1148 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp9_ = _tmp8_;
+#line 1148 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp10_ = file;
+#line 1148 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp11_ = media_source_holding_tank_fetch_by_master_file (_tmp9_, _tmp10_);
+#line 1148 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_g_object_unref0 (video);
+#line 1148 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	video = G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_VIDEO, Video);
+#line 1148 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_source_holding_tank_unref0 (_tmp9_);
+#line 1149 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_tmp12_ = video;
+#line 1149 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	if (_tmp12_ != NULL) {
+#line 1150 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		_vala_state = VIDEO_SOURCE_COLLECTION_STATE_OFFLINE;
+#line 1152 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		result = video;
+#line 1152 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		if (state) {
+#line 1152 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+			*state = _vala_state;
+#line 10358 "VideoSupport.c"
+		}
+#line 1152 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		return result;
+#line 10362 "VideoSupport.c"
+	}
+#line 1155 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_vala_state = VIDEO_SOURCE_COLLECTION_STATE_UNKNOWN;
+#line 1157 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	result = NULL;
+#line 1157 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_g_object_unref0 (video);
+#line 1157 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	if (state) {
+#line 1157 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+		*state = _vala_state;
+#line 10374 "VideoSupport.c"
+	}
+#line 1157 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 10334 "VideoSupport.c"
+#line 10378 "VideoSupport.c"
 }
 
 
@@ -10348,83 +10392,83 @@ static void video_source_collection_compare_backing (VideoSourceCollection* self
 	GFileInfo* _tmp6_ = NULL;
 	GTimeVal _tmp7_ = {0};
 	glong _tmp8_ = 0L;
-#line 1142 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1160 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO_SOURCE_COLLECTION (self));
-#line 1142 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1160 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO (video));
-#line 1142 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1160 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 1142 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1160 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (GEE_IS_COLLECTION (matching_master));
-#line 1143 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = video;
-#line 1143 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = media_source_get_filesize (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 1143 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = info;
-#line 1143 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = g_file_info_get_size (_tmp2_);
-#line 1143 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp1_ != ((guint64) _tmp3_)) {
-#line 1144 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1162 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		return;
-#line 10368 "VideoSupport.c"
+#line 10412 "VideoSupport.c"
 	}
-#line 1146 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1164 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp4_ = video;
-#line 1146 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1164 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp5_ = media_source_get_timestamp (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 1146 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1164 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp6_ = info;
-#line 1146 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1164 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_file_info_get_modification_time (_tmp6_, &_tmp7_);
-#line 1146 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1164 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp8_ = _tmp7_.tv_sec;
-#line 1146 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1164 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp5_ == ((time_t) _tmp8_)) {
-#line 10382 "VideoSupport.c"
+#line 10426 "VideoSupport.c"
 		GeeCollection* _tmp9_ = NULL;
 		Video* _tmp10_ = NULL;
-#line 1147 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1165 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp9_ = matching_master;
-#line 1147 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1165 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp10_ = video;
-#line 1147 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1165 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		gee_collection_add (_tmp9_, _tmp10_);
-#line 10391 "VideoSupport.c"
+#line 10435 "VideoSupport.c"
 	}
 }
 
 
 void video_source_collection_fetch_by_matching_backing (VideoSourceCollection* self, GFileInfo* info, GeeCollection* matching_master) {
-#line 1150 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1168 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO_SOURCE_COLLECTION (self));
-#line 1150 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1168 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 1150 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1168 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (GEE_IS_COLLECTION (matching_master));
-#line 10403 "VideoSupport.c"
+#line 10447 "VideoSupport.c"
 	{
 		GeeIterator* _object_it = NULL;
 		GeeCollection* _tmp0_ = NULL;
 		GeeCollection* _tmp1_ = NULL;
 		GeeIterator* _tmp2_ = NULL;
 		GeeIterator* _tmp3_ = NULL;
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = data_collection_get_all (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATA_COLLECTION, DataCollection));
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = _tmp0_;
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp2_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp3_ = _tmp2_;
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_tmp1_);
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_object_it = _tmp3_;
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		while (TRUE) {
-#line 10424 "VideoSupport.c"
+#line 10468 "VideoSupport.c"
 			GeeIterator* _tmp4_ = NULL;
 			gboolean _tmp5_ = FALSE;
 			DataObject* object = NULL;
@@ -10433,37 +10477,37 @@ void video_source_collection_fetch_by_matching_backing (VideoSourceCollection* s
 			DataObject* _tmp8_ = NULL;
 			GFileInfo* _tmp9_ = NULL;
 			GeeCollection* _tmp10_ = NULL;
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp4_ = _object_it;
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp5_ = gee_iterator_next (_tmp4_);
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (!_tmp5_) {
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				break;
-#line 10441 "VideoSupport.c"
+#line 10485 "VideoSupport.c"
 			}
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp6_ = _object_it;
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp7_ = gee_iterator_get (_tmp6_);
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			object = (DataObject*) _tmp7_;
-#line 1152 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1170 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp8_ = object;
-#line 1152 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1170 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp9_ = info;
-#line 1152 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1170 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp10_ = matching_master;
-#line 1152 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1170 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			video_source_collection_compare_backing (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, TYPE_VIDEO, Video), _tmp9_, _tmp10_);
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (object);
-#line 10459 "VideoSupport.c"
+#line 10503 "VideoSupport.c"
 		}
-#line 1151 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_object_it);
-#line 10463 "VideoSupport.c"
+#line 10507 "VideoSupport.c"
 	}
 	{
 		GeeIterator* _media_it = NULL;
@@ -10471,21 +10515,21 @@ void video_source_collection_fetch_by_matching_backing (VideoSourceCollection* s
 		GeeCollection* _tmp12_ = NULL;
 		GeeIterator* _tmp13_ = NULL;
 		GeeIterator* _tmp14_ = NULL;
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp11_ = media_source_collection_get_offline_bin_contents (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp12_ = _tmp11_;
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp13_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp14_ = _tmp13_;
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_tmp12_);
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_media_it = _tmp14_;
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		while (TRUE) {
-#line 10485 "VideoSupport.c"
+#line 10529 "VideoSupport.c"
 			GeeIterator* _tmp15_ = NULL;
 			gboolean _tmp16_ = FALSE;
 			MediaSource* media = NULL;
@@ -10494,37 +10538,37 @@ void video_source_collection_fetch_by_matching_backing (VideoSourceCollection* s
 			MediaSource* _tmp19_ = NULL;
 			GFileInfo* _tmp20_ = NULL;
 			GeeCollection* _tmp21_ = NULL;
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp15_ = _media_it;
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp16_ = gee_iterator_next (_tmp15_);
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (!_tmp16_) {
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				break;
-#line 10502 "VideoSupport.c"
+#line 10546 "VideoSupport.c"
 			}
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp17_ = _media_it;
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp18_ = gee_iterator_get (_tmp17_);
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			media = (MediaSource*) _tmp18_;
-#line 1155 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1173 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp19_ = media;
-#line 1155 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1173 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp20_ = info;
-#line 1155 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1173 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp21_ = matching_master;
-#line 1155 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1173 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			video_source_collection_compare_backing (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, TYPE_VIDEO, Video), _tmp20_, _tmp21_);
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (media);
-#line 10520 "VideoSupport.c"
+#line 10564 "VideoSupport.c"
 		}
-#line 1154 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_media_it);
-#line 10524 "VideoSupport.c"
+#line 10568 "VideoSupport.c"
 	}
 }
 
@@ -10535,30 +10579,30 @@ static void video_source_collection_real_notify_contents_altered (DataCollection
 	GeeIterable* _tmp13_ = NULL;
 	GeeIterable* _tmp26_ = NULL;
 	GeeIterable* _tmp27_ = NULL;
-#line 1158 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1176 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
-#line 1158 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1176 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail ((added == NULL) || GEE_IS_ITERABLE (added));
-#line 1158 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1176 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail ((removed == NULL) || GEE_IS_ITERABLE (removed));
-#line 1160 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1178 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = added;
-#line 1160 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1178 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp0_ != NULL) {
-#line 10545 "VideoSupport.c"
+#line 10589 "VideoSupport.c"
 		{
 			GeeIterator* _object_it = NULL;
 			GeeIterable* _tmp1_ = NULL;
 			GeeIterator* _tmp2_ = NULL;
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp1_ = added;
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp2_ = gee_iterable_iterator (_tmp1_);
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_object_it = _tmp2_;
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			while (TRUE) {
-#line 10558 "VideoSupport.c"
+#line 10602 "VideoSupport.c"
 				GeeIterator* _tmp3_ = NULL;
 				gboolean _tmp4_ = FALSE;
 				DataObject* object = NULL;
@@ -10571,67 +10615,67 @@ static void video_source_collection_real_notify_contents_altered (DataCollection
 				Video* _tmp10_ = NULL;
 				guint64 _tmp11_ = 0ULL;
 				Video* _tmp12_ = NULL;
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp3_ = _object_it;
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp4_ = gee_iterator_next (_tmp3_);
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (!_tmp4_) {
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					break;
-#line 10579 "VideoSupport.c"
+#line 10623 "VideoSupport.c"
 				}
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp5_ = _object_it;
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp6_ = gee_iterator_get (_tmp5_);
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				object = (DataObject*) _tmp6_;
-#line 1162 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp7_ = object;
-#line 1162 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp8_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_VIDEO, Video));
-#line 1162 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video = _tmp8_;
-#line 1164 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1182 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp9_ = self->priv->filesize_to_video;
-#line 1164 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1182 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp10_ = video;
-#line 1164 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1182 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp11_ = media_source_get_master_filesize (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 1164 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1182 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp12_ = video;
-#line 1164 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1182 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				gee_multi_map_set (_tmp9_, &_tmp11_, _tmp12_);
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_object_unref0 (video);
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_object_unref0 (object);
-#line 10607 "VideoSupport.c"
+#line 10651 "VideoSupport.c"
 			}
-#line 1161 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (_object_it);
-#line 10611 "VideoSupport.c"
+#line 10655 "VideoSupport.c"
 		}
 	}
-#line 1168 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1186 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp13_ = removed;
-#line 1168 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1186 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp13_ != NULL) {
-#line 10618 "VideoSupport.c"
+#line 10662 "VideoSupport.c"
 		{
 			GeeIterator* _object_it = NULL;
 			GeeIterable* _tmp14_ = NULL;
 			GeeIterator* _tmp15_ = NULL;
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp14_ = removed;
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp15_ = gee_iterable_iterator (_tmp14_);
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_object_it = _tmp15_;
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			while (TRUE) {
-#line 10631 "VideoSupport.c"
+#line 10675 "VideoSupport.c"
 				GeeIterator* _tmp16_ = NULL;
 				gboolean _tmp17_ = FALSE;
 				DataObject* object = NULL;
@@ -10644,66 +10688,66 @@ static void video_source_collection_real_notify_contents_altered (DataCollection
 				Video* _tmp23_ = NULL;
 				guint64 _tmp24_ = 0ULL;
 				Video* _tmp25_ = NULL;
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp16_ = _object_it;
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp17_ = gee_iterator_next (_tmp16_);
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				if (!_tmp17_) {
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 					break;
-#line 10652 "VideoSupport.c"
+#line 10696 "VideoSupport.c"
 				}
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp18_ = _object_it;
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp19_ = gee_iterator_get (_tmp18_);
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				object = (DataObject*) _tmp19_;
-#line 1170 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1188 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp20_ = object;
-#line 1170 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1188 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp21_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, TYPE_VIDEO, Video));
-#line 1170 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1188 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video = _tmp21_;
-#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp22_ = self->priv->filesize_to_video;
-#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp23_ = video;
-#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp24_ = media_source_get_master_filesize (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp25_ = video;
-#line 1172 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				gee_multi_map_remove (_tmp22_, &_tmp24_, _tmp25_);
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_object_unref0 (video);
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_object_unref0 (object);
-#line 10680 "VideoSupport.c"
+#line 10724 "VideoSupport.c"
 			}
-#line 1169 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1187 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (_object_it);
-#line 10684 "VideoSupport.c"
+#line 10728 "VideoSupport.c"
 		}
 	}
-#line 1176 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1194 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp26_ = added;
-#line 1176 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1194 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp27_ = removed;
-#line 1176 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1194 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	DATA_COLLECTION_CLASS (video_source_collection_parent_class)->notify_contents_altered (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), TYPE_DATA_COLLECTION, DataCollection), _tmp26_, _tmp27_);
-#line 10693 "VideoSupport.c"
+#line 10737 "VideoSupport.c"
 }
 
 
 void video_source_collection_get_basename_filesize_duplicate (VideoSourceCollection* self, const gchar* basename, guint64 filesize, VideoID* result) {
 	VideoID _tmp19_ = {0};
-#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1197 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (IS_VIDEO_SOURCE_COLLECTION (self));
-#line 1179 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1197 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_if_fail (basename != NULL);
-#line 10703 "VideoSupport.c"
+#line 10747 "VideoSupport.c"
 	{
 		GeeIterator* _video_it = NULL;
 		GeeMultiMap* _tmp0_ = NULL;
@@ -10712,25 +10756,25 @@ void video_source_collection_get_basename_filesize_duplicate (VideoSourceCollect
 		GeeCollection* _tmp3_ = NULL;
 		GeeIterator* _tmp4_ = NULL;
 		GeeIterator* _tmp5_ = NULL;
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp0_ = self->priv->filesize_to_video;
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = filesize;
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp2_ = gee_multi_map_get (_tmp0_, &_tmp1_);
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp3_ = _tmp2_;
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp4_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp5_ = _tmp4_;
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_tmp3_);
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_video_it = _tmp5_;
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		while (TRUE) {
-#line 10730 "VideoSupport.c"
+#line 10774 "VideoSupport.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			Video* video = NULL;
@@ -10743,72 +10787,72 @@ void video_source_collection_get_basename_filesize_duplicate (VideoSourceCollect
 			const gchar* _tmp14_ = NULL;
 			gint _tmp15_ = 0;
 			gboolean _tmp16_ = FALSE;
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp6_ = _video_it;
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp7_ = gee_iterator_next (_tmp6_);
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (!_tmp7_) {
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				break;
-#line 10751 "VideoSupport.c"
+#line 10795 "VideoSupport.c"
 			}
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp8_ = _video_it;
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp9_ = gee_iterator_get (_tmp8_);
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			video = (Video*) _tmp9_;
-#line 1181 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1199 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp10_ = video;
-#line 1181 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1199 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp11_ = media_source_get_master_file (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 1181 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1199 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp12_ = _tmp11_;
-#line 1181 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1199 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp13_ = g_file_get_basename (_tmp12_);
-#line 1181 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1199 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp14_ = basename;
-#line 1181 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1199 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp15_ = utf8_ci_compare (_tmp13_, _tmp14_);
-#line 1181 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1199 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_tmp16_ = _tmp15_ == 0;
-#line 1181 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1199 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (_tmp12_);
-#line 1181 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1199 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			if (_tmp16_) {
-#line 10777 "VideoSupport.c"
+#line 10821 "VideoSupport.c"
 				Video* _tmp17_ = NULL;
 				VideoID _tmp18_ = {0};
-#line 1182 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1200 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_tmp17_ = video;
-#line 1182 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1200 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				video_get_video_id (_tmp17_, &_tmp18_);
-#line 1182 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1200 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				*result = _tmp18_;
-#line 1182 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1200 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_object_unref0 (video);
-#line 1182 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1200 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				_g_object_unref0 (_video_it);
-#line 1182 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1200 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 				return;
-#line 10792 "VideoSupport.c"
+#line 10836 "VideoSupport.c"
 			}
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 			_g_object_unref0 (video);
-#line 10796 "VideoSupport.c"
+#line 10840 "VideoSupport.c"
 		}
-#line 1180 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1198 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_g_object_unref0 (_video_it);
-#line 10800 "VideoSupport.c"
+#line 10844 "VideoSupport.c"
 	}
-#line 1185 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1203 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_id_init (&_tmp19_, VIDEO_ID_INVALID);
-#line 1185 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1203 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	*result = _tmp19_;
-#line 1185 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1203 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return;
-#line 10808 "VideoSupport.c"
+#line 10852 "VideoSupport.c"
 }
 
 
@@ -10818,23 +10862,23 @@ gboolean video_source_collection_has_basename_filesize_duplicate (VideoSourceCol
 	guint64 _tmp1_ = 0ULL;
 	VideoID _tmp2_ = {0};
 	gboolean _tmp3_ = FALSE;
-#line 1189 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1207 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (IS_VIDEO_SOURCE_COLLECTION (self), FALSE);
-#line 1189 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1207 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_return_val_if_fail (basename != NULL, FALSE);
-#line 1190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1208 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = basename;
-#line 1190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1208 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp1_ = filesize;
-#line 1190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1208 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_source_collection_get_basename_filesize_duplicate (self, _tmp0_, _tmp1_, &_tmp2_);
-#line 1190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1208 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp3_ = video_id_is_valid (&_tmp2_);
-#line 1190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1208 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp3_;
-#line 1190 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1208 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 10834 "VideoSupport.c"
+#line 10878 "VideoSupport.c"
 }
 
 
@@ -10843,88 +10887,88 @@ static TransactionController* video_source_collection_real_get_transaction_contr
 	VideoSourceCollection* self;
 	TransactionController* _tmp0_ = NULL;
 	TransactionController* _tmp2_ = NULL;
-#line 1033 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1051 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
-#line 1034 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1052 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = self->priv->_transaction_controller;
-#line 1034 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1052 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	if (_tmp0_ == NULL) {
-#line 10849 "VideoSupport.c"
+#line 10893 "VideoSupport.c"
 		MediaSourceTransactionController* _tmp1_ = NULL;
-#line 1035 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1053 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_tmp1_ = media_source_transaction_controller_new (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
-#line 1035 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1053 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		_transaction_controller_unref0 (self->priv->_transaction_controller);
-#line 1035 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1053 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 		self->priv->_transaction_controller = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_TRANSACTION_CONTROLLER, TransactionController);
-#line 10857 "VideoSupport.c"
+#line 10901 "VideoSupport.c"
 	}
-#line 1037 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1055 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp2_ = self->priv->_transaction_controller;
-#line 1037 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1055 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	result = _tmp2_;
-#line 1037 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1055 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	return result;
-#line 10865 "VideoSupport.c"
+#line 10909 "VideoSupport.c"
 }
 
 
 static void video_source_collection_class_init (VideoSourceCollectionClass * klass) {
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	video_source_collection_parent_class = g_type_class_peek_parent (klass);
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	((DataCollectionClass *) klass)->finalize = video_source_collection_finalize;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	g_type_class_add_private (klass, sizeof (VideoSourceCollectionPrivate));
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	((MediaSourceCollectionClass *) klass)->create_trashcan = video_source_collection_real_create_trashcan;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	((MediaSourceCollectionClass *) klass)->create_offline_bin = video_source_collection_real_create_offline_bin;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	((MediaSourceCollectionClass *) klass)->create_media_monitor = video_source_collection_real_create_media_monitor;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	((SourceCollectionClass *) klass)->holds_type_of_source = video_source_collection_real_holds_type_of_source;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	((MediaSourceCollectionClass *) klass)->get_typename = video_source_collection_real_get_typename;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	((MediaSourceCollectionClass *) klass)->is_file_recognized = video_source_collection_real_is_file_recognized;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	((MediaSourceCollectionClass *) klass)->fetch_by_numeric_id = video_source_collection_real_fetch_by_numeric_id;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	((MediaSourceCollectionClass *) klass)->get_event_source_ids = video_source_collection_real_get_event_source_ids;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	((DataCollectionClass *) klass)->notify_contents_altered = video_source_collection_real_notify_contents_altered;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	MEDIA_SOURCE_COLLECTION_CLASS (klass)->get_transaction_controller = video_source_collection_real_get_transaction_controller;
-#line 10896 "VideoSupport.c"
+#line 10940 "VideoSupport.c"
 }
 
 
 static void video_source_collection_instance_init (VideoSourceCollection * self) {
 	GeeTreeMultiMap* _tmp0_ = NULL;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self->priv = VIDEO_SOURCE_COLLECTION_GET_PRIVATE (self);
-#line 1041 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1059 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self->priv->_transaction_controller = NULL;
-#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1060 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_tmp0_ = gee_tree_multi_map_new (G_TYPE_UINT64, (GBoxedCopyFunc) _uint64_dup, g_free, TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, g_object_unref, _uint64_compare_gcompare_data_func, NULL, NULL, NULL, NULL, NULL);
-#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1060 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	self->priv->filesize_to_video = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_MULTI_MAP, GeeMultiMap);
-#line 10910 "VideoSupport.c"
+#line 10954 "VideoSupport.c"
 }
 
 
 static void video_source_collection_finalize (DataCollection* obj) {
 	VideoSourceCollection * self;
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
-#line 1041 "/home/jens/Source/shotwell/src/VideoSupport.vala"
-	_transaction_controller_unref0 (self->priv->_transaction_controller);
 #line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_VIDEO_SOURCE_COLLECTION, VideoSourceCollection);
+#line 1059 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+	_transaction_controller_unref0 (self->priv->_transaction_controller);
+#line 1060 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	_g_object_unref0 (self->priv->filesize_to_video);
-#line 1024 "/home/jens/Source/shotwell/src/VideoSupport.vala"
+#line 1042 "/home/jens/Source/shotwell/src/VideoSupport.vala"
 	DATA_COLLECTION_CLASS (video_source_collection_parent_class)->finalize (obj);
-#line 10924 "VideoSupport.c"
+#line 10968 "VideoSupport.c"
 }
 
 

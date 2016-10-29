@@ -1803,8 +1803,8 @@ static ImportPageImportPageSearchViewFilter* import_page_import_page_search_view
 static ImportPageImportPageSearchViewFilter* import_page_import_page_search_view_filter_construct (GType object_type);
 static ImportPageHideImportedViewFilter* import_page_hide_imported_view_filter_new (void);
 static ImportPageHideImportedViewFilter* import_page_hide_imported_view_filter_construct (GType object_type);
-#define IMPORT_PAGE_UNMOUNT_FAILED_MSG _ ("Unable to unmount camera.  Try unmounting the camera from the file man" \
-"ager.")
+#define IMPORT_PAGE_UNMOUNT_FAILED_MSG _ ("Unable to unmount camera. Try unmounting the camera from the file mana" \
+"ger.")
 ImportPage* import_page_new (Camera* camera, const gchar* uri, const gchar* display_name, const gchar* icon);
 ImportPage* import_page_construct (GType object_type, Camera* camera, const gchar* uri, const gchar* display_name, const gchar* icon);
 CheckerboardPage* checkerboard_page_construct (GType object_type, const gchar* page_name);
@@ -3907,7 +3907,7 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 #line 283 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3909 "ImportPage.c"
-			goto __catch61_g_error;
+			goto __catch62_g_error;
 		}
 #line 283 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp9_ = _tmp6_;
@@ -3921,8 +3921,8 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		_g_object_unref0 (_tmp6_);
 #line 3922 "ImportPage.c"
 	}
-	goto __finally61;
-	__catch61_g_error:
+	goto __finally62;
+	__catch62_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp10_ = NULL;
@@ -3949,7 +3949,7 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		_g_error_free0 (err);
 #line 3950 "ImportPage.c"
 	}
-	__finally61:
+	__finally62:
 #line 282 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 282 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -6885,7 +6885,7 @@ static void import_page_try_refreshing_camera (ImportPage* self, gboolean fail_o
 #line 1000 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp6_ = self->priv->uri;
 #line 1000 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-			g_debug ("ImportPage.vala:1000: Checking if %s is mounted ...", _tmp6_);
+			g_debug ("ImportPage.vala:1000: Checking if %s is mounted…", _tmp6_);
 #line 1002 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp7_ = self->priv->uri;
 #line 1002 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -6909,7 +6909,7 @@ static void import_page_try_refreshing_camera (ImportPage* self, gboolean fail_o
 #line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6911 "ImportPage.c"
-					goto __catch62_g_error;
+					goto __catch63_g_error;
 				}
 #line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp12_ = _tmp9_;
@@ -6923,8 +6923,8 @@ static void import_page_try_refreshing_camera (ImportPage* self, gboolean fail_o
 				_g_object_unref0 (_tmp9_);
 #line 6924 "ImportPage.c"
 			}
-			goto __finally62;
-			__catch62_g_error:
+			goto __finally63;
+			__catch63_g_error:
 			{
 				GError* err = NULL;
 #line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -6935,7 +6935,7 @@ static void import_page_try_refreshing_camera (ImportPage* self, gboolean fail_o
 				_g_error_free0 (err);
 #line 6936 "ImportPage.c"
 			}
-			__finally62:
+			__finally63:
 #line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -6974,7 +6974,7 @@ static void import_page_try_refreshing_camera (ImportPage* self, gboolean fail_o
 				gint _tmp27_ = 0;
 #line 1013 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp14_ = _ ("Shotwell needs to unmount the camera from the filesystem in order to a" \
-"ccess it.  Continue?");
+"ccess it. Continue?");
 #line 1013 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp15_ = g_strdup (_tmp14_);
 #line 1013 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -7054,9 +7054,9 @@ static void import_page_try_refreshing_camera (ImportPage* self, gboolean fail_o
 				GtkMessageDialog* _tmp39_ = NULL;
 				const gchar* _tmp40_ = NULL;
 #line 1029 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-				_tmp30_ = _ ("The camera is locked by another application.  Shotwell can only access" \
-" the camera when it's unlocked.  Please close any other application us" \
-"ing the camera and try again.");
+				_tmp30_ = _ ("The camera is locked by another application. Shotwell can only access " \
+"the camera when it’s unlocked. Please close any other application usin" \
+"g the camera and try again.");
 #line 1029 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp31_ = g_strdup (_tmp30_);
 #line 1029 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -7210,7 +7210,7 @@ gboolean import_page_unmount_camera (ImportPage* self, GMount* mount) {
 #line 1061 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = self->priv->progress_bar;
 #line 1061 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp5_ = _ ("Unmounting...");
+	_tmp5_ = _ ("Unmounting…");
 #line 1061 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_text (_tmp4_, _tmp5_);
 #line 1066 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -7218,7 +7218,7 @@ gboolean import_page_unmount_camera (ImportPage* self, GMount* mount) {
 #line 1066 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_signal_connect_object (_tmp6_, "unmounted", (GCallback) _import_page_on_unmounted_g_mount_unmounted, self, 0);
 #line 1068 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	g_debug ("ImportPage.vala:1068: Unmounting camera ...");
+	g_debug ("ImportPage.vala:1068: Unmounting camera…");
 #line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp7_ = mount;
 #line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -7272,11 +7272,11 @@ static void import_page_on_unmount_finished (ImportPage* self, GObject* source, 
 #line 1080 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 7271 "ImportPage.c"
-			goto __catch63_g_error;
+			goto __catch64_g_error;
 		}
 	}
-	goto __finally63;
-	__catch63_g_error:
+	goto __finally64;
+	__catch64_g_error:
 	{
 		GError* err = NULL;
 		guint _tmp3_ = 0U;
@@ -7314,7 +7314,7 @@ static void import_page_on_unmount_finished (ImportPage* self, GObject* source, 
 		_g_error_free0 (err);
 #line 7312 "ImportPage.c"
 	}
-	__finally63:
+	__finally64:
 #line 1079 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1079 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -7641,7 +7641,7 @@ static ImportPageRefreshResult import_page_refresh_camera (ImportPage* self) {
 #line 7638 "ImportPage.c"
 	}
 #line 1152 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp1_ = _ ("Starting import, please wait...");
+	_tmp1_ = _ ("Starting import, please wait…");
 #line 1152 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	checkerboard_page_set_page_message (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), _tmp1_);
 #line 1154 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -8977,7 +8977,7 @@ static gboolean import_page_enumerate_files (ImportPage* self, gint fsid, const 
 #line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						 (info);
 #line 8976 "ImportPage.c"
-						goto __catch64_g_error;
+						goto __catch65_g_error;
 					}
 #line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (!_tmp40_) {
@@ -9213,8 +9213,8 @@ static gboolean import_page_enumerate_files (ImportPage* self, gint fsid, const 
 					 (info);
 #line 9210 "ImportPage.c"
 				}
-				goto __finally64;
-				__catch64_g_error:
+				goto __finally65;
+				__catch65_g_error:
 				{
 					GError* err = NULL;
 					const gchar* _tmp103_ = NULL;
@@ -9259,7 +9259,7 @@ static gboolean import_page_enumerate_files (ImportPage* self, gint fsid, const 
 					return result;
 #line 9256 "ImportPage.c"
 				}
-				__finally64:
+				__finally65:
 #line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -10233,7 +10233,7 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 #line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 10230 "ImportPage.c"
-						goto __catch65_g_error;
+						goto __catch66_g_error;
 					}
 #line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp43_ = _tmp36_;
@@ -10247,8 +10247,8 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 					_media_metadata_unref0 (_tmp36_);
 #line 10243 "ImportPage.c"
 				}
-				goto __finally65;
-				__catch65_g_error:
+				goto __finally66;
+				__catch66_g_error:
 				{
 					GError* err = NULL;
 					const gchar* _tmp44_ = NULL;
@@ -10273,7 +10273,7 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 					_g_error_free0 (err);
 #line 10269 "ImportPage.c"
 				}
-				__finally65:
+				__finally66:
 #line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -10472,7 +10472,7 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 #line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (preview_fulldir);
 #line 10469 "ImportPage.c"
-					goto __catch66_g_error;
+					goto __catch67_g_error;
 				}
 #line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp77_ = _tmp67_;
@@ -10490,8 +10490,8 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 				_g_free0 (preview_fulldir);
 #line 10486 "ImportPage.c"
 			}
-			goto __finally66;
-			__catch66_g_error:
+			goto __finally67;
+			__catch67_g_error:
 			{
 				GError* err = NULL;
 				const gchar* _tmp78_ = NULL;
@@ -10527,7 +10527,7 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 				_g_error_free0 (err);
 #line 10523 "ImportPage.c"
 			}
-			__finally66:
+			__finally67:
 #line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -10704,7 +10704,7 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 #line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 10701 "ImportPage.c"
-						goto __catch67_g_error;
+						goto __catch68_g_error;
 					}
 #line 1602 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp113_ = associated;
@@ -10720,8 +10720,8 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 					_media_metadata_unref0 (associated_metadata);
 #line 10716 "ImportPage.c"
 				}
-				goto __finally67;
-				__catch67_g_error:
+				goto __finally68;
+				__catch68_g_error:
 				{
 					GError* err = NULL;
 					PhotoImportSource* _tmp117_ = NULL;
@@ -10762,7 +10762,7 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 					_g_error_free0 (err);
 #line 10758 "ImportPage.c"
 				}
-				__finally67:
+				__finally68:
 #line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -11449,11 +11449,11 @@ static void import_page_on_import_job_failed (ImportPage* self, BatchImportResul
 #line 1712 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 11445 "ImportPage.c"
-			goto __catch68_g_error;
+			goto __catch69_g_error;
 		}
 	}
-	goto __finally68;
-	__catch68_g_error:
+	goto __finally69;
+	__catch69_g_error:
 	{
 		GError* err = NULL;
 		BatchImportResult* _tmp7_ = NULL;
@@ -11486,7 +11486,7 @@ static void import_page_on_import_job_failed (ImportPage* self, BatchImportResul
 		_g_error_free0 (err);
 #line 11481 "ImportPage.c"
 	}
-	__finally68:
+	__finally69:
 #line 1711 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1711 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -12613,7 +12613,7 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 #line 557 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 12609 "ImportPage.c"
-			goto __catch69_g_error;
+			goto __catch70_g_error;
 		}
 #line 557 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = _tmp0_;
@@ -12627,8 +12627,8 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 		_g_object_unref0 (_tmp0_);
 #line 12622 "ImportPage.c"
 	}
-	goto __finally69;
-	__catch69_g_error:
+	goto __finally70;
+	__catch70_g_error:
 	{
 		GError* err = NULL;
 		ImportSource* _tmp7_ = NULL;
@@ -12658,7 +12658,7 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 		_g_error_free0 (err);
 #line 12653 "ImportPage.c"
 	}
-	__finally69:
+	__finally70:
 #line 555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -12740,10 +12740,10 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 #line 574 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 12736 "ImportPage.c"
-			goto __finally70;
+			goto __finally71;
 		}
 	}
-	__finally70:
+	__finally71:
 	{
 		GFile* _tmp23_ = NULL;
 #line 576 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -12809,7 +12809,7 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 #line 583 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 12805 "ImportPage.c"
-				goto __catch71_g_error;
+				goto __catch72_g_error;
 			}
 #line 582 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp34_ = _tmp25_;
@@ -12823,8 +12823,8 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 			_backing_photo_row_unref0 (_tmp25_);
 #line 12818 "ImportPage.c"
 		}
-		goto __finally71;
-		__catch71_g_error:
+		goto __finally72;
+		__catch72_g_error:
 		{
 			GError* err = NULL;
 			ImportPageCameraImportJob* _tmp35_ = NULL;
@@ -12850,7 +12850,7 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 			_g_error_free0 (err);
 #line 12844 "ImportPage.c"
 		}
-		__finally71:
+		__finally72:
 #line 581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -12941,10 +12941,10 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 #line 598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 12936 "ImportPage.c"
-				goto __finally72;
+				goto __finally73;
 			}
 		}
-		__finally72:
+		__finally73:
 		{
 			GFile* _tmp54_ = NULL;
 #line 601 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"

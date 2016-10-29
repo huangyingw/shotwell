@@ -462,7 +462,7 @@ GType batch_import_get_type (void) G_GNUC_CONST;
 enum  {
 	IMPORT_QUEUE_PAGE_DUMMY_PROPERTY
 };
-#define IMPORT_QUEUE_PAGE_NAME _ ("Importing...")
+#define IMPORT_QUEUE_PAGE_NAME _ ("Importing…")
 ImportQueuePage* import_queue_page_new (void);
 ImportQueuePage* import_queue_page_construct (GType object_type);
 SinglePhotoPage* single_photo_page_construct (GType object_type, const gchar* page_name, gboolean scale_up_to_viewport);
@@ -1101,7 +1101,7 @@ static void import_queue_page_on_preparing (ImportQueuePage* self) {
 #line 124 "/home/jens/Source/shotwell/src/library/ImportQueuePage.vala"
 	_tmp0_ = self->priv->progress_bar;
 #line 124 "/home/jens/Source/shotwell/src/library/ImportQueuePage.vala"
-	_tmp1_ = _ ("Preparing to import...");
+	_tmp1_ = _ ("Preparing to import…");
 #line 124 "/home/jens/Source/shotwell/src/library/ImportQueuePage.vala"
 	gtk_progress_bar_set_text (_tmp0_, _tmp1_);
 #line 125 "/home/jens/Source/shotwell/src/library/ImportQueuePage.vala"

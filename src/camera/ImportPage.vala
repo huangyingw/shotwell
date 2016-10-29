@@ -455,7 +455,7 @@ public class CameraAccumulator : Object, Core.TrackerAccumulator {
 }
 
 public class ImportPage : CheckerboardPage {
-    private const string UNMOUNT_FAILED_MSG = _("Unable to unmount camera.  Try unmounting the camera from the file manager.");
+    private const string UNMOUNT_FAILED_MSG = _("Unable to unmount camera. Try unmounting the camera from the file manager.");
     
     private class ImportViewManager : ViewManager {
         private ImportPage owner;
@@ -997,7 +997,7 @@ public class ImportPage : CheckerboardPage {
                 }
                 
                 // if locked because it's mounted, offer to unmount
-                debug("Checking if %s is mounted ...", uri);
+                debug("Checking if %s is mounted…", uri);
 
                 File uri = File.new_for_uri(uri);
 
@@ -1010,7 +1010,7 @@ public class ImportPage : CheckerboardPage {
                 
                 if (mount != null) {
                     // it's mounted, offer to unmount for the user
-                    string mounted_message = _("Shotwell needs to unmount the camera from the filesystem in order to access it.  Continue?");
+                    string mounted_message = _("Shotwell needs to unmount the camera from the filesystem in order to access it. Continue?");
 
                     Gtk.MessageDialog dialog = new Gtk.MessageDialog(AppWindow.get_instance(), 
                         Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
@@ -1026,7 +1026,7 @@ public class ImportPage : CheckerboardPage {
                         unmount_camera(mount);
                     }
                 } else {
-                    string locked_message = _("The camera is locked by another application.  Shotwell can only access the camera when it's unlocked.  Please close any other application using the camera and try again.");
+                    string locked_message = _("The camera is locked by another application. Shotwell can only access the camera when it’s unlocked. Please close any other application using the camera and try again.");
 
                     // it's not mounted, so another application must have it locked
                     Gtk.MessageDialog dialog = new Gtk.MessageDialog(AppWindow.get_instance(),
@@ -1058,14 +1058,14 @@ public class ImportPage : CheckerboardPage {
         progress_bar.visible = true;
         progress_bar.set_fraction(0.0);
         progress_bar.set_ellipsize(Pango.EllipsizeMode.NONE);
-        progress_bar.set_text(_("Unmounting..."));
+        progress_bar.set_text(_("Unmounting…"));
         
         // unmount_with_operation() can/will complete with the volume still mounted (probably meaning
         // it's been *scheduled* for unmounting).  However, this signal is fired when the mount
         // really is unmounted -- *if* a VolumeMonitor has been instantiated.
         mount.unmounted.connect(on_unmounted);
         
-        debug("Unmounting camera ...");
+        debug("Unmounting camera…");
         mount.unmount_with_operation.begin(MountUnmountFlags.NONE, 
             new Gtk.MountOperation(AppWindow.get_instance()), null, on_unmount_finished);
         
@@ -1149,7 +1149,7 @@ public class ImportPage : CheckerboardPage {
         if (busy)
             return RefreshResult.BUSY;
             
-        this.set_page_message (_("Starting import, please wait..."));
+        this.set_page_message (_("Starting import, please wait…"));
 
         update_status(busy, false);
         

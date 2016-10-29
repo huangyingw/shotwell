@@ -160,23 +160,22 @@ const gchar* fallback_image_missing[103] = {"48 48 54 1 ", "  c #6A6D67", ". c #
 
 gboolean is_color_parsable (const gchar* spec) {
 	gboolean result = FALSE;
-	GdkColor color = {0};
+	GdkRGBA color = {0};
 	const gchar* _tmp0_ = NULL;
-	GdkColor _tmp1_ = {0};
-	gboolean _tmp2_ = FALSE;
+	gboolean _tmp1_ = FALSE;
 #line 117 "/home/jens/Source/shotwell/src/util/image.vala"
 	g_return_val_if_fail (spec != NULL, FALSE);
+#line 118 "/home/jens/Source/shotwell/src/util/image.vala"
+	memset (&color, 0, sizeof (GdkRGBA));
 #line 119 "/home/jens/Source/shotwell/src/util/image.vala"
 	_tmp0_ = spec;
 #line 119 "/home/jens/Source/shotwell/src/util/image.vala"
-	_tmp2_ = gdk_color_parse (_tmp0_, &_tmp1_);
+	_tmp1_ = gdk_rgba_parse (&color, _tmp0_);
 #line 119 "/home/jens/Source/shotwell/src/util/image.vala"
-	color = _tmp1_;
-#line 119 "/home/jens/Source/shotwell/src/util/image.vala"
-	result = _tmp2_;
+	result = _tmp1_;
 #line 119 "/home/jens/Source/shotwell/src/util/image.vala"
 	return result;
-#line 180 "image.c"
+#line 179 "image.c"
 }
 
 
@@ -193,7 +192,7 @@ void parse_color (const gchar* spec, GdkRGBA* result) {
 	*result = _tmp1_;
 #line 123 "/home/jens/Source/shotwell/src/util/image.vala"
 	return;
-#line 197 "image.c"
+#line 196 "image.c"
 }
 
 
@@ -211,19 +210,19 @@ void fetch_color (const gchar* spec, GdkRGBA* result) {
 	_tmp1_ = gdk_rgba_parse (&rgba, _tmp0_);
 #line 128 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (!_tmp1_) {
-#line 215 "image.c"
+#line 214 "image.c"
 		const gchar* _tmp2_ = NULL;
 #line 129 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp2_ = spec;
 #line 129 "/home/jens/Source/shotwell/src/util/image.vala"
 		g_error ("image.vala:129: Can't parse color %s", _tmp2_);
-#line 221 "image.c"
+#line 220 "image.c"
 	}
 #line 131 "/home/jens/Source/shotwell/src/util/image.vala"
 	*result = rgba;
 #line 131 "/home/jens/Source/shotwell/src/util/image.vala"
 	return;
-#line 227 "image.c"
+#line 226 "image.c"
 }
 
 
@@ -270,14 +269,14 @@ void set_source_color_from_string (cairo_t* ctx, const gchar* spec) {
 	_tmp10_ = _tmp9_.alpha;
 #line 136 "/home/jens/Source/shotwell/src/util/image.vala"
 	cairo_set_source_rgba (_tmp2_, _tmp4_, _tmp6_, _tmp8_, _tmp10_);
-#line 274 "image.c"
+#line 273 "image.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 147 "/home/jens/Source/shotwell/src/util/image.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 281 "image.c"
+#line 280 "image.c"
 }
 
 
@@ -287,7 +286,7 @@ GdkPixbuf* get_placeholder_pixbuf (void) {
 	GError * _inner_error_ = NULL;
 #line 144 "/home/jens/Source/shotwell/src/util/image.vala"
 	pixbuf = NULL;
-#line 291 "image.c"
+#line 290 "image.c"
 	{
 		GtkIconTheme* icon_theme = NULL;
 		GtkIconTheme* _tmp0_ = NULL;
@@ -309,7 +308,7 @@ GdkPixbuf* get_placeholder_pixbuf (void) {
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 148 "/home/jens/Source/shotwell/src/util/image.vala"
 			_g_object_unref0 (icon_theme);
-#line 313 "image.c"
+#line 312 "image.c"
 			goto __catch4_g_error;
 		}
 #line 148 "/home/jens/Source/shotwell/src/util/image.vala"
@@ -324,7 +323,7 @@ GdkPixbuf* get_placeholder_pixbuf (void) {
 		_g_object_unref0 (_tmp2_);
 #line 146 "/home/jens/Source/shotwell/src/util/image.vala"
 		_g_object_unref0 (icon_theme);
-#line 328 "image.c"
+#line 327 "image.c"
 	}
 	goto __finally4;
 	__catch4_g_error:
@@ -351,7 +350,7 @@ GdkPixbuf* get_placeholder_pixbuf (void) {
 		g_warning ("image.vala:152: Could not load icon from theme: %s", _tmp7_);
 #line 146 "/home/jens/Source/shotwell/src/util/image.vala"
 		_g_error_free0 (_error_);
-#line 355 "image.c"
+#line 354 "image.c"
 	}
 	__finally4:
 #line 146 "/home/jens/Source/shotwell/src/util/image.vala"
@@ -364,13 +363,13 @@ GdkPixbuf* get_placeholder_pixbuf (void) {
 		g_clear_error (&_inner_error_);
 #line 146 "/home/jens/Source/shotwell/src/util/image.vala"
 		return NULL;
-#line 368 "image.c"
+#line 367 "image.c"
 	}
 #line 155 "/home/jens/Source/shotwell/src/util/image.vala"
 	result = pixbuf;
 #line 155 "/home/jens/Source/shotwell/src/util/image.vala"
 	return result;
-#line 374 "image.c"
+#line 373 "image.c"
 }
 
 
@@ -422,7 +421,7 @@ GdkPixbuf* scale_pixbuf (GdkPixbuf* pixbuf, gint scale, GdkInterpType interp, gb
 	_tmp9_ = _tmp8_.width;
 #line 161 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp7_ == _tmp9_) {
-#line 426 "image.c"
+#line 425 "image.c"
 		Dimensions _tmp10_ = {0};
 		gint _tmp11_ = 0;
 		Dimensions _tmp12_ = {0};
@@ -437,15 +436,15 @@ GdkPixbuf* scale_pixbuf (GdkPixbuf* pixbuf, gint scale, GdkInterpType interp, gb
 		_tmp13_ = _tmp12_.height;
 #line 161 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp5_ = _tmp11_ == _tmp13_;
-#line 441 "image.c"
+#line 440 "image.c"
 	} else {
 #line 161 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp5_ = FALSE;
-#line 445 "image.c"
+#line 444 "image.c"
 	}
 #line 161 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp5_) {
-#line 449 "image.c"
+#line 448 "image.c"
 		GdkPixbuf* _tmp14_ = NULL;
 		GdkPixbuf* _tmp15_ = NULL;
 #line 162 "/home/jens/Source/shotwell/src/util/image.vala"
@@ -456,7 +455,7 @@ GdkPixbuf* scale_pixbuf (GdkPixbuf* pixbuf, gint scale, GdkInterpType interp, gb
 		result = _tmp15_;
 #line 162 "/home/jens/Source/shotwell/src/util/image.vala"
 		return result;
-#line 460 "image.c"
+#line 459 "image.c"
 	}
 #line 165 "/home/jens/Source/shotwell/src/util/image.vala"
 	dimensions_with_min (&scaled, MIN_SCALED_WIDTH, MIN_SCALED_HEIGHT, &_tmp16_);
@@ -480,7 +479,7 @@ GdkPixbuf* scale_pixbuf (GdkPixbuf* pixbuf, gint scale, GdkInterpType interp, gb
 	result = _tmp23_;
 #line 167 "/home/jens/Source/shotwell/src/util/image.vala"
 	return result;
-#line 484 "image.c"
+#line 483 "image.c"
 }
 
 
@@ -522,7 +521,7 @@ GdkPixbuf* resize_pixbuf (GdkPixbuf* pixbuf, Dimensions* resized, GdkInterpType 
 	_tmp6_ = _tmp5_.width;
 #line 172 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp4_ == _tmp6_) {
-#line 526 "image.c"
+#line 525 "image.c"
 		Dimensions _tmp7_ = {0};
 		gint _tmp8_ = 0;
 		Dimensions _tmp9_ = {0};
@@ -537,15 +536,15 @@ GdkPixbuf* resize_pixbuf (GdkPixbuf* pixbuf, Dimensions* resized, GdkInterpType 
 		_tmp10_ = _tmp9_.height;
 #line 172 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp2_ = _tmp8_ == _tmp10_;
-#line 541 "image.c"
+#line 540 "image.c"
 	} else {
 #line 172 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp2_ = FALSE;
-#line 545 "image.c"
+#line 544 "image.c"
 	}
 #line 172 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp2_) {
-#line 549 "image.c"
+#line 548 "image.c"
 		GdkPixbuf* _tmp11_ = NULL;
 		GdkPixbuf* _tmp12_ = NULL;
 #line 173 "/home/jens/Source/shotwell/src/util/image.vala"
@@ -556,7 +555,7 @@ GdkPixbuf* resize_pixbuf (GdkPixbuf* pixbuf, Dimensions* resized, GdkInterpType 
 		result = _tmp12_;
 #line 173 "/home/jens/Source/shotwell/src/util/image.vala"
 		return result;
-#line 560 "image.c"
+#line 559 "image.c"
 	}
 #line 176 "/home/jens/Source/shotwell/src/util/image.vala"
 	dimensions_with_min (resized, MIN_SCALED_WIDTH, MIN_SCALED_HEIGHT, &_tmp13_);
@@ -580,7 +579,7 @@ GdkPixbuf* resize_pixbuf (GdkPixbuf* pixbuf, Dimensions* resized, GdkInterpType 
 	result = _tmp20_;
 #line 178 "/home/jens/Source/shotwell/src/util/image.vala"
 	return result;
-#line 584 "image.c"
+#line 583 "image.c"
 }
 
 
@@ -610,7 +609,7 @@ void draw_rounded_corners_filled (cairo_t* ctx, Dimensions* dim, GdkPoint* origi
 	_tmp4_ = ctx;
 #line 186 "/home/jens/Source/shotwell/src/util/image.vala"
 	cairo_paint (_tmp4_);
-#line 614 "image.c"
+#line 613 "image.c"
 }
 
 
@@ -716,7 +715,7 @@ void context_rounded_corners (cairo_t* cx, Dimensions* dim, GdkPoint* origin, gd
 	_tmp21_ = cx;
 #line 209 "/home/jens/Source/shotwell/src/util/image.vala"
 	cairo_clip (_tmp21_);
-#line 720 "image.c"
+#line 719 "image.c"
 }
 
 
@@ -735,7 +734,7 @@ inline guchar shift_color_byte (gint b, gint shift) {
 	result = (guchar) _tmp2_;
 #line 213 "/home/jens/Source/shotwell/src/util/image.vala"
 	return result;
-#line 739 "image.c"
+#line 738 "image.c"
 }
 
 
@@ -774,17 +773,17 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 	_tmp1_ = red;
 #line 217 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp1_ >= -255) {
-#line 778 "image.c"
+#line 777 "image.c"
 		gint _tmp2_ = 0;
 #line 217 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp2_ = red;
 #line 217 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp0_ = _tmp2_ <= 255;
-#line 784 "image.c"
+#line 783 "image.c"
 	} else {
 #line 217 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp0_ = FALSE;
-#line 788 "image.c"
+#line 787 "image.c"
 	}
 #line 217 "/home/jens/Source/shotwell/src/util/image.vala"
 	_vala_assert (_tmp0_, "red >= -255 && red <= 255");
@@ -792,17 +791,17 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 	_tmp4_ = green;
 #line 218 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp4_ >= -255) {
-#line 796 "image.c"
+#line 795 "image.c"
 		gint _tmp5_ = 0;
 #line 218 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp5_ = green;
 #line 218 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp3_ = _tmp5_ <= 255;
-#line 802 "image.c"
+#line 801 "image.c"
 	} else {
 #line 218 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp3_ = FALSE;
-#line 806 "image.c"
+#line 805 "image.c"
 	}
 #line 218 "/home/jens/Source/shotwell/src/util/image.vala"
 	_vala_assert (_tmp3_, "green >= -255 && green <= 255");
@@ -810,17 +809,17 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 	_tmp7_ = blue;
 #line 219 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp7_ >= -255) {
-#line 814 "image.c"
+#line 813 "image.c"
 		gint _tmp8_ = 0;
 #line 219 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp8_ = blue;
 #line 219 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp6_ = _tmp8_ <= 255;
-#line 820 "image.c"
+#line 819 "image.c"
 	} else {
 #line 219 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp6_ = FALSE;
-#line 824 "image.c"
+#line 823 "image.c"
 	}
 #line 219 "/home/jens/Source/shotwell/src/util/image.vala"
 	_vala_assert (_tmp6_, "blue >= -255 && blue <= 255");
@@ -828,17 +827,17 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 	_tmp10_ = alpha;
 #line 220 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp10_ >= -255) {
-#line 832 "image.c"
+#line 831 "image.c"
 		gint _tmp11_ = 0;
 #line 220 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp11_ = alpha;
 #line 220 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp9_ = _tmp11_ <= 255;
-#line 838 "image.c"
+#line 837 "image.c"
 	} else {
 #line 220 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp9_ = FALSE;
-#line 842 "image.c"
+#line 841 "image.c"
 	}
 #line 220 "/home/jens/Source/shotwell/src/util/image.vala"
 	_vala_assert (_tmp9_, "alpha >= -255 && alpha <= 255");
@@ -888,19 +887,19 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 	_tmp26_ = gdk_pixbuf_get_bits_per_sample (_tmp25_);
 #line 230 "/home/jens/Source/shotwell/src/util/image.vala"
 	_vala_assert (_tmp26_ == 8, "pixbuf.get_bits_per_sample() == 8");
-#line 892 "image.c"
+#line 891 "image.c"
 	{
 		gint y = 0;
 #line 232 "/home/jens/Source/shotwell/src/util/image.vala"
 		y = 0;
-#line 897 "image.c"
+#line 896 "image.c"
 		{
 			gboolean _tmp27_ = FALSE;
 #line 232 "/home/jens/Source/shotwell/src/util/image.vala"
 			_tmp27_ = TRUE;
 #line 232 "/home/jens/Source/shotwell/src/util/image.vala"
 			while (TRUE) {
-#line 904 "image.c"
+#line 903 "image.c"
 				gint _tmp29_ = 0;
 				gint _tmp30_ = 0;
 				gint y_offset = 0;
@@ -908,13 +907,13 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 				gint _tmp32_ = 0;
 #line 232 "/home/jens/Source/shotwell/src/util/image.vala"
 				if (!_tmp27_) {
-#line 912 "image.c"
+#line 911 "image.c"
 					gint _tmp28_ = 0;
 #line 232 "/home/jens/Source/shotwell/src/util/image.vala"
 					_tmp28_ = y;
 #line 232 "/home/jens/Source/shotwell/src/util/image.vala"
 					y = _tmp28_ + 1;
-#line 918 "image.c"
+#line 917 "image.c"
 				}
 #line 232 "/home/jens/Source/shotwell/src/util/image.vala"
 				_tmp27_ = FALSE;
@@ -926,7 +925,7 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 				if (!(_tmp29_ < _tmp30_)) {
 #line 232 "/home/jens/Source/shotwell/src/util/image.vala"
 					break;
-#line 930 "image.c"
+#line 929 "image.c"
 				}
 #line 233 "/home/jens/Source/shotwell/src/util/image.vala"
 				_tmp31_ = y;
@@ -934,19 +933,19 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 				_tmp32_ = rowstride;
 #line 233 "/home/jens/Source/shotwell/src/util/image.vala"
 				y_offset = _tmp31_ * _tmp32_;
-#line 938 "image.c"
+#line 937 "image.c"
 				{
 					gint x = 0;
 #line 235 "/home/jens/Source/shotwell/src/util/image.vala"
 					x = 0;
-#line 943 "image.c"
+#line 942 "image.c"
 					{
 						gboolean _tmp33_ = FALSE;
 #line 235 "/home/jens/Source/shotwell/src/util/image.vala"
 						_tmp33_ = TRUE;
 #line 235 "/home/jens/Source/shotwell/src/util/image.vala"
 						while (TRUE) {
-#line 950 "image.c"
+#line 949 "image.c"
 							gint _tmp35_ = 0;
 							gint _tmp36_ = 0;
 							gint offset = 0;
@@ -960,13 +959,13 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 							gint _tmp68_ = 0;
 #line 235 "/home/jens/Source/shotwell/src/util/image.vala"
 							if (!_tmp33_) {
-#line 964 "image.c"
+#line 963 "image.c"
 								gint _tmp34_ = 0;
 #line 235 "/home/jens/Source/shotwell/src/util/image.vala"
 								_tmp34_ = x;
 #line 235 "/home/jens/Source/shotwell/src/util/image.vala"
 								x = _tmp34_ + 1;
-#line 970 "image.c"
+#line 969 "image.c"
 							}
 #line 235 "/home/jens/Source/shotwell/src/util/image.vala"
 							_tmp33_ = FALSE;
@@ -978,7 +977,7 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 							if (!(_tmp35_ < _tmp36_)) {
 #line 235 "/home/jens/Source/shotwell/src/util/image.vala"
 								break;
-#line 982 "image.c"
+#line 981 "image.c"
 							}
 #line 236 "/home/jens/Source/shotwell/src/util/image.vala"
 							_tmp37_ = y_offset;
@@ -992,7 +991,7 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 							_tmp40_ = red;
 #line 238 "/home/jens/Source/shotwell/src/util/image.vala"
 							if (_tmp40_ != 0) {
-#line 996 "image.c"
+#line 995 "image.c"
 								guchar* _tmp41_ = NULL;
 								gint _tmp42_ = 0;
 								guchar* _tmp43_ = NULL;
@@ -1019,13 +1018,13 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 								_tmp41_[_tmp42_] = _tmp47_;
 #line 239 "/home/jens/Source/shotwell/src/util/image.vala"
 								_tmp48_ = _tmp41_[_tmp42_];
-#line 1023 "image.c"
+#line 1022 "image.c"
 							}
 #line 241 "/home/jens/Source/shotwell/src/util/image.vala"
 							_tmp49_ = green;
 #line 241 "/home/jens/Source/shotwell/src/util/image.vala"
 							if (_tmp49_ != 0) {
-#line 1029 "image.c"
+#line 1028 "image.c"
 								guchar* _tmp50_ = NULL;
 								gint _tmp51_ = 0;
 								guchar* _tmp52_ = NULL;
@@ -1052,13 +1051,13 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 								_tmp50_[_tmp51_ + 1] = _tmp56_;
 #line 242 "/home/jens/Source/shotwell/src/util/image.vala"
 								_tmp57_ = _tmp50_[_tmp51_ + 1];
-#line 1056 "image.c"
+#line 1055 "image.c"
 							}
 #line 244 "/home/jens/Source/shotwell/src/util/image.vala"
 							_tmp58_ = blue;
 #line 244 "/home/jens/Source/shotwell/src/util/image.vala"
 							if (_tmp58_ != 0) {
-#line 1062 "image.c"
+#line 1061 "image.c"
 								guchar* _tmp59_ = NULL;
 								gint _tmp60_ = 0;
 								guchar* _tmp61_ = NULL;
@@ -1085,27 +1084,27 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 								_tmp59_[_tmp60_ + 2] = _tmp65_;
 #line 245 "/home/jens/Source/shotwell/src/util/image.vala"
 								_tmp66_ = _tmp59_[_tmp60_ + 2];
-#line 1089 "image.c"
+#line 1088 "image.c"
 							}
 #line 247 "/home/jens/Source/shotwell/src/util/image.vala"
 							_tmp68_ = alpha;
 #line 247 "/home/jens/Source/shotwell/src/util/image.vala"
 							if (_tmp68_ != 0) {
-#line 1095 "image.c"
+#line 1094 "image.c"
 								gint _tmp69_ = 0;
 #line 247 "/home/jens/Source/shotwell/src/util/image.vala"
 								_tmp69_ = channels;
 #line 247 "/home/jens/Source/shotwell/src/util/image.vala"
 								_tmp67_ = _tmp69_ >= 4;
-#line 1101 "image.c"
+#line 1100 "image.c"
 							} else {
 #line 247 "/home/jens/Source/shotwell/src/util/image.vala"
 								_tmp67_ = FALSE;
-#line 1105 "image.c"
+#line 1104 "image.c"
 							}
 #line 247 "/home/jens/Source/shotwell/src/util/image.vala"
 							if (_tmp67_) {
-#line 1109 "image.c"
+#line 1108 "image.c"
 								guchar* _tmp70_ = NULL;
 								gint _tmp71_ = 0;
 								guchar* _tmp72_ = NULL;
@@ -1132,7 +1131,7 @@ void shift_colors (GdkPixbuf* pixbuf, gint red, gint green, gint blue, gint alph
 								_tmp70_[_tmp71_ + 3] = _tmp76_;
 #line 248 "/home/jens/Source/shotwell/src/util/image.vala"
 								_tmp77_ = _tmp70_[_tmp71_ + 3];
-#line 1136 "image.c"
+#line 1135 "image.c"
 							}
 						}
 					}
@@ -1174,7 +1173,7 @@ void dim_pixbuf (GdkPixbuf* pixbuf) {
 	_pixel_transformation_unref0 (sat);
 #line 253 "/home/jens/Source/shotwell/src/util/image.vala"
 	_pixel_transformer_unref0 (transformer);
-#line 1178 "image.c"
+#line 1177 "image.c"
 }
 
 
@@ -1196,7 +1195,7 @@ gboolean coord_in_rectangle (gint x, gint y, GdkRectangle* rect) {
 	_tmp5_ = _tmp4_.x;
 #line 262 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp3_ >= _tmp5_) {
-#line 1200 "image.c"
+#line 1199 "image.c"
 		gint _tmp6_ = 0;
 		GdkRectangle _tmp7_ = {0};
 		gint _tmp8_ = 0;
@@ -1214,15 +1213,15 @@ gboolean coord_in_rectangle (gint x, gint y, GdkRectangle* rect) {
 		_tmp10_ = _tmp9_.width;
 #line 262 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp2_ = _tmp6_ < (_tmp8_ + _tmp10_);
-#line 1218 "image.c"
+#line 1217 "image.c"
 	} else {
 #line 262 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp2_ = FALSE;
-#line 1222 "image.c"
+#line 1221 "image.c"
 	}
 #line 262 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp2_) {
-#line 1226 "image.c"
+#line 1225 "image.c"
 		gint _tmp11_ = 0;
 		GdkRectangle _tmp12_ = {0};
 		gint _tmp13_ = 0;
@@ -1234,15 +1233,15 @@ gboolean coord_in_rectangle (gint x, gint y, GdkRectangle* rect) {
 		_tmp13_ = _tmp12_.y;
 #line 262 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp1_ = _tmp11_ >= _tmp13_;
-#line 1238 "image.c"
+#line 1237 "image.c"
 	} else {
 #line 262 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp1_ = FALSE;
-#line 1242 "image.c"
+#line 1241 "image.c"
 	}
 #line 262 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp1_) {
-#line 1246 "image.c"
+#line 1245 "image.c"
 		gint _tmp14_ = 0;
 		GdkRectangle _tmp15_ = {0};
 		gint _tmp16_ = 0;
@@ -1260,17 +1259,17 @@ gboolean coord_in_rectangle (gint x, gint y, GdkRectangle* rect) {
 		_tmp18_ = _tmp17_.height;
 #line 262 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp0_ = _tmp14_ <= (_tmp16_ + _tmp18_);
-#line 1264 "image.c"
+#line 1263 "image.c"
 	} else {
 #line 262 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp0_ = FALSE;
-#line 1268 "image.c"
+#line 1267 "image.c"
 	}
 #line 262 "/home/jens/Source/shotwell/src/util/image.vala"
 	result = _tmp0_;
 #line 262 "/home/jens/Source/shotwell/src/util/image.vala"
 	return result;
-#line 1274 "image.c"
+#line 1273 "image.c"
 }
 
 
@@ -1297,7 +1296,7 @@ gboolean rectangles_equal (GdkRectangle* a, GdkRectangle* b) {
 	_tmp6_ = _tmp5_.x;
 #line 266 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp4_ == _tmp6_) {
-#line 1301 "image.c"
+#line 1300 "image.c"
 		GdkRectangle _tmp7_ = {0};
 		gint _tmp8_ = 0;
 		GdkRectangle _tmp9_ = {0};
@@ -1312,15 +1311,15 @@ gboolean rectangles_equal (GdkRectangle* a, GdkRectangle* b) {
 		_tmp10_ = _tmp9_.y;
 #line 266 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp2_ = _tmp8_ == _tmp10_;
-#line 1316 "image.c"
+#line 1315 "image.c"
 	} else {
 #line 266 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp2_ = FALSE;
-#line 1320 "image.c"
+#line 1319 "image.c"
 	}
 #line 266 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp2_) {
-#line 1324 "image.c"
+#line 1323 "image.c"
 		GdkRectangle _tmp11_ = {0};
 		gint _tmp12_ = 0;
 		GdkRectangle _tmp13_ = {0};
@@ -1335,15 +1334,15 @@ gboolean rectangles_equal (GdkRectangle* a, GdkRectangle* b) {
 		_tmp14_ = _tmp13_.width;
 #line 266 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp1_ = _tmp12_ == _tmp14_;
-#line 1339 "image.c"
+#line 1338 "image.c"
 	} else {
 #line 266 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp1_ = FALSE;
-#line 1343 "image.c"
+#line 1342 "image.c"
 	}
 #line 266 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp1_) {
-#line 1347 "image.c"
+#line 1346 "image.c"
 		GdkRectangle _tmp15_ = {0};
 		gint _tmp16_ = 0;
 		GdkRectangle _tmp17_ = {0};
@@ -1358,17 +1357,17 @@ gboolean rectangles_equal (GdkRectangle* a, GdkRectangle* b) {
 		_tmp18_ = _tmp17_.height;
 #line 266 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp0_ = _tmp16_ == _tmp18_;
-#line 1362 "image.c"
+#line 1361 "image.c"
 	} else {
 #line 266 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp0_ = FALSE;
-#line 1366 "image.c"
+#line 1365 "image.c"
 	}
 #line 266 "/home/jens/Source/shotwell/src/util/image.vala"
 	result = _tmp0_;
 #line 266 "/home/jens/Source/shotwell/src/util/image.vala"
 	return result;
-#line 1372 "image.c"
+#line 1371 "image.c"
 }
 
 
@@ -1407,7 +1406,7 @@ gchar* rectangle_to_string (GdkRectangle* rect) {
 	result = _tmp8_;
 #line 270 "/home/jens/Source/shotwell/src/util/image.vala"
 	return result;
-#line 1411 "image.c"
+#line 1410 "image.c"
 }
 
 
@@ -1491,7 +1490,7 @@ void clamp_rectangle (GdkRectangle* original, Dimensions* max, GdkRectangle* res
 	*result = rect;
 #line 280 "/home/jens/Source/shotwell/src/util/image.vala"
 	return;
-#line 1495 "image.c"
+#line 1494 "image.c"
 }
 
 
@@ -1530,7 +1529,7 @@ void scale_point (GdkPoint* p, gdouble factor, GdkPoint* result) {
 	*result = _result_;
 #line 288 "/home/jens/Source/shotwell/src/util/image.vala"
 	return;
-#line 1534 "image.c"
+#line 1533 "image.c"
 }
 
 
@@ -1577,7 +1576,7 @@ void add_points (GdkPoint* p1, GdkPoint* p2, GdkPoint* result) {
 	*result = _result_;
 #line 296 "/home/jens/Source/shotwell/src/util/image.vala"
 	return;
-#line 1581 "image.c"
+#line 1580 "image.c"
 }
 
 
@@ -1624,7 +1623,7 @@ void subtract_points (GdkPoint* p1, GdkPoint* p2, GdkPoint* result) {
 	*result = _result_;
 #line 304 "/home/jens/Source/shotwell/src/util/image.vala"
 	return;
-#line 1628 "image.c"
+#line 1627 "image.c"
 }
 
 
@@ -1643,19 +1642,19 @@ void fix_cairo_pixbuf (GdkPixbuf* pixbuf) {
 	_tmp2_ = _tmp1_;
 #line 309 "/home/jens/Source/shotwell/src/util/image.vala"
 	gdk_pixels = _tmp2_;
-#line 1647 "image.c"
+#line 1646 "image.c"
 	{
 		gint j = 0;
 #line 310 "/home/jens/Source/shotwell/src/util/image.vala"
 		j = 0;
-#line 1652 "image.c"
+#line 1651 "image.c"
 		{
 			gboolean _tmp3_ = FALSE;
 #line 310 "/home/jens/Source/shotwell/src/util/image.vala"
 			_tmp3_ = TRUE;
 #line 310 "/home/jens/Source/shotwell/src/util/image.vala"
 			while (TRUE) {
-#line 1659 "image.c"
+#line 1658 "image.c"
 				gint _tmp5_ = 0;
 				GdkPixbuf* _tmp6_ = NULL;
 				gint _tmp7_ = 0;
@@ -1673,13 +1672,13 @@ void fix_cairo_pixbuf (GdkPixbuf* pixbuf) {
 				gint _tmp29_ = 0;
 #line 310 "/home/jens/Source/shotwell/src/util/image.vala"
 				if (!_tmp3_) {
-#line 1677 "image.c"
+#line 1676 "image.c"
 					gint _tmp4_ = 0;
 #line 310 "/home/jens/Source/shotwell/src/util/image.vala"
 					_tmp4_ = j;
 #line 310 "/home/jens/Source/shotwell/src/util/image.vala"
 					j = _tmp4_ + 1;
-#line 1683 "image.c"
+#line 1682 "image.c"
 				}
 #line 310 "/home/jens/Source/shotwell/src/util/image.vala"
 				_tmp3_ = FALSE;
@@ -1695,7 +1694,7 @@ void fix_cairo_pixbuf (GdkPixbuf* pixbuf) {
 				if (!(_tmp5_ < _tmp8_)) {
 #line 310 "/home/jens/Source/shotwell/src/util/image.vala"
 					break;
-#line 1699 "image.c"
+#line 1698 "image.c"
 				}
 #line 311 "/home/jens/Source/shotwell/src/util/image.vala"
 				_tmp9_ = gdk_pixels;
@@ -1713,7 +1712,7 @@ void fix_cairo_pixbuf (GdkPixbuf* pixbuf) {
 				end = _tmp10_ + (4 * _tmp13_);
 #line 314 "/home/jens/Source/shotwell/src/util/image.vala"
 				while (TRUE) {
-#line 1717 "image.c"
+#line 1716 "image.c"
 					guchar* _tmp14_ = NULL;
 					guchar* _tmp15_ = NULL;
 					guchar tmp = '\0';
@@ -1735,7 +1734,7 @@ void fix_cairo_pixbuf (GdkPixbuf* pixbuf) {
 					if (!(_tmp14_ < _tmp15_)) {
 #line 314 "/home/jens/Source/shotwell/src/util/image.vala"
 						break;
-#line 1739 "image.c"
+#line 1738 "image.c"
 					}
 #line 315 "/home/jens/Source/shotwell/src/util/image.vala"
 					_tmp16_ = p;
@@ -1765,7 +1764,7 @@ void fix_cairo_pixbuf (GdkPixbuf* pixbuf) {
 					_tmp25_ = p;
 #line 325 "/home/jens/Source/shotwell/src/util/image.vala"
 					p = _tmp25_ + 4;
-#line 1769 "image.c"
+#line 1768 "image.c"
 				}
 #line 328 "/home/jens/Source/shotwell/src/util/image.vala"
 				_tmp26_ = gdk_pixels;
@@ -1777,7 +1776,7 @@ void fix_cairo_pixbuf (GdkPixbuf* pixbuf) {
 				_tmp29_ = _tmp28_;
 #line 328 "/home/jens/Source/shotwell/src/util/image.vala"
 				gdk_pixels = _tmp26_ + _tmp29_;
-#line 1781 "image.c"
+#line 1780 "image.c"
 			}
 		}
 	}
@@ -1857,13 +1856,13 @@ void compute_arb_rotated_size (gdouble src_width, gdouble src_height, gdouble an
 	if (dest_width) {
 #line 342 "/home/jens/Source/shotwell/src/util/image.vala"
 		*dest_width = _vala_dest_width;
-#line 1861 "image.c"
+#line 1860 "image.c"
 	}
 #line 342 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (dest_height) {
 #line 342 "/home/jens/Source/shotwell/src/util/image.vala"
 		*dest_height = _vala_dest_height;
-#line 1867 "image.c"
+#line 1866 "image.c"
 	}
 }
 
@@ -1953,7 +1952,7 @@ GdkPixbuf* rotate_arb (GdkPixbuf* source_pixbuf, gdouble angle) {
 	_tmp0_ = angle;
 #line 361 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp0_ == 0.0) {
-#line 1957 "image.c"
+#line 1956 "image.c"
 		GdkPixbuf* _tmp1_ = NULL;
 		GdkPixbuf* _tmp2_ = NULL;
 #line 362 "/home/jens/Source/shotwell/src/util/image.vala"
@@ -1964,7 +1963,7 @@ GdkPixbuf* rotate_arb (GdkPixbuf* source_pixbuf, gdouble angle) {
 		result = _tmp2_;
 #line 362 "/home/jens/Source/shotwell/src/util/image.vala"
 		return result;
-#line 1968 "image.c"
+#line 1967 "image.c"
 	}
 #line 369 "/home/jens/Source/shotwell/src/util/image.vala"
 	_tmp3_ = source_pixbuf;
@@ -2008,11 +2007,11 @@ GdkPixbuf* rotate_arb (GdkPixbuf* source_pixbuf, gdouble angle) {
 	if (_tmp20_) {
 #line 377 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp17_ = CAIRO_FORMAT_ARGB32;
-#line 2012 "image.c"
+#line 2011 "image.c"
 	} else {
 #line 377 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp17_ = CAIRO_FORMAT_RGB24;
-#line 2016 "image.c"
+#line 2015 "image.c"
 	}
 #line 375 "/home/jens/Source/shotwell/src/util/image.vala"
 	_tmp21_ = dest_pixbuf;
@@ -2140,7 +2139,7 @@ GdkPixbuf* rotate_arb (GdkPixbuf* source_pixbuf, gdouble angle) {
 	_cairo_surface_destroy0 (surface);
 #line 398 "/home/jens/Source/shotwell/src/util/image.vala"
 	return result;
-#line 2144 "image.c"
+#line 2143 "image.c"
 }
 
 
@@ -2189,7 +2188,7 @@ void rotate_point_arb (GdkPoint* source_point, gint img_w, gint img_h, gdouble a
 	_tmp0_ = angle;
 #line 417 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp0_ == 0.0) {
-#line 2193 "image.c"
+#line 2192 "image.c"
 		GdkPoint _tmp1_ = {0};
 #line 419 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp1_ = *source_point;
@@ -2197,7 +2196,7 @@ void rotate_point_arb (GdkPoint* source_point, gint img_w, gint img_h, gdouble a
 		*result = _tmp1_;
 #line 419 "/home/jens/Source/shotwell/src/util/image.vala"
 		return;
-#line 2201 "image.c"
+#line 2200 "image.c"
 	}
 #line 424 "/home/jens/Source/shotwell/src/util/image.vala"
 	_tmp2_ = img_w;
@@ -2235,13 +2234,13 @@ void rotate_point_arb (GdkPoint* source_point, gint img_w, gint img_h, gdouble a
 	_tmp13_ = invert;
 #line 430 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp13_) {
-#line 2239 "image.c"
+#line 2238 "image.c"
 		cairo_status_t _tmp14_ = 0;
 #line 431 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp14_ = cairo_matrix_invert (&matrix);
 #line 431 "/home/jens/Source/shotwell/src/util/image.vala"
 		_vala_assert (_tmp14_ == CAIRO_STATUS_SUCCESS, "matrix.invert() == Cairo.Status.SUCCESS");
-#line 2245 "image.c"
+#line 2244 "image.c"
 	}
 #line 433 "/home/jens/Source/shotwell/src/util/image.vala"
 	_tmp15_ = *source_point;
@@ -2269,7 +2268,7 @@ void rotate_point_arb (GdkPoint* source_point, gint img_w, gint img_h, gdouble a
 	*result = _tmp21_;
 #line 437 "/home/jens/Source/shotwell/src/util/image.vala"
 	return;
-#line 2273 "image.c"
+#line 2272 "image.c"
 }
 
 
@@ -2308,7 +2307,7 @@ void derotate_point_arb (GdkPoint* source_point, gint img_w, gint img_h, gdouble
 	*result = _tmp4_;
 #line 454 "/home/jens/Source/shotwell/src/util/image.vala"
 	return;
-#line 2312 "image.c"
+#line 2311 "image.c"
 }
 
 
@@ -2512,7 +2511,7 @@ void clamp_inside_rotated_image (Box* src, gint img_w, gint img_h, gdouble angle
 	_tmp43_ = top;
 #line 471 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp43_ < 0) {
-#line 2516 "image.c"
+#line 2515 "image.c"
 		gint _tmp44_ = 0;
 		gdouble _tmp45_ = 0.0;
 		gdouble _tmp46_ = 0.0;
@@ -2524,7 +2523,7 @@ void clamp_inside_rotated_image (Box* src, gint img_w, gint img_h, gdouble angle
 		_tmp46_ = cos (_tmp45_);
 #line 472 "/home/jens/Source/shotwell/src/util/image.vala"
 		top_offset = (gint) ((0 - _tmp44_) * _tmp46_);
-#line 2528 "image.c"
+#line 2527 "image.c"
 	}
 #line 474 "/home/jens/Source/shotwell/src/util/image.vala"
 	_tmp47_ = bottom_left;
@@ -2544,7 +2543,7 @@ void clamp_inside_rotated_image (Box* src, gint img_w, gint img_h, gdouble angle
 	_tmp53_ = img_h;
 #line 475 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp52_ > _tmp53_) {
-#line 2548 "image.c"
+#line 2547 "image.c"
 		gint _tmp54_ = 0;
 		gint _tmp55_ = 0;
 		gdouble _tmp56_ = 0.0;
@@ -2559,7 +2558,7 @@ void clamp_inside_rotated_image (Box* src, gint img_w, gint img_h, gdouble angle
 		_tmp57_ = cos (_tmp56_);
 #line 476 "/home/jens/Source/shotwell/src/util/image.vala"
 		bottom_offset = (gint) ((_tmp54_ - _tmp55_) * _tmp57_);
-#line 2563 "image.c"
+#line 2562 "image.c"
 	}
 #line 478 "/home/jens/Source/shotwell/src/util/image.vala"
 	_tmp58_ = top_left;
@@ -2577,7 +2576,7 @@ void clamp_inside_rotated_image (Box* src, gint img_w, gint img_h, gdouble angle
 	_tmp63_ = left;
 #line 479 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp63_ < 0) {
-#line 2581 "image.c"
+#line 2580 "image.c"
 		gint _tmp64_ = 0;
 		gdouble _tmp65_ = 0.0;
 		gdouble _tmp66_ = 0.0;
@@ -2589,7 +2588,7 @@ void clamp_inside_rotated_image (Box* src, gint img_w, gint img_h, gdouble angle
 		_tmp66_ = cos (_tmp65_);
 #line 480 "/home/jens/Source/shotwell/src/util/image.vala"
 		left_offset = (gint) ((0 - _tmp64_) * _tmp66_);
-#line 2593 "image.c"
+#line 2592 "image.c"
 	}
 #line 482 "/home/jens/Source/shotwell/src/util/image.vala"
 	_tmp67_ = top_right;
@@ -2609,7 +2608,7 @@ void clamp_inside_rotated_image (Box* src, gint img_w, gint img_h, gdouble angle
 	_tmp73_ = img_w;
 #line 483 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp72_ > _tmp73_) {
-#line 2613 "image.c"
+#line 2612 "image.c"
 		gint _tmp74_ = 0;
 		gint _tmp75_ = 0;
 		gdouble _tmp76_ = 0.0;
@@ -2624,13 +2623,13 @@ void clamp_inside_rotated_image (Box* src, gint img_w, gint img_h, gdouble angle
 		_tmp77_ = cos (_tmp76_);
 #line 484 "/home/jens/Source/shotwell/src/util/image.vala"
 		right_offset = (gint) ((_tmp74_ - _tmp75_) * _tmp77_);
-#line 2628 "image.c"
+#line 2627 "image.c"
 	}
 #line 486 "/home/jens/Source/shotwell/src/util/image.vala"
 	_tmp79_ = preserve_geom;
 #line 486 "/home/jens/Source/shotwell/src/util/image.vala"
 	if (_tmp79_) {
-#line 2634 "image.c"
+#line 2633 "image.c"
 		gint _tmp80_ = 0;
 		gint _tmp81_ = 0;
 		gint _tmp82_ = 0;
@@ -2648,7 +2647,7 @@ void clamp_inside_rotated_image (Box* src, gint img_w, gint img_h, gdouble angle
 		box_get_offset (src, _tmp80_ + _tmp81_, _tmp82_ + _tmp83_, &_tmp84_);
 #line 486 "/home/jens/Source/shotwell/src/util/image.vala"
 		_tmp78_ = _tmp84_;
-#line 2652 "image.c"
+#line 2651 "image.c"
 	} else {
 		Box _tmp85_ = {0};
 		gint _tmp86_ = 0;
@@ -2688,13 +2687,13 @@ void clamp_inside_rotated_image (Box* src, gint img_w, gint img_h, gdouble angle
 		_tmp96_ = bottom_offset;
 #line 487 "/home/jens/Source/shotwell/src/util/image.vala"
 		box_init (&_tmp78_, _tmp86_ + _tmp87_, _tmp89_ + _tmp90_, _tmp92_ + _tmp93_, _tmp95_ + _tmp96_);
-#line 2692 "image.c"
+#line 2691 "image.c"
 	}
 #line 486 "/home/jens/Source/shotwell/src/util/image.vala"
 	*result = _tmp78_;
 #line 486 "/home/jens/Source/shotwell/src/util/image.vala"
 	return;
-#line 2698 "image.c"
+#line 2697 "image.c"
 }
 
 

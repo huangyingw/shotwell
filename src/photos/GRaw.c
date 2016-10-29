@@ -510,7 +510,7 @@ GRawProcessedImage* graw_processed_image_construct_from_thumb (GType object_type
 #line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_g_bytes_unref0 (bytes);
 #line 513 "GRaw.c"
-			goto __catch26_g_error;
+			goto __catch27_g_error;
 		}
 #line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp13_ = _tmp7_;
@@ -526,8 +526,8 @@ GRawProcessedImage* graw_processed_image_construct_from_thumb (GType object_type
 		_g_bytes_unref0 (bytes);
 #line 528 "GRaw.c"
 	}
-	goto __finally26;
-	__catch26_g_error:
+	goto __finally27;
+	__catch27_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp14_ = NULL;
@@ -548,9 +548,9 @@ GRawProcessedImage* graw_processed_image_construct_from_thumb (GType object_type
 #line 132 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_g_error_free0 (err);
 #line 551 "GRaw.c"
-		goto __finally26;
+		goto __finally27;
 	}
-	__finally26:
+	__finally27:
 #line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"

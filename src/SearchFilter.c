@@ -5855,11 +5855,11 @@ SearchFilterToolbar* search_filter_toolbar_construct (GType object_type, SearchF
 #line 1146 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5858 "SearchFilter.c"
-			goto __catch580_g_error;
+			goto __catch593_g_error;
 		}
 	}
-	goto __finally580;
-	__catch580_g_error:
+	goto __finally593;
+	__catch593_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp14_ = NULL;
@@ -5897,7 +5897,7 @@ SearchFilterToolbar* search_filter_toolbar_construct (GType object_type, SearchF
 		_g_error_free0 (err);
 #line 5899 "SearchFilter.c"
 	}
-	__finally580:
+	__finally593:
 #line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"

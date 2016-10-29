@@ -1604,7 +1604,7 @@ static PublishingTumblrSizeEntry** publishing_tumblr_tumblr_publisher_create_siz
 #line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1__length1 = _result__length1;
 #line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp2_ = _ ("500 x 375 pixels");
+	_tmp2_ = _ ("500 × 375 pixels");
 #line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = publishing_tumblr_size_entry_new (_tmp2_, 500);
 #line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -1614,7 +1614,7 @@ static PublishingTumblrSizeEntry** publishing_tumblr_tumblr_publisher_create_siz
 #line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp4__length1 = _result__length1;
 #line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp5_ = _ ("1024 x 768 pixels");
+	_tmp5_ = _ ("1024 × 768 pixels");
 #line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp6_ = publishing_tumblr_size_entry_new (_tmp5_, 1024);
 #line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -1624,7 +1624,7 @@ static PublishingTumblrSizeEntry** publishing_tumblr_tumblr_publisher_create_siz
 #line 107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp7__length1 = _result__length1;
 #line 107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp8_ = _ ("1280 x 853 pixels");
+	_tmp8_ = _ ("1280 × 853 pixels");
 #line 107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp9_ = publishing_tumblr_size_entry_new (_tmp8_, 1280);
 #line 107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -2452,7 +2452,7 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_auth_req
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp10_ = self->priv->host;
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp11_ = _ ("'%s' isn't a valid response to an OAuth authentication request");
+					_tmp11_ = _ ("“%s” isn’t a valid response to an OAuth authentication request");
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp12_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, _tmp11_);
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -2554,7 +2554,7 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_auth_req
 #line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp27_ = self->priv->host;
 #line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp28_ = _ ("'%s' isn't a valid response to an OAuth authentication request");
+		_tmp28_ = _ ("“%s” isn’t a valid response to an OAuth authentication request");
 #line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp29_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, _tmp28_);
 #line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -3894,7 +3894,7 @@ static void publishing_tumblr_tumblr_publisher_real_start (SpitPublishingPublish
 #line 3878 "TumblrPublishing.c"
 		const gchar* _tmp2_ = NULL;
 #line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp2_ = _ ("TumblrPublisher: start( ): can't start; this publisher is not restarta" \
+		_tmp2_ = _ ("TumblrPublisher: start( ): can’t start; this publisher is not restarta" \
 "ble.");
 #line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_error ("TumblrPublishing.vala:559: %s", _tmp2_);

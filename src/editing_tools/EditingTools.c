@@ -513,6 +513,16 @@ typedef struct _SaturationTransformationClass SaturationTransformationClass;
 
 typedef struct _ExposureTransformation ExposureTransformation;
 typedef struct _ExposureTransformationClass ExposureTransformationClass;
+
+#define TYPE_CONTRAST_TRANSFORMATION (contrast_transformation_get_type ())
+#define CONTRAST_TRANSFORMATION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_CONTRAST_TRANSFORMATION, ContrastTransformation))
+#define CONTRAST_TRANSFORMATION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_CONTRAST_TRANSFORMATION, ContrastTransformationClass))
+#define IS_CONTRAST_TRANSFORMATION(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_CONTRAST_TRANSFORMATION))
+#define IS_CONTRAST_TRANSFORMATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_CONTRAST_TRANSFORMATION))
+#define CONTRAST_TRANSFORMATION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_CONTRAST_TRANSFORMATION, ContrastTransformationClass))
+
+typedef struct _ContrastTransformation ContrastTransformation;
+typedef struct _ContrastTransformationClass ContrastTransformationClass;
 #define _pixel_transformation_unref0(var) ((var == NULL) ? NULL : (var = (pixel_transformation_unref (var), NULL)))
 
 #define EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND (editing_tools_adjust_tool_adjust_tool_command_get_type ())
@@ -885,6 +895,7 @@ struct _EditingToolsAdjustToolPrivate {
 	gboolean disable_histogram_refresh;
 	OneShotScheduler* temperature_scheduler;
 	OneShotScheduler* tint_scheduler;
+	OneShotScheduler* contrast_scheduler;
 	OneShotScheduler* saturation_scheduler;
 	OneShotScheduler* exposure_scheduler;
 	OneShotScheduler* shadows_scheduler;
@@ -898,13 +909,15 @@ typedef enum  {
 	PIXEL_TRANSFORMATION_TYPE_TEMPERATURE,
 	PIXEL_TRANSFORMATION_TYPE_TINT,
 	PIXEL_TRANSFORMATION_TYPE_SATURATION,
-	PIXEL_TRANSFORMATION_TYPE_EXPOSURE
+	PIXEL_TRANSFORMATION_TYPE_EXPOSURE,
+	PIXEL_TRANSFORMATION_TYPE_CONTRAST
 } PixelTransformationType;
 
 struct _EditingToolsAdjustToolAdjustToolWindow {
 	EditingToolsEditingToolWindow parent_instance;
 	EditingToolsAdjustToolAdjustToolWindowPrivate * priv;
 	GtkScale* exposure_slider;
+	GtkHScale* contrast_slider;
 	GtkScale* saturation_slider;
 	GtkScale* tint_slider;
 	GtkScale* temperature_slider;
@@ -1293,7 +1306,7 @@ void configuration_facade_set_last_crop_menu_choice (ConfigurationFacade* self, 
 void configuration_facade_set_last_crop_width (ConfigurationFacade* self, gint choice);
 void configuration_facade_set_last_crop_height (ConfigurationFacade* self, gint choice);
 #define RESOURCES_CROP_LABEL _ ("Crop")
-#define RESOURCES_CROP_TOOLTIP _ ("Crop the photo's size")
+#define RESOURCES_CROP_TOOLTIP _ ("Crop the photo’s size")
 CropCommand* crop_command_new (Photo* photo, Box* crop, const gchar* name, const gchar* explanation);
 CropCommand* crop_command_construct (GType object_type, Photo* photo, Box* crop, const gchar* name, const gchar* explanation);
 GType page_command_get_type (void) G_GNUC_CONST;
@@ -1480,6 +1493,8 @@ GType saturation_transformation_get_type (void) G_GNUC_CONST;
 gfloat saturation_transformation_get_parameter (SaturationTransformation* self);
 GType exposure_transformation_get_type (void) G_GNUC_CONST;
 gfloat exposure_transformation_get_parameter (ExposureTransformation* self);
+GType contrast_transformation_get_type (void) G_GNUC_CONST;
+gfloat contrast_transformation_get_parameter (ContrastTransformation* self);
 static void editing_tools_adjust_tool_bind_canvas_handlers (EditingToolsAdjustTool* self, EditingToolsPhotoCanvas* canvas);
 static void editing_tools_adjust_tool_bind_window_handlers (EditingToolsAdjustTool* self);
 static void editing_tools_adjust_tool_init_fp_pixel_cache (EditingToolsAdjustTool* self, GdkPixbuf* source);
@@ -1502,7 +1517,7 @@ static EditingToolsAdjustToolAdjustResetCommand* editing_tools_adjust_tool_adjus
 static EditingToolsAdjustToolAdjustResetCommand* editing_tools_adjust_tool_adjust_reset_command_construct (GType object_type, EditingToolsAdjustTool* owner, PixelTransformationBundle* current);
 static void editing_tools_adjust_tool_on_ok (EditingToolsAdjustTool* self);
 #define RESOURCES_ADJUST_LABEL _ ("Adjust")
-#define RESOURCES_ADJUST_TOOLTIP _ ("Adjust the photo's color and tone")
+#define RESOURCES_ADJUST_TOOLTIP _ ("Adjust the photo’s color and tone")
 AdjustColorsSingleCommand* adjust_colors_single_command_new (Photo* photo, PixelTransformationBundle* transformations, const gchar* name, const gchar* explanation);
 AdjustColorsSingleCommand* adjust_colors_single_command_construct (GType object_type, Photo* photo, PixelTransformationBundle* transformations, const gchar* name, const gchar* explanation);
 GType adjust_colors_single_command_get_type (void) G_GNUC_CONST;
@@ -1529,6 +1544,11 @@ static void editing_tools_adjust_tool_on_delayed_tint_adjustment (EditingToolsAd
 static void _editing_tools_adjust_tool_on_delayed_tint_adjustment_one_shot_callback (gpointer self);
 TintTransformation* tint_transformation_new (gfloat client_param);
 TintTransformation* tint_transformation_construct (GType object_type, gfloat client_param);
+static void editing_tools_adjust_tool_on_contrast_adjustment (EditingToolsAdjustTool* self);
+static void editing_tools_adjust_tool_on_delayed_contrast_adjustment (EditingToolsAdjustTool* self);
+static void _editing_tools_adjust_tool_on_delayed_contrast_adjustment_one_shot_callback (gpointer self);
+ContrastTransformation* contrast_transformation_new (gfloat client_parameter);
+ContrastTransformation* contrast_transformation_construct (GType object_type, gfloat client_parameter);
 static void editing_tools_adjust_tool_on_saturation_adjustment (EditingToolsAdjustTool* self);
 static void editing_tools_adjust_tool_on_delayed_saturation_adjustment (EditingToolsAdjustTool* self);
 static void _editing_tools_adjust_tool_on_delayed_saturation_adjustment_one_shot_callback (gpointer self);
@@ -1561,6 +1581,7 @@ static void _editing_tools_adjust_tool_on_canvas_resize_editing_tools_photo_canv
 static void _editing_tools_adjust_tool_on_ok_gtk_button_clicked (GtkButton* _sender, gpointer self);
 static void _editing_tools_adjust_tool_on_reset_gtk_button_clicked (GtkButton* _sender, gpointer self);
 static void _editing_tools_adjust_tool_on_exposure_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self);
+static void _editing_tools_adjust_tool_on_contrast_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self);
 static void _editing_tools_adjust_tool_on_saturation_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self);
 static void _editing_tools_adjust_tool_on_tint_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self);
 static void _editing_tools_adjust_tool_on_temperature_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self);
@@ -1580,6 +1601,8 @@ enum  {
 };
 #define EXPOSURE_TRANSFORMATION_MIN_PARAMETER (-16.0f)
 #define EXPOSURE_TRANSFORMATION_MAX_PARAMETER 16.0f
+#define CONTRAST_TRANSFORMATION_MIN_PARAMETER (-16.0f)
+#define CONTRAST_TRANSFORMATION_MAX_PARAMETER 16.0f
 #define SATURATION_TRANSFORMATION_MIN_PARAMETER (-16.0f)
 #define SATURATION_TRANSFORMATION_MAX_PARAMETER 16.0f
 #define TINT_TRANSFORMATION_MIN_PARAMETER (-16.0f)
@@ -1631,7 +1654,7 @@ enum  {
 	EDITING_TOOLS_ADJUST_TOOL_ADJUST_ENHANCE_COMMAND_DUMMY_PROPERTY
 };
 #define RESOURCES_ENHANCE_LABEL _ ("Enhance")
-#define RESOURCES_ENHANCE_TOOLTIP _ ("Automatically improve the photo's appearance")
+#define RESOURCES_ENHANCE_TOOLTIP _ ("Automatically improve the photo’s appearance")
 static void editing_tools_adjust_tool_adjust_enhance_command_real_execute (Command* base);
 PixelTransformationBundle* photo_get_enhance_transformations (Photo* self);
 static void editing_tools_adjust_tool_adjust_enhance_command_real_undo (Command* base);
@@ -1660,7 +1683,7 @@ void editing_tools_terminate (void) {
 static void _suppress_warnings_glog_func (const gchar* log_domain, GLogLevelFlags log_levels, const gchar* message, gpointer self) {
 #line 59 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	suppress_warnings (log_domain, log_levels, message);
-#line 1664 "EditingTools.c"
+#line 1687 "EditingTools.c"
 }
 
 
@@ -1724,7 +1747,7 @@ EditingToolsEditingToolWindow* editing_tools_editing_tool_window_construct (GTyp
 	_g_object_unref0 (outer_frame);
 #line 34 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 1728 "EditingTools.c"
+#line 1751 "EditingTools.c"
 }
 
 
@@ -1742,7 +1765,7 @@ static void editing_tools_editing_tool_window_real_add (GtkContainer* base, GtkW
 	_tmp1_ = widget;
 #line 67 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_container_get_type (), GtkContainer), _tmp1_);
-#line 1746 "EditingTools.c"
+#line 1769 "EditingTools.c"
 }
 
 
@@ -1757,7 +1780,7 @@ gboolean editing_tools_editing_tool_window_has_user_moved (EditingToolsEditingTo
 	result = _tmp0_;
 #line 71 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 1761 "EditingTools.c"
+#line 1784 "EditingTools.c"
 }
 
 
@@ -1785,7 +1808,7 @@ static gboolean editing_tools_editing_tool_window_real_key_press_event (GtkWidge
 		result = TRUE;
 #line 76 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 1789 "EditingTools.c"
+#line 1812 "EditingTools.c"
 	}
 #line 78 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = app_window_get_instance ();
@@ -1803,7 +1826,7 @@ static gboolean editing_tools_editing_tool_window_real_key_press_event (GtkWidge
 	result = _tmp6_;
 #line 78 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 1807 "EditingTools.c"
+#line 1830 "EditingTools.c"
 }
 
 
@@ -1830,11 +1853,11 @@ static gboolean editing_tools_editing_tool_window_real_button_press_event (GtkWi
 	_tmp1_ = _tmp0_->button;
 #line 83 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp1_ != ((guint) 1)) {
-#line 1834 "EditingTools.c"
+#line 1857 "EditingTools.c"
 		gboolean _tmp2_ = FALSE;
 #line 84 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (GTK_WIDGET_CLASS (editing_tools_editing_tool_window_parent_class)->button_press_event != NULL) {
-#line 1838 "EditingTools.c"
+#line 1861 "EditingTools.c"
 			GdkEventButton* _tmp3_ = NULL;
 			gboolean _tmp4_ = FALSE;
 #line 84 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -1843,17 +1866,17 @@ static gboolean editing_tools_editing_tool_window_real_button_press_event (GtkWi
 			_tmp4_ = GTK_WIDGET_CLASS (editing_tools_editing_tool_window_parent_class)->button_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), gtk_widget_get_type (), GtkWidget), _tmp3_);
 #line 84 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp2_ = _tmp4_;
-#line 1847 "EditingTools.c"
+#line 1870 "EditingTools.c"
 		} else {
 #line 84 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp2_ = TRUE;
-#line 1851 "EditingTools.c"
+#line 1874 "EditingTools.c"
 		}
 #line 84 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = _tmp2_;
 #line 84 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 1857 "EditingTools.c"
+#line 1880 "EditingTools.c"
 	}
 #line 86 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = event;
@@ -1879,7 +1902,7 @@ static gboolean editing_tools_editing_tool_window_real_button_press_event (GtkWi
 	result = TRUE;
 #line 89 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 1883 "EditingTools.c"
+#line 1906 "EditingTools.c"
 }
 
 
@@ -1891,7 +1914,7 @@ static void editing_tools_editing_tool_window_real_realize (GtkWidget* base) {
 	gtk_window_set_opacity (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), RESOURCES_TRANSIENT_WINDOW_OPACITY);
 #line 95 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	GTK_WIDGET_CLASS (editing_tools_editing_tool_window_parent_class)->realize (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), gtk_widget_get_type (), GtkWidget));
-#line 1895 "EditingTools.c"
+#line 1918 "EditingTools.c"
 }
 
 
@@ -1910,7 +1933,7 @@ static void editing_tools_editing_tool_window_class_init (EditingToolsEditingToo
 	((GtkWidgetClass *) klass)->realize = editing_tools_editing_tool_window_real_realize;
 #line 28 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (klass)->finalize = editing_tools_editing_tool_window_finalize;
-#line 1914 "EditingTools.c"
+#line 1937 "EditingTools.c"
 }
 
 
@@ -1926,7 +1949,7 @@ static void editing_tools_editing_tool_window_instance_init (EditingToolsEditing
 	self->priv->layout_frame = _tmp0_;
 #line 32 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->user_moved = FALSE;
-#line 1930 "EditingTools.c"
+#line 1953 "EditingTools.c"
 }
 
 
@@ -1946,7 +1969,7 @@ static void editing_tools_editing_tool_window_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->layout_frame);
 #line 28 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (editing_tools_editing_tool_window_parent_class)->finalize (obj);
-#line 1950 "EditingTools.c"
+#line 1973 "EditingTools.c"
 }
 
 
@@ -1965,14 +1988,14 @@ GType editing_tools_editing_tool_window_get_type (void) {
 static gpointer _g_object_ref0 (gpointer self) {
 #line 114 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 1969 "EditingTools.c"
+#line 1992 "EditingTools.c"
 }
 
 
 static gpointer _cairo_reference0 (gpointer self) {
 #line 117 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self ? cairo_reference (self) : NULL;
-#line 1976 "EditingTools.c"
+#line 1999 "EditingTools.c"
 }
 
 
@@ -2072,7 +2095,7 @@ EditingToolsPhotoCanvas* editing_tools_photo_canvas_construct (GType object_type
 	self->priv->scaled = _tmp15_;
 #line 112 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 2076 "EditingTools.c"
+#line 2099 "EditingTools.c"
 }
 
 
@@ -2094,7 +2117,7 @@ void editing_tools_photo_canvas_unscaled_to_raw_rect (EditingToolsPhotoCanvas* s
 	*result = _tmp2_;
 #line 130 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 2098 "EditingTools.c"
+#line 2121 "EditingTools.c"
 }
 
 
@@ -2174,7 +2197,7 @@ void editing_tools_photo_canvas_active_to_unscaled_point (EditingToolsPhotoCanva
 	*result = _result_;
 #line 146 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 2178 "EditingTools.c"
+#line 2201 "EditingTools.c"
 }
 
 
@@ -2306,7 +2329,7 @@ void editing_tools_photo_canvas_active_to_unscaled_rect (EditingToolsPhotoCanvas
 	*result = unscaled_rect;
 #line 166 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 2310 "EditingTools.c"
+#line 2333 "EditingTools.c"
 }
 
 
@@ -2359,7 +2382,7 @@ void editing_tools_photo_canvas_user_to_active_point (EditingToolsPhotoCanvas* s
 	*result = _result_;
 #line 176 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 2363 "EditingTools.c"
+#line 2386 "EditingTools.c"
 }
 
 
@@ -2491,7 +2514,7 @@ void editing_tools_photo_canvas_user_to_active_rect (EditingToolsPhotoCanvas* se
 	*result = active_rect;
 #line 196 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 2495 "EditingTools.c"
+#line 2518 "EditingTools.c"
 }
 
 
@@ -2509,7 +2532,7 @@ Photo* editing_tools_photo_canvas_get_photo (EditingToolsPhotoCanvas* self) {
 	result = _tmp1_;
 #line 200 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 2513 "EditingTools.c"
+#line 2536 "EditingTools.c"
 }
 
 
@@ -2527,7 +2550,7 @@ GtkWindow* editing_tools_photo_canvas_get_container (EditingToolsPhotoCanvas* se
 	result = _tmp1_;
 #line 204 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 2531 "EditingTools.c"
+#line 2554 "EditingTools.c"
 }
 
 
@@ -2545,7 +2568,7 @@ GdkWindow* editing_tools_photo_canvas_get_drawing_window (EditingToolsPhotoCanva
 	result = _tmp1_;
 #line 208 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 2549 "EditingTools.c"
+#line 2572 "EditingTools.c"
 }
 
 
@@ -2563,7 +2586,7 @@ cairo_t* editing_tools_photo_canvas_get_default_ctx (EditingToolsPhotoCanvas* se
 	result = _tmp1_;
 #line 212 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 2567 "EditingTools.c"
+#line 2590 "EditingTools.c"
 }
 
 
@@ -2577,7 +2600,7 @@ void editing_tools_photo_canvas_get_surface_dim (EditingToolsPhotoCanvas* self, 
 	*result = _tmp0_;
 #line 216 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 2581 "EditingTools.c"
+#line 2604 "EditingTools.c"
 }
 
 
@@ -2594,7 +2617,7 @@ void editing_tools_photo_canvas_get_scaling (EditingToolsPhotoCanvas* self, Scal
 	*result = _tmp1_;
 #line 220 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 2598 "EditingTools.c"
+#line 2621 "EditingTools.c"
 }
 
 
@@ -2628,14 +2651,14 @@ void editing_tools_photo_canvas_set_surface (EditingToolsPhotoCanvas* self, cair
 	_tmp4_ = *surface_dim;
 #line 227 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_emit_by_name (self, "new-surface", _tmp3_, &_tmp4_);
-#line 2632 "EditingTools.c"
+#line 2655 "EditingTools.c"
 }
 
 
 static gpointer _cairo_surface_reference0 (gpointer self) {
 #line 231 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self ? cairo_surface_reference (self) : NULL;
-#line 2639 "EditingTools.c"
+#line 2662 "EditingTools.c"
 }
 
 
@@ -2653,7 +2676,7 @@ cairo_surface_t* editing_tools_photo_canvas_get_scaled_surface (EditingToolsPhot
 	result = _tmp1_;
 #line 231 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 2657 "EditingTools.c"
+#line 2680 "EditingTools.c"
 }
 
 
@@ -2671,7 +2694,7 @@ GdkPixbuf* editing_tools_photo_canvas_get_scaled_pixbuf (EditingToolsPhotoCanvas
 	result = _tmp1_;
 #line 235 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 2675 "EditingTools.c"
+#line 2698 "EditingTools.c"
 }
 
 
@@ -2685,7 +2708,7 @@ void editing_tools_photo_canvas_get_scaled_pixbuf_position (EditingToolsPhotoCan
 	*result = _tmp0_;
 #line 239 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 2689 "EditingTools.c"
+#line 2712 "EditingTools.c"
 }
 
 
@@ -2740,7 +2763,7 @@ void editing_tools_photo_canvas_resized_pixbuf (EditingToolsPhotoCanvas* self, D
 	_tmp9_ = *scaled_position;
 #line 247 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_emit_by_name (self, "resized-scaled-pixbuf", &_tmp7_, _tmp8_, &_tmp9_);
-#line 2744 "EditingTools.c"
+#line 2767 "EditingTools.c"
 }
 
 
@@ -2749,7 +2772,7 @@ static void editing_tools_photo_canvas_real_repaint (EditingToolsPhotoCanvas* se
 	g_critical ("Type `%s' does not implement abstract method `editing_tools_photo_canvas_repaint'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
 #line 250 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 2753 "EditingTools.c"
+#line 2776 "EditingTools.c"
 }
 
 
@@ -2758,7 +2781,7 @@ void editing_tools_photo_canvas_repaint (EditingToolsPhotoCanvas* self) {
 	g_return_if_fail (EDITING_TOOLS_IS_PHOTO_CANVAS (self));
 #line 250 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_PHOTO_CANVAS_GET_CLASS (self)->repaint (self);
-#line 2762 "EditingTools.c"
+#line 2785 "EditingTools.c"
 }
 
 
@@ -2858,7 +2881,7 @@ void editing_tools_photo_canvas_paint_pixbuf (EditingToolsPhotoCanvas* self, Gdk
 	_tmp24_ = self->priv->default_ctx;
 #line 271 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_restore (_tmp24_);
-#line 2862 "EditingTools.c"
+#line 2885 "EditingTools.c"
 }
 
 
@@ -2901,7 +2924,7 @@ void editing_tools_photo_canvas_paint_pixbuf_area (EditingToolsPhotoCanvas* self
 	_tmp2_ = gdk_pixbuf_get_has_alpha (_tmp1_);
 #line 276 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp2_) {
-#line 2905 "EditingTools.c"
+#line 2928 "EditingTools.c"
 		cairo_t* _tmp3_ = NULL;
 		cairo_t* _tmp4_ = NULL;
 		GdkRectangle _tmp5_ = {0};
@@ -2947,7 +2970,7 @@ void editing_tools_photo_canvas_paint_pixbuf_area (EditingToolsPhotoCanvas* self
 		_tmp15_ = self->priv->default_ctx;
 #line 281 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		cairo_fill (_tmp15_);
-#line 2951 "EditingTools.c"
+#line 2974 "EditingTools.c"
 	}
 #line 284 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp16_ = self->priv->default_ctx;
@@ -2995,7 +3018,7 @@ void editing_tools_photo_canvas_paint_pixbuf_area (EditingToolsPhotoCanvas* self
 	_tmp34_ = self->priv->default_ctx;
 #line 290 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_restore (_tmp34_);
-#line 2999 "EditingTools.c"
+#line 3022 "EditingTools.c"
 }
 
 
@@ -3029,20 +3052,20 @@ void editing_tools_photo_canvas_paint_surface (EditingToolsPhotoCanvas* self, ca
 	_tmp1_ = over;
 #line 296 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp1_ == FALSE) {
-#line 3033 "EditingTools.c"
+#line 3056 "EditingTools.c"
 		cairo_t* _tmp2_ = NULL;
 #line 297 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = self->priv->default_ctx;
 #line 297 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		cairo_set_operator (_tmp2_, CAIRO_OPERATOR_SOURCE);
-#line 3039 "EditingTools.c"
+#line 3062 "EditingTools.c"
 	} else {
 		cairo_t* _tmp3_ = NULL;
 #line 299 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = self->priv->default_ctx;
 #line 299 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		cairo_set_operator (_tmp3_, CAIRO_OPERATOR_OVER);
-#line 3046 "EditingTools.c"
+#line 3069 "EditingTools.c"
 	}
 #line 301 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = self->priv->default_ctx;
@@ -3084,7 +3107,7 @@ void editing_tools_photo_canvas_paint_surface (EditingToolsPhotoCanvas* self, ca
 	_tmp18_ = self->priv->default_ctx;
 #line 305 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_restore (_tmp18_);
-#line 3088 "EditingTools.c"
+#line 3111 "EditingTools.c"
 }
 
 
@@ -3142,20 +3165,20 @@ void editing_tools_photo_canvas_paint_surface_area (EditingToolsPhotoCanvas* sel
 	_tmp1_ = over;
 #line 310 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp1_ == FALSE) {
-#line 3146 "EditingTools.c"
+#line 3169 "EditingTools.c"
 		cairo_t* _tmp2_ = NULL;
 #line 311 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = self->priv->default_ctx;
 #line 311 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		cairo_set_operator (_tmp2_, CAIRO_OPERATOR_SOURCE);
-#line 3152 "EditingTools.c"
+#line 3175 "EditingTools.c"
 	} else {
 		cairo_t* _tmp3_ = NULL;
 #line 313 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = self->priv->default_ctx;
 #line 313 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		cairo_set_operator (_tmp3_, CAIRO_OPERATOR_OVER);
-#line 3159 "EditingTools.c"
+#line 3182 "EditingTools.c"
 	}
 #line 315 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = self->priv->default_ctx;
@@ -3245,7 +3268,7 @@ void editing_tools_photo_canvas_paint_surface_area (EditingToolsPhotoCanvas* sel
 	_tmp40_ = self->priv->default_ctx;
 #line 326 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_restore (_tmp40_);
-#line 3249 "EditingTools.c"
+#line 3272 "EditingTools.c"
 }
 
 
@@ -3318,7 +3341,7 @@ void editing_tools_photo_canvas_draw_box (EditingToolsPhotoCanvas* self, cairo_t
 	_tmp16_ = ctx;
 #line 335 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_stroke (_tmp16_);
-#line 3322 "EditingTools.c"
+#line 3345 "EditingTools.c"
 }
 
 
@@ -3359,7 +3382,7 @@ void editing_tools_photo_canvas_draw_text (EditingToolsPhotoCanvas* self, cairo_
 	_tmp0_ = use_scaled_pos;
 #line 339 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_) {
-#line 3363 "EditingTools.c"
+#line 3386 "EditingTools.c"
 		gint _tmp1_ = 0;
 		GdkRectangle _tmp2_ = {0};
 		gint _tmp3_ = 0;
@@ -3382,7 +3405,7 @@ void editing_tools_photo_canvas_draw_text (EditingToolsPhotoCanvas* self, cairo_
 		_tmp6_ = _tmp5_.y;
 #line 341 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		y = _tmp4_ + _tmp6_;
-#line 3386 "EditingTools.c"
+#line 3409 "EditingTools.c"
 	}
 #line 344 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = ctx;
@@ -3448,7 +3471,7 @@ void editing_tools_photo_canvas_draw_text (EditingToolsPhotoCanvas* self, cairo_
 	_tmp29_ = text;
 #line 357 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_show_text (_tmp28_, _tmp29_);
-#line 3452 "EditingTools.c"
+#line 3475 "EditingTools.c"
 }
 
 
@@ -3481,7 +3504,7 @@ void editing_tools_photo_canvas_draw_horizontal_line (EditingToolsPhotoCanvas* s
 	_tmp0_ = use_scaled_pos;
 #line 372 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_) {
-#line 3485 "EditingTools.c"
+#line 3508 "EditingTools.c"
 		gint _tmp1_ = 0;
 		GdkRectangle _tmp2_ = {0};
 		gint _tmp3_ = 0;
@@ -3504,7 +3527,7 @@ void editing_tools_photo_canvas_draw_horizontal_line (EditingToolsPhotoCanvas* s
 		_tmp6_ = _tmp5_.y;
 #line 374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		y = _tmp4_ + _tmp6_;
-#line 3508 "EditingTools.c"
+#line 3531 "EditingTools.c"
 	}
 #line 377 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = ctx;
@@ -3528,7 +3551,7 @@ void editing_tools_photo_canvas_draw_horizontal_line (EditingToolsPhotoCanvas* s
 	_tmp14_ = ctx;
 #line 379 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_stroke (_tmp14_);
-#line 3532 "EditingTools.c"
+#line 3555 "EditingTools.c"
 }
 
 
@@ -3561,7 +3584,7 @@ void editing_tools_photo_canvas_draw_vertical_line (EditingToolsPhotoCanvas* sel
 	_tmp0_ = use_scaled_pos;
 #line 394 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_) {
-#line 3565 "EditingTools.c"
+#line 3588 "EditingTools.c"
 		gint _tmp1_ = 0;
 		GdkRectangle _tmp2_ = {0};
 		gint _tmp3_ = 0;
@@ -3584,7 +3607,7 @@ void editing_tools_photo_canvas_draw_vertical_line (EditingToolsPhotoCanvas* sel
 		_tmp6_ = _tmp5_.y;
 #line 396 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		y = _tmp4_ + _tmp6_;
-#line 3588 "EditingTools.c"
+#line 3611 "EditingTools.c"
 	}
 #line 399 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = ctx;
@@ -3608,7 +3631,7 @@ void editing_tools_photo_canvas_draw_vertical_line (EditingToolsPhotoCanvas* sel
 	_tmp14_ = ctx;
 #line 401 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_stroke (_tmp14_);
-#line 3612 "EditingTools.c"
+#line 3635 "EditingTools.c"
 }
 
 
@@ -3681,7 +3704,7 @@ void editing_tools_photo_canvas_erase_horizontal_line (EditingToolsPhotoCanvas* 
 	_tmp17_ = self->priv->default_ctx;
 #line 413 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_restore (_tmp17_);
-#line 3685 "EditingTools.c"
+#line 3708 "EditingTools.c"
 }
 
 
@@ -3727,7 +3750,7 @@ void editing_tools_photo_canvas_draw_circle (EditingToolsPhotoCanvas* self, cair
 	_tmp8_ = ctx;
 #line 422 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_stroke (_tmp8_);
-#line 3731 "EditingTools.c"
+#line 3754 "EditingTools.c"
 }
 
 
@@ -3800,7 +3823,7 @@ void editing_tools_photo_canvas_erase_vertical_line (EditingToolsPhotoCanvas* se
 	_tmp17_ = self->priv->default_ctx;
 #line 438 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_restore (_tmp17_);
-#line 3804 "EditingTools.c"
+#line 3827 "EditingTools.c"
 }
 
 
@@ -3877,7 +3900,7 @@ void editing_tools_photo_canvas_erase_box (EditingToolsPhotoCanvas* self, Box* b
 	_tmp19_ = box_get_height (box);
 #line 446 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_erase_vertical_line (self, _tmp16_, _tmp18_, _tmp19_);
-#line 3881 "EditingTools.c"
+#line 3904 "EditingTools.c"
 }
 
 
@@ -3922,7 +3945,7 @@ void editing_tools_photo_canvas_invalidate_area (EditingToolsPhotoCanvas* self, 
 	_tmp8_ = rect;
 #line 454 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gdk_window_invalidate_rect (_tmp7_, &_tmp8_, FALSE);
-#line 3926 "EditingTools.c"
+#line 3949 "EditingTools.c"
 }
 
 
@@ -3979,7 +4002,7 @@ static cairo_surface_t* editing_tools_photo_canvas_pixbuf_to_surface (EditingToo
 	_cairo_destroy0 (ctx);
 #line 464 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 3983 "EditingTools.c"
+#line 4006 "EditingTools.c"
 }
 
 
@@ -3998,19 +4021,19 @@ static void g_cclosure_user_marshal_VOID__POINTER_BOXED (GClosure * closure, GVa
 		data1 = closure->data;
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 4002 "EditingTools.c"
+#line 4025 "EditingTools.c"
 	} else {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		data2 = closure->data;
-#line 4008 "EditingTools.c"
+#line 4031 "EditingTools.c"
 	}
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	callback = (GMarshalFunc_VOID__POINTER_BOXED) (marshal_data ? marshal_data : cc->callback);
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	callback (data1, g_value_get_pointer (param_values + 1), g_value_get_boxed (param_values + 2), data2);
-#line 4014 "EditingTools.c"
+#line 4037 "EditingTools.c"
 }
 
 
@@ -4029,26 +4052,26 @@ static void g_cclosure_user_marshal_VOID__BOXED_OBJECT_BOXED (GClosure * closure
 		data1 = closure->data;
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 4033 "EditingTools.c"
+#line 4056 "EditingTools.c"
 	} else {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		data2 = closure->data;
-#line 4039 "EditingTools.c"
+#line 4062 "EditingTools.c"
 	}
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	callback = (GMarshalFunc_VOID__BOXED_OBJECT_BOXED) (marshal_data ? marshal_data : cc->callback);
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	callback (data1, g_value_get_boxed (param_values + 1), g_value_get_object (param_values + 2), g_value_get_boxed (param_values + 3), data2);
-#line 4045 "EditingTools.c"
+#line 4068 "EditingTools.c"
 }
 
 
 static void editing_tools_value_photo_canvas_init (GValue* value) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	value->data[0].v_pointer = NULL;
-#line 4052 "EditingTools.c"
+#line 4075 "EditingTools.c"
 }
 
 
@@ -4057,7 +4080,7 @@ static void editing_tools_value_photo_canvas_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_photo_canvas_unref (value->data[0].v_pointer);
-#line 4061 "EditingTools.c"
+#line 4084 "EditingTools.c"
 	}
 }
 
@@ -4067,11 +4090,11 @@ static void editing_tools_value_photo_canvas_copy_value (const GValue* src_value
 	if (src_value->data[0].v_pointer) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		dest_value->data[0].v_pointer = editing_tools_photo_canvas_ref (src_value->data[0].v_pointer);
-#line 4071 "EditingTools.c"
+#line 4094 "EditingTools.c"
 	} else {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 4075 "EditingTools.c"
+#line 4098 "EditingTools.c"
 	}
 }
 
@@ -4079,37 +4102,37 @@ static void editing_tools_value_photo_canvas_copy_value (const GValue* src_value
 static gpointer editing_tools_value_photo_canvas_peek_pointer (const GValue* value) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return value->data[0].v_pointer;
-#line 4083 "EditingTools.c"
+#line 4106 "EditingTools.c"
 }
 
 
 static gchar* editing_tools_value_photo_canvas_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (collect_values[0].v_pointer) {
-#line 4090 "EditingTools.c"
+#line 4113 "EditingTools.c"
 		EditingToolsPhotoCanvas* object;
 		object = collect_values[0].v_pointer;
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 4097 "EditingTools.c"
+#line 4120 "EditingTools.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 4101 "EditingTools.c"
+#line 4124 "EditingTools.c"
 		}
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = editing_tools_photo_canvas_ref (object);
-#line 4105 "EditingTools.c"
+#line 4128 "EditingTools.c"
 	} else {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = NULL;
-#line 4109 "EditingTools.c"
+#line 4132 "EditingTools.c"
 	}
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return NULL;
-#line 4113 "EditingTools.c"
+#line 4136 "EditingTools.c"
 }
 
 
@@ -4120,25 +4143,25 @@ static gchar* editing_tools_value_photo_canvas_lcopy_value (const GValue* value,
 	if (!object_p) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 4124 "EditingTools.c"
+#line 4147 "EditingTools.c"
 	}
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (!value->data[0].v_pointer) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*object_p = NULL;
-#line 4130 "EditingTools.c"
+#line 4153 "EditingTools.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*object_p = value->data[0].v_pointer;
-#line 4134 "EditingTools.c"
+#line 4157 "EditingTools.c"
 	} else {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*object_p = editing_tools_photo_canvas_ref (value->data[0].v_pointer);
-#line 4138 "EditingTools.c"
+#line 4161 "EditingTools.c"
 	}
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return NULL;
-#line 4142 "EditingTools.c"
+#line 4165 "EditingTools.c"
 }
 
 
@@ -4152,7 +4175,7 @@ GParamSpec* editing_tools_param_spec_photo_canvas (const gchar* name, const gcha
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return G_PARAM_SPEC (spec);
-#line 4156 "EditingTools.c"
+#line 4179 "EditingTools.c"
 }
 
 
@@ -4161,7 +4184,7 @@ gpointer editing_tools_value_get_photo_canvas (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, EDITING_TOOLS_TYPE_PHOTO_CANVAS), NULL);
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return value->data[0].v_pointer;
-#line 4165 "EditingTools.c"
+#line 4188 "EditingTools.c"
 }
 
 
@@ -4181,17 +4204,17 @@ void editing_tools_value_set_photo_canvas (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_photo_canvas_ref (value->data[0].v_pointer);
-#line 4185 "EditingTools.c"
+#line 4208 "EditingTools.c"
 	} else {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = NULL;
-#line 4189 "EditingTools.c"
+#line 4212 "EditingTools.c"
 	}
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (old) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_photo_canvas_unref (old);
-#line 4195 "EditingTools.c"
+#line 4218 "EditingTools.c"
 	}
 }
 
@@ -4210,17 +4233,17 @@ void editing_tools_value_take_photo_canvas (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = v_object;
-#line 4214 "EditingTools.c"
+#line 4237 "EditingTools.c"
 	} else {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = NULL;
-#line 4218 "EditingTools.c"
+#line 4241 "EditingTools.c"
 	}
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (old) {
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_photo_canvas_unref (old);
-#line 4224 "EditingTools.c"
+#line 4247 "EditingTools.c"
 	}
 }
 
@@ -4238,7 +4261,7 @@ static void editing_tools_photo_canvas_class_init (EditingToolsPhotoCanvasClass 
 	g_signal_new ("new_surface", EDITING_TOOLS_TYPE_PHOTO_CANVAS, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__POINTER_BOXED, G_TYPE_NONE, 2, G_TYPE_POINTER, TYPE_DIMENSIONS);
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_new ("resized_scaled_pixbuf", EDITING_TOOLS_TYPE_PHOTO_CANVAS, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__BOXED_OBJECT_BOXED, G_TYPE_NONE, 3, TYPE_DIMENSIONS, GDK_TYPE_PIXBUF, GDK_TYPE_RECTANGLE);
-#line 4242 "EditingTools.c"
+#line 4265 "EditingTools.c"
 }
 
 
@@ -4247,7 +4270,7 @@ static void editing_tools_photo_canvas_instance_init (EditingToolsPhotoCanvas * 
 	self->priv = EDITING_TOOLS_PHOTO_CANVAS_GET_PRIVATE (self);
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->ref_count = 1;
-#line 4251 "EditingTools.c"
+#line 4274 "EditingTools.c"
 }
 
 
@@ -4269,7 +4292,7 @@ static void editing_tools_photo_canvas_finalize (EditingToolsPhotoCanvas* obj) {
 	_cairo_surface_destroy0 (self->priv->scaled);
 #line 109 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->priv->scaled_pixbuf);
-#line 4273 "EditingTools.c"
+#line 4296 "EditingTools.c"
 }
 
 
@@ -4294,7 +4317,7 @@ gpointer editing_tools_photo_canvas_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return instance;
-#line 4298 "EditingTools.c"
+#line 4321 "EditingTools.c"
 }
 
 
@@ -4307,7 +4330,7 @@ void editing_tools_photo_canvas_unref (gpointer instance) {
 		EDITING_TOOLS_PHOTO_CANVAS_GET_CLASS (self)->finalize (self);
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 4311 "EditingTools.c"
+#line 4334 "EditingTools.c"
 	}
 }
 
@@ -4330,14 +4353,14 @@ EditingToolsEditingTool* editing_tools_editing_tool_construct (GType object_type
 	self->name = _tmp1_;
 #line 489 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 4334 "EditingTools.c"
+#line 4357 "EditingTools.c"
 }
 
 
 static gpointer _editing_tools_photo_canvas_ref0 (gpointer self) {
 #line 502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self ? editing_tools_photo_canvas_ref (self) : NULL;
-#line 4341 "EditingTools.c"
+#line 4364 "EditingTools.c"
 }
 
 
@@ -4346,7 +4369,7 @@ static gboolean _editing_tools_editing_tool_on_keypress_gtk_widget_key_press_eve
 	result = editing_tools_editing_tool_on_keypress ((EditingToolsEditingTool*) self, event);
 #line 506 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 4350 "EditingTools.c"
+#line 4373 "EditingTools.c"
 }
 
 
@@ -4385,17 +4408,17 @@ static void editing_tools_editing_tool_real_activate (EditingToolsEditingTool* s
 	_tmp5_ = self->priv->tool_window;
 #line 505 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp5_ != NULL) {
-#line 4389 "EditingTools.c"
+#line 4412 "EditingTools.c"
 		EditingToolsEditingToolWindow* _tmp6_ = NULL;
 #line 506 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp6_ = self->priv->tool_window;
 #line 506 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget), "key-press-event", (GCallback) _editing_tools_editing_tool_on_keypress_gtk_widget_key_press_event, self);
-#line 4395 "EditingTools.c"
+#line 4418 "EditingTools.c"
 	}
 #line 508 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_emit_by_name (self, "activated");
-#line 4399 "EditingTools.c"
+#line 4422 "EditingTools.c"
 }
 
 
@@ -4404,7 +4427,7 @@ void editing_tools_editing_tool_activate (EditingToolsEditingTool* self, Editing
 	g_return_if_fail (EDITING_TOOLS_IS_EDITING_TOOL (self));
 #line 497 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_GET_CLASS (self)->activate (self, canvas);
-#line 4408 "EditingTools.c"
+#line 4431 "EditingTools.c"
 }
 
 
@@ -4416,23 +4439,23 @@ static void editing_tools_editing_tool_real_deactivate (EditingToolsEditingTool*
 	_tmp1_ = self->canvas;
 #line 514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp1_ == NULL) {
-#line 4420 "EditingTools.c"
+#line 4443 "EditingTools.c"
 		EditingToolsEditingToolWindow* _tmp2_ = NULL;
 #line 514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = self->priv->tool_window;
 #line 514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = _tmp2_ == NULL;
-#line 4426 "EditingTools.c"
+#line 4449 "EditingTools.c"
 	} else {
 #line 514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = FALSE;
-#line 4430 "EditingTools.c"
+#line 4453 "EditingTools.c"
 	}
 #line 514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_) {
 #line 515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 4436 "EditingTools.c"
+#line 4459 "EditingTools.c"
 	}
 #line 517 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_editing_tools_photo_canvas_unref0 (self->canvas);
@@ -4442,7 +4465,7 @@ static void editing_tools_editing_tool_real_deactivate (EditingToolsEditingTool*
 	_tmp3_ = self->priv->tool_window;
 #line 519 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp3_ != NULL) {
-#line 4446 "EditingTools.c"
+#line 4469 "EditingTools.c"
 		EditingToolsEditingToolWindow* _tmp4_ = NULL;
 		guint _tmp5_ = 0U;
 #line 520 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -4455,11 +4478,11 @@ static void editing_tools_editing_tool_real_deactivate (EditingToolsEditingTool*
 		_g_object_unref0 (self->priv->tool_window);
 #line 521 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->tool_window = NULL;
-#line 4459 "EditingTools.c"
+#line 4482 "EditingTools.c"
 	}
 #line 524 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_emit_by_name (self, "deactivated");
-#line 4463 "EditingTools.c"
+#line 4486 "EditingTools.c"
 }
 
 
@@ -4468,7 +4491,7 @@ void editing_tools_editing_tool_deactivate (EditingToolsEditingTool* self) {
 	g_return_if_fail (EDITING_TOOLS_IS_EDITING_TOOL (self));
 #line 512 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_GET_CLASS (self)->deactivate (self);
-#line 4472 "EditingTools.c"
+#line 4495 "EditingTools.c"
 }
 
 
@@ -4483,7 +4506,7 @@ gboolean editing_tools_editing_tool_is_activated (EditingToolsEditingTool* self)
 	result = _tmp0_ != NULL;
 #line 528 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 4487 "EditingTools.c"
+#line 4510 "EditingTools.c"
 }
 
 
@@ -4493,7 +4516,7 @@ static EditingToolsEditingToolWindow* editing_tools_editing_tool_real_get_tool_w
 	result = NULL;
 #line 532 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 4497 "EditingTools.c"
+#line 4520 "EditingTools.c"
 }
 
 
@@ -4502,7 +4525,7 @@ EditingToolsEditingToolWindow* editing_tools_editing_tool_get_tool_window (Editi
 	g_return_val_if_fail (EDITING_TOOLS_IS_EDITING_TOOL (self), NULL);
 #line 531 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return EDITING_TOOLS_EDITING_TOOL_GET_CLASS (self)->get_tool_window (self);
-#line 4506 "EditingTools.c"
+#line 4529 "EditingTools.c"
 }
 
 
@@ -4521,11 +4544,11 @@ static GdkPixbuf* editing_tools_editing_tool_real_get_display_pixbuf (EditingToo
 	if (max_dim) {
 #line 550 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*max_dim = _vala_max_dim;
-#line 4525 "EditingTools.c"
+#line 4548 "EditingTools.c"
 	}
 #line 550 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 4529 "EditingTools.c"
+#line 4552 "EditingTools.c"
 }
 
 
@@ -4534,7 +4557,7 @@ GdkPixbuf* editing_tools_editing_tool_get_display_pixbuf (EditingToolsEditingToo
 	g_return_val_if_fail (EDITING_TOOLS_IS_EDITING_TOOL (self), NULL);
 #line 546 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return EDITING_TOOLS_EDITING_TOOL_GET_CLASS (self)->get_display_pixbuf (self, scaling, photo, max_dim, error);
-#line 4538 "EditingTools.c"
+#line 4561 "EditingTools.c"
 }
 
 
@@ -4547,7 +4570,7 @@ void editing_tools_editing_tool_on_left_click (EditingToolsEditingTool* self, gi
 	g_return_if_fail (EDITING_TOOLS_IS_EDITING_TOOL (self));
 #line 553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_GET_CLASS (self)->on_left_click (self, x, y);
-#line 4551 "EditingTools.c"
+#line 4574 "EditingTools.c"
 }
 
 
@@ -4560,7 +4583,7 @@ void editing_tools_editing_tool_on_left_released (EditingToolsEditingTool* self,
 	g_return_if_fail (EDITING_TOOLS_IS_EDITING_TOOL (self));
 #line 556 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_GET_CLASS (self)->on_left_released (self, x, y);
-#line 4564 "EditingTools.c"
+#line 4587 "EditingTools.c"
 }
 
 
@@ -4573,7 +4596,7 @@ void editing_tools_editing_tool_on_motion (EditingToolsEditingTool* self, gint x
 	g_return_if_fail (EDITING_TOOLS_IS_EDITING_TOOL (self));
 #line 559 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_GET_CLASS (self)->on_motion (self, x, y, mask);
-#line 4577 "EditingTools.c"
+#line 4600 "EditingTools.c"
 }
 
 
@@ -4583,7 +4606,7 @@ static gboolean editing_tools_editing_tool_real_on_leave_notify_event (EditingTo
 	result = FALSE;
 #line 563 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 4587 "EditingTools.c"
+#line 4610 "EditingTools.c"
 }
 
 
@@ -4592,7 +4615,7 @@ gboolean editing_tools_editing_tool_on_leave_notify_event (EditingToolsEditingTo
 	g_return_val_if_fail (EDITING_TOOLS_IS_EDITING_TOOL (self), FALSE);
 #line 562 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return EDITING_TOOLS_EDITING_TOOL_GET_CLASS (self)->on_leave_notify_event (self);
-#line 4596 "EditingTools.c"
+#line 4619 "EditingTools.c"
 }
 
 
@@ -4617,13 +4640,13 @@ static gboolean editing_tools_editing_tool_real_on_keypress (EditingToolsEditing
 		result = TRUE;
 #line 571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 4621 "EditingTools.c"
+#line 4644 "EditingTools.c"
 	}
 #line 574 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = FALSE;
 #line 574 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 4627 "EditingTools.c"
+#line 4650 "EditingTools.c"
 }
 
 
@@ -4632,14 +4655,14 @@ gboolean editing_tools_editing_tool_on_keypress (EditingToolsEditingTool* self, 
 	g_return_val_if_fail (EDITING_TOOLS_IS_EDITING_TOOL (self), FALSE);
 #line 566 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return EDITING_TOOLS_EDITING_TOOL_GET_CLASS (self)->on_keypress (self, event);
-#line 4636 "EditingTools.c"
+#line 4659 "EditingTools.c"
 }
 
 
 static void editing_tools_editing_tool_real_paint (EditingToolsEditingTool* self, cairo_t* ctx) {
 #line 577 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (ctx != NULL);
-#line 4643 "EditingTools.c"
+#line 4666 "EditingTools.c"
 }
 
 
@@ -4648,7 +4671,7 @@ void editing_tools_editing_tool_paint (EditingToolsEditingTool* self, cairo_t* c
 	g_return_if_fail (EDITING_TOOLS_IS_EDITING_TOOL (self));
 #line 577 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_GET_CLASS (self)->paint (self, ctx);
-#line 4652 "EditingTools.c"
+#line 4675 "EditingTools.c"
 }
 
 
@@ -4657,7 +4680,7 @@ void editing_tools_editing_tool_notify_cancel (EditingToolsEditingTool* self) {
 	g_return_if_fail (EDITING_TOOLS_IS_EDITING_TOOL (self));
 #line 582 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_emit_by_name (self, "cancelled");
-#line 4661 "EditingTools.c"
+#line 4684 "EditingTools.c"
 }
 
 
@@ -4676,26 +4699,26 @@ static void g_cclosure_user_marshal_VOID__OBJECT_OBJECT_BOXED_BOOLEAN (GClosure 
 		data1 = closure->data;
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 4680 "EditingTools.c"
+#line 4703 "EditingTools.c"
 	} else {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		data2 = closure->data;
-#line 4686 "EditingTools.c"
+#line 4709 "EditingTools.c"
 	}
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	callback = (GMarshalFunc_VOID__OBJECT_OBJECT_BOXED_BOOLEAN) (marshal_data ? marshal_data : cc->callback);
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	callback (data1, g_value_get_object (param_values + 1), g_value_get_object (param_values + 2), g_value_get_boxed (param_values + 3), g_value_get_boolean (param_values + 4), data2);
-#line 4692 "EditingTools.c"
+#line 4715 "EditingTools.c"
 }
 
 
 static void editing_tools_value_editing_tool_init (GValue* value) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	value->data[0].v_pointer = NULL;
-#line 4699 "EditingTools.c"
+#line 4722 "EditingTools.c"
 }
 
 
@@ -4704,7 +4727,7 @@ static void editing_tools_value_editing_tool_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_editing_tool_unref (value->data[0].v_pointer);
-#line 4708 "EditingTools.c"
+#line 4731 "EditingTools.c"
 	}
 }
 
@@ -4714,11 +4737,11 @@ static void editing_tools_value_editing_tool_copy_value (const GValue* src_value
 	if (src_value->data[0].v_pointer) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		dest_value->data[0].v_pointer = editing_tools_editing_tool_ref (src_value->data[0].v_pointer);
-#line 4718 "EditingTools.c"
+#line 4741 "EditingTools.c"
 	} else {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 4722 "EditingTools.c"
+#line 4745 "EditingTools.c"
 	}
 }
 
@@ -4726,37 +4749,37 @@ static void editing_tools_value_editing_tool_copy_value (const GValue* src_value
 static gpointer editing_tools_value_editing_tool_peek_pointer (const GValue* value) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return value->data[0].v_pointer;
-#line 4730 "EditingTools.c"
+#line 4753 "EditingTools.c"
 }
 
 
 static gchar* editing_tools_value_editing_tool_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (collect_values[0].v_pointer) {
-#line 4737 "EditingTools.c"
+#line 4760 "EditingTools.c"
 		EditingToolsEditingTool* object;
 		object = collect_values[0].v_pointer;
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 4744 "EditingTools.c"
+#line 4767 "EditingTools.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 4748 "EditingTools.c"
+#line 4771 "EditingTools.c"
 		}
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = editing_tools_editing_tool_ref (object);
-#line 4752 "EditingTools.c"
+#line 4775 "EditingTools.c"
 	} else {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = NULL;
-#line 4756 "EditingTools.c"
+#line 4779 "EditingTools.c"
 	}
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return NULL;
-#line 4760 "EditingTools.c"
+#line 4783 "EditingTools.c"
 }
 
 
@@ -4767,25 +4790,25 @@ static gchar* editing_tools_value_editing_tool_lcopy_value (const GValue* value,
 	if (!object_p) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 4771 "EditingTools.c"
+#line 4794 "EditingTools.c"
 	}
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (!value->data[0].v_pointer) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*object_p = NULL;
-#line 4777 "EditingTools.c"
+#line 4800 "EditingTools.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*object_p = value->data[0].v_pointer;
-#line 4781 "EditingTools.c"
+#line 4804 "EditingTools.c"
 	} else {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*object_p = editing_tools_editing_tool_ref (value->data[0].v_pointer);
-#line 4785 "EditingTools.c"
+#line 4808 "EditingTools.c"
 	}
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return NULL;
-#line 4789 "EditingTools.c"
+#line 4812 "EditingTools.c"
 }
 
 
@@ -4799,7 +4822,7 @@ GParamSpec* editing_tools_param_spec_editing_tool (const gchar* name, const gcha
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return G_PARAM_SPEC (spec);
-#line 4803 "EditingTools.c"
+#line 4826 "EditingTools.c"
 }
 
 
@@ -4808,7 +4831,7 @@ gpointer editing_tools_value_get_editing_tool (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, EDITING_TOOLS_TYPE_EDITING_TOOL), NULL);
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return value->data[0].v_pointer;
-#line 4812 "EditingTools.c"
+#line 4835 "EditingTools.c"
 }
 
 
@@ -4828,17 +4851,17 @@ void editing_tools_value_set_editing_tool (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_editing_tool_ref (value->data[0].v_pointer);
-#line 4832 "EditingTools.c"
+#line 4855 "EditingTools.c"
 	} else {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = NULL;
-#line 4836 "EditingTools.c"
+#line 4859 "EditingTools.c"
 	}
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (old) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_editing_tool_unref (old);
-#line 4842 "EditingTools.c"
+#line 4865 "EditingTools.c"
 	}
 }
 
@@ -4857,17 +4880,17 @@ void editing_tools_value_take_editing_tool (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = v_object;
-#line 4861 "EditingTools.c"
+#line 4884 "EditingTools.c"
 	} else {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = NULL;
-#line 4865 "EditingTools.c"
+#line 4888 "EditingTools.c"
 	}
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (old) {
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_editing_tool_unref (old);
-#line 4871 "EditingTools.c"
+#line 4894 "EditingTools.c"
 	}
 }
 
@@ -4909,7 +4932,7 @@ static void editing_tools_editing_tool_class_init (EditingToolsEditingToolClass 
 	g_signal_new ("cancelled", EDITING_TOOLS_TYPE_EDITING_TOOL, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_new ("aborted", EDITING_TOOLS_TYPE_EDITING_TOOL, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 4913 "EditingTools.c"
+#line 4936 "EditingTools.c"
 }
 
 
@@ -4922,7 +4945,7 @@ static void editing_tools_editing_tool_instance_init (EditingToolsEditingTool * 
 	self->priv->tool_window = NULL;
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->ref_count = 1;
-#line 4926 "EditingTools.c"
+#line 4949 "EditingTools.c"
 }
 
 
@@ -4940,7 +4963,7 @@ static void editing_tools_editing_tool_finalize (EditingToolsEditingTool* obj) {
 	_cairo_surface_destroy0 (self->surface);
 #line 473 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_free0 (self->name);
-#line 4944 "EditingTools.c"
+#line 4967 "EditingTools.c"
 }
 
 
@@ -4965,7 +4988,7 @@ gpointer editing_tools_editing_tool_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return instance;
-#line 4969 "EditingTools.c"
+#line 4992 "EditingTools.c"
 }
 
 
@@ -4978,7 +5001,7 @@ void editing_tools_editing_tool_unref (gpointer instance) {
 		EDITING_TOOLS_EDITING_TOOL_GET_CLASS (self)->finalize (self);
 #line 468 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 4982 "EditingTools.c"
+#line 5005 "EditingTools.c"
 	}
 }
 
@@ -4990,17 +5013,17 @@ static EditingToolsCropToolReticleOrientation editing_tools_crop_tool_reticle_or
 	if (self == EDITING_TOOLS_CROP_TOOL_RETICLE_ORIENTATION_LANDSCAPE) {
 #line 636 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = EDITING_TOOLS_CROP_TOOL_RETICLE_ORIENTATION_PORTRAIT;
-#line 4994 "EditingTools.c"
+#line 5017 "EditingTools.c"
 	} else {
 #line 637 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = EDITING_TOOLS_CROP_TOOL_RETICLE_ORIENTATION_LANDSCAPE;
-#line 4998 "EditingTools.c"
+#line 5021 "EditingTools.c"
 	}
 #line 636 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _tmp0_;
 #line 636 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 5004 "EditingTools.c"
+#line 5027 "EditingTools.c"
 }
 
 
@@ -5034,14 +5057,14 @@ static EditingToolsCropTool* editing_tools_crop_tool_construct (GType object_typ
 	self = (EditingToolsCropTool*) editing_tools_editing_tool_construct (object_type, "CropTool");
 #line 736 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 5038 "EditingTools.c"
+#line 5061 "EditingTools.c"
 }
 
 
 static EditingToolsCropTool* editing_tools_crop_tool_new (void) {
 #line 736 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return editing_tools_crop_tool_construct (EDITING_TOOLS_TYPE_CROP_TOOL);
-#line 5045 "EditingTools.c"
+#line 5068 "EditingTools.c"
 }
 
 
@@ -5054,7 +5077,7 @@ EditingToolsCropTool* editing_tools_crop_tool_factory (void) {
 	result = _tmp0_;
 #line 741 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 5058 "EditingTools.c"
+#line 5081 "EditingTools.c"
 }
 
 
@@ -5085,7 +5108,7 @@ gboolean editing_tools_crop_tool_is_available (Photo* photo, Scaling* scaling) {
 	_tmp5_ = _tmp4_.width;
 #line 747 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp5_ > EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE) {
-#line 5089 "EditingTools.c"
+#line 5112 "EditingTools.c"
 		Dimensions _tmp6_ = {0};
 		gint _tmp7_ = 0;
 #line 747 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5094,17 +5117,17 @@ gboolean editing_tools_crop_tool_is_available (Photo* photo, Scaling* scaling) {
 		_tmp7_ = _tmp6_.height;
 #line 747 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = _tmp7_ > EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE;
-#line 5098 "EditingTools.c"
+#line 5121 "EditingTools.c"
 	} else {
 #line 747 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = FALSE;
-#line 5102 "EditingTools.c"
+#line 5125 "EditingTools.c"
 	}
 #line 747 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _tmp3_;
 #line 747 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 5108 "EditingTools.c"
+#line 5131 "EditingTools.c"
 }
 
 
@@ -5115,13 +5138,13 @@ static void _vala_array_add4 (EditingToolsCropToolConstraintDescription*** array
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 753 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5119 "EditingTools.c"
+#line 5142 "EditingTools.c"
 	}
 #line 753 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 753 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5125 "EditingTools.c"
+#line 5148 "EditingTools.c"
 }
 
 
@@ -5132,13 +5155,13 @@ static void _vala_array_add5 (EditingToolsCropToolConstraintDescription*** array
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 754 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5136 "EditingTools.c"
+#line 5159 "EditingTools.c"
 	}
 #line 754 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 754 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5142 "EditingTools.c"
+#line 5165 "EditingTools.c"
 }
 
 
@@ -5149,13 +5172,13 @@ static void _vala_array_add6 (EditingToolsCropToolConstraintDescription*** array
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 755 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5153 "EditingTools.c"
+#line 5176 "EditingTools.c"
 	}
 #line 755 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 755 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5159 "EditingTools.c"
+#line 5182 "EditingTools.c"
 }
 
 
@@ -5166,13 +5189,13 @@ static void _vala_array_add7 (EditingToolsCropToolConstraintDescription*** array
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 756 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5170 "EditingTools.c"
+#line 5193 "EditingTools.c"
 	}
 #line 756 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 756 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5176 "EditingTools.c"
+#line 5199 "EditingTools.c"
 }
 
 
@@ -5183,13 +5206,13 @@ static void _vala_array_add8 (EditingToolsCropToolConstraintDescription*** array
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 757 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5187 "EditingTools.c"
+#line 5210 "EditingTools.c"
 	}
 #line 757 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 757 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5193 "EditingTools.c"
+#line 5216 "EditingTools.c"
 }
 
 
@@ -5200,13 +5223,13 @@ static void _vala_array_add9 (EditingToolsCropToolConstraintDescription*** array
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 758 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5204 "EditingTools.c"
+#line 5227 "EditingTools.c"
 	}
 #line 758 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 758 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5210 "EditingTools.c"
+#line 5233 "EditingTools.c"
 }
 
 
@@ -5217,13 +5240,13 @@ static void _vala_array_add10 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 759 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5221 "EditingTools.c"
+#line 5244 "EditingTools.c"
 	}
 #line 759 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 759 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5227 "EditingTools.c"
+#line 5250 "EditingTools.c"
 }
 
 
@@ -5234,13 +5257,13 @@ static void _vala_array_add11 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 760 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5238 "EditingTools.c"
+#line 5261 "EditingTools.c"
 	}
 #line 760 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 760 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5244 "EditingTools.c"
+#line 5267 "EditingTools.c"
 }
 
 
@@ -5251,13 +5274,13 @@ static void _vala_array_add12 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 761 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5255 "EditingTools.c"
+#line 5278 "EditingTools.c"
 	}
 #line 761 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 761 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5261 "EditingTools.c"
+#line 5284 "EditingTools.c"
 }
 
 
@@ -5268,13 +5291,13 @@ static void _vala_array_add13 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 762 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5272 "EditingTools.c"
+#line 5295 "EditingTools.c"
 	}
 #line 762 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 762 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5278 "EditingTools.c"
+#line 5301 "EditingTools.c"
 }
 
 
@@ -5285,13 +5308,13 @@ static void _vala_array_add14 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 763 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5289 "EditingTools.c"
+#line 5312 "EditingTools.c"
 	}
 #line 763 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 763 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5295 "EditingTools.c"
+#line 5318 "EditingTools.c"
 }
 
 
@@ -5302,13 +5325,13 @@ static void _vala_array_add15 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 764 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5306 "EditingTools.c"
+#line 5329 "EditingTools.c"
 	}
 #line 764 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 764 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5312 "EditingTools.c"
+#line 5335 "EditingTools.c"
 }
 
 
@@ -5319,13 +5342,13 @@ static void _vala_array_add16 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5323 "EditingTools.c"
+#line 5346 "EditingTools.c"
 	}
 #line 765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5329 "EditingTools.c"
+#line 5352 "EditingTools.c"
 }
 
 
@@ -5336,13 +5359,13 @@ static void _vala_array_add17 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5340 "EditingTools.c"
+#line 5363 "EditingTools.c"
 	}
 #line 766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5346 "EditingTools.c"
+#line 5369 "EditingTools.c"
 }
 
 
@@ -5353,13 +5376,13 @@ static void _vala_array_add18 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5357 "EditingTools.c"
+#line 5380 "EditingTools.c"
 	}
 #line 767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5363 "EditingTools.c"
+#line 5386 "EditingTools.c"
 }
 
 
@@ -5370,13 +5393,13 @@ static void _vala_array_add19 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5374 "EditingTools.c"
+#line 5397 "EditingTools.c"
 	}
 #line 768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5380 "EditingTools.c"
+#line 5403 "EditingTools.c"
 }
 
 
@@ -5387,13 +5410,13 @@ static void _vala_array_add20 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5391 "EditingTools.c"
+#line 5414 "EditingTools.c"
 	}
 #line 769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5397 "EditingTools.c"
+#line 5420 "EditingTools.c"
 }
 
 
@@ -5404,13 +5427,13 @@ static void _vala_array_add21 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 770 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5408 "EditingTools.c"
+#line 5431 "EditingTools.c"
 	}
 #line 770 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 770 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5414 "EditingTools.c"
+#line 5437 "EditingTools.c"
 }
 
 
@@ -5421,13 +5444,13 @@ static void _vala_array_add22 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 771 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5425 "EditingTools.c"
+#line 5448 "EditingTools.c"
 	}
 #line 771 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 771 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5431 "EditingTools.c"
+#line 5454 "EditingTools.c"
 }
 
 
@@ -5438,13 +5461,13 @@ static void _vala_array_add23 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 772 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5442 "EditingTools.c"
+#line 5465 "EditingTools.c"
 	}
 #line 772 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 772 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5448 "EditingTools.c"
+#line 5471 "EditingTools.c"
 }
 
 
@@ -5455,13 +5478,13 @@ static void _vala_array_add24 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5459 "EditingTools.c"
+#line 5482 "EditingTools.c"
 	}
 #line 773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5465 "EditingTools.c"
+#line 5488 "EditingTools.c"
 }
 
 
@@ -5472,13 +5495,13 @@ static void _vala_array_add25 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5476 "EditingTools.c"
+#line 5499 "EditingTools.c"
 	}
 #line 774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5482 "EditingTools.c"
+#line 5505 "EditingTools.c"
 }
 
 
@@ -5489,13 +5512,13 @@ static void _vala_array_add26 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 775 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5493 "EditingTools.c"
+#line 5516 "EditingTools.c"
 	}
 #line 775 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 775 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5499 "EditingTools.c"
+#line 5522 "EditingTools.c"
 }
 
 
@@ -5506,13 +5529,13 @@ static void _vala_array_add27 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 776 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5510 "EditingTools.c"
+#line 5533 "EditingTools.c"
 	}
 #line 776 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 776 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5516 "EditingTools.c"
+#line 5539 "EditingTools.c"
 }
 
 
@@ -5523,13 +5546,13 @@ static void _vala_array_add28 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 777 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5527 "EditingTools.c"
+#line 5550 "EditingTools.c"
 	}
 #line 777 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 777 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5533 "EditingTools.c"
+#line 5556 "EditingTools.c"
 }
 
 
@@ -5540,13 +5563,13 @@ static void _vala_array_add29 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 778 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5544 "EditingTools.c"
+#line 5567 "EditingTools.c"
 	}
 #line 778 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 778 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5550 "EditingTools.c"
+#line 5573 "EditingTools.c"
 }
 
 
@@ -5557,13 +5580,13 @@ static void _vala_array_add30 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 779 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5561 "EditingTools.c"
+#line 5584 "EditingTools.c"
 	}
 #line 779 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 779 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5567 "EditingTools.c"
+#line 5590 "EditingTools.c"
 }
 
 
@@ -5574,13 +5597,13 @@ static void _vala_array_add31 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 780 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5578 "EditingTools.c"
+#line 5601 "EditingTools.c"
 	}
 #line 780 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 780 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5584 "EditingTools.c"
+#line 5607 "EditingTools.c"
 }
 
 
@@ -5591,13 +5614,13 @@ static void _vala_array_add32 (EditingToolsCropToolConstraintDescription*** arra
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 781 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*array = g_renew (EditingToolsCropToolConstraintDescription*, *array, (*size) + 1);
-#line 5595 "EditingTools.c"
+#line 5618 "EditingTools.c"
 	}
 #line 781 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[(*length)++] = value;
 #line 781 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*array)[*length] = NULL;
-#line 5601 "EditingTools.c"
+#line 5624 "EditingTools.c"
 }
 
 
@@ -5788,7 +5811,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 758 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp16__length1 = _result__length1;
 #line 758 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp17_ = _ ("SD Video (4 : 3)");
+	_tmp17_ = _ ("SD Video (4 ∶ 3)");
 #line 758 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp18_ = editing_tools_crop_tool_constraint_description_new (_tmp17_, 4, 3, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 758 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5798,7 +5821,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 759 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp19__length1 = _result__length1;
 #line 759 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp20_ = _ ("HD Video (16 : 9)");
+	_tmp20_ = _ ("HD Video (16 ∶ 9)");
 #line 759 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp21_ = editing_tools_crop_tool_constraint_description_new (_tmp20_, 16, 9, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 759 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5818,7 +5841,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 761 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp25__length1 = _result__length1;
 #line 761 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp26_ = _ ("Wallet (2 x 3 in.)");
+	_tmp26_ = _ ("Wallet (2 × 3 in.)");
 #line 761 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp27_ = editing_tools_crop_tool_constraint_description_new (_tmp26_, 3, 2, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 761 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5828,7 +5851,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 762 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp28__length1 = _result__length1;
 #line 762 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp29_ = _ ("Notecard (3 x 5 in.)");
+	_tmp29_ = _ ("Notecard (3 × 5 in.)");
 #line 762 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp30_ = editing_tools_crop_tool_constraint_description_new (_tmp29_, 5, 3, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 762 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5838,7 +5861,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 763 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp31__length1 = _result__length1;
 #line 763 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp32_ = _ ("4 x 6 in.");
+	_tmp32_ = _ ("4 × 6 in.");
 #line 763 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp33_ = editing_tools_crop_tool_constraint_description_new (_tmp32_, 6, 4, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 763 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5848,7 +5871,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 764 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp34__length1 = _result__length1;
 #line 764 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp35_ = _ ("5 x 7 in.");
+	_tmp35_ = _ ("5 × 7 in.");
 #line 764 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp36_ = editing_tools_crop_tool_constraint_description_new (_tmp35_, 7, 5, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 764 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5858,7 +5881,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp37__length1 = _result__length1;
 #line 765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp38_ = _ ("8 x 10 in.");
+	_tmp38_ = _ ("8 × 10 in.");
 #line 765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp39_ = editing_tools_crop_tool_constraint_description_new (_tmp38_, 10, 8, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5868,7 +5891,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp40__length1 = _result__length1;
 #line 766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp41_ = _ ("Letter (8.5 x 11 in.)");
+	_tmp41_ = _ ("Letter (8.5 × 11 in.)");
 #line 766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp42_ = editing_tools_crop_tool_constraint_description_new (_tmp41_, 85, 110, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5878,7 +5901,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp43__length1 = _result__length1;
 #line 767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp44_ = _ ("11 x 14 in.");
+	_tmp44_ = _ ("11 × 14 in.");
 #line 767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp45_ = editing_tools_crop_tool_constraint_description_new (_tmp44_, 14, 11, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5888,7 +5911,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp46__length1 = _result__length1;
 #line 768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp47_ = _ ("Tabloid (11 x 17 in.)");
+	_tmp47_ = _ ("Tabloid (11 × 17 in.)");
 #line 768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp48_ = editing_tools_crop_tool_constraint_description_new (_tmp47_, 17, 11, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5898,7 +5921,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp49__length1 = _result__length1;
 #line 769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp50_ = _ ("16 x 20 in.");
+	_tmp50_ = _ ("16 × 20 in.");
 #line 769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp51_ = editing_tools_crop_tool_constraint_description_new (_tmp50_, 20, 16, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5918,7 +5941,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 771 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp55__length1 = _result__length1;
 #line 771 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp56_ = _ ("Metric Wallet (9 x 13 cm)");
+	_tmp56_ = _ ("Metric Wallet (9 × 13 cm)");
 #line 771 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp57_ = editing_tools_crop_tool_constraint_description_new (_tmp56_, 13, 9, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 771 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5928,7 +5951,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 772 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp58__length1 = _result__length1;
 #line 772 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp59_ = _ ("Postcard (10 x 15 cm)");
+	_tmp59_ = _ ("Postcard (10 × 15 cm)");
 #line 772 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp60_ = editing_tools_crop_tool_constraint_description_new (_tmp59_, 15, 10, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 772 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5938,7 +5961,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp61__length1 = _result__length1;
 #line 773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp62_ = _ ("13 x 18 cm");
+	_tmp62_ = _ ("13 × 18 cm");
 #line 773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp63_ = editing_tools_crop_tool_constraint_description_new (_tmp62_, 18, 13, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5948,7 +5971,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp64__length1 = _result__length1;
 #line 774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp65_ = _ ("18 x 24 cm");
+	_tmp65_ = _ ("18 × 24 cm");
 #line 774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp66_ = editing_tools_crop_tool_constraint_description_new (_tmp65_, 24, 18, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5958,7 +5981,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 775 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp67__length1 = _result__length1;
 #line 775 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp68_ = _ ("A4 (210 x 297 mm)");
+	_tmp68_ = _ ("A4 (210 × 297 mm)");
 #line 775 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp69_ = editing_tools_crop_tool_constraint_description_new (_tmp68_, 210, 297, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 775 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5968,7 +5991,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 776 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp70__length1 = _result__length1;
 #line 776 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp71_ = _ ("20 x 30 cm");
+	_tmp71_ = _ ("20 × 30 cm");
 #line 776 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp72_ = editing_tools_crop_tool_constraint_description_new (_tmp71_, 30, 20, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 776 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5978,7 +6001,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 777 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp73__length1 = _result__length1;
 #line 777 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp74_ = _ ("24 x 40 cm");
+	_tmp74_ = _ ("24 × 40 cm");
 #line 777 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp75_ = editing_tools_crop_tool_constraint_description_new (_tmp74_, 40, 24, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 777 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5988,7 +6011,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 778 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp76__length1 = _result__length1;
 #line 778 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp77_ = _ ("30 x 40 cm");
+	_tmp77_ = _ ("30 × 40 cm");
 #line 778 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp78_ = editing_tools_crop_tool_constraint_description_new (_tmp77_, 40, 30, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 778 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -5998,7 +6021,7 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 #line 779 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp79__length1 = _result__length1;
 #line 779 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp80_ = _ ("A3 (297 x 420 mm)");
+	_tmp80_ = _ ("A3 (297 × 420 mm)");
 #line 779 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp81_ = editing_tools_crop_tool_constraint_description_new (_tmp80_, 420, 297, TRUE, EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS);
 #line 779 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -6031,20 +6054,20 @@ static EditingToolsCropToolConstraintDescription** editing_tools_crop_tool_creat
 	if (result_length1) {
 #line 783 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*result_length1 = _tmp88__length1;
-#line 6035 "EditingTools.c"
+#line 6058 "EditingTools.c"
 	}
 #line 783 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _tmp88_;
 #line 783 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 6041 "EditingTools.c"
+#line 6064 "EditingTools.c"
 }
 
 
 static gpointer _editing_tools_crop_tool_constraint_description_ref0 (gpointer self) {
 #line 790 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self ? editing_tools_crop_tool_constraint_description_ref (self) : NULL;
-#line 6048 "EditingTools.c"
+#line 6071 "EditingTools.c"
 }
 
 
@@ -6063,7 +6086,7 @@ static GtkListStore* editing_tools_crop_tool_create_constraint_list (EditingTool
 	_tmp1_ = constraint_data;
 #line 790 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1__length1 = constraint_data_length1;
-#line 6067 "EditingTools.c"
+#line 6090 "EditingTools.c"
 	{
 		EditingToolsCropToolConstraintDescription** constraint_collection = NULL;
 		gint constraint_collection_length1 = 0;
@@ -6075,14 +6098,14 @@ static GtkListStore* editing_tools_crop_tool_create_constraint_list (EditingTool
 		constraint_collection_length1 = _tmp1__length1;
 #line 790 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		for (constraint_it = 0; constraint_it < _tmp1__length1; constraint_it = constraint_it + 1) {
-#line 6079 "EditingTools.c"
+#line 6102 "EditingTools.c"
 			EditingToolsCropToolConstraintDescription* _tmp2_ = NULL;
 			EditingToolsCropToolConstraintDescription* constraint = NULL;
 #line 790 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp2_ = _editing_tools_crop_tool_constraint_description_ref0 (constraint_collection[constraint_it]);
 #line 790 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			constraint = _tmp2_;
-#line 6086 "EditingTools.c"
+#line 6109 "EditingTools.c"
 			{
 				GtkListStore* _tmp3_ = NULL;
 				GtkTreeIter _tmp4_ = {0};
@@ -6115,7 +6138,7 @@ static GtkListStore* editing_tools_crop_tool_create_constraint_list (EditingTool
 				G_IS_VALUE (&_tmp9_) ? (g_value_unset (&_tmp9_), NULL) : NULL;
 #line 790 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_editing_tools_crop_tool_constraint_description_unref0 (constraint);
-#line 6119 "EditingTools.c"
+#line 6142 "EditingTools.c"
 			}
 		}
 	}
@@ -6123,7 +6146,7 @@ static GtkListStore* editing_tools_crop_tool_create_constraint_list (EditingTool
 	result = _result_;
 #line 795 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 6127 "EditingTools.c"
+#line 6150 "EditingTools.c"
 }
 
 
@@ -6149,7 +6172,7 @@ static void editing_tools_crop_tool_update_pivot_button_state (EditingToolsCropT
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget), _tmp4_);
 #line 799 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_editing_tools_crop_tool_constraint_description_unref0 (_tmp3_);
-#line 6153 "EditingTools.c"
+#line 6176 "EditingTools.c"
 }
 
 
@@ -6189,7 +6212,7 @@ static EditingToolsCropToolConstraintDescription* editing_tools_crop_tool_get_se
 	_tmp7_ = _tmp6_->aspect_ratio;
 #line 806 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp7_ == EDITING_TOOLS_CROP_TOOL_ORIGINAL_ASPECT_RATIO) {
-#line 6193 "EditingTools.c"
+#line 6216 "EditingTools.c"
 		EditingToolsCropToolConstraintDescription* _tmp8_ = NULL;
 		EditingToolsPhotoCanvas* _tmp9_ = NULL;
 		GdkRectangle _tmp10_ = {0};
@@ -6218,7 +6241,7 @@ static EditingToolsCropToolConstraintDescription* editing_tools_crop_tool_get_se
 		_tmp15_ = _tmp14_.height;
 #line 808 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp12_->basis_height = _tmp15_;
-#line 6222 "EditingTools.c"
+#line 6245 "EditingTools.c"
 	} else {
 		EditingToolsCropToolConstraintDescription* _tmp16_ = NULL;
 		gfloat _tmp17_ = 0.0F;
@@ -6228,7 +6251,7 @@ static EditingToolsCropToolConstraintDescription* editing_tools_crop_tool_get_se
 		_tmp17_ = _tmp16_->aspect_ratio;
 #line 809 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp17_ == EDITING_TOOLS_CROP_TOOL_SCREEN_ASPECT_RATIO) {
-#line 6232 "EditingTools.c"
+#line 6255 "EditingTools.c"
 			GdkScreen* screen = NULL;
 			GdkScreen* _tmp18_ = NULL;
 			GdkScreen* _tmp19_ = NULL;
@@ -6262,14 +6285,14 @@ static EditingToolsCropToolConstraintDescription* editing_tools_crop_tool_get_se
 			_tmp23_->basis_height = _tmp25_;
 #line 809 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_g_object_unref0 (screen);
-#line 6266 "EditingTools.c"
+#line 6289 "EditingTools.c"
 		}
 	}
 #line 815 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _result_;
 #line 815 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 6273 "EditingTools.c"
+#line 6296 "EditingTools.c"
 }
 
 
@@ -6305,7 +6328,7 @@ static gboolean editing_tools_crop_tool_on_width_entry_focus_out (EditingToolsCr
 	result = _tmp5_;
 #line 820 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 6309 "EditingTools.c"
+#line 6332 "EditingTools.c"
 }
 
 
@@ -6341,7 +6364,7 @@ static gboolean editing_tools_crop_tool_on_height_entry_focus_out (EditingToolsC
 	result = _tmp5_;
 #line 825 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 6345 "EditingTools.c"
+#line 6368 "EditingTools.c"
 }
 
 
@@ -6411,7 +6434,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 	_tmp10_ = width;
 #line 832 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp10_ < 1) {
-#line 6415 "EditingTools.c"
+#line 6438 "EditingTools.c"
 		EditingToolsCropToolCropToolWindow* _tmp11_ = NULL;
 		GtkEntry* _tmp12_ = NULL;
 		gint _tmp13_ = 0;
@@ -6433,13 +6456,13 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 		gtk_entry_set_text (_tmp12_, _tmp15_);
 #line 834 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_free0 (_tmp15_);
-#line 6437 "EditingTools.c"
+#line 6460 "EditingTools.c"
 	}
 #line 837 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp16_ = height;
 #line 837 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp16_ < 1) {
-#line 6443 "EditingTools.c"
+#line 6466 "EditingTools.c"
 		EditingToolsCropToolCropToolWindow* _tmp17_ = NULL;
 		GtkEntry* _tmp18_ = NULL;
 		gint _tmp19_ = 0;
@@ -6461,7 +6484,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 		gtk_entry_set_text (_tmp18_, _tmp21_);
 #line 839 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_free0 (_tmp21_);
-#line 6465 "EditingTools.c"
+#line 6488 "EditingTools.c"
 	}
 #line 842 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp23_ = width;
@@ -6469,7 +6492,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 	_tmp24_ = self->priv->custom_width;
 #line 842 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp23_ == _tmp24_) {
-#line 6473 "EditingTools.c"
+#line 6496 "EditingTools.c"
 		gint _tmp25_ = 0;
 		gint _tmp26_ = 0;
 #line 842 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -6478,11 +6501,11 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 		_tmp26_ = self->priv->custom_height;
 #line 842 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp22_ = _tmp25_ == _tmp26_;
-#line 6482 "EditingTools.c"
+#line 6505 "EditingTools.c"
 	} else {
 #line 842 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp22_ = FALSE;
-#line 6486 "EditingTools.c"
+#line 6509 "EditingTools.c"
 	}
 #line 842 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp22_) {
@@ -6490,7 +6513,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 		result = FALSE;
 #line 843 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 6494 "EditingTools.c"
+#line 6517 "EditingTools.c"
 	}
 #line 845 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp27_ = width;
@@ -6502,7 +6525,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 	_tmp29_ = self->priv->custom_aspect_ratio;
 #line 847 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp29_ < EDITING_TOOLS_CROP_TOOL_MIN_ASPECT_RATIO) {
-#line 6506 "EditingTools.c"
+#line 6529 "EditingTools.c"
 		EditingToolsCropToolCropToolWindow* _tmp30_ = NULL;
 		GtkEntry* _tmp31_ = NULL;
 		EditingToolsCropToolCropToolWindow* _tmp32_ = NULL;
@@ -6517,7 +6540,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 		_tmp33_ = _tmp32_->custom_height_entry;
 #line 848 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp31_ == _tmp33_) {
-#line 6521 "EditingTools.c"
+#line 6544 "EditingTools.c"
 			gint _tmp34_ = 0;
 			EditingToolsCropToolCropToolWindow* _tmp35_ = NULL;
 			GtkEntry* _tmp36_ = NULL;
@@ -6542,7 +6565,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 			gtk_entry_set_text (_tmp36_, _tmp39_);
 #line 850 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_g_free0 (_tmp39_);
-#line 6546 "EditingTools.c"
+#line 6569 "EditingTools.c"
 		} else {
 			gint _tmp40_ = 0;
 			EditingToolsCropToolCropToolWindow* _tmp41_ = NULL;
@@ -6568,7 +6591,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 			gtk_entry_set_text (_tmp42_, _tmp45_);
 #line 853 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_g_free0 (_tmp45_);
-#line 6572 "EditingTools.c"
+#line 6595 "EditingTools.c"
 		}
 	} else {
 		gfloat _tmp46_ = 0.0F;
@@ -6576,7 +6599,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 		_tmp46_ = self->priv->custom_aspect_ratio;
 #line 855 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp46_ > EDITING_TOOLS_CROP_TOOL_MAX_ASPECT_RATIO) {
-#line 6580 "EditingTools.c"
+#line 6603 "EditingTools.c"
 			EditingToolsCropToolCropToolWindow* _tmp47_ = NULL;
 			GtkEntry* _tmp48_ = NULL;
 			EditingToolsCropToolCropToolWindow* _tmp49_ = NULL;
@@ -6591,7 +6614,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 			_tmp50_ = _tmp49_->custom_height_entry;
 #line 856 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp48_ == _tmp50_) {
-#line 6595 "EditingTools.c"
+#line 6618 "EditingTools.c"
 				gint _tmp51_ = 0;
 				EditingToolsCropToolCropToolWindow* _tmp52_ = NULL;
 				GtkEntry* _tmp53_ = NULL;
@@ -6616,7 +6639,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 				gtk_entry_set_text (_tmp53_, _tmp56_);
 #line 858 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_g_free0 (_tmp56_);
-#line 6620 "EditingTools.c"
+#line 6643 "EditingTools.c"
 			} else {
 				gint _tmp57_ = 0;
 				EditingToolsCropToolCropToolWindow* _tmp58_ = NULL;
@@ -6642,7 +6665,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 				gtk_entry_set_text (_tmp59_, _tmp62_);
 #line 861 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_g_free0 (_tmp62_);
-#line 6646 "EditingTools.c"
+#line 6669 "EditingTools.c"
 			}
 		}
 	}
@@ -6688,7 +6711,7 @@ static gboolean editing_tools_crop_tool_on_custom_entry_focus_out (EditingToolsC
 	result = FALSE;
 #line 877 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 6692 "EditingTools.c"
+#line 6715 "EditingTools.c"
 }
 
 
@@ -6711,7 +6734,7 @@ static void editing_tools_crop_tool_on_width_insert_text (EditingToolsCropTool* 
 	_tmp3_ = length;
 #line 881 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_crop_tool_on_entry_insert_text (self, _tmp1_, _tmp2_, _tmp3_, position);
-#line 6715 "EditingTools.c"
+#line 6738 "EditingTools.c"
 }
 
 
@@ -6734,7 +6757,7 @@ static void editing_tools_crop_tool_on_height_insert_text (EditingToolsCropTool*
 	_tmp3_ = length;
 #line 885 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_crop_tool_on_entry_insert_text (self, _tmp1_, _tmp2_, _tmp3_, position);
-#line 6738 "EditingTools.c"
+#line 6761 "EditingTools.c"
 }
 
 
@@ -6752,7 +6775,7 @@ static gchar string_get (const gchar* self, glong index) {
 	result = _tmp1_;
 #line 1087 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 6756 "EditingTools.c"
+#line 6779 "EditingTools.c"
 }
 
 
@@ -6777,7 +6800,7 @@ static void editing_tools_crop_tool_on_entry_insert_text (EditingToolsCropTool* 
 	if (_tmp0_) {
 #line 890 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 6781 "EditingTools.c"
+#line 6804 "EditingTools.c"
 	}
 #line 892 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->entry_insert_in_progress = TRUE;
@@ -6785,7 +6808,7 @@ static void editing_tools_crop_tool_on_entry_insert_text (EditingToolsCropTool* 
 	_tmp1_ = length;
 #line 894 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp1_ == -1) {
-#line 6789 "EditingTools.c"
+#line 6812 "EditingTools.c"
 		const gchar* _tmp2_ = NULL;
 		gint _tmp3_ = 0;
 		gint _tmp4_ = 0;
@@ -6797,25 +6820,25 @@ static void editing_tools_crop_tool_on_entry_insert_text (EditingToolsCropTool* 
 		_tmp4_ = _tmp3_;
 #line 895 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		length = (gint) _tmp4_;
-#line 6801 "EditingTools.c"
+#line 6824 "EditingTools.c"
 	}
 #line 898 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = g_strdup ("");
 #line 898 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	new_text = _tmp5_;
-#line 6807 "EditingTools.c"
+#line 6830 "EditingTools.c"
 	{
 		gint ctr = 0;
 #line 899 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		ctr = 0;
-#line 6812 "EditingTools.c"
+#line 6835 "EditingTools.c"
 		{
 			gboolean _tmp6_ = FALSE;
 #line 899 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp6_ = TRUE;
 #line 899 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			while (TRUE) {
-#line 6819 "EditingTools.c"
+#line 6842 "EditingTools.c"
 				gint _tmp8_ = 0;
 				gint _tmp9_ = 0;
 				const gchar* _tmp10_ = NULL;
@@ -6824,13 +6847,13 @@ static void editing_tools_crop_tool_on_entry_insert_text (EditingToolsCropTool* 
 				gboolean _tmp13_ = FALSE;
 #line 899 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (!_tmp6_) {
-#line 6828 "EditingTools.c"
+#line 6851 "EditingTools.c"
 					gint _tmp7_ = 0;
 #line 899 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					_tmp7_ = ctr;
 #line 899 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					ctr = _tmp7_ + 1;
-#line 6834 "EditingTools.c"
+#line 6857 "EditingTools.c"
 				}
 #line 899 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp6_ = FALSE;
@@ -6842,7 +6865,7 @@ static void editing_tools_crop_tool_on_entry_insert_text (EditingToolsCropTool* 
 				if (!(_tmp8_ < _tmp9_)) {
 #line 899 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					break;
-#line 6846 "EditingTools.c"
+#line 6869 "EditingTools.c"
 				}
 #line 900 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp10_ = text;
@@ -6854,7 +6877,7 @@ static void editing_tools_crop_tool_on_entry_insert_text (EditingToolsCropTool* 
 				_tmp13_ = g_ascii_isdigit (_tmp12_);
 #line 900 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (_tmp13_) {
-#line 6858 "EditingTools.c"
+#line 6881 "EditingTools.c"
 					const gchar* _tmp14_ = NULL;
 					const gchar* _tmp15_ = NULL;
 					gint _tmp16_ = 0;
@@ -6882,7 +6905,7 @@ static void editing_tools_crop_tool_on_entry_insert_text (EditingToolsCropTool* 
 					new_text = _tmp20_;
 #line 901 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					_g_free0 (_tmp19_);
-#line 6886 "EditingTools.c"
+#line 6909 "EditingTools.c"
 				}
 			}
 		}
@@ -6895,7 +6918,7 @@ static void editing_tools_crop_tool_on_entry_insert_text (EditingToolsCropTool* 
 	_tmp23_ = _tmp22_;
 #line 905 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp23_ > 0) {
-#line 6899 "EditingTools.c"
+#line 6922 "EditingTools.c"
 		GtkEntry* _tmp24_ = NULL;
 		const gchar* _tmp25_ = NULL;
 		const gchar* _tmp26_ = NULL;
@@ -6913,7 +6936,7 @@ static void editing_tools_crop_tool_on_entry_insert_text (EditingToolsCropTool* 
 		_tmp28_ = _tmp27_;
 #line 906 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		gtk_editable_insert_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, GTK_TYPE_EDITABLE, GtkEditable), _tmp25_, (gint) _tmp28_, position);
-#line 6917 "EditingTools.c"
+#line 6940 "EditingTools.c"
 	}
 #line 908 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp29_ = sender;
@@ -6923,7 +6946,7 @@ static void editing_tools_crop_tool_on_entry_insert_text (EditingToolsCropTool* 
 	self->priv->entry_insert_in_progress = FALSE;
 #line 888 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_free0 (new_text);
-#line 6927 "EditingTools.c"
+#line 6950 "EditingTools.c"
 }
 
 
@@ -6954,7 +6977,7 @@ static gfloat editing_tools_crop_tool_get_constraint_aspect_ratio (EditingToolsC
 	_tmp4_ = _result_;
 #line 916 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp4_ == EDITING_TOOLS_CROP_TOOL_ORIGINAL_ASPECT_RATIO) {
-#line 6958 "EditingTools.c"
+#line 6981 "EditingTools.c"
 		EditingToolsPhotoCanvas* _tmp5_ = NULL;
 		GdkRectangle _tmp6_ = {0};
 		gint _tmp7_ = 0;
@@ -6975,14 +6998,14 @@ static gfloat editing_tools_crop_tool_get_constraint_aspect_ratio (EditingToolsC
 		_tmp10_ = _tmp9_.height;
 #line 917 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_result_ = ((gfloat) _tmp7_) / ((gfloat) _tmp10_);
-#line 6979 "EditingTools.c"
+#line 7002 "EditingTools.c"
 	} else {
 		gfloat _tmp11_ = 0.0F;
 #line 919 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp11_ = _result_;
 #line 919 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp11_ == EDITING_TOOLS_CROP_TOOL_SCREEN_ASPECT_RATIO) {
-#line 6986 "EditingTools.c"
+#line 7009 "EditingTools.c"
 			GdkScreen* screen = NULL;
 			GdkScreen* _tmp12_ = NULL;
 			GdkScreen* _tmp13_ = NULL;
@@ -7008,20 +7031,20 @@ static gfloat editing_tools_crop_tool_get_constraint_aspect_ratio (EditingToolsC
 			_result_ = ((gfloat) _tmp15_) / ((gfloat) _tmp17_);
 #line 919 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_g_object_unref0 (screen);
-#line 7012 "EditingTools.c"
+#line 7035 "EditingTools.c"
 		} else {
 			gfloat _tmp18_ = 0.0F;
 #line 922 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp18_ = _result_;
 #line 922 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp18_ == EDITING_TOOLS_CROP_TOOL_CUSTOM_ASPECT_RATIO) {
-#line 7019 "EditingTools.c"
+#line 7042 "EditingTools.c"
 				gfloat _tmp19_ = 0.0F;
 #line 923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp19_ = self->priv->custom_aspect_ratio;
 #line 923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_result_ = _tmp19_;
-#line 7025 "EditingTools.c"
+#line 7048 "EditingTools.c"
 			}
 		}
 	}
@@ -7029,19 +7052,19 @@ static gfloat editing_tools_crop_tool_get_constraint_aspect_ratio (EditingToolsC
 	_tmp20_ = self->priv->reticle_orientation;
 #line 925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp20_ == EDITING_TOOLS_CROP_TOOL_RETICLE_ORIENTATION_PORTRAIT) {
-#line 7033 "EditingTools.c"
+#line 7056 "EditingTools.c"
 		gfloat _tmp21_ = 0.0F;
 #line 926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp21_ = _result_;
 #line 926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_result_ = 1.0f / _tmp21_;
-#line 7039 "EditingTools.c"
+#line 7062 "EditingTools.c"
 	}
 #line 928 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _result_;
 #line 928 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 7045 "EditingTools.c"
+#line 7068 "EditingTools.c"
 }
 
 
@@ -7068,7 +7091,7 @@ static gfloat editing_tools_crop_tool_get_constraint_aspect_ratio_for_constraint
 	_tmp2_ = _result_;
 #line 934 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp2_ == EDITING_TOOLS_CROP_TOOL_ORIGINAL_ASPECT_RATIO) {
-#line 7072 "EditingTools.c"
+#line 7095 "EditingTools.c"
 		Dimensions orig_dim = {0};
 		Photo* _tmp3_ = NULL;
 		Dimensions _tmp4_ = {0};
@@ -7092,14 +7115,14 @@ static gfloat editing_tools_crop_tool_get_constraint_aspect_ratio_for_constraint
 		_tmp8_ = _tmp7_.height;
 #line 936 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_result_ = ((gfloat) _tmp6_) / ((gfloat) _tmp8_);
-#line 7096 "EditingTools.c"
+#line 7119 "EditingTools.c"
 	} else {
 		gfloat _tmp9_ = 0.0F;
 #line 937 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp9_ = _result_;
 #line 937 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp9_ == EDITING_TOOLS_CROP_TOOL_SCREEN_ASPECT_RATIO) {
-#line 7103 "EditingTools.c"
+#line 7126 "EditingTools.c"
 			GdkScreen* screen = NULL;
 			GdkScreen* _tmp10_ = NULL;
 			GdkScreen* _tmp11_ = NULL;
@@ -7125,20 +7148,20 @@ static gfloat editing_tools_crop_tool_get_constraint_aspect_ratio_for_constraint
 			_result_ = ((gfloat) _tmp13_) / ((gfloat) _tmp15_);
 #line 937 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_g_object_unref0 (screen);
-#line 7129 "EditingTools.c"
+#line 7152 "EditingTools.c"
 		} else {
 			gfloat _tmp16_ = 0.0F;
 #line 940 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp16_ = _result_;
 #line 940 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp16_ == EDITING_TOOLS_CROP_TOOL_CUSTOM_ASPECT_RATIO) {
-#line 7136 "EditingTools.c"
+#line 7159 "EditingTools.c"
 				gfloat _tmp17_ = 0.0F;
 #line 941 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp17_ = self->priv->custom_aspect_ratio;
 #line 941 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_result_ = _tmp17_;
-#line 7142 "EditingTools.c"
+#line 7165 "EditingTools.c"
 			}
 		}
 	}
@@ -7146,19 +7169,19 @@ static gfloat editing_tools_crop_tool_get_constraint_aspect_ratio_for_constraint
 	_tmp18_ = self->priv->reticle_orientation;
 #line 943 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp18_ == EDITING_TOOLS_CROP_TOOL_RETICLE_ORIENTATION_PORTRAIT) {
-#line 7150 "EditingTools.c"
+#line 7173 "EditingTools.c"
 		gfloat _tmp19_ = 0.0F;
 #line 944 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp19_ = _result_;
 #line 944 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_result_ = 1.0f / _tmp19_;
-#line 7156 "EditingTools.c"
+#line 7179 "EditingTools.c"
 	}
 #line 946 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _result_;
 #line 946 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 7162 "EditingTools.c"
+#line 7185 "EditingTools.c"
 }
 
 
@@ -7187,7 +7210,7 @@ static void editing_tools_crop_tool_constraint_changed (EditingToolsCropTool* se
 	if (_tmp2_ == EDITING_TOOLS_CROP_TOOL_CUSTOM_ASPECT_RATIO) {
 #line 953 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_crop_tool_set_custom_constraint_mode (self);
-#line 7191 "EditingTools.c"
+#line 7214 "EditingTools.c"
 	} else {
 		EditingToolsCropToolConstraintDescription* _tmp3_ = NULL;
 		gfloat _tmp4_ = 0.0F;
@@ -7199,7 +7222,7 @@ static void editing_tools_crop_tool_constraint_changed (EditingToolsCropTool* se
 		_tmp4_ = _tmp3_->aspect_ratio;
 #line 957 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp4_ != EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 7203 "EditingTools.c"
+#line 7226 "EditingTools.c"
 			ConfigFacade* _tmp5_ = NULL;
 			ConfigFacade* _tmp6_ = NULL;
 			gint _tmp7_ = 0;
@@ -7234,7 +7257,7 @@ static void editing_tools_crop_tool_constraint_changed (EditingToolsCropTool* se
 			_tmp12_ = self->priv->custom_init_height;
 #line 963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			self->priv->custom_aspect_ratio = ((gfloat) _tmp11_) / ((gfloat) _tmp12_);
-#line 7238 "EditingTools.c"
+#line 7261 "EditingTools.c"
 		}
 	}
 #line 967 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -7253,7 +7276,7 @@ static void editing_tools_crop_tool_constraint_changed (EditingToolsCropTool* se
 	if (_tmp16_) {
 #line 970 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->reticle_orientation = EDITING_TOOLS_CROP_TOOL_RETICLE_ORIENTATION_LANDSCAPE;
-#line 7257 "EditingTools.c"
+#line 7280 "EditingTools.c"
 	}
 #line 972 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp17_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
@@ -7261,7 +7284,7 @@ static void editing_tools_crop_tool_constraint_changed (EditingToolsCropTool* se
 	_tmp18_ = self->priv->pre_aspect_ratio;
 #line 972 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp17_ != _tmp18_) {
-#line 7265 "EditingTools.c"
+#line 7288 "EditingTools.c"
 		Box new_crop = {0};
 		Box _tmp19_ = {0};
 		Box _tmp20_ = {0};
@@ -7299,11 +7322,11 @@ static void editing_tools_crop_tool_constraint_changed (EditingToolsCropTool* se
 		_tmp26_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
 #line 980 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->pre_aspect_ratio = _tmp26_;
-#line 7303 "EditingTools.c"
+#line 7326 "EditingTools.c"
 	}
 #line 950 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_editing_tools_crop_tool_constraint_description_unref0 (selected_constraint);
-#line 7307 "EditingTools.c"
+#line 7330 "EditingTools.c"
 }
 
 
@@ -7360,7 +7383,7 @@ static void editing_tools_crop_tool_set_custom_constraint_mode (EditingToolsCrop
 	if (_tmp0_ == EDITING_TOOLS_CROP_TOOL_CONSTRAINT_MODE_CUSTOM) {
 #line 986 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 7364 "EditingTools.c"
+#line 7387 "EditingTools.c"
 	}
 #line 988 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = self->priv->crop_tool_window;
@@ -7370,7 +7393,7 @@ static void editing_tools_crop_tool_set_custom_constraint_mode (EditingToolsCrop
 	if (_tmp3_ == -1) {
 #line 988 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = TRUE;
-#line 7374 "EditingTools.c"
+#line 7397 "EditingTools.c"
 	} else {
 		EditingToolsCropToolCropToolWindow* _tmp4_ = NULL;
 		gint _tmp5_ = 0;
@@ -7380,11 +7403,11 @@ static void editing_tools_crop_tool_set_custom_constraint_mode (EditingToolsCrop
 		_tmp5_ = _tmp4_->normal_height;
 #line 988 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = _tmp5_ == -1;
-#line 7384 "EditingTools.c"
+#line 7407 "EditingTools.c"
 	}
 #line 988 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp1_) {
-#line 7388 "EditingTools.c"
+#line 7411 "EditingTools.c"
 		EditingToolsCropToolCropToolWindow* _tmp6_ = NULL;
 		EditingToolsCropToolCropToolWindow* _tmp7_ = NULL;
 		EditingToolsCropToolCropToolWindow* _tmp8_ = NULL;
@@ -7402,7 +7425,7 @@ static void editing_tools_crop_tool_set_custom_constraint_mode (EditingToolsCrop
 		_tmp7_->normal_width = _tmp9_;
 #line 989 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp8_->normal_height = _tmp10_;
-#line 7406 "EditingTools.c"
+#line 7429 "EditingTools.c"
 	}
 #line 992 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = self->priv->crop_tool_window;
@@ -7498,7 +7521,7 @@ static void editing_tools_crop_tool_set_custom_constraint_mode (EditingToolsCrop
 	_tmp47_ = self->priv->reticle_orientation;
 #line 1003 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp47_ == EDITING_TOOLS_CROP_TOOL_RETICLE_ORIENTATION_LANDSCAPE) {
-#line 7502 "EditingTools.c"
+#line 7525 "EditingTools.c"
 		EditingToolsCropToolCropToolWindow* _tmp48_ = NULL;
 		GtkEntry* _tmp49_ = NULL;
 		gint _tmp50_ = 0;
@@ -7537,7 +7560,7 @@ static void editing_tools_crop_tool_set_custom_constraint_mode (EditingToolsCrop
 		gtk_entry_set_text (_tmp54_, _tmp57_);
 #line 1005 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_free0 (_tmp57_);
-#line 7541 "EditingTools.c"
+#line 7564 "EditingTools.c"
 	} else {
 		EditingToolsCropToolCropToolWindow* _tmp58_ = NULL;
 		GtkEntry* _tmp59_ = NULL;
@@ -7577,7 +7600,7 @@ static void editing_tools_crop_tool_set_custom_constraint_mode (EditingToolsCrop
 		gtk_entry_set_text (_tmp64_, _tmp67_);
 #line 1008 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_free0 (_tmp67_);
-#line 7581 "EditingTools.c"
+#line 7604 "EditingTools.c"
 	}
 #line 1010 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp68_ = self->priv->custom_init_width;
@@ -7591,7 +7614,7 @@ static void editing_tools_crop_tool_set_custom_constraint_mode (EditingToolsCrop
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp70_, gtk_widget_get_type (), GtkWidget));
 #line 1014 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->constraint_mode = EDITING_TOOLS_CROP_TOOL_CONSTRAINT_MODE_CUSTOM;
-#line 7595 "EditingTools.c"
+#line 7618 "EditingTools.c"
 }
 
 
@@ -7647,7 +7670,7 @@ static void editing_tools_crop_tool_set_normal_constraint_mode (EditingToolsCrop
 	if (_tmp0_ == EDITING_TOOLS_CROP_TOOL_CONSTRAINT_MODE_NORMAL) {
 #line 1019 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 7651 "EditingTools.c"
+#line 7674 "EditingTools.c"
 	}
 #line 1021 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = self->priv->crop_tool_window;
@@ -7757,7 +7780,7 @@ static void editing_tools_crop_tool_set_normal_constraint_mode (EditingToolsCrop
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, gtk_widget_get_type (), GtkWidget));
 #line 1037 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->constraint_mode = EDITING_TOOLS_CROP_TOOL_CONSTRAINT_MODE_NORMAL;
-#line 7761 "EditingTools.c"
+#line 7784 "EditingTools.c"
 }
 
 
@@ -7804,7 +7827,7 @@ static void editing_tools_crop_tool_constrain_crop (EditingToolsCropTool* self, 
 	_tmp1_ = user_aspect_ratio;
 #line 1042 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp1_ == EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 7808 "EditingTools.c"
+#line 7831 "EditingTools.c"
 		Box _tmp2_ = {0};
 #line 1043 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = *crop;
@@ -7812,7 +7835,7 @@ static void editing_tools_crop_tool_constrain_crop (EditingToolsCropTool* self, 
 		*result = _tmp2_;
 #line 1043 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 7816 "EditingTools.c"
+#line 7839 "EditingTools.c"
 	}
 #line 1046 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = box_get_width (crop);
@@ -7876,7 +7899,7 @@ static void editing_tools_crop_tool_constrain_crop (EditingToolsCropTool* self, 
 	_tmp25_ = user_aspect_ratio;
 #line 1057 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (((gfloat) _tmp23_) >= (_tmp24_ * _tmp25_)) {
-#line 7880 "EditingTools.c"
+#line 7903 "EditingTools.c"
 		gint _tmp26_ = 0;
 		gfloat _tmp27_ = 0.0F;
 #line 1058 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -7885,7 +7908,7 @@ static void editing_tools_crop_tool_constrain_crop (EditingToolsCropTool* self, 
 		_tmp27_ = user_aspect_ratio;
 #line 1058 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		box_adjust_width (crop, (gint) (_tmp26_ * _tmp27_));
-#line 7889 "EditingTools.c"
+#line 7912 "EditingTools.c"
 	} else {
 		gint _tmp28_ = 0;
 		gfloat _tmp29_ = 0.0F;
@@ -7895,7 +7918,7 @@ static void editing_tools_crop_tool_constrain_crop (EditingToolsCropTool* self, 
 		_tmp29_ = user_aspect_ratio;
 #line 1060 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		box_adjust_height (crop, (gint) (_tmp28_ / _tmp29_));
-#line 7899 "EditingTools.c"
+#line 7922 "EditingTools.c"
 	}
 #line 1062 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp30_ = *crop;
@@ -7903,7 +7926,7 @@ static void editing_tools_crop_tool_constrain_crop (EditingToolsCropTool* self, 
 	*result = _tmp30_;
 #line 1062 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 7907 "EditingTools.c"
+#line 7930 "EditingTools.c"
 }
 
 
@@ -7938,7 +7961,7 @@ static EditingToolsCropToolConstraintDescription* editing_tools_crop_tool_get_la
 	_tmp5__length1 = self->priv->constraints_length1;
 #line 1068 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp4_ < _tmp5__length1) {
-#line 7942 "EditingTools.c"
+#line 7965 "EditingTools.c"
 		EditingToolsCropToolConstraintDescription** _tmp6_ = NULL;
 		gint _tmp6__length1 = 0;
 		gint _tmp7_ = 0;
@@ -7953,11 +7976,11 @@ static EditingToolsCropToolConstraintDescription* editing_tools_crop_tool_get_la
 		_tmp8_ = _tmp6_[_tmp7_];
 #line 1068 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = _tmp8_;
-#line 7957 "EditingTools.c"
+#line 7980 "EditingTools.c"
 	} else {
 #line 1068 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = NULL;
-#line 7961 "EditingTools.c"
+#line 7984 "EditingTools.c"
 	}
 #line 1068 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp9_ = _editing_tools_crop_tool_constraint_description_ref0 (_tmp3_);
@@ -7967,11 +7990,11 @@ static EditingToolsCropToolConstraintDescription* editing_tools_crop_tool_get_la
 	if (index) {
 #line 1068 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*index = _vala_index;
-#line 7971 "EditingTools.c"
+#line 7994 "EditingTools.c"
 	}
 #line 1068 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 7975 "EditingTools.c"
+#line 7998 "EditingTools.c"
 }
 
 
@@ -8082,7 +8105,7 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 		_cairo_surface_destroy0 (self->priv->crop_surface);
 #line 1077 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->crop_surface = NULL;
-#line 8086 "EditingTools.c"
+#line 8109 "EditingTools.c"
 	}
 #line 1079 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = canvas;
@@ -8154,7 +8177,7 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 	_g_object_unref0 (_tmp27_);
 #line 1092 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp29_) {
-#line 8158 "EditingTools.c"
+#line 8181 "EditingTools.c"
 		gint index = 0;
 		EditingToolsCropToolConstraintDescription* desc = NULL;
 		gint _tmp30_ = 0;
@@ -8171,7 +8194,7 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 		_tmp33_ = desc;
 #line 1095 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp33_ != NULL) {
-#line 8175 "EditingTools.c"
+#line 8198 "EditingTools.c"
 			EditingToolsCropToolConstraintDescription* _tmp34_ = NULL;
 			gboolean _tmp35_ = FALSE;
 #line 1095 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -8180,15 +8203,15 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 			_tmp35_ = editing_tools_crop_tool_constraint_description_is_separator (_tmp34_);
 #line 1095 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp32_ = !_tmp35_;
-#line 8184 "EditingTools.c"
+#line 8207 "EditingTools.c"
 		} else {
 #line 1095 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp32_ = FALSE;
-#line 8188 "EditingTools.c"
+#line 8211 "EditingTools.c"
 		}
 #line 1095 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp32_) {
-#line 8192 "EditingTools.c"
+#line 8215 "EditingTools.c"
 			EditingToolsCropToolCropToolWindow* _tmp36_ = NULL;
 			GtkComboBox* _tmp37_ = NULL;
 			gint _tmp38_ = 0;
@@ -8200,11 +8223,11 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 			_tmp38_ = index;
 #line 1096 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			gtk_combo_box_set_active (_tmp37_, _tmp38_);
-#line 8204 "EditingTools.c"
+#line 8227 "EditingTools.c"
 		}
 #line 1092 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_editing_tools_crop_tool_constraint_description_unref0 (desc);
-#line 8208 "EditingTools.c"
+#line 8231 "EditingTools.c"
 	} else {
 		Photo* photo = NULL;
 		EditingToolsPhotoCanvas* _tmp39_ = NULL;
@@ -8239,19 +8262,19 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 		_tmp46_ = _tmp45_.height;
 #line 1102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		ratio = ((gfloat) _tmp44_) / ((gfloat) _tmp46_);
-#line 8243 "EditingTools.c"
+#line 8266 "EditingTools.c"
 		{
 			gint index = 0;
 #line 1103 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			index = 1;
-#line 8248 "EditingTools.c"
+#line 8271 "EditingTools.c"
 			{
 				gboolean _tmp47_ = FALSE;
 #line 1103 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp47_ = TRUE;
 #line 1103 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				while (TRUE) {
-#line 8255 "EditingTools.c"
+#line 8278 "EditingTools.c"
 					gint _tmp49_ = 0;
 					EditingToolsCropToolConstraintDescription** _tmp50_ = NULL;
 					gint _tmp50__length1 = 0;
@@ -8265,13 +8288,13 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 					gdouble _tmp57_ = 0.0;
 #line 1103 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					if (!_tmp47_) {
-#line 8269 "EditingTools.c"
+#line 8292 "EditingTools.c"
 						gint _tmp48_ = 0;
 #line 1103 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 						_tmp48_ = index;
 #line 1103 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 						index = _tmp48_ + 1;
-#line 8275 "EditingTools.c"
+#line 8298 "EditingTools.c"
 					}
 #line 1103 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					_tmp47_ = FALSE;
@@ -8285,7 +8308,7 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 					if (!(_tmp49_ < _tmp50__length1)) {
 #line 1103 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 						break;
-#line 8289 "EditingTools.c"
+#line 8312 "EditingTools.c"
 					}
 #line 1104 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					_tmp51_ = ratio;
@@ -8305,7 +8328,7 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 					_tmp57_ = fabs ((gdouble) (_tmp51_ - _tmp56_));
 #line 1104 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					if (_tmp57_ < 0.005) {
-#line 8309 "EditingTools.c"
+#line 8332 "EditingTools.c"
 						EditingToolsCropToolCropToolWindow* _tmp58_ = NULL;
 						GtkComboBox* _tmp59_ = NULL;
 						gint _tmp60_ = 0;
@@ -8317,14 +8340,14 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 						_tmp60_ = index;
 #line 1105 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 						gtk_combo_box_set_active (_tmp59_, _tmp60_);
-#line 8321 "EditingTools.c"
+#line 8344 "EditingTools.c"
 					}
 				}
 			}
 		}
 #line 1092 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (photo);
-#line 8328 "EditingTools.c"
+#line 8351 "EditingTools.c"
 	}
 #line 1110 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_crop_tool_update_pivot_button_state (self);
@@ -8362,7 +8385,7 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 	_g_object_unref0 (_tmp68_);
 #line 1119 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp71_) {
-#line 8366 "EditingTools.c"
+#line 8389 "EditingTools.c"
 		gint xofs = 0;
 		Dimensions _tmp72_ = {0};
 		gint _tmp73_ = 0;
@@ -8407,7 +8430,7 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 		_tmp83_ = yofs;
 #line 1125 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		box_init (&crop, _tmp76_, _tmp77_, _tmp79_ - _tmp80_, _tmp82_ - _tmp83_);
-#line 8411 "EditingTools.c"
+#line 8434 "EditingTools.c"
 	}
 #line 1130 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp84_ = uncropped_dim;
@@ -8479,7 +8502,7 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 	_g_object_unref0 (_tmp103_);
 #line 1148 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp105_) {
-#line 8483 "EditingTools.c"
+#line 8506 "EditingTools.c"
 		EditingToolsCropToolConstraintDescription* desc = NULL;
 		EditingToolsCropToolConstraintDescription* _tmp106_ = NULL;
 		gboolean _tmp107_ = FALSE;
@@ -8493,7 +8516,7 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 		_tmp109_ = desc;
 #line 1150 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp109_ != NULL) {
-#line 8497 "EditingTools.c"
+#line 8520 "EditingTools.c"
 			EditingToolsCropToolConstraintDescription* _tmp110_ = NULL;
 			gboolean _tmp111_ = FALSE;
 #line 1150 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -8502,15 +8525,15 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 			_tmp111_ = editing_tools_crop_tool_constraint_description_is_separator (_tmp110_);
 #line 1150 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp108_ = !_tmp111_;
-#line 8506 "EditingTools.c"
+#line 8529 "EditingTools.c"
 		} else {
 #line 1150 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp108_ = FALSE;
-#line 8510 "EditingTools.c"
+#line 8533 "EditingTools.c"
 		}
 #line 1150 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp108_) {
-#line 8514 "EditingTools.c"
+#line 8537 "EditingTools.c"
 			EditingToolsCropToolConstraintDescription* _tmp112_ = NULL;
 			gfloat _tmp113_ = 0.0F;
 #line 1150 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -8519,21 +8542,21 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 			_tmp113_ = _tmp112_->aspect_ratio;
 #line 1150 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp107_ = _tmp113_ == EDITING_TOOLS_CROP_TOOL_CUSTOM_ASPECT_RATIO;
-#line 8523 "EditingTools.c"
+#line 8546 "EditingTools.c"
 		} else {
 #line 1150 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp107_ = FALSE;
-#line 8527 "EditingTools.c"
+#line 8550 "EditingTools.c"
 		}
 #line 1150 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp107_) {
 #line 1151 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			editing_tools_crop_tool_set_custom_constraint_mode (self);
-#line 8533 "EditingTools.c"
+#line 8556 "EditingTools.c"
 		}
 #line 1148 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_editing_tools_crop_tool_constraint_description_unref0 (desc);
-#line 8537 "EditingTools.c"
+#line 8560 "EditingTools.c"
 	}
 #line 1158 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp114_ = self->priv->scaled_crop;
@@ -8565,21 +8588,21 @@ static void editing_tools_crop_tool_real_activate (EditingToolsEditingTool* base
 	self->priv->pre_aspect_ratio = _tmp121_;
 #line 1071 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_cairo_destroy0 (ctx);
-#line 8569 "EditingTools.c"
+#line 8592 "EditingTools.c"
 }
 
 
 static void _editing_tools_crop_tool_prepare_ctx_editing_tools_photo_canvas_new_surface (EditingToolsPhotoCanvas* _sender, cairo_t* ctx, Dimensions* dim, gpointer self) {
 #line 1169 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_crop_tool_prepare_ctx ((EditingToolsCropTool*) self, ctx, dim);
-#line 8576 "EditingTools.c"
+#line 8599 "EditingTools.c"
 }
 
 
 static void _editing_tools_crop_tool_on_resized_pixbuf_editing_tools_photo_canvas_resized_scaled_pixbuf (EditingToolsPhotoCanvas* _sender, Dimensions* old_dim, GdkPixbuf* scaled, GdkRectangle* scaled_position, gpointer self) {
 #line 1170 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_crop_tool_on_resized_pixbuf ((EditingToolsCropTool*) self, old_dim, scaled, scaled_position);
-#line 8583 "EditingTools.c"
+#line 8606 "EditingTools.c"
 }
 
 
@@ -8598,7 +8621,7 @@ static void editing_tools_crop_tool_bind_canvas_handlers (EditingToolsCropTool* 
 	_tmp1_ = canvas;
 #line 1170 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (_tmp1_, "resized-scaled-pixbuf", (GCallback) _editing_tools_crop_tool_on_resized_pixbuf_editing_tools_photo_canvas_resized_scaled_pixbuf, self);
-#line 8602 "EditingTools.c"
+#line 8625 "EditingTools.c"
 }
 
 
@@ -8623,35 +8646,35 @@ static void editing_tools_crop_tool_unbind_canvas_handlers (EditingToolsCropTool
 	g_signal_parse_name ("resized-scaled-pixbuf", EDITING_TOOLS_TYPE_PHOTO_CANVAS, &_tmp3_, NULL, FALSE);
 #line 1175 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _editing_tools_crop_tool_on_resized_pixbuf_editing_tools_photo_canvas_resized_scaled_pixbuf, self);
-#line 8627 "EditingTools.c"
+#line 8650 "EditingTools.c"
 }
 
 
 static void _editing_tools_crop_tool_on_crop_ok_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 1180 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_crop_tool_on_crop_ok ((EditingToolsCropTool*) self);
-#line 8634 "EditingTools.c"
+#line 8657 "EditingTools.c"
 }
 
 
 static void _editing_tools_editing_tool_notify_cancel_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 1181 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_editing_tool_notify_cancel ((EditingToolsEditingTool*) self);
-#line 8641 "EditingTools.c"
+#line 8664 "EditingTools.c"
 }
 
 
 static void _editing_tools_crop_tool_constraint_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
 #line 1182 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_crop_tool_constraint_changed ((EditingToolsCropTool*) self);
-#line 8648 "EditingTools.c"
+#line 8671 "EditingTools.c"
 }
 
 
 static void _editing_tools_crop_tool_on_pivot_button_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 1183 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_crop_tool_on_pivot_button_clicked ((EditingToolsCropTool*) self);
-#line 8655 "EditingTools.c"
+#line 8678 "EditingTools.c"
 }
 
 
@@ -8660,7 +8683,7 @@ static gboolean _editing_tools_crop_tool_on_width_entry_focus_out_gtk_widget_foc
 	result = editing_tools_crop_tool_on_width_entry_focus_out ((EditingToolsCropTool*) self, event);
 #line 1186 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 8664 "EditingTools.c"
+#line 8687 "EditingTools.c"
 }
 
 
@@ -8669,21 +8692,21 @@ static gboolean _editing_tools_crop_tool_on_height_entry_focus_out_gtk_widget_fo
 	result = editing_tools_crop_tool_on_height_entry_focus_out ((EditingToolsCropTool*) self, event);
 #line 1187 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 8673 "EditingTools.c"
+#line 8696 "EditingTools.c"
 }
 
 
 static void _editing_tools_crop_tool_on_width_insert_text_gtk_editable_insert_text (GtkEditable* _sender, const gchar* new_text, gint new_text_length, gint* position, gpointer self) {
 #line 1188 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_crop_tool_on_width_insert_text ((EditingToolsCropTool*) self, new_text, new_text_length, position);
-#line 8680 "EditingTools.c"
+#line 8703 "EditingTools.c"
 }
 
 
 static void _editing_tools_crop_tool_on_height_insert_text_gtk_editable_insert_text (GtkEditable* _sender, const gchar* new_text, gint new_text_length, gint* position, gpointer self) {
 #line 1189 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_crop_tool_on_height_insert_text ((EditingToolsCropTool*) self, new_text, new_text_length, position);
-#line 8687 "EditingTools.c"
+#line 8710 "EditingTools.c"
 }
 
 
@@ -8759,7 +8782,7 @@ static void editing_tools_crop_tool_bind_window_handlers (EditingToolsCropTool* 
 	_tmp16_ = _tmp15_->custom_height_entry;
 #line 1189 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, GTK_TYPE_EDITABLE, GtkEditable), "insert-text", (GCallback) _editing_tools_crop_tool_on_height_insert_text_gtk_editable_insert_text, self);
-#line 8763 "EditingTools.c"
+#line 8786 "EditingTools.c"
 }
 
 
@@ -8851,7 +8874,7 @@ static void editing_tools_crop_tool_unbind_window_handlers (EditingToolsCropTool
 	g_signal_parse_name ("insert-text", GTK_TYPE_EDITABLE, &_tmp22_, NULL, FALSE);
 #line 1202 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, GTK_TYPE_EDITABLE, GtkEditable), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp22_, 0, NULL, (GCallback) _editing_tools_crop_tool_on_width_insert_text_gtk_editable_insert_text, self);
-#line 8855 "EditingTools.c"
+#line 8878 "EditingTools.c"
 }
 
 
@@ -8879,7 +8902,7 @@ static gboolean editing_tools_crop_tool_real_on_keypress (EditingToolsEditingToo
 	if (g_strcmp0 (_tmp4_, "KP_Enter") == 0) {
 #line 1206 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = TRUE;
-#line 8883 "EditingTools.c"
+#line 8906 "EditingTools.c"
 	} else {
 		GdkEventKey* _tmp5_ = NULL;
 		guint _tmp6_ = 0U;
@@ -8892,13 +8915,13 @@ static gboolean editing_tools_crop_tool_real_on_keypress (EditingToolsEditingToo
 		_tmp7_ = gdk_keyval_name (_tmp6_);
 #line 1207 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = g_strcmp0 (_tmp7_, "Enter") == 0;
-#line 8896 "EditingTools.c"
+#line 8919 "EditingTools.c"
 	}
 #line 1206 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp1_) {
 #line 1206 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = TRUE;
-#line 8902 "EditingTools.c"
+#line 8925 "EditingTools.c"
 	} else {
 		GdkEventKey* _tmp8_ = NULL;
 		guint _tmp9_ = 0U;
@@ -8911,7 +8934,7 @@ static gboolean editing_tools_crop_tool_real_on_keypress (EditingToolsEditingToo
 		_tmp10_ = gdk_keyval_name (_tmp9_);
 #line 1208 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = g_strcmp0 (_tmp10_, "Return") == 0;
-#line 8915 "EditingTools.c"
+#line 8938 "EditingTools.c"
 	}
 #line 1206 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_) {
@@ -8921,7 +8944,7 @@ static gboolean editing_tools_crop_tool_real_on_keypress (EditingToolsEditingToo
 		result = TRUE;
 #line 1210 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 8925 "EditingTools.c"
+#line 8948 "EditingTools.c"
 	}
 #line 1213 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = event;
@@ -8931,7 +8954,7 @@ static gboolean editing_tools_crop_tool_real_on_keypress (EditingToolsEditingToo
 	result = _tmp12_;
 #line 1213 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 8935 "EditingTools.c"
+#line 8958 "EditingTools.c"
 }
 
 
@@ -8956,7 +8979,7 @@ static void editing_tools_crop_tool_on_pivot_button_clicked (EditingToolsCropToo
 	_editing_tools_crop_tool_constraint_description_unref0 (_tmp1_);
 #line 1217 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp3_) {
-#line 8960 "EditingTools.c"
+#line 8983 "EditingTools.c"
 		gchar* width_text = NULL;
 		EditingToolsCropToolCropToolWindow* _tmp4_ = NULL;
 		GtkEntry* _tmp5_ = NULL;
@@ -9029,7 +9052,7 @@ static void editing_tools_crop_tool_on_pivot_button_clicked (EditingToolsCropToo
 		_g_free0 (height_text);
 #line 1217 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_free0 (width_text);
-#line 9033 "EditingTools.c"
+#line 9056 "EditingTools.c"
 	}
 #line 1227 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp21_ = self->priv->reticle_orientation;
@@ -9039,7 +9062,7 @@ static void editing_tools_crop_tool_on_pivot_button_clicked (EditingToolsCropToo
 	self->priv->reticle_orientation = _tmp22_;
 #line 1228 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_crop_tool_constraint_changed (self);
-#line 9043 "EditingTools.c"
+#line 9066 "EditingTools.c"
 }
 
 
@@ -9054,19 +9077,19 @@ static void editing_tools_crop_tool_real_deactivate (EditingToolsEditingTool* ba
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
 #line 1232 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ != NULL) {
-#line 9058 "EditingTools.c"
+#line 9081 "EditingTools.c"
 		EditingToolsPhotoCanvas* _tmp1_ = NULL;
 #line 1233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
 #line 1233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_crop_tool_unbind_canvas_handlers (self, _tmp1_);
-#line 9064 "EditingTools.c"
+#line 9087 "EditingTools.c"
 	}
 #line 1235 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = self->priv->crop_tool_window;
 #line 1235 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp2_ != NULL) {
-#line 9070 "EditingTools.c"
+#line 9093 "EditingTools.c"
 		EditingToolsCropToolCropToolWindow* _tmp3_ = NULL;
 		EditingToolsCropToolCropToolWindow* _tmp4_ = NULL;
 #line 1236 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -9083,13 +9106,13 @@ static void editing_tools_crop_tool_real_deactivate (EditingToolsEditingTool* ba
 		_g_object_unref0 (self->priv->crop_tool_window);
 #line 1239 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->crop_tool_window = NULL;
-#line 9087 "EditingTools.c"
+#line 9110 "EditingTools.c"
 	}
 #line 1243 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
 #line 1243 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp5_ != NULL) {
-#line 9093 "EditingTools.c"
+#line 9116 "EditingTools.c"
 		EditingToolsPhotoCanvas* _tmp6_ = NULL;
 		GdkWindow* _tmp7_ = NULL;
 		GdkWindow* _tmp8_ = NULL;
@@ -9111,7 +9134,7 @@ static void editing_tools_crop_tool_real_deactivate (EditingToolsEditingTool* ba
 		_g_object_unref0 (_tmp10_);
 #line 1244 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (_tmp8_);
-#line 9115 "EditingTools.c"
+#line 9138 "EditingTools.c"
 	}
 #line 1246 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_cairo_surface_destroy0 (self->priv->crop_surface);
@@ -9119,7 +9142,7 @@ static void editing_tools_crop_tool_real_deactivate (EditingToolsEditingTool* ba
 	self->priv->crop_surface = NULL;
 #line 1248 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_crop_tool_parent_class)->deactivate (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 9123 "EditingTools.c"
+#line 9146 "EditingTools.c"
 }
 
 
@@ -9138,7 +9161,7 @@ static EditingToolsEditingToolWindow* editing_tools_crop_tool_real_get_tool_wind
 	result = _tmp1_;
 #line 1252 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 9142 "EditingTools.c"
+#line 9165 "EditingTools.c"
 }
 
 
@@ -9180,7 +9203,7 @@ static GdkPixbuf* editing_tools_crop_tool_real_get_display_pixbuf (EditingToolsE
 		g_propagate_error (error, _inner_error_);
 #line 1259 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return NULL;
-#line 9184 "EditingTools.c"
+#line 9207 "EditingTools.c"
 	}
 #line 1259 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = _tmp2_;
@@ -9194,11 +9217,11 @@ static GdkPixbuf* editing_tools_crop_tool_real_get_display_pixbuf (EditingToolsE
 	if (max_dim) {
 #line 1259 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*max_dim = _vala_max_dim;
-#line 9198 "EditingTools.c"
+#line 9221 "EditingTools.c"
 	}
 #line 1259 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 9202 "EditingTools.c"
+#line 9225 "EditingTools.c"
 }
 
 
@@ -9296,7 +9319,7 @@ static void editing_tools_crop_tool_prepare_ctx (EditingToolsCropTool* self, cai
 	_tmp18_ = self->priv->text_ctx;
 #line 1276 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_select_font_face (_tmp18_, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-#line 9300 "EditingTools.c"
+#line 9323 "EditingTools.c"
 }
 
 
@@ -9380,7 +9403,7 @@ static void editing_tools_crop_tool_on_resized_pixbuf (EditingToolsCropTool* sel
 		_cairo_surface_destroy0 (self->priv->crop_surface);
 #line 1289 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->crop_surface = NULL;
-#line 9384 "EditingTools.c"
+#line 9407 "EditingTools.c"
 	}
 #line 1291 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp14_ = scaled;
@@ -9412,7 +9435,7 @@ static void editing_tools_crop_tool_on_resized_pixbuf (EditingToolsCropTool* sel
 	cairo_paint (ctx);
 #line 1279 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_cairo_destroy0 (ctx);
-#line 9416 "EditingTools.c"
+#line 9439 "EditingTools.c"
 }
 
 
@@ -9495,7 +9518,7 @@ static void editing_tools_crop_tool_real_on_left_click (EditingToolsEditingTool*
 	_tmp18_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
 #line 1310 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_repaint (_tmp18_);
-#line 9499 "EditingTools.c"
+#line 9522 "EditingTools.c"
 }
 
 
@@ -9513,7 +9536,7 @@ static void editing_tools_crop_tool_real_on_left_released (EditingToolsEditingTo
 	if (_tmp0_ == BOX_LOCATION_OUTSIDE) {
 #line 1316 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 9517 "EditingTools.c"
+#line 9540 "EditingTools.c"
 	}
 #line 1319 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->in_manipulation = BOX_LOCATION_OUTSIDE;
@@ -9531,7 +9554,7 @@ static void editing_tools_crop_tool_real_on_left_released (EditingToolsEditingTo
 	_tmp3_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
 #line 1326 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_repaint (_tmp3_);
-#line 9535 "EditingTools.c"
+#line 9558 "EditingTools.c"
 }
 
 
@@ -9547,7 +9570,7 @@ static void editing_tools_crop_tool_real_on_motion (EditingToolsEditingTool* bas
 	_tmp0_ = self->priv->in_manipulation;
 #line 1332 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ != BOX_LOCATION_OUTSIDE) {
-#line 9551 "EditingTools.c"
+#line 9574 "EditingTools.c"
 		gint _tmp1_ = 0;
 		gint _tmp2_ = 0;
 #line 1333 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -9556,7 +9579,7 @@ static void editing_tools_crop_tool_real_on_motion (EditingToolsEditingTool* bas
 		_tmp2_ = y;
 #line 1333 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_crop_tool_on_canvas_manipulation (self, _tmp1_, _tmp2_);
-#line 9560 "EditingTools.c"
+#line 9583 "EditingTools.c"
 	}
 #line 1335 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = x;
@@ -9568,7 +9591,7 @@ static void editing_tools_crop_tool_real_on_motion (EditingToolsEditingTool* bas
 	_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
 #line 1336 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_repaint (_tmp5_);
-#line 9572 "EditingTools.c"
+#line 9595 "EditingTools.c"
 }
 
 
@@ -9692,7 +9715,7 @@ static void editing_tools_crop_tool_real_paint (EditingToolsEditingTool* base, c
 	editing_tools_crop_tool_paint_crop_tool (self, &_tmp24_);
 #line 1339 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_cairo_destroy0 (ctx);
-#line 9696 "EditingTools.c"
+#line 9719 "EditingTools.c"
 }
 
 
@@ -9843,7 +9866,7 @@ static void editing_tools_crop_tool_on_crop_ok (EditingToolsCropTool* self) {
 	_g_object_unref0 (_tmp33_);
 #line 1365 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (cropped);
-#line 9847 "EditingTools.c"
+#line 9870 "EditingTools.c"
 }
 
 
@@ -9895,99 +9918,99 @@ static void editing_tools_crop_tool_update_cursor (EditingToolsCropTool* self, g
 	switch (_tmp9_) {
 #line 1395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_LEFT_SIDE:
-#line 9899 "EditingTools.c"
+#line 9922 "EditingTools.c"
 		{
 #line 1397 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			cursor_type = GDK_LEFT_SIDE;
 #line 1398 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 9905 "EditingTools.c"
+#line 9928 "EditingTools.c"
 		}
 #line 1395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_TOP_SIDE:
-#line 9909 "EditingTools.c"
+#line 9932 "EditingTools.c"
 		{
 #line 1401 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			cursor_type = GDK_TOP_SIDE;
 #line 1402 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 9915 "EditingTools.c"
+#line 9938 "EditingTools.c"
 		}
 #line 1395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_RIGHT_SIDE:
-#line 9919 "EditingTools.c"
+#line 9942 "EditingTools.c"
 		{
 #line 1405 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			cursor_type = GDK_RIGHT_SIDE;
 #line 1406 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 9925 "EditingTools.c"
+#line 9948 "EditingTools.c"
 		}
 #line 1395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_BOTTOM_SIDE:
-#line 9929 "EditingTools.c"
+#line 9952 "EditingTools.c"
 		{
 #line 1409 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			cursor_type = GDK_BOTTOM_SIDE;
 #line 1410 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 9935 "EditingTools.c"
+#line 9958 "EditingTools.c"
 		}
 #line 1395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_TOP_LEFT:
-#line 9939 "EditingTools.c"
+#line 9962 "EditingTools.c"
 		{
 #line 1413 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			cursor_type = GDK_TOP_LEFT_CORNER;
 #line 1414 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 9945 "EditingTools.c"
+#line 9968 "EditingTools.c"
 		}
 #line 1395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_BOTTOM_LEFT:
-#line 9949 "EditingTools.c"
+#line 9972 "EditingTools.c"
 		{
 #line 1417 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			cursor_type = GDK_BOTTOM_LEFT_CORNER;
 #line 1418 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 9955 "EditingTools.c"
+#line 9978 "EditingTools.c"
 		}
 #line 1395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_TOP_RIGHT:
-#line 9959 "EditingTools.c"
+#line 9982 "EditingTools.c"
 		{
 #line 1421 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			cursor_type = GDK_TOP_RIGHT_CORNER;
 #line 1422 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 9965 "EditingTools.c"
+#line 9988 "EditingTools.c"
 		}
 #line 1395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_BOTTOM_RIGHT:
-#line 9969 "EditingTools.c"
+#line 9992 "EditingTools.c"
 		{
 #line 1425 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			cursor_type = GDK_BOTTOM_RIGHT_CORNER;
 #line 1426 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 9975 "EditingTools.c"
+#line 9998 "EditingTools.c"
 		}
 #line 1395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_INSIDE:
-#line 9979 "EditingTools.c"
+#line 10002 "EditingTools.c"
 		{
 #line 1429 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			cursor_type = GDK_FLEUR;
 #line 1430 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 9985 "EditingTools.c"
+#line 10008 "EditingTools.c"
 		}
 		default:
 		{
 #line 1434 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 9991 "EditingTools.c"
+#line 10014 "EditingTools.c"
 		}
 	}
 #line 1437 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -9996,7 +10019,7 @@ static void editing_tools_crop_tool_update_cursor (EditingToolsCropTool* self, g
 	_tmp11_ = self->priv->current_cursor_type;
 #line 1437 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp10_ != _tmp11_) {
-#line 10000 "EditingTools.c"
+#line 10023 "EditingTools.c"
 		GdkCursor* cursor = NULL;
 		GdkCursorType _tmp12_ = 0;
 		GdkCursor* _tmp13_ = NULL;
@@ -10029,7 +10052,7 @@ static void editing_tools_crop_tool_update_cursor (EditingToolsCropTool* self, g
 		self->priv->current_cursor_type = _tmp18_;
 #line 1437 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (cursor);
-#line 10033 "EditingTools.c"
+#line 10056 "EditingTools.c"
 	}
 }
 
@@ -10069,7 +10092,7 @@ static gint editing_tools_crop_tool_eval_radial_line (EditingToolsCropTool* self
 	result = (gint) ((decision_slope * _tmp6_) + decision_intercept);
 #line 1449 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 10073 "EditingTools.c"
+#line 10096 "EditingTools.c"
 }
 
 
@@ -10186,7 +10209,7 @@ static void editing_tools_crop_tool_get_photo_dimensions (EditingToolsCropTool* 
 	*result = _tmp28_;
 #line 1463 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 10190 "EditingTools.c"
+#line 10213 "EditingTools.c"
 }
 
 
@@ -10195,47 +10218,47 @@ static gboolean _box_equal (const Box* s1, const Box* s2) {
 	if (s1 == s2) {
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return TRUE;
-#line 10199 "EditingTools.c"
+#line 10222 "EditingTools.c"
 	}
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (s1 == NULL) {
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return FALSE;
-#line 10205 "EditingTools.c"
+#line 10228 "EditingTools.c"
 	}
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (s2 == NULL) {
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return FALSE;
-#line 10211 "EditingTools.c"
+#line 10234 "EditingTools.c"
 	}
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (s1->left != s2->left) {
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return FALSE;
-#line 10217 "EditingTools.c"
+#line 10240 "EditingTools.c"
 	}
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (s1->top != s2->top) {
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return FALSE;
-#line 10223 "EditingTools.c"
+#line 10246 "EditingTools.c"
 	}
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (s1->right != s2->right) {
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return FALSE;
-#line 10229 "EditingTools.c"
+#line 10252 "EditingTools.c"
 	}
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (s1->bottom != s2->bottom) {
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return FALSE;
-#line 10235 "EditingTools.c"
+#line 10258 "EditingTools.c"
 	}
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return TRUE;
-#line 10239 "EditingTools.c"
+#line 10262 "EditingTools.c"
 }
 
 
@@ -10311,7 +10334,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 	if (_tmp5_ < 0) {
 #line 1474 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		x = 0;
-#line 10315 "EditingTools.c"
+#line 10338 "EditingTools.c"
 	} else {
 		gint _tmp6_ = 0;
 		GdkRectangle _tmp7_ = {0};
@@ -10324,7 +10347,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 		_tmp8_ = _tmp7_.width;
 #line 1475 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp6_ >= _tmp8_) {
-#line 10328 "EditingTools.c"
+#line 10351 "EditingTools.c"
 			GdkRectangle _tmp9_ = {0};
 			gint _tmp10_ = 0;
 #line 1476 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -10333,7 +10356,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			_tmp10_ = _tmp9_.width;
 #line 1476 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			x = _tmp10_ - 1;
-#line 10337 "EditingTools.c"
+#line 10360 "EditingTools.c"
 		}
 	}
 #line 1478 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -10350,7 +10373,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 	if (_tmp14_ < 0) {
 #line 1480 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		y = 0;
-#line 10354 "EditingTools.c"
+#line 10377 "EditingTools.c"
 	} else {
 		gint _tmp15_ = 0;
 		GdkRectangle _tmp16_ = {0};
@@ -10363,7 +10386,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 		_tmp17_ = _tmp16_.height;
 #line 1481 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp15_ >= _tmp17_) {
-#line 10367 "EditingTools.c"
+#line 10390 "EditingTools.c"
 			GdkRectangle _tmp18_ = {0};
 			gint _tmp19_ = 0;
 #line 1482 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -10372,7 +10395,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			_tmp19_ = _tmp18_.height;
 #line 1482 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			y = _tmp19_ - 1;
-#line 10376 "EditingTools.c"
+#line 10399 "EditingTools.c"
 		}
 	}
 #line 1486 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -10417,7 +10440,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 	switch (_tmp32_) {
 #line 1495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_LEFT_SIDE:
-#line 10421 "EditingTools.c"
+#line 10444 "EditingTools.c"
 		{
 			gint _tmp33_ = 0;
 			gfloat _tmp34_ = 0.0F;
@@ -10429,7 +10452,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			_tmp34_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
 #line 1498 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp34_ != EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 10433 "EditingTools.c"
+#line 10456 "EditingTools.c"
 				gfloat new_height = 0.0F;
 				gint _tmp35_ = 0;
 				gint _tmp36_ = 0;
@@ -10450,15 +10473,15 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp39_ = new_height;
 #line 1500 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				bottom = _tmp38_ + ((gint) _tmp39_);
-#line 10454 "EditingTools.c"
+#line 10477 "EditingTools.c"
 			}
 #line 1502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 10458 "EditingTools.c"
+#line 10481 "EditingTools.c"
 		}
 #line 1495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_TOP_SIDE:
-#line 10462 "EditingTools.c"
+#line 10485 "EditingTools.c"
 		{
 			gint _tmp40_ = 0;
 			gfloat _tmp41_ = 0.0F;
@@ -10470,7 +10493,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			_tmp41_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
 #line 1506 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp41_ != EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 10474 "EditingTools.c"
+#line 10497 "EditingTools.c"
 				gfloat new_width = 0.0F;
 				gint _tmp42_ = 0;
 				gint _tmp43_ = 0;
@@ -10491,15 +10514,15 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp46_ = new_width;
 #line 1508 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				right = _tmp45_ + ((gint) _tmp46_);
-#line 10495 "EditingTools.c"
+#line 10518 "EditingTools.c"
 			}
 #line 1510 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 10499 "EditingTools.c"
+#line 10522 "EditingTools.c"
 		}
 #line 1495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_RIGHT_SIDE:
-#line 10503 "EditingTools.c"
+#line 10526 "EditingTools.c"
 		{
 			gint _tmp47_ = 0;
 			gfloat _tmp48_ = 0.0F;
@@ -10511,7 +10534,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			_tmp48_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
 #line 1514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp48_ != EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 10515 "EditingTools.c"
+#line 10538 "EditingTools.c"
 				gfloat new_height = 0.0F;
 				gint _tmp49_ = 0;
 				gint _tmp50_ = 0;
@@ -10532,15 +10555,15 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp53_ = new_height;
 #line 1516 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				bottom = _tmp52_ + ((gint) _tmp53_);
-#line 10536 "EditingTools.c"
+#line 10559 "EditingTools.c"
 			}
 #line 1518 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 10540 "EditingTools.c"
+#line 10563 "EditingTools.c"
 		}
 #line 1495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_BOTTOM_SIDE:
-#line 10544 "EditingTools.c"
+#line 10567 "EditingTools.c"
 		{
 			gint _tmp54_ = 0;
 			gfloat _tmp55_ = 0.0F;
@@ -10552,7 +10575,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			_tmp55_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
 #line 1522 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp55_ != EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 10556 "EditingTools.c"
+#line 10579 "EditingTools.c"
 				gfloat new_width = 0.0F;
 				gint _tmp56_ = 0;
 				gint _tmp57_ = 0;
@@ -10573,22 +10596,22 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp60_ = new_width;
 #line 1524 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				right = _tmp59_ + ((gint) _tmp60_);
-#line 10577 "EditingTools.c"
+#line 10600 "EditingTools.c"
 			}
 #line 1526 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 10581 "EditingTools.c"
+#line 10604 "EditingTools.c"
 		}
 #line 1495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_TOP_LEFT:
-#line 10585 "EditingTools.c"
+#line 10608 "EditingTools.c"
 		{
 			gfloat _tmp61_ = 0.0F;
 #line 1529 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp61_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
 #line 1529 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp61_ == EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 10592 "EditingTools.c"
+#line 10615 "EditingTools.c"
 				gint _tmp62_ = 0;
 				gint _tmp63_ = 0;
 #line 1530 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -10599,7 +10622,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp63_ = x;
 #line 1531 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				left = _tmp63_;
-#line 10603 "EditingTools.c"
+#line 10626 "EditingTools.c"
 			} else {
 				gint _tmp64_ = 0;
 				gint _tmp65_ = 0;
@@ -10624,7 +10647,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp70_ = editing_tools_crop_tool_eval_radial_line (self, (gdouble) _tmp65_, (gdouble) _tmp66_, (gdouble) _tmp67_, (gdouble) _tmp68_, (gdouble) _tmp69_);
 #line 1533 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (_tmp64_ < _tmp70_) {
-#line 10628 "EditingTools.c"
+#line 10651 "EditingTools.c"
 					gint _tmp71_ = 0;
 					gfloat new_width = 0.0F;
 					gint _tmp72_ = 0;
@@ -10650,7 +10673,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp76_ = new_width;
 #line 1536 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					left = _tmp75_ - ((gint) _tmp76_);
-#line 10654 "EditingTools.c"
+#line 10677 "EditingTools.c"
 				} else {
 					gint _tmp77_ = 0;
 					gfloat new_height = 0.0F;
@@ -10677,23 +10700,23 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp82_ = new_height;
 #line 1540 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					top = _tmp81_ - ((gint) _tmp82_);
-#line 10681 "EditingTools.c"
+#line 10704 "EditingTools.c"
 				}
 			}
 #line 1543 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 10686 "EditingTools.c"
+#line 10709 "EditingTools.c"
 		}
 #line 1495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_BOTTOM_LEFT:
-#line 10690 "EditingTools.c"
+#line 10713 "EditingTools.c"
 		{
 			gfloat _tmp83_ = 0.0F;
 #line 1546 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp83_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
 #line 1546 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp83_ == EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 10697 "EditingTools.c"
+#line 10720 "EditingTools.c"
 				gint _tmp84_ = 0;
 				gint _tmp85_ = 0;
 #line 1547 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -10704,7 +10727,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp85_ = x;
 #line 1548 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				left = _tmp85_;
-#line 10708 "EditingTools.c"
+#line 10731 "EditingTools.c"
 			} else {
 				gint _tmp86_ = 0;
 				gint _tmp87_ = 0;
@@ -10729,7 +10752,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp92_ = editing_tools_crop_tool_eval_radial_line (self, (gdouble) _tmp87_, (gdouble) _tmp88_, (gdouble) _tmp89_, (gdouble) _tmp90_, (gdouble) _tmp91_);
 #line 1550 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (_tmp86_ < _tmp92_) {
-#line 10733 "EditingTools.c"
+#line 10756 "EditingTools.c"
 					gint _tmp93_ = 0;
 					gfloat new_height = 0.0F;
 					gint _tmp94_ = 0;
@@ -10755,7 +10778,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp98_ = new_height;
 #line 1553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					bottom = _tmp97_ + ((gint) _tmp98_);
-#line 10759 "EditingTools.c"
+#line 10782 "EditingTools.c"
 				} else {
 					gint _tmp99_ = 0;
 					gfloat new_width = 0.0F;
@@ -10782,23 +10805,23 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp104_ = new_width;
 #line 1557 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					left = _tmp103_ - ((gint) _tmp104_);
-#line 10786 "EditingTools.c"
+#line 10809 "EditingTools.c"
 				}
 			}
 #line 1560 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 10791 "EditingTools.c"
+#line 10814 "EditingTools.c"
 		}
 #line 1495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_TOP_RIGHT:
-#line 10795 "EditingTools.c"
+#line 10818 "EditingTools.c"
 		{
 			gfloat _tmp105_ = 0.0F;
 #line 1563 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp105_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
 #line 1563 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp105_ == EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 10802 "EditingTools.c"
+#line 10825 "EditingTools.c"
 				gint _tmp106_ = 0;
 				gint _tmp107_ = 0;
 #line 1564 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -10809,7 +10832,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp107_ = x;
 #line 1565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				right = _tmp107_;
-#line 10813 "EditingTools.c"
+#line 10836 "EditingTools.c"
 			} else {
 				gint _tmp108_ = 0;
 				gint _tmp109_ = 0;
@@ -10834,7 +10857,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp114_ = editing_tools_crop_tool_eval_radial_line (self, (gdouble) _tmp109_, (gdouble) _tmp110_, (gdouble) _tmp111_, (gdouble) _tmp112_, (gdouble) _tmp113_);
 #line 1567 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (_tmp108_ < _tmp114_) {
-#line 10838 "EditingTools.c"
+#line 10861 "EditingTools.c"
 					gint _tmp115_ = 0;
 					gfloat new_width = 0.0F;
 					gint _tmp116_ = 0;
@@ -10860,7 +10883,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp120_ = new_width;
 #line 1570 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					right = _tmp119_ + ((gint) _tmp120_);
-#line 10864 "EditingTools.c"
+#line 10887 "EditingTools.c"
 				} else {
 					gint _tmp121_ = 0;
 					gfloat new_height = 0.0F;
@@ -10887,23 +10910,23 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp126_ = new_height;
 #line 1574 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					top = _tmp125_ - ((gint) _tmp126_);
-#line 10891 "EditingTools.c"
+#line 10914 "EditingTools.c"
 				}
 			}
 #line 1577 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 10896 "EditingTools.c"
+#line 10919 "EditingTools.c"
 		}
 #line 1495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_BOTTOM_RIGHT:
-#line 10900 "EditingTools.c"
+#line 10923 "EditingTools.c"
 		{
 			gfloat _tmp127_ = 0.0F;
 #line 1580 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp127_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
 #line 1580 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp127_ == EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 10907 "EditingTools.c"
+#line 10930 "EditingTools.c"
 				gint _tmp128_ = 0;
 				gint _tmp129_ = 0;
 #line 1581 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -10914,7 +10937,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp129_ = x;
 #line 1582 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				right = _tmp129_;
-#line 10918 "EditingTools.c"
+#line 10941 "EditingTools.c"
 			} else {
 				gint _tmp130_ = 0;
 				gint _tmp131_ = 0;
@@ -10939,7 +10962,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp136_ = editing_tools_crop_tool_eval_radial_line (self, (gdouble) _tmp131_, (gdouble) _tmp132_, (gdouble) _tmp133_, (gdouble) _tmp134_, (gdouble) _tmp135_);
 #line 1584 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (_tmp130_ < _tmp136_) {
-#line 10943 "EditingTools.c"
+#line 10966 "EditingTools.c"
 					gint _tmp137_ = 0;
 					gfloat new_height = 0.0F;
 					gint _tmp138_ = 0;
@@ -10965,7 +10988,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp142_ = new_height;
 #line 1587 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					bottom = _tmp141_ + ((gint) _tmp142_);
-#line 10969 "EditingTools.c"
+#line 10992 "EditingTools.c"
 				} else {
 					gint _tmp143_ = 0;
 					gfloat new_width = 0.0F;
@@ -10992,16 +11015,16 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp148_ = new_width;
 #line 1591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					right = _tmp147_ + ((gint) _tmp148_);
-#line 10996 "EditingTools.c"
+#line 11019 "EditingTools.c"
 				}
 			}
 #line 1594 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 11001 "EditingTools.c"
+#line 11024 "EditingTools.c"
 		}
 #line 1495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case BOX_LOCATION_INSIDE:
-#line 11005 "EditingTools.c"
+#line 11028 "EditingTools.c"
 		{
 			gint _tmp149_ = 0;
 			gint _tmp150_ = 0;
@@ -11115,7 +11138,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			if (_tmp169_ < 0) {
 #line 1616 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				left = 0;
-#line 11119 "EditingTools.c"
+#line 11142 "EditingTools.c"
 			}
 #line 1618 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp170_ = top;
@@ -11123,7 +11146,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			if (_tmp170_ < 0) {
 #line 1619 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				top = 0;
-#line 11127 "EditingTools.c"
+#line 11150 "EditingTools.c"
 			}
 #line 1621 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp171_ = right;
@@ -11133,7 +11156,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			_tmp173_ = _tmp172_.width;
 #line 1621 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp171_ >= _tmp173_) {
-#line 11137 "EditingTools.c"
+#line 11160 "EditingTools.c"
 				GdkRectangle _tmp174_ = {0};
 				gint _tmp175_ = 0;
 #line 1622 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -11142,7 +11165,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp175_ = _tmp174_.width;
 #line 1622 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				right = _tmp175_ - 1;
-#line 11146 "EditingTools.c"
+#line 11169 "EditingTools.c"
 			}
 #line 1624 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp176_ = bottom;
@@ -11152,7 +11175,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			_tmp178_ = _tmp177_.height;
 #line 1624 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp176_ >= _tmp178_) {
-#line 11156 "EditingTools.c"
+#line 11179 "EditingTools.c"
 				GdkRectangle _tmp179_ = {0};
 				gint _tmp180_ = 0;
 #line 1625 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -11161,7 +11184,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 				_tmp180_ = _tmp179_.height;
 #line 1625 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				bottom = _tmp180_ - 1;
-#line 11165 "EditingTools.c"
+#line 11188 "EditingTools.c"
 			}
 #line 1627 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp181_ = right;
@@ -11181,13 +11204,13 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			_tmp186_ = width;
 #line 1631 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp185_ != _tmp186_) {
-#line 11185 "EditingTools.c"
+#line 11208 "EditingTools.c"
 				gint _tmp187_ = 0;
 #line 1632 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp187_ = delta_x;
 #line 1632 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (_tmp187_ < 0) {
-#line 11191 "EditingTools.c"
+#line 11214 "EditingTools.c"
 					gint _tmp188_ = 0;
 					gint _tmp189_ = 0;
 #line 1633 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -11196,7 +11219,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp189_ = width;
 #line 1633 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					right = (_tmp188_ + _tmp189_) - 1;
-#line 11200 "EditingTools.c"
+#line 11223 "EditingTools.c"
 				} else {
 					gint _tmp190_ = 0;
 					gint _tmp191_ = 0;
@@ -11206,7 +11229,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp191_ = width;
 #line 1635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					left = (_tmp190_ - _tmp191_) + 1;
-#line 11210 "EditingTools.c"
+#line 11233 "EditingTools.c"
 				}
 			}
 #line 1638 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -11215,13 +11238,13 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			_tmp193_ = height;
 #line 1638 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (_tmp192_ != _tmp193_) {
-#line 11219 "EditingTools.c"
+#line 11242 "EditingTools.c"
 				gint _tmp194_ = 0;
 #line 1639 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp194_ = delta_y;
 #line 1639 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (_tmp194_ < 0) {
-#line 11225 "EditingTools.c"
+#line 11248 "EditingTools.c"
 					gint _tmp195_ = 0;
 					gint _tmp196_ = 0;
 #line 1640 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -11230,7 +11253,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp196_ = height;
 #line 1640 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					bottom = (_tmp195_ + _tmp196_) - 1;
-#line 11234 "EditingTools.c"
+#line 11257 "EditingTools.c"
 				} else {
 					gint _tmp197_ = 0;
 					gint _tmp198_ = 0;
@@ -11240,12 +11263,12 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 					_tmp198_ = height;
 #line 1642 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					top = (_tmp197_ - _tmp198_) + 1;
-#line 11244 "EditingTools.c"
+#line 11267 "EditingTools.c"
 				}
 			}
 #line 1644 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 11249 "EditingTools.c"
+#line 11272 "EditingTools.c"
 		}
 		default:
 		{
@@ -11253,7 +11276,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			result = FALSE;
 #line 1648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			return result;
-#line 11257 "EditingTools.c"
+#line 11280 "EditingTools.c"
 		}
 	}
 #line 1658 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -11288,7 +11311,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 	_tmp208_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
 #line 1666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp208_ == EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 11292 "EditingTools.c"
+#line 11315 "EditingTools.c"
 		gint _tmp209_ = 0;
 		gint _tmp210_ = 0;
 		gint _tmp211_ = 0;
@@ -11329,24 +11352,24 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			case BOX_LOCATION_TOP_LEFT:
 #line 1670 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			case BOX_LOCATION_BOTTOM_LEFT:
-#line 11333 "EditingTools.c"
+#line 11356 "EditingTools.c"
 			{
 				gint _tmp214_ = 0;
 #line 1674 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp214_ = width;
 #line 1674 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (_tmp214_ < EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE) {
-#line 11340 "EditingTools.c"
+#line 11363 "EditingTools.c"
 					gint _tmp215_ = 0;
 #line 1675 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					_tmp215_ = right;
 #line 1675 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					left = _tmp215_ - EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE;
-#line 11346 "EditingTools.c"
+#line 11369 "EditingTools.c"
 				}
 #line 1676 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				break;
-#line 11350 "EditingTools.c"
+#line 11373 "EditingTools.c"
 			}
 #line 1670 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			case BOX_LOCATION_RIGHT_SIDE:
@@ -11354,30 +11377,30 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			case BOX_LOCATION_TOP_RIGHT:
 #line 1670 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			case BOX_LOCATION_BOTTOM_RIGHT:
-#line 11358 "EditingTools.c"
+#line 11381 "EditingTools.c"
 			{
 				gint _tmp216_ = 0;
 #line 1681 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp216_ = width;
 #line 1681 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (_tmp216_ < EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE) {
-#line 11365 "EditingTools.c"
+#line 11388 "EditingTools.c"
 					gint _tmp217_ = 0;
 #line 1682 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					_tmp217_ = left;
 #line 1682 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					right = _tmp217_ + EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE;
-#line 11371 "EditingTools.c"
+#line 11394 "EditingTools.c"
 				}
 #line 1683 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				break;
-#line 11375 "EditingTools.c"
+#line 11398 "EditingTools.c"
 			}
 			default:
 			{
 #line 1686 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				break;
-#line 11381 "EditingTools.c"
+#line 11404 "EditingTools.c"
 			}
 		}
 #line 1689 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -11390,24 +11413,24 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			case BOX_LOCATION_TOP_LEFT:
 #line 1689 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			case BOX_LOCATION_TOP_RIGHT:
-#line 11394 "EditingTools.c"
+#line 11417 "EditingTools.c"
 			{
 				gint _tmp219_ = 0;
 #line 1693 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp219_ = height;
 #line 1693 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (_tmp219_ < EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE) {
-#line 11401 "EditingTools.c"
+#line 11424 "EditingTools.c"
 					gint _tmp220_ = 0;
 #line 1694 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					_tmp220_ = bottom;
 #line 1694 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					top = _tmp220_ - EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE;
-#line 11407 "EditingTools.c"
+#line 11430 "EditingTools.c"
 				}
 #line 1695 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				break;
-#line 11411 "EditingTools.c"
+#line 11434 "EditingTools.c"
 			}
 #line 1689 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			case BOX_LOCATION_BOTTOM_SIDE:
@@ -11415,30 +11438,30 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 			case BOX_LOCATION_BOTTOM_LEFT:
 #line 1689 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			case BOX_LOCATION_BOTTOM_RIGHT:
-#line 11419 "EditingTools.c"
+#line 11442 "EditingTools.c"
 			{
 				gint _tmp221_ = 0;
 #line 1700 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp221_ = height;
 #line 1700 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (_tmp221_ < EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE) {
-#line 11426 "EditingTools.c"
+#line 11449 "EditingTools.c"
 					gint _tmp222_ = 0;
 #line 1701 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					_tmp222_ = top;
 #line 1701 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					bottom = _tmp222_ + EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE;
-#line 11432 "EditingTools.c"
+#line 11455 "EditingTools.c"
 				}
 #line 1702 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				break;
-#line 11436 "EditingTools.c"
+#line 11459 "EditingTools.c"
 			}
 			default:
 			{
 #line 1705 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				break;
-#line 11442 "EditingTools.c"
+#line 11465 "EditingTools.c"
 			}
 		}
 #line 1711 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -11467,7 +11490,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 		clamp_inside_rotated_image (&_tmp227_, _tmp229_, _tmp231_, _tmp232_, _tmp233_ == BOX_LOCATION_INSIDE, &_tmp234_);
 #line 1711 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		new_crop = _tmp234_;
-#line 11471 "EditingTools.c"
+#line 11494 "EditingTools.c"
 	} else {
 		gint _tmp235_ = 0;
 		gint _tmp236_ = 0;
@@ -11522,57 +11545,57 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 		if (_box_equal (&_tmp249_, &_tmp250_) != TRUE) {
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp248_ = TRUE;
-#line 11526 "EditingTools.c"
+#line 11549 "EditingTools.c"
 		} else {
 			gint _tmp251_ = 0;
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp251_ = width;
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp248_ = _tmp251_ < EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE;
-#line 11533 "EditingTools.c"
+#line 11556 "EditingTools.c"
 		}
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp248_) {
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp247_ = TRUE;
-#line 11539 "EditingTools.c"
+#line 11562 "EditingTools.c"
 		} else {
 			gint _tmp252_ = 0;
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp252_ = height;
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp247_ = _tmp252_ < EDITING_TOOLS_CROP_TOOL_CROP_MIN_SIZE;
-#line 11546 "EditingTools.c"
+#line 11569 "EditingTools.c"
 		}
 #line 1725 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp247_) {
-#line 11550 "EditingTools.c"
+#line 11573 "EditingTools.c"
 			Box _tmp253_ = {0};
 #line 1726 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp253_ = self->priv->scaled_crop;
 #line 1726 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			new_crop = _tmp253_;
-#line 11556 "EditingTools.c"
+#line 11579 "EditingTools.c"
 		}
 	}
 #line 1730 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp254_ = self->priv->in_manipulation;
 #line 1730 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp254_ != BOX_LOCATION_INSIDE) {
-#line 11563 "EditingTools.c"
+#line 11586 "EditingTools.c"
 		Box _tmp255_ = {0};
 #line 1731 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp255_ = new_crop;
 #line 1731 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_crop_tool_crop_resized (self, &_tmp255_);
-#line 11569 "EditingTools.c"
+#line 11592 "EditingTools.c"
 	} else {
 		Box _tmp256_ = {0};
 #line 1733 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp256_ = new_crop;
 #line 1733 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_crop_tool_crop_moved (self, &_tmp256_);
-#line 11576 "EditingTools.c"
+#line 11599 "EditingTools.c"
 	}
 #line 1736 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp257_ = new_crop;
@@ -11582,7 +11605,7 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 	_tmp258_ = editing_tools_crop_tool_get_constraint_aspect_ratio (self);
 #line 1738 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp258_ == EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO) {
-#line 11586 "EditingTools.c"
+#line 11609 "EditingTools.c"
 		gint _tmp259_ = 0;
 		gint _tmp260_ = 0;
 		gint _tmp261_ = 0;
@@ -11601,13 +11624,13 @@ static gboolean editing_tools_crop_tool_on_canvas_manipulation (EditingToolsCrop
 		_tmp262_ = self->priv->custom_init_height;
 #line 1741 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->custom_aspect_ratio = ((gfloat) _tmp261_) / ((gfloat) _tmp262_);
-#line 11605 "EditingTools.c"
+#line 11628 "EditingTools.c"
 	}
 #line 1744 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = FALSE;
 #line 1744 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 11611 "EditingTools.c"
+#line 11634 "EditingTools.c"
 }
 
 
@@ -11647,7 +11670,7 @@ static void editing_tools_crop_tool_crop_resized (EditingToolsCropTool* self, Bo
 	if (_tmp1_) {
 #line 1750 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 11651 "EditingTools.c"
+#line 11674 "EditingTools.c"
 	}
 #line 1753 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
@@ -11679,18 +11702,18 @@ static void editing_tools_crop_tool_crop_resized (EditingToolsCropTool* self, Bo
 	if (_tmp12_ == BOX_COMPLEMENTS_HORIZONTAL) {
 #line 1765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp11_ = TRUE;
-#line 11683 "EditingTools.c"
+#line 11706 "EditingTools.c"
 	} else {
 		BoxComplements _tmp13_ = 0;
 #line 1765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp13_ = complements;
 #line 1765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp11_ = _tmp13_ == BOX_COMPLEMENTS_BOTH;
-#line 11690 "EditingTools.c"
+#line 11713 "EditingTools.c"
 	}
 #line 1765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp11_) {
-#line 11694 "EditingTools.c"
+#line 11717 "EditingTools.c"
 		gdouble _tmp14_ = 0.0;
 		gboolean _tmp15_ = FALSE;
 		Box _tmp16_ = {0};
@@ -11700,17 +11723,17 @@ static void editing_tools_crop_tool_crop_resized (EditingToolsCropTool* self, Bo
 		if (_tmp15_) {
 #line 1766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp14_ = 0.0;
-#line 11704 "EditingTools.c"
+#line 11727 "EditingTools.c"
 		} else {
 #line 1766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp14_ = 0.5;
-#line 11708 "EditingTools.c"
+#line 11731 "EditingTools.c"
 		}
 #line 1766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp16_ = horizontal;
 #line 1766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_crop_tool_set_area_alpha (self, &_tmp16_, _tmp14_);
-#line 11714 "EditingTools.c"
+#line 11737 "EditingTools.c"
 	}
 #line 1768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp18_ = complements;
@@ -11718,18 +11741,18 @@ static void editing_tools_crop_tool_crop_resized (EditingToolsCropTool* self, Bo
 	if (_tmp18_ == BOX_COMPLEMENTS_VERTICAL) {
 #line 1768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp17_ = TRUE;
-#line 11722 "EditingTools.c"
+#line 11745 "EditingTools.c"
 	} else {
 		BoxComplements _tmp19_ = 0;
 #line 1768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp19_ = complements;
 #line 1768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp17_ = _tmp19_ == BOX_COMPLEMENTS_BOTH;
-#line 11729 "EditingTools.c"
+#line 11752 "EditingTools.c"
 	}
 #line 1768 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp17_) {
-#line 11733 "EditingTools.c"
+#line 11756 "EditingTools.c"
 		gdouble _tmp20_ = 0.0;
 		gboolean _tmp21_ = FALSE;
 		Box _tmp22_ = {0};
@@ -11739,17 +11762,17 @@ static void editing_tools_crop_tool_crop_resized (EditingToolsCropTool* self, Bo
 		if (_tmp21_) {
 #line 1769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp20_ = 0.0;
-#line 11743 "EditingTools.c"
+#line 11766 "EditingTools.c"
 		} else {
 #line 1769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp20_ = 0.5;
-#line 11747 "EditingTools.c"
+#line 11770 "EditingTools.c"
 		}
 #line 1769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp22_ = vertical;
 #line 1769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_crop_tool_set_area_alpha (self, &_tmp22_, _tmp20_);
-#line 11753 "EditingTools.c"
+#line 11776 "EditingTools.c"
 	}
 #line 1771 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp23_ = *new_crop;
@@ -11761,7 +11784,7 @@ static void editing_tools_crop_tool_crop_resized (EditingToolsCropTool* self, Bo
 	_tmp25_ = *new_crop;
 #line 1772 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_invalidate_area (_tmp24_, &_tmp25_);
-#line 11765 "EditingTools.c"
+#line 11788 "EditingTools.c"
 }
 
 
@@ -11787,7 +11810,7 @@ static void editing_tools_crop_tool_crop_moved (EditingToolsCropTool* self, Box*
 	if (_tmp1_) {
 #line 1778 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 11791 "EditingTools.c"
+#line 11814 "EditingTools.c"
 	}
 #line 1781 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
@@ -11813,7 +11836,7 @@ static void editing_tools_crop_tool_crop_moved (EditingToolsCropTool* self, Box*
 	_tmp8_ = *new_crop;
 #line 1789 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_invalidate_area (_tmp7_, &_tmp8_);
-#line 11817 "EditingTools.c"
+#line 11840 "EditingTools.c"
 }
 
 
@@ -11873,7 +11896,7 @@ static void editing_tools_crop_tool_set_area_alpha (EditingToolsCropTool* self, 
 	editing_tools_photo_canvas_paint_surface_area (_tmp9_, _tmp10_, &_tmp11_, TRUE);
 #line 1792 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_cairo_destroy0 (ctx);
-#line 11877 "EditingTools.c"
+#line 11900 "EditingTools.c"
 }
 
 
@@ -11896,7 +11919,7 @@ static void editing_tools_crop_tool_paint_crop_tool (EditingToolsCropTool* self,
 	_tmp0_ = self->priv->in_manipulation;
 #line 1803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ != BOX_LOCATION_OUTSIDE) {
-#line 11900 "EditingTools.c"
+#line 11923 "EditingTools.c"
 		gint one_third_x = 0;
 		gint _tmp1_ = 0;
 		gint one_third_y = 0;
@@ -12127,7 +12150,7 @@ static void editing_tools_crop_tool_paint_crop_tool (EditingToolsCropTool* self,
 		editing_tools_photo_canvas_draw_text (_tmp60_, _tmp61_, _tmp62_, _tmp63_, _tmp64_, TRUE);
 #line 1803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_free0 (text);
-#line 12131 "EditingTools.c"
+#line 12154 "EditingTools.c"
 	}
 #line 1825 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp65_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
@@ -12153,7 +12176,7 @@ static void editing_tools_crop_tool_paint_crop_tool (EditingToolsCropTool* self,
 	box_get_reduced (crop, 2, &_tmp73_);
 #line 1827 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_draw_box (_tmp71_, _tmp72_, &_tmp73_);
-#line 12157 "EditingTools.c"
+#line 12180 "EditingTools.c"
 }
 
 
@@ -12189,7 +12212,7 @@ static EditingToolsCropToolConstraintDescription* editing_tools_crop_tool_constr
 	_tmp4_ = new_aspect_ratio;
 #line 619 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp4_ == EDITING_TOOLS_CROP_TOOL_COMPUTE_FROM_BASIS) {
-#line 12193 "EditingTools.c"
+#line 12216 "EditingTools.c"
 		gint _tmp5_ = 0;
 		gint _tmp6_ = 0;
 #line 620 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -12198,14 +12221,14 @@ static EditingToolsCropToolConstraintDescription* editing_tools_crop_tool_constr
 		_tmp6_ = self->basis_height;
 #line 620 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->aspect_ratio = ((gfloat) _tmp5_) / ((gfloat) _tmp6_);
-#line 12202 "EditingTools.c"
+#line 12225 "EditingTools.c"
 	} else {
 		gfloat _tmp7_ = 0.0F;
 #line 622 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp7_ = new_aspect_ratio;
 #line 622 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->aspect_ratio = _tmp7_;
-#line 12209 "EditingTools.c"
+#line 12232 "EditingTools.c"
 	}
 #line 623 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp8_ = new_pivotable;
@@ -12213,14 +12236,14 @@ static EditingToolsCropToolConstraintDescription* editing_tools_crop_tool_constr
 	self->is_pivotable = _tmp8_;
 #line 614 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 12217 "EditingTools.c"
+#line 12240 "EditingTools.c"
 }
 
 
 static EditingToolsCropToolConstraintDescription* editing_tools_crop_tool_constraint_description_new (const gchar* new_name, gint new_basis_width, gint new_basis_height, gboolean new_pivotable, gfloat new_aspect_ratio) {
 #line 614 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return editing_tools_crop_tool_constraint_description_construct (EDITING_TOOLS_CROP_TOOL_TYPE_CONSTRAINT_DESCRIPTION, new_name, new_basis_width, new_basis_height, new_pivotable, new_aspect_ratio);
-#line 12224 "EditingTools.c"
+#line 12247 "EditingTools.c"
 }
 
 
@@ -12234,30 +12257,30 @@ static gboolean editing_tools_crop_tool_constraint_description_is_separator (Edi
 	_tmp1_ = self->is_pivotable;
 #line 627 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (!_tmp1_) {
-#line 12238 "EditingTools.c"
+#line 12261 "EditingTools.c"
 		gfloat _tmp2_ = 0.0F;
 #line 627 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = self->aspect_ratio;
 #line 627 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = _tmp2_ == EDITING_TOOLS_CROP_TOOL_SEPARATOR;
-#line 12244 "EditingTools.c"
+#line 12267 "EditingTools.c"
 	} else {
 #line 627 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = FALSE;
-#line 12248 "EditingTools.c"
+#line 12271 "EditingTools.c"
 	}
 #line 627 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _tmp0_;
 #line 627 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 12254 "EditingTools.c"
+#line 12277 "EditingTools.c"
 }
 
 
 static void editing_tools_crop_tool_value_constraint_description_init (GValue* value) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	value->data[0].v_pointer = NULL;
-#line 12261 "EditingTools.c"
+#line 12284 "EditingTools.c"
 }
 
 
@@ -12266,7 +12289,7 @@ static void editing_tools_crop_tool_value_constraint_description_free_value (GVa
 	if (value->data[0].v_pointer) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_crop_tool_constraint_description_unref (value->data[0].v_pointer);
-#line 12270 "EditingTools.c"
+#line 12293 "EditingTools.c"
 	}
 }
 
@@ -12276,11 +12299,11 @@ static void editing_tools_crop_tool_value_constraint_description_copy_value (con
 	if (src_value->data[0].v_pointer) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		dest_value->data[0].v_pointer = editing_tools_crop_tool_constraint_description_ref (src_value->data[0].v_pointer);
-#line 12280 "EditingTools.c"
+#line 12303 "EditingTools.c"
 	} else {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 12284 "EditingTools.c"
+#line 12307 "EditingTools.c"
 	}
 }
 
@@ -12288,37 +12311,37 @@ static void editing_tools_crop_tool_value_constraint_description_copy_value (con
 static gpointer editing_tools_crop_tool_value_constraint_description_peek_pointer (const GValue* value) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return value->data[0].v_pointer;
-#line 12292 "EditingTools.c"
+#line 12315 "EditingTools.c"
 }
 
 
 static gchar* editing_tools_crop_tool_value_constraint_description_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (collect_values[0].v_pointer) {
-#line 12299 "EditingTools.c"
+#line 12322 "EditingTools.c"
 		EditingToolsCropToolConstraintDescription* object;
 		object = collect_values[0].v_pointer;
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 12306 "EditingTools.c"
+#line 12329 "EditingTools.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 12310 "EditingTools.c"
+#line 12333 "EditingTools.c"
 		}
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = editing_tools_crop_tool_constraint_description_ref (object);
-#line 12314 "EditingTools.c"
+#line 12337 "EditingTools.c"
 	} else {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = NULL;
-#line 12318 "EditingTools.c"
+#line 12341 "EditingTools.c"
 	}
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return NULL;
-#line 12322 "EditingTools.c"
+#line 12345 "EditingTools.c"
 }
 
 
@@ -12329,25 +12352,25 @@ static gchar* editing_tools_crop_tool_value_constraint_description_lcopy_value (
 	if (!object_p) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 12333 "EditingTools.c"
+#line 12356 "EditingTools.c"
 	}
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (!value->data[0].v_pointer) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*object_p = NULL;
-#line 12339 "EditingTools.c"
+#line 12362 "EditingTools.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*object_p = value->data[0].v_pointer;
-#line 12343 "EditingTools.c"
+#line 12366 "EditingTools.c"
 	} else {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*object_p = editing_tools_crop_tool_constraint_description_ref (value->data[0].v_pointer);
-#line 12347 "EditingTools.c"
+#line 12370 "EditingTools.c"
 	}
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return NULL;
-#line 12351 "EditingTools.c"
+#line 12374 "EditingTools.c"
 }
 
 
@@ -12361,7 +12384,7 @@ static GParamSpec* editing_tools_crop_tool_param_spec_constraint_description (co
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return G_PARAM_SPEC (spec);
-#line 12365 "EditingTools.c"
+#line 12388 "EditingTools.c"
 }
 
 
@@ -12370,7 +12393,7 @@ static gpointer editing_tools_crop_tool_value_get_constraint_description (const 
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, EDITING_TOOLS_CROP_TOOL_TYPE_CONSTRAINT_DESCRIPTION), NULL);
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return value->data[0].v_pointer;
-#line 12374 "EditingTools.c"
+#line 12397 "EditingTools.c"
 }
 
 
@@ -12390,17 +12413,17 @@ static void editing_tools_crop_tool_value_set_constraint_description (GValue* va
 		value->data[0].v_pointer = v_object;
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_crop_tool_constraint_description_ref (value->data[0].v_pointer);
-#line 12394 "EditingTools.c"
+#line 12417 "EditingTools.c"
 	} else {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = NULL;
-#line 12398 "EditingTools.c"
+#line 12421 "EditingTools.c"
 	}
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (old) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_crop_tool_constraint_description_unref (old);
-#line 12404 "EditingTools.c"
+#line 12427 "EditingTools.c"
 	}
 }
 
@@ -12419,17 +12442,17 @@ static void editing_tools_crop_tool_value_take_constraint_description (GValue* v
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = v_object;
-#line 12423 "EditingTools.c"
+#line 12446 "EditingTools.c"
 	} else {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		value->data[0].v_pointer = NULL;
-#line 12427 "EditingTools.c"
+#line 12450 "EditingTools.c"
 	}
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (old) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_crop_tool_constraint_description_unref (old);
-#line 12433 "EditingTools.c"
+#line 12456 "EditingTools.c"
 	}
 }
 
@@ -12439,14 +12462,14 @@ static void editing_tools_crop_tool_constraint_description_class_init (EditingTo
 	editing_tools_crop_tool_constraint_description_parent_class = g_type_class_peek_parent (klass);
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((EditingToolsCropToolConstraintDescriptionClass *) klass)->finalize = editing_tools_crop_tool_constraint_description_finalize;
-#line 12443 "EditingTools.c"
+#line 12466 "EditingTools.c"
 }
 
 
 static void editing_tools_crop_tool_constraint_description_instance_init (EditingToolsCropToolConstraintDescription * self) {
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->ref_count = 1;
-#line 12450 "EditingTools.c"
+#line 12473 "EditingTools.c"
 }
 
 
@@ -12458,7 +12481,7 @@ static void editing_tools_crop_tool_constraint_description_finalize (EditingTool
 	g_signal_handlers_destroy (self);
 #line 608 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_free0 (self->name);
-#line 12462 "EditingTools.c"
+#line 12485 "EditingTools.c"
 }
 
 
@@ -12483,7 +12506,7 @@ static gpointer editing_tools_crop_tool_constraint_description_ref (gpointer ins
 	g_atomic_int_inc (&self->ref_count);
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return instance;
-#line 12487 "EditingTools.c"
+#line 12510 "EditingTools.c"
 }
 
 
@@ -12496,7 +12519,7 @@ static void editing_tools_crop_tool_constraint_description_unref (gpointer insta
 		EDITING_TOOLS_CROP_TOOL_CONSTRAINT_DESCRIPTION_GET_CLASS (self)->finalize (self);
 #line 607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 12500 "EditingTools.c"
+#line 12523 "EditingTools.c"
 	}
 }
 
@@ -12506,7 +12529,7 @@ static gboolean _editing_tools_crop_tool_crop_tool_window_constraint_combo_separ
 	result = editing_tools_crop_tool_crop_tool_window_constraint_combo_separator_func (model, iter);
 #line 675 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 12510 "EditingTools.c"
+#line 12533 "EditingTools.c"
 }
 
 
@@ -12697,14 +12720,14 @@ static EditingToolsCropToolCropToolWindow* editing_tools_crop_tool_crop_tool_win
 	_g_object_unref0 (combo_text_renderer);
 #line 662 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 12701 "EditingTools.c"
+#line 12724 "EditingTools.c"
 }
 
 
 static EditingToolsCropToolCropToolWindow* editing_tools_crop_tool_crop_tool_window_new (GtkWindow* container) {
 #line 662 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return editing_tools_crop_tool_crop_tool_window_construct (EDITING_TOOLS_CROP_TOOL_TYPE_CROP_TOOL_WINDOW, container);
-#line 12708 "EditingTools.c"
+#line 12731 "EditingTools.c"
 }
 
 
@@ -12745,7 +12768,7 @@ static gboolean editing_tools_crop_tool_crop_tool_window_constraint_combo_separa
 	G_IS_VALUE (&val) ? (g_value_unset (&val), NULL) : NULL;
 #line 704 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 12749 "EditingTools.c"
+#line 12772 "EditingTools.c"
 }
 
 
@@ -12754,7 +12777,7 @@ static void editing_tools_crop_tool_crop_tool_window_class_init (EditingToolsCro
 	editing_tools_crop_tool_crop_tool_window_parent_class = g_type_class_peek_parent (klass);
 #line 646 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (klass)->finalize = editing_tools_crop_tool_crop_tool_window_finalize;
-#line 12758 "EditingTools.c"
+#line 12781 "EditingTools.c"
 }
 
 
@@ -12811,7 +12834,7 @@ static void editing_tools_crop_tool_crop_tool_window_instance_init (EditingTools
 	self->normal_width = -1;
 #line 660 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->normal_height = -1;
-#line 12815 "EditingTools.c"
+#line 12838 "EditingTools.c"
 }
 
 
@@ -12841,7 +12864,7 @@ static void editing_tools_crop_tool_crop_tool_window_finalize (GObject* obj) {
 	_g_object_unref0 (self->layout);
 #line 646 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (editing_tools_crop_tool_crop_tool_window_parent_class)->finalize (obj);
-#line 12845 "EditingTools.c"
+#line 12868 "EditingTools.c"
 }
 
 
@@ -12882,7 +12905,7 @@ static void editing_tools_crop_tool_class_init (EditingToolsCropToolClass * klas
 	((EditingToolsEditingToolClass *) klass)->on_motion = editing_tools_crop_tool_real_on_motion;
 #line 586 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((EditingToolsEditingToolClass *) klass)->paint = editing_tools_crop_tool_real_paint;
-#line 12886 "EditingTools.c"
+#line 12909 "EditingTools.c"
 }
 
 
@@ -12954,7 +12977,7 @@ static void editing_tools_crop_tool_instance_init (EditingToolsCropTool * self) 
 	self->priv->custom_init_height = -1;
 #line 734 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->pre_aspect_ratio = EDITING_TOOLS_CROP_TOOL_ANY_ASPECT_RATIO;
-#line 12958 "EditingTools.c"
+#line 12981 "EditingTools.c"
 }
 
 
@@ -12980,7 +13003,7 @@ static void editing_tools_crop_tool_finalize (EditingToolsEditingTool* obj) {
 	_g_object_unref0 (self->priv->constraint_list);
 #line 586 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_crop_tool_parent_class)->finalize (obj);
-#line 12984 "EditingTools.c"
+#line 13007 "EditingTools.c"
 }
 
 
@@ -13009,7 +13032,7 @@ static void editing_tools_redeye_instance_init (EditingToolsRedeyeInstance *self
 	(*self).center = _tmp0_;
 #line 1843 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	(*self).radius = EDITING_TOOLS_REDEYE_INSTANCE_DEFAULT_RADIUS;
-#line 13013 "EditingTools.c"
+#line 13036 "EditingTools.c"
 }
 
 
@@ -13073,7 +13096,7 @@ void editing_tools_redeye_instance_to_bounds_rect (EditingToolsRedeyeInstance* i
 	*result = _result_;
 #line 1853 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 13077 "EditingTools.c"
+#line 13100 "EditingTools.c"
 }
 
 
@@ -13135,7 +13158,7 @@ void editing_tools_redeye_instance_from_bounds_rect (GdkRectangle* rect, Editing
 	*result = _result_;
 #line 1864 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 13139 "EditingTools.c"
+#line 13162 "EditingTools.c"
 }
 
 
@@ -13147,14 +13170,14 @@ EditingToolsRedeyeInstance* editing_tools_redeye_instance_dup (const EditingTool
 	memcpy (dup, self, sizeof (EditingToolsRedeyeInstance));
 #line 1832 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return dup;
-#line 13151 "EditingTools.c"
+#line 13174 "EditingTools.c"
 }
 
 
 void editing_tools_redeye_instance_free (EditingToolsRedeyeInstance* self) {
 #line 1832 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_free (self);
-#line 13158 "EditingTools.c"
+#line 13181 "EditingTools.c"
 }
 
 
@@ -13175,14 +13198,14 @@ static EditingToolsRedeyeTool* editing_tools_redeye_tool_construct (GType object
 	self = (EditingToolsRedeyeTool*) editing_tools_editing_tool_construct (object_type, "RedeyeTool");
 #line 1915 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 13179 "EditingTools.c"
+#line 13202 "EditingTools.c"
 }
 
 
 static EditingToolsRedeyeTool* editing_tools_redeye_tool_new (void) {
 #line 1915 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return editing_tools_redeye_tool_construct (EDITING_TOOLS_TYPE_REDEYE_TOOL);
-#line 13186 "EditingTools.c"
+#line 13209 "EditingTools.c"
 }
 
 
@@ -13195,7 +13218,7 @@ EditingToolsRedeyeTool* editing_tools_redeye_tool_factory (void) {
 	result = _tmp0_;
 #line 1920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 13199 "EditingTools.c"
+#line 13222 "EditingTools.c"
 }
 
 
@@ -13226,7 +13249,7 @@ gboolean editing_tools_redeye_tool_is_available (Photo* photo, Scaling* scaling)
 	_tmp5_ = _tmp4_.width;
 #line 1926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp5_ >= (EDITING_TOOLS_REDEYE_INSTANCE_MAX_RADIUS * 2)) {
-#line 13230 "EditingTools.c"
+#line 13253 "EditingTools.c"
 		Dimensions _tmp6_ = {0};
 		gint _tmp7_ = 0;
 #line 1927 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -13235,17 +13258,17 @@ gboolean editing_tools_redeye_tool_is_available (Photo* photo, Scaling* scaling)
 		_tmp7_ = _tmp6_.height;
 #line 1927 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = _tmp7_ >= (EDITING_TOOLS_REDEYE_INSTANCE_MAX_RADIUS * 2);
-#line 13239 "EditingTools.c"
+#line 13262 "EditingTools.c"
 	} else {
 #line 1926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = FALSE;
-#line 13243 "EditingTools.c"
+#line 13266 "EditingTools.c"
 	}
 #line 1926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _tmp3_;
 #line 1926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 13249 "EditingTools.c"
+#line 13272 "EditingTools.c"
 }
 
 
@@ -13322,7 +13345,7 @@ static void editing_tools_redeye_tool_new_interaction_instance (EditingToolsRede
 	*result = _result_;
 #line 1941 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return;
-#line 13326 "EditingTools.c"
+#line 13349 "EditingTools.c"
 }
 
 
@@ -13379,7 +13402,7 @@ static void editing_tools_redeye_tool_prepare_ctx (EditingToolsRedeyeTool* self,
 	_tmp9_ = self->priv->thin_white_ctx;
 #line 1951 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cairo_set_line_width (_tmp9_, (gdouble) 1);
-#line 13383 "EditingTools.c"
+#line 13406 "EditingTools.c"
 }
 
 
@@ -13452,7 +13475,7 @@ static void editing_tools_redeye_tool_draw_redeye_instance (EditingToolsRedeyeTo
 	_tmp19_ = _tmp18_.radius;
 #line 1957 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_draw_circle (_tmp10_, _tmp11_, _tmp14_, _tmp17_, _tmp19_);
-#line 13456 "EditingTools.c"
+#line 13479 "EditingTools.c"
 }
 
 
@@ -13480,7 +13503,7 @@ static gboolean editing_tools_redeye_tool_on_size_slider_adjust (EditingToolsRed
 	result = FALSE;
 #line 1967 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 13484 "EditingTools.c"
+#line 13507 "EditingTools.c"
 }
 
 
@@ -13641,7 +13664,7 @@ static void editing_tools_redeye_tool_on_apply (EditingToolsRedeyeTool* self) {
 	_command_manager_unref0 (_tmp37_);
 #line 1970 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (command);
-#line 13645 "EditingTools.c"
+#line 13668 "EditingTools.c"
 }
 
 
@@ -13676,7 +13699,7 @@ static void editing_tools_redeye_tool_on_photos_altered (EditingToolsRedeyeTool*
 	if (_tmp5_) {
 #line 2003 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 13680 "EditingTools.c"
+#line 13703 "EditingTools.c"
 	}
 	{
 		GdkPixbuf* _tmp6_ = NULL;
@@ -13708,7 +13731,7 @@ static void editing_tools_redeye_tool_on_photos_altered (EditingToolsRedeyeTool*
 		_tmp6_ = _tmp13_;
 #line 2006 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 13712 "EditingTools.c"
+#line 13735 "EditingTools.c"
 			goto __catch20_g_error;
 		}
 #line 2006 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -13721,7 +13744,7 @@ static void editing_tools_redeye_tool_on_photos_altered (EditingToolsRedeyeTool*
 		self->priv->current_pixbuf = _tmp14_;
 #line 2005 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (_tmp6_);
-#line 13725 "EditingTools.c"
+#line 13748 "EditingTools.c"
 	}
 	goto __finally20;
 	__catch20_g_error:
@@ -13745,7 +13768,7 @@ static void editing_tools_redeye_tool_on_photos_altered (EditingToolsRedeyeTool*
 		_g_error_free0 (err);
 #line 2011 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 13749 "EditingTools.c"
+#line 13772 "EditingTools.c"
 	}
 	__finally20:
 #line 2005 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -13756,13 +13779,13 @@ static void editing_tools_redeye_tool_on_photos_altered (EditingToolsRedeyeTool*
 		g_clear_error (&_inner_error_);
 #line 2005 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 13760 "EditingTools.c"
+#line 13783 "EditingTools.c"
 	}
 #line 2014 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp17_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
 #line 2014 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_repaint (_tmp17_);
-#line 13766 "EditingTools.c"
+#line 13789 "EditingTools.c"
 }
 
 
@@ -13788,7 +13811,7 @@ static void editing_tools_redeye_tool_on_close (EditingToolsRedeyeTool* self) {
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool), "applied", NULL, _tmp0_, &_tmp4_, FALSE);
 #line 2018 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp3_);
-#line 13792 "EditingTools.c"
+#line 13815 "EditingTools.c"
 }
 
 
@@ -13894,14 +13917,14 @@ static void editing_tools_redeye_tool_on_canvas_resize (EditingToolsRedeyeTool* 
 	_g_object_unref0 (self->priv->current_pixbuf);
 #line 2043 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->current_pixbuf = NULL;
-#line 13898 "EditingTools.c"
+#line 13921 "EditingTools.c"
 }
 
 
 static void _editing_tools_redeye_tool_on_photos_altered_data_collection_items_altered (DataCollection* _sender, GeeMap* items, gpointer self) {
 #line 2066 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_redeye_tool_on_photos_altered ((EditingToolsRedeyeTool*) self, items);
-#line 13905 "EditingTools.c"
+#line 13928 "EditingTools.c"
 }
 
 
@@ -14037,13 +14060,13 @@ static void editing_tools_redeye_tool_real_activate (EditingToolsEditingTool* ba
 	_tmp27_ = owner;
 #line 2065 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp27_ != NULL) {
-#line 14041 "EditingTools.c"
+#line 14064 "EditingTools.c"
 		DataCollection* _tmp28_ = NULL;
 #line 2066 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp28_ = owner;
 #line 2066 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		g_signal_connect (_tmp28_, "items-altered", (GCallback) _editing_tools_redeye_tool_on_photos_altered_data_collection_items_altered, self);
-#line 14047 "EditingTools.c"
+#line 14070 "EditingTools.c"
 	}
 #line 2068 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp29_ = canvas;
@@ -14051,7 +14074,7 @@ static void editing_tools_redeye_tool_real_activate (EditingToolsEditingTool* ba
 	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_redeye_tool_parent_class)->activate (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool), _tmp29_);
 #line 2046 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_data_collection_unref0 (owner);
-#line 14055 "EditingTools.c"
+#line 14078 "EditingTools.c"
 }
 
 
@@ -14065,7 +14088,7 @@ static void editing_tools_redeye_tool_real_deactivate (EditingToolsEditingTool* 
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
 #line 2072 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ != NULL) {
-#line 14069 "EditingTools.c"
+#line 14092 "EditingTools.c"
 		DataCollection* owner = NULL;
 		EditingToolsPhotoCanvas* _tmp1_ = NULL;
 		Photo* _tmp2_ = NULL;
@@ -14092,7 +14115,7 @@ static void editing_tools_redeye_tool_real_deactivate (EditingToolsEditingTool* 
 		_tmp6_ = owner;
 #line 2074 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp6_ != NULL) {
-#line 14096 "EditingTools.c"
+#line 14119 "EditingTools.c"
 			DataCollection* _tmp7_ = NULL;
 			guint _tmp8_ = 0U;
 #line 2075 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -14101,7 +14124,7 @@ static void editing_tools_redeye_tool_real_deactivate (EditingToolsEditingTool* 
 			g_signal_parse_name ("items-altered", TYPE_DATA_COLLECTION, &_tmp8_, NULL, FALSE);
 #line 2075 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			g_signal_handlers_disconnect_matched (_tmp7_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp8_, 0, NULL, (GCallback) _editing_tools_redeye_tool_on_photos_altered_data_collection_items_altered, self);
-#line 14105 "EditingTools.c"
+#line 14128 "EditingTools.c"
 		}
 #line 2077 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp9_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
@@ -14109,13 +14132,13 @@ static void editing_tools_redeye_tool_real_deactivate (EditingToolsEditingTool* 
 		editing_tools_redeye_tool_unbind_canvas_handlers (self, _tmp9_);
 #line 2072 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_data_collection_unref0 (owner);
-#line 14113 "EditingTools.c"
+#line 14136 "EditingTools.c"
 	}
 #line 2080 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp10_ = self->priv->redeye_tool_window;
 #line 2080 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp10_ != NULL) {
-#line 14119 "EditingTools.c"
+#line 14142 "EditingTools.c"
 		EditingToolsRedeyeToolRedeyeToolWindow* _tmp11_ = NULL;
 		EditingToolsRedeyeToolRedeyeToolWindow* _tmp12_ = NULL;
 #line 2081 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -14132,25 +14155,25 @@ static void editing_tools_redeye_tool_real_deactivate (EditingToolsEditingTool* 
 		_g_object_unref0 (self->priv->redeye_tool_window);
 #line 2084 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->redeye_tool_window = NULL;
-#line 14136 "EditingTools.c"
+#line 14159 "EditingTools.c"
 	}
 #line 2087 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_redeye_tool_parent_class)->deactivate (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 14140 "EditingTools.c"
+#line 14163 "EditingTools.c"
 }
 
 
 static void _editing_tools_redeye_tool_prepare_ctx_editing_tools_photo_canvas_new_surface (EditingToolsPhotoCanvas* _sender, cairo_t* ctx, Dimensions* dim, gpointer self) {
 #line 2091 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_redeye_tool_prepare_ctx ((EditingToolsRedeyeTool*) self, ctx, dim);
-#line 14147 "EditingTools.c"
+#line 14170 "EditingTools.c"
 }
 
 
 static void _editing_tools_redeye_tool_on_canvas_resize_editing_tools_photo_canvas_resized_scaled_pixbuf (EditingToolsPhotoCanvas* _sender, Dimensions* old_dim, GdkPixbuf* scaled, GdkRectangle* scaled_position, gpointer self) {
 #line 2092 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_redeye_tool_on_canvas_resize ((EditingToolsRedeyeTool*) self);
-#line 14154 "EditingTools.c"
+#line 14177 "EditingTools.c"
 }
 
 
@@ -14169,7 +14192,7 @@ static void editing_tools_redeye_tool_bind_canvas_handlers (EditingToolsRedeyeTo
 	_tmp1_ = canvas;
 #line 2092 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (_tmp1_, "resized-scaled-pixbuf", (GCallback) _editing_tools_redeye_tool_on_canvas_resize_editing_tools_photo_canvas_resized_scaled_pixbuf, self);
-#line 14173 "EditingTools.c"
+#line 14196 "EditingTools.c"
 }
 
 
@@ -14194,21 +14217,21 @@ static void editing_tools_redeye_tool_unbind_canvas_handlers (EditingToolsRedeye
 	g_signal_parse_name ("resized-scaled-pixbuf", EDITING_TOOLS_TYPE_PHOTO_CANVAS, &_tmp3_, NULL, FALSE);
 #line 2097 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _editing_tools_redeye_tool_on_canvas_resize_editing_tools_photo_canvas_resized_scaled_pixbuf, self);
-#line 14198 "EditingTools.c"
+#line 14221 "EditingTools.c"
 }
 
 
 static void _editing_tools_redeye_tool_on_apply_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 2101 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_redeye_tool_on_apply ((EditingToolsRedeyeTool*) self);
-#line 14205 "EditingTools.c"
+#line 14228 "EditingTools.c"
 }
 
 
 static void _editing_tools_redeye_tool_on_close_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 2102 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_redeye_tool_on_close ((EditingToolsRedeyeTool*) self);
-#line 14212 "EditingTools.c"
+#line 14235 "EditingTools.c"
 }
 
 
@@ -14217,7 +14240,7 @@ static gboolean _editing_tools_redeye_tool_on_size_slider_adjust_gtk_range_chang
 	result = editing_tools_redeye_tool_on_size_slider_adjust ((EditingToolsRedeyeTool*) self, scroll);
 #line 2103 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 14221 "EditingTools.c"
+#line 14244 "EditingTools.c"
 }
 
 
@@ -14248,7 +14271,7 @@ static void editing_tools_redeye_tool_bind_window_handlers (EditingToolsRedeyeTo
 	_tmp5_ = _tmp4_->slider;
 #line 2103 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_range_get_type (), GtkRange), "change-value", (GCallback) _editing_tools_redeye_tool_on_size_slider_adjust_gtk_range_change_value, self);
-#line 14252 "EditingTools.c"
+#line 14275 "EditingTools.c"
 }
 
 
@@ -14288,7 +14311,7 @@ static void editing_tools_redeye_tool_unbind_window_handlers (EditingToolsRedeye
 	g_signal_parse_name ("change-value", gtk_range_get_type (), &_tmp8_, NULL, FALSE);
 #line 2109 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp8_, 0, NULL, (GCallback) _editing_tools_redeye_tool_on_size_slider_adjust_gtk_range_change_value, self);
-#line 14292 "EditingTools.c"
+#line 14315 "EditingTools.c"
 }
 
 
@@ -14307,7 +14330,7 @@ static EditingToolsEditingToolWindow* editing_tools_redeye_tool_real_get_tool_wi
 	result = _tmp1_;
 #line 2113 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 14311 "EditingTools.c"
+#line 14334 "EditingTools.c"
 }
 
 
@@ -14331,7 +14354,7 @@ static void editing_tools_redeye_tool_real_paint (EditingToolsEditingTool* base,
 	_tmp1_ = self->priv->current_pixbuf;
 #line 2117 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp1_ != NULL) {
-#line 14335 "EditingTools.c"
+#line 14358 "EditingTools.c"
 		GdkPixbuf* _tmp2_ = NULL;
 		GdkPixbuf* _tmp3_ = NULL;
 #line 2117 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -14342,7 +14365,7 @@ static void editing_tools_redeye_tool_real_paint (EditingToolsEditingTool* base,
 		_g_object_unref0 (_tmp0_);
 #line 2117 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = _tmp3_;
-#line 14346 "EditingTools.c"
+#line 14369 "EditingTools.c"
 	} else {
 		EditingToolsPhotoCanvas* _tmp4_ = NULL;
 		GdkPixbuf* _tmp5_ = NULL;
@@ -14354,7 +14377,7 @@ static void editing_tools_redeye_tool_real_paint (EditingToolsEditingTool* base,
 		_g_object_unref0 (_tmp0_);
 #line 2117 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = _tmp5_;
-#line 14358 "EditingTools.c"
+#line 14381 "EditingTools.c"
 	}
 #line 2117 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
@@ -14380,7 +14403,7 @@ static void editing_tools_redeye_tool_real_paint (EditingToolsEditingTool* base,
 	editing_tools_redeye_tool_draw_redeye_instance (self, &_tmp12_);
 #line 2116 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp0_);
-#line 14384 "EditingTools.c"
+#line 14407 "EditingTools.c"
 }
 
 
@@ -14411,7 +14434,7 @@ static void editing_tools_redeye_tool_real_on_left_click (EditingToolsEditingToo
 	_tmp5_ = coord_in_rectangle (_tmp2_, _tmp3_, &_tmp4_);
 #line 2131 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp5_) {
-#line 14415 "EditingTools.c"
+#line 14438 "EditingTools.c"
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
 		EditingToolsRedeyeInstance _tmp8_ = {0};
@@ -14432,7 +14455,7 @@ static void editing_tools_redeye_tool_real_on_left_click (EditingToolsEditingToo
 		_tmp9_ = _tmp8_.center;
 #line 2135 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->reticle_move_anchor = _tmp9_;
-#line 14436 "EditingTools.c"
+#line 14459 "EditingTools.c"
 	}
 }
 
@@ -14443,7 +14466,7 @@ static void editing_tools_redeye_tool_real_on_left_released (EditingToolsEditing
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_REDEYE_TOOL, EditingToolsRedeyeTool);
 #line 2140 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->is_reticle_move_in_progress = FALSE;
-#line 14447 "EditingTools.c"
+#line 14470 "EditingTools.c"
 }
 
 
@@ -14456,7 +14479,7 @@ static void editing_tools_redeye_tool_real_on_motion (EditingToolsEditingTool* b
 	_tmp0_ = self->priv->is_reticle_move_in_progress;
 #line 2144 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_) {
-#line 14460 "EditingTools.c"
+#line 14483 "EditingTools.c"
 		GdkRectangle active_region_rect = {0};
 		EditingToolsPhotoCanvas* _tmp1_ = NULL;
 		GdkRectangle _tmp2_ = {0};
@@ -14629,7 +14652,7 @@ static void editing_tools_redeye_tool_real_on_motion (EditingToolsEditingTool* b
 		_tmp47_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
 #line 2175 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_photo_canvas_repaint (_tmp47_);
-#line 14633 "EditingTools.c"
+#line 14656 "EditingTools.c"
 	} else {
 		GdkRectangle bounds = {0};
 		EditingToolsRedeyeInstance _tmp48_ = {0};
@@ -14654,7 +14677,7 @@ static void editing_tools_redeye_tool_real_on_motion (EditingToolsEditingTool* b
 		_tmp53_ = coord_in_rectangle (_tmp50_, _tmp51_, &_tmp52_);
 #line 2180 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp53_) {
-#line 14658 "EditingTools.c"
+#line 14681 "EditingTools.c"
 			EditingToolsPhotoCanvas* _tmp54_ = NULL;
 			GdkWindow* _tmp55_ = NULL;
 			GdkWindow* _tmp56_ = NULL;
@@ -14671,7 +14694,7 @@ static void editing_tools_redeye_tool_real_on_motion (EditingToolsEditingTool* b
 			gdk_window_set_cursor (_tmp56_, _tmp57_);
 #line 2181 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_g_object_unref0 (_tmp56_);
-#line 14675 "EditingTools.c"
+#line 14698 "EditingTools.c"
 		} else {
 			EditingToolsPhotoCanvas* _tmp58_ = NULL;
 			GdkWindow* _tmp59_ = NULL;
@@ -14689,7 +14712,7 @@ static void editing_tools_redeye_tool_real_on_motion (EditingToolsEditingTool* b
 			gdk_window_set_cursor (_tmp60_, _tmp61_);
 #line 2183 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_g_object_unref0 (_tmp60_);
-#line 14693 "EditingTools.c"
+#line 14716 "EditingTools.c"
 		}
 	}
 }
@@ -14719,7 +14742,7 @@ static gboolean editing_tools_redeye_tool_real_on_keypress (EditingToolsEditingT
 	if (g_strcmp0 (_tmp4_, "KP_Enter") == 0) {
 #line 2189 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = TRUE;
-#line 14723 "EditingTools.c"
+#line 14746 "EditingTools.c"
 	} else {
 		GdkEventKey* _tmp5_ = NULL;
 		guint _tmp6_ = 0U;
@@ -14732,13 +14755,13 @@ static gboolean editing_tools_redeye_tool_real_on_keypress (EditingToolsEditingT
 		_tmp7_ = gdk_keyval_name (_tmp6_);
 #line 2190 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = g_strcmp0 (_tmp7_, "Enter") == 0;
-#line 14736 "EditingTools.c"
+#line 14759 "EditingTools.c"
 	}
 #line 2189 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp1_) {
 #line 2189 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = TRUE;
-#line 14742 "EditingTools.c"
+#line 14765 "EditingTools.c"
 	} else {
 		GdkEventKey* _tmp8_ = NULL;
 		guint _tmp9_ = 0U;
@@ -14751,7 +14774,7 @@ static gboolean editing_tools_redeye_tool_real_on_keypress (EditingToolsEditingT
 		_tmp10_ = gdk_keyval_name (_tmp9_);
 #line 2191 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = g_strcmp0 (_tmp10_, "Return") == 0;
-#line 14755 "EditingTools.c"
+#line 14778 "EditingTools.c"
 	}
 #line 2189 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_) {
@@ -14761,7 +14784,7 @@ static gboolean editing_tools_redeye_tool_real_on_keypress (EditingToolsEditingT
 		result = TRUE;
 #line 2193 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 14765 "EditingTools.c"
+#line 14788 "EditingTools.c"
 	}
 #line 2196 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = event;
@@ -14771,7 +14794,7 @@ static gboolean editing_tools_redeye_tool_real_on_keypress (EditingToolsEditingT
 	result = _tmp12_;
 #line 2196 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 14775 "EditingTools.c"
+#line 14798 "EditingTools.c"
 }
 
 
@@ -14854,14 +14877,14 @@ static EditingToolsRedeyeToolRedeyeToolWindow* editing_tools_redeye_tool_redeye_
 	_g_object_unref0 (layout);
 #line 1881 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 14858 "EditingTools.c"
+#line 14881 "EditingTools.c"
 }
 
 
 static EditingToolsRedeyeToolRedeyeToolWindow* editing_tools_redeye_tool_redeye_tool_window_new (GtkWindow* container) {
 #line 1881 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return editing_tools_redeye_tool_redeye_tool_window_construct (EDITING_TOOLS_REDEYE_TOOL_TYPE_REDEYE_TOOL_WINDOW, container);
-#line 14865 "EditingTools.c"
+#line 14888 "EditingTools.c"
 }
 
 
@@ -14872,7 +14895,7 @@ static void editing_tools_redeye_tool_redeye_tool_window_class_init (EditingTool
 	g_type_class_add_private (klass, sizeof (EditingToolsRedeyeToolRedeyeToolWindowPrivate));
 #line 1869 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (klass)->finalize = editing_tools_redeye_tool_redeye_tool_window_finalize;
-#line 14876 "EditingTools.c"
+#line 14899 "EditingTools.c"
 }
 
 
@@ -14910,7 +14933,7 @@ static void editing_tools_redeye_tool_redeye_tool_window_instance_init (EditingT
 	g_object_ref_sink (_tmp4_);
 #line 1878 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->slider = _tmp4_;
-#line 14914 "EditingTools.c"
+#line 14937 "EditingTools.c"
 }
 
 
@@ -14928,7 +14951,7 @@ static void editing_tools_redeye_tool_redeye_tool_window_finalize (GObject* obj)
 	_g_object_unref0 (self->slider);
 #line 1869 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (editing_tools_redeye_tool_redeye_tool_window_parent_class)->finalize (obj);
-#line 14932 "EditingTools.c"
+#line 14955 "EditingTools.c"
 }
 
 
@@ -14967,7 +14990,7 @@ static void editing_tools_redeye_tool_class_init (EditingToolsRedeyeToolClass * 
 	((EditingToolsEditingToolClass *) klass)->on_motion = editing_tools_redeye_tool_real_on_motion;
 #line 1868 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((EditingToolsEditingToolClass *) klass)->on_keypress = editing_tools_redeye_tool_real_on_keypress;
-#line 14971 "EditingTools.c"
+#line 14994 "EditingTools.c"
 }
 
 
@@ -14984,7 +15007,7 @@ static void editing_tools_redeye_tool_instance_init (EditingToolsRedeyeTool * se
 	self->priv->is_reticle_move_in_progress = FALSE;
 #line 1913 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->current_pixbuf = NULL;
-#line 14988 "EditingTools.c"
+#line 15011 "EditingTools.c"
 }
 
 
@@ -15006,7 +15029,7 @@ static void editing_tools_redeye_tool_finalize (EditingToolsEditingTool* obj) {
 	_g_object_unref0 (self->priv->current_pixbuf);
 #line 1868 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_redeye_tool_parent_class)->finalize (obj);
-#line 15010 "EditingTools.c"
+#line 15033 "EditingTools.c"
 }
 
 
@@ -15024,52 +15047,52 @@ GType editing_tools_redeye_tool_get_type (void) {
 
 static EditingToolsAdjustTool* editing_tools_adjust_tool_construct (GType object_type) {
 	EditingToolsAdjustTool* self = NULL;
-#line 2491 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2503 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = (EditingToolsAdjustTool*) editing_tools_editing_tool_construct (object_type, "AdjustTool");
-#line 2490 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 15032 "EditingTools.c"
+#line 15055 "EditingTools.c"
 }
 
 
 static EditingToolsAdjustTool* editing_tools_adjust_tool_new (void) {
-#line 2490 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return editing_tools_adjust_tool_construct (EDITING_TOOLS_TYPE_ADJUST_TOOL);
-#line 15039 "EditingTools.c"
+#line 15062 "EditingTools.c"
 }
 
 
 EditingToolsAdjustTool* editing_tools_adjust_tool_factory (void) {
 	EditingToolsAdjustTool* result = NULL;
 	EditingToolsAdjustTool* _tmp0_ = NULL;
-#line 2495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2507 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = editing_tools_adjust_tool_new ();
-#line 2495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2507 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _tmp0_;
-#line 2495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2507 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 15052 "EditingTools.c"
+#line 15075 "EditingTools.c"
 }
 
 
 gboolean editing_tools_adjust_tool_is_available (Photo* photo, Scaling* scaling) {
 	gboolean result = FALSE;
-#line 2498 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2510 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (IS_PHOTO (photo), FALSE);
-#line 2498 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2510 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (scaling != NULL, FALSE);
-#line 2499 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2511 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = TRUE;
-#line 2499 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2511 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 15066 "EditingTools.c"
+#line 15089 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_photos_altered_data_collection_items_altered (DataCollection* _sender, GeeMap* items, gpointer self) {
-#line 2582 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2600 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_photos_altered ((EditingToolsAdjustTool*) self, items);
-#line 15073 "EditingTools.c"
+#line 15096 "EditingTools.c"
 }
 
 
@@ -15152,458 +15175,491 @@ static void editing_tools_adjust_tool_real_activate (EditingToolsEditingTool* ba
 	GtkScale* _tmp66_ = NULL;
 	ExposureTransformation* _tmp67_ = NULL;
 	gfloat _tmp68_ = 0.0F;
-	EditingToolsPhotoCanvas* _tmp69_ = NULL;
-	EditingToolsPhotoCanvas* _tmp70_ = NULL;
-	GdkPixbuf* _tmp71_ = NULL;
-	GdkPixbuf* _tmp72_ = NULL;
-	GdkPixbuf* _tmp73_ = NULL;
-	EditingToolsPhotoCanvas* _tmp74_ = NULL;
-	GdkPixbuf* _tmp75_ = NULL;
-	GdkPixbuf* _tmp76_ = NULL;
-	gboolean _tmp77_ = FALSE;
-	GdkPixbuf* _tmp78_ = NULL;
-	gint _tmp79_ = 0;
-	gint _tmp80_ = 0;
-	gboolean _tmp84_ = FALSE;
+	ContrastTransformation* contrast_trans = NULL;
+	PixelTransformationBundle* _tmp69_ = NULL;
+	PixelTransformation* _tmp70_ = NULL;
+	PixelTransformer* _tmp71_ = NULL;
+	ContrastTransformation* _tmp72_ = NULL;
+	EditingToolsAdjustToolAdjustToolWindow* _tmp73_ = NULL;
+	GtkHScale* _tmp74_ = NULL;
+	ContrastTransformation* _tmp75_ = NULL;
+	gfloat _tmp76_ = 0.0F;
+	EditingToolsPhotoCanvas* _tmp77_ = NULL;
+	EditingToolsPhotoCanvas* _tmp78_ = NULL;
+	GdkPixbuf* _tmp79_ = NULL;
+	GdkPixbuf* _tmp80_ = NULL;
+	GdkPixbuf* _tmp81_ = NULL;
+	EditingToolsPhotoCanvas* _tmp82_ = NULL;
+	GdkPixbuf* _tmp83_ = NULL;
+	GdkPixbuf* _tmp84_ = NULL;
 	gboolean _tmp85_ = FALSE;
 	GdkPixbuf* _tmp86_ = NULL;
 	gint _tmp87_ = 0;
 	gint _tmp88_ = 0;
-	GdkPixbuf* _tmp89_ = NULL;
-	gint _tmp90_ = 0;
-	gint _tmp91_ = 0;
-	GdkPixbuf* _tmp108_ = NULL;
-	GdkPixbuf* _tmp109_ = NULL;
+	gboolean _tmp92_ = FALSE;
+	gboolean _tmp93_ = FALSE;
+	GdkPixbuf* _tmp94_ = NULL;
+	gint _tmp95_ = 0;
+	gint _tmp96_ = 0;
+	GdkPixbuf* _tmp97_ = NULL;
+	gint _tmp98_ = 0;
+	gint _tmp99_ = 0;
+	GdkPixbuf* _tmp116_ = NULL;
+	GdkPixbuf* _tmp117_ = NULL;
 	DataCollection* owner = NULL;
-	EditingToolsPhotoCanvas* _tmp110_ = NULL;
-	Photo* _tmp111_ = NULL;
-	Photo* _tmp112_ = NULL;
-	DataCollection* _tmp113_ = NULL;
-	DataCollection* _tmp114_ = NULL;
-	DataCollection* _tmp115_ = NULL;
-	EditingToolsPhotoCanvas* _tmp117_ = NULL;
-#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	EditingToolsPhotoCanvas* _tmp118_ = NULL;
+	Photo* _tmp119_ = NULL;
+	Photo* _tmp120_ = NULL;
+	DataCollection* _tmp121_ = NULL;
+	DataCollection* _tmp122_ = NULL;
+	DataCollection* _tmp123_ = NULL;
+	EditingToolsPhotoCanvas* _tmp125_ = NULL;
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_ADJUST_TOOL, EditingToolsAdjustTool);
-#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_PHOTO_CANVAS (canvas));
-#line 2503 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = canvas;
-#line 2503 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = editing_tools_photo_canvas_get_container (_tmp0_);
-#line 2503 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = _tmp1_;
-#line 2503 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = editing_tools_adjust_tool_adjust_tool_window_new (_tmp2_);
-#line 2503 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_object_ref_sink (_tmp3_);
-#line 2503 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->priv->adjust_tool_window);
-#line 2503 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->adjust_tool_window = _tmp3_;
-#line 2503 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp2_);
-#line 2505 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2517 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = canvas;
-#line 2505 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2517 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = editing_tools_photo_canvas_get_photo (_tmp4_);
-#line 2505 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2517 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	photo = _tmp5_;
-#line 2506 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2518 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = photo;
-#line 2506 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2518 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = photo_get_color_adjustments (_tmp6_);
-#line 2506 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2518 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_bundle_unref0 (self->priv->transformations);
-#line 2506 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2518 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->transformations = _tmp7_;
-#line 2507 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2519 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp8_ = self->priv->transformations;
-#line 2507 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2519 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp9_ = pixel_transformation_bundle_generate_transformer (_tmp8_);
-#line 2507 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2519 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformer_unref0 (self->priv->transformer);
-#line 2507 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2519 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->transformer = _tmp9_;
-#line 2510 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2522 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp10_ = pixel_transformer_new ();
-#line 2510 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2522 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformer_unref0 (self->priv->histogram_transformer);
-#line 2510 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2522 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->histogram_transformer = _tmp10_;
-#line 2513 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2525 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = self->priv->transformations;
-#line 2513 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2525 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp12_ = pixel_transformation_bundle_get_transformation (_tmp11_, PIXEL_TRANSFORMATION_TYPE_TONE_EXPANSION);
-#line 2513 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2525 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	expansion_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_EXPANSION_TRANSFORMATION, ExpansionTransformation);
-#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2527 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp13_ = self->priv->adjust_tool_window;
-#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2527 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp14_ = _tmp13_->histogram_manipulator;
-#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2527 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp15_ = expansion_trans;
-#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2527 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp16_ = expansion_transformation_get_black_point (_tmp15_);
-#line 2515 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2527 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	rgb_histogram_manipulator_set_left_nub_position (_tmp14_, _tmp16_);
-#line 2517 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2529 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp17_ = self->priv->adjust_tool_window;
-#line 2517 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2529 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp18_ = _tmp17_->histogram_manipulator;
-#line 2517 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2529 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp19_ = expansion_trans;
-#line 2517 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2529 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp20_ = expansion_transformation_get_white_point (_tmp19_);
-#line 2517 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2529 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	rgb_histogram_manipulator_set_right_nub_position (_tmp18_, _tmp20_);
-#line 2521 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2533 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp21_ = self->priv->transformations;
-#line 2521 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2533 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp22_ = pixel_transformation_bundle_get_transformation (_tmp21_, PIXEL_TRANSFORMATION_TYPE_SHADOWS);
-#line 2521 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2533 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	shadows_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, TYPE_SHADOW_DETAIL_TRANSFORMATION, ShadowDetailTransformation);
-#line 2523 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2535 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp23_ = self->priv->histogram_transformer;
-#line 2523 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2535 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp24_ = shadows_trans;
-#line 2523 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2535 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	pixel_transformer_attach_transformation (_tmp23_, G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 2524 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2536 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp25_ = self->priv->adjust_tool_window;
-#line 2524 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2536 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp26_ = _tmp25_->shadows_slider;
-#line 2524 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2536 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp27_ = shadows_trans;
-#line 2524 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2536 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp28_ = shadow_detail_transformation_get_parameter (_tmp27_);
-#line 2524 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2536 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_range_get_type (), GtkRange), (gdouble) _tmp28_);
-#line 2527 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2539 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp29_ = self->priv->transformations;
-#line 2527 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2539 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp30_ = pixel_transformation_bundle_get_transformation (_tmp29_, PIXEL_TRANSFORMATION_TYPE_HIGHLIGHTS);
-#line 2527 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2539 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	highlights_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, TYPE_HIGHLIGHT_DETAIL_TRANSFORMATION, HighlightDetailTransformation);
-#line 2529 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2541 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp31_ = self->priv->histogram_transformer;
-#line 2529 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2541 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp32_ = highlights_trans;
-#line 2529 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2541 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	pixel_transformer_attach_transformation (_tmp31_, G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 2530 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2542 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp33_ = self->priv->adjust_tool_window;
-#line 2530 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2542 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp34_ = _tmp33_->highlights_slider;
-#line 2530 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2542 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp35_ = highlights_trans;
-#line 2530 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2542 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp36_ = highlight_detail_transformation_get_parameter (_tmp35_);
-#line 2530 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2542 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, gtk_range_get_type (), GtkRange), (gdouble) _tmp36_);
-#line 2533 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2545 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp37_ = self->priv->transformations;
-#line 2533 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2545 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp38_ = pixel_transformation_bundle_get_transformation (_tmp37_, PIXEL_TRANSFORMATION_TYPE_TEMPERATURE);
-#line 2533 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2545 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	temp_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, TYPE_TEMPERATURE_TRANSFORMATION, TemperatureTransformation);
-#line 2535 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2547 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp39_ = self->priv->histogram_transformer;
-#line 2535 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2547 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp40_ = temp_trans;
-#line 2535 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2547 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	pixel_transformer_attach_transformation (_tmp39_, G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 2536 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2548 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp41_ = self->priv->adjust_tool_window;
-#line 2536 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2548 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp42_ = _tmp41_->temperature_slider;
-#line 2536 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2548 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp43_ = temp_trans;
-#line 2536 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2548 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp44_ = temperature_transformation_get_parameter (_tmp43_);
-#line 2536 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2548 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, gtk_range_get_type (), GtkRange), (gdouble) _tmp44_);
-#line 2538 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2550 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp45_ = self->priv->transformations;
-#line 2538 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2550 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp46_ = pixel_transformation_bundle_get_transformation (_tmp45_, PIXEL_TRANSFORMATION_TYPE_TINT);
-#line 2538 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2550 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	tint_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, TYPE_TINT_TRANSFORMATION, TintTransformation);
-#line 2540 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2552 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp47_ = self->priv->histogram_transformer;
-#line 2540 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2552 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp48_ = tint_trans;
-#line 2540 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2552 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	pixel_transformer_attach_transformation (_tmp47_, G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 2541 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp49_ = self->priv->adjust_tool_window;
-#line 2541 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp50_ = _tmp49_->tint_slider;
-#line 2541 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp51_ = tint_trans;
-#line 2541 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp52_ = tint_transformation_get_parameter (_tmp51_);
-#line 2541 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, gtk_range_get_type (), GtkRange), (gdouble) _tmp52_);
-#line 2544 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp53_ = self->priv->transformations;
-#line 2544 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp54_ = pixel_transformation_bundle_get_transformation (_tmp53_, PIXEL_TRANSFORMATION_TYPE_SATURATION);
-#line 2544 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	sat_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp54_, TYPE_SATURATION_TRANSFORMATION, SaturationTransformation);
-#line 2546 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp55_ = self->priv->histogram_transformer;
-#line 2546 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp56_ = sat_trans;
-#line 2546 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	pixel_transformer_attach_transformation (_tmp55_, G_TYPE_CHECK_INSTANCE_CAST (_tmp56_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 2547 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp57_ = self->priv->adjust_tool_window;
-#line 2547 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp58_ = _tmp57_->saturation_slider;
-#line 2547 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp59_ = sat_trans;
-#line 2547 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp60_ = saturation_transformation_get_parameter (_tmp59_);
-#line 2547 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp58_, gtk_range_get_type (), GtkRange), (gdouble) _tmp60_);
-#line 2550 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp61_ = self->priv->transformations;
-#line 2550 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp62_ = pixel_transformation_bundle_get_transformation (_tmp61_, PIXEL_TRANSFORMATION_TYPE_EXPOSURE);
-#line 2550 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	exposure_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp62_, TYPE_EXPOSURE_TRANSFORMATION, ExposureTransformation);
-#line 2552 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp63_ = self->priv->histogram_transformer;
-#line 2552 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp64_ = exposure_trans;
-#line 2552 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	pixel_transformer_attach_transformation (_tmp63_, G_TYPE_CHECK_INSTANCE_CAST (_tmp64_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
-#line 2553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp65_ = self->priv->adjust_tool_window;
-#line 2553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp66_ = _tmp65_->exposure_slider;
-#line 2553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp67_ = exposure_trans;
-#line 2553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp68_ = exposure_transformation_get_parameter (_tmp67_);
-#line 2553 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp66_, gtk_range_get_type (), GtkRange), (gdouble) _tmp68_);
-#line 2555 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp69_ = canvas;
-#line 2555 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	editing_tools_adjust_tool_bind_canvas_handlers (self, _tmp69_);
 #line 2556 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp53_ = self->priv->transformations;
+#line 2556 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp54_ = pixel_transformation_bundle_get_transformation (_tmp53_, PIXEL_TRANSFORMATION_TYPE_SATURATION);
+#line 2556 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	sat_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp54_, TYPE_SATURATION_TRANSFORMATION, SaturationTransformation);
+#line 2558 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp55_ = self->priv->histogram_transformer;
+#line 2558 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp56_ = sat_trans;
+#line 2558 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	pixel_transformer_attach_transformation (_tmp55_, G_TYPE_CHECK_INSTANCE_CAST (_tmp56_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
+#line 2559 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp57_ = self->priv->adjust_tool_window;
+#line 2559 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp58_ = _tmp57_->saturation_slider;
+#line 2559 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp59_ = sat_trans;
+#line 2559 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp60_ = saturation_transformation_get_parameter (_tmp59_);
+#line 2559 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp58_, gtk_range_get_type (), GtkRange), (gdouble) _tmp60_);
+#line 2562 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp61_ = self->priv->transformations;
+#line 2562 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp62_ = pixel_transformation_bundle_get_transformation (_tmp61_, PIXEL_TRANSFORMATION_TYPE_EXPOSURE);
+#line 2562 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	exposure_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp62_, TYPE_EXPOSURE_TRANSFORMATION, ExposureTransformation);
+#line 2564 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp63_ = self->priv->histogram_transformer;
+#line 2564 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp64_ = exposure_trans;
+#line 2564 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	pixel_transformer_attach_transformation (_tmp63_, G_TYPE_CHECK_INSTANCE_CAST (_tmp64_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
+#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp65_ = self->priv->adjust_tool_window;
+#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp66_ = _tmp65_->exposure_slider;
+#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp67_ = exposure_trans;
+#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp68_ = exposure_transformation_get_parameter (_tmp67_);
+#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp66_, gtk_range_get_type (), GtkRange), (gdouble) _tmp68_);
+#line 2568 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp69_ = self->priv->transformations;
+#line 2568 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp70_ = pixel_transformation_bundle_get_transformation (_tmp69_, PIXEL_TRANSFORMATION_TYPE_CONTRAST);
+#line 2568 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	contrast_trans = G_TYPE_CHECK_INSTANCE_CAST (_tmp70_, TYPE_CONTRAST_TRANSFORMATION, ContrastTransformation);
+#line 2570 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp71_ = self->priv->histogram_transformer;
+#line 2570 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp72_ = contrast_trans;
+#line 2570 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	pixel_transformer_attach_transformation (_tmp71_, G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, TYPE_PIXEL_TRANSFORMATION, PixelTransformation));
+#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp73_ = self->priv->adjust_tool_window;
+#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp74_ = _tmp73_->contrast_slider;
+#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp75_ = contrast_trans;
+#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp76_ = contrast_transformation_get_parameter (_tmp75_);
+#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp74_, gtk_range_get_type (), GtkRange), (gdouble) _tmp76_);
+#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp77_ = canvas;
+#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	editing_tools_adjust_tool_bind_canvas_handlers (self, _tmp77_);
+#line 2574 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_bind_window_handlers (self);
-#line 2558 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp70_ = canvas;
-#line 2558 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp71_ = editing_tools_photo_canvas_get_scaled_pixbuf (_tmp70_);
-#line 2558 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp72_ = _tmp71_;
-#line 2558 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp73_ = gdk_pixbuf_copy (_tmp72_);
-#line 2558 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (self->priv->draw_to_pixbuf);
-#line 2558 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->draw_to_pixbuf = _tmp73_;
-#line 2558 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (_tmp72_);
-#line 2559 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp74_ = canvas;
-#line 2559 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp75_ = editing_tools_photo_canvas_get_scaled_pixbuf (_tmp74_);
-#line 2559 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp76_ = _tmp75_;
-#line 2559 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	editing_tools_adjust_tool_init_fp_pixel_cache (self, _tmp76_);
-#line 2559 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (_tmp76_);
-#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp78_ = self->priv->draw_to_pixbuf;
-#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp79_ = gdk_pixbuf_get_width (_tmp78_);
-#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2576 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp78_ = canvas;
+#line 2576 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp79_ = editing_tools_photo_canvas_get_scaled_pixbuf (_tmp78_);
+#line 2576 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp80_ = _tmp79_;
-#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	if (_tmp80_ == 1) {
-#line 15430 "EditingTools.c"
-		GdkPixbuf* _tmp81_ = NULL;
-		gint _tmp82_ = 0;
-		gint _tmp83_ = 0;
-#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp81_ = self->priv->draw_to_pixbuf;
-#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp82_ = gdk_pixbuf_get_height (_tmp81_);
-#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp83_ = _tmp82_;
-#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp77_ = _tmp83_ == 1;
-#line 15442 "EditingTools.c"
-	} else {
-#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp77_ = FALSE;
-#line 15446 "EditingTools.c"
-	}
-#line 2565 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	if (_tmp77_) {
-#line 2566 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		self->priv->disable_histogram_refresh = TRUE;
-#line 15452 "EditingTools.c"
-	}
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2576 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp81_ = gdk_pixbuf_copy (_tmp80_);
+#line 2576 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_g_object_unref0 (self->priv->draw_to_pixbuf);
+#line 2576 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->draw_to_pixbuf = _tmp81_;
+#line 2576 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_g_object_unref0 (_tmp80_);
+#line 2577 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp82_ = canvas;
+#line 2577 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp83_ = editing_tools_photo_canvas_get_scaled_pixbuf (_tmp82_);
+#line 2577 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp84_ = _tmp83_;
+#line 2577 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	editing_tools_adjust_tool_init_fp_pixel_cache (self, _tmp84_);
+#line 2577 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_g_object_unref0 (_tmp84_);
+#line 2583 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp86_ = self->priv->draw_to_pixbuf;
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2583 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp87_ = gdk_pixbuf_get_width (_tmp86_);
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2583 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp88_ = _tmp87_;
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp89_ = self->priv->draw_to_pixbuf;
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp90_ = gdk_pixbuf_get_height (_tmp89_);
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp91_ = _tmp90_;
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	if ((_tmp88_ * _tmp91_) > 8192) {
-#line 15468 "EditingTools.c"
-		GdkPixbuf* _tmp92_ = NULL;
-		gint _tmp93_ = 0;
-		gint _tmp94_ = 0;
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp92_ = self->priv->draw_to_pixbuf;
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp93_ = gdk_pixbuf_get_width (_tmp92_);
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp94_ = _tmp93_;
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp85_ = _tmp94_ > 1;
-#line 15480 "EditingTools.c"
-	} else {
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp85_ = FALSE;
+#line 2583 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	if (_tmp88_ == 1) {
 #line 15484 "EditingTools.c"
-	}
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	if (_tmp85_) {
-#line 15488 "EditingTools.c"
-		GdkPixbuf* _tmp95_ = NULL;
-		gint _tmp96_ = 0;
-		gint _tmp97_ = 0;
-#line 2572 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp95_ = self->priv->draw_to_pixbuf;
-#line 2572 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp96_ = gdk_pixbuf_get_height (_tmp95_);
-#line 2572 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp97_ = _tmp96_;
-#line 2572 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp84_ = _tmp97_ > 1;
+		GdkPixbuf* _tmp89_ = NULL;
+		gint _tmp90_ = 0;
+		gint _tmp91_ = 0;
+#line 2583 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp89_ = self->priv->draw_to_pixbuf;
+#line 2583 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp90_ = gdk_pixbuf_get_height (_tmp89_);
+#line 2583 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp91_ = _tmp90_;
+#line 2583 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp85_ = _tmp91_ == 1;
+#line 15496 "EditingTools.c"
+	} else {
+#line 2583 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp85_ = FALSE;
 #line 15500 "EditingTools.c"
-	} else {
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp84_ = FALSE;
-#line 15504 "EditingTools.c"
 	}
-#line 2571 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	if (_tmp84_) {
-#line 15508 "EditingTools.c"
-		GdkPixbuf* _tmp98_ = NULL;
-		GdkPixbuf* _tmp99_ = NULL;
-		gint _tmp100_ = 0;
+#line 2583 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	if (_tmp85_) {
+#line 2584 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		self->priv->disable_histogram_refresh = TRUE;
+#line 15506 "EditingTools.c"
+	}
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp94_ = self->priv->draw_to_pixbuf;
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp95_ = gdk_pixbuf_get_width (_tmp94_);
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp96_ = _tmp95_;
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp97_ = self->priv->draw_to_pixbuf;
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp98_ = gdk_pixbuf_get_height (_tmp97_);
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp99_ = _tmp98_;
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	if ((_tmp96_ * _tmp99_) > 8192) {
+#line 15522 "EditingTools.c"
+		GdkPixbuf* _tmp100_ = NULL;
 		gint _tmp101_ = 0;
-		GdkPixbuf* _tmp102_ = NULL;
-		gint _tmp103_ = 0;
-		gint _tmp104_ = 0;
-		GdkPixbuf* _tmp105_ = NULL;
-#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp98_ = self->priv->draw_to_pixbuf;
-#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp99_ = self->priv->draw_to_pixbuf;
-#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp100_ = gdk_pixbuf_get_width (_tmp99_);
-#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp101_ = _tmp100_;
-#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp102_ = self->priv->draw_to_pixbuf;
-#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp103_ = gdk_pixbuf_get_height (_tmp102_);
-#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp104_ = _tmp103_;
-#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp105_ = gdk_pixbuf_scale_simple (_tmp98_, _tmp101_ / 2, _tmp104_ / 2, GDK_INTERP_HYPER);
-#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_g_object_unref0 (self->priv->histogram_pixbuf);
-#line 2573 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		self->priv->histogram_pixbuf = _tmp105_;
-#line 15537 "EditingTools.c"
+		gint _tmp102_ = 0;
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp100_ = self->priv->draw_to_pixbuf;
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp101_ = gdk_pixbuf_get_width (_tmp100_);
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp102_ = _tmp101_;
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp93_ = _tmp102_ > 1;
+#line 15534 "EditingTools.c"
 	} else {
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp93_ = FALSE;
+#line 15538 "EditingTools.c"
+	}
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	if (_tmp93_) {
+#line 15542 "EditingTools.c"
+		GdkPixbuf* _tmp103_ = NULL;
+		gint _tmp104_ = 0;
+		gint _tmp105_ = 0;
+#line 2590 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp103_ = self->priv->draw_to_pixbuf;
+#line 2590 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp104_ = gdk_pixbuf_get_height (_tmp103_);
+#line 2590 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp105_ = _tmp104_;
+#line 2590 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp92_ = _tmp105_ > 1;
+#line 15554 "EditingTools.c"
+	} else {
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp92_ = FALSE;
+#line 15558 "EditingTools.c"
+	}
+#line 2589 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	if (_tmp92_) {
+#line 15562 "EditingTools.c"
 		GdkPixbuf* _tmp106_ = NULL;
 		GdkPixbuf* _tmp107_ = NULL;
-#line 2576 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		gint _tmp108_ = 0;
+		gint _tmp109_ = 0;
+		GdkPixbuf* _tmp110_ = NULL;
+		gint _tmp111_ = 0;
+		gint _tmp112_ = 0;
+		GdkPixbuf* _tmp113_ = NULL;
+#line 2591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp106_ = self->priv->draw_to_pixbuf;
-#line 2576 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp107_ = gdk_pixbuf_copy (_tmp106_);
-#line 2576 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp107_ = self->priv->draw_to_pixbuf;
+#line 2591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp108_ = gdk_pixbuf_get_width (_tmp107_);
+#line 2591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp109_ = _tmp108_;
+#line 2591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp110_ = self->priv->draw_to_pixbuf;
+#line 2591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp111_ = gdk_pixbuf_get_height (_tmp110_);
+#line 2591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp112_ = _tmp111_;
+#line 2591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp113_ = gdk_pixbuf_scale_simple (_tmp106_, _tmp109_ / 2, _tmp112_ / 2, GDK_INTERP_HYPER);
+#line 2591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (self->priv->histogram_pixbuf);
-#line 2576 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		self->priv->histogram_pixbuf = _tmp107_;
-#line 15549 "EditingTools.c"
+#line 2591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		self->priv->histogram_pixbuf = _tmp113_;
+#line 15591 "EditingTools.c"
+	} else {
+		GdkPixbuf* _tmp114_ = NULL;
+		GdkPixbuf* _tmp115_ = NULL;
+#line 2594 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp114_ = self->priv->draw_to_pixbuf;
+#line 2594 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp115_ = gdk_pixbuf_copy (_tmp114_);
+#line 2594 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_g_object_unref0 (self->priv->histogram_pixbuf);
+#line 2594 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		self->priv->histogram_pixbuf = _tmp115_;
+#line 15603 "EditingTools.c"
 	}
-#line 2578 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp108_ = self->priv->histogram_pixbuf;
-#line 2578 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp109_ = gdk_pixbuf_copy (_tmp108_);
-#line 2578 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2596 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp116_ = self->priv->histogram_pixbuf;
+#line 2596 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp117_ = gdk_pixbuf_copy (_tmp116_);
+#line 2596 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->priv->virgin_histogram_pixbuf);
-#line 2578 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->virgin_histogram_pixbuf = _tmp109_;
-#line 2580 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp110_ = canvas;
-#line 2580 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp111_ = editing_tools_photo_canvas_get_photo (_tmp110_);
-#line 2580 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp112_ = _tmp111_;
-#line 2580 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp113_ = data_object_get_membership (G_TYPE_CHECK_INSTANCE_CAST (_tmp112_, TYPE_DATA_OBJECT, DataObject));
-#line 2580 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp114_ = _tmp113_;
-#line 2580 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (_tmp112_);
-#line 2580 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	owner = _tmp114_;
-#line 2581 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp115_ = owner;
-#line 2581 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	if (_tmp115_ != NULL) {
-#line 15577 "EditingTools.c"
-		DataCollection* _tmp116_ = NULL;
-#line 2582 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		_tmp116_ = owner;
-#line 2582 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		g_signal_connect (_tmp116_, "items-altered", (GCallback) _editing_tools_adjust_tool_on_photos_altered_data_collection_items_altered, self);
-#line 15583 "EditingTools.c"
+#line 2596 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->virgin_histogram_pixbuf = _tmp117_;
+#line 2598 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp118_ = canvas;
+#line 2598 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp119_ = editing_tools_photo_canvas_get_photo (_tmp118_);
+#line 2598 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp120_ = _tmp119_;
+#line 2598 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp121_ = data_object_get_membership (G_TYPE_CHECK_INSTANCE_CAST (_tmp120_, TYPE_DATA_OBJECT, DataObject));
+#line 2598 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp122_ = _tmp121_;
+#line 2598 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_g_object_unref0 (_tmp120_);
+#line 2598 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	owner = _tmp122_;
+#line 2599 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp123_ = owner;
+#line 2599 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	if (_tmp123_ != NULL) {
+#line 15631 "EditingTools.c"
+		DataCollection* _tmp124_ = NULL;
+#line 2600 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp124_ = owner;
+#line 2600 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		g_signal_connect (_tmp124_, "items-altered", (GCallback) _editing_tools_adjust_tool_on_photos_altered_data_collection_items_altered, self);
+#line 15637 "EditingTools.c"
 	}
-#line 2584 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp117_ = canvas;
-#line 2584 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_adjust_tool_parent_class)->activate (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool), _tmp117_);
-#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2602 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp125_ = canvas;
+#line 2602 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_adjust_tool_parent_class)->activate (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool), _tmp125_);
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_data_collection_unref0 (owner);
-#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_pixel_transformation_unref0 (contrast_trans);
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (exposure_trans);
-#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (sat_trans);
-#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (tint_trans);
-#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (temp_trans);
-#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (highlights_trans);
-#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (shadows_trans);
-#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (expansion_trans);
-#line 2502 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2514 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (photo);
-#line 15607 "EditingTools.c"
+#line 15663 "EditingTools.c"
 }
 
 
@@ -15612,17 +15668,17 @@ static EditingToolsEditingToolWindow* editing_tools_adjust_tool_real_get_tool_wi
 	EditingToolsEditingToolWindow* result = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp0_ = NULL;
 	EditingToolsEditingToolWindow* _tmp1_ = NULL;
-#line 2587 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2605 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_ADJUST_TOOL, EditingToolsAdjustTool);
-#line 2588 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2606 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->adjust_tool_window;
-#line 2588 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2606 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, EDITING_TOOLS_TYPE_EDITING_TOOL_WINDOW, EditingToolsEditingToolWindow));
-#line 2588 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2606 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _tmp1_;
-#line 2588 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2606 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 15626 "EditingTools.c"
+#line 15682 "EditingTools.c"
 }
 
 
@@ -15630,13 +15686,13 @@ static void editing_tools_adjust_tool_real_deactivate (EditingToolsEditingTool* 
 	EditingToolsAdjustTool * self;
 	EditingToolsPhotoCanvas* _tmp0_ = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp10_ = NULL;
-#line 2591 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2609 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_ADJUST_TOOL, EditingToolsAdjustTool);
-#line 2592 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2610 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2592 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2610 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ != NULL) {
-#line 15640 "EditingTools.c"
+#line 15696 "EditingTools.c"
 		DataCollection* owner = NULL;
 		EditingToolsPhotoCanvas* _tmp1_ = NULL;
 		Photo* _tmp2_ = NULL;
@@ -15645,81 +15701,81 @@ static void editing_tools_adjust_tool_real_deactivate (EditingToolsEditingTool* 
 		DataCollection* _tmp5_ = NULL;
 		DataCollection* _tmp6_ = NULL;
 		EditingToolsPhotoCanvas* _tmp9_ = NULL;
-#line 2593 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2611 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2593 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2611 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = editing_tools_photo_canvas_get_photo (_tmp1_);
-#line 2593 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2611 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = _tmp2_;
-#line 2593 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2611 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp4_ = data_object_get_membership (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_DATA_OBJECT, DataObject));
-#line 2593 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2611 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp5_ = _tmp4_;
-#line 2593 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2611 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (_tmp3_);
-#line 2593 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2611 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		owner = _tmp5_;
-#line 2594 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2612 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp6_ = owner;
-#line 2594 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2612 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (_tmp6_ != NULL) {
-#line 15667 "EditingTools.c"
+#line 15723 "EditingTools.c"
 			DataCollection* _tmp7_ = NULL;
 			guint _tmp8_ = 0U;
-#line 2595 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2613 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp7_ = owner;
-#line 2595 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2613 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			g_signal_parse_name ("items-altered", TYPE_DATA_COLLECTION, &_tmp8_, NULL, FALSE);
-#line 2595 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2613 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			g_signal_handlers_disconnect_matched (_tmp7_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp8_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_photos_altered_data_collection_items_altered, self);
-#line 15676 "EditingTools.c"
+#line 15732 "EditingTools.c"
 		}
-#line 2597 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2615 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp9_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2597 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2615 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_adjust_tool_unbind_canvas_handlers (self, _tmp9_);
-#line 2592 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2610 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_data_collection_unref0 (owner);
-#line 15684 "EditingTools.c"
+#line 15740 "EditingTools.c"
 	}
-#line 2600 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2618 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp10_ = self->priv->adjust_tool_window;
-#line 2600 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2618 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp10_ != NULL) {
-#line 15690 "EditingTools.c"
+#line 15746 "EditingTools.c"
 		EditingToolsAdjustToolAdjustToolWindow* _tmp11_ = NULL;
 		EditingToolsAdjustToolAdjustToolWindow* _tmp12_ = NULL;
-#line 2601 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2619 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_adjust_tool_unbind_window_handlers (self);
-#line 2602 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2620 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp11_ = self->priv->adjust_tool_window;
-#line 2602 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2620 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget));
-#line 2603 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2621 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp12_ = self->priv->adjust_tool_window;
-#line 2603 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2621 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget));
-#line 2604 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2622 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (self->priv->adjust_tool_window);
-#line 2604 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2622 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->adjust_tool_window = NULL;
-#line 15707 "EditingTools.c"
+#line 15763 "EditingTools.c"
 	}
-#line 2607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2625 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->priv->draw_to_pixbuf);
-#line 2607 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2625 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->draw_to_pixbuf = NULL;
-#line 2608 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2626 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->fp_pixel_cache = (g_free (self->priv->fp_pixel_cache), NULL);
-#line 2608 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2626 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->fp_pixel_cache = NULL;
-#line 2608 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2626 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->fp_pixel_cache_length1 = 0;
-#line 2608 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2626 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->_fp_pixel_cache_size_ = self->priv->fp_pixel_cache_length1;
-#line 2610 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2628 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_adjust_tool_parent_class)->deactivate (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 15723 "EditingTools.c"
+#line 15779 "EditingTools.c"
 }
 
 
@@ -15728,61 +15784,61 @@ static void editing_tools_adjust_tool_real_paint (EditingToolsEditingTool* base,
 	gboolean _tmp0_ = FALSE;
 	EditingToolsPhotoCanvas* _tmp10_ = NULL;
 	GdkPixbuf* _tmp11_ = NULL;
-#line 2613 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2631 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_ADJUST_TOOL, EditingToolsAdjustTool);
-#line 2613 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2631 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (ctx != NULL);
-#line 2614 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2632 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->suppress_effect_redraw;
-#line 2614 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2632 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (!_tmp0_) {
-#line 15740 "EditingTools.c"
+#line 15796 "EditingTools.c"
 		PixelTransformer* _tmp1_ = NULL;
 		GdkPixbuf* _tmp2_ = NULL;
 		PixelTransformer* _tmp3_ = NULL;
 		GdkPixbuf* _tmp4_ = NULL;
 		GdkPixbuf* _tmp5_ = NULL;
 		gboolean _tmp6_ = FALSE;
-#line 2615 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2633 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = self->priv->transformer;
-#line 2615 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2633 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = self->priv->draw_to_pixbuf;
-#line 2615 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2633 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		pixel_transformer_transform_from_fp (_tmp1_, &self->priv->fp_pixel_cache, &self->priv->fp_pixel_cache_length1, _tmp2_);
-#line 2616 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2634 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = self->priv->histogram_transformer;
-#line 2616 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2634 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp4_ = self->priv->virgin_histogram_pixbuf;
-#line 2616 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2634 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp5_ = self->priv->histogram_pixbuf;
-#line 2616 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2634 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		pixel_transformer_transform_to_other_pixbuf (_tmp3_, _tmp4_, _tmp5_, NULL);
-#line 2618 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2636 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp6_ = self->priv->disable_histogram_refresh;
-#line 2618 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2636 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (!_tmp6_) {
-#line 15765 "EditingTools.c"
+#line 15821 "EditingTools.c"
 			EditingToolsAdjustToolAdjustToolWindow* _tmp7_ = NULL;
 			RGBHistogramManipulator* _tmp8_ = NULL;
 			GdkPixbuf* _tmp9_ = NULL;
-#line 2619 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2637 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp7_ = self->priv->adjust_tool_window;
-#line 2619 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2637 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp8_ = _tmp7_->histogram_manipulator;
-#line 2619 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2637 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp9_ = self->priv->histogram_pixbuf;
-#line 2619 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2637 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			rgb_histogram_manipulator_update_histogram (_tmp8_, _tmp9_);
-#line 15777 "EditingTools.c"
+#line 15833 "EditingTools.c"
 		}
 	}
-#line 2622 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2640 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp10_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2622 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2640 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = self->priv->draw_to_pixbuf;
-#line 2622 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2640 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_paint_pixbuf (_tmp10_, _tmp11_);
-#line 15786 "EditingTools.c"
+#line 15842 "EditingTools.c"
 }
 
 
@@ -15800,71 +15856,71 @@ static GdkPixbuf* editing_tools_adjust_tool_real_get_display_pixbuf (EditingTool
 	GdkPixbuf* _tmp7_ = NULL;
 	GdkPixbuf* _tmp8_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 2625 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2643 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_ADJUST_TOOL, EditingToolsAdjustTool);
-#line 2625 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2643 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (scaling != NULL, NULL);
-#line 2625 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2643 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (IS_PHOTO (photo), NULL);
-#line 2627 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2645 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = photo;
-#line 2627 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2645 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = photo_has_color_adjustments (_tmp0_);
-#line 2627 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2645 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (!_tmp1_) {
-#line 2628 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2646 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		dimensions_init (&_vala_max_dim, 0, 0);
-#line 2630 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = NULL;
-#line 2630 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		if (max_dim) {
-#line 2630 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			*max_dim = _vala_max_dim;
-#line 15824 "EditingTools.c"
+#line 15880 "EditingTools.c"
 		}
-#line 2630 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 15828 "EditingTools.c"
+#line 15884 "EditingTools.c"
 	}
-#line 2633 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2651 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = photo;
-#line 2633 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2651 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	media_source_get_dimensions (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_MEDIA_SOURCE, MediaSource), PHOTO_EXCEPTION_NONE, &_tmp3_);
-#line 2633 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2651 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_vala_max_dim = _tmp3_;
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = photo;
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = *scaling;
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = photo_get_pixbuf_with_options (_tmp5_, &_tmp6_, PHOTO_EXCEPTION_ADJUST, BACKING_FETCH_MODE_BASELINE, &_inner_error_);
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _tmp7_;
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		g_propagate_error (error, _inner_error_);
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return NULL;
-#line 15850 "EditingTools.c"
+#line 15906 "EditingTools.c"
 	}
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp8_ = _tmp4_;
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = NULL;
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _tmp8_;
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp4_);
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (max_dim) {
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		*max_dim = _vala_max_dim;
-#line 15864 "EditingTools.c"
+#line 15920 "EditingTools.c"
 	}
-#line 2635 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 15868 "EditingTools.c"
+#line 15924 "EditingTools.c"
 }
 
 
@@ -15874,25 +15930,25 @@ static void editing_tools_adjust_tool_on_reset (EditingToolsAdjustTool* self) {
 	EditingToolsAdjustToolAdjustResetCommand* _tmp1_ = NULL;
 	CommandManager* _tmp2_ = NULL;
 	CommandManager* _tmp3_ = NULL;
-#line 2638 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2656 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2639 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2657 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->transformations;
-#line 2639 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2657 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = editing_tools_adjust_tool_adjust_reset_command_new (self, _tmp0_);
-#line 2639 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2657 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	command = _tmp1_;
-#line 2640 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2658 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = app_window_get_command_manager ();
-#line 2640 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2658 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = _tmp2_;
-#line 2640 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2658 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	command_manager_execute (_tmp3_, G_TYPE_CHECK_INSTANCE_CAST (command, TYPE_COMMAND, Command));
-#line 2640 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2658 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_command_manager_unref0 (_tmp3_);
-#line 2638 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2656 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (command);
-#line 15896 "EditingTools.c"
+#line 15952 "EditingTools.c"
 }
 
 
@@ -15910,58 +15966,58 @@ static void editing_tools_adjust_tool_on_ok (EditingToolsAdjustTool* self) {
 	Photo* _tmp10_ = NULL;
 	Photo* _tmp11_ = NULL;
 	Dimensions _tmp12_ = {0};
-#line 2643 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2661 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2644 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2662 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->suppress_effect_redraw = TRUE;
-#line 2646 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2664 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = editing_tools_editing_tool_get_tool_window (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 2646 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2664 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _tmp0_;
-#line 2646 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2664 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget));
-#line 2646 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2664 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp1_);
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = editing_tools_photo_canvas_get_photo (_tmp2_);
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _tmp3_;
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = self->priv->transformations;
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = adjust_colors_single_command_new (_tmp4_, _tmp5_, RESOURCES_ADJUST_LABEL, RESOURCES_ADJUST_TOOLTIP);
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = _tmp6_;
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp8_ = self->priv->draw_to_pixbuf;
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp9_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp10_ = editing_tools_photo_canvas_get_photo (_tmp9_);
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = _tmp10_;
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	media_source_get_dimensions (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_MEDIA_SOURCE, MediaSource), PHOTO_EXCEPTION_NONE, &_tmp12_);
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool), "applied", G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_COMMAND, Command), _tmp8_, &_tmp12_, FALSE);
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp11_);
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp7_);
-#line 2648 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp4_);
-#line 15956 "EditingTools.c"
+#line 16012 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_update_transformations (EditingToolsAdjustTool* self, PixelTransformationBundle* new_transformations) {
-#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2671 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2653 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2671 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (new_transformations));
-#line 15965 "EditingTools.c"
+#line 16021 "EditingTools.c"
 	{
 		GeeIterator* _transformation_it = NULL;
 		PixelTransformationBundle* _tmp0_ = NULL;
@@ -15969,56 +16025,56 @@ static void editing_tools_adjust_tool_update_transformations (EditingToolsAdjust
 		GeeIterable* _tmp2_ = NULL;
 		GeeIterator* _tmp3_ = NULL;
 		GeeIterator* _tmp4_ = NULL;
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = new_transformations;
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = pixel_transformation_bundle_get_transformations (_tmp0_);
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = _tmp1_;
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = gee_iterable_iterator (_tmp2_);
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp4_ = _tmp3_;
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (_tmp2_);
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_transformation_it = _tmp4_;
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		while (TRUE) {
-#line 15989 "EditingTools.c"
+#line 16045 "EditingTools.c"
 			GeeIterator* _tmp5_ = NULL;
 			gboolean _tmp6_ = FALSE;
 			PixelTransformation* transformation = NULL;
 			GeeIterator* _tmp7_ = NULL;
 			gpointer _tmp8_ = NULL;
 			PixelTransformation* _tmp9_ = NULL;
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp5_ = _transformation_it;
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp6_ = gee_iterator_next (_tmp5_);
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (!_tmp6_) {
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				break;
-#line 16004 "EditingTools.c"
+#line 16060 "EditingTools.c"
 			}
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp7_ = _transformation_it;
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp8_ = gee_iterator_get (_tmp7_);
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			transformation = (PixelTransformation*) _tmp8_;
-#line 2655 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2673 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp9_ = transformation;
-#line 2655 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2673 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			editing_tools_adjust_tool_update_transformation (self, _tmp9_);
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_pixel_transformation_unref0 (transformation);
-#line 16018 "EditingTools.c"
+#line 16074 "EditingTools.c"
 		}
-#line 2654 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (_transformation_it);
-#line 16022 "EditingTools.c"
+#line 16078 "EditingTools.c"
 	}
 }
 
@@ -16036,57 +16092,57 @@ static void editing_tools_adjust_tool_update_transformation (EditingToolsAdjustT
 	PixelTransformationType _tmp8_ = 0;
 	PixelTransformationBundle* _tmp12_ = NULL;
 	PixelTransformation* _tmp13_ = NULL;
-#line 2658 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2676 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2658 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2676 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (new_transformation));
-#line 2659 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2677 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->transformations;
-#line 2659 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2677 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = new_transformation;
-#line 2659 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2677 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = pixel_transformation_get_transformation_type (_tmp1_);
-#line 2659 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2677 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = pixel_transformation_bundle_get_transformation (_tmp0_, _tmp2_);
-#line 2659 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2677 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	old_transformation = _tmp3_;
-#line 2662 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2680 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = self->priv->transformer;
-#line 2662 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2680 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = old_transformation;
-#line 2662 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2680 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = new_transformation;
-#line 2662 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2680 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	pixel_transformer_replace_transformation (_tmp4_, _tmp5_, _tmp6_);
-#line 2663 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2681 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = new_transformation;
-#line 2663 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2681 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp8_ = pixel_transformation_get_transformation_type (_tmp7_);
-#line 2663 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2681 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp8_ != PIXEL_TRANSFORMATION_TYPE_TONE_EXPANSION) {
-#line 16068 "EditingTools.c"
+#line 16124 "EditingTools.c"
 		PixelTransformer* _tmp9_ = NULL;
 		PixelTransformation* _tmp10_ = NULL;
 		PixelTransformation* _tmp11_ = NULL;
-#line 2664 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2682 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp9_ = self->priv->histogram_transformer;
-#line 2664 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2682 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp10_ = old_transformation;
-#line 2664 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2682 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp11_ = new_transformation;
-#line 2664 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2682 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		pixel_transformer_replace_transformation (_tmp9_, _tmp10_, _tmp11_);
-#line 16080 "EditingTools.c"
+#line 16136 "EditingTools.c"
 	}
-#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2684 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp12_ = self->priv->transformations;
-#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2684 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp13_ = new_transformation;
-#line 2666 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2684 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	pixel_transformation_bundle_set (_tmp12_, _tmp13_);
-#line 2658 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2676 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (old_transformation);
-#line 16090 "EditingTools.c"
+#line 16146 "EditingTools.c"
 }
 
 
@@ -16102,77 +16158,77 @@ static void editing_tools_adjust_tool_slider_updated (EditingToolsAdjustTool* se
 	EditingToolsAdjustToolSliderAdjustmentCommand* _tmp6_ = NULL;
 	CommandManager* _tmp7_ = NULL;
 	CommandManager* _tmp8_ = NULL;
-#line 2669 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2687 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2669 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2687 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (new_transformation));
-#line 2669 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2687 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (name != NULL);
-#line 2670 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2688 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->transformations;
-#line 2670 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2688 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = new_transformation;
-#line 2670 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2688 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = pixel_transformation_get_transformation_type (_tmp1_);
-#line 2670 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2688 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = pixel_transformation_bundle_get_transformation (_tmp0_, _tmp2_);
-#line 2670 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2688 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	old_transformation = _tmp3_;
-#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2690 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = new_transformation;
-#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2690 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = name;
-#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2690 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = editing_tools_adjust_tool_slider_adjustment_command_new (self, old_transformation, _tmp4_, _tmp5_);
-#line 2672 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2690 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	command = _tmp6_;
-#line 2674 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2692 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = app_window_get_command_manager ();
-#line 2674 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2692 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp8_ = _tmp7_;
-#line 2674 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2692 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	command_manager_execute (_tmp8_, G_TYPE_CHECK_INSTANCE_CAST (command, TYPE_COMMAND, Command));
-#line 2674 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2692 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_command_manager_unref0 (_tmp8_);
-#line 2669 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2687 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (command);
-#line 2669 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2687 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (old_transformation);
-#line 16142 "EditingTools.c"
+#line 16198 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_delayed_temperature_adjustment_one_shot_callback (gpointer self) {
-#line 2679 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2697 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_delayed_temperature_adjustment ((EditingToolsAdjustTool*) self);
-#line 16149 "EditingTools.c"
+#line 16205 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_on_temperature_adjustment (EditingToolsAdjustTool* self) {
 	OneShotScheduler* _tmp0_ = NULL;
 	OneShotScheduler* _tmp2_ = NULL;
-#line 2677 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2695 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2678 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2696 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->temperature_scheduler;
-#line 2678 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2696 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ == NULL) {
-#line 16162 "EditingTools.c"
+#line 16218 "EditingTools.c"
 		OneShotScheduler* _tmp1_ = NULL;
-#line 2679 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2697 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = one_shot_scheduler_new ("temperature", _editing_tools_adjust_tool_on_delayed_temperature_adjustment_one_shot_callback, self);
-#line 2679 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2697 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_one_shot_scheduler_unref0 (self->priv->temperature_scheduler);
-#line 2679 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2697 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->temperature_scheduler = _tmp1_;
-#line 16170 "EditingTools.c"
+#line 16226 "EditingTools.c"
 	}
-#line 2681 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2699 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = self->priv->temperature_scheduler;
-#line 2681 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2699 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	one_shot_scheduler_after_timeout (_tmp2_, EDITING_TOOLS_ADJUST_TOOL_SLIDER_DELAY_MSEC, TRUE);
-#line 16176 "EditingTools.c"
+#line 16232 "EditingTools.c"
 }
 
 
@@ -16183,59 +16239,59 @@ static void editing_tools_adjust_tool_on_delayed_temperature_adjustment (Editing
 	gdouble _tmp2_ = 0.0;
 	TemperatureTransformation* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
-#line 2684 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2702 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2685 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2703 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->adjust_tool_window;
-#line 2685 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2703 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _tmp0_->temperature_slider;
-#line 2685 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2703 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_range_get_type (), GtkRange));
-#line 2685 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2703 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = temperature_transformation_new ((gfloat) _tmp2_);
-#line 2685 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2703 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	new_temp_trans = _tmp3_;
-#line 2687 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2705 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _ ("Temperature");
-#line 2687 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2705 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_slider_updated (self, G_TYPE_CHECK_INSTANCE_CAST (new_temp_trans, TYPE_PIXEL_TRANSFORMATION, PixelTransformation), _tmp4_);
-#line 2684 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2702 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (new_temp_trans);
-#line 16205 "EditingTools.c"
+#line 16261 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_delayed_tint_adjustment_one_shot_callback (gpointer self) {
-#line 2692 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2710 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_delayed_tint_adjustment ((EditingToolsAdjustTool*) self);
-#line 16212 "EditingTools.c"
+#line 16268 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_on_tint_adjustment (EditingToolsAdjustTool* self) {
 	OneShotScheduler* _tmp0_ = NULL;
 	OneShotScheduler* _tmp2_ = NULL;
-#line 2690 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2708 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2691 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2709 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->tint_scheduler;
-#line 2691 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2709 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ == NULL) {
-#line 16225 "EditingTools.c"
+#line 16281 "EditingTools.c"
 		OneShotScheduler* _tmp1_ = NULL;
-#line 2692 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2710 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = one_shot_scheduler_new ("tint", _editing_tools_adjust_tool_on_delayed_tint_adjustment_one_shot_callback, self);
-#line 2692 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2710 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_one_shot_scheduler_unref0 (self->priv->tint_scheduler);
-#line 2692 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2710 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->tint_scheduler = _tmp1_;
-#line 16233 "EditingTools.c"
+#line 16289 "EditingTools.c"
 	}
-#line 2694 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2711 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = self->priv->tint_scheduler;
-#line 2694 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2711 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	one_shot_scheduler_after_timeout (_tmp2_, EDITING_TOOLS_ADJUST_TOOL_SLIDER_DELAY_MSEC, TRUE);
-#line 16239 "EditingTools.c"
+#line 16295 "EditingTools.c"
 }
 
 
@@ -16246,59 +16302,122 @@ static void editing_tools_adjust_tool_on_delayed_tint_adjustment (EditingToolsAd
 	gdouble _tmp2_ = 0.0;
 	TintTransformation* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
-#line 2697 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2714 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2698 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2715 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->adjust_tool_window;
-#line 2698 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2715 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _tmp0_->tint_slider;
-#line 2698 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2715 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_range_get_type (), GtkRange));
-#line 2698 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2715 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = tint_transformation_new ((gfloat) _tmp2_);
-#line 2698 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2715 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	new_tint_trans = _tmp3_;
-#line 2700 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2717 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _ ("Tint");
-#line 2700 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2717 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_slider_updated (self, G_TYPE_CHECK_INSTANCE_CAST (new_tint_trans, TYPE_PIXEL_TRANSFORMATION, PixelTransformation), _tmp4_);
-#line 2697 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2714 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (new_tint_trans);
-#line 16268 "EditingTools.c"
+#line 16324 "EditingTools.c"
+}
+
+
+static void _editing_tools_adjust_tool_on_delayed_contrast_adjustment_one_shot_callback (gpointer self) {
+#line 2722 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	editing_tools_adjust_tool_on_delayed_contrast_adjustment ((EditingToolsAdjustTool*) self);
+#line 16331 "EditingTools.c"
+}
+
+
+static void editing_tools_adjust_tool_on_contrast_adjustment (EditingToolsAdjustTool* self) {
+	OneShotScheduler* _tmp0_ = NULL;
+	OneShotScheduler* _tmp2_ = NULL;
+#line 2720 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
+#line 2721 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp0_ = self->priv->contrast_scheduler;
+#line 2721 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	if (_tmp0_ == NULL) {
+#line 16344 "EditingTools.c"
+		OneShotScheduler* _tmp1_ = NULL;
+#line 2722 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_tmp1_ = one_shot_scheduler_new ("contrast", _editing_tools_adjust_tool_on_delayed_contrast_adjustment_one_shot_callback, self);
+#line 2722 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		_one_shot_scheduler_unref0 (self->priv->contrast_scheduler);
+#line 2722 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		self->priv->contrast_scheduler = _tmp1_;
+#line 16352 "EditingTools.c"
+	}
+#line 2723 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp2_ = self->priv->contrast_scheduler;
+#line 2723 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	one_shot_scheduler_after_timeout (_tmp2_, EDITING_TOOLS_ADJUST_TOOL_SLIDER_DELAY_MSEC, TRUE);
+#line 16358 "EditingTools.c"
+}
+
+
+static void editing_tools_adjust_tool_on_delayed_contrast_adjustment (EditingToolsAdjustTool* self) {
+	ContrastTransformation* new_exp_trans = NULL;
+	EditingToolsAdjustToolAdjustToolWindow* _tmp0_ = NULL;
+	GtkHScale* _tmp1_ = NULL;
+	gdouble _tmp2_ = 0.0;
+	ContrastTransformation* _tmp3_ = NULL;
+	const gchar* _tmp4_ = NULL;
+#line 2726 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
+#line 2727 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp0_ = self->priv->adjust_tool_window;
+#line 2727 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp1_ = _tmp0_->contrast_slider;
+#line 2727 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp2_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_range_get_type (), GtkRange));
+#line 2727 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp3_ = contrast_transformation_new ((gfloat) _tmp2_);
+#line 2727 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	new_exp_trans = _tmp3_;
+#line 2729 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp4_ = _ ("Contrast");
+#line 2729 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	editing_tools_adjust_tool_slider_updated (self, G_TYPE_CHECK_INSTANCE_CAST (new_exp_trans, TYPE_PIXEL_TRANSFORMATION, PixelTransformation), _tmp4_);
+#line 2726 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_pixel_transformation_unref0 (new_exp_trans);
+#line 16387 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_delayed_saturation_adjustment_one_shot_callback (gpointer self) {
-#line 2705 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2735 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_delayed_saturation_adjustment ((EditingToolsAdjustTool*) self);
-#line 16275 "EditingTools.c"
+#line 16394 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_on_saturation_adjustment (EditingToolsAdjustTool* self) {
 	OneShotScheduler* _tmp0_ = NULL;
 	OneShotScheduler* _tmp2_ = NULL;
-#line 2703 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2733 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2704 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2734 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->saturation_scheduler;
-#line 2704 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2734 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ == NULL) {
-#line 16288 "EditingTools.c"
+#line 16407 "EditingTools.c"
 		OneShotScheduler* _tmp1_ = NULL;
-#line 2705 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2735 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = one_shot_scheduler_new ("saturation", _editing_tools_adjust_tool_on_delayed_saturation_adjustment_one_shot_callback, self);
-#line 2705 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2735 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_one_shot_scheduler_unref0 (self->priv->saturation_scheduler);
-#line 2705 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2735 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->saturation_scheduler = _tmp1_;
-#line 16296 "EditingTools.c"
+#line 16415 "EditingTools.c"
 	}
-#line 2707 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2737 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = self->priv->saturation_scheduler;
-#line 2707 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2737 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	one_shot_scheduler_after_timeout (_tmp2_, EDITING_TOOLS_ADJUST_TOOL_SLIDER_DELAY_MSEC, TRUE);
-#line 16302 "EditingTools.c"
+#line 16421 "EditingTools.c"
 }
 
 
@@ -16309,59 +16428,59 @@ static void editing_tools_adjust_tool_on_delayed_saturation_adjustment (EditingT
 	gdouble _tmp2_ = 0.0;
 	SaturationTransformation* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
-#line 2710 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2740 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2711 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2741 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->adjust_tool_window;
-#line 2711 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2741 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _tmp0_->saturation_slider;
-#line 2711 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2741 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_range_get_type (), GtkRange));
-#line 2711 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2741 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = saturation_transformation_new ((gfloat) _tmp2_);
-#line 2711 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2741 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	new_sat_trans = _tmp3_;
-#line 2713 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2743 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _ ("Saturation");
-#line 2713 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2743 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_slider_updated (self, G_TYPE_CHECK_INSTANCE_CAST (new_sat_trans, TYPE_PIXEL_TRANSFORMATION, PixelTransformation), _tmp4_);
-#line 2710 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2740 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (new_sat_trans);
-#line 16331 "EditingTools.c"
+#line 16450 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_delayed_exposure_adjustment_one_shot_callback (gpointer self) {
-#line 2718 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2748 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_delayed_exposure_adjustment ((EditingToolsAdjustTool*) self);
-#line 16338 "EditingTools.c"
+#line 16457 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_on_exposure_adjustment (EditingToolsAdjustTool* self) {
 	OneShotScheduler* _tmp0_ = NULL;
 	OneShotScheduler* _tmp2_ = NULL;
-#line 2716 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2746 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2717 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2747 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->exposure_scheduler;
-#line 2717 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2747 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ == NULL) {
-#line 16351 "EditingTools.c"
+#line 16470 "EditingTools.c"
 		OneShotScheduler* _tmp1_ = NULL;
-#line 2718 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2748 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = one_shot_scheduler_new ("exposure", _editing_tools_adjust_tool_on_delayed_exposure_adjustment_one_shot_callback, self);
-#line 2718 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2748 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_one_shot_scheduler_unref0 (self->priv->exposure_scheduler);
-#line 2718 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2748 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->exposure_scheduler = _tmp1_;
-#line 16359 "EditingTools.c"
+#line 16478 "EditingTools.c"
 	}
-#line 2720 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2750 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = self->priv->exposure_scheduler;
-#line 2720 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2750 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	one_shot_scheduler_after_timeout (_tmp2_, EDITING_TOOLS_ADJUST_TOOL_SLIDER_DELAY_MSEC, TRUE);
-#line 16365 "EditingTools.c"
+#line 16484 "EditingTools.c"
 }
 
 
@@ -16372,59 +16491,59 @@ static void editing_tools_adjust_tool_on_delayed_exposure_adjustment (EditingToo
 	gdouble _tmp2_ = 0.0;
 	ExposureTransformation* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
-#line 2723 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2753 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2724 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2754 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->adjust_tool_window;
-#line 2724 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2754 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _tmp0_->exposure_slider;
-#line 2724 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2754 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_range_get_type (), GtkRange));
-#line 2724 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2754 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = exposure_transformation_new ((gfloat) _tmp2_);
-#line 2724 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2754 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	new_exp_trans = _tmp3_;
-#line 2726 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2756 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _ ("Exposure");
-#line 2726 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2756 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_slider_updated (self, G_TYPE_CHECK_INSTANCE_CAST (new_exp_trans, TYPE_PIXEL_TRANSFORMATION, PixelTransformation), _tmp4_);
-#line 2723 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2753 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (new_exp_trans);
-#line 16394 "EditingTools.c"
+#line 16513 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_delayed_shadows_adjustment_one_shot_callback (gpointer self) {
-#line 2731 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2761 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_delayed_shadows_adjustment ((EditingToolsAdjustTool*) self);
-#line 16401 "EditingTools.c"
+#line 16520 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_on_shadows_adjustment (EditingToolsAdjustTool* self) {
 	OneShotScheduler* _tmp0_ = NULL;
 	OneShotScheduler* _tmp2_ = NULL;
-#line 2729 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2759 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2730 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2760 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->shadows_scheduler;
-#line 2730 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2760 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ == NULL) {
-#line 16414 "EditingTools.c"
+#line 16533 "EditingTools.c"
 		OneShotScheduler* _tmp1_ = NULL;
-#line 2731 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2761 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = one_shot_scheduler_new ("shadows", _editing_tools_adjust_tool_on_delayed_shadows_adjustment_one_shot_callback, self);
-#line 2731 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2761 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_one_shot_scheduler_unref0 (self->priv->shadows_scheduler);
-#line 2731 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2761 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->shadows_scheduler = _tmp1_;
-#line 16422 "EditingTools.c"
+#line 16541 "EditingTools.c"
 	}
-#line 2733 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2763 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = self->priv->shadows_scheduler;
-#line 2733 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2763 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	one_shot_scheduler_after_timeout (_tmp2_, EDITING_TOOLS_ADJUST_TOOL_SLIDER_DELAY_MSEC, TRUE);
-#line 16428 "EditingTools.c"
+#line 16547 "EditingTools.c"
 }
 
 
@@ -16435,59 +16554,59 @@ static void editing_tools_adjust_tool_on_delayed_shadows_adjustment (EditingTool
 	gdouble _tmp2_ = 0.0;
 	ShadowDetailTransformation* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
-#line 2736 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2737 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->adjust_tool_window;
-#line 2737 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _tmp0_->shadows_slider;
-#line 2737 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_range_get_type (), GtkRange));
-#line 2737 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = shadow_detail_transformation_new ((gfloat) _tmp2_);
-#line 2737 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	new_shadows_trans = _tmp3_;
-#line 2739 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _ ("Shadows");
-#line 2739 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2769 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_slider_updated (self, G_TYPE_CHECK_INSTANCE_CAST (new_shadows_trans, TYPE_PIXEL_TRANSFORMATION, PixelTransformation), _tmp4_);
-#line 2736 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (new_shadows_trans);
-#line 16457 "EditingTools.c"
+#line 16576 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_delayed_highlights_adjustment_one_shot_callback (gpointer self) {
-#line 2744 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_delayed_highlights_adjustment ((EditingToolsAdjustTool*) self);
-#line 16464 "EditingTools.c"
+#line 16583 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_on_highlights_adjustment (EditingToolsAdjustTool* self) {
 	OneShotScheduler* _tmp0_ = NULL;
 	OneShotScheduler* _tmp2_ = NULL;
-#line 2742 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2772 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2743 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->highlights_scheduler;
-#line 2743 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ == NULL) {
-#line 16477 "EditingTools.c"
+#line 16596 "EditingTools.c"
 		OneShotScheduler* _tmp1_ = NULL;
-#line 2744 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = one_shot_scheduler_new ("highlights", _editing_tools_adjust_tool_on_delayed_highlights_adjustment_one_shot_callback, self);
-#line 2744 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_one_shot_scheduler_unref0 (self->priv->highlights_scheduler);
-#line 2744 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->highlights_scheduler = _tmp1_;
-#line 16485 "EditingTools.c"
+#line 16604 "EditingTools.c"
 	}
-#line 2746 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2776 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = self->priv->highlights_scheduler;
-#line 2746 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2776 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	one_shot_scheduler_after_timeout (_tmp2_, EDITING_TOOLS_ADJUST_TOOL_SLIDER_DELAY_MSEC, TRUE);
-#line 16491 "EditingTools.c"
+#line 16610 "EditingTools.c"
 }
 
 
@@ -16498,25 +16617,25 @@ static void editing_tools_adjust_tool_on_delayed_highlights_adjustment (EditingT
 	gdouble _tmp2_ = 0.0;
 	HighlightDetailTransformation* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
-#line 2749 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2779 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2750 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2780 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->adjust_tool_window;
-#line 2750 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2780 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _tmp0_->highlights_slider;
-#line 2750 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2780 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_range_get_type (), GtkRange));
-#line 2750 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2780 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = highlight_detail_transformation_new ((gfloat) _tmp2_);
-#line 2750 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2780 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	new_highlights_trans = _tmp3_;
-#line 2752 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2782 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _ ("Highlights");
-#line 2752 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2782 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_slider_updated (self, G_TYPE_CHECK_INSTANCE_CAST (new_highlights_trans, TYPE_PIXEL_TRANSFORMATION, PixelTransformation), _tmp4_);
-#line 2749 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2779 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (new_highlights_trans);
-#line 16520 "EditingTools.c"
+#line 16639 "EditingTools.c"
 }
 
 
@@ -16532,35 +16651,35 @@ static void editing_tools_adjust_tool_on_histogram_constraint (EditingToolsAdjus
 	ExpansionTransformation* new_exp_trans = NULL;
 	ExpansionTransformation* _tmp6_ = NULL;
 	const gchar* _tmp7_ = NULL;
-#line 2755 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2785 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2756 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2786 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->adjust_tool_window;
-#line 2756 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2786 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _tmp0_->histogram_manipulator;
-#line 2756 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2786 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = rgb_histogram_manipulator_get_left_nub_position (_tmp1_);
-#line 2756 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2786 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	expansion_black_point = _tmp2_;
-#line 2758 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2788 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = self->priv->adjust_tool_window;
-#line 2758 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2788 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _tmp3_->histogram_manipulator;
-#line 2758 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2788 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = rgb_histogram_manipulator_get_right_nub_position (_tmp4_);
-#line 2758 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2788 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	expansion_white_point = _tmp5_;
-#line 2760 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2790 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = expansion_transformation_new_from_extrema (expansion_black_point, expansion_white_point);
-#line 2760 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2790 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	new_exp_trans = _tmp6_;
-#line 2762 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2792 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = _ ("Contrast Expansion");
-#line 2762 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2792 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_slider_updated (self, G_TYPE_CHECK_INSTANCE_CAST (new_exp_trans, TYPE_PIXEL_TRANSFORMATION, PixelTransformation), _tmp7_);
-#line 2755 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2785 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (new_exp_trans);
-#line 16564 "EditingTools.c"
+#line 16683 "EditingTools.c"
 }
 
 
@@ -16572,33 +16691,33 @@ static void editing_tools_adjust_tool_on_canvas_resize (EditingToolsAdjustTool* 
 	EditingToolsPhotoCanvas* _tmp4_ = NULL;
 	GdkPixbuf* _tmp5_ = NULL;
 	GdkPixbuf* _tmp6_ = NULL;
-#line 2765 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2795 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2796 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2796 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = editing_tools_photo_canvas_get_scaled_pixbuf (_tmp0_);
-#line 2766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2796 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = _tmp1_;
-#line 2766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2796 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = gdk_pixbuf_copy (_tmp2_);
-#line 2766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2796 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->priv->draw_to_pixbuf);
-#line 2766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2796 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->draw_to_pixbuf = _tmp3_;
-#line 2766 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2796 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp2_);
-#line 2767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2797 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2797 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = editing_tools_photo_canvas_get_scaled_pixbuf (_tmp4_);
-#line 2767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2797 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = _tmp5_;
-#line 2767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2797 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_init_fp_pixel_cache (self, _tmp6_);
-#line 2767 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2797 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp6_);
-#line 16602 "EditingTools.c"
+#line 16721 "EditingTools.c"
 }
 
 
@@ -16611,192 +16730,199 @@ static gboolean editing_tools_adjust_tool_on_hscale_reset (EditingToolsAdjustToo
 	gboolean _tmp3_ = FALSE;
 	GdkEventButton* _tmp4_ = NULL;
 	guint _tmp5_ = 0U;
-#line 2770 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2800 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self), FALSE);
-#line 2770 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2800 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-#line 2770 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2800 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 2771 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2801 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = widget;
-#line 2771 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2801 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_scale_get_type (), GtkScale));
-#line 2771 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2801 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	source = _tmp1_;
-#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = event;
-#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = _tmp4_->button;
-#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp5_ == ((guint) 1)) {
-#line 16633 "EditingTools.c"
+#line 16752 "EditingTools.c"
 		GdkEventButton* _tmp6_ = NULL;
 		GdkEventType _tmp7_ = 0;
-#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp6_ = event;
-#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp7_ = _tmp6_->type;
-#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = _tmp7_ == GDK_BUTTON_PRESS;
-#line 16642 "EditingTools.c"
+#line 16761 "EditingTools.c"
 	} else {
-#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = FALSE;
-#line 16646 "EditingTools.c"
+#line 16765 "EditingTools.c"
 	}
-#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp3_) {
-#line 16650 "EditingTools.c"
+#line 16769 "EditingTools.c"
 		GdkEventButton* _tmp8_ = NULL;
 		GdkModifierType _tmp9_ = 0;
 		gboolean _tmp10_ = FALSE;
-#line 2774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2804 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp8_ = event;
-#line 2774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2804 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp9_ = _tmp8_->state;
-#line 2774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2804 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp10_ = has_only_key_modifier (_tmp9_, GDK_CONTROL_MASK);
-#line 2774 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2804 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = _tmp10_;
-#line 16662 "EditingTools.c"
+#line 16781 "EditingTools.c"
 	} else {
-#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = FALSE;
-#line 16666 "EditingTools.c"
+#line 16785 "EditingTools.c"
 	}
-#line 2773 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2803 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp2_) {
-#line 16670 "EditingTools.c"
+#line 16789 "EditingTools.c"
 		GtkScale* _tmp11_ = NULL;
-#line 2776 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2806 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp11_ = source;
-#line 2776 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2806 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_range_get_type (), GtkRange), (gdouble) 0);
-#line 2778 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2808 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = TRUE;
-#line 2778 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2808 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (source);
-#line 2778 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2808 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 16682 "EditingTools.c"
+#line 16801 "EditingTools.c"
 	}
-#line 2781 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2811 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = FALSE;
-#line 2781 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2811 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (source);
-#line 2781 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2811 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 16690 "EditingTools.c"
+#line 16809 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_canvas_resize_editing_tools_photo_canvas_resized_scaled_pixbuf (EditingToolsPhotoCanvas* _sender, Dimensions* old_dim, GdkPixbuf* scaled, GdkRectangle* scaled_position, gpointer self) {
-#line 2785 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2815 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_canvas_resize ((EditingToolsAdjustTool*) self);
-#line 16697 "EditingTools.c"
+#line 16816 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_bind_canvas_handlers (EditingToolsAdjustTool* self, EditingToolsPhotoCanvas* canvas) {
 	EditingToolsPhotoCanvas* _tmp0_ = NULL;
-#line 2784 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2814 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2784 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2814 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_PHOTO_CANVAS (canvas));
-#line 2785 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2815 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = canvas;
-#line 2785 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2815 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (_tmp0_, "resized-scaled-pixbuf", (GCallback) _editing_tools_adjust_tool_on_canvas_resize_editing_tools_photo_canvas_resized_scaled_pixbuf, self);
-#line 16711 "EditingTools.c"
+#line 16830 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_unbind_canvas_handlers (EditingToolsAdjustTool* self, EditingToolsPhotoCanvas* canvas) {
 	EditingToolsPhotoCanvas* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
-#line 2788 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2818 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2788 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2818 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_PHOTO_CANVAS (canvas));
-#line 2789 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2819 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = canvas;
-#line 2789 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2819 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("resized-scaled-pixbuf", EDITING_TOOLS_TYPE_PHOTO_CANVAS, &_tmp1_, NULL, FALSE);
-#line 2789 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2819 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_canvas_resize_editing_tools_photo_canvas_resized_scaled_pixbuf, self);
-#line 16728 "EditingTools.c"
+#line 16847 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_ok_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 2793 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2823 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_ok ((EditingToolsAdjustTool*) self);
-#line 16735 "EditingTools.c"
+#line 16854 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_reset_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 2794 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2824 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_reset ((EditingToolsAdjustTool*) self);
-#line 16742 "EditingTools.c"
+#line 16861 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_exposure_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self) {
-#line 2796 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2826 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_exposure_adjustment ((EditingToolsAdjustTool*) self);
-#line 16749 "EditingTools.c"
+#line 16868 "EditingTools.c"
+}
+
+
+static void _editing_tools_adjust_tool_on_contrast_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self) {
+#line 2827 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	editing_tools_adjust_tool_on_contrast_adjustment ((EditingToolsAdjustTool*) self);
+#line 16875 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_saturation_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self) {
-#line 2797 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2828 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_saturation_adjustment ((EditingToolsAdjustTool*) self);
-#line 16756 "EditingTools.c"
+#line 16882 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_tint_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self) {
-#line 2798 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2829 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_tint_adjustment ((EditingToolsAdjustTool*) self);
-#line 16763 "EditingTools.c"
+#line 16889 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_temperature_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self) {
-#line 2799 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2830 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_temperature_adjustment ((EditingToolsAdjustTool*) self);
-#line 16770 "EditingTools.c"
+#line 16896 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_shadows_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self) {
-#line 2800 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2831 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_shadows_adjustment ((EditingToolsAdjustTool*) self);
-#line 16777 "EditingTools.c"
+#line 16903 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_highlights_adjustment_gtk_range_value_changed (GtkRange* _sender, gpointer self) {
-#line 2801 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2832 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_highlights_adjustment ((EditingToolsAdjustTool*) self);
-#line 16784 "EditingTools.c"
+#line 16910 "EditingTools.c"
 }
 
 
 static void _editing_tools_adjust_tool_on_histogram_constraint_rgb_histogram_manipulator_nub_position_changed (RGBHistogramManipulator* _sender, gpointer self) {
-#line 2802 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2833 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_on_histogram_constraint ((EditingToolsAdjustTool*) self);
-#line 16791 "EditingTools.c"
+#line 16917 "EditingTools.c"
 }
 
 
 static gboolean _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event (GtkWidget* _sender, GdkEventButton* event, gpointer self) {
 	gboolean result;
 	result = editing_tools_adjust_tool_on_hscale_reset ((EditingToolsAdjustTool*) self, _sender, event);
-#line 2804 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2835 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 16800 "EditingTools.c"
+#line 16926 "EditingTools.c"
 }
 
 
@@ -16810,7 +16936,7 @@ static void editing_tools_adjust_tool_bind_window_handlers (EditingToolsAdjustTo
 	EditingToolsAdjustToolAdjustToolWindow* _tmp6_ = NULL;
 	GtkScale* _tmp7_ = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp8_ = NULL;
-	GtkScale* _tmp9_ = NULL;
+	GtkHScale* _tmp9_ = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp10_ = NULL;
 	GtkScale* _tmp11_ = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp12_ = NULL;
@@ -16820,118 +16946,134 @@ static void editing_tools_adjust_tool_bind_window_handlers (EditingToolsAdjustTo
 	EditingToolsAdjustToolAdjustToolWindow* _tmp16_ = NULL;
 	GtkScale* _tmp17_ = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp18_ = NULL;
-	RGBHistogramManipulator* _tmp19_ = NULL;
+	GtkScale* _tmp19_ = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp20_ = NULL;
-	GtkScale* _tmp21_ = NULL;
+	RGBHistogramManipulator* _tmp21_ = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp22_ = NULL;
 	GtkScale* _tmp23_ = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp24_ = NULL;
 	GtkScale* _tmp25_ = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp26_ = NULL;
-	GtkScale* _tmp27_ = NULL;
+	GtkHScale* _tmp27_ = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp28_ = NULL;
 	GtkScale* _tmp29_ = NULL;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp30_ = NULL;
 	GtkScale* _tmp31_ = NULL;
-#line 2792 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	EditingToolsAdjustToolAdjustToolWindow* _tmp32_ = NULL;
+	GtkScale* _tmp33_ = NULL;
+	EditingToolsAdjustToolAdjustToolWindow* _tmp34_ = NULL;
+	GtkScale* _tmp35_ = NULL;
+#line 2822 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2793 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2823 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->adjust_tool_window;
-#line 2793 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2823 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _tmp0_->ok_button;
-#line 2793 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2823 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (_tmp1_, "clicked", (GCallback) _editing_tools_adjust_tool_on_ok_gtk_button_clicked, self);
-#line 2794 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2824 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = self->priv->adjust_tool_window;
-#line 2794 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2824 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = _tmp2_->reset_button;
-#line 2794 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2824 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (_tmp3_, "clicked", (GCallback) _editing_tools_adjust_tool_on_reset_gtk_button_clicked, self);
-#line 2795 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2825 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = self->priv->adjust_tool_window;
-#line 2795 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2825 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = _tmp4_->cancel_button;
-#line 2795 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2825 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (_tmp5_, "clicked", (GCallback) _editing_tools_editing_tool_notify_cancel_gtk_button_clicked, G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 2796 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2826 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = self->priv->adjust_tool_window;
-#line 2796 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2826 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = _tmp6_->exposure_slider;
-#line 2796 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2826 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_exposure_adjustment_gtk_range_value_changed, self);
-#line 2797 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2827 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp8_ = self->priv->adjust_tool_window;
-#line 2797 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp9_ = _tmp8_->saturation_slider;
-#line 2797 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_saturation_adjustment_gtk_range_value_changed, self);
-#line 2798 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2827 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp9_ = _tmp8_->contrast_slider;
+#line 2827 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_contrast_adjustment_gtk_range_value_changed, self);
+#line 2828 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp10_ = self->priv->adjust_tool_window;
-#line 2798 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp11_ = _tmp10_->tint_slider;
-#line 2798 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_tint_adjustment_gtk_range_value_changed, self);
-#line 2799 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2828 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp11_ = _tmp10_->saturation_slider;
+#line 2828 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_saturation_adjustment_gtk_range_value_changed, self);
+#line 2829 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp12_ = self->priv->adjust_tool_window;
-#line 2799 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp13_ = _tmp12_->temperature_slider;
-#line 2799 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_temperature_adjustment_gtk_range_value_changed, self);
-#line 2800 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2829 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp13_ = _tmp12_->tint_slider;
+#line 2829 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_tint_adjustment_gtk_range_value_changed, self);
+#line 2830 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp14_ = self->priv->adjust_tool_window;
-#line 2800 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp15_ = _tmp14_->shadows_slider;
-#line 2800 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_shadows_adjustment_gtk_range_value_changed, self);
-#line 2801 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2830 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp15_ = _tmp14_->temperature_slider;
+#line 2830 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_temperature_adjustment_gtk_range_value_changed, self);
+#line 2831 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp16_ = self->priv->adjust_tool_window;
-#line 2801 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp17_ = _tmp16_->highlights_slider;
-#line 2801 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_highlights_adjustment_gtk_range_value_changed, self);
-#line 2802 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2831 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp17_ = _tmp16_->shadows_slider;
+#line 2831 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_shadows_adjustment_gtk_range_value_changed, self);
+#line 2832 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp18_ = self->priv->adjust_tool_window;
-#line 2802 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp19_ = _tmp18_->histogram_manipulator;
-#line 2802 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_connect (_tmp19_, "nub-position-changed", (GCallback) _editing_tools_adjust_tool_on_histogram_constraint_rgb_histogram_manipulator_nub_position_changed, self);
-#line 2804 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2832 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp19_ = _tmp18_->highlights_slider;
+#line 2832 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_adjust_tool_on_highlights_adjustment_gtk_range_value_changed, self);
+#line 2833 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp20_ = self->priv->adjust_tool_window;
-#line 2804 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp21_ = _tmp20_->saturation_slider;
-#line 2804 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 2805 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2833 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp21_ = _tmp20_->histogram_manipulator;
+#line 2833 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_connect (_tmp21_, "nub-position-changed", (GCallback) _editing_tools_adjust_tool_on_histogram_constraint_rgb_histogram_manipulator_nub_position_changed, self);
+#line 2835 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp22_ = self->priv->adjust_tool_window;
-#line 2805 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp23_ = _tmp22_->exposure_slider;
-#line 2805 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2835 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp23_ = _tmp22_->saturation_slider;
+#line 2835 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 2806 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2836 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp24_ = self->priv->adjust_tool_window;
-#line 2806 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp25_ = _tmp24_->tint_slider;
-#line 2806 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2836 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp25_ = _tmp24_->exposure_slider;
+#line 2836 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 2807 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2837 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp26_ = self->priv->adjust_tool_window;
-#line 2807 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp27_ = _tmp26_->temperature_slider;
-#line 2807 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2837 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp27_ = _tmp26_->contrast_slider;
+#line 2837 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 2808 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2838 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp28_ = self->priv->adjust_tool_window;
-#line 2808 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp29_ = _tmp28_->shadows_slider;
-#line 2808 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2838 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp29_ = _tmp28_->tint_slider;
+#line 2838 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 2809 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2839 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp30_ = self->priv->adjust_tool_window;
-#line 2809 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp31_ = _tmp30_->highlights_slider;
-#line 2809 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2839 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp31_ = _tmp30_->temperature_slider;
+#line 2839 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 16935 "EditingTools.c"
+#line 2840 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp32_ = self->priv->adjust_tool_window;
+#line 2840 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp33_ = _tmp32_->shadows_slider;
+#line 2840 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
+#line 2841 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp34_ = self->priv->adjust_tool_window;
+#line 2841 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp35_ = _tmp34_->highlights_slider;
+#line 2841 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
+#line 17077 "EditingTools.c"
 }
 
 
@@ -16949,7 +17091,7 @@ static void editing_tools_adjust_tool_unbind_window_handlers (EditingToolsAdjust
 	GtkScale* _tmp10_ = NULL;
 	guint _tmp11_ = 0U;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp12_ = NULL;
-	GtkScale* _tmp13_ = NULL;
+	GtkHScale* _tmp13_ = NULL;
 	guint _tmp14_ = 0U;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp15_ = NULL;
 	GtkScale* _tmp16_ = NULL;
@@ -16964,10 +17106,10 @@ static void editing_tools_adjust_tool_unbind_window_handlers (EditingToolsAdjust
 	GtkScale* _tmp25_ = NULL;
 	guint _tmp26_ = 0U;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp27_ = NULL;
-	RGBHistogramManipulator* _tmp28_ = NULL;
+	GtkScale* _tmp28_ = NULL;
 	guint _tmp29_ = 0U;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp30_ = NULL;
-	GtkScale* _tmp31_ = NULL;
+	RGBHistogramManipulator* _tmp31_ = NULL;
 	guint _tmp32_ = 0U;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp33_ = NULL;
 	GtkScale* _tmp34_ = NULL;
@@ -16976,7 +17118,7 @@ static void editing_tools_adjust_tool_unbind_window_handlers (EditingToolsAdjust
 	GtkScale* _tmp37_ = NULL;
 	guint _tmp38_ = 0U;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp39_ = NULL;
-	GtkScale* _tmp40_ = NULL;
+	GtkHScale* _tmp40_ = NULL;
 	guint _tmp41_ = 0U;
 	EditingToolsAdjustToolAdjustToolWindow* _tmp42_ = NULL;
 	GtkScale* _tmp43_ = NULL;
@@ -16984,137 +17126,159 @@ static void editing_tools_adjust_tool_unbind_window_handlers (EditingToolsAdjust
 	EditingToolsAdjustToolAdjustToolWindow* _tmp45_ = NULL;
 	GtkScale* _tmp46_ = NULL;
 	guint _tmp47_ = 0U;
-#line 2812 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	EditingToolsAdjustToolAdjustToolWindow* _tmp48_ = NULL;
+	GtkScale* _tmp49_ = NULL;
+	guint _tmp50_ = 0U;
+	EditingToolsAdjustToolAdjustToolWindow* _tmp51_ = NULL;
+	GtkScale* _tmp52_ = NULL;
+	guint _tmp53_ = 0U;
+#line 2844 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2813 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2845 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->adjust_tool_window;
-#line 2813 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2845 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _tmp0_->ok_button;
-#line 2813 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2845 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("clicked", gtk_button_get_type (), &_tmp2_, NULL, FALSE);
-#line 2813 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2845 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (_tmp1_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp2_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_ok_gtk_button_clicked, self);
-#line 2814 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2846 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = self->priv->adjust_tool_window;
-#line 2814 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2846 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _tmp3_->reset_button;
-#line 2814 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2846 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("clicked", gtk_button_get_type (), &_tmp5_, NULL, FALSE);
-#line 2814 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2846 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (_tmp4_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp5_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_reset_gtk_button_clicked, self);
-#line 2815 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2847 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = self->priv->adjust_tool_window;
-#line 2815 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2847 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = _tmp6_->cancel_button;
-#line 2815 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2847 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("clicked", gtk_button_get_type (), &_tmp8_, NULL, FALSE);
-#line 2815 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2847 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (_tmp7_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp8_, 0, NULL, (GCallback) _editing_tools_editing_tool_notify_cancel_gtk_button_clicked, G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 2816 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2848 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp9_ = self->priv->adjust_tool_window;
-#line 2816 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2848 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp10_ = _tmp9_->exposure_slider;
-#line 2816 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2848 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("value-changed", gtk_range_get_type (), &_tmp11_, NULL, FALSE);
-#line 2816 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2848 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp11_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_exposure_adjustment_gtk_range_value_changed, self);
-#line 2817 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2849 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp12_ = self->priv->adjust_tool_window;
-#line 2817 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp13_ = _tmp12_->saturation_slider;
-#line 2817 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2849 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp13_ = _tmp12_->contrast_slider;
+#line 2849 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("value-changed", gtk_range_get_type (), &_tmp14_, NULL, FALSE);
-#line 2817 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp14_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_saturation_adjustment_gtk_range_value_changed, self);
-#line 2818 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2849 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp14_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_contrast_adjustment_gtk_range_value_changed, self);
+#line 2850 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp15_ = self->priv->adjust_tool_window;
-#line 2818 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp16_ = _tmp15_->tint_slider;
-#line 2818 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2850 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp16_ = _tmp15_->saturation_slider;
+#line 2850 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("value-changed", gtk_range_get_type (), &_tmp17_, NULL, FALSE);
-#line 2818 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp17_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_tint_adjustment_gtk_range_value_changed, self);
-#line 2819 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2850 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp17_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_saturation_adjustment_gtk_range_value_changed, self);
+#line 2851 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp18_ = self->priv->adjust_tool_window;
-#line 2819 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp19_ = _tmp18_->temperature_slider;
-#line 2819 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2851 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp19_ = _tmp18_->tint_slider;
+#line 2851 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("value-changed", gtk_range_get_type (), &_tmp20_, NULL, FALSE);
-#line 2819 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp20_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_temperature_adjustment_gtk_range_value_changed, self);
-#line 2820 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2851 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp20_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_tint_adjustment_gtk_range_value_changed, self);
+#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp21_ = self->priv->adjust_tool_window;
-#line 2820 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp22_ = _tmp21_->shadows_slider;
-#line 2820 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp22_ = _tmp21_->temperature_slider;
+#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("value-changed", gtk_range_get_type (), &_tmp23_, NULL, FALSE);
-#line 2820 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp23_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_shadows_adjustment_gtk_range_value_changed, self);
-#line 2821 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp23_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_temperature_adjustment_gtk_range_value_changed, self);
+#line 2853 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp24_ = self->priv->adjust_tool_window;
-#line 2821 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp25_ = _tmp24_->highlights_slider;
-#line 2821 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2853 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp25_ = _tmp24_->shadows_slider;
+#line 2853 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("value-changed", gtk_range_get_type (), &_tmp26_, NULL, FALSE);
-#line 2821 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp26_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_highlights_adjustment_gtk_range_value_changed, self);
-#line 2822 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2853 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp26_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_shadows_adjustment_gtk_range_value_changed, self);
+#line 2854 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp27_ = self->priv->adjust_tool_window;
-#line 2822 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp28_ = _tmp27_->histogram_manipulator;
-#line 2822 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_parse_name ("nub-position-changed", TYPE_RGB_HISTOGRAM_MANIPULATOR, &_tmp29_, NULL, FALSE);
-#line 2822 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_handlers_disconnect_matched (_tmp28_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp29_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_histogram_constraint_rgb_histogram_manipulator_nub_position_changed, self);
-#line 2824 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2854 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp28_ = _tmp27_->highlights_slider;
+#line 2854 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_parse_name ("value-changed", gtk_range_get_type (), &_tmp29_, NULL, FALSE);
+#line 2854 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp29_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_highlights_adjustment_gtk_range_value_changed, self);
+#line 2855 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp30_ = self->priv->adjust_tool_window;
-#line 2824 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp31_ = _tmp30_->saturation_slider;
-#line 2824 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_parse_name ("button-press-event", gtk_widget_get_type (), &_tmp32_, NULL, FALSE);
-#line 2824 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, gtk_widget_get_type (), GtkWidget), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp32_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 2825 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2855 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp31_ = _tmp30_->histogram_manipulator;
+#line 2855 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_parse_name ("nub-position-changed", TYPE_RGB_HISTOGRAM_MANIPULATOR, &_tmp32_, NULL, FALSE);
+#line 2855 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_handlers_disconnect_matched (_tmp31_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp32_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_histogram_constraint_rgb_histogram_manipulator_nub_position_changed, self);
+#line 2857 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp33_ = self->priv->adjust_tool_window;
-#line 2825 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp34_ = _tmp33_->exposure_slider;
-#line 2825 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2857 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp34_ = _tmp33_->saturation_slider;
+#line 2857 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("button-press-event", gtk_widget_get_type (), &_tmp35_, NULL, FALSE);
-#line 2825 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2857 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, gtk_widget_get_type (), GtkWidget), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp35_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 2826 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2858 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp36_ = self->priv->adjust_tool_window;
-#line 2826 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp37_ = _tmp36_->tint_slider;
-#line 2826 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2858 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp37_ = _tmp36_->exposure_slider;
+#line 2858 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("button-press-event", gtk_widget_get_type (), &_tmp38_, NULL, FALSE);
-#line 2826 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2858 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, gtk_widget_get_type (), GtkWidget), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp38_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 2827 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2859 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp39_ = self->priv->adjust_tool_window;
-#line 2827 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp40_ = _tmp39_->temperature_slider;
-#line 2827 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2859 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp40_ = _tmp39_->contrast_slider;
+#line 2859 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("button-press-event", gtk_widget_get_type (), &_tmp41_, NULL, FALSE);
-#line 2827 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2859 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, gtk_widget_get_type (), GtkWidget), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp41_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 2828 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2860 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp42_ = self->priv->adjust_tool_window;
-#line 2828 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp43_ = _tmp42_->shadows_slider;
-#line 2828 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2860 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp43_ = _tmp42_->tint_slider;
+#line 2860 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("button-press-event", gtk_widget_get_type (), &_tmp44_, NULL, FALSE);
-#line 2828 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2860 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, gtk_widget_get_type (), GtkWidget), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp44_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 2829 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2861 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp45_ = self->priv->adjust_tool_window;
-#line 2829 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp46_ = _tmp45_->highlights_slider;
-#line 2829 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2861 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp46_ = _tmp45_->temperature_slider;
+#line 2861 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_parse_name ("button-press-event", gtk_widget_get_type (), &_tmp47_, NULL, FALSE);
-#line 2829 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2861 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, gtk_widget_get_type (), GtkWidget), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp47_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
-#line 17118 "EditingTools.c"
+#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp48_ = self->priv->adjust_tool_window;
+#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp49_ = _tmp48_->shadows_slider;
+#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_parse_name ("button-press-event", gtk_widget_get_type (), &_tmp50_, NULL, FALSE);
+#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, gtk_widget_get_type (), GtkWidget), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp50_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
+#line 2863 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp51_ = self->priv->adjust_tool_window;
+#line 2863 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp52_ = _tmp51_->highlights_slider;
+#line 2863 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_parse_name ("button-press-event", gtk_widget_get_type (), &_tmp53_, NULL, FALSE);
+#line 2863 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp52_, gtk_widget_get_type (), GtkWidget), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp53_, 0, NULL, (GCallback) _editing_tools_adjust_tool_on_hscale_reset_gtk_widget_button_press_event, self);
+#line 17282 "EditingTools.c"
 }
 
 
@@ -17128,37 +17292,37 @@ gboolean editing_tools_adjust_tool_enhance (EditingToolsAdjustTool* self) {
 	EditingToolsAdjustToolAdjustEnhanceCommand* _tmp4_ = NULL;
 	CommandManager* _tmp5_ = NULL;
 	CommandManager* _tmp6_ = NULL;
-#line 2832 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2866 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self), FALSE);
-#line 2833 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2833 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = editing_tools_photo_canvas_get_photo (_tmp0_);
-#line 2833 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = _tmp1_;
-#line 2833 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = editing_tools_adjust_tool_adjust_enhance_command_new (self, _tmp2_);
-#line 2833 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _tmp3_;
-#line 2833 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp2_);
-#line 2833 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	command = _tmp4_;
-#line 2834 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2868 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = app_window_get_command_manager ();
-#line 2834 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2868 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = _tmp5_;
-#line 2834 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2868 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	command_manager_execute (_tmp6_, G_TYPE_CHECK_INSTANCE_CAST (command, TYPE_COMMAND, Command));
-#line 2834 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2868 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_command_manager_unref0 (_tmp6_);
-#line 2836 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2870 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = TRUE;
-#line 2836 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2870 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (command);
-#line 2836 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2870 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 17162 "EditingTools.c"
+#line 17326 "EditingTools.c"
 }
 
 
@@ -17176,68 +17340,68 @@ static void editing_tools_adjust_tool_on_photos_altered (EditingToolsAdjustTool*
 	PixelTransformationBundle* _tmp9_ = NULL;
 	PixelTransformationBundle* _tmp10_ = NULL;
 	PixelTransformationBundle* _tmp11_ = NULL;
-#line 2839 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2873 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2839 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2873 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (GEE_IS_MAP (map));
-#line 2840 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2874 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = map;
-#line 2840 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2874 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2840 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2874 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = editing_tools_photo_canvas_get_photo (_tmp1_);
-#line 2840 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2874 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = _tmp2_;
-#line 2840 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2874 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = gee_map_has_key (_tmp0_, G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_DATA_OBJECT, DataObject));
-#line 2840 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2874 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = !_tmp4_;
-#line 2840 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2874 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp3_);
-#line 2840 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2874 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp5_) {
-#line 2841 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2875 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return;
-#line 17202 "EditingTools.c"
+#line 17366 "EditingTools.c"
 	}
-#line 2843 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2877 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2843 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2877 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = editing_tools_photo_canvas_get_photo (_tmp6_);
-#line 2843 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2877 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp8_ = _tmp7_;
-#line 2843 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2877 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp9_ = photo_get_color_adjustments (_tmp8_);
-#line 2843 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2877 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp10_ = _tmp9_;
-#line 2843 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2877 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (_tmp8_);
-#line 2843 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2877 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	adjustments = _tmp10_;
-#line 2844 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2878 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = adjustments;
-#line 2844 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2878 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_set_adjustments (self, _tmp11_);
-#line 2839 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2873 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_bundle_unref0 (adjustments);
-#line 17224 "EditingTools.c"
+#line 17388 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_set_adjustments (EditingToolsAdjustTool* self, PixelTransformationBundle* new_adjustments) {
 	PixelTransformationBundle* _tmp0_ = NULL;
 	EditingToolsPhotoCanvas* _tmp11_ = NULL;
-#line 2847 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2881 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2847 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2881 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (new_adjustments));
-#line 2848 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2882 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_unbind_window_handlers (self);
-#line 2850 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2884 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = new_adjustments;
-#line 2850 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2884 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_update_transformations (self, _tmp0_);
-#line 17241 "EditingTools.c"
+#line 17405 "EditingTools.c"
 	{
 		GeeIterator* _adjustment_it = NULL;
 		PixelTransformationBundle* _tmp1_ = NULL;
@@ -17245,106 +17409,106 @@ static void editing_tools_adjust_tool_set_adjustments (EditingToolsAdjustTool* s
 		GeeIterable* _tmp3_ = NULL;
 		GeeIterator* _tmp4_ = NULL;
 		GeeIterator* _tmp5_ = NULL;
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = new_adjustments;
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = pixel_transformation_bundle_get_transformations (_tmp1_);
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = _tmp2_;
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp4_ = gee_iterable_iterator (_tmp3_);
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp5_ = _tmp4_;
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (_tmp3_);
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_adjustment_it = _tmp5_;
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		while (TRUE) {
-#line 17265 "EditingTools.c"
+#line 17429 "EditingTools.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			PixelTransformation* adjustment = NULL;
 			GeeIterator* _tmp8_ = NULL;
 			gpointer _tmp9_ = NULL;
 			PixelTransformation* _tmp10_ = NULL;
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp6_ = _adjustment_it;
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp7_ = gee_iterator_next (_tmp6_);
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (!_tmp7_) {
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				break;
-#line 17280 "EditingTools.c"
+#line 17444 "EditingTools.c"
 			}
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp8_ = _adjustment_it;
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp9_ = gee_iterator_get (_tmp8_);
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			adjustment = (PixelTransformation*) _tmp9_;
-#line 2853 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2887 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp10_ = adjustment;
-#line 2853 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2887 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			editing_tools_adjust_tool_update_slider (self, _tmp10_);
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_pixel_transformation_unref0 (adjustment);
-#line 17294 "EditingTools.c"
+#line 17458 "EditingTools.c"
 		}
-#line 2852 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2886 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (_adjustment_it);
-#line 17298 "EditingTools.c"
+#line 17462 "EditingTools.c"
 	}
-#line 2855 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2889 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_bind_window_handlers (self);
-#line 2856 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2890 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2856 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2890 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_repaint (_tmp11_);
-#line 17306 "EditingTools.c"
+#line 17470 "EditingTools.c"
 }
 
 
 static gpointer _pixel_transformation_ref0 (gpointer self) {
-#line 2864 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2898 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self ? pixel_transformation_ref (self) : NULL;
-#line 17313 "EditingTools.c"
+#line 17477 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_update_slider (EditingToolsAdjustTool* self, PixelTransformation* transformation) {
 	PixelTransformation* _tmp0_ = NULL;
 	PixelTransformationType _tmp1_ = 0;
-#line 2861 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2895 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2861 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2895 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (IS_PIXEL_TRANSFORMATION (transformation));
-#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2896 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = transformation;
-#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2896 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = pixel_transformation_get_transformation_type (_tmp0_);
-#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2896 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	switch (_tmp1_) {
-#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2896 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case PIXEL_TRANSFORMATION_TYPE_TONE_EXPANSION:
-#line 17332 "EditingTools.c"
+#line 17496 "EditingTools.c"
 		{
 			ExpansionTransformation* expansion = NULL;
 			PixelTransformation* _tmp2_ = NULL;
 			ExpansionTransformation* _tmp3_ = NULL;
 			gboolean _tmp4_ = FALSE;
-#line 2864 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2898 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp2_ = transformation;
-#line 2864 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2898 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp3_ = _pixel_transformation_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_EXPANSION_TRANSFORMATION, ExpansionTransformation));
-#line 2864 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2898 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			expansion = _tmp3_;
-#line 2866 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2900 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp4_ = self->priv->disable_histogram_refresh;
-#line 2866 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2900 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			if (!_tmp4_) {
-#line 17348 "EditingTools.c"
+#line 17512 "EditingTools.c"
 				EditingToolsAdjustToolAdjustToolWindow* _tmp5_ = NULL;
 				RGBHistogramManipulator* _tmp6_ = NULL;
 				ExpansionTransformation* _tmp7_ = NULL;
@@ -17353,177 +17517,199 @@ static void editing_tools_adjust_tool_update_slider (EditingToolsAdjustTool* sel
 				RGBHistogramManipulator* _tmp10_ = NULL;
 				ExpansionTransformation* _tmp11_ = NULL;
 				gint _tmp12_ = 0;
-#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2901 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp5_ = self->priv->adjust_tool_window;
-#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2901 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp6_ = _tmp5_->histogram_manipulator;
-#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2901 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp7_ = expansion;
-#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2901 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp8_ = expansion_transformation_get_black_point (_tmp7_);
-#line 2867 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2901 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				rgb_histogram_manipulator_set_left_nub_position (_tmp6_, _tmp8_);
-#line 2869 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2903 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp9_ = self->priv->adjust_tool_window;
-#line 2869 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2903 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp10_ = _tmp9_->histogram_manipulator;
-#line 2869 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2903 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp11_ = expansion;
-#line 2869 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2903 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp12_ = expansion_transformation_get_white_point (_tmp11_);
-#line 2869 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2903 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				rgb_histogram_manipulator_set_right_nub_position (_tmp10_, _tmp12_);
-#line 17377 "EditingTools.c"
+#line 17541 "EditingTools.c"
 			}
-#line 2872 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2906 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_pixel_transformation_unref0 (expansion);
-#line 2872 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2906 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 17383 "EditingTools.c"
+#line 17547 "EditingTools.c"
 		}
-#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2896 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		case PIXEL_TRANSFORMATION_TYPE_SHADOWS:
-#line 17387 "EditingTools.c"
+#line 17551 "EditingTools.c"
 		{
 			EditingToolsAdjustToolAdjustToolWindow* _tmp13_ = NULL;
 			GtkScale* _tmp14_ = NULL;
 			PixelTransformation* _tmp15_ = NULL;
 			gfloat _tmp16_ = 0.0F;
-#line 2875 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2909 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp13_ = self->priv->adjust_tool_window;
-#line 2875 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2909 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp14_ = _tmp13_->shadows_slider;
-#line 2875 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2909 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp15_ = transformation;
-#line 2875 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2909 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp16_ = shadow_detail_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, TYPE_SHADOW_DETAIL_TRANSFORMATION, ShadowDetailTransformation));
-#line 2875 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2909 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_range_get_type (), GtkRange), (gdouble) _tmp16_);
-#line 2877 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2911 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 17405 "EditingTools.c"
+#line 17569 "EditingTools.c"
 		}
-#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		case PIXEL_TRANSFORMATION_TYPE_HIGHLIGHTS:
-#line 17409 "EditingTools.c"
+#line 2896 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		case PIXEL_TRANSFORMATION_TYPE_CONTRAST:
+#line 17573 "EditingTools.c"
 		{
 			EditingToolsAdjustToolAdjustToolWindow* _tmp17_ = NULL;
-			GtkScale* _tmp18_ = NULL;
+			GtkHScale* _tmp18_ = NULL;
 			PixelTransformation* _tmp19_ = NULL;
 			gfloat _tmp20_ = 0.0F;
-#line 2880 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2914 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp17_ = self->priv->adjust_tool_window;
-#line 2880 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp18_ = _tmp17_->highlights_slider;
-#line 2880 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2914 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp18_ = _tmp17_->contrast_slider;
+#line 2914 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp19_ = transformation;
-#line 2880 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp20_ = highlight_detail_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, TYPE_HIGHLIGHT_DETAIL_TRANSFORMATION, HighlightDetailTransformation));
-#line 2880 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2914 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp20_ = contrast_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, TYPE_CONTRAST_TRANSFORMATION, ContrastTransformation));
+#line 2914 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_range_get_type (), GtkRange), (gdouble) _tmp20_);
-#line 2882 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2916 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 17427 "EditingTools.c"
+#line 17591 "EditingTools.c"
 		}
-#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		case PIXEL_TRANSFORMATION_TYPE_EXPOSURE:
-#line 17431 "EditingTools.c"
+#line 2896 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		case PIXEL_TRANSFORMATION_TYPE_HIGHLIGHTS:
+#line 17595 "EditingTools.c"
 		{
 			EditingToolsAdjustToolAdjustToolWindow* _tmp21_ = NULL;
 			GtkScale* _tmp22_ = NULL;
 			PixelTransformation* _tmp23_ = NULL;
 			gfloat _tmp24_ = 0.0F;
-#line 2885 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2919 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp21_ = self->priv->adjust_tool_window;
-#line 2885 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp22_ = _tmp21_->exposure_slider;
-#line 2885 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2919 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp22_ = _tmp21_->highlights_slider;
+#line 2919 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp23_ = transformation;
-#line 2885 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp24_ = exposure_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, TYPE_EXPOSURE_TRANSFORMATION, ExposureTransformation));
-#line 2885 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2919 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp24_ = highlight_detail_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, TYPE_HIGHLIGHT_DETAIL_TRANSFORMATION, HighlightDetailTransformation));
+#line 2919 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_range_get_type (), GtkRange), (gdouble) _tmp24_);
-#line 2887 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2921 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 17449 "EditingTools.c"
+#line 17613 "EditingTools.c"
 		}
-#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		case PIXEL_TRANSFORMATION_TYPE_SATURATION:
-#line 17453 "EditingTools.c"
+#line 2896 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		case PIXEL_TRANSFORMATION_TYPE_EXPOSURE:
+#line 17617 "EditingTools.c"
 		{
 			EditingToolsAdjustToolAdjustToolWindow* _tmp25_ = NULL;
 			GtkScale* _tmp26_ = NULL;
 			PixelTransformation* _tmp27_ = NULL;
 			gfloat _tmp28_ = 0.0F;
-#line 2890 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp25_ = self->priv->adjust_tool_window;
-#line 2890 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp26_ = _tmp25_->saturation_slider;
-#line 2890 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp26_ = _tmp25_->exposure_slider;
+#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp27_ = transformation;
-#line 2890 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp28_ = saturation_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, TYPE_SATURATION_TRANSFORMATION, SaturationTransformation));
-#line 2890 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp28_ = exposure_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, TYPE_EXPOSURE_TRANSFORMATION, ExposureTransformation));
+#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_range_get_type (), GtkRange), (gdouble) _tmp28_);
-#line 2892 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 17471 "EditingTools.c"
+#line 17635 "EditingTools.c"
 		}
-#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		case PIXEL_TRANSFORMATION_TYPE_TINT:
-#line 17475 "EditingTools.c"
+#line 2896 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		case PIXEL_TRANSFORMATION_TYPE_SATURATION:
+#line 17639 "EditingTools.c"
 		{
 			EditingToolsAdjustToolAdjustToolWindow* _tmp29_ = NULL;
 			GtkScale* _tmp30_ = NULL;
 			PixelTransformation* _tmp31_ = NULL;
 			gfloat _tmp32_ = 0.0F;
-#line 2895 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2929 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp29_ = self->priv->adjust_tool_window;
-#line 2895 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp30_ = _tmp29_->tint_slider;
-#line 2895 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2929 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp30_ = _tmp29_->saturation_slider;
+#line 2929 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp31_ = transformation;
-#line 2895 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp32_ = tint_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, TYPE_TINT_TRANSFORMATION, TintTransformation));
-#line 2895 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2929 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp32_ = saturation_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, TYPE_SATURATION_TRANSFORMATION, SaturationTransformation));
+#line 2929 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, gtk_range_get_type (), GtkRange), (gdouble) _tmp32_);
-#line 2897 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2931 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 17493 "EditingTools.c"
+#line 17657 "EditingTools.c"
 		}
-#line 2862 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-		case PIXEL_TRANSFORMATION_TYPE_TEMPERATURE:
-#line 17497 "EditingTools.c"
+#line 2896 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		case PIXEL_TRANSFORMATION_TYPE_TINT:
+#line 17661 "EditingTools.c"
 		{
 			EditingToolsAdjustToolAdjustToolWindow* _tmp33_ = NULL;
 			GtkScale* _tmp34_ = NULL;
 			PixelTransformation* _tmp35_ = NULL;
 			gfloat _tmp36_ = 0.0F;
-#line 2900 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2934 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp33_ = self->priv->adjust_tool_window;
-#line 2900 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp34_ = _tmp33_->temperature_slider;
-#line 2900 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2934 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp34_ = _tmp33_->tint_slider;
+#line 2934 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp35_ = transformation;
-#line 2900 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp36_ = temperature_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, TYPE_TEMPERATURE_TRANSFORMATION, TemperatureTransformation));
-#line 2900 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2934 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp36_ = tint_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, TYPE_TINT_TRANSFORMATION, TintTransformation));
+#line 2934 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, gtk_range_get_type (), GtkRange), (gdouble) _tmp36_);
-#line 2902 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2936 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			break;
-#line 17515 "EditingTools.c"
+#line 17679 "EditingTools.c"
+		}
+#line 2896 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+		case PIXEL_TRANSFORMATION_TYPE_TEMPERATURE:
+#line 17683 "EditingTools.c"
+		{
+			EditingToolsAdjustToolAdjustToolWindow* _tmp37_ = NULL;
+			GtkScale* _tmp38_ = NULL;
+			PixelTransformation* _tmp39_ = NULL;
+			gfloat _tmp40_ = 0.0F;
+#line 2939 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp37_ = self->priv->adjust_tool_window;
+#line 2939 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp38_ = _tmp37_->temperature_slider;
+#line 2939 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp39_ = transformation;
+#line 2939 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp40_ = temperature_transformation_get_parameter (G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, TYPE_TEMPERATURE_TRANSFORMATION, TemperatureTransformation));
+#line 2939 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, gtk_range_get_type (), GtkRange), (gdouble) _tmp40_);
+#line 2941 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			break;
+#line 17701 "EditingTools.c"
 		}
 		default:
 		{
-			PixelTransformation* _tmp37_ = NULL;
-			PixelTransformationType _tmp38_ = 0;
-#line 2905 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp37_ = transformation;
-#line 2905 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			_tmp38_ = pixel_transformation_get_transformation_type (_tmp37_);
-#line 2905 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-			g_error ("EditingTools.vala:2905: Unknown adjustment: %d", (gint) _tmp38_);
-#line 17527 "EditingTools.c"
+			PixelTransformation* _tmp41_ = NULL;
+			PixelTransformationType _tmp42_ = 0;
+#line 2944 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp41_ = transformation;
+#line 2944 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			_tmp42_ = pixel_transformation_get_transformation_type (_tmp41_);
+#line 2944 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+			g_error ("EditingTools.vala:2944: Unknown adjustment: %d", (gint) _tmp42_);
+#line 17713 "EditingTools.c"
 		}
 	}
 }
@@ -17552,75 +17738,75 @@ static void editing_tools_adjust_tool_init_fp_pixel_cache (EditingToolsAdjustToo
 	gfloat* _tmp12_ = NULL;
 	gint cache_pixel_index = 0;
 	gfloat INV_255 = 0.0F;
-#line 2909 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2948 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (self));
-#line 2909 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2948 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (GDK_IS_PIXBUF (source));
-#line 2910 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2949 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = source;
-#line 2910 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2949 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = gdk_pixbuf_get_width (_tmp0_);
-#line 2910 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2949 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	source_width = _tmp1_;
-#line 2911 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2950 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = source;
-#line 2911 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2950 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = gdk_pixbuf_get_height (_tmp2_);
-#line 2911 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2950 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	source_height = _tmp3_;
-#line 2912 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2951 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = source;
-#line 2912 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2951 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = gdk_pixbuf_get_n_channels (_tmp4_);
-#line 2912 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2951 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	source_num_channels = _tmp5_;
-#line 2913 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2952 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = source;
-#line 2913 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2952 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = gdk_pixbuf_get_rowstride (_tmp6_);
-#line 2913 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2952 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	source_rowstride = _tmp7_;
-#line 2914 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2953 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp8_ = source;
-#line 2914 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2953 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp9_ = gdk_pixbuf_get_pixels (_tmp8_);
-#line 2914 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2953 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	source_pixels = _tmp9_;
-#line 2914 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2953 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	source_pixels_length1 = -1;
-#line 2914 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2953 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_source_pixels_size_ = source_pixels_length1;
-#line 2916 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2955 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp10_ = source_width;
-#line 2916 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2955 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = source_height;
-#line 2916 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2955 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp12_ = g_new0 (gfloat, (3 * _tmp10_) * _tmp11_);
-#line 2916 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2955 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->fp_pixel_cache = (g_free (self->priv->fp_pixel_cache), NULL);
-#line 2916 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2955 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->fp_pixel_cache = _tmp12_;
-#line 2916 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2955 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->fp_pixel_cache_length1 = (3 * _tmp10_) * _tmp11_;
-#line 2916 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2955 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->_fp_pixel_cache_size_ = self->priv->fp_pixel_cache_length1;
-#line 2917 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2956 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	cache_pixel_index = 0;
-#line 2918 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2957 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	INV_255 = 1.0f / 255.0f;
-#line 17612 "EditingTools.c"
+#line 17798 "EditingTools.c"
 	{
 		gint j = 0;
-#line 2920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2959 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		j = 0;
-#line 17617 "EditingTools.c"
+#line 17803 "EditingTools.c"
 		{
 			gboolean _tmp13_ = FALSE;
-#line 2920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2959 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			_tmp13_ = TRUE;
-#line 2920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2959 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 			while (TRUE) {
-#line 17624 "EditingTools.c"
+#line 17810 "EditingTools.c"
 				gint _tmp15_ = 0;
 				gint _tmp16_ = 0;
 				gint row_start_index = 0;
@@ -17630,58 +17816,58 @@ static void editing_tools_adjust_tool_init_fp_pixel_cache (EditingToolsAdjustToo
 				gint _tmp19_ = 0;
 				gint _tmp20_ = 0;
 				gint _tmp21_ = 0;
-#line 2920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2959 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (!_tmp13_) {
-#line 17636 "EditingTools.c"
+#line 17822 "EditingTools.c"
 					gint _tmp14_ = 0;
-#line 2920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2959 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					_tmp14_ = j;
-#line 2920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2959 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					j = _tmp14_ + 1;
-#line 17642 "EditingTools.c"
+#line 17828 "EditingTools.c"
 				}
-#line 2920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2959 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp13_ = FALSE;
-#line 2920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2959 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp15_ = j;
-#line 2920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2959 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp16_ = source_height;
-#line 2920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2959 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				if (!(_tmp15_ < _tmp16_)) {
-#line 2920 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2959 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					break;
-#line 17654 "EditingTools.c"
+#line 17840 "EditingTools.c"
 				}
-#line 2921 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2960 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp17_ = j;
-#line 2921 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2960 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp18_ = source_rowstride;
-#line 2921 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2960 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				row_start_index = _tmp17_ * _tmp18_;
-#line 2922 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2961 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp19_ = row_start_index;
-#line 2922 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2961 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp20_ = source_width;
-#line 2922 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2961 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				_tmp21_ = source_num_channels;
-#line 2922 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2961 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 				row_end_index = _tmp19_ + (_tmp20_ * _tmp21_);
-#line 17670 "EditingTools.c"
+#line 17856 "EditingTools.c"
 				{
 					gint i = 0;
 					gint _tmp22_ = 0;
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					_tmp22_ = row_start_index;
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 					i = _tmp22_;
-#line 17678 "EditingTools.c"
+#line 17864 "EditingTools.c"
 					{
 						gboolean _tmp23_ = FALSE;
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 						_tmp23_ = TRUE;
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 						while (TRUE) {
-#line 17685 "EditingTools.c"
+#line 17871 "EditingTools.c"
 							gint _tmp26_ = 0;
 							gint _tmp27_ = 0;
 							gfloat* _tmp28_ = NULL;
@@ -17711,98 +17897,98 @@ static void editing_tools_adjust_tool_init_fp_pixel_cache (EditingToolsAdjustToo
 							guchar _tmp46_ = '\0';
 							gfloat _tmp47_ = 0.0F;
 							gfloat _tmp48_ = 0.0F;
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							if (!_tmp23_) {
-#line 17717 "EditingTools.c"
+#line 17903 "EditingTools.c"
 								gint _tmp24_ = 0;
 								gint _tmp25_ = 0;
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 								_tmp24_ = i;
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 								_tmp25_ = source_num_channels;
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 								i = _tmp24_ + _tmp25_;
-#line 17726 "EditingTools.c"
+#line 17912 "EditingTools.c"
 							}
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp23_ = FALSE;
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp26_ = i;
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp27_ = row_end_index;
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							if (!(_tmp26_ < _tmp27_)) {
-#line 2923 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2962 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 								break;
-#line 17738 "EditingTools.c"
+#line 17924 "EditingTools.c"
 							}
-#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp28_ = self->priv->fp_pixel_cache;
-#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp28__length1 = self->priv->fp_pixel_cache_length1;
-#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp29_ = cache_pixel_index;
-#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							cache_pixel_index = _tmp29_ + 1;
-#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp30_ = source_pixels;
-#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp30__length1 = source_pixels_length1;
-#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp31_ = i;
-#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp32_ = _tmp30_[_tmp31_];
-#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp33_ = INV_255;
-#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp28_[_tmp29_] = ((gfloat) _tmp32_) * _tmp33_;
-#line 2924 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2963 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp34_ = _tmp28_[_tmp29_];
-#line 2925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2964 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp35_ = self->priv->fp_pixel_cache;
-#line 2925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2964 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp35__length1 = self->priv->fp_pixel_cache_length1;
-#line 2925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2964 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp36_ = cache_pixel_index;
-#line 2925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2964 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							cache_pixel_index = _tmp36_ + 1;
-#line 2925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2964 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp37_ = source_pixels;
-#line 2925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2964 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp37__length1 = source_pixels_length1;
-#line 2925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2964 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp38_ = i;
-#line 2925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2964 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp39_ = _tmp37_[_tmp38_ + 1];
-#line 2925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2964 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp40_ = INV_255;
-#line 2925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2964 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp35_[_tmp36_] = ((gfloat) _tmp39_) * _tmp40_;
-#line 2925 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2964 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp41_ = _tmp35_[_tmp36_];
-#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2965 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp42_ = self->priv->fp_pixel_cache;
-#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2965 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp42__length1 = self->priv->fp_pixel_cache_length1;
-#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2965 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp43_ = cache_pixel_index;
-#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2965 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							cache_pixel_index = _tmp43_ + 1;
-#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2965 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp44_ = source_pixels;
-#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2965 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp44__length1 = source_pixels_length1;
-#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2965 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp45_ = i;
-#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2965 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp46_ = _tmp44_[_tmp45_ + 2];
-#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2965 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp47_ = INV_255;
-#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2965 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp42_[_tmp43_] = ((gfloat) _tmp46_) * _tmp47_;
-#line 2926 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2965 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 							_tmp48_ = _tmp42_[_tmp43_];
-#line 17806 "EditingTools.c"
+#line 17992 "EditingTools.c"
 						}
 					}
 				}
@@ -17822,73 +18008,73 @@ static gboolean editing_tools_adjust_tool_real_on_keypress (EditingToolsEditingT
 	const gchar* _tmp4_ = NULL;
 	GdkEventKey* _tmp11_ = NULL;
 	gboolean _tmp12_ = FALSE;
-#line 2931 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2970 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_ADJUST_TOOL, EditingToolsAdjustTool);
-#line 2931 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2970 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 2932 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2971 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = event;
-#line 2932 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2971 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = _tmp2_->keyval;
-#line 2932 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2971 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = gdk_keyval_name (_tmp3_);
-#line 2932 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2971 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (g_strcmp0 (_tmp4_, "KP_Enter") == 0) {
-#line 2932 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2971 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = TRUE;
-#line 17840 "EditingTools.c"
+#line 18026 "EditingTools.c"
 	} else {
 		GdkEventKey* _tmp5_ = NULL;
 		guint _tmp6_ = 0U;
 		const gchar* _tmp7_ = NULL;
-#line 2933 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2972 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp5_ = event;
-#line 2933 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2972 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp6_ = _tmp5_->keyval;
-#line 2933 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2972 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp7_ = gdk_keyval_name (_tmp6_);
-#line 2933 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2972 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = g_strcmp0 (_tmp7_, "Enter") == 0;
-#line 17853 "EditingTools.c"
+#line 18039 "EditingTools.c"
 	}
-#line 2932 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2971 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp1_) {
-#line 2932 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2971 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = TRUE;
-#line 17859 "EditingTools.c"
+#line 18045 "EditingTools.c"
 	} else {
 		GdkEventKey* _tmp8_ = NULL;
 		guint _tmp9_ = 0U;
 		const gchar* _tmp10_ = NULL;
-#line 2934 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2973 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp8_ = event;
-#line 2934 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2973 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp9_ = _tmp8_->keyval;
-#line 2934 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2973 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp10_ = gdk_keyval_name (_tmp9_);
-#line 2934 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2973 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp0_ = g_strcmp0 (_tmp10_, "Return") == 0;
-#line 17872 "EditingTools.c"
+#line 18058 "EditingTools.c"
 	}
-#line 2932 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2971 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_) {
-#line 2935 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2974 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		editing_tools_adjust_tool_on_ok (self);
-#line 2936 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2975 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = TRUE;
-#line 2936 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2975 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 17882 "EditingTools.c"
+#line 18068 "EditingTools.c"
 	}
-#line 2939 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2978 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = event;
-#line 2939 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2978 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp12_ = EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_adjust_tool_parent_class)->on_keypress (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool), _tmp11_);
-#line 2939 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2978 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = _tmp12_;
-#line 2939 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2978 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 17892 "EditingTools.c"
+#line 18078 "EditingTools.c"
 }
 
 
@@ -17904,314 +18090,351 @@ static EditingToolsAdjustToolAdjustToolWindow* editing_tools_adjust_tool_adjust_
 	GtkScale* _tmp5_ = NULL;
 	GtkScale* _tmp6_ = NULL;
 	GtkScale* _tmp7_ = NULL;
-	GtkLabel* saturation_label = NULL;
+	GtkLabel* contrast_label = NULL;
 	const gchar* _tmp8_ = NULL;
 	GtkLabel* _tmp9_ = NULL;
-	GtkScale* _tmp10_ = NULL;
-	GtkScale* _tmp11_ = NULL;
-	GtkScale* _tmp12_ = NULL;
-	GtkScale* _tmp13_ = NULL;
-	GtkLabel* tint_label = NULL;
+	GtkHScale* _tmp10_ = NULL;
+	GtkHScale* _tmp11_ = NULL;
+	GtkHScale* _tmp12_ = NULL;
+	GtkHScale* _tmp13_ = NULL;
+	GtkLabel* saturation_label = NULL;
 	const gchar* _tmp14_ = NULL;
 	GtkLabel* _tmp15_ = NULL;
 	GtkScale* _tmp16_ = NULL;
 	GtkScale* _tmp17_ = NULL;
 	GtkScale* _tmp18_ = NULL;
 	GtkScale* _tmp19_ = NULL;
-	GtkLabel* temperature_label = NULL;
+	GtkLabel* tint_label = NULL;
 	const gchar* _tmp20_ = NULL;
 	GtkLabel* _tmp21_ = NULL;
 	GtkScale* _tmp22_ = NULL;
 	GtkScale* _tmp23_ = NULL;
 	GtkScale* _tmp24_ = NULL;
 	GtkScale* _tmp25_ = NULL;
-	GtkLabel* shadows_label = NULL;
+	GtkLabel* temperature_label = NULL;
 	const gchar* _tmp26_ = NULL;
 	GtkLabel* _tmp27_ = NULL;
 	GtkScale* _tmp28_ = NULL;
 	GtkScale* _tmp29_ = NULL;
 	GtkScale* _tmp30_ = NULL;
 	GtkScale* _tmp31_ = NULL;
-	GtkLabel* highlights_label = NULL;
+	GtkLabel* shadows_label = NULL;
 	const gchar* _tmp32_ = NULL;
 	GtkLabel* _tmp33_ = NULL;
 	GtkScale* _tmp34_ = NULL;
 	GtkScale* _tmp35_ = NULL;
 	GtkScale* _tmp36_ = NULL;
+	GtkScale* _tmp37_ = NULL;
+	GtkLabel* highlights_label = NULL;
+	const gchar* _tmp38_ = NULL;
+	GtkLabel* _tmp39_ = NULL;
+	GtkScale* _tmp40_ = NULL;
+	GtkScale* _tmp41_ = NULL;
+	GtkScale* _tmp42_ = NULL;
 	GtkBox* button_layouter = NULL;
-	GtkBox* _tmp37_ = NULL;
-	GtkButton* _tmp38_ = NULL;
-	GtkButton* _tmp39_ = NULL;
-	GtkButton* _tmp40_ = NULL;
-	GtkAlignment* histogram_aligner = NULL;
-	GtkAlignment* _tmp41_ = NULL;
-	RGBHistogramManipulator* _tmp42_ = NULL;
-	GtkBox* pane_layouter = NULL;
 	GtkBox* _tmp43_ = NULL;
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	GtkButton* _tmp44_ = NULL;
+	GtkButton* _tmp45_ = NULL;
+	GtkButton* _tmp46_ = NULL;
+	GtkAlignment* histogram_aligner = NULL;
+	GtkAlignment* _tmp47_ = NULL;
+	RGBHistogramManipulator* _tmp48_ = NULL;
+	GtkBox* pane_layouter = NULL;
+	GtkBox* _tmp49_ = NULL;
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (GTK_IS_WINDOW (container), NULL);
-#line 2231 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp0_ = container;
-#line 2231 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self = (EditingToolsAdjustToolAdjustToolWindow*) editing_tools_editing_tool_window_construct (object_type, _tmp0_);
-#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp1_ = (GtkGrid*) gtk_grid_new ();
-#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_object_ref_sink (_tmp1_);
-#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	slider_organizer = _tmp1_;
 #line 2234 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_grid_set_column_homogeneous (slider_organizer, FALSE);
-#line 2235 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_grid_set_row_spacing (slider_organizer, (guint) 12);
+	_tmp0_ = container;
+#line 2234 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self = (EditingToolsAdjustToolAdjustToolWindow*) editing_tools_editing_tool_window_construct (object_type, _tmp0_);
 #line 2236 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_grid_set_column_spacing (slider_organizer, (guint) 12);
+	_tmp1_ = (GtkGrid*) gtk_grid_new ();
+#line 2236 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp1_);
+#line 2236 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	slider_organizer = _tmp1_;
 #line 2237 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_widget_set_margin_left (G_TYPE_CHECK_INSTANCE_CAST (slider_organizer, gtk_widget_get_type (), GtkWidget), 12);
+	gtk_grid_set_column_homogeneous (slider_organizer, FALSE);
 #line 2238 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_widget_set_margin_bottom (G_TYPE_CHECK_INSTANCE_CAST (slider_organizer, gtk_widget_get_type (), GtkWidget), 12);
+	gtk_grid_set_row_spacing (slider_organizer, (guint) 12);
+#line 2239 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_grid_set_column_spacing (slider_organizer, (guint) 12);
 #line 2240 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp2_ = _ ("Exposure:");
-#line 2240 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp3_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp2_);
-#line 2240 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_object_ref_sink (_tmp3_);
-#line 2240 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	exposure_label = _tmp3_;
+	gtk_widget_set_margin_left (G_TYPE_CHECK_INSTANCE_CAST (slider_organizer, gtk_widget_get_type (), GtkWidget), 12);
 #line 2241 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_widget_set_margin_bottom (G_TYPE_CHECK_INSTANCE_CAST (slider_organizer, gtk_widget_get_type (), GtkWidget), 12);
+#line 2243 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp2_ = _ ("Exposure:");
+#line 2243 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp3_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp2_);
+#line 2243 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp3_);
+#line 2243 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	exposure_label = _tmp3_;
+#line 2244 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (exposure_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
-#line 2242 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2245 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (exposure_label, gtk_widget_get_type (), GtkWidget), 0, 0, 1, 1);
-#line 2243 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2246 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = self->exposure_slider;
-#line 2243 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2246 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget), 1, 0, 1, 1);
-#line 2244 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2247 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = self->exposure_slider;
-#line 2244 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2247 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_ADJUST_TOOL_SLIDER_WIDTH, -1);
-#line 2245 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2248 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = self->exposure_slider;
-#line 2245 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2248 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_scale_set_draw_value (_tmp6_, FALSE);
-#line 2246 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp7_ = self->exposure_slider;
-#line 2246 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_widget_set_margin_right (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), 0);
-#line 2248 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp8_ = _ ("Saturation:");
-#line 2248 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp9_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp8_);
-#line 2248 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_object_ref_sink (_tmp9_);
-#line 2248 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	saturation_label = _tmp9_;
 #line 2249 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (saturation_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
-#line 2250 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (saturation_label, gtk_widget_get_type (), GtkWidget), 0, 1, 1, 1);
+	_tmp7_ = self->exposure_slider;
+#line 2249 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_widget_set_margin_right (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), 0);
 #line 2251 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp10_ = self->saturation_slider;
+	_tmp8_ = _ ("Contrast:");
 #line 2251 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp9_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp8_);
+#line 2251 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp9_);
+#line 2251 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	contrast_label = _tmp9_;
+#line 2252 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (contrast_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
+#line 2253 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (contrast_label, gtk_widget_get_type (), GtkWidget), 0, 1, 1, 1);
+#line 2254 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp10_ = self->contrast_slider;
+#line 2254 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget), 1, 1, 1, 1);
-#line 2252 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp11_ = self->saturation_slider;
-#line 2252 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2255 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp11_ = self->contrast_slider;
+#line 2255 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_ADJUST_TOOL_SLIDER_WIDTH, -1);
-#line 2253 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp12_ = self->saturation_slider;
-#line 2253 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_scale_set_draw_value (_tmp12_, FALSE);
-#line 2254 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp13_ = self->saturation_slider;
-#line 2254 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_widget_set_margin_right (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_widget_get_type (), GtkWidget), 0);
 #line 2256 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp14_ = _ ("Tint:");
+	_tmp12_ = self->contrast_slider;
 #line 2256 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp15_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp14_);
-#line 2256 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_object_ref_sink (_tmp15_);
-#line 2256 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	tint_label = _tmp15_;
+	gtk_scale_set_draw_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_scale_get_type (), GtkScale), FALSE);
 #line 2257 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (tint_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
-#line 2258 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (tint_label, gtk_widget_get_type (), GtkWidget), 0, 2, 1, 1);
+	_tmp13_ = self->contrast_slider;
+#line 2257 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_widget_set_margin_right (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_widget_get_type (), GtkWidget), 0);
 #line 2259 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp16_ = self->tint_slider;
+	_tmp14_ = _ ("Saturation:");
 #line 2259 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp15_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp14_);
+#line 2259 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp15_);
+#line 2259 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	saturation_label = _tmp15_;
+#line 2260 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (saturation_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
+#line 2261 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (saturation_label, gtk_widget_get_type (), GtkWidget), 0, 2, 1, 1);
+#line 2262 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp16_ = self->saturation_slider;
+#line 2262 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_widget_get_type (), GtkWidget), 1, 2, 1, 1);
-#line 2260 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp17_ = self->tint_slider;
-#line 2260 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2263 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp17_ = self->saturation_slider;
+#line 2263 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_ADJUST_TOOL_SLIDER_WIDTH, -1);
-#line 2261 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp18_ = self->tint_slider;
-#line 2261 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2264 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp18_ = self->saturation_slider;
+#line 2264 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_scale_set_draw_value (_tmp18_, FALSE);
-#line 2262 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp19_ = self->tint_slider;
-#line 2262 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2265 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp19_ = self->saturation_slider;
+#line 2265 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_widget_set_margin_right (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_widget_get_type (), GtkWidget), 0);
-#line 2264 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp20_ = _ ("Temperature:");
-#line 2264 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp21_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp20_);
-#line 2264 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_object_ref_sink (_tmp21_);
-#line 2264 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	temperature_label = _tmp21_;
-#line 2266 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (temperature_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
 #line 2267 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (temperature_label, gtk_widget_get_type (), GtkWidget), 0, 3, 1, 1);
+	_tmp20_ = _ ("Tint:");
+#line 2267 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp21_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp20_);
+#line 2267 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp21_);
+#line 2267 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	tint_label = _tmp21_;
 #line 2268 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp22_ = self->temperature_slider;
-#line 2268 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (tint_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
+#line 2269 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (tint_label, gtk_widget_get_type (), GtkWidget), 0, 3, 1, 1);
+#line 2270 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp22_ = self->tint_slider;
+#line 2270 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_widget_get_type (), GtkWidget), 1, 3, 1, 1);
-#line 2269 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp23_ = self->temperature_slider;
-#line 2269 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2271 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp23_ = self->tint_slider;
+#line 2271 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_ADJUST_TOOL_SLIDER_WIDTH, -1);
-#line 2270 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp24_ = self->temperature_slider;
-#line 2270 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2272 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp24_ = self->tint_slider;
+#line 2272 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_scale_set_draw_value (_tmp24_, FALSE);
-#line 2271 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp25_ = self->temperature_slider;
-#line 2271 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2273 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp25_ = self->tint_slider;
+#line 2273 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_widget_set_margin_right (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_widget_get_type (), GtkWidget), 0);
-#line 2273 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp26_ = _ ("Shadows:");
-#line 2273 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp27_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp26_);
-#line 2273 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_object_ref_sink (_tmp27_);
-#line 2273 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	shadows_label = _tmp27_;
-#line 2274 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (shadows_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
 #line 2275 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (shadows_label, gtk_widget_get_type (), GtkWidget), 0, 4, 1, 1);
-#line 2276 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp28_ = self->shadows_slider;
-#line 2276 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp26_ = _ ("Temperature:");
+#line 2275 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp27_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp26_);
+#line 2275 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp27_);
+#line 2275 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	temperature_label = _tmp27_;
+#line 2277 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (temperature_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
+#line 2278 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (temperature_label, gtk_widget_get_type (), GtkWidget), 0, 4, 1, 1);
+#line 2279 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp28_ = self->temperature_slider;
+#line 2279 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, gtk_widget_get_type (), GtkWidget), 1, 4, 1, 1);
-#line 2277 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp29_ = self->shadows_slider;
-#line 2277 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2280 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp29_ = self->temperature_slider;
+#line 2280 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_ADJUST_TOOL_SLIDER_WIDTH, -1);
-#line 2278 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp30_ = self->shadows_slider;
-#line 2278 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2281 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp30_ = self->temperature_slider;
+#line 2281 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_scale_set_draw_value (_tmp30_, FALSE);
-#line 2279 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp31_ = self->shadows_slider;
-#line 2279 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_widget_set_margin_right (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, gtk_widget_get_type (), GtkWidget), 0);
-#line 2281 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp32_ = _ ("Highlights:");
-#line 2281 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp33_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp32_);
-#line 2281 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_object_ref_sink (_tmp33_);
-#line 2281 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	highlights_label = _tmp33_;
 #line 2282 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (highlights_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
-#line 2283 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (highlights_label, gtk_widget_get_type (), GtkWidget), 0, 5, 1, 1);
+	_tmp31_ = self->temperature_slider;
+#line 2282 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_widget_set_margin_right (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, gtk_widget_get_type (), GtkWidget), 0);
 #line 2284 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp34_ = self->highlights_slider;
+	_tmp32_ = _ ("Shadows:");
 #line 2284 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp33_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp32_);
+#line 2284 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp33_);
+#line 2284 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	shadows_label = _tmp33_;
+#line 2285 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (shadows_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
+#line 2286 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (shadows_label, gtk_widget_get_type (), GtkWidget), 0, 5, 1, 1);
+#line 2287 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp34_ = self->shadows_slider;
+#line 2287 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, gtk_widget_get_type (), GtkWidget), 1, 5, 1, 1);
-#line 2285 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp35_ = self->highlights_slider;
-#line 2285 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2288 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp35_ = self->shadows_slider;
+#line 2288 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_ADJUST_TOOL_SLIDER_WIDTH, -1);
-#line 2286 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp36_ = self->highlights_slider;
-#line 2286 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_scale_set_draw_value (_tmp36_, FALSE);
-#line 2288 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp37_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-#line 2288 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_object_ref_sink (_tmp37_);
-#line 2288 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	button_layouter = _tmp37_;
 #line 2289 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_box_set_homogeneous (button_layouter, TRUE);
+	_tmp36_ = self->shadows_slider;
+#line 2289 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_scale_set_draw_value (_tmp36_, FALSE);
 #line 2290 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp38_ = self->cancel_button;
+	_tmp37_ = self->shadows_slider;
 #line 2290 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_box_pack_start (button_layouter, G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 1);
-#line 2291 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp39_ = self->reset_button;
-#line 2291 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_box_pack_start (button_layouter, G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 1);
+	gtk_widget_set_margin_right (G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, gtk_widget_get_type (), GtkWidget), 0);
 #line 2292 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp40_ = self->ok_button;
+	_tmp38_ = _ ("Highlights:");
 #line 2292 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_box_pack_start (button_layouter, G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 1);
+	_tmp39_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp38_);
+#line 2292 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp39_);
+#line 2292 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	highlights_label = _tmp39_;
+#line 2293 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (highlights_label, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
 #line 2294 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp41_ = (GtkAlignment*) gtk_alignment_new (0.0f, 0.0f, 0.0f, 0.0f);
-#line 2294 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_object_ref_sink (_tmp41_);
-#line 2294 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	histogram_aligner = _tmp41_;
+	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (highlights_label, gtk_widget_get_type (), GtkWidget), 0, 6, 1, 1);
 #line 2295 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp42_ = self->histogram_manipulator;
+	_tmp40_ = self->highlights_slider;
 #line 2295 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (histogram_aligner, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, gtk_widget_get_type (), GtkWidget));
+	gtk_grid_attach (slider_organizer, G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, gtk_widget_get_type (), GtkWidget), 1, 6, 1, 1);
 #line 2296 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_alignment_set_padding (histogram_aligner, (guint) 12, (guint) 8, (guint) 12, (guint) 12);
-#line 2298 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp43_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-#line 2298 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_object_ref_sink (_tmp43_);
-#line 2298 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	pane_layouter = _tmp43_;
+	_tmp41_ = self->highlights_slider;
+#line 2296 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_ADJUST_TOOL_SLIDER_WIDTH, -1);
+#line 2297 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp42_ = self->highlights_slider;
+#line 2297 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_scale_set_draw_value (_tmp42_, FALSE);
 #line 2299 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (pane_layouter, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (histogram_aligner, gtk_widget_get_type (), GtkWidget));
+	_tmp43_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
+#line 2299 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp43_);
+#line 2299 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	button_layouter = _tmp43_;
 #line 2300 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (pane_layouter, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (slider_organizer, gtk_widget_get_type (), GtkWidget));
+	gtk_box_set_homogeneous (button_layouter, TRUE);
 #line 2301 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (pane_layouter, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (button_layouter, gtk_widget_get_type (), GtkWidget));
+	_tmp44_ = self->cancel_button;
+#line 2301 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_box_pack_start (button_layouter, G_TYPE_CHECK_INSTANCE_CAST (_tmp44_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 1);
 #line 2302 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp45_ = self->reset_button;
+#line 2302 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_box_pack_start (button_layouter, G_TYPE_CHECK_INSTANCE_CAST (_tmp45_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 1);
+#line 2303 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp46_ = self->ok_button;
+#line 2303 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_box_pack_start (button_layouter, G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 1);
+#line 2305 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp47_ = (GtkAlignment*) gtk_alignment_new (0.0f, 0.0f, 0.0f, 0.0f);
+#line 2305 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp47_);
+#line 2305 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	histogram_aligner = _tmp47_;
+#line 2306 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp48_ = self->histogram_manipulator;
+#line 2306 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (histogram_aligner, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, gtk_widget_get_type (), GtkWidget));
+#line 2307 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_alignment_set_padding (histogram_aligner, (guint) 12, (guint) 8, (guint) 12, (guint) 12);
+#line 2309 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp49_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+#line 2309 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp49_);
+#line 2309 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	pane_layouter = _tmp49_;
+#line 2310 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (pane_layouter, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (histogram_aligner, gtk_widget_get_type (), GtkWidget));
+#line 2311 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (pane_layouter, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (slider_organizer, gtk_widget_get_type (), GtkWidget));
+#line 2312 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (pane_layouter, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (button_layouter, gtk_widget_get_type (), GtkWidget));
+#line 2313 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_box_set_child_packing (pane_layouter, G_TYPE_CHECK_INSTANCE_CAST (histogram_aligner, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0, GTK_PACK_START);
-#line 2304 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2315 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (pane_layouter, gtk_widget_get_type (), GtkWidget));
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (pane_layouter);
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (histogram_aligner);
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (button_layouter);
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (highlights_label);
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (shadows_label);
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (temperature_label);
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (tint_label);
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (saturation_label);
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_g_object_unref0 (contrast_label);
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (exposure_label);
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (slider_organizer);
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 18208 "EditingTools.c"
+#line 18431 "EditingTools.c"
 }
 
 
 static EditingToolsAdjustToolAdjustToolWindow* editing_tools_adjust_tool_adjust_tool_window_new (GtkWindow* container) {
-#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2233 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return editing_tools_adjust_tool_adjust_tool_window_construct (EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_WINDOW, container);
-#line 18215 "EditingTools.c"
+#line 18438 "EditingTools.c"
 }
 
 
@@ -18220,22 +18443,23 @@ static void editing_tools_adjust_tool_adjust_tool_window_class_init (EditingTool
 	editing_tools_adjust_tool_adjust_tool_window_parent_class = g_type_class_peek_parent (klass);
 #line 2204 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (klass)->finalize = editing_tools_adjust_tool_adjust_tool_window_finalize;
-#line 18224 "EditingTools.c"
+#line 18447 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_adjust_tool_window_instance_init (EditingToolsAdjustToolAdjustToolWindow * self) {
 	GtkScale* _tmp0_ = NULL;
-	GtkScale* _tmp1_ = NULL;
+	GtkHScale* _tmp1_ = NULL;
 	GtkScale* _tmp2_ = NULL;
 	GtkScale* _tmp3_ = NULL;
 	GtkScale* _tmp4_ = NULL;
 	GtkScale* _tmp5_ = NULL;
-	GtkButton* _tmp6_ = NULL;
-	const gchar* _tmp7_ = NULL;
-	GtkButton* _tmp8_ = NULL;
+	GtkScale* _tmp6_ = NULL;
+	GtkButton* _tmp7_ = NULL;
+	const gchar* _tmp8_ = NULL;
 	GtkButton* _tmp9_ = NULL;
-	RGBHistogramManipulator* _tmp10_ = NULL;
+	GtkButton* _tmp10_ = NULL;
+	RGBHistogramManipulator* _tmp11_ = NULL;
 #line 2205 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = (GtkScale*) gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, (gdouble) EXPOSURE_TRANSFORMATION_MIN_PARAMETER, (gdouble) EXPOSURE_TRANSFORMATION_MAX_PARAMETER, 1.0);
 #line 2205 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
@@ -18243,62 +18467,68 @@ static void editing_tools_adjust_tool_adjust_tool_window_instance_init (EditingT
 #line 2205 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->exposure_slider = _tmp0_;
 #line 2208 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp1_ = (GtkScale*) gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, (gdouble) SATURATION_TRANSFORMATION_MIN_PARAMETER, (gdouble) SATURATION_TRANSFORMATION_MAX_PARAMETER, 1.0);
+	_tmp1_ = (GtkHScale*) gtk_hscale_new_with_range ((gdouble) CONTRAST_TRANSFORMATION_MIN_PARAMETER, (gdouble) CONTRAST_TRANSFORMATION_MAX_PARAMETER, 1.0);
 #line 2208 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_object_ref_sink (_tmp1_);
 #line 2208 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->saturation_slider = _tmp1_;
+	self->contrast_slider = _tmp1_;
 #line 2211 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp2_ = (GtkScale*) gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, (gdouble) TINT_TRANSFORMATION_MIN_PARAMETER, (gdouble) TINT_TRANSFORMATION_MAX_PARAMETER, 1.0);
+	_tmp2_ = (GtkScale*) gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, (gdouble) SATURATION_TRANSFORMATION_MIN_PARAMETER, (gdouble) SATURATION_TRANSFORMATION_MAX_PARAMETER, 1.0);
 #line 2211 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_object_ref_sink (_tmp2_);
 #line 2211 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->tint_slider = _tmp2_;
-#line 2213 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp3_ = (GtkScale*) gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, (gdouble) TEMPERATURE_TRANSFORMATION_MIN_PARAMETER, (gdouble) TEMPERATURE_TRANSFORMATION_MAX_PARAMETER, 1.0);
-#line 2213 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->saturation_slider = _tmp2_;
+#line 2214 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp3_ = (GtkScale*) gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, (gdouble) TINT_TRANSFORMATION_MIN_PARAMETER, (gdouble) TINT_TRANSFORMATION_MAX_PARAMETER, 1.0);
+#line 2214 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_object_ref_sink (_tmp3_);
-#line 2213 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->temperature_slider = _tmp3_;
-#line 2217 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp4_ = (GtkScale*) gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, (gdouble) SHADOW_DETAIL_TRANSFORMATION_MIN_PARAMETER, (gdouble) SHADOW_DETAIL_TRANSFORMATION_MAX_PARAMETER, 1.0);
-#line 2217 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2214 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->tint_slider = _tmp3_;
+#line 2216 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp4_ = (GtkScale*) gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, (gdouble) TEMPERATURE_TRANSFORMATION_MIN_PARAMETER, (gdouble) TEMPERATURE_TRANSFORMATION_MAX_PARAMETER, 1.0);
+#line 2216 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_object_ref_sink (_tmp4_);
-#line 2217 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->shadows_slider = _tmp4_;
-#line 2221 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp5_ = (GtkScale*) gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, (gdouble) HIGHLIGHT_DETAIL_TRANSFORMATION_MIN_PARAMETER, (gdouble) HIGHLIGHT_DETAIL_TRANSFORMATION_MAX_PARAMETER, 1.0);
-#line 2221 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2216 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->temperature_slider = _tmp4_;
+#line 2220 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp5_ = (GtkScale*) gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, (gdouble) SHADOW_DETAIL_TRANSFORMATION_MIN_PARAMETER, (gdouble) SHADOW_DETAIL_TRANSFORMATION_MAX_PARAMETER, 1.0);
+#line 2220 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_object_ref_sink (_tmp5_);
-#line 2221 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->highlights_slider = _tmp5_;
-#line 2225 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp6_ = (GtkButton*) gtk_button_new_with_mnemonic (RESOURCES_OK_LABEL);
-#line 2225 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2220 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->shadows_slider = _tmp5_;
+#line 2224 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp6_ = (GtkScale*) gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, (gdouble) HIGHLIGHT_DETAIL_TRANSFORMATION_MIN_PARAMETER, (gdouble) HIGHLIGHT_DETAIL_TRANSFORMATION_MAX_PARAMETER, 1.0);
+#line 2224 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_object_ref_sink (_tmp6_);
-#line 2225 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->ok_button = _tmp6_;
-#line 2226 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp7_ = _ ("_Reset");
-#line 2226 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp8_ = (GtkButton*) gtk_button_new_with_mnemonic (_tmp7_);
-#line 2226 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	g_object_ref_sink (_tmp8_);
-#line 2226 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->reset_button = _tmp8_;
-#line 2227 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp9_ = (GtkButton*) gtk_button_new_with_mnemonic (RESOURCES_CANCEL_LABEL);
-#line 2227 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2224 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->highlights_slider = _tmp6_;
+#line 2228 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp7_ = (GtkButton*) gtk_button_new_with_mnemonic (RESOURCES_OK_LABEL);
+#line 2228 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp7_);
+#line 2228 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->ok_button = _tmp7_;
+#line 2229 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp8_ = _ ("_Reset");
+#line 2229 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp9_ = (GtkButton*) gtk_button_new_with_mnemonic (_tmp8_);
+#line 2229 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_object_ref_sink (_tmp9_);
-#line 2227 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->cancel_button = _tmp9_;
-#line 2228 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp10_ = rgb_histogram_manipulator_new ();
-#line 2228 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2229 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->reset_button = _tmp9_;
+#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp10_ = (GtkButton*) gtk_button_new_with_mnemonic (RESOURCES_CANCEL_LABEL);
+#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_object_ref_sink (_tmp10_);
-#line 2228 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->histogram_manipulator = _tmp10_;
-#line 18302 "EditingTools.c"
+#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->cancel_button = _tmp10_;
+#line 2231 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_tmp11_ = rgb_histogram_manipulator_new ();
+#line 2231 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	g_object_ref_sink (_tmp11_);
+#line 2231 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->histogram_manipulator = _tmp11_;
+#line 18532 "EditingTools.c"
 }
 
 
@@ -18309,26 +18539,28 @@ static void editing_tools_adjust_tool_adjust_tool_window_finalize (GObject* obj)
 #line 2205 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->exposure_slider);
 #line 2208 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (self->saturation_slider);
+	_g_object_unref0 (self->contrast_slider);
 #line 2211 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_g_object_unref0 (self->saturation_slider);
+#line 2214 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->tint_slider);
-#line 2213 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2216 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->temperature_slider);
-#line 2217 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2220 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->shadows_slider);
-#line 2221 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2224 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->highlights_slider);
-#line 2225 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (self->ok_button);
-#line 2226 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (self->reset_button);
-#line 2227 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (self->cancel_button);
 #line 2228 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_g_object_unref0 (self->ok_button);
+#line 2229 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_g_object_unref0 (self->reset_button);
+#line 2230 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_g_object_unref0 (self->cancel_button);
+#line 2231 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->histogram_manipulator);
 #line 2204 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (editing_tools_adjust_tool_adjust_tool_window_parent_class)->finalize (obj);
-#line 18332 "EditingTools.c"
+#line 18564 "EditingTools.c"
 }
 
 
@@ -18345,9 +18577,9 @@ static GType editing_tools_adjust_tool_adjust_tool_window_get_type (void) {
 
 
 static void _editing_tools_adjust_tool_adjust_tool_command_on_owner_deactivated_editing_tools_editing_tool_deactivated (EditingToolsEditingTool* _sender, gpointer self) {
-#line 2320 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2331 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_adjust_tool_command_on_owner_deactivated ((EditingToolsAdjustToolAdjustToolCommand*) self);
-#line 18351 "EditingTools.c"
+#line 18583 "EditingTools.c"
 }
 
 
@@ -18357,55 +18589,55 @@ static EditingToolsAdjustToolAdjustToolCommand* editing_tools_adjust_tool_adjust
 	const gchar* _tmp1_ = NULL;
 	EditingToolsAdjustTool* _tmp2_ = NULL;
 	EditingToolsAdjustTool* _tmp3_ = NULL;
-#line 2311 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2322 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (owner), NULL);
-#line 2311 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2322 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 2311 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2322 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (explanation != NULL, NULL);
-#line 2312 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2323 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = name;
-#line 2312 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2323 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = explanation;
-#line 2312 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2323 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = (EditingToolsAdjustToolAdjustToolCommand*) command_construct (object_type, _tmp0_, _tmp1_);
-#line 2314 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2325 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = owner;
-#line 2314 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2325 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->owner = _tmp2_;
-#line 2315 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2326 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = owner;
-#line 2315 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2326 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool), "deactivated", (GCallback) _editing_tools_adjust_tool_adjust_tool_command_on_owner_deactivated_editing_tools_editing_tool_deactivated, self, 0);
-#line 2311 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2322 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 18383 "EditingTools.c"
+#line 18615 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_adjust_tool_command_on_owner_deactivated (EditingToolsAdjustToolAdjustToolCommand* self) {
 	CommandManager* _tmp0_ = NULL;
 	CommandManager* _tmp1_ = NULL;
-#line 2323 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2334 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_if_fail (EDITING_TOOLS_ADJUST_TOOL_IS_ADJUST_TOOL_COMMAND (self));
-#line 2326 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2337 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = app_window_get_command_manager ();
-#line 2326 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2337 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _tmp0_;
-#line 2326 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2337 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	command_manager_reset (_tmp1_);
-#line 2326 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2337 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_command_manager_unref0 (_tmp1_);
-#line 18400 "EditingTools.c"
+#line 18632 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_adjust_tool_command_class_init (EditingToolsAdjustToolAdjustToolCommandClass * klass) {
-#line 2308 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2319 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_adjust_tool_command_parent_class = g_type_class_peek_parent (klass);
-#line 2308 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2319 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (klass)->finalize = editing_tools_adjust_tool_adjust_tool_command_finalize;
-#line 18409 "EditingTools.c"
+#line 18641 "EditingTools.c"
 }
 
 
@@ -18416,26 +18648,26 @@ static void editing_tools_adjust_tool_adjust_tool_command_instance_init (Editing
 static void editing_tools_adjust_tool_adjust_tool_command_finalize (GObject* obj) {
 	EditingToolsAdjustToolAdjustToolCommand * self;
 	EditingToolsAdjustTool* _tmp0_ = NULL;
-#line 2308 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2319 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand);
-#line 2319 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2330 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->owner;
-#line 2319 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2330 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ != NULL) {
-#line 18426 "EditingTools.c"
+#line 18658 "EditingTools.c"
 		EditingToolsAdjustTool* _tmp1_ = NULL;
 		guint _tmp2_ = 0U;
-#line 2320 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2331 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = self->owner;
-#line 2320 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2331 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		g_signal_parse_name ("deactivated", EDITING_TOOLS_TYPE_EDITING_TOOL, &_tmp2_, NULL, FALSE);
-#line 2320 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2331 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp2_, 0, NULL, (GCallback) _editing_tools_adjust_tool_adjust_tool_command_on_owner_deactivated_editing_tools_editing_tool_deactivated, self);
-#line 18435 "EditingTools.c"
+#line 18667 "EditingTools.c"
 	}
-#line 2308 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2319 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (editing_tools_adjust_tool_adjust_tool_command_parent_class)->finalize (obj);
-#line 18439 "EditingTools.c"
+#line 18671 "EditingTools.c"
 }
 
 
@@ -18460,46 +18692,46 @@ static EditingToolsAdjustToolAdjustResetCommand* editing_tools_adjust_tool_adjus
 	PixelTransformationBundle* _tmp4_ = NULL;
 	PixelTransformationBundle* _tmp5_ = NULL;
 	PixelTransformationBundle* _tmp6_ = NULL;
-#line 2334 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2345 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (owner), NULL);
-#line 2334 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2345 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION_BUNDLE (current), NULL);
-#line 2335 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2346 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = owner;
-#line 2335 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2346 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _ ("Reset Colors");
-#line 2335 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2346 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = _ ("Reset all color adjustments to original");
-#line 2335 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2346 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = (EditingToolsAdjustToolAdjustResetCommand*) editing_tools_adjust_tool_adjust_tool_command_construct (object_type, _tmp0_, _tmp1_, _tmp2_);
-#line 2337 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2348 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = current;
-#line 2337 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2348 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = pixel_transformation_bundle_copy (_tmp3_);
-#line 2337 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2348 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_bundle_unref0 (self->priv->original);
-#line 2337 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2348 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->original = _tmp4_;
-#line 2338 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2349 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = pixel_transformation_bundle_new ();
-#line 2338 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2349 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_bundle_unref0 (self->priv->reset);
-#line 2338 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2349 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->reset = _tmp5_;
-#line 2339 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2350 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = self->priv->reset;
-#line 2339 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2350 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	pixel_transformation_bundle_set_to_identity (_tmp6_);
-#line 2334 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2345 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 18496 "EditingTools.c"
+#line 18728 "EditingTools.c"
 }
 
 
 static EditingToolsAdjustToolAdjustResetCommand* editing_tools_adjust_tool_adjust_reset_command_new (EditingToolsAdjustTool* owner, PixelTransformationBundle* current) {
-#line 2334 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2345 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return editing_tools_adjust_tool_adjust_reset_command_construct (EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_RESET_COMMAND, owner, current);
-#line 18503 "EditingTools.c"
+#line 18735 "EditingTools.c"
 }
 
 
@@ -18507,15 +18739,15 @@ static void editing_tools_adjust_tool_adjust_reset_command_real_execute (Command
 	EditingToolsAdjustToolAdjustResetCommand * self;
 	EditingToolsAdjustTool* _tmp0_ = NULL;
 	PixelTransformationBundle* _tmp1_ = NULL;
-#line 2342 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2353 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_RESET_COMMAND, EditingToolsAdjustToolAdjustResetCommand);
-#line 2343 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2354 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2343 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2354 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = self->priv->reset;
-#line 2343 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2354 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_set_adjustments (_tmp0_, _tmp1_);
-#line 18519 "EditingTools.c"
+#line 18751 "EditingTools.c"
 }
 
 
@@ -18523,15 +18755,15 @@ static void editing_tools_adjust_tool_adjust_reset_command_real_undo (Command* b
 	EditingToolsAdjustToolAdjustResetCommand * self;
 	EditingToolsAdjustTool* _tmp0_ = NULL;
 	PixelTransformationBundle* _tmp1_ = NULL;
-#line 2346 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2357 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_RESET_COMMAND, EditingToolsAdjustToolAdjustResetCommand);
-#line 2347 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2358 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2347 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2358 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = self->priv->original;
-#line 2347 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2358 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_set_adjustments (_tmp0_, _tmp1_);
-#line 18535 "EditingTools.c"
+#line 18767 "EditingTools.c"
 }
 
 
@@ -18545,89 +18777,89 @@ static gboolean editing_tools_adjust_tool_adjust_reset_command_real_compress (Co
 	EditingToolsAdjustToolAdjustResetCommand* _tmp3_ = NULL;
 	EditingToolsAdjustTool* _tmp4_ = NULL;
 	EditingToolsAdjustTool* _tmp5_ = NULL;
-#line 2350 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2361 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_RESET_COMMAND, EditingToolsAdjustToolAdjustResetCommand);
-#line 2350 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2361 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (IS_COMMAND (command), FALSE);
-#line 2351 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2362 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = command;
-#line 2351 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2362 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_RESET_COMMAND) ? ((EditingToolsAdjustToolAdjustResetCommand*) _tmp0_) : NULL);
-#line 2351 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2362 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	reset_command = _tmp1_;
-#line 2352 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = reset_command;
-#line 2352 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp2_ == NULL) {
-#line 2353 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2364 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = FALSE;
-#line 2353 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2364 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (reset_command);
-#line 2353 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2364 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 18569 "EditingTools.c"
+#line 18801 "EditingTools.c"
 	}
-#line 2355 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2366 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = reset_command;
-#line 2355 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2366 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2355 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2366 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2355 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2366 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp4_ != _tmp5_) {
-#line 2356 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2367 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = FALSE;
-#line 2356 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2367 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (reset_command);
-#line 2356 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2367 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 18585 "EditingTools.c"
+#line 18817 "EditingTools.c"
 	}
-#line 2359 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2370 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = TRUE;
-#line 2359 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2370 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (reset_command);
-#line 2359 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2370 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 18593 "EditingTools.c"
+#line 18825 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_adjust_reset_command_class_init (EditingToolsAdjustToolAdjustResetCommandClass * klass) {
-#line 2330 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2341 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_adjust_reset_command_parent_class = g_type_class_peek_parent (klass);
-#line 2330 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2341 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_type_class_add_private (klass, sizeof (EditingToolsAdjustToolAdjustResetCommandPrivate));
-#line 2330 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2341 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((CommandClass *) klass)->execute = editing_tools_adjust_tool_adjust_reset_command_real_execute;
-#line 2330 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2341 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((CommandClass *) klass)->undo = editing_tools_adjust_tool_adjust_reset_command_real_undo;
-#line 2330 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2341 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((CommandClass *) klass)->compress = editing_tools_adjust_tool_adjust_reset_command_real_compress;
-#line 2330 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2341 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (klass)->finalize = editing_tools_adjust_tool_adjust_reset_command_finalize;
-#line 18610 "EditingTools.c"
+#line 18842 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_adjust_reset_command_instance_init (EditingToolsAdjustToolAdjustResetCommand * self) {
-#line 2330 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2341 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv = EDITING_TOOLS_ADJUST_TOOL_ADJUST_RESET_COMMAND_GET_PRIVATE (self);
-#line 18617 "EditingTools.c"
+#line 18849 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_adjust_reset_command_finalize (GObject* obj) {
 	EditingToolsAdjustToolAdjustResetCommand * self;
-#line 2330 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2341 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_RESET_COMMAND, EditingToolsAdjustToolAdjustResetCommand);
-#line 2331 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2342 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_bundle_unref0 (self->priv->original);
-#line 2332 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2343 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_bundle_unref0 (self->priv->reset);
-#line 2330 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2341 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (editing_tools_adjust_tool_adjust_reset_command_parent_class)->finalize (obj);
-#line 18631 "EditingTools.c"
+#line 18863 "EditingTools.c"
 }
 
 
@@ -18657,62 +18889,62 @@ static EditingToolsAdjustToolSliderAdjustmentCommand* editing_tools_adjust_tool_
 	PixelTransformation* _tmp9_ = NULL;
 	PixelTransformationType _tmp10_ = 0;
 	PixelTransformationType _tmp11_ = 0;
-#line 2368 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2379 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (owner), NULL);
-#line 2368 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2379 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION (old_transformation), NULL);
-#line 2368 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2379 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (IS_PIXEL_TRANSFORMATION (new_transformation), NULL);
-#line 2368 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2379 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 2370 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2381 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = owner;
-#line 2370 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2381 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = name;
-#line 2370 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2381 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = name;
-#line 2370 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2381 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = (EditingToolsAdjustToolSliderAdjustmentCommand*) editing_tools_adjust_tool_adjust_tool_command_construct (object_type, _tmp0_, _tmp1_, _tmp2_);
-#line 2372 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2383 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = old_transformation;
-#line 2372 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2383 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = _pixel_transformation_ref0 (_tmp3_);
-#line 2372 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2383 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (self->priv->old_transformation);
-#line 2372 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2383 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->old_transformation = _tmp4_;
-#line 2373 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2384 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = new_transformation;
-#line 2373 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2384 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = _pixel_transformation_ref0 (_tmp5_);
-#line 2373 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2384 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (self->priv->new_transformation);
-#line 2373 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2384 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->new_transformation = _tmp6_;
-#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2385 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = old_transformation;
-#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2385 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp8_ = pixel_transformation_get_transformation_type (_tmp7_);
-#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2385 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->transformation_type = _tmp8_;
-#line 2375 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2386 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp9_ = new_transformation;
-#line 2375 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2386 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp10_ = pixel_transformation_get_transformation_type (_tmp9_);
-#line 2375 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2386 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = self->priv->transformation_type;
-#line 2375 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2386 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_vala_assert (_tmp10_ == _tmp11_, "new_transformation.get_transformation_type() == transformation_type");
-#line 2368 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2379 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 18709 "EditingTools.c"
+#line 18941 "EditingTools.c"
 }
 
 
 static EditingToolsAdjustToolSliderAdjustmentCommand* editing_tools_adjust_tool_slider_adjustment_command_new (EditingToolsAdjustTool* owner, PixelTransformation* old_transformation, PixelTransformation* new_transformation, const gchar* name) {
-#line 2368 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2379 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return editing_tools_adjust_tool_slider_adjustment_command_construct (EDITING_TOOLS_ADJUST_TOOL_TYPE_SLIDER_ADJUSTMENT_COMMAND, owner, old_transformation, new_transformation, name);
-#line 18716 "EditingTools.c"
+#line 18948 "EditingTools.c"
 }
 
 
@@ -18722,21 +18954,21 @@ static void editing_tools_adjust_tool_slider_adjustment_command_real_execute (Co
 	PixelTransformation* _tmp1_ = NULL;
 	EditingToolsAdjustTool* _tmp2_ = NULL;
 	EditingToolsPhotoCanvas* _tmp3_ = NULL;
-#line 2378 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2389 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_ADJUST_TOOL_TYPE_SLIDER_ADJUSTMENT_COMMAND, EditingToolsAdjustToolSliderAdjustmentCommand);
-#line 2380 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2391 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2380 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2391 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = self->priv->new_transformation;
-#line 2380 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2391 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_update_transformation (_tmp0_, _tmp1_);
-#line 2381 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2392 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2381 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2392 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2381 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2392 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_repaint (_tmp3_);
-#line 18740 "EditingTools.c"
+#line 18972 "EditingTools.c"
 }
 
 
@@ -18750,35 +18982,35 @@ static void editing_tools_adjust_tool_slider_adjustment_command_real_undo (Comma
 	EditingToolsAdjustTool* _tmp5_ = NULL;
 	EditingToolsAdjustTool* _tmp6_ = NULL;
 	EditingToolsPhotoCanvas* _tmp7_ = NULL;
-#line 2384 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_ADJUST_TOOL_TYPE_SLIDER_ADJUSTMENT_COMMAND, EditingToolsAdjustToolSliderAdjustmentCommand);
-#line 2385 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2396 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2385 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2396 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = self->priv->old_transformation;
-#line 2385 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2396 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_update_transformation (_tmp0_, _tmp1_);
-#line 2387 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2398 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2387 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2398 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_unbind_window_handlers (_tmp2_);
-#line 2388 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2399 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2388 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2399 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = self->priv->old_transformation;
-#line 2388 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2399 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_update_slider (_tmp3_, _tmp4_);
-#line 2389 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2400 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2389 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2400 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_bind_window_handlers (_tmp5_);
-#line 2391 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2402 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2391 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2402 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2391 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2402 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_repaint (_tmp7_);
-#line 18782 "EditingTools.c"
+#line 19014 "EditingTools.c"
 }
 
 
@@ -18792,35 +19024,35 @@ static void editing_tools_adjust_tool_slider_adjustment_command_real_redo (Comma
 	EditingToolsAdjustTool* _tmp5_ = NULL;
 	EditingToolsAdjustTool* _tmp6_ = NULL;
 	EditingToolsPhotoCanvas* _tmp7_ = NULL;
-#line 2394 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2405 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_ADJUST_TOOL_TYPE_SLIDER_ADJUSTMENT_COMMAND, EditingToolsAdjustToolSliderAdjustmentCommand);
-#line 2395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2406 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2406 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = self->priv->new_transformation;
-#line 2395 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2406 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_update_transformation (_tmp0_, _tmp1_);
-#line 2397 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2408 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2397 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2408 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_unbind_window_handlers (_tmp2_);
-#line 2398 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2409 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2398 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2409 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = self->priv->new_transformation;
-#line 2398 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2409 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_update_slider (_tmp3_, _tmp4_);
-#line 2399 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2410 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2399 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2410 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_bind_window_handlers (_tmp5_);
-#line 2401 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2412 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2401 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2412 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2401 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2412 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_photo_canvas_repaint (_tmp7_);
-#line 18824 "EditingTools.c"
+#line 19056 "EditingTools.c"
 }
 
 
@@ -18841,121 +19073,121 @@ static gboolean editing_tools_adjust_tool_slider_adjustment_command_real_compres
 	EditingToolsAdjustToolSliderAdjustmentCommand* _tmp10_ = NULL;
 	PixelTransformation* _tmp11_ = NULL;
 	PixelTransformation* _tmp12_ = NULL;
-#line 2404 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2415 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_ADJUST_TOOL_TYPE_SLIDER_ADJUSTMENT_COMMAND, EditingToolsAdjustToolSliderAdjustmentCommand);
-#line 2404 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2415 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (IS_COMMAND (command), FALSE);
-#line 2405 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2416 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = command;
-#line 2405 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2416 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, EDITING_TOOLS_ADJUST_TOOL_TYPE_SLIDER_ADJUSTMENT_COMMAND) ? ((EditingToolsAdjustToolSliderAdjustmentCommand*) _tmp0_) : NULL);
-#line 2405 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2416 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	slider_adjustment = _tmp1_;
-#line 2406 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2417 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = slider_adjustment;
-#line 2406 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2417 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp2_ == NULL) {
-#line 2407 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2418 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = FALSE;
-#line 2407 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2418 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (slider_adjustment);
-#line 2407 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2418 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 18865 "EditingTools.c"
+#line 19097 "EditingTools.c"
 	}
-#line 2410 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2421 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = slider_adjustment;
-#line 2410 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2421 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2410 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2421 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2410 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2421 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp4_ != _tmp5_) {
-#line 2411 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2422 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = FALSE;
-#line 2411 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2422 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (slider_adjustment);
-#line 2411 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2422 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 18881 "EditingTools.c"
+#line 19113 "EditingTools.c"
 	}
-#line 2414 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2425 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp6_ = slider_adjustment;
-#line 2414 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2425 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp7_ = _tmp6_->priv->transformation_type;
-#line 2414 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2425 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp8_ = self->priv->transformation_type;
-#line 2414 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2425 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp7_ != _tmp8_) {
-#line 2415 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2426 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = FALSE;
-#line 2415 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2426 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (slider_adjustment);
-#line 2415 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2426 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 18897 "EditingTools.c"
+#line 19129 "EditingTools.c"
 	}
-#line 2418 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2429 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp9_ = slider_adjustment;
-#line 2418 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2429 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	command_execute (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_COMMAND, Command));
-#line 2421 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2432 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp10_ = slider_adjustment;
-#line 2421 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2432 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp11_ = _tmp10_->priv->new_transformation;
-#line 2421 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2432 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp12_ = _pixel_transformation_ref0 (_tmp11_);
-#line 2421 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2432 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (self->priv->new_transformation);
-#line 2421 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2432 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->new_transformation = _tmp12_;
-#line 2423 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2434 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = TRUE;
-#line 2423 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2434 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (slider_adjustment);
-#line 2423 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2434 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 18919 "EditingTools.c"
+#line 19151 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_slider_adjustment_command_class_init (EditingToolsAdjustToolSliderAdjustmentCommandClass * klass) {
-#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_slider_adjustment_command_parent_class = g_type_class_peek_parent (klass);
-#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_type_class_add_private (klass, sizeof (EditingToolsAdjustToolSliderAdjustmentCommandPrivate));
-#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((CommandClass *) klass)->execute = editing_tools_adjust_tool_slider_adjustment_command_real_execute;
-#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((CommandClass *) klass)->undo = editing_tools_adjust_tool_slider_adjustment_command_real_undo;
-#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((CommandClass *) klass)->redo = editing_tools_adjust_tool_slider_adjustment_command_real_redo;
-#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((CommandClass *) klass)->compress = editing_tools_adjust_tool_slider_adjustment_command_real_compress;
-#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (klass)->finalize = editing_tools_adjust_tool_slider_adjustment_command_finalize;
-#line 18938 "EditingTools.c"
+#line 19170 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_slider_adjustment_command_instance_init (EditingToolsAdjustToolSliderAdjustmentCommand * self) {
-#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv = EDITING_TOOLS_ADJUST_TOOL_SLIDER_ADJUSTMENT_COMMAND_GET_PRIVATE (self);
-#line 18945 "EditingTools.c"
+#line 19177 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_slider_adjustment_command_finalize (GObject* obj) {
 	EditingToolsAdjustToolSliderAdjustmentCommand * self;
-#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, EDITING_TOOLS_ADJUST_TOOL_TYPE_SLIDER_ADJUSTMENT_COMMAND, EditingToolsAdjustToolSliderAdjustmentCommand);
-#line 2365 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2376 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (self->priv->new_transformation);
-#line 2366 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2377 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_unref0 (self->priv->old_transformation);
-#line 2363 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2374 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (editing_tools_adjust_tool_slider_adjustment_command_parent_class)->finalize (obj);
-#line 18959 "EditingTools.c"
+#line 19191 "EditingTools.c"
 }
 
 
@@ -18978,40 +19210,40 @@ static EditingToolsAdjustToolAdjustEnhanceCommand* editing_tools_adjust_tool_adj
 	Photo* _tmp2_ = NULL;
 	Photo* _tmp3_ = NULL;
 	PixelTransformationBundle* _tmp4_ = NULL;
-#line 2432 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2443 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (EDITING_TOOLS_IS_ADJUST_TOOL (owner), NULL);
-#line 2432 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2443 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (IS_PHOTO (photo), NULL);
-#line 2433 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2444 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = owner;
-#line 2433 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2444 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = (EditingToolsAdjustToolAdjustEnhanceCommand*) editing_tools_adjust_tool_adjust_tool_command_construct (object_type, _tmp0_, RESOURCES_ENHANCE_LABEL, RESOURCES_ENHANCE_TOOLTIP);
-#line 2435 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2446 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = photo;
-#line 2435 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2446 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = _g_object_ref0 (_tmp1_);
-#line 2435 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2446 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->priv->photo);
-#line 2435 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2446 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->photo = _tmp2_;
-#line 2436 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2447 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = photo;
-#line 2436 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2447 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = photo_get_color_adjustments (_tmp3_);
-#line 2436 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2447 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_bundle_unref0 (self->priv->original);
-#line 2436 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2447 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->original = _tmp4_;
-#line 2432 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2443 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return self;
-#line 19008 "EditingTools.c"
+#line 19240 "EditingTools.c"
 }
 
 
 static EditingToolsAdjustToolAdjustEnhanceCommand* editing_tools_adjust_tool_adjust_enhance_command_new (EditingToolsAdjustTool* owner, Photo* photo) {
-#line 2432 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2443 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return editing_tools_adjust_tool_adjust_enhance_command_construct (EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_ENHANCE_COMMAND, owner, photo);
-#line 19015 "EditingTools.c"
+#line 19247 "EditingTools.c"
 }
 
 
@@ -19020,32 +19252,32 @@ static void editing_tools_adjust_tool_adjust_enhance_command_real_execute (Comma
 	PixelTransformationBundle* _tmp0_ = NULL;
 	EditingToolsAdjustTool* _tmp3_ = NULL;
 	PixelTransformationBundle* _tmp4_ = NULL;
-#line 2439 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2450 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_ENHANCE_COMMAND, EditingToolsAdjustToolAdjustEnhanceCommand);
-#line 2440 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2451 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = self->priv->enhanced;
-#line 2440 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2451 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp0_ == NULL) {
-#line 19030 "EditingTools.c"
+#line 19262 "EditingTools.c"
 		Photo* _tmp1_ = NULL;
 		PixelTransformationBundle* _tmp2_ = NULL;
-#line 2441 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2452 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp1_ = self->priv->photo;
-#line 2441 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2452 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp2_ = photo_get_enhance_transformations (_tmp1_);
-#line 2441 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2452 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_pixel_transformation_bundle_unref0 (self->priv->enhanced);
-#line 2441 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2452 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		self->priv->enhanced = _tmp2_;
-#line 19041 "EditingTools.c"
+#line 19273 "EditingTools.c"
 	}
-#line 2443 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2454 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp3_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2443 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2454 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp4_ = self->priv->enhanced;
-#line 2443 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2454 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_set_adjustments (_tmp3_, _tmp4_);
-#line 19049 "EditingTools.c"
+#line 19281 "EditingTools.c"
 }
 
 
@@ -19053,15 +19285,15 @@ static void editing_tools_adjust_tool_adjust_enhance_command_real_undo (Command*
 	EditingToolsAdjustToolAdjustEnhanceCommand * self;
 	EditingToolsAdjustTool* _tmp0_ = NULL;
 	PixelTransformationBundle* _tmp1_ = NULL;
-#line 2446 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2457 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_ENHANCE_COMMAND, EditingToolsAdjustToolAdjustEnhanceCommand);
-#line 2447 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2447 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = self->priv->original;
-#line 2447 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_set_adjustments (_tmp0_, _tmp1_);
-#line 19065 "EditingTools.c"
+#line 19297 "EditingTools.c"
 }
 
 
@@ -19079,21 +19311,21 @@ static gboolean editing_tools_adjust_tool_adjust_enhance_command_real_compress (
 	EditingToolsAdjustToolAdjustEnhanceCommand* _tmp15_ = NULL;
 	EditingToolsAdjustTool* _tmp16_ = NULL;
 	EditingToolsAdjustTool* _tmp17_ = NULL;
-#line 2450 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2461 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_ENHANCE_COMMAND, EditingToolsAdjustToolAdjustEnhanceCommand);
-#line 2450 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2461 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_return_val_if_fail (IS_COMMAND (command), FALSE);
-#line 2452 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2463 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp0_ = command;
-#line 2452 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2463 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_ENHANCE_SINGLE_COMMAND) ? ((EnhanceSingleCommand*) _tmp0_) : NULL);
-#line 2452 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2463 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	enhance_single = _tmp1_;
-#line 2453 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2464 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp2_ = enhance_single;
-#line 2453 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2464 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp2_ != NULL) {
-#line 19097 "EditingTools.c"
+#line 19329 "EditingTools.c"
 		Photo* photo = NULL;
 		EnhanceSingleCommand* _tmp3_ = NULL;
 		DataSource* _tmp4_ = NULL;
@@ -19104,127 +19336,127 @@ static gboolean editing_tools_adjust_tool_adjust_enhance_command_real_compress (
 		Photo* _tmp9_ = NULL;
 		gboolean _tmp10_ = FALSE;
 		gboolean _tmp11_ = FALSE;
-#line 2454 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2465 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp3_ = enhance_single;
-#line 2454 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2465 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp4_ = single_data_source_command_get_source (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_SINGLE_DATA_SOURCE_COMMAND, SingleDataSourceCommand));
-#line 2454 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2465 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		photo = G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_PHOTO, Photo);
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp5_ = photo;
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp6_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp7_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp8_ = editing_tools_photo_canvas_get_photo (_tmp7_);
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp9_ = _tmp8_;
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp10_ = data_source_equals (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_DATA_SOURCE, DataSource), G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_DATA_SOURCE, DataSource));
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_tmp11_ = _tmp10_;
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (_tmp9_);
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = _tmp11_;
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (photo);
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (enhance_single);
-#line 2458 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 19138 "EditingTools.c"
+#line 19370 "EditingTools.c"
 	}
-#line 2461 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2472 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp12_ = command;
-#line 2461 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2472 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp13_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp12_, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_ENHANCE_COMMAND) ? ((EditingToolsAdjustToolAdjustEnhanceCommand*) _tmp12_) : NULL);
-#line 2461 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2472 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	enhance_command = _tmp13_;
-#line 2462 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2473 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp14_ = enhance_command;
-#line 2462 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2473 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp14_ == NULL) {
-#line 2463 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2474 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = FALSE;
-#line 2463 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2474 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (enhance_command);
-#line 2463 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2474 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (enhance_single);
-#line 2463 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2474 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 19158 "EditingTools.c"
+#line 19390 "EditingTools.c"
 	}
-#line 2465 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2476 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp15_ = enhance_command;
-#line 2465 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2476 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp16_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2465 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2476 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_tmp17_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_TOOL_COMMAND, EditingToolsAdjustToolAdjustToolCommand)->owner;
-#line 2465 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2476 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	if (_tmp16_ != _tmp17_) {
-#line 2466 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2477 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		result = FALSE;
-#line 2466 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2477 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (enhance_command);
-#line 2466 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2477 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		_g_object_unref0 (enhance_single);
-#line 2466 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2477 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 		return result;
-#line 19176 "EditingTools.c"
+#line 19408 "EditingTools.c"
 	}
-#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2480 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	result = TRUE;
-#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2480 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (enhance_command);
-#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2480 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (enhance_single);
-#line 2469 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2480 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	return result;
-#line 19186 "EditingTools.c"
+#line 19418 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_adjust_enhance_command_class_init (EditingToolsAdjustToolAdjustEnhanceCommandClass * klass) {
-#line 2427 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2438 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	editing_tools_adjust_tool_adjust_enhance_command_parent_class = g_type_class_peek_parent (klass);
-#line 2427 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2438 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_type_class_add_private (klass, sizeof (EditingToolsAdjustToolAdjustEnhanceCommandPrivate));
-#line 2427 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2438 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((CommandClass *) klass)->execute = editing_tools_adjust_tool_adjust_enhance_command_real_execute;
-#line 2427 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2438 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((CommandClass *) klass)->undo = editing_tools_adjust_tool_adjust_enhance_command_real_undo;
-#line 2427 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2438 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((CommandClass *) klass)->compress = editing_tools_adjust_tool_adjust_enhance_command_real_compress;
-#line 2427 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2438 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (klass)->finalize = editing_tools_adjust_tool_adjust_enhance_command_finalize;
-#line 19203 "EditingTools.c"
+#line 19435 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_adjust_enhance_command_instance_init (EditingToolsAdjustToolAdjustEnhanceCommand * self) {
-#line 2427 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2438 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv = EDITING_TOOLS_ADJUST_TOOL_ADJUST_ENHANCE_COMMAND_GET_PRIVATE (self);
-#line 2430 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2441 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->enhanced = NULL;
-#line 19212 "EditingTools.c"
+#line 19444 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_adjust_enhance_command_finalize (GObject* obj) {
 	EditingToolsAdjustToolAdjustEnhanceCommand * self;
-#line 2427 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2438 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, EDITING_TOOLS_ADJUST_TOOL_TYPE_ADJUST_ENHANCE_COMMAND, EditingToolsAdjustToolAdjustEnhanceCommand);
-#line 2428 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2439 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_g_object_unref0 (self->priv->photo);
-#line 2429 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2440 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_bundle_unref0 (self->priv->original);
-#line 2430 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2441 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_pixel_transformation_bundle_unref0 (self->priv->enhanced);
-#line 2427 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+#line 2438 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	G_OBJECT_CLASS (editing_tools_adjust_tool_adjust_enhance_command_parent_class)->finalize (obj);
-#line 19228 "EditingTools.c"
+#line 19460 "EditingTools.c"
 }
 
 
@@ -19259,50 +19491,52 @@ static void editing_tools_adjust_tool_class_init (EditingToolsAdjustToolClass * 
 	((EditingToolsEditingToolClass *) klass)->get_display_pixbuf = editing_tools_adjust_tool_real_get_display_pixbuf;
 #line 2200 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	((EditingToolsEditingToolClass *) klass)->on_keypress = editing_tools_adjust_tool_real_on_keypress;
-#line 19263 "EditingTools.c"
+#line 19495 "EditingTools.c"
 }
 
 
 static void editing_tools_adjust_tool_instance_init (EditingToolsAdjustTool * self) {
 #line 2200 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv = EDITING_TOOLS_ADJUST_TOOL_GET_PRIVATE (self);
-#line 2473 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->adjust_tool_window = NULL;
-#line 2474 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->suppress_effect_redraw = FALSE;
-#line 2475 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->draw_to_pixbuf = NULL;
-#line 2476 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->histogram_pixbuf = NULL;
-#line 2477 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->virgin_histogram_pixbuf = NULL;
-#line 2478 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->transformer = NULL;
-#line 2479 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->histogram_transformer = NULL;
-#line 2480 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->transformations = NULL;
-#line 2481 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->fp_pixel_cache = NULL;
-#line 2481 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->fp_pixel_cache_length1 = 0;
-#line 2481 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->_fp_pixel_cache_size_ = self->priv->fp_pixel_cache_length1;
-#line 2482 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->disable_histogram_refresh = FALSE;
-#line 2483 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->temperature_scheduler = NULL;
 #line 2484 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->tint_scheduler = NULL;
+	self->priv->adjust_tool_window = NULL;
 #line 2485 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->saturation_scheduler = NULL;
+	self->priv->suppress_effect_redraw = FALSE;
 #line 2486 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->exposure_scheduler = NULL;
+	self->priv->draw_to_pixbuf = NULL;
 #line 2487 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->shadows_scheduler = NULL;
+	self->priv->histogram_pixbuf = NULL;
 #line 2488 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->virgin_histogram_pixbuf = NULL;
+#line 2489 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->transformer = NULL;
+#line 2490 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->histogram_transformer = NULL;
+#line 2491 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->transformations = NULL;
+#line 2492 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->fp_pixel_cache = NULL;
+#line 2492 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->fp_pixel_cache_length1 = 0;
+#line 2492 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->_fp_pixel_cache_size_ = self->priv->fp_pixel_cache_length1;
+#line 2493 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->disable_histogram_refresh = FALSE;
+#line 2494 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->temperature_scheduler = NULL;
+#line 2495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->tint_scheduler = NULL;
+#line 2496 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->contrast_scheduler = NULL;
+#line 2497 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->saturation_scheduler = NULL;
+#line 2498 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->exposure_scheduler = NULL;
+#line 2499 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->shadows_scheduler = NULL;
+#line 2500 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self->priv->highlights_scheduler = NULL;
-#line 19306 "EditingTools.c"
+#line 19540 "EditingTools.c"
 }
 
 
@@ -19310,37 +19544,39 @@ static void editing_tools_adjust_tool_finalize (EditingToolsEditingTool* obj) {
 	EditingToolsAdjustTool * self;
 #line 2200 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, EDITING_TOOLS_TYPE_ADJUST_TOOL, EditingToolsAdjustTool);
-#line 2473 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (self->priv->adjust_tool_window);
-#line 2475 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (self->priv->draw_to_pixbuf);
-#line 2476 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (self->priv->histogram_pixbuf);
-#line 2477 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_g_object_unref0 (self->priv->virgin_histogram_pixbuf);
-#line 2478 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_pixel_transformer_unref0 (self->priv->transformer);
-#line 2479 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_pixel_transformer_unref0 (self->priv->histogram_transformer);
-#line 2480 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_pixel_transformation_bundle_unref0 (self->priv->transformations);
-#line 2481 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	self->priv->fp_pixel_cache = (g_free (self->priv->fp_pixel_cache), NULL);
-#line 2483 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_one_shot_scheduler_unref0 (self->priv->temperature_scheduler);
 #line 2484 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_one_shot_scheduler_unref0 (self->priv->tint_scheduler);
-#line 2485 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_one_shot_scheduler_unref0 (self->priv->saturation_scheduler);
+	_g_object_unref0 (self->priv->adjust_tool_window);
 #line 2486 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_one_shot_scheduler_unref0 (self->priv->exposure_scheduler);
+	_g_object_unref0 (self->priv->draw_to_pixbuf);
 #line 2487 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_one_shot_scheduler_unref0 (self->priv->shadows_scheduler);
+	_g_object_unref0 (self->priv->histogram_pixbuf);
 #line 2488 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_g_object_unref0 (self->priv->virgin_histogram_pixbuf);
+#line 2489 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_pixel_transformer_unref0 (self->priv->transformer);
+#line 2490 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_pixel_transformer_unref0 (self->priv->histogram_transformer);
+#line 2491 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_pixel_transformation_bundle_unref0 (self->priv->transformations);
+#line 2492 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	self->priv->fp_pixel_cache = (g_free (self->priv->fp_pixel_cache), NULL);
+#line 2494 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_one_shot_scheduler_unref0 (self->priv->temperature_scheduler);
+#line 2495 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_one_shot_scheduler_unref0 (self->priv->tint_scheduler);
+#line 2496 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_one_shot_scheduler_unref0 (self->priv->contrast_scheduler);
+#line 2497 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_one_shot_scheduler_unref0 (self->priv->saturation_scheduler);
+#line 2498 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_one_shot_scheduler_unref0 (self->priv->exposure_scheduler);
+#line 2499 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
+	_one_shot_scheduler_unref0 (self->priv->shadows_scheduler);
+#line 2500 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	_one_shot_scheduler_unref0 (self->priv->highlights_scheduler);
 #line 2200 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_adjust_tool_parent_class)->finalize (obj);
-#line 19344 "EditingTools.c"
+#line 19580 "EditingTools.c"
 }
 
 

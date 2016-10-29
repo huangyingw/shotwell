@@ -6616,7 +6616,7 @@ static void photo_monitor_real_process_updates (MediaMonitor* base, GeeCollectio
 #line 997 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
 #line 6617 "PhotoMonitor.c"
-					goto __catch572_database_error;
+					goto __catch585_database_error;
 				}
 #line 997 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 				_g_object_unref0 (reimport_raw_developments);
@@ -6641,8 +6641,8 @@ static void photo_monitor_real_process_updates (MediaMonitor* base, GeeCollectio
 #line 6640 "PhotoMonitor.c"
 			}
 		}
-		goto __finally572;
-		__catch572_database_error:
+		goto __finally585;
+		__catch585_database_error:
 		{
 			GError* err = NULL;
 			GError* _tmp97_ = NULL;
@@ -6658,7 +6658,7 @@ static void photo_monitor_real_process_updates (MediaMonitor* base, GeeCollectio
 			_g_error_free0 (err);
 #line 6658 "PhotoMonitor.c"
 		}
-		__finally572:
+		__finally585:
 #line 996 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 996 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
@@ -6718,7 +6718,7 @@ static void photo_monitor_real_process_updates (MediaMonitor* base, GeeCollectio
 #line 1007 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
 #line 6719 "PhotoMonitor.c"
-					goto __catch573_database_error;
+					goto __catch586_database_error;
 				}
 #line 1007 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 				_g_object_unref0 (reimport_raw_developments);
@@ -6743,8 +6743,8 @@ static void photo_monitor_real_process_updates (MediaMonitor* base, GeeCollectio
 #line 6742 "PhotoMonitor.c"
 			}
 		}
-		goto __finally573;
-		__catch573_database_error:
+		goto __finally586;
+		__catch586_database_error:
 		{
 			GError* err = NULL;
 			GError* _tmp105_ = NULL;
@@ -6760,7 +6760,7 @@ static void photo_monitor_real_process_updates (MediaMonitor* base, GeeCollectio
 			_g_error_free0 (err);
 #line 6760 "PhotoMonitor.c"
 		}
-		__finally573:
+		__finally586:
 #line 1006 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1006 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
@@ -7437,7 +7437,7 @@ static void photo_monitor_on_master_reimported (PhotoMonitor* self, BackgroundJo
 #line 1085 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 7437 "PhotoMonitor.c"
-				goto __catch574_database_error;
+				goto __catch587_database_error;
 			}
 #line 1085 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 			_background_job_unref0 (job);
@@ -7450,8 +7450,8 @@ static void photo_monitor_on_master_reimported (PhotoMonitor* self, BackgroundJo
 #line 7448 "PhotoMonitor.c"
 		}
 	}
-	goto __finally574;
-	__catch574_database_error:
+	goto __finally587;
+	__catch587_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp26_ = NULL;
@@ -7467,7 +7467,7 @@ static void photo_monitor_on_master_reimported (PhotoMonitor* self, BackgroundJo
 		_g_error_free0 (err);
 #line 7466 "PhotoMonitor.c"
 	}
-	__finally574:
+	__finally587:
 #line 1084 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1084 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
@@ -7650,7 +7650,7 @@ static void photo_monitor_on_editable_reimported (PhotoMonitor* self, Background
 #line 1116 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 7650 "PhotoMonitor.c"
-				goto __catch575_database_error;
+				goto __catch588_database_error;
 			}
 #line 1116 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 			_background_job_unref0 (job);
@@ -7663,8 +7663,8 @@ static void photo_monitor_on_editable_reimported (PhotoMonitor* self, Background
 #line 7661 "PhotoMonitor.c"
 		}
 	}
-	goto __finally575;
-	__catch575_database_error:
+	goto __finally588;
+	__catch588_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp20_ = NULL;
@@ -7680,7 +7680,7 @@ static void photo_monitor_on_editable_reimported (PhotoMonitor* self, Background
 		_g_error_free0 (err);
 #line 7679 "PhotoMonitor.c"
 	}
-	__finally575:
+	__finally588:
 #line 1115 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1115 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
@@ -7844,7 +7844,7 @@ static void photo_monitor_on_raw_development_reimported (PhotoMonitor* self, Bac
 #line 1143 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 7844 "PhotoMonitor.c"
-				goto __catch576_database_error;
+				goto __catch589_database_error;
 			}
 #line 1143 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 			_background_job_unref0 (job);
@@ -7857,8 +7857,8 @@ static void photo_monitor_on_raw_development_reimported (PhotoMonitor* self, Bac
 #line 7855 "PhotoMonitor.c"
 		}
 	}
-	goto __finally576;
-	__catch576_database_error:
+	goto __finally589;
+	__catch589_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp20_ = NULL;
@@ -7874,7 +7874,7 @@ static void photo_monitor_on_raw_development_reimported (PhotoMonitor* self, Bac
 		_g_error_free0 (err);
 #line 7873 "PhotoMonitor.c"
 	}
-	__finally576:
+	__finally589:
 #line 1142 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1142 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
@@ -8030,14 +8030,14 @@ static void photo_monitor_reimport_master_job_real_execute (BackgroundJob* base)
 #line 176 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8030 "PhotoMonitor.c"
-			goto __catch577_g_error;
+			goto __catch590_g_error;
 		}
 #line 176 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 		self->mark_online = _tmp0_;
 #line 8035 "PhotoMonitor.c"
 	}
-	goto __finally577;
-	__catch577_g_error:
+	goto __finally590;
+	__catch590_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -8058,7 +8058,7 @@ static void photo_monitor_reimport_master_job_real_execute (BackgroundJob* base)
 		_g_error_free0 (err);
 #line 8057 "PhotoMonitor.c"
 	}
-	__finally577:
+	__finally590:
 #line 175 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 175 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
@@ -8208,14 +8208,14 @@ static void photo_monitor_reimport_editable_job_real_execute (BackgroundJob* bas
 #line 198 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8208 "PhotoMonitor.c"
-			goto __catch578_g_error;
+			goto __catch591_g_error;
 		}
 #line 198 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 		self->success = _tmp0_;
 #line 8213 "PhotoMonitor.c"
 	}
-	goto __finally578;
-	__catch578_g_error:
+	goto __finally591;
+	__catch591_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -8236,7 +8236,7 @@ static void photo_monitor_reimport_editable_job_real_execute (BackgroundJob* bas
 		_g_error_free0 (err);
 #line 8235 "PhotoMonitor.c"
 	}
-	__finally578:
+	__finally591:
 #line 197 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 197 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
@@ -8386,14 +8386,14 @@ static void photo_monitor_reimport_raw_development_job_real_execute (BackgroundJ
 #line 220 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8386 "PhotoMonitor.c"
-			goto __catch579_g_error;
+			goto __catch592_g_error;
 		}
 #line 220 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 		self->success = _tmp0_;
 #line 8391 "PhotoMonitor.c"
 	}
-	goto __finally579;
-	__catch579_g_error:
+	goto __finally592;
+	__catch592_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -8414,7 +8414,7 @@ static void photo_monitor_reimport_raw_development_job_real_execute (BackgroundJ
 		_g_error_free0 (err);
 #line 8413 "PhotoMonitor.c"
 	}
-	__finally579:
+	__finally592:
 #line 219 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 219 "/home/jens/Source/shotwell/src/PhotoMonitor.vala"

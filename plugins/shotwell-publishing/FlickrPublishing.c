@@ -506,7 +506,7 @@ static void flickr_service_finalize (GObject* obj);
 #define PUBLISHING_FLICKR_SERVICE_NAME "Flickr"
 #define PUBLISHING_FLICKR_SERVICE_WELCOME_MESSAGE _ ("You are not currently logged into Flickr.\n" \
 "\n" \
-"Click Login to log into Flickr in your Web browser.  You will have to " \
+"Click Log in to log into Flickr in your Web browser. You will have to " \
 "authorize Shotwell Connect to link to your Flickr account.")
 #define PUBLISHING_FLICKR_RESTART_ERROR_MESSAGE _ ("You have already logged in and out of Flickr during this Shotwell sess" \
 "ion.\n" \
@@ -2765,7 +2765,7 @@ static void publishing_flickr_flickr_publisher_do_run_authentication_request_tra
 #line 374 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = self->priv->host;
 #line 374 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = _ ("Preparing for login...");
+	_tmp2_ = _ ("Preparing for login…");
 #line 374 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_publishing_plugin_host_install_static_message_pane (_tmp1_, _tmp2_, SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
 #line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
@@ -3237,7 +3237,7 @@ static void publishing_flickr_flickr_publisher_do_show_pin_entry_pane (Publishin
 		_tmp4_ = self->priv->host;
 #line 442 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp5_ = _ ("A file required for publishing is unavailable. Publishing to Flickr ca" \
-"n't continue.");
+"n’t continue.");
 #line 442 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp6_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp5_);
 #line 442 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
@@ -3316,7 +3316,7 @@ static void publishing_flickr_flickr_publisher_do_verify_pin (PublishingFlickrFl
 #line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = self->priv->host;
 #line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = _ ("Verifying authorization...");
+	_tmp3_ = _ ("Verifying authorization…");
 #line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_publishing_plugin_host_install_static_message_pane (_tmp2_, _tmp3_, SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
 #line 459 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
@@ -4163,7 +4163,7 @@ static void publishing_flickr_flickr_publisher_do_show_publishing_options_pane (
 		_tmp5_ = self->priv->host;
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp6_ = _ ("A file required for publishing is unavailable. Publishing to Flickr ca" \
-"n't continue.");
+"n’t continue.");
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp7_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp6_);
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
@@ -8615,7 +8615,7 @@ static PublishingFlickrPublishingOptionsPaneSizeEntry** publishing_flickr_publis
 #line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1__length1 = _result__length1;
 #line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = _ ("500 x 375 pixels");
+	_tmp2_ = _ ("500 × 375 pixels");
 #line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = publishing_flickr_publishing_options_pane_size_entry_new (_tmp2_, 500);
 #line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
@@ -8625,7 +8625,7 @@ static PublishingFlickrPublishingOptionsPaneSizeEntry** publishing_flickr_publis
 #line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4__length1 = _result__length1;
 #line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = _ ("1024 x 768 pixels");
+	_tmp5_ = _ ("1024 × 768 pixels");
 #line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = publishing_flickr_publishing_options_pane_size_entry_new (_tmp5_, 1024);
 #line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
@@ -8635,7 +8635,7 @@ static PublishingFlickrPublishingOptionsPaneSizeEntry** publishing_flickr_publis
 #line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7__length1 = _result__length1;
 #line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp8_ = _ ("2048 x 1536 pixels");
+	_tmp8_ = _ ("2048 × 1536 pixels");
 #line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9_ = publishing_flickr_publishing_options_pane_size_entry_new (_tmp8_, 2048);
 #line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
@@ -8645,7 +8645,7 @@ static PublishingFlickrPublishingOptionsPaneSizeEntry** publishing_flickr_publis
 #line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10__length1 = _result__length1;
 #line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp11_ = _ ("4096 x 3072 pixels");
+	_tmp11_ = _ ("4096 × 3072 pixels");
 #line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp12_ = publishing_flickr_publishing_options_pane_size_entry_new (_tmp11_, 4096);
 #line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"

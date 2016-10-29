@@ -2305,8 +2305,8 @@ static void publishing_you_tube_you_tube_publisher_do_show_publishing_options_pa
 #line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp4_ = publishing_rest_support_google_publisher_get_host (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
 #line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp5_ = _ ("A file required for publishing is unavailable. Publishing to Youtube c" \
-"an't continue.");
+		_tmp5_ = _ ("A file required for publishing is unavailable. Publishing to YouTube c" \
+"an’t continue.");
 #line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp6_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp5_);
 #line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -2930,7 +2930,7 @@ PublishingYouTubePublishingOptionsPane* publishing_you_tube_publishing_options_p
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp39_ = self->priv->publish_to_label;
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp40_ = _ ("Videos will appear in '%s'");
+	_tmp40_ = _ ("Videos will appear in “%s”");
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp41_ = publishing_parameters;
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"

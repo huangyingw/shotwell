@@ -1110,7 +1110,7 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 #line 225 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1113 "SlideshowPage.c"
-					goto __catch450_g_error;
+					goto __catch463_g_error;
 				}
 #line 225 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				_tmp7_ = _tmp3_;
@@ -1124,8 +1124,8 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 				_g_object_unref0 (_tmp3_);
 #line 1126 "SlideshowPage.c"
 			}
-			goto __finally450;
-			__catch450_g_error:
+			goto __finally463;
+			__catch463_g_error:
 			{
 				GError* err = NULL;
 				Photo* _tmp8_ = NULL;
@@ -1334,7 +1334,7 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 				continue;
 #line 1336 "SlideshowPage.c"
 			}
-			__finally450:
+			__finally463:
 #line 223 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 223 "/home/jens/Source/shotwell/src/SlideshowPage.vala"

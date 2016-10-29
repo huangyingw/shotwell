@@ -364,9 +364,9 @@ static void picasa_service_real_activation (SpitPluggable* base, gboolean enable
 static void picasa_service_finalize (GObject* obj);
 #define PUBLISHING_PICASA_SERVICE_WELCOME_MESSAGE _ ("You are not currently logged into Picasa Web Albums.\n" \
 "\n" \
-"Click Login to log into Picasa Web Albums in your Web browser. You wil" \
-"l have to authorize Shotwell Connect to link to your Picasa Web Albums" \
-" account.")
+"Click Log in to log into Picasa Web Albums in your Web browser. You wi" \
+"ll have to authorize Shotwell Connect to link to your Picasa Web Album" \
+"s account.")
 #define PUBLISHING_PICASA_DEFAULT_ALBUM_NAME _ ("Shotwell Connect")
 gpointer publishing_picasa_publishing_parameters_ref (gpointer instance);
 void publishing_picasa_publishing_parameters_unref (gpointer instance);
@@ -2582,7 +2582,7 @@ static void publishing_picasa_picasa_publisher_do_show_publishing_options_pane (
 		_tmp4_ = publishing_rest_support_google_publisher_get_host (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
 #line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp5_ = _ ("A file required for publishing is unavailable. Publishing to Picasa ca" \
-"n't continue.");
+"n’t continue.");
 #line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp6_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp5_);
 #line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -2684,7 +2684,7 @@ static void publishing_picasa_picasa_publisher_do_create_album (PublishingPicasa
 #line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp5_ = publishing_rest_support_google_publisher_get_host (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
 #line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp6_ = _ ("Creating album...");
+	_tmp6_ = _ ("Creating album…");
 #line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	spit_publishing_plugin_host_install_static_message_pane (_tmp5_, _tmp6_, SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
 #line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -5997,7 +5997,7 @@ static PublishingPicasaPublishingOptionsPaneSizeDescription** publishing_picasa_
 #line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp1__length1 = _result__length1;
 #line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp2_ = _ ("Small (640 x 480 pixels)");
+	_tmp2_ = _ ("Small (640 × 480 pixels)");
 #line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp3_ = publishing_picasa_publishing_options_pane_size_description_new (_tmp2_, 640);
 #line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -6007,7 +6007,7 @@ static PublishingPicasaPublishingOptionsPaneSizeDescription** publishing_picasa_
 #line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp4__length1 = _result__length1;
 #line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp5_ = _ ("Medium (1024 x 768 pixels)");
+	_tmp5_ = _ ("Medium (1024 × 768 pixels)");
 #line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp6_ = publishing_picasa_publishing_options_pane_size_description_new (_tmp5_, 1024);
 #line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -6017,7 +6017,7 @@ static PublishingPicasaPublishingOptionsPaneSizeDescription** publishing_picasa_
 #line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp7__length1 = _result__length1;
 #line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp8_ = _ ("Recommended (1600 x 1200 pixels)");
+	_tmp8_ = _ ("Recommended (1600 × 1200 pixels)");
 #line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp9_ = publishing_picasa_publishing_options_pane_size_description_new (_tmp8_, 1600);
 #line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -6027,7 +6027,7 @@ static PublishingPicasaPublishingOptionsPaneSizeDescription** publishing_picasa_
 #line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp10__length1 = _result__length1;
 #line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp11_ = _ ("Google+ (2048 x 1536 pixels)");
+	_tmp11_ = _ ("Google+ (2048 × 1536 pixels)");
 #line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp12_ = publishing_picasa_publishing_options_pane_size_description_new (_tmp11_, 2048);
 #line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"

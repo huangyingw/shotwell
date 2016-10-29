@@ -15,16 +15,14 @@
 #include "shotwell-plugin-dev-1.0.h"
 #include <gee.h>
 #include <gio/gio.h>
-#include <glib/gstdio.h>
 #include <glib/gi18n-lib.h>
+#include <glib/gstdio.h>
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 #include <float.h>
 #include <math.h>
 #include <json-glib/json-glib.h>
 #include <webkit2/webkit2.h>
-#include <gtk/gtk.h>
-#include <gdk/gdk.h>
 #include <gobject/gvaluecollector.h>
 
 #define _g_hmac_unref0(var) ((var == NULL) ? NULL : (var = (g_hmac_unref (var), NULL)))
@@ -69,6 +67,7 @@ typedef struct _PublishingRESTSupportTransaction PublishingRESTSupportTransactio
 typedef struct _PublishingRESTSupportTransactionClass PublishingRESTSupportTransactionClass;
 typedef struct _PublishingRESTSupportTransactionPrivate PublishingRESTSupportTransactionPrivate;
 #define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
+#define _g_string_free0(var) ((var == NULL) ? NULL : (var = (g_string_free (var, TRUE), NULL)))
 #define __vala_SoupURI_free0(var) ((var == NULL) ? NULL : (var = (_vala_SoupURI_free (var), NULL)))
 typedef struct _PublishingRESTSupportParamSpecTransaction PublishingRESTSupportParamSpecTransaction;
 
@@ -98,7 +97,6 @@ typedef struct _PublishingRESTSupportXmlDocumentClass PublishingRESTSupportXmlDo
 typedef struct _PublishingRESTSupportXmlDocumentPrivate PublishingRESTSupportXmlDocumentPrivate;
 #define _publishing_rest_support_xml_document_unref0(var) ((var == NULL) ? NULL : (var = (publishing_rest_support_xml_document_unref (var), NULL)))
 typedef struct _PublishingRESTSupportParamSpecXmlDocument PublishingRESTSupportParamSpecXmlDocument;
-#define _g_string_free0(var) ((var == NULL) ? NULL : (var = (g_string_free (var, TRUE), NULL)))
 
 #define PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER (publishing_rest_support_batch_uploader_get_type ())
 #define PUBLISHING_REST_SUPPORT_BATCH_UPLOADER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader))
@@ -145,6 +143,16 @@ typedef struct _PublishingRESTSupportGooglePublisherPrivate PublishingRESTSuppor
 
 typedef struct _PublishingRESTSupportGooglePublisherGoogleSessionImpl PublishingRESTSupportGooglePublisherGoogleSessionImpl;
 typedef struct _PublishingRESTSupportGooglePublisherGoogleSessionImplClass PublishingRESTSupportGooglePublisherGoogleSessionImplClass;
+
+#define SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE (shotwell_plugins_common_web_authentication_pane_get_type ())
+#define SHOTWELL_PLUGINS_COMMON_WEB_AUTHENTICATION_PANE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane))
+#define SHOTWELL_PLUGINS_COMMON_WEB_AUTHENTICATION_PANE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPaneClass))
+#define SHOTWELL_PLUGINS_COMMON_IS_WEB_AUTHENTICATION_PANE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE))
+#define SHOTWELL_PLUGINS_COMMON_IS_WEB_AUTHENTICATION_PANE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE))
+#define SHOTWELL_PLUGINS_COMMON_WEB_AUTHENTICATION_PANE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPaneClass))
+
+typedef struct _ShotwellPluginsCommonWebAuthenticationPane ShotwellPluginsCommonWebAuthenticationPane;
+typedef struct _ShotwellPluginsCommonWebAuthenticationPaneClass ShotwellPluginsCommonWebAuthenticationPaneClass;
 
 #define PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_WEB_AUTHENTICATION_PANE (publishing_rest_support_google_publisher_web_authentication_pane_get_type ())
 #define PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_WEB_AUTHENTICATION_PANE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_WEB_AUTHENTICATION_PANE, PublishingRESTSupportGooglePublisherWebAuthenticationPane))
@@ -197,6 +205,7 @@ typedef struct _PublishingRESTSupportGooglePublisherAuthenticatedTransactionClas
 
 typedef struct _PublishingRESTSupportGooglePublisherUsernameFetchTransaction PublishingRESTSupportGooglePublisherUsernameFetchTransaction;
 typedef struct _PublishingRESTSupportGooglePublisherUsernameFetchTransactionClass PublishingRESTSupportGooglePublisherUsernameFetchTransactionClass;
+typedef struct _ShotwellPluginsCommonWebAuthenticationPanePrivate ShotwellPluginsCommonWebAuthenticationPanePrivate;
 typedef struct _PublishingRESTSupportGooglePublisherWebAuthenticationPanePrivate PublishingRESTSupportGooglePublisherWebAuthenticationPanePrivate;
 typedef struct _PublishingRESTSupportGooglePublisherGetAccessTokensTransactionPrivate PublishingRESTSupportGooglePublisherGetAccessTokensTransactionPrivate;
 typedef struct _PublishingRESTSupportGooglePublisherRefreshAccessTokenTransactionPrivate PublishingRESTSupportGooglePublisherRefreshAccessTokenTransactionPrivate;
@@ -388,19 +397,23 @@ struct _PublishingRESTSupportGooglePublisherGoogleSessionImplClass {
 	PublishingRESTSupportGoogleSessionClass parent_class;
 };
 
-struct _PublishingRESTSupportGooglePublisherWebAuthenticationPane {
+struct _ShotwellPluginsCommonWebAuthenticationPane {
 	GObject parent_instance;
+	ShotwellPluginsCommonWebAuthenticationPanePrivate * priv;
+};
+
+struct _ShotwellPluginsCommonWebAuthenticationPaneClass {
+	GObjectClass parent_class;
+	void (*on_page_load) (ShotwellPluginsCommonWebAuthenticationPane* self);
+};
+
+struct _PublishingRESTSupportGooglePublisherWebAuthenticationPane {
+	ShotwellPluginsCommonWebAuthenticationPane parent_instance;
 	PublishingRESTSupportGooglePublisherWebAuthenticationPanePrivate * priv;
 };
 
 struct _PublishingRESTSupportGooglePublisherWebAuthenticationPaneClass {
-	GObjectClass parent_class;
-};
-
-struct _PublishingRESTSupportGooglePublisherWebAuthenticationPanePrivate {
-	WebKitWebView* webview;
-	GtkBox* pane_widget;
-	gchar* auth_sequence_start_url;
+	ShotwellPluginsCommonWebAuthenticationPaneClass parent_class;
 };
 
 struct _PublishingRESTSupportGooglePublisherGetAccessTokensTransaction {
@@ -452,7 +465,6 @@ static gpointer publishing_rest_support_google_publisher_google_session_impl_par
 static gpointer publishing_rest_support_google_publisher_web_authentication_pane_parent_class = NULL;
 static gboolean publishing_rest_support_google_publisher_web_authentication_pane_cache_dirty;
 static gboolean publishing_rest_support_google_publisher_web_authentication_pane_cache_dirty = FALSE;
-static SpitPublishingDialogPaneIface* publishing_rest_support_google_publisher_web_authentication_pane_spit_publishing_dialog_pane_parent_iface = NULL;
 static gpointer publishing_rest_support_google_publisher_get_access_tokens_transaction_parent_class = NULL;
 static gpointer publishing_rest_support_google_publisher_refresh_access_token_transaction_parent_class = NULL;
 static gpointer publishing_rest_support_google_publisher_authenticated_transaction_parent_class = NULL;
@@ -483,6 +495,7 @@ void publishing_rest_support_session_stop_transactions (PublishingRESTSupportSes
 gboolean publishing_rest_support_session_are_transactions_stopped (PublishingRESTSupportSession* self);
 void publishing_rest_support_session_send_wire_message (PublishingRESTSupportSession* self, SoupMessage* message);
 static void _publishing_rest_support_session_notify_wire_message_unqueued_soup_session_request_unqueued (SoupSession* _sender, SoupMessage* msg, gpointer self);
+void publishing_rest_support_session_set_insecure (PublishingRESTSupportSession* self);
 static void publishing_rest_support_session_finalize (PublishingRESTSupportSession* obj);
 GType publishing_rest_support_http_method_get_type (void) G_GNUC_CONST;
 gchar* publishing_rest_support_http_method_to_string (PublishingRESTSupportHttpMethod self);
@@ -524,6 +537,7 @@ PublishingRESTSupportTransaction* publishing_rest_support_transaction_construct_
 static void publishing_rest_support_transaction_on_message_unqueued (PublishingRESTSupportTransaction* self, SoupMessage* message);
 void publishing_rest_support_transaction_check_response (PublishingRESTSupportTransaction* self, SoupMessage* message, GError** error);
 gchar* publishing_rest_support_transaction_get_response (PublishingRESTSupportTransaction* self);
+gchar* publishing_rest_support_transaction_detailed_error_from_tls_flags (PublishingRESTSupportTransaction* self, GTlsCertificate** cert);
 gchar* publishing_rest_support_transaction_get_endpoint_url (PublishingRESTSupportTransaction* self);
 PublishingRESTSupportArgument** publishing_rest_support_transaction_get_arguments (PublishingRESTSupportTransaction* self, int* result_length1);
 static PublishingRESTSupportArgument** _vala_array_dup1 (PublishingRESTSupportArgument** self, int length);
@@ -623,6 +637,7 @@ static void publishing_rest_support_google_session_real_deauthenticate (Publishi
 PublishingRESTSupportGoogleSession* publishing_rest_support_google_session_construct (GType object_type);
 GType publishing_rest_support_google_publisher_get_type (void) G_GNUC_CONST;
 static GType publishing_rest_support_google_publisher_google_session_impl_get_type (void) G_GNUC_CONST G_GNUC_UNUSED;
+GType shotwell_plugins_common_web_authentication_pane_get_type (void) G_GNUC_CONST;
 static GType publishing_rest_support_google_publisher_web_authentication_pane_get_type (void) G_GNUC_CONST G_GNUC_UNUSED;
 #define PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisherPrivate))
 enum  {
@@ -692,20 +707,11 @@ static gchar* publishing_rest_support_google_publisher_google_session_impl_real_
 static gchar* publishing_rest_support_google_publisher_google_session_impl_real_get_refresh_token (PublishingRESTSupportGoogleSession* base);
 static void publishing_rest_support_google_publisher_google_session_impl_real_deauthenticate (PublishingRESTSupportGoogleSession* base);
 static void publishing_rest_support_google_publisher_google_session_impl_finalize (PublishingRESTSupportSession* obj);
-#define PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_WEB_AUTHENTICATION_PANE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_WEB_AUTHENTICATION_PANE, PublishingRESTSupportGooglePublisherWebAuthenticationPanePrivate))
 enum  {
 	PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_WEB_AUTHENTICATION_PANE_DUMMY_PROPERTY
 };
-static void publishing_rest_support_google_publisher_web_authentication_pane_on_page_load_changed (PublishingRESTSupportGooglePublisherWebAuthenticationPane* self, WebKitLoadEvent load_event);
-static void _publishing_rest_support_google_publisher_web_authentication_pane_on_page_load_changed_webkit_web_view_load_changed (WebKitWebView* _sender, WebKitLoadEvent load_event, gpointer self);
-static gboolean __lambda4_ (PublishingRESTSupportGooglePublisherWebAuthenticationPane* self);
-static gboolean ___lambda4__webkit_web_view_context_menu (WebKitWebView* _sender, WebKitContextMenu* context_menu, GdkEvent* event, WebKitHitTestResult* hit_test_result, gpointer self);
-static void publishing_rest_support_google_publisher_web_authentication_pane_on_page_load (PublishingRESTSupportGooglePublisherWebAuthenticationPane* self);
-static void publishing_rest_support_google_publisher_web_authentication_pane_on_load_started (PublishingRESTSupportGooglePublisherWebAuthenticationPane* self);
-static SpitPublishingDialogPaneGeometryOptions publishing_rest_support_google_publisher_web_authentication_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base);
-static GtkWidget* publishing_rest_support_google_publisher_web_authentication_pane_real_get_widget (SpitPublishingDialogPane* base);
-static void publishing_rest_support_google_publisher_web_authentication_pane_real_on_pane_installed (SpitPublishingDialogPane* base);
-static void publishing_rest_support_google_publisher_web_authentication_pane_real_on_pane_uninstalled (SpitPublishingDialogPane* base);
+static void publishing_rest_support_google_publisher_web_authentication_pane_real_on_page_load (ShotwellPluginsCommonWebAuthenticationPane* base);
+WebKitWebView* shotwell_plugins_common_web_authentication_pane_get_view (ShotwellPluginsCommonWebAuthenticationPane* self);
 static void publishing_rest_support_google_publisher_web_authentication_pane_finalize (GObject* obj);
 enum  {
 	PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_GET_ACCESS_TOKENS_TRANSACTION_DUMMY_PROPERTY
@@ -771,13 +777,13 @@ static guint8* string_get_data (const gchar* self, int* result_length1) {
 	if (result_length1) {
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		*result_length1 = _tmp4__length1;
-#line 774 "RESTSupport.c"
+#line 780 "RESTSupport.c"
 	}
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	result = _tmp4_;
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 780 "RESTSupport.c"
+#line 786 "RESTSupport.c"
 }
 
 
@@ -839,7 +845,7 @@ gchar* publishing_rest_support_hmac_sha1 (const gchar* key, const gchar* message
 	_g_hmac_unref0 (mac);
 #line 22 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 842 "RESTSupport.c"
+#line 848 "RESTSupport.c"
 }
 
 
@@ -847,7 +853,7 @@ PublishingRESTSupportSession* publishing_rest_support_session_construct (GType o
 	PublishingRESTSupportSession* self = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-	SoupSessionAsync* _tmp2_ = NULL;
+	SoupSession* _tmp2_ = NULL;
 	SoupSession* _tmp3_ = NULL;
 #line 34 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportSession*) g_type_create_instance (object_type);
@@ -860,18 +866,18 @@ PublishingRESTSupportSession* publishing_rest_support_session_construct (GType o
 #line 35 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->endpoint_url = _tmp1_;
 #line 36 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp2_ = (SoupSessionAsync*) soup_session_async_new ();
+	_tmp2_ = soup_session_new ();
 #line 36 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->priv->soup_session);
 #line 36 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv->soup_session = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, soup_session_get_type (), SoupSession);
+	self->priv->soup_session = _tmp2_;
 #line 37 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = self->priv->soup_session;
 #line 37 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_object_set (_tmp3_, "ssl-use-system-ca-file", TRUE, NULL);
 #line 34 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 874 "RESTSupport.c"
+#line 880 "RESTSupport.c"
 }
 
 
@@ -885,7 +891,7 @@ void publishing_rest_support_session_notify_wire_message_unqueued (PublishingRES
 	_tmp0_ = message;
 #line 41 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_emit_by_name (self, "wire-message-unqueued", _tmp0_);
-#line 888 "RESTSupport.c"
+#line 894 "RESTSupport.c"
 }
 
 
@@ -894,7 +900,7 @@ void publishing_rest_support_session_notify_authenticated (PublishingRESTSupport
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_SESSION (self));
 #line 45 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_emit_by_name (self, "authenticated");
-#line 897 "RESTSupport.c"
+#line 903 "RESTSupport.c"
 }
 
 
@@ -906,7 +912,7 @@ void publishing_rest_support_session_notify_authentication_failed (PublishingRES
 	_tmp0_ = err;
 #line 49 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_emit_by_name (self, "authentication-failed", _tmp0_);
-#line 909 "RESTSupport.c"
+#line 915 "RESTSupport.c"
 }
 
 
@@ -915,7 +921,7 @@ static gboolean publishing_rest_support_session_real_is_authenticated (Publishin
 	g_critical ("Type `%s' does not implement abstract method `publishing_rest_support_session_is_authenticated'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
 #line 52 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return FALSE;
-#line 918 "RESTSupport.c"
+#line 924 "RESTSupport.c"
 }
 
 
@@ -924,7 +930,7 @@ gboolean publishing_rest_support_session_is_authenticated (PublishingRESTSupport
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_SESSION (self), FALSE);
 #line 52 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return PUBLISHING_REST_SUPPORT_SESSION_GET_CLASS (self)->is_authenticated (self);
-#line 927 "RESTSupport.c"
+#line 933 "RESTSupport.c"
 }
 
 
@@ -942,7 +948,7 @@ gchar* publishing_rest_support_session_get_endpoint_url (PublishingRESTSupportSe
 	result = _tmp1_;
 #line 55 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 945 "RESTSupport.c"
+#line 951 "RESTSupport.c"
 }
 
 
@@ -956,7 +962,7 @@ void publishing_rest_support_session_stop_transactions (PublishingRESTSupportSes
 	_tmp0_ = self->priv->soup_session;
 #line 60 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	soup_session_abort (_tmp0_);
-#line 959 "RESTSupport.c"
+#line 965 "RESTSupport.c"
 }
 
 
@@ -971,14 +977,14 @@ gboolean publishing_rest_support_session_are_transactions_stopped (PublishingRES
 	result = _tmp0_;
 #line 64 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 974 "RESTSupport.c"
+#line 980 "RESTSupport.c"
 }
 
 
 static void _publishing_rest_support_session_notify_wire_message_unqueued_soup_session_request_unqueued (SoupSession* _sender, SoupMessage* msg, gpointer self) {
 #line 71 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_session_notify_wire_message_unqueued ((PublishingRESTSupportSession*) self, msg);
-#line 981 "RESTSupport.c"
+#line 987 "RESTSupport.c"
 }
 
 
@@ -999,7 +1005,7 @@ void publishing_rest_support_session_send_wire_message (PublishingRESTSupportSes
 	if (_tmp0_) {
 #line 69 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 1002 "RESTSupport.c"
+#line 1008 "RESTSupport.c"
 	}
 #line 71 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->soup_session;
@@ -1017,14 +1023,31 @@ void publishing_rest_support_session_send_wire_message (PublishingRESTSupportSes
 	g_signal_parse_name ("request-unqueued", soup_session_get_type (), &_tmp5_, NULL, FALSE);
 #line 74 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp4_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp5_, 0, NULL, (GCallback) _publishing_rest_support_session_notify_wire_message_unqueued_soup_session_request_unqueued, self);
-#line 1020 "RESTSupport.c"
+#line 1026 "RESTSupport.c"
+}
+
+
+void publishing_rest_support_session_set_insecure (PublishingRESTSupportSession* self) {
+	SoupSession* _tmp0_ = NULL;
+	SoupSession* _tmp1_ = NULL;
+#line 77 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_SESSION (self));
+#line 78 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp0_ = self->priv->soup_session;
+#line 78 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_object_set (_tmp0_, "ssl-use-system-ca-file", FALSE, NULL);
+#line 79 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp1_ = self->priv->soup_session;
+#line 79 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_object_set (_tmp1_, "ssl-strict", FALSE, NULL);
+#line 1043 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_value_session_init (GValue* value) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	value->data[0].v_pointer = NULL;
-#line 1027 "RESTSupport.c"
+#line 1050 "RESTSupport.c"
 }
 
 
@@ -1033,7 +1056,7 @@ static void publishing_rest_support_value_session_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_session_unref (value->data[0].v_pointer);
-#line 1036 "RESTSupport.c"
+#line 1059 "RESTSupport.c"
 	}
 }
 
@@ -1043,11 +1066,11 @@ static void publishing_rest_support_value_session_copy_value (const GValue* src_
 	if (src_value->data[0].v_pointer) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		dest_value->data[0].v_pointer = publishing_rest_support_session_ref (src_value->data[0].v_pointer);
-#line 1046 "RESTSupport.c"
+#line 1069 "RESTSupport.c"
 	} else {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 1050 "RESTSupport.c"
+#line 1073 "RESTSupport.c"
 	}
 }
 
@@ -1055,37 +1078,37 @@ static void publishing_rest_support_value_session_copy_value (const GValue* src_
 static gpointer publishing_rest_support_value_session_peek_pointer (const GValue* value) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return value->data[0].v_pointer;
-#line 1058 "RESTSupport.c"
+#line 1081 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_value_session_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (collect_values[0].v_pointer) {
-#line 1065 "RESTSupport.c"
+#line 1088 "RESTSupport.c"
 		PublishingRESTSupportSession* object;
 		object = collect_values[0].v_pointer;
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1072 "RESTSupport.c"
+#line 1095 "RESTSupport.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1076 "RESTSupport.c"
+#line 1099 "RESTSupport.c"
 		}
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = publishing_rest_support_session_ref (object);
-#line 1080 "RESTSupport.c"
+#line 1103 "RESTSupport.c"
 	} else {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 1084 "RESTSupport.c"
+#line 1107 "RESTSupport.c"
 	}
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 1088 "RESTSupport.c"
+#line 1111 "RESTSupport.c"
 }
 
 
@@ -1096,25 +1119,25 @@ static gchar* publishing_rest_support_value_session_lcopy_value (const GValue* v
 	if (!object_p) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 1099 "RESTSupport.c"
+#line 1122 "RESTSupport.c"
 	}
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!value->data[0].v_pointer) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = NULL;
-#line 1105 "RESTSupport.c"
+#line 1128 "RESTSupport.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = value->data[0].v_pointer;
-#line 1109 "RESTSupport.c"
+#line 1132 "RESTSupport.c"
 	} else {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = publishing_rest_support_session_ref (value->data[0].v_pointer);
-#line 1113 "RESTSupport.c"
+#line 1136 "RESTSupport.c"
 	}
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 1117 "RESTSupport.c"
+#line 1140 "RESTSupport.c"
 }
 
 
@@ -1128,7 +1151,7 @@ GParamSpec* publishing_rest_support_param_spec_session (const gchar* name, const
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return G_PARAM_SPEC (spec);
-#line 1131 "RESTSupport.c"
+#line 1154 "RESTSupport.c"
 }
 
 
@@ -1137,7 +1160,7 @@ gpointer publishing_rest_support_value_get_session (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_SESSION), NULL);
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return value->data[0].v_pointer;
-#line 1140 "RESTSupport.c"
+#line 1163 "RESTSupport.c"
 }
 
 
@@ -1157,17 +1180,17 @@ void publishing_rest_support_value_set_session (GValue* value, gpointer v_object
 		value->data[0].v_pointer = v_object;
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_session_ref (value->data[0].v_pointer);
-#line 1160 "RESTSupport.c"
+#line 1183 "RESTSupport.c"
 	} else {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 1164 "RESTSupport.c"
+#line 1187 "RESTSupport.c"
 	}
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (old) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_session_unref (old);
-#line 1170 "RESTSupport.c"
+#line 1193 "RESTSupport.c"
 	}
 }
 
@@ -1186,17 +1209,17 @@ void publishing_rest_support_value_take_session (GValue* value, gpointer v_objec
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = v_object;
-#line 1189 "RESTSupport.c"
+#line 1212 "RESTSupport.c"
 	} else {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 1193 "RESTSupport.c"
+#line 1216 "RESTSupport.c"
 	}
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (old) {
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_session_unref (old);
-#line 1199 "RESTSupport.c"
+#line 1222 "RESTSupport.c"
 	}
 }
 
@@ -1216,7 +1239,7 @@ static void publishing_rest_support_session_class_init (PublishingRESTSupportSes
 	g_signal_new ("authenticated", PUBLISHING_REST_SUPPORT_TYPE_SESSION, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_new ("authentication_failed", PUBLISHING_REST_SUPPORT_TYPE_SESSION, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1, G_TYPE_POINTER);
-#line 1219 "RESTSupport.c"
+#line 1242 "RESTSupport.c"
 }
 
 
@@ -1231,7 +1254,7 @@ static void publishing_rest_support_session_instance_init (PublishingRESTSupport
 	self->priv->transactions_stopped = FALSE;
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->ref_count = 1;
-#line 1234 "RESTSupport.c"
+#line 1257 "RESTSupport.c"
 }
 
 
@@ -1245,7 +1268,7 @@ static void publishing_rest_support_session_finalize (PublishingRESTSupportSessi
 	_g_free0 (self->priv->endpoint_url);
 #line 27 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->priv->soup_session);
-#line 1248 "RESTSupport.c"
+#line 1271 "RESTSupport.c"
 }
 
 
@@ -1270,7 +1293,7 @@ gpointer publishing_rest_support_session_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return instance;
-#line 1273 "RESTSupport.c"
+#line 1296 "RESTSupport.c"
 }
 
 
@@ -1283,59 +1306,59 @@ void publishing_rest_support_session_unref (gpointer instance) {
 		PUBLISHING_REST_SUPPORT_SESSION_GET_CLASS (self)->finalize (self);
 #line 25 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 1286 "RESTSupport.c"
+#line 1309 "RESTSupport.c"
 	}
 }
 
 
 gchar* publishing_rest_support_http_method_to_string (PublishingRESTSupportHttpMethod self) {
 	gchar* result = NULL;
-#line 84 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 89 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	switch (self) {
-#line 84 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 89 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		case PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET:
-#line 1297 "RESTSupport.c"
+#line 1320 "RESTSupport.c"
 		{
 			gchar* _tmp0_ = NULL;
-#line 86 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 91 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp0_ = g_strdup ("GET");
-#line 86 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 91 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			result = _tmp0_;
-#line 86 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 91 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return result;
-#line 1306 "RESTSupport.c"
+#line 1329 "RESTSupport.c"
 		}
-#line 84 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 89 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		case PUBLISHING_REST_SUPPORT_HTTP_METHOD_PUT:
-#line 1310 "RESTSupport.c"
+#line 1333 "RESTSupport.c"
 		{
 			gchar* _tmp1_ = NULL;
-#line 89 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 94 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp1_ = g_strdup ("PUT");
-#line 89 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 94 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			result = _tmp1_;
-#line 89 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 94 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return result;
-#line 1319 "RESTSupport.c"
+#line 1342 "RESTSupport.c"
 		}
-#line 84 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 89 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		case PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST:
-#line 1323 "RESTSupport.c"
+#line 1346 "RESTSupport.c"
 		{
 			gchar* _tmp2_ = NULL;
-#line 92 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 97 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp2_ = g_strdup ("POST");
-#line 92 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 97 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			result = _tmp2_;
-#line 92 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 97 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return result;
-#line 1332 "RESTSupport.c"
+#line 1355 "RESTSupport.c"
 		}
 		default:
 		{
-#line 95 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-			g_error ("RESTSupport.vala:95: unrecognized HTTP method enumeration value");
-#line 1338 "RESTSupport.c"
+#line 100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			g_error ("RESTSupport.vala:100: unrecognized HTTP method enumeration value");
+#line 1361 "RESTSupport.c"
 		}
 	}
 }
@@ -1344,46 +1367,46 @@ gchar* publishing_rest_support_http_method_to_string (PublishingRESTSupportHttpM
 PublishingRESTSupportHttpMethod publishing_rest_support_http_method_from_string (const gchar* str) {
 	PublishingRESTSupportHttpMethod result = 0;
 	const gchar* _tmp0_ = NULL;
-#line 99 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 104 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (str != NULL, 0);
-#line 100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = str;
-#line 100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (g_strcmp0 (_tmp0_, "GET") == 0) {
-#line 101 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 106 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		result = PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET;
-#line 101 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 106 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return result;
-#line 1357 "RESTSupport.c"
+#line 1380 "RESTSupport.c"
 	} else {
 		const gchar* _tmp1_ = NULL;
-#line 102 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 107 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp1_ = str;
-#line 102 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 107 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (g_strcmp0 (_tmp1_, "PUT") == 0) {
-#line 103 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 108 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			result = PUBLISHING_REST_SUPPORT_HTTP_METHOD_PUT;
-#line 103 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 108 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return result;
-#line 1368 "RESTSupport.c"
+#line 1391 "RESTSupport.c"
 		} else {
 			const gchar* _tmp2_ = NULL;
-#line 104 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 109 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp2_ = str;
-#line 104 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 109 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (g_strcmp0 (_tmp2_, "POST") == 0) {
-#line 105 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				result = PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST;
-#line 105 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				return result;
-#line 1379 "RESTSupport.c"
+#line 1402 "RESTSupport.c"
 			} else {
 				const gchar* _tmp3_ = NULL;
-#line 107 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp3_ = str;
-#line 107 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-				g_error ("RESTSupport.vala:107: unrecognized HTTP method name: %s", _tmp3_);
-#line 1386 "RESTSupport.c"
+#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				g_error ("RESTSupport.vala:112: unrecognized HTTP method name: %s", _tmp3_);
+#line 1409 "RESTSupport.c"
 			}
 		}
 	}
@@ -1408,38 +1431,38 @@ PublishingRESTSupportArgument* publishing_rest_support_argument_construct (GType
 	gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 116 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 121 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (key != NULL, NULL);
-#line 116 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 121 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (value != NULL, NULL);
-#line 116 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 121 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportArgument*) g_type_create_instance (object_type);
-#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = key;
-#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->key);
-#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->key = _tmp1_;
-#line 118 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = value;
-#line 118 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 118 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->value);
-#line 118 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->value = _tmp3_;
-#line 116 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 121 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 1435 "RESTSupport.c"
+#line 1458 "RESTSupport.c"
 }
 
 
 PublishingRESTSupportArgument* publishing_rest_support_argument_new (const gchar* key, const gchar* value) {
-#line 116 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 121 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_argument_construct (PUBLISHING_REST_SUPPORT_TYPE_ARGUMENT, key, value);
-#line 1442 "RESTSupport.c"
+#line 1465 "RESTSupport.c"
 }
 
 
@@ -1451,43 +1474,43 @@ gint publishing_rest_support_argument_compare (PublishingRESTSupportArgument* ar
 	PublishingRESTSupportArgument* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
 	gint _tmp5_ = 0;
-#line 121 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 126 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_ARGUMENT (arg1), 0);
-#line 121 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 126 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_ARGUMENT (arg2), 0);
-#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 127 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = g_strcmp0;
-#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 127 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = arg1;
-#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 127 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _tmp1_->key;
-#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 127 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = arg2;
-#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 127 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = _tmp3_->key;
-#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 127 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = _tmp0_ (_tmp2_, _tmp4_);
-#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 127 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp5_;
-#line 122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 127 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 1474 "RESTSupport.c"
+#line 1497 "RESTSupport.c"
 }
 
 
 static gint _publishing_rest_support_argument_compare_gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self) {
 	gint result;
 	result = publishing_rest_support_argument_compare ((PublishingRESTSupportArgument*) a, (PublishingRESTSupportArgument*) b);
-#line 126 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 1483 "RESTSupport.c"
+#line 1506 "RESTSupport.c"
 }
 
 
 static gpointer _publishing_rest_support_argument_ref0 (gpointer self) {
-#line 128 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self ? publishing_rest_support_argument_ref (self) : NULL;
-#line 1490 "RESTSupport.c"
+#line 1513 "RESTSupport.c"
 }
 
 
@@ -1502,70 +1525,70 @@ PublishingRESTSupportArgument** publishing_rest_support_argument_sort (Publishin
 	gpointer* _tmp7_ = NULL;
 	PublishingRESTSupportArgument** _tmp8_ = NULL;
 	gint _tmp8__length1 = 0;
-#line 126 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = gee_tree_set_new (PUBLISHING_REST_SUPPORT_TYPE_ARGUMENT, (GBoxedCopyFunc) publishing_rest_support_argument_ref, publishing_rest_support_argument_unref, _publishing_rest_support_argument_compare_gcompare_data_func, NULL, NULL);
-#line 126 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	sorted_args = _tmp0_;
-#line 128 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = inputArray;
-#line 128 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1__length1 = inputArray_length1;
-#line 1513 "RESTSupport.c"
+#line 1536 "RESTSupport.c"
 	{
 		PublishingRESTSupportArgument** arg_collection = NULL;
 		gint arg_collection_length1 = 0;
 		gint _arg_collection_size_ = 0;
 		gint arg_it = 0;
-#line 128 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		arg_collection = _tmp1_;
-#line 128 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		arg_collection_length1 = _tmp1__length1;
-#line 128 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		for (arg_it = 0; arg_it < _tmp1__length1; arg_it = arg_it + 1) {
-#line 1525 "RESTSupport.c"
+#line 1548 "RESTSupport.c"
 			PublishingRESTSupportArgument* _tmp2_ = NULL;
 			PublishingRESTSupportArgument* arg = NULL;
-#line 128 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp2_ = _publishing_rest_support_argument_ref0 (arg_collection[arg_it]);
-#line 128 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			arg = _tmp2_;
-#line 1532 "RESTSupport.c"
+#line 1555 "RESTSupport.c"
 			{
 				GeeTreeSet* _tmp3_ = NULL;
 				PublishingRESTSupportArgument* _tmp4_ = NULL;
-#line 129 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 134 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp3_ = sorted_args;
-#line 129 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 134 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp4_ = arg;
-#line 129 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 134 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp4_);
-#line 128 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_publishing_rest_support_argument_unref0 (arg);
-#line 1544 "RESTSupport.c"
+#line 1567 "RESTSupport.c"
 			}
 		}
 	}
-#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = sorted_args;
-#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = gee_collection_to_array (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GEE_TYPE_COLLECTION, GeeCollection), &_tmp6_);
-#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8_ = _tmp7_;
-#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8__length1 = _tmp6_;
-#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (result_length1) {
-#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*result_length1 = _tmp8__length1;
-#line 1560 "RESTSupport.c"
+#line 1583 "RESTSupport.c"
 	}
-#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp8_;
-#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (sorted_args);
-#line 131 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 1568 "RESTSupport.c"
+#line 1591 "RESTSupport.c"
 }
 
 
@@ -1574,229 +1597,229 @@ gchar* publishing_rest_support_argument_to_string (PublishingRESTSupportArgument
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 134 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_ARGUMENT (self), NULL);
-#line 135 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 140 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->key;
-#line 135 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 140 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->value;
-#line 135 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 140 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = g_strdup_printf ("%s=%s", _tmp0_, _tmp1_);
-#line 135 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 140 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp2_;
-#line 135 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 140 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 1589 "RESTSupport.c"
+#line 1612 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_value_argument_init (GValue* value) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	value->data[0].v_pointer = NULL;
-#line 1596 "RESTSupport.c"
+#line 1619 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_value_argument_free_value (GValue* value) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (value->data[0].v_pointer) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_argument_unref (value->data[0].v_pointer);
-#line 1605 "RESTSupport.c"
+#line 1628 "RESTSupport.c"
 	}
 }
 
 
 static void publishing_rest_support_value_argument_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (src_value->data[0].v_pointer) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		dest_value->data[0].v_pointer = publishing_rest_support_argument_ref (src_value->data[0].v_pointer);
-#line 1615 "RESTSupport.c"
+#line 1638 "RESTSupport.c"
 	} else {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 1619 "RESTSupport.c"
+#line 1642 "RESTSupport.c"
 	}
 }
 
 
 static gpointer publishing_rest_support_value_argument_peek_pointer (const GValue* value) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return value->data[0].v_pointer;
-#line 1627 "RESTSupport.c"
+#line 1650 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_value_argument_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (collect_values[0].v_pointer) {
-#line 1634 "RESTSupport.c"
+#line 1657 "RESTSupport.c"
 		PublishingRESTSupportArgument* object;
 		object = collect_values[0].v_pointer;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1641 "RESTSupport.c"
+#line 1664 "RESTSupport.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1645 "RESTSupport.c"
+#line 1668 "RESTSupport.c"
 		}
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = publishing_rest_support_argument_ref (object);
-#line 1649 "RESTSupport.c"
+#line 1672 "RESTSupport.c"
 	} else {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 1653 "RESTSupport.c"
+#line 1676 "RESTSupport.c"
 	}
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 1657 "RESTSupport.c"
+#line 1680 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_value_argument_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingRESTSupportArgument** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!object_p) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 1668 "RESTSupport.c"
+#line 1691 "RESTSupport.c"
 	}
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!value->data[0].v_pointer) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = NULL;
-#line 1674 "RESTSupport.c"
+#line 1697 "RESTSupport.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = value->data[0].v_pointer;
-#line 1678 "RESTSupport.c"
+#line 1701 "RESTSupport.c"
 	} else {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = publishing_rest_support_argument_ref (value->data[0].v_pointer);
-#line 1682 "RESTSupport.c"
+#line 1705 "RESTSupport.c"
 	}
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 1686 "RESTSupport.c"
+#line 1709 "RESTSupport.c"
 }
 
 
 GParamSpec* publishing_rest_support_param_spec_argument (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingRESTSupportParamSpecArgument* spec;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_REST_SUPPORT_TYPE_ARGUMENT), NULL);
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return G_PARAM_SPEC (spec);
-#line 1700 "RESTSupport.c"
+#line 1723 "RESTSupport.c"
 }
 
 
 gpointer publishing_rest_support_value_get_argument (const GValue* value) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_ARGUMENT), NULL);
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return value->data[0].v_pointer;
-#line 1709 "RESTSupport.c"
+#line 1732 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_value_set_argument (GValue* value, gpointer v_object) {
 	PublishingRESTSupportArgument* old;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_ARGUMENT));
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	old = value->data[0].v_pointer;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (v_object) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_REST_SUPPORT_TYPE_ARGUMENT));
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = v_object;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_argument_ref (value->data[0].v_pointer);
-#line 1729 "RESTSupport.c"
+#line 1752 "RESTSupport.c"
 	} else {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 1733 "RESTSupport.c"
+#line 1756 "RESTSupport.c"
 	}
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (old) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_argument_unref (old);
-#line 1739 "RESTSupport.c"
+#line 1762 "RESTSupport.c"
 	}
 }
 
 
 void publishing_rest_support_value_take_argument (GValue* value, gpointer v_object) {
 	PublishingRESTSupportArgument* old;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_ARGUMENT));
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	old = value->data[0].v_pointer;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (v_object) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_REST_SUPPORT_TYPE_ARGUMENT));
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = v_object;
-#line 1758 "RESTSupport.c"
+#line 1781 "RESTSupport.c"
 	} else {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 1762 "RESTSupport.c"
+#line 1785 "RESTSupport.c"
 	}
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (old) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_argument_unref (old);
-#line 1768 "RESTSupport.c"
+#line 1791 "RESTSupport.c"
 	}
 }
 
 
 static void publishing_rest_support_argument_class_init (PublishingRESTSupportArgumentClass * klass) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_argument_parent_class = g_type_class_peek_parent (klass);
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportArgumentClass *) klass)->finalize = publishing_rest_support_argument_finalize;
-#line 1778 "RESTSupport.c"
+#line 1801 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_argument_instance_init (PublishingRESTSupportArgument * self) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->ref_count = 1;
-#line 1785 "RESTSupport.c"
+#line 1808 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_argument_finalize (PublishingRESTSupportArgument* obj) {
 	PublishingRESTSupportArgument * self;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_REST_SUPPORT_TYPE_ARGUMENT, PublishingRESTSupportArgument);
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_destroy (self);
-#line 113 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 118 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->key);
-#line 114 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 119 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->value);
-#line 1799 "RESTSupport.c"
+#line 1822 "RESTSupport.c"
 }
 
 
@@ -1817,32 +1840,32 @@ GType publishing_rest_support_argument_get_type (void) {
 gpointer publishing_rest_support_argument_ref (gpointer instance) {
 	PublishingRESTSupportArgument* self;
 	self = instance;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return instance;
-#line 1824 "RESTSupport.c"
+#line 1847 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_argument_unref (gpointer instance) {
 	PublishingRESTSupportArgument* self;
 	self = instance;
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		PUBLISHING_REST_SUPPORT_ARGUMENT_GET_CLASS (self)->finalize (self);
-#line 112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 1837 "RESTSupport.c"
+#line 1860 "RESTSupport.c"
 	}
 }
 
 
 static void _publishing_rest_support_transaction_on_wrote_body_data_soup_message_wrote_body_data (SoupMessage* _sender, SoupBuffer* chunk, gpointer self) {
-#line 161 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 166 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_on_wrote_body_data ((PublishingRESTSupportTransaction*) self, chunk);
-#line 1845 "RESTSupport.c"
+#line 1868 "RESTSupport.c"
 }
 
 
@@ -1860,60 +1883,60 @@ PublishingRESTSupportTransaction* publishing_rest_support_transaction_construct 
 	gchar* _tmp9_ = NULL;
 	SoupMessage* _tmp10_ = NULL;
 	SoupMessage* _tmp11_ = NULL;
-#line 153 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 158 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_SESSION (parent_session), NULL);
-#line 153 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 158 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportTransaction*) g_type_create_instance (object_type);
-#line 156 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = parent_session;
-#line 156 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = publishing_rest_support_session_get_endpoint_url (_tmp0_);
-#line 156 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _tmp1_;
-#line 156 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp2_ != NULL, "parent_session.get_endpoint_url() != null");
-#line 156 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp2_);
-#line 158 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = parent_session;
-#line 158 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->parent_session = _tmp3_;
-#line 160 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = method;
-#line 160 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = publishing_rest_support_http_method_to_string (_tmp4_);
-#line 160 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = _tmp5_;
-#line 160 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = parent_session;
-#line 160 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8_ = publishing_rest_support_session_get_endpoint_url (_tmp7_);
-#line 160 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp9_ = _tmp8_;
-#line 160 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp10_ = soup_message_new (_tmp6_, _tmp9_);
-#line 160 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->priv->message);
-#line 160 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->message = _tmp10_;
-#line 160 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp9_);
-#line 160 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp6_);
-#line 161 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 166 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp11_ = self->priv->message;
-#line 161 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 166 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_connect (_tmp11_, "wrote-body-data", (GCallback) _publishing_rest_support_transaction_on_wrote_body_data_soup_message_wrote_body_data, self);
-#line 153 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 158 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 1909 "RESTSupport.c"
+#line 1932 "RESTSupport.c"
 }
 
 
 PublishingRESTSupportTransaction* publishing_rest_support_transaction_new (PublishingRESTSupportSession* parent_session, PublishingRESTSupportHttpMethod method) {
-#line 153 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 158 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_transaction_construct (PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, parent_session, method);
-#line 1916 "RESTSupport.c"
+#line 1939 "RESTSupport.c"
 }
 
 
@@ -1927,50 +1950,50 @@ PublishingRESTSupportTransaction* publishing_rest_support_transaction_construct_
 	gchar* _tmp5_ = NULL;
 	const gchar* _tmp6_ = NULL;
 	SoupMessage* _tmp7_ = NULL;
-#line 164 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 169 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_SESSION (parent_session), NULL);
-#line 164 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 169 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (endpoint_url != NULL, NULL);
-#line 164 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 169 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportTransaction*) g_type_create_instance (object_type);
-#line 166 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 171 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = parent_session;
-#line 166 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 171 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->parent_session = _tmp0_;
-#line 167 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 172 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = endpoint_url;
-#line 167 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 172 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 167 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 172 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->priv->endpoint_url);
-#line 167 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 172 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->endpoint_url = _tmp2_;
-#line 168 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = method;
-#line 168 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = publishing_rest_support_http_method_to_string (_tmp3_);
-#line 168 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = _tmp4_;
-#line 168 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = endpoint_url;
-#line 168 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = soup_message_new (_tmp5_, _tmp6_);
-#line 168 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->priv->message);
-#line 168 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->message = _tmp7_;
-#line 168 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp5_);
-#line 164 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 169 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 1966 "RESTSupport.c"
+#line 1989 "RESTSupport.c"
 }
 
 
 PublishingRESTSupportTransaction* publishing_rest_support_transaction_new_with_endpoint_url (PublishingRESTSupportSession* parent_session, const gchar* endpoint_url, PublishingRESTSupportHttpMethod method) {
-#line 164 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 169 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_transaction_construct_with_endpoint_url (PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, parent_session, endpoint_url, method);
-#line 1973 "RESTSupport.c"
+#line 1996 "RESTSupport.c"
 }
 
 
@@ -1982,36 +2005,36 @@ static void publishing_rest_support_transaction_on_wrote_body_data (PublishingRE
 	SoupMessage* _tmp4_ = NULL;
 	SoupMessageBody* _tmp5_ = NULL;
 	gint64 _tmp6_ = 0LL;
-#line 171 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 176 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self));
-#line 171 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 176 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (written_data != NULL);
-#line 172 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 177 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->bytes_written;
-#line 172 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 177 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = written_data;
-#line 172 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 177 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _tmp1_->length;
-#line 172 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 177 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->bytes_written = _tmp0_ + ((gint) _tmp2_);
-#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 178 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = self->priv->bytes_written;
-#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 178 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = self->priv->message;
-#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 178 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = _tmp4_->request_body;
-#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 178 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = _tmp5_->length;
-#line 173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 178 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_emit_by_name (self, "chunk-transmitted", _tmp3_, (gint) _tmp6_);
-#line 2007 "RESTSupport.c"
+#line 2030 "RESTSupport.c"
 }
 
 
 static gpointer _g_error_copy0 (gpointer self) {
-#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self ? g_error_copy (self) : NULL;
-#line 2014 "RESTSupport.c"
+#line 2037 "RESTSupport.c"
 }
 
 
@@ -2019,40 +2042,40 @@ static void publishing_rest_support_transaction_on_message_unqueued (PublishingR
 	SoupMessage* _tmp0_ = NULL;
 	SoupMessage* _tmp1_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 176 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self));
-#line 176 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (SOUP_IS_MESSAGE (message));
-#line 177 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 182 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->message;
-#line 177 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 182 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = message;
-#line 177 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 182 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp0_ != _tmp1_) {
-#line 178 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 183 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 2034 "RESTSupport.c"
+#line 2057 "RESTSupport.c"
 	}
 	{
 		SoupMessage* _tmp2_ = NULL;
-#line 181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2_ = message;
-#line 181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_transaction_check_response (self, _tmp2_, &_inner_error_);
-#line 181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 2046 "RESTSupport.c"
+#line 2069 "RESTSupport.c"
 				goto __catch0_spit_publishing_publishing_error;
 			}
-#line 181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 2055 "RESTSupport.c"
+#line 2078 "RESTSupport.c"
 		}
 	}
 	goto __finally0;
@@ -2065,47 +2088,342 @@ static void publishing_rest_support_transaction_on_message_unqueued (PublishingR
 		gchar* _tmp6_ = NULL;
 		GError* _tmp7_ = NULL;
 		GError* _tmp8_ = NULL;
-#line 180 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		err = _inner_error_;
-#line 180 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = NULL;
-#line 183 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 188 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp3_ = err;
-#line 183 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 188 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = _tmp3_->message;
-#line 183 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		g_warning ("RESTSupport.vala:183: Publishing error: %s", _tmp4_);
-#line 184 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 188 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		g_warning ("RESTSupport.vala:188: Publishing error: %s", _tmp4_);
+#line 189 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp5_ = publishing_rest_support_transaction_get_response (self);
-#line 184 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 189 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp6_ = _tmp5_;
-#line 184 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		g_warning ("RESTSupport.vala:184: response validation failed. bad response = '%s'.", _tmp6_);
-#line 184 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 189 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		g_warning ("RESTSupport.vala:189: response validation failed. bad response = '%s'.", _tmp6_);
+#line 189 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp6_);
-#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp7_ = err;
-#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp8_ = _g_error_copy0 (_tmp7_);
-#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_error_free0 (self->priv->err);
-#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		self->priv->err = _tmp8_;
-#line 180 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_error_free0 (err);
-#line 2096 "RESTSupport.c"
+#line 2119 "RESTSupport.c"
 	}
 	__finally0:
-#line 180 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 180 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 180 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 180 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 2107 "RESTSupport.c"
+#line 2130 "RESTSupport.c"
 	}
+}
+
+
+static gpointer _g_object_ref0 (gpointer self) {
+#line 197 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	return self ? g_object_ref (self) : NULL;
+#line 2138 "RESTSupport.c"
+}
+
+
+gchar* publishing_rest_support_transaction_detailed_error_from_tls_flags (PublishingRESTSupportTransaction* self, GTlsCertificate** cert) {
+	GTlsCertificate* _vala_cert = NULL;
+	gchar* result = NULL;
+	GTlsCertificateFlags tls_errors = 0;
+	SoupMessage* _tmp0_ = NULL;
+	GTlsCertificate* _tmp1_ = NULL;
+	GTlsCertificateFlags _tmp2_ = 0;
+	GTlsCertificate* _tmp3_ = NULL;
+	GeeArrayList* list = NULL;
+	GeeArrayList* _tmp4_ = NULL;
+	GTlsCertificateFlags _tmp5_ = 0;
+	GTlsCertificateFlags _tmp8_ = 0;
+	GTlsCertificateFlags _tmp11_ = 0;
+	GTlsCertificateFlags _tmp14_ = 0;
+	GTlsCertificateFlags _tmp17_ = 0;
+	GTlsCertificateFlags _tmp20_ = 0;
+	GTlsCertificateFlags _tmp23_ = 0;
+	GString* builder = NULL;
+	GString* _tmp26_ = NULL;
+	GeeArrayList* _tmp27_ = NULL;
+	gint _tmp28_ = 0;
+	gint _tmp29_ = 0;
+	GString* _tmp47_ = NULL;
+	const gchar* _tmp48_ = NULL;
+	gchar* _tmp49_ = NULL;
+#line 195 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self), NULL);
+#line 197 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp0_ = self->priv->message;
+#line 197 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	soup_message_get_https_status (_tmp0_, &_tmp1_, &_tmp2_);
+#line 197 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_g_object_unref0 (_vala_cert);
+#line 197 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp3_ = _g_object_ref0 (_tmp1_);
+#line 197 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_vala_cert = _tmp3_;
+#line 197 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	tls_errors = _tmp2_;
+#line 199 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp4_ = gee_array_list_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
+#line 199 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	list = _tmp4_;
+#line 200 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp5_ = tls_errors;
+#line 200 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if ((_tmp5_ & G_TLS_CERTIFICATE_BAD_IDENTITY) == G_TLS_CERTIFICATE_BAD_IDENTITY) {
+#line 2189 "RESTSupport.c"
+		GeeArrayList* _tmp6_ = NULL;
+		const gchar* _tmp7_ = NULL;
+#line 202 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp6_ = list;
+#line 202 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp7_ = _ ("⚫ This website presented identification that belongs to a different we" \
+"bsite.");
+#line 202 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp7_);
+#line 2198 "RESTSupport.c"
+	}
+#line 205 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp8_ = tls_errors;
+#line 205 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if ((_tmp8_ & G_TLS_CERTIFICATE_EXPIRED) == G_TLS_CERTIFICATE_EXPIRED) {
+#line 2204 "RESTSupport.c"
+		GeeArrayList* _tmp9_ = NULL;
+		const gchar* _tmp10_ = NULL;
+#line 207 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp9_ = list;
+#line 207 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp10_ = _ ("⚫ This website’s identification is too old to trust. Check the date on" \
+" your computer’s calendar.");
+#line 207 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp10_);
+#line 2213 "RESTSupport.c"
+	}
+#line 210 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp11_ = tls_errors;
+#line 210 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if ((_tmp11_ & G_TLS_CERTIFICATE_UNKNOWN_CA) == G_TLS_CERTIFICATE_UNKNOWN_CA) {
+#line 2219 "RESTSupport.c"
+		GeeArrayList* _tmp12_ = NULL;
+		const gchar* _tmp13_ = NULL;
+#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp12_ = list;
+#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp13_ = _ ("⚫ This website’s identification was not issued by a trusted organizati" \
+"on.");
+#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp13_);
+#line 2228 "RESTSupport.c"
+	}
+#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp14_ = tls_errors;
+#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if ((_tmp14_ & G_TLS_CERTIFICATE_GENERIC_ERROR) == G_TLS_CERTIFICATE_GENERIC_ERROR) {
+#line 2234 "RESTSupport.c"
+		GeeArrayList* _tmp15_ = NULL;
+		const gchar* _tmp16_ = NULL;
+#line 217 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp15_ = list;
+#line 217 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp16_ = _ ("⚫ This website’s identification could not be processed. It may be corr" \
+"upted.");
+#line 217 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp16_);
+#line 2243 "RESTSupport.c"
+	}
+#line 220 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp17_ = tls_errors;
+#line 220 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if ((_tmp17_ & G_TLS_CERTIFICATE_REVOKED) == G_TLS_CERTIFICATE_REVOKED) {
+#line 2249 "RESTSupport.c"
+		GeeArrayList* _tmp18_ = NULL;
+		const gchar* _tmp19_ = NULL;
+#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp18_ = list;
+#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp19_ = _ ("⚫ This website’s identification has been revoked by the trusted organi" \
+"zation that issued it.");
+#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp19_);
+#line 2258 "RESTSupport.c"
+	}
+#line 225 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp20_ = tls_errors;
+#line 225 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if ((_tmp20_ & G_TLS_CERTIFICATE_INSECURE) == G_TLS_CERTIFICATE_INSECURE) {
+#line 2264 "RESTSupport.c"
+		GeeArrayList* _tmp21_ = NULL;
+		const gchar* _tmp22_ = NULL;
+#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp21_ = list;
+#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp22_ = _ ("⚫ This website’s identification cannot be trusted because it uses very" \
+" weak encryption.");
+#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp22_);
+#line 2273 "RESTSupport.c"
+	}
+#line 230 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp23_ = tls_errors;
+#line 230 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if ((_tmp23_ & G_TLS_CERTIFICATE_NOT_ACTIVATED) == G_TLS_CERTIFICATE_NOT_ACTIVATED) {
+#line 2279 "RESTSupport.c"
+		GeeArrayList* _tmp24_ = NULL;
+		const gchar* _tmp25_ = NULL;
+#line 232 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp24_ = list;
+#line 232 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp25_ = _ ("⚫ This website’s identification is only valid for future dates. Check " \
+"the date on your computer’s calendar.");
+#line 232 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp25_);
+#line 2288 "RESTSupport.c"
+	}
+#line 235 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp26_ = g_string_new ("");
+#line 235 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	builder = _tmp26_;
+#line 236 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp27_ = list;
+#line 236 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp28_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 236 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp29_ = _tmp28_;
+#line 236 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if (_tmp29_ == 1) {
+#line 2302 "RESTSupport.c"
+		GString* _tmp30_ = NULL;
+		GeeArrayList* _tmp31_ = NULL;
+		gpointer _tmp32_ = NULL;
+		gchar* _tmp33_ = NULL;
+#line 237 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp30_ = builder;
+#line 237 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp31_ = list;
+#line 237 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp32_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), 0);
+#line 237 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp33_ = (gchar*) _tmp32_;
+#line 237 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		g_string_append (_tmp30_, _tmp33_);
+#line 237 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_g_free0 (_tmp33_);
+#line 2319 "RESTSupport.c"
+	} else {
+		{
+			GeeArrayList* _entry_list = NULL;
+			GeeArrayList* _tmp34_ = NULL;
+			GeeArrayList* _tmp35_ = NULL;
+			gint _entry_size = 0;
+			GeeArrayList* _tmp36_ = NULL;
+			gint _tmp37_ = 0;
+			gint _tmp38_ = 0;
+			gint _entry_index = 0;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			_tmp34_ = list;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			_tmp35_ = _g_object_ref0 (_tmp34_);
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			_entry_list = _tmp35_;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			_tmp36_ = _entry_list;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			_tmp37_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			_tmp38_ = _tmp37_;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			_entry_size = _tmp38_;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			_entry_index = -1;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			while (TRUE) {
+#line 2348 "RESTSupport.c"
+				gint _tmp39_ = 0;
+				gint _tmp40_ = 0;
+				gint _tmp41_ = 0;
+				gchar* entry = NULL;
+				GeeArrayList* _tmp42_ = NULL;
+				gint _tmp43_ = 0;
+				gpointer _tmp44_ = NULL;
+				GString* _tmp45_ = NULL;
+				const gchar* _tmp46_ = NULL;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				_tmp39_ = _entry_index;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				_entry_index = _tmp39_ + 1;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				_tmp40_ = _entry_index;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				_tmp41_ = _entry_size;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				if (!(_tmp40_ < _tmp41_)) {
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+					break;
+#line 2370 "RESTSupport.c"
+				}
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				_tmp42_ = _entry_list;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				_tmp43_ = _entry_index;
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				_tmp44_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp43_);
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				entry = (gchar*) _tmp44_;
+#line 240 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				_tmp45_ = builder;
+#line 240 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				_tmp46_ = entry;
+#line 240 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				g_string_append_printf (_tmp45_, "%s\n", _tmp46_);
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+				_g_free0 (entry);
+#line 2388 "RESTSupport.c"
+			}
+#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			_g_object_unref0 (_entry_list);
+#line 2392 "RESTSupport.c"
+		}
+	}
+#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp47_ = builder;
+#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp48_ = _tmp47_->str;
+#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp49_ = g_strdup (_tmp48_);
+#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	result = _tmp49_;
+#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_g_string_free0 (builder);
+#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_g_object_unref0 (list);
+#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if (cert) {
+#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		*cert = _vala_cert;
+#line 2411 "RESTSupport.c"
+	} else {
+#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_g_object_unref0 (_vala_cert);
+#line 2415 "RESTSupport.c"
+	}
+#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	return result;
+#line 2419 "RESTSupport.c"
 }
 
 
@@ -2119,33 +2437,33 @@ void publishing_rest_support_transaction_check_response (PublishingRESTSupportTr
 	guint8* _tmp45_ = NULL;
 	gint _tmp45__length1 = 0;
 	GError * _inner_error_ = NULL;
-#line 189 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 247 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self));
-#line 189 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 247 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (SOUP_IS_MESSAGE (message));
-#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = message;
-#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_object_get (_tmp0_, "status-code", &_tmp1_, NULL);
-#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _tmp1_;
-#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	switch (_tmp2_) {
-#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		case SOUP_STATUS_OK:
-#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		case SOUP_STATUS_CREATED:
-#line 2138 "RESTSupport.c"
+#line 2449 "RESTSupport.c"
 		{
-#line 194 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 252 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			break;
-#line 2142 "RESTSupport.c"
+#line 2453 "RESTSupport.c"
 		}
-#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		case SOUP_STATUS_CANT_RESOLVE:
-#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		case SOUP_STATUS_CANT_RESOLVE_PROXY:
-#line 2148 "RESTSupport.c"
+#line 2459 "RESTSupport.c"
 		{
 			gchar* _tmp3_ = NULL;
 			gchar* _tmp4_ = NULL;
@@ -2154,46 +2472,46 @@ void publishing_rest_support_transaction_check_response (PublishingRESTSupportTr
 			guint _tmp7_ = 0U;
 			GError* _tmp8_ = NULL;
 			GError* _tmp9_ = NULL;
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp3_ = publishing_rest_support_transaction_get_endpoint_url (self);
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp4_ = _tmp3_;
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp5_ = message;
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_object_get (_tmp5_, "status-code", &_tmp6_, NULL);
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp7_ = _tmp6_;
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp8_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_NO_ANSWER, "Unable to resolve %s (error code %u)", _tmp4_, _tmp7_);
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp9_ = _tmp8_;
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (_tmp4_);
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_inner_error_ = _tmp9_;
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_propagate_error (error, _inner_error_);
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				return;
-#line 2181 "RESTSupport.c"
+#line 2492 "RESTSupport.c"
 			} else {
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 198 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				return;
-#line 2189 "RESTSupport.c"
+#line 2500 "RESTSupport.c"
 			}
 		}
-#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		case SOUP_STATUS_CANT_CONNECT:
-#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		case SOUP_STATUS_CANT_CONNECT_PROXY:
-#line 2196 "RESTSupport.c"
+#line 2507 "RESTSupport.c"
 		{
 			gchar* _tmp10_ = NULL;
 			gchar* _tmp11_ = NULL;
@@ -2202,76 +2520,76 @@ void publishing_rest_support_transaction_check_response (PublishingRESTSupportTr
 			guint _tmp14_ = 0U;
 			GError* _tmp15_ = NULL;
 			GError* _tmp16_ = NULL;
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp10_ = publishing_rest_support_transaction_get_endpoint_url (self);
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp11_ = _tmp10_;
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp12_ = message;
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_object_get (_tmp12_, "status-code", &_tmp13_, NULL);
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp14_ = _tmp13_;
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp15_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_NO_ANSWER, "Unable to connect to %s (error code %u)", _tmp11_, _tmp14_);
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp16_ = _tmp15_;
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (_tmp11_);
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_inner_error_ = _tmp16_;
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_propagate_error (error, _inner_error_);
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				return;
-#line 2229 "RESTSupport.c"
+#line 2540 "RESTSupport.c"
 			} else {
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 203 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				return;
-#line 2237 "RESTSupport.c"
+#line 2548 "RESTSupport.c"
 			}
 		}
-#line 190 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		case SOUP_STATUS_SSL_FAILED:
-#line 2242 "RESTSupport.c"
+#line 2553 "RESTSupport.c"
 		{
 			gchar* _tmp17_ = NULL;
 			gchar* _tmp18_ = NULL;
 			GError* _tmp19_ = NULL;
 			GError* _tmp20_ = NULL;
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp17_ = publishing_rest_support_transaction_get_endpoint_url (self);
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp18_ = _tmp17_;
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp19_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_SSL_FAILED, "Unable to connect to %s: Secure connection failed", _tmp18_);
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp20_ = _tmp19_;
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (_tmp18_);
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_inner_error_ = _tmp20_;
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_propagate_error (error, _inner_error_);
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				return;
-#line 2266 "RESTSupport.c"
+#line 2577 "RESTSupport.c"
 			} else {
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 206 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				return;
-#line 2274 "RESTSupport.c"
+#line 2585 "RESTSupport.c"
 			}
 		}
 		default:
@@ -2279,15 +2597,15 @@ void publishing_rest_support_transaction_check_response (PublishingRESTSupportTr
 			SoupMessage* _tmp21_ = NULL;
 			guint _tmp22_ = 0U;
 			guint _tmp23_ = 0U;
-#line 211 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 269 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp21_ = message;
-#line 211 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 269 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_object_get (_tmp21_, "status-code", &_tmp22_, NULL);
-#line 211 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 269 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp23_ = _tmp22_;
-#line 211 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 269 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (_tmp23_ >= ((guint) 100)) {
-#line 2290 "RESTSupport.c"
+#line 2601 "RESTSupport.c"
 				gchar* _tmp24_ = NULL;
 				gchar* _tmp25_ = NULL;
 				SoupMessage* _tmp26_ = NULL;
@@ -2299,49 +2617,49 @@ void publishing_rest_support_transaction_check_response (PublishingRESTSupportTr
 				gchar* _tmp32_ = NULL;
 				GError* _tmp33_ = NULL;
 				GError* _tmp34_ = NULL;
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp24_ = publishing_rest_support_transaction_get_endpoint_url (self);
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp25_ = _tmp24_;
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp26_ = message;
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_object_get (_tmp26_, "status-code", &_tmp27_, NULL);
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp28_ = _tmp27_;
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp29_ = message;
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_object_get (_tmp29_, "reason-phrase", &_tmp30_, NULL);
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp31_ = _tmp30_;
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp32_ = _tmp31_;
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp33_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_NO_ANSWER, "Service %s returned HTTP status code %u %s", _tmp25_, _tmp28_, _tmp32_);
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp34_ = _tmp33_;
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_g_free0 (_tmp32_);
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_g_free0 (_tmp25_);
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_inner_error_ = _tmp34_;
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					g_propagate_error (error, _inner_error_);
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					return;
-#line 2336 "RESTSupport.c"
+#line 2647 "RESTSupport.c"
 				} else {
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					g_clear_error (&_inner_error_);
-#line 212 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					return;
-#line 2344 "RESTSupport.c"
+#line 2655 "RESTSupport.c"
 				}
 			} else {
 				gchar* _tmp35_ = NULL;
@@ -2351,107 +2669,107 @@ void publishing_rest_support_transaction_check_response (PublishingRESTSupportTr
 				guint _tmp39_ = 0U;
 				GError* _tmp40_ = NULL;
 				GError* _tmp41_ = NULL;
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp35_ = publishing_rest_support_transaction_get_endpoint_url (self);
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp36_ = _tmp35_;
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp37_ = message;
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_object_get (_tmp37_, "status-code", &_tmp38_, NULL);
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp39_ = _tmp38_;
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp40_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_NO_ANSWER, "Failure communicating with %s (error code %u)", _tmp36_, _tmp39_);
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp41_ = _tmp40_;
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_g_free0 (_tmp36_);
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_inner_error_ = _tmp41_;
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					g_propagate_error (error, _inner_error_);
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					return;
-#line 2378 "RESTSupport.c"
+#line 2689 "RESTSupport.c"
 				} else {
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					g_clear_error (&_inner_error_);
-#line 215 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					return;
-#line 2386 "RESTSupport.c"
+#line 2697 "RESTSupport.c"
 				}
 			}
 		}
 	}
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp43_ = message;
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp44_ = _tmp43_->response_body;
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp45_ = _tmp44_->data;
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp45__length1 = (gint) _tmp44_->length;
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp45_ == NULL) {
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp42_ = TRUE;
-#line 2403 "RESTSupport.c"
+#line 2714 "RESTSupport.c"
 	} else {
 		SoupMessage* _tmp46_ = NULL;
 		SoupMessageBody* _tmp47_ = NULL;
 		guint8* _tmp48_ = NULL;
 		gint _tmp48__length1 = 0;
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp46_ = message;
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp47_ = _tmp46_->response_body;
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp48_ = _tmp47_->data;
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp48__length1 = (gint) _tmp47_->length;
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp42_ = _tmp48__length1 == 0;
-#line 2419 "RESTSupport.c"
+#line 2730 "RESTSupport.c"
 	}
-#line 221 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp42_) {
-#line 2423 "RESTSupport.c"
+#line 2734 "RESTSupport.c"
 		gchar* _tmp49_ = NULL;
 		gchar* _tmp50_ = NULL;
 		GError* _tmp51_ = NULL;
 		GError* _tmp52_ = NULL;
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp49_ = publishing_rest_support_transaction_get_endpoint_url (self);
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp50_ = _tmp49_;
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp51_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "No response data from %s", _tmp50_);
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp52_ = _tmp51_;
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp50_);
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = _tmp52_;
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_propagate_error (error, _inner_error_);
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 2446 "RESTSupport.c"
+#line 2757 "RESTSupport.c"
 		} else {
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 222 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 2454 "RESTSupport.c"
+#line 2765 "RESTSupport.c"
 		}
 	}
 }
@@ -2460,21 +2778,21 @@ void publishing_rest_support_transaction_check_response (PublishingRESTSupportTr
 static PublishingRESTSupportArgument** _vala_array_dup1 (PublishingRESTSupportArgument** self, int length) {
 	PublishingRESTSupportArgument** result;
 	int i;
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = g_new0 (PublishingRESTSupportArgument*, length + 1);
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	for (i = 0; i < length; i++) {
-#line 2467 "RESTSupport.c"
+#line 2778 "RESTSupport.c"
 		PublishingRESTSupportArgument* _tmp0_ = NULL;
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp0_ = _publishing_rest_support_argument_ref0 (self[i]);
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		result[i] = _tmp0_;
-#line 2473 "RESTSupport.c"
+#line 2784 "RESTSupport.c"
 	}
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 2477 "RESTSupport.c"
+#line 2788 "RESTSupport.c"
 }
 
 
@@ -2486,31 +2804,31 @@ PublishingRESTSupportArgument** publishing_rest_support_transaction_get_argument
 	gint _tmp1__length1 = 0;
 	PublishingRESTSupportArgument** _tmp2_ = NULL;
 	gint _tmp2__length1 = 0;
-#line 226 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 284 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self), NULL);
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->arguments;
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0__length1 = self->priv->arguments_length1;
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup1 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1__length1 = _tmp0__length1;
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _tmp1_;
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2__length1 = _tmp1__length1;
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (result_length1) {
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*result_length1 = _tmp2__length1;
-#line 2507 "RESTSupport.c"
+#line 2818 "RESTSupport.c"
 	}
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp2_;
-#line 227 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 2513 "RESTSupport.c"
+#line 2824 "RESTSupport.c"
 }
 
 
@@ -2526,56 +2844,56 @@ PublishingRESTSupportArgument** publishing_rest_support_transaction_get_sorted_a
 	gint _tmp5__length1 = 0;
 	PublishingRESTSupportArgument** _tmp6_ = NULL;
 	gint _tmp6__length1 = 0;
-#line 230 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 288 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self), NULL);
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = publishing_rest_support_transaction_get_arguments (self, &_tmp0_);
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _tmp1_;
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2__length1 = _tmp0_;
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = publishing_rest_support_argument_sort (_tmp2_, _tmp0_, &_tmp3_);
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = _tmp4_;
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5__length1 = _tmp3_;
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = (_vala_array_free (_tmp2_, _tmp2__length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = _tmp5_;
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6__length1 = _tmp5__length1;
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (result_length1) {
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*result_length1 = _tmp6__length1;
-#line 2553 "RESTSupport.c"
+#line 2864 "RESTSupport.c"
 	}
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp6_;
-#line 231 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 2559 "RESTSupport.c"
+#line 2870 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_transaction_set_is_executed (PublishingRESTSupportTransaction* self, gboolean is_executed) {
 	gboolean _tmp0_ = FALSE;
-#line 234 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self));
-#line 235 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 293 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = is_executed;
-#line 235 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 293 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->is_executed = _tmp0_;
-#line 2571 "RESTSupport.c"
+#line 2882 "RESTSupport.c"
 }
 
 
 static void _publishing_rest_support_transaction_on_message_unqueued_publishing_rest_support_session_wire_message_unqueued (PublishingRESTSupportSession* _sender, SoupMessage* message, gpointer self) {
-#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 297 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_on_message_unqueued ((PublishingRESTSupportTransaction*) self, message);
-#line 2578 "RESTSupport.c"
+#line 2889 "RESTSupport.c"
 }
 
 
@@ -2591,78 +2909,78 @@ void publishing_rest_support_transaction_send (PublishingRESTSupportTransaction*
 	GError* _tmp8_ = NULL;
 	GError* _tmp10_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 238 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 296 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self));
-#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 297 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->parent_session;
-#line 239 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 297 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_connect (_tmp0_, "wire-message-unqueued", (GCallback) _publishing_rest_support_transaction_on_message_unqueued_publishing_rest_support_session_wire_message_unqueued, self);
-#line 240 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->message;
-#line 240 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_connect (_tmp1_, "wrote-body-data", (GCallback) _publishing_rest_support_transaction_on_wrote_body_data_soup_message_wrote_body_data, self);
-#line 241 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 299 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = self->priv->parent_session;
-#line 241 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 299 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = self->priv->message;
-#line 241 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 299 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_session_send_wire_message (_tmp2_, _tmp3_);
-#line 243 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 301 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = self->priv->parent_session;
-#line 243 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 301 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("wire-message-unqueued", PUBLISHING_REST_SUPPORT_TYPE_SESSION, &_tmp5_, NULL, FALSE);
-#line 243 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 301 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp4_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp5_, 0, NULL, (GCallback) _publishing_rest_support_transaction_on_message_unqueued_publishing_rest_support_session_wire_message_unqueued, self);
-#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 302 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = self->priv->message;
-#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 302 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("wrote-body-data", soup_message_get_type (), &_tmp7_, NULL, FALSE);
-#line 244 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 302 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp6_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp7_, 0, NULL, (GCallback) _publishing_rest_support_transaction_on_wrote_body_data_soup_message_wrote_body_data, self);
-#line 246 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 304 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8_ = self->priv->err;
-#line 246 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 304 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp8_ != NULL) {
-#line 2626 "RESTSupport.c"
+#line 2937 "RESTSupport.c"
 		GError* _tmp9_ = NULL;
-#line 247 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 305 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp9_ = self->priv->err;
-#line 247 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 305 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_signal_emit_by_name (self, "network-error", _tmp9_);
-#line 2632 "RESTSupport.c"
+#line 2943 "RESTSupport.c"
 	} else {
-#line 249 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 307 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_signal_emit_by_name (self, "completed");
-#line 2636 "RESTSupport.c"
+#line 2947 "RESTSupport.c"
 	}
-#line 251 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 309 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp10_ = self->priv->err;
-#line 251 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 309 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp10_ != NULL) {
-#line 2642 "RESTSupport.c"
+#line 2953 "RESTSupport.c"
 		GError* _tmp11_ = NULL;
 		GError* _tmp12_ = NULL;
-#line 252 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp11_ = self->priv->err;
-#line 252 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp12_ = _g_error_copy0 (_tmp11_);
-#line 252 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = _tmp12_;
-#line 252 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 252 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_propagate_error (error, _inner_error_);
-#line 252 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 2657 "RESTSupport.c"
+#line 2968 "RESTSupport.c"
 		} else {
-#line 252 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 252 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 252 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 2665 "RESTSupport.c"
+#line 2976 "RESTSupport.c"
 		}
 	}
 }
@@ -2676,27 +2994,27 @@ PublishingRESTSupportHttpMethod publishing_rest_support_transaction_get_method (
 	gchar* _tmp3_ = NULL;
 	PublishingRESTSupportHttpMethod _tmp4_ = 0;
 	PublishingRESTSupportHttpMethod _tmp5_ = 0;
-#line 255 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 313 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self), 0);
-#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->message;
-#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_object_get (_tmp0_, "method", &_tmp1_, NULL);
-#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _tmp1_;
-#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = _tmp2_;
-#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = publishing_rest_support_http_method_from_string (_tmp3_);
-#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = _tmp4_;
-#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp3_);
-#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp5_;
-#line 256 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 2699 "RESTSupport.c"
+#line 3010 "RESTSupport.c"
 }
 
 
@@ -2705,30 +3023,30 @@ static void publishing_rest_support_transaction_real_add_header (PublishingRESTS
 	SoupMessageHeaders* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	const gchar* _tmp3_ = NULL;
-#line 259 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 317 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (key != NULL);
-#line 259 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 317 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (value != NULL);
-#line 260 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 318 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->message;
-#line 260 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 318 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = _tmp0_->request_headers;
-#line 260 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 318 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = key;
-#line 260 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 318 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = value;
-#line 260 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 318 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	soup_message_headers_append (_tmp1_, _tmp2_, _tmp3_);
-#line 2722 "RESTSupport.c"
+#line 3033 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_transaction_add_header (PublishingRESTSupportTransaction* self, const gchar* key, const gchar* value) {
-#line 259 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 317 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self));
-#line 259 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 317 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_GET_CLASS (self)->add_header (self, key, value);
-#line 2731 "RESTSupport.c"
+#line 3042 "RESTSupport.c"
 }
 
 
@@ -2746,111 +3064,104 @@ void publishing_rest_support_transaction_set_custom_payload (PublishingRESTSuppo
 	guint8* _tmp12_ = NULL;
 	gint _tmp12__length1 = 0;
 	gulong _tmp13_ = 0UL;
-#line 271 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 329 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self));
-#line 271 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 329 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (payload_content_type != NULL);
-#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 331 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = publishing_rest_support_transaction_get_method (self);
-#line 273 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 331 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp0_ != PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET, "get_method() != HttpMethod.GET");
-#line 275 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 333 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = custom_payload;
-#line 275 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 333 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp1_ == NULL) {
-#line 276 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 334 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		self->priv->use_custom_payload = FALSE;
-#line 277 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 335 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 2765 "RESTSupport.c"
+#line 3076 "RESTSupport.c"
 	}
-#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = payload_length;
-#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp3_ > ((gulong) 0)) {
-#line 2771 "RESTSupport.c"
+#line 3082 "RESTSupport.c"
 		gulong _tmp4_ = 0UL;
-#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = payload_length;
-#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2_ = _tmp4_;
-#line 2777 "RESTSupport.c"
+#line 3088 "RESTSupport.c"
 	} else {
 		const gchar* _tmp5_ = NULL;
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
-#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp5_ = custom_payload;
-#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp6_ = strlen (_tmp5_);
-#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp7_ = _tmp6_;
-#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2_ = (gulong) _tmp7_;
-#line 2790 "RESTSupport.c"
+#line 3101 "RESTSupport.c"
 	}
-#line 280 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	length = _tmp2_;
-#line 281 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8_ = self->priv->message;
-#line 281 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp9_ = payload_content_type;
-#line 281 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp10_ = custom_payload;
-#line 281 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp11_ = string_get_data (_tmp10_, &_tmp11__length1);
-#line 281 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp12_ = _tmp11_;
-#line 281 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp12__length1 = _tmp11__length1;
-#line 281 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp13_ = length;
-#line 281 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	soup_message_set_request (_tmp8_, _tmp9_, SOUP_MEMORY_COPY, _tmp12_ + 0, (gsize) (((gint) _tmp13_) - 0));
-#line 283 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 341 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->use_custom_payload = TRUE;
-#line 2812 "RESTSupport.c"
-}
-
-
-static gpointer _g_object_ref0 (gpointer self) {
-#line 292 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	return self ? g_object_ref (self) : NULL;
-#line 2819 "RESTSupport.c"
+#line 3123 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_transaction_set_message (PublishingRESTSupportTransaction* self, SoupMessage* message) {
 	SoupMessage* _tmp0_ = NULL;
 	SoupMessage* _tmp1_ = NULL;
-#line 291 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 349 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self));
-#line 291 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 349 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (SOUP_IS_MESSAGE (message));
-#line 292 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 350 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = message;
-#line 292 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 350 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 292 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 350 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->priv->message);
-#line 292 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 350 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->message = _tmp1_;
-#line 2838 "RESTSupport.c"
+#line 3142 "RESTSupport.c"
 }
 
 
 gboolean publishing_rest_support_transaction_get_is_executed (PublishingRESTSupportTransaction* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 295 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 353 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self), FALSE);
-#line 296 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->is_executed;
-#line 296 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp0_;
-#line 296 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 2853 "RESTSupport.c"
+#line 3157 "RESTSupport.c"
 }
 
 
@@ -2860,30 +3171,30 @@ guint publishing_rest_support_transaction_get_status_code (PublishingRESTSupport
 	SoupMessage* _tmp1_ = NULL;
 	guint _tmp2_ = 0U;
 	guint _tmp3_ = 0U;
-#line 299 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 357 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self), 0U);
-#line 300 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = publishing_rest_support_transaction_get_is_executed (self);
-#line 300 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp0_, "get_is_executed()");
-#line 301 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 359 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->message;
-#line 301 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 359 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_object_get (_tmp1_, "status-code", &_tmp2_, NULL);
-#line 301 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 359 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = _tmp2_;
-#line 301 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 359 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp3_;
-#line 301 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 359 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 2879 "RESTSupport.c"
+#line 3183 "RESTSupport.c"
 }
 
 
 static void _vala_SoupURI_free (SoupURI* self) {
-#line 335 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 393 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_boxed_free (soup_uri_get_type (), self);
-#line 2886 "RESTSupport.c"
+#line 3190 "RESTSupport.c"
 }
 
 
@@ -2897,69 +3208,69 @@ static void publishing_rest_support_transaction_real_execute (PublishingRESTSupp
 	gboolean _tmp19_ = FALSE;
 	PublishingRESTSupportHttpMethod _tmp20_ = 0;
 	GError * _inner_error_ = NULL;
-#line 308 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 366 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->use_custom_payload;
-#line 308 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 366 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp0_) {
-#line 309 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 367 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		self->priv->is_executed = TRUE;
-#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_transaction_send (self, &_inner_error_);
-#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_propagate_error (error, _inner_error_);
-#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				return;
-#line 2916 "RESTSupport.c"
+#line 3220 "RESTSupport.c"
 			} else {
-#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_clear_error (&_inner_error_);
-#line 310 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				return;
-#line 2924 "RESTSupport.c"
+#line 3228 "RESTSupport.c"
 			}
 		}
-#line 312 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 370 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 2929 "RESTSupport.c"
+#line 3233 "RESTSupport.c"
 	}
-#line 316 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 374 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = publishing_rest_support_transaction_get_method (self);
-#line 316 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 374 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp1_ == PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST) {
-#line 2935 "RESTSupport.c"
+#line 3239 "RESTSupport.c"
 		PublishingRESTSupportArgument** _tmp2_ = NULL;
 		gint _tmp2__length1 = 0;
-#line 317 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2_ = self->priv->arguments;
-#line 317 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2__length1 = self->priv->arguments_length1;
-#line 317 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_vala_assert (_tmp2__length1 > 0, "arguments.length > 0");
-#line 2944 "RESTSupport.c"
+#line 3248 "RESTSupport.c"
 	}
-#line 320 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 378 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = g_strdup ("");
-#line 320 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 378 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	formdata_string = _tmp3_;
-#line 2950 "RESTSupport.c"
+#line 3254 "RESTSupport.c"
 	{
 		gint i = 0;
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		i = 0;
-#line 2955 "RESTSupport.c"
+#line 3259 "RESTSupport.c"
 		{
 			gboolean _tmp4_ = FALSE;
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp4_ = TRUE;
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			while (TRUE) {
-#line 2962 "RESTSupport.c"
+#line 3266 "RESTSupport.c"
 				gint _tmp6_ = 0;
 				PublishingRESTSupportArgument** _tmp7_ = NULL;
 				gint _tmp7__length1 = 0;
@@ -2974,102 +3285,102 @@ static void publishing_rest_support_transaction_real_execute (PublishingRESTSupp
 				gint _tmp15_ = 0;
 				PublishingRESTSupportArgument** _tmp16_ = NULL;
 				gint _tmp16__length1 = 0;
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (!_tmp4_) {
-#line 2979 "RESTSupport.c"
+#line 3283 "RESTSupport.c"
 					gint _tmp5_ = 0;
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp5_ = i;
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					i = _tmp5_ + 1;
-#line 2985 "RESTSupport.c"
+#line 3289 "RESTSupport.c"
 				}
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp4_ = FALSE;
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp6_ = i;
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp7_ = self->priv->arguments;
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp7__length1 = self->priv->arguments_length1;
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (!(_tmp6_ < _tmp7__length1)) {
-#line 321 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					break;
-#line 2999 "RESTSupport.c"
+#line 3303 "RESTSupport.c"
 				}
-#line 322 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp8_ = formdata_string;
-#line 322 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp9_ = self->priv->arguments;
-#line 322 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp9__length1 = self->priv->arguments_length1;
-#line 322 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp10_ = i;
-#line 322 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp11_ = _tmp9_[_tmp10_];
-#line 322 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp12_ = publishing_rest_support_argument_to_string (_tmp11_);
-#line 322 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp13_ = _tmp12_;
-#line 322 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp14_ = g_strconcat (_tmp8_, _tmp13_, NULL);
-#line 322 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_g_free0 (formdata_string);
-#line 322 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				formdata_string = _tmp14_;
-#line 322 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_g_free0 (_tmp13_);
-#line 323 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 381 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp15_ = i;
-#line 323 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 381 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp16_ = self->priv->arguments;
-#line 323 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 381 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp16__length1 = self->priv->arguments_length1;
-#line 323 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 381 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (_tmp15_ < (_tmp16__length1 - 1)) {
-#line 3031 "RESTSupport.c"
+#line 3335 "RESTSupport.c"
 					const gchar* _tmp17_ = NULL;
 					gchar* _tmp18_ = NULL;
-#line 324 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp17_ = formdata_string;
-#line 324 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp18_ = g_strconcat (_tmp17_, "&", NULL);
-#line 324 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_g_free0 (formdata_string);
-#line 324 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					formdata_string = _tmp18_;
-#line 3042 "RESTSupport.c"
+#line 3346 "RESTSupport.c"
 				}
 			}
 		}
 	}
-#line 330 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 388 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	old_url = NULL;
-#line 331 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 389 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	url_with_query = NULL;
-#line 332 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp20_ = publishing_rest_support_transaction_get_method (self);
-#line 332 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp20_ == PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET) {
-#line 3055 "RESTSupport.c"
+#line 3359 "RESTSupport.c"
 		PublishingRESTSupportArgument** _tmp21_ = NULL;
 		gint _tmp21__length1 = 0;
-#line 332 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp21_ = self->priv->arguments;
-#line 332 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp21__length1 = self->priv->arguments_length1;
-#line 332 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp19_ = _tmp21__length1 > 0;
-#line 3064 "RESTSupport.c"
+#line 3368 "RESTSupport.c"
 	} else {
-#line 332 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp19_ = FALSE;
-#line 3068 "RESTSupport.c"
+#line 3372 "RESTSupport.c"
 	}
-#line 332 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp19_) {
-#line 3072 "RESTSupport.c"
+#line 3376 "RESTSupport.c"
 		SoupMessage* _tmp22_ = NULL;
 		SoupURI* _tmp23_ = NULL;
 		gchar* _tmp24_ = NULL;
@@ -3083,49 +3394,49 @@ static void publishing_rest_support_transaction_real_execute (PublishingRESTSupp
 		const gchar* _tmp32_ = NULL;
 		SoupURI* _tmp33_ = NULL;
 		SoupURI* _tmp34_ = NULL;
-#line 333 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 391 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp22_ = self->priv->message;
-#line 333 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 391 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp23_ = soup_message_get_uri (_tmp22_);
-#line 333 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 391 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp24_ = soup_uri_to_string (_tmp23_, FALSE);
-#line 333 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 391 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (old_url);
-#line 333 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 391 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		old_url = _tmp24_;
-#line 334 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp25_ = publishing_rest_support_transaction_get_endpoint_url (self);
-#line 334 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp26_ = _tmp25_;
-#line 334 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp27_ = g_strconcat (_tmp26_, "?", NULL);
-#line 334 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp28_ = _tmp27_;
-#line 334 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp29_ = formdata_string;
-#line 334 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp30_ = g_strconcat (_tmp28_, _tmp29_, NULL);
-#line 334 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (url_with_query);
-#line 334 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		url_with_query = _tmp30_;
-#line 334 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp28_);
-#line 334 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp26_);
-#line 335 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 393 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp31_ = self->priv->message;
-#line 335 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 393 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp32_ = url_with_query;
-#line 335 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 393 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp33_ = soup_uri_new (_tmp32_);
-#line 335 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 393 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp34_ = _tmp33_;
-#line 335 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 393 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		soup_message_set_uri (_tmp31_, _tmp34_);
-#line 335 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 393 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		__vala_SoupURI_free0 (_tmp34_);
-#line 3128 "RESTSupport.c"
+#line 3432 "RESTSupport.c"
 	} else {
 		SoupMessage* _tmp35_ = NULL;
 		const gchar* _tmp36_ = NULL;
@@ -3133,122 +3444,122 @@ static void publishing_rest_support_transaction_real_execute (PublishingRESTSupp
 		gint _tmp37__length1 = 0;
 		guint8* _tmp38_ = NULL;
 		gint _tmp38__length1 = 0;
-#line 337 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 395 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp35_ = self->priv->message;
-#line 337 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 395 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp36_ = formdata_string;
-#line 337 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 395 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp37_ = string_get_data (_tmp36_, &_tmp37__length1);
-#line 337 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 395 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp38_ = _tmp37_;
-#line 337 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 395 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp38__length1 = _tmp37__length1;
-#line 337 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 395 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		soup_message_set_request (_tmp35_, "application/x-www-form-urlencoded", SOUP_MEMORY_COPY, _tmp38_, (gsize) _tmp38__length1);
-#line 3148 "RESTSupport.c"
+#line 3452 "RESTSupport.c"
 	}
-#line 341 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 399 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->is_executed = TRUE;
-#line 3152 "RESTSupport.c"
+#line 3456 "RESTSupport.c"
 	{
 		SoupMessage* _tmp39_ = NULL;
 		SoupURI* _tmp40_ = NULL;
 		gchar* _tmp41_ = NULL;
 		gchar* _tmp42_ = NULL;
-#line 344 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp39_ = self->priv->message;
-#line 344 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp40_ = soup_message_get_uri (_tmp39_);
-#line 344 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp41_ = soup_uri_to_string (_tmp40_, FALSE);
-#line 344 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp42_ = _tmp41_;
-#line 344 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		g_debug ("RESTSupport.vala:344: sending message to URI = '%s'", _tmp42_);
-#line 344 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		g_debug ("RESTSupport.vala:402: sending message to URI = '%s'", _tmp42_);
+#line 402 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp42_);
-#line 345 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 403 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_transaction_send (self, &_inner_error_);
-#line 345 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 403 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3174 "RESTSupport.c"
+#line 3478 "RESTSupport.c"
 			goto __finally1;
 		}
 	}
 	__finally1:
 	{
 		const gchar* _tmp43_ = NULL;
-#line 348 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 406 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp43_ = old_url;
-#line 348 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 406 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_tmp43_ != NULL) {
-#line 3185 "RESTSupport.c"
+#line 3489 "RESTSupport.c"
 			SoupMessage* _tmp44_ = NULL;
 			const gchar* _tmp45_ = NULL;
 			SoupURI* _tmp46_ = NULL;
 			SoupURI* _tmp47_ = NULL;
-#line 349 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 407 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp44_ = self->priv->message;
-#line 349 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 407 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp45_ = old_url;
-#line 349 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 407 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp46_ = soup_uri_new (_tmp45_);
-#line 349 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 407 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp47_ = _tmp46_;
-#line 349 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 407 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			soup_message_set_uri (_tmp44_, _tmp47_);
-#line 349 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 407 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			__vala_SoupURI_free0 (_tmp47_);
-#line 3202 "RESTSupport.c"
+#line 3506 "RESTSupport.c"
 		}
 	}
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_propagate_error (error, _inner_error_);
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (url_with_query);
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (old_url);
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (formdata_string);
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 3219 "RESTSupport.c"
+#line 3523 "RESTSupport.c"
 		} else {
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (url_with_query);
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (old_url);
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (formdata_string);
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 343 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 3233 "RESTSupport.c"
+#line 3537 "RESTSupport.c"
 		}
 	}
-#line 304 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (url_with_query);
-#line 304 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (old_url);
-#line 304 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (formdata_string);
-#line 3242 "RESTSupport.c"
+#line 3546 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_transaction_execute (PublishingRESTSupportTransaction* self, GError** error) {
-#line 304 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self));
-#line 304 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_GET_CLASS (self)->execute (self, error);
-#line 3251 "RESTSupport.c"
+#line 3555 "RESTSupport.c"
 }
 
 
@@ -3260,27 +3571,27 @@ gchar* publishing_rest_support_transaction_get_response (PublishingRESTSupportTr
 	guint8* _tmp3_ = NULL;
 	gint _tmp3__length1 = 0;
 	gchar* _tmp4_ = NULL;
-#line 353 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 411 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self), NULL);
-#line 354 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 412 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = publishing_rest_support_transaction_get_is_executed (self);
-#line 354 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 412 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp0_, "get_is_executed()");
-#line 355 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 413 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->message;
-#line 355 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 413 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _tmp1_->response_body;
-#line 355 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 413 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = _tmp2_->data;
-#line 355 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 413 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3__length1 = (gint) _tmp2_->length;
-#line 355 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 413 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = g_strdup ((const gchar*) _tmp3_);
-#line 355 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 413 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp4_;
-#line 355 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 413 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 3283 "RESTSupport.c"
+#line 3587 "RESTSupport.c"
 }
 
 
@@ -3289,21 +3600,21 @@ SoupMessageHeaders* publishing_rest_support_transaction_get_response_headers (Pu
 	gboolean _tmp0_ = FALSE;
 	SoupMessage* _tmp1_ = NULL;
 	SoupMessageHeaders* _tmp2_ = NULL;
-#line 358 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 416 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self), NULL);
-#line 359 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 417 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = publishing_rest_support_transaction_get_is_executed (self);
-#line 359 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 417 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp0_, "get_is_executed()");
-#line 360 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->message;
-#line 360 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _tmp1_->response_headers;
-#line 360 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp2_;
-#line 360 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 3306 "RESTSupport.c"
+#line 3610 "RESTSupport.c"
 }
 
 
@@ -3312,38 +3623,38 @@ SoupMessage* publishing_rest_support_transaction_get_message (PublishingRESTSupp
 	gboolean _tmp0_ = FALSE;
 	SoupMessage* _tmp1_ = NULL;
 	SoupMessage* _tmp2_ = NULL;
-#line 363 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 421 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self), NULL);
-#line 364 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 422 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = publishing_rest_support_transaction_get_is_executed (self);
-#line 364 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 422 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp0_, "get_is_executed()");
-#line 365 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 423 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->message;
-#line 365 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 423 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _g_object_ref0 (_tmp1_);
-#line 365 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 423 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp2_;
-#line 365 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 423 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 3329 "RESTSupport.c"
+#line 3633 "RESTSupport.c"
 }
 
 
 static void _vala_array_add1 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value) {
-#line 369 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if ((*length) == (*size)) {
-#line 369 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 369 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*array = g_renew (PublishingRESTSupportArgument*, *array, (*size) + 1);
-#line 3340 "RESTSupport.c"
+#line 3644 "RESTSupport.c"
 	}
-#line 369 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	(*array)[(*length)++] = value;
-#line 369 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	(*array)[*length] = NULL;
-#line 3346 "RESTSupport.c"
+#line 3650 "RESTSupport.c"
 }
 
 
@@ -3353,25 +3664,25 @@ void publishing_rest_support_transaction_add_argument (PublishingRESTSupportTran
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	PublishingRESTSupportArgument* _tmp3_ = NULL;
-#line 368 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self));
-#line 368 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (name != NULL);
-#line 368 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (value != NULL);
-#line 369 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->arguments;
-#line 369 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0__length1 = self->priv->arguments_length1;
-#line 369 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = name;
-#line 369 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = value;
-#line 369 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = publishing_rest_support_argument_new (_tmp1_, _tmp2_);
-#line 369 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_array_add1 (&self->priv->arguments, &self->priv->arguments_length1, &self->priv->_arguments_size_, _tmp3_);
-#line 3374 "RESTSupport.c"
+#line 3678 "RESTSupport.c"
 }
 
 
@@ -3379,49 +3690,49 @@ gchar* publishing_rest_support_transaction_get_endpoint_url (PublishingRESTSuppo
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 372 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 430 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self), NULL);
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->endpoint_url;
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp1_ != NULL) {
-#line 3388 "RESTSupport.c"
+#line 3692 "RESTSupport.c"
 		const gchar* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2_ = self->priv->endpoint_url;
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp3_ = g_strdup (_tmp2_);
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp0_);
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp0_ = _tmp3_;
-#line 3399 "RESTSupport.c"
+#line 3703 "RESTSupport.c"
 	} else {
 		PublishingRESTSupportSession* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = self->priv->parent_session;
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp5_ = publishing_rest_support_session_get_endpoint_url (_tmp4_);
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp0_);
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp0_ = _tmp5_;
-#line 3411 "RESTSupport.c"
+#line 3715 "RESTSupport.c"
 	}
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp0_;
-#line 373 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 3417 "RESTSupport.c"
+#line 3721 "RESTSupport.c"
 }
 
 
 static gpointer _publishing_rest_support_session_ref0 (gpointer self) {
-#line 377 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self ? publishing_rest_support_session_ref (self) : NULL;
-#line 3424 "RESTSupport.c"
+#line 3728 "RESTSupport.c"
 }
 
 
@@ -3429,17 +3740,17 @@ PublishingRESTSupportSession* publishing_rest_support_transaction_get_parent_ses
 	PublishingRESTSupportSession* result = NULL;
 	PublishingRESTSupportSession* _tmp0_ = NULL;
 	PublishingRESTSupportSession* _tmp1_ = NULL;
-#line 376 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 434 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (self), NULL);
-#line 377 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->parent_session;
-#line 377 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = _publishing_rest_support_session_ref0 (_tmp0_);
-#line 377 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp1_;
-#line 377 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 3442 "RESTSupport.c"
+#line 3746 "RESTSupport.c"
 }
 
 
@@ -3450,267 +3761,267 @@ static void g_cclosure_user_marshal_VOID__INT_INT (GClosure * closure, GValue * 
 	register gpointer data1;
 	register gpointer data2;
 	cc = (GCClosure *) closure;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (n_param_values == 3);
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (G_CCLOSURE_SWAP_DATA (closure)) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		data1 = closure->data;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 3461 "RESTSupport.c"
+#line 3765 "RESTSupport.c"
 	} else {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		data1 = param_values->data[0].v_pointer;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		data2 = closure->data;
-#line 3467 "RESTSupport.c"
+#line 3771 "RESTSupport.c"
 	}
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	callback = (GMarshalFunc_VOID__INT_INT) (marshal_data ? marshal_data : cc->callback);
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	callback (data1, g_value_get_int (param_values + 1), g_value_get_int (param_values + 2), data2);
-#line 3473 "RESTSupport.c"
+#line 3777 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_value_transaction_init (GValue* value) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	value->data[0].v_pointer = NULL;
-#line 3480 "RESTSupport.c"
+#line 3784 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_value_transaction_free_value (GValue* value) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (value->data[0].v_pointer) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_transaction_unref (value->data[0].v_pointer);
-#line 3489 "RESTSupport.c"
+#line 3793 "RESTSupport.c"
 	}
 }
 
 
 static void publishing_rest_support_value_transaction_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (src_value->data[0].v_pointer) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		dest_value->data[0].v_pointer = publishing_rest_support_transaction_ref (src_value->data[0].v_pointer);
-#line 3499 "RESTSupport.c"
+#line 3803 "RESTSupport.c"
 	} else {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 3503 "RESTSupport.c"
+#line 3807 "RESTSupport.c"
 	}
 }
 
 
 static gpointer publishing_rest_support_value_transaction_peek_pointer (const GValue* value) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return value->data[0].v_pointer;
-#line 3511 "RESTSupport.c"
+#line 3815 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_value_transaction_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (collect_values[0].v_pointer) {
-#line 3518 "RESTSupport.c"
+#line 3822 "RESTSupport.c"
 		PublishingRESTSupportTransaction* object;
 		object = collect_values[0].v_pointer;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3525 "RESTSupport.c"
+#line 3829 "RESTSupport.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3529 "RESTSupport.c"
+#line 3833 "RESTSupport.c"
 		}
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = publishing_rest_support_transaction_ref (object);
-#line 3533 "RESTSupport.c"
+#line 3837 "RESTSupport.c"
 	} else {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 3537 "RESTSupport.c"
+#line 3841 "RESTSupport.c"
 	}
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 3541 "RESTSupport.c"
+#line 3845 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_value_transaction_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingRESTSupportTransaction** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!object_p) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 3552 "RESTSupport.c"
+#line 3856 "RESTSupport.c"
 	}
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!value->data[0].v_pointer) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = NULL;
-#line 3558 "RESTSupport.c"
+#line 3862 "RESTSupport.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = value->data[0].v_pointer;
-#line 3562 "RESTSupport.c"
+#line 3866 "RESTSupport.c"
 	} else {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = publishing_rest_support_transaction_ref (value->data[0].v_pointer);
-#line 3566 "RESTSupport.c"
+#line 3870 "RESTSupport.c"
 	}
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 3570 "RESTSupport.c"
+#line 3874 "RESTSupport.c"
 }
 
 
 GParamSpec* publishing_rest_support_param_spec_transaction (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingRESTSupportParamSpecTransaction* spec;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION), NULL);
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return G_PARAM_SPEC (spec);
-#line 3584 "RESTSupport.c"
+#line 3888 "RESTSupport.c"
 }
 
 
 gpointer publishing_rest_support_value_get_transaction (const GValue* value) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION), NULL);
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return value->data[0].v_pointer;
-#line 3593 "RESTSupport.c"
+#line 3897 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_value_set_transaction (GValue* value, gpointer v_object) {
 	PublishingRESTSupportTransaction* old;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION));
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	old = value->data[0].v_pointer;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (v_object) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION));
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = v_object;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_transaction_ref (value->data[0].v_pointer);
-#line 3613 "RESTSupport.c"
+#line 3917 "RESTSupport.c"
 	} else {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 3617 "RESTSupport.c"
+#line 3921 "RESTSupport.c"
 	}
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (old) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_transaction_unref (old);
-#line 3623 "RESTSupport.c"
+#line 3927 "RESTSupport.c"
 	}
 }
 
 
 void publishing_rest_support_value_take_transaction (GValue* value, gpointer v_object) {
 	PublishingRESTSupportTransaction* old;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION));
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	old = value->data[0].v_pointer;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (v_object) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION));
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = v_object;
-#line 3642 "RESTSupport.c"
+#line 3946 "RESTSupport.c"
 	} else {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 3646 "RESTSupport.c"
+#line 3950 "RESTSupport.c"
 	}
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (old) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_transaction_unref (old);
-#line 3652 "RESTSupport.c"
+#line 3956 "RESTSupport.c"
 	}
 }
 
 
 static void publishing_rest_support_transaction_class_init (PublishingRESTSupportTransactionClass * klass) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->finalize = publishing_rest_support_transaction_finalize;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_type_class_add_private (klass, sizeof (PublishingRESTSupportTransactionPrivate));
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->add_header = publishing_rest_support_transaction_real_add_header;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->execute = publishing_rest_support_transaction_real_execute;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_new ("chunk_transmitted", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__INT_INT, G_TYPE_NONE, 2, G_TYPE_INT, G_TYPE_INT);
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_new ("network_error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1, G_TYPE_POINTER);
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_new ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 3674 "RESTSupport.c"
+#line 3978 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_transaction_instance_init (PublishingRESTSupportTransaction * self) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv = PUBLISHING_REST_SUPPORT_TRANSACTION_GET_PRIVATE (self);
-#line 141 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv->is_executed = FALSE;
-#line 142 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv->parent_session = NULL;
-#line 143 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv->message = NULL;
 #line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv->bytes_written = 0;
-#line 145 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv->err = NULL;
+	self->priv = PUBLISHING_REST_SUPPORT_TRANSACTION_GET_PRIVATE (self);
 #line 146 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	self->priv->is_executed = FALSE;
+#line 147 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	self->priv->parent_session = NULL;
+#line 148 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	self->priv->message = NULL;
+#line 149 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	self->priv->bytes_written = 0;
+#line 150 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	self->priv->err = NULL;
+#line 151 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->endpoint_url = NULL;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->ref_count = 1;
-#line 3695 "RESTSupport.c"
+#line 3999 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_transaction_finalize (PublishingRESTSupportTransaction* obj) {
 	PublishingRESTSupportTransaction * self;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction);
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_destroy (self);
-#line 140 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv->arguments = (_vala_array_free (self->priv->arguments, self->priv->arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 143 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_g_object_unref0 (self->priv->message);
 #line 145 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	self->priv->arguments = (_vala_array_free (self->priv->arguments, self->priv->arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
+#line 148 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_g_object_unref0 (self->priv->message);
+#line 150 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_error_free0 (self->priv->err);
-#line 146 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 151 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->priv->endpoint_url);
-#line 3713 "RESTSupport.c"
+#line 4017 "RESTSupport.c"
 }
 
 
@@ -3731,24 +4042,24 @@ GType publishing_rest_support_transaction_get_type (void) {
 gpointer publishing_rest_support_transaction_ref (gpointer instance) {
 	PublishingRESTSupportTransaction* self;
 	self = instance;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return instance;
-#line 3738 "RESTSupport.c"
+#line 4042 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_transaction_unref (gpointer instance) {
 	PublishingRESTSupportTransaction* self;
 	self = instance;
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		PUBLISHING_REST_SUPPORT_TRANSACTION_GET_CLASS (self)->finalize (self);
-#line 139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 3751 "RESTSupport.c"
+#line 4055 "RESTSupport.c"
 	}
 }
 
@@ -3763,54 +4074,54 @@ PublishingRESTSupportUploadTransaction* publishing_rest_support_upload_transacti
 	gchar* _tmp5_ = NULL;
 	GHashTable* _tmp6_ = NULL;
 	GeeHashMap* _tmp7_ = NULL;
-#line 387 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 445 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_SESSION (session), NULL);
-#line 387 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 445 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
-#line 388 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = session;
-#line 388 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportUploadTransaction*) publishing_rest_support_transaction_construct (object_type, _tmp0_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 389 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = publishable;
-#line 389 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _g_object_ref0 (_tmp1_);
-#line 389 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->publishable);
-#line 389 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->publishable = _tmp2_;
-#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 448 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = publishable;
-#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 448 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = spit_publishing_publishable_get_media_type (_tmp3_);
-#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 448 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = publishing_rest_support_upload_transaction_media_type_to_mime_type (_tmp4_);
-#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 448 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->mime_type);
-#line 390 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 448 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->mime_type = _tmp5_;
-#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 450 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = publishing_rest_support_upload_transaction_create_default_binary_disposition_table (self);
-#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 450 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_hash_table_unref0 (self->binary_disposition_table);
-#line 392 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 450 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->binary_disposition_table = _tmp6_;
-#line 394 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 452 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 394 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 452 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->message_headers);
-#line 394 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 452 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->message_headers = _tmp7_;
-#line 387 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 445 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 3806 "RESTSupport.c"
+#line 4110 "RESTSupport.c"
 }
 
 
 PublishingRESTSupportUploadTransaction* publishing_rest_support_upload_transaction_new (PublishingRESTSupportSession* session, SpitPublishingPublishable* publishable) {
-#line 387 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 445 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_upload_transaction_construct (PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, session, publishable);
-#line 3813 "RESTSupport.c"
+#line 4117 "RESTSupport.c"
 }
 
 
@@ -3825,58 +4136,58 @@ PublishingRESTSupportUploadTransaction* publishing_rest_support_upload_transacti
 	gchar* _tmp6_ = NULL;
 	GHashTable* _tmp7_ = NULL;
 	GeeHashMap* _tmp8_ = NULL;
-#line 397 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 455 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_SESSION (session), NULL);
-#line 397 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 455 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
-#line 397 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 455 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (endpoint_url != NULL, NULL);
-#line 399 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = session;
-#line 399 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = endpoint_url;
-#line 399 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportUploadTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, _tmp0_, _tmp1_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 400 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 458 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = publishable;
-#line 400 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 458 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 400 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 458 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->publishable);
-#line 400 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 458 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->publishable = _tmp3_;
-#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 459 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = publishable;
-#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 459 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = spit_publishing_publishable_get_media_type (_tmp4_);
-#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 459 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = publishing_rest_support_upload_transaction_media_type_to_mime_type (_tmp5_);
-#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 459 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->mime_type);
-#line 401 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 459 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->mime_type = _tmp6_;
-#line 403 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 461 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = publishing_rest_support_upload_transaction_create_default_binary_disposition_table (self);
-#line 403 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 461 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_hash_table_unref0 (self->binary_disposition_table);
-#line 403 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 461 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->binary_disposition_table = _tmp7_;
-#line 405 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 463 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 405 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 463 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->message_headers);
-#line 405 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 463 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->message_headers = _tmp8_;
-#line 397 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 455 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 3872 "RESTSupport.c"
+#line 4176 "RESTSupport.c"
 }
 
 
 PublishingRESTSupportUploadTransaction* publishing_rest_support_upload_transaction_new_with_endpoint_url (PublishingRESTSupportSession* session, SpitPublishingPublishable* publishable, const gchar* endpoint_url) {
-#line 397 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 455 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_upload_transaction_construct_with_endpoint_url (PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, session, publishable, endpoint_url);
-#line 3879 "RESTSupport.c"
+#line 4183 "RESTSupport.c"
 }
 
 
@@ -3885,74 +4196,74 @@ static void publishing_rest_support_upload_transaction_real_add_header (Publishi
 	GeeHashMap* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
-#line 408 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 466 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction);
-#line 408 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 466 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (key != NULL);
-#line 408 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 466 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (value != NULL);
-#line 409 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 467 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->message_headers;
-#line 409 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 467 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = key;
-#line 409 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 467 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = value;
-#line 409 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 467 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp1_, _tmp2_);
-#line 3902 "RESTSupport.c"
+#line 4206 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_upload_transaction_media_type_to_mime_type (SpitPublishingPublisherMediaType media_type) {
 	gchar* result = NULL;
 	SpitPublishingPublisherMediaType _tmp0_ = 0;
-#line 413 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = media_type;
-#line 413 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp0_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) {
-#line 3913 "RESTSupport.c"
+#line 4217 "RESTSupport.c"
 		gchar* _tmp1_ = NULL;
-#line 414 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 472 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp1_ = g_strdup ("image/jpeg");
-#line 414 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 472 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		result = _tmp1_;
-#line 414 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 472 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return result;
-#line 3921 "RESTSupport.c"
+#line 4225 "RESTSupport.c"
 	} else {
 		SpitPublishingPublisherMediaType _tmp2_ = 0;
-#line 415 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 473 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2_ = media_type;
-#line 415 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 473 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_tmp2_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
-#line 3928 "RESTSupport.c"
+#line 4232 "RESTSupport.c"
 			gchar* _tmp3_ = NULL;
-#line 416 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 474 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp3_ = g_strdup ("video/mpeg");
-#line 416 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 474 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			result = _tmp3_;
-#line 416 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 474 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return result;
-#line 3936 "RESTSupport.c"
+#line 4240 "RESTSupport.c"
 		} else {
 			SpitPublishingPublisherMediaType _tmp4_ = 0;
 			GEnumValue* _tmp5_;
-#line 418 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 476 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp4_ = media_type;
-#line 418 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 476 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp5_ = g_enum_get_value (g_type_class_ref (SPIT_PUBLISHING_PUBLISHER_TYPE_MEDIA_TYPE), _tmp4_);
-#line 418 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-			g_error ("RESTSupport.vala:418: UploadTransaction: unknown media type %s.", (_tmp5_ != NULL) ? _tmp5_->value_name : NULL);
-#line 3946 "RESTSupport.c"
+#line 476 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			g_error ("RESTSupport.vala:476: UploadTransaction: unknown media type %s.", (_tmp5_ != NULL) ? _tmp5_->value_name : NULL);
+#line 4250 "RESTSupport.c"
 		}
 	}
 }
 
 
 static void _g_free0_ (gpointer var) {
-#line 422 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 480 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	var = (g_free (var), NULL);
-#line 3955 "RESTSupport.c"
+#line 4259 "RESTSupport.c"
 }
 
 
@@ -3969,81 +4280,81 @@ static GHashTable* publishing_rest_support_upload_transaction_create_default_bin
 	gchar* _tmp7_ = NULL;
 	gchar* _tmp8_ = NULL;
 	gchar* _tmp9_ = NULL;
-#line 421 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 479 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_UPLOAD_TRANSACTION (self), NULL);
-#line 422 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 480 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = g_str_hash;
-#line 422 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 480 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = g_str_equal;
-#line 422 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 480 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = g_hash_table_new_full (_tmp0_, _tmp1_, _g_free0_, _g_free0_);
-#line 422 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 480 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_result_ = _tmp2_;
-#line 425 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = g_strdup ("filename");
-#line 425 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = self->publishable;
-#line 425 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = spit_publishing_publishable_get_serialized_file (_tmp4_);
-#line 425 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = _tmp5_;
-#line 425 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = g_file_get_basename (_tmp6_);
-#line 425 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8_ = _tmp7_;
-#line 425 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp9_ = soup_uri_encode (_tmp8_, NULL);
-#line 425 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_hash_table_insert (_result_, _tmp3_, _tmp9_);
-#line 425 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp8_);
-#line 425 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (_tmp6_);
-#line 428 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 486 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _result_;
-#line 428 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 486 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 4006 "RESTSupport.c"
+#line 4310 "RESTSupport.c"
 }
 
 
 static gpointer _g_hash_table_ref0 (gpointer self) {
-#line 432 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 490 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self ? g_hash_table_ref (self) : NULL;
-#line 4013 "RESTSupport.c"
+#line 4317 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_upload_transaction_set_binary_disposition_table (PublishingRESTSupportUploadTransaction* self, GHashTable* new_disp_table) {
 	GHashTable* _tmp0_ = NULL;
 	GHashTable* _tmp1_ = NULL;
-#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 489 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_UPLOAD_TRANSACTION (self));
-#line 431 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 489 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (new_disp_table != NULL);
-#line 432 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 490 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = new_disp_table;
-#line 432 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 490 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = _g_hash_table_ref0 (_tmp0_);
-#line 432 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 490 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_hash_table_unref0 (self->binary_disposition_table);
-#line 432 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 490 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->binary_disposition_table = _tmp1_;
-#line 4032 "RESTSupport.c"
+#line 4336 "RESTSupport.c"
 }
 
 
 static void _vala_SoupMultipart_free (SoupMultipart* self) {
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_boxed_free (soup_multipart_get_type (), self);
-#line 4039 "RESTSupport.c"
+#line 4343 "RESTSupport.c"
 }
 
 
 static void _vala_SoupBuffer_free (SoupBuffer* self) {
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_boxed_free (soup_buffer_get_type (), self);
-#line 4046 "RESTSupport.c"
+#line 4350 "RESTSupport.c"
 }
 
 
@@ -4103,71 +4414,71 @@ static void publishing_rest_support_upload_transaction_real_execute (PublishingR
 	gboolean _tmp49_ = FALSE;
 	SoupMessage* _tmp61_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 493 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction);
-#line 436 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = publishing_rest_support_transaction_get_arguments (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_tmp0_);
-#line 436 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	request_arguments = _tmp1_;
-#line 436 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	request_arguments_length1 = _tmp0_;
-#line 436 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_request_arguments_size_ = request_arguments_length1;
-#line 437 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 495 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = request_arguments;
-#line 437 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 495 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2__length1 = request_arguments_length1;
-#line 437 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 495 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp2__length1 > 0, "request_arguments.length > 0");
-#line 439 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 497 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = soup_multipart_new ("multipart/form-data");
-#line 439 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 497 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	message_parts = _tmp3_;
-#line 441 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 499 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = request_arguments;
-#line 441 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 499 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4__length1 = request_arguments_length1;
-#line 4130 "RESTSupport.c"
+#line 4434 "RESTSupport.c"
 	{
 		PublishingRESTSupportArgument** arg_collection = NULL;
 		gint arg_collection_length1 = 0;
 		gint _arg_collection_size_ = 0;
 		gint arg_it = 0;
-#line 441 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 499 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		arg_collection = _tmp4_;
-#line 441 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 499 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		arg_collection_length1 = _tmp4__length1;
-#line 441 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 499 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		for (arg_it = 0; arg_it < _tmp4__length1; arg_it = arg_it + 1) {
-#line 4142 "RESTSupport.c"
+#line 4446 "RESTSupport.c"
 			PublishingRESTSupportArgument* _tmp5_ = NULL;
 			PublishingRESTSupportArgument* arg = NULL;
-#line 441 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 499 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp5_ = _publishing_rest_support_argument_ref0 (arg_collection[arg_it]);
-#line 441 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 499 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			arg = _tmp5_;
-#line 4149 "RESTSupport.c"
+#line 4453 "RESTSupport.c"
 			{
 				SoupMultipart* _tmp6_ = NULL;
 				PublishingRESTSupportArgument* _tmp7_ = NULL;
 				const gchar* _tmp8_ = NULL;
 				PublishingRESTSupportArgument* _tmp9_ = NULL;
 				const gchar* _tmp10_ = NULL;
-#line 442 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp6_ = message_parts;
-#line 442 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp7_ = arg;
-#line 442 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp8_ = _tmp7_->key;
-#line 442 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp9_ = arg;
-#line 442 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp10_ = _tmp9_->value;
-#line 442 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				soup_multipart_append_form_string (_tmp6_, _tmp8_, _tmp10_);
-#line 441 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 499 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_publishing_rest_support_argument_unref0 (arg);
-#line 4170 "RESTSupport.c"
+#line 4474 "RESTSupport.c"
 			}
 		}
 	}
@@ -4179,48 +4490,48 @@ static void publishing_rest_support_upload_transaction_real_execute (PublishingR
 		gchar* _tmp15_ = NULL;
 		gchar* _tmp16_ = NULL;
 		gsize _tmp17_ = 0UL;
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp11_ = self->publishable;
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp12_ = spit_publishing_publishable_get_serialized_file (_tmp11_);
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp13_ = _tmp12_;
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp14_ = g_file_get_path (_tmp13_);
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp15_ = _tmp14_;
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_file_get_contents (_tmp15_, &_tmp16_, &_tmp17_, &_inner_error_);
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (payload);
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		payload = _tmp16_;
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		payload_length = _tmp17_;
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp15_);
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_object_unref0 (_tmp13_);
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (_inner_error_->domain == G_FILE_ERROR) {
-#line 4208 "RESTSupport.c"
+#line 4512 "RESTSupport.c"
 				goto __catch2_g_file_error;
 			}
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (payload);
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			__vala_SoupMultipart_free0 (message_parts);
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			request_arguments = (_vala_array_free (request_arguments, request_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 447 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 4223 "RESTSupport.c"
+#line 4527 "RESTSupport.c"
 		}
 	}
 	goto __finally2;
@@ -4229,140 +4540,140 @@ static void publishing_rest_support_upload_transaction_real_execute (PublishingR
 		GError* e = NULL;
 		const gchar* _tmp18_ = NULL;
 		GError* _tmp19_ = NULL;
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		e = _inner_error_;
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = NULL;
-#line 450 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 508 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp18_ = _ ("A temporary file needed for publishing is unavailable");
-#line 450 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 508 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp19_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp18_);
-#line 450 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 508 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = _tmp19_;
-#line 450 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 508 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_error_free0 (e);
-#line 4244 "RESTSupport.c"
+#line 4548 "RESTSupport.c"
 		goto __finally2;
 	}
 	__finally2:
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_propagate_error (error, _inner_error_);
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (payload);
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			__vala_SoupMultipart_free0 (message_parts);
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			request_arguments = (_vala_array_free (request_arguments, request_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 4262 "RESTSupport.c"
+#line 4566 "RESTSupport.c"
 		} else {
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (payload);
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			__vala_SoupMultipart_free0 (message_parts);
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			request_arguments = (_vala_array_free (request_arguments, request_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 446 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 504 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 4276 "RESTSupport.c"
+#line 4580 "RESTSupport.c"
 		}
 	}
-#line 454 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 512 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp20_ = message_parts;
-#line 454 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 512 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp21_ = soup_multipart_get_length (_tmp20_);
-#line 454 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 512 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	payload_part_num = _tmp21_;
-#line 456 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp22_ = payload;
-#line 456 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp23_ = string_get_data (_tmp22_, &_tmp23__length1);
-#line 456 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp24_ = _tmp23_;
-#line 456 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp24__length1 = _tmp23__length1;
-#line 456 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp25_ = payload_length;
-#line 456 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp26_ = soup_buffer_new (SOUP_MEMORY_COPY, _tmp24_ + 0, ((gint) _tmp25_) - 0);
-#line 456 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	bindable_data = _tmp26_;
-#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp27_ = message_parts;
-#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp28_ = self->publishable;
-#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp29_ = spit_publishing_publishable_get_serialized_file (_tmp28_);
-#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp30_ = _tmp29_;
-#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp31_ = g_file_get_path (_tmp30_);
-#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp32_ = _tmp31_;
-#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp33_ = self->mime_type;
-#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp34_ = bindable_data;
-#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	soup_multipart_append_form_file (_tmp27_, "", _tmp32_, _tmp33_, _tmp34_);
-#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp32_);
-#line 457 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (_tmp30_);
-#line 462 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp35_ = message_parts;
-#line 462 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp36_ = payload_part_num;
-#line 462 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	soup_multipart_get_part (_tmp35_, _tmp36_, &_tmp37_, &_tmp38_);
-#line 462 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	image_part_header = _tmp37_;
-#line 462 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	image_part_body = _tmp38_;
-#line 463 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 521 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp39_ = image_part_header;
-#line 463 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 521 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp40_ = self->binary_disposition_table;
-#line 463 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 521 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	soup_message_headers_set_content_disposition (_tmp39_, "form-data", _tmp40_);
-#line 465 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 523 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp41_ = publishing_rest_support_transaction_get_endpoint_url (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
-#line 465 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 523 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp42_ = _tmp41_;
-#line 465 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 523 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp43_ = message_parts;
-#line 465 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 523 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp44_ = soup_form_request_new_from_multipart (_tmp42_, _tmp43_);
-#line 465 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 523 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp45_ = _tmp44_;
-#line 465 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 523 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp42_);
-#line 465 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 523 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	outbound_message = _tmp45_;
-#line 468 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 526 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp46_ = self->message_headers;
-#line 468 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 526 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp47_ = gee_abstract_map_map_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
-#line 468 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 526 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	i = _tmp47_;
-#line 469 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 527 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp48_ = i;
-#line 469 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 527 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp49_ = gee_map_iterator_next (_tmp48_);
-#line 469 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 527 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	cont = _tmp49_;
-#line 470 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	while (TRUE) {
-#line 4365 "RESTSupport.c"
+#line 4669 "RESTSupport.c"
 		gboolean _tmp50_ = FALSE;
 		SoupMessage* _tmp51_ = NULL;
 		SoupMessageHeaders* _tmp52_ = NULL;
@@ -4374,150 +4685,150 @@ static void publishing_rest_support_upload_transaction_real_execute (PublishingR
 		gchar* _tmp58_ = NULL;
 		GeeMapIterator* _tmp59_ = NULL;
 		gboolean _tmp60_ = FALSE;
-#line 470 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp50_ = cont;
-#line 470 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (!_tmp50_) {
-#line 470 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			break;
-#line 4383 "RESTSupport.c"
+#line 4687 "RESTSupport.c"
 		}
-#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp51_ = outbound_message;
-#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp52_ = _tmp51_->request_headers;
-#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp53_ = i;
-#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp54_ = gee_map_iterator_get_key (_tmp53_);
-#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp55_ = (gchar*) _tmp54_;
-#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp56_ = i;
-#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp57_ = gee_map_iterator_get_value (_tmp56_);
-#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp58_ = (gchar*) _tmp57_;
-#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		soup_message_headers_append (_tmp52_, _tmp55_, _tmp58_);
-#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp58_);
-#line 471 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp55_);
-#line 472 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp59_ = i;
-#line 472 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp60_ = gee_map_iterator_next (_tmp59_);
-#line 472 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		cont = _tmp60_;
-#line 4413 "RESTSupport.c"
+#line 4717 "RESTSupport.c"
 	}
-#line 474 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 532 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp61_ = outbound_message;
-#line 474 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 532 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_set_message (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), _tmp61_);
-#line 476 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 534 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_set_is_executed (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), TRUE);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_send (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_propagate_error (error, _inner_error_);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_object_unref0 (i);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_object_unref0 (outbound_message);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			__vala_SoupBuffer_free0 (bindable_data);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (payload);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			__vala_SoupMultipart_free0 (message_parts);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			request_arguments = (_vala_array_free (request_arguments, request_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 4443 "RESTSupport.c"
+#line 4747 "RESTSupport.c"
 		} else {
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_object_unref0 (i);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_object_unref0 (outbound_message);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			__vala_SoupBuffer_free0 (bindable_data);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (payload);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			__vala_SoupMultipart_free0 (message_parts);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			request_arguments = (_vala_array_free (request_arguments, request_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 477 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 4463 "RESTSupport.c"
+#line 4767 "RESTSupport.c"
 		}
 	}
-#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 493 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (i);
-#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 493 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (outbound_message);
-#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 493 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	__vala_SoupBuffer_free0 (bindable_data);
-#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 493 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (payload);
-#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 493 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	__vala_SoupMultipart_free0 (message_parts);
-#line 435 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 493 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	request_arguments = (_vala_array_free (request_arguments, request_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 4478 "RESTSupport.c"
+#line 4782 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_upload_transaction_class_init (PublishingRESTSupportUploadTransactionClass * klass) {
-#line 381 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 439 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_upload_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 381 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 439 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->finalize = publishing_rest_support_upload_transaction_finalize;
-#line 381 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 439 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->add_header = publishing_rest_support_upload_transaction_real_add_header;
-#line 381 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 439 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->execute = publishing_rest_support_upload_transaction_real_execute;
-#line 4491 "RESTSupport.c"
+#line 4795 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_upload_transaction_instance_init (PublishingRESTSupportUploadTransaction * self) {
-#line 382 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 440 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->binary_disposition_table = NULL;
-#line 383 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 441 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->publishable = NULL;
-#line 385 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 443 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->message_headers = NULL;
-#line 4502 "RESTSupport.c"
+#line 4806 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_upload_transaction_finalize (PublishingRESTSupportTransaction* obj) {
 	PublishingRESTSupportUploadTransaction * self;
-#line 381 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 439 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction);
-#line 382 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 440 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_hash_table_unref0 (self->binary_disposition_table);
-#line 383 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 441 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->publishable);
-#line 384 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 442 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->mime_type);
-#line 385 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 443 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->message_headers);
-#line 381 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 439 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_CLASS (publishing_rest_support_upload_transaction_parent_class)->finalize (obj);
-#line 4520 "RESTSupport.c"
+#line 4824 "RESTSupport.c"
 }
 
 
@@ -4536,22 +4847,22 @@ GType publishing_rest_support_upload_transaction_get_type (void) {
 static PublishingRESTSupportXmlDocument* publishing_rest_support_xml_document_construct (GType object_type, xmlDoc* doc) {
 	PublishingRESTSupportXmlDocument* self = NULL;
 	xmlDoc* _tmp0_ = NULL;
-#line 489 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportXmlDocument*) g_type_create_instance (object_type);
-#line 490 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 548 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = doc;
-#line 490 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 548 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->document = _tmp0_;
-#line 489 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 4547 "RESTSupport.c"
+#line 4851 "RESTSupport.c"
 }
 
 
 static PublishingRESTSupportXmlDocument* publishing_rest_support_xml_document_new (xmlDoc* doc) {
-#line 489 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_xml_document_construct (PUBLISHING_REST_SUPPORT_TYPE_XML_DOCUMENT, doc);
-#line 4554 "RESTSupport.c"
+#line 4858 "RESTSupport.c"
 }
 
 
@@ -4559,17 +4870,17 @@ xmlNode* publishing_rest_support_xml_document_get_root_node (PublishingRESTSuppo
 	xmlNode* result = NULL;
 	xmlDoc* _tmp0_ = NULL;
 	xmlNode* _tmp1_ = NULL;
-#line 497 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 555 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_XML_DOCUMENT (self), NULL);
-#line 498 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->document;
-#line 498 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = xmlDocGetRootElement (_tmp0_);
-#line 498 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp1_;
-#line 498 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 4572 "RESTSupport.c"
+#line 4876 "RESTSupport.c"
 }
 
 
@@ -4581,92 +4892,92 @@ xmlNode* publishing_rest_support_xml_document_get_named_child (PublishingRESTSup
 	const gchar* _tmp10_ = NULL;
 	GError* _tmp11_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 501 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 559 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_XML_DOCUMENT (self), NULL);
-#line 501 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 559 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (child_name != NULL, NULL);
-#line 503 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 561 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = parent;
-#line 503 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 561 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = _tmp0_->children;
-#line 503 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 561 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	doc_node_iter = _tmp1_;
-#line 4594 "RESTSupport.c"
+#line 4898 "RESTSupport.c"
 	{
 		gboolean _tmp2_ = FALSE;
-#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2_ = TRUE;
-#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		while (TRUE) {
-#line 4601 "RESTSupport.c"
+#line 4905 "RESTSupport.c"
 			xmlNode* _tmp5_ = NULL;
 			xmlNode* _tmp6_ = NULL;
 			const gchar* _tmp7_ = NULL;
 			const gchar* _tmp8_ = NULL;
-#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (!_tmp2_) {
-#line 4608 "RESTSupport.c"
+#line 4912 "RESTSupport.c"
 				xmlNode* _tmp3_ = NULL;
 				xmlNode* _tmp4_ = NULL;
-#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp3_ = doc_node_iter;
-#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp4_ = _tmp3_->next;
-#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				doc_node_iter = _tmp4_;
-#line 4617 "RESTSupport.c"
+#line 4921 "RESTSupport.c"
 			}
-#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp2_ = FALSE;
-#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp5_ = doc_node_iter;
-#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (!(_tmp5_ != NULL)) {
-#line 505 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				break;
-#line 4627 "RESTSupport.c"
+#line 4931 "RESTSupport.c"
 			}
-#line 506 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 564 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp6_ = doc_node_iter;
-#line 506 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 564 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp7_ = _tmp6_->name;
-#line 506 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 564 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp8_ = child_name;
-#line 506 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 564 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (g_strcmp0 (_tmp7_, _tmp8_) == 0) {
-#line 4637 "RESTSupport.c"
+#line 4941 "RESTSupport.c"
 				xmlNode* _tmp9_ = NULL;
-#line 507 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 565 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp9_ = doc_node_iter;
-#line 507 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 565 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				result = _tmp9_;
-#line 507 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 565 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				return result;
-#line 4645 "RESTSupport.c"
+#line 4949 "RESTSupport.c"
 			}
 		}
 	}
-#line 510 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 568 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp10_ = child_name;
-#line 510 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 568 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp11_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "Can't find XML node %s", _tmp10_);
-#line 510 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 568 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_inner_error_ = _tmp11_;
-#line 510 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 568 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 510 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 568 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_propagate_error (error, _inner_error_);
-#line 510 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 568 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return NULL;
-#line 4661 "RESTSupport.c"
+#line 4965 "RESTSupport.c"
 	} else {
-#line 510 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 568 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 510 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 568 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 510 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 568 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return NULL;
-#line 4669 "RESTSupport.c"
+#line 4973 "RESTSupport.c"
 	}
 }
 
@@ -4679,63 +4990,63 @@ gchar* publishing_rest_support_xml_document_get_property_value (PublishingRESTSu
 	gchar* _tmp2_ = NULL;
 	const gchar* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 514 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 572 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_XML_DOCUMENT (self), NULL);
-#line 514 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 572 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (property_key != NULL, NULL);
-#line 516 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 574 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = node;
-#line 516 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 574 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = property_key;
-#line 516 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 574 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = (gchar*) xmlGetProp (_tmp0_, (xmlChar*) _tmp1_);
-#line 516 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 574 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	value_string = _tmp2_;
-#line 517 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 575 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = value_string;
-#line 517 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 575 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp3_ == NULL) {
-#line 4698 "RESTSupport.c"
+#line 5002 "RESTSupport.c"
 		const gchar* _tmp4_ = NULL;
 		xmlNode* _tmp5_ = NULL;
 		const gchar* _tmp6_ = NULL;
 		GError* _tmp7_ = NULL;
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = property_key;
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp5_ = node;
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp6_ = _tmp5_->name;
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp7_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "Can't find XML " "property %s on node %s", _tmp4_, _tmp6_);
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = _tmp7_;
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_propagate_error (error, _inner_error_);
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (value_string);
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 4721 "RESTSupport.c"
+#line 5025 "RESTSupport.c"
 		} else {
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (value_string);
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 518 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 4731 "RESTSupport.c"
+#line 5035 "RESTSupport.c"
 		}
 	}
-#line 521 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = value_string;
-#line 521 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 4738 "RESTSupport.c"
+#line 5042 "RESTSupport.c"
 }
 
 
@@ -4758,7 +5069,7 @@ static gchar* string_chug (const gchar* self) {
 	result = _result_;
 #line 1202 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 4761 "RESTSupport.c"
+#line 5065 "RESTSupport.c"
 }
 
 
@@ -4781,7 +5092,7 @@ static gchar* string_chomp (const gchar* self) {
 	result = _result_;
 #line 1194 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 4784 "RESTSupport.c"
+#line 5088 "RESTSupport.c"
 }
 
 
@@ -4816,75 +5127,75 @@ PublishingRESTSupportXmlDocument* publishing_rest_support_xml_document_parse_str
 	gchar* _tmp35_ = NULL;
 	const gchar* _tmp36_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 526 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 584 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = input_string;
-#line 526 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 584 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp1_ == NULL) {
-#line 526 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 584 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp0_ = TRUE;
-#line 4825 "RESTSupport.c"
+#line 5129 "RESTSupport.c"
 	} else {
 		const gchar* _tmp2_ = NULL;
 		gint _tmp3_ = 0;
 		gint _tmp4_ = 0;
-#line 526 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 584 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2_ = input_string;
-#line 526 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 584 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp3_ = strlen (_tmp2_);
-#line 526 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 584 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = _tmp3_;
-#line 526 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 584 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp0_ = _tmp4_ == 0;
-#line 4838 "RESTSupport.c"
+#line 5142 "RESTSupport.c"
 	}
-#line 526 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 584 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp0_) {
-#line 4842 "RESTSupport.c"
+#line 5146 "RESTSupport.c"
 		GError* _tmp5_ = NULL;
-#line 527 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp5_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "Empty XML string");
-#line 527 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = _tmp5_;
-#line 527 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 527 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_propagate_error (error, _inner_error_);
-#line 527 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 4854 "RESTSupport.c"
+#line 5158 "RESTSupport.c"
 		} else {
-#line 527 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 527 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 527 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 4862 "RESTSupport.c"
+#line 5166 "RESTSupport.c"
 		}
 	}
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = input_string;
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8_ = string_chug (_tmp7_);
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp9_ = _tmp8_;
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp10_ = string_chomp (_tmp9_);
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp11_ = _tmp10_;
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp12_ = g_str_has_prefix (_tmp11_, "<");
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp13_ = !_tmp12_;
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp11_);
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp9_);
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp13_) {
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp6_ = TRUE;
-#line 4887 "RESTSupport.c"
+#line 5191 "RESTSupport.c"
 	} else {
 		const gchar* _tmp14_ = NULL;
 		gchar* _tmp15_ = NULL;
@@ -4892,395 +5203,395 @@ PublishingRESTSupportXmlDocument* publishing_rest_support_xml_document_parse_str
 		gchar* _tmp17_ = NULL;
 		gchar* _tmp18_ = NULL;
 		gboolean _tmp19_ = FALSE;
-#line 531 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp14_ = input_string;
-#line 531 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp15_ = string_chug (_tmp14_);
-#line 531 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp16_ = _tmp15_;
-#line 531 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp17_ = string_chomp (_tmp16_);
-#line 531 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp18_ = _tmp17_;
-#line 531 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp19_ = g_str_has_suffix (_tmp18_, ">");
-#line 531 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp6_ = !_tmp19_;
-#line 531 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp18_);
-#line 531 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp16_);
-#line 4913 "RESTSupport.c"
+#line 5217 "RESTSupport.c"
 	}
-#line 530 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp6_) {
-#line 4917 "RESTSupport.c"
+#line 5221 "RESTSupport.c"
 		GError* _tmp20_ = NULL;
-#line 533 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp20_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "Unable to parse XML " "document");
-#line 533 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = _tmp20_;
-#line 533 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 533 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_propagate_error (error, _inner_error_);
-#line 533 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 4929 "RESTSupport.c"
+#line 5233 "RESTSupport.c"
 		} else {
-#line 533 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 533 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 533 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 4937 "RESTSupport.c"
+#line 5241 "RESTSupport.c"
 		}
 	}
-#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 597 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp21_ = input_string;
-#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 597 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp22_ = input_string;
-#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 597 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp23_ = strlen (_tmp22_);
-#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 597 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp24_ = _tmp23_;
-#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 597 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp25_ = xmlReadMemory (_tmp21_, (gint) _tmp24_, NULL, NULL, (gint) (XML_PARSE_NOBLANKS | XML_PARSE_RECOVER));
-#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 597 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	doc = _tmp25_;
-#line 541 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 599 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp26_ = doc;
-#line 541 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 599 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp26_ == NULL) {
-#line 4956 "RESTSupport.c"
+#line 5260 "RESTSupport.c"
 		GError* _tmp27_ = NULL;
-#line 542 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 600 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp27_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "Unable to parse XML " "document");
-#line 542 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 600 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = _tmp27_;
-#line 542 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 600 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 542 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 600 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_propagate_error (error, _inner_error_);
-#line 542 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 600 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 4968 "RESTSupport.c"
+#line 5272 "RESTSupport.c"
 		} else {
-#line 542 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 600 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 542 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 600 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 542 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 600 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 4976 "RESTSupport.c"
+#line 5280 "RESTSupport.c"
 		}
 	}
-#line 547 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp28_ = doc;
-#line 547 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp29_ = _tmp28_->children;
-#line 547 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp29_ == NULL) {
-#line 4985 "RESTSupport.c"
+#line 5289 "RESTSupport.c"
 		GError* _tmp30_ = NULL;
-#line 548 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 606 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp30_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "Unable to parse XML " "document");
-#line 548 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 606 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = _tmp30_;
-#line 548 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 606 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 548 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 606 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_propagate_error (error, _inner_error_);
-#line 548 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 606 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 4997 "RESTSupport.c"
+#line 5301 "RESTSupport.c"
 		} else {
-#line 548 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 606 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 548 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 606 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 548 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 606 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 5005 "RESTSupport.c"
+#line 5309 "RESTSupport.c"
 		}
 	}
-#line 552 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 610 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp31_ = doc;
-#line 552 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 610 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp32_ = publishing_rest_support_xml_document_new (_tmp31_);
-#line 552 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 610 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	rest_doc = _tmp32_;
-#line 554 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp33_ = check_for_error_response;
-#line 554 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp33__target = check_for_error_response_target;
-#line 554 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp34_ = rest_doc;
-#line 554 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp35_ = _tmp33_ (_tmp34_, _tmp33__target);
-#line 554 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_result_ = _tmp35_;
-#line 555 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp36_ = _result_;
-#line 555 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp36_ != NULL) {
-#line 5028 "RESTSupport.c"
+#line 5332 "RESTSupport.c"
 		const gchar* _tmp37_ = NULL;
 		GError* _tmp38_ = NULL;
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp37_ = _result_;
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp38_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_SERVICE_ERROR, "%s", _tmp37_);
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = _tmp38_;
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_propagate_error (error, _inner_error_);
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (_result_);
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_publishing_rest_support_xml_document_unref0 (rest_doc);
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 5047 "RESTSupport.c"
+#line 5351 "RESTSupport.c"
 		} else {
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (_result_);
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_publishing_rest_support_xml_document_unref0 (rest_doc);
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 556 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return NULL;
-#line 5059 "RESTSupport.c"
+#line 5363 "RESTSupport.c"
 		}
 	}
-#line 558 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 616 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = rest_doc;
-#line 558 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 616 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_result_);
-#line 558 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 616 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 5068 "RESTSupport.c"
+#line 5372 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_value_xml_document_init (GValue* value) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	value->data[0].v_pointer = NULL;
-#line 5075 "RESTSupport.c"
+#line 5379 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_value_xml_document_free_value (GValue* value) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (value->data[0].v_pointer) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_xml_document_unref (value->data[0].v_pointer);
-#line 5084 "RESTSupport.c"
+#line 5388 "RESTSupport.c"
 	}
 }
 
 
 static void publishing_rest_support_value_xml_document_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (src_value->data[0].v_pointer) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		dest_value->data[0].v_pointer = publishing_rest_support_xml_document_ref (src_value->data[0].v_pointer);
-#line 5094 "RESTSupport.c"
+#line 5398 "RESTSupport.c"
 	} else {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 5098 "RESTSupport.c"
+#line 5402 "RESTSupport.c"
 	}
 }
 
 
 static gpointer publishing_rest_support_value_xml_document_peek_pointer (const GValue* value) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return value->data[0].v_pointer;
-#line 5106 "RESTSupport.c"
+#line 5410 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_value_xml_document_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (collect_values[0].v_pointer) {
-#line 5113 "RESTSupport.c"
+#line 5417 "RESTSupport.c"
 		PublishingRESTSupportXmlDocument* object;
 		object = collect_values[0].v_pointer;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 5120 "RESTSupport.c"
+#line 5424 "RESTSupport.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 5124 "RESTSupport.c"
+#line 5428 "RESTSupport.c"
 		}
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = publishing_rest_support_xml_document_ref (object);
-#line 5128 "RESTSupport.c"
+#line 5432 "RESTSupport.c"
 	} else {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 5132 "RESTSupport.c"
+#line 5436 "RESTSupport.c"
 	}
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 5136 "RESTSupport.c"
+#line 5440 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_value_xml_document_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingRESTSupportXmlDocument** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!object_p) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 5147 "RESTSupport.c"
+#line 5451 "RESTSupport.c"
 	}
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!value->data[0].v_pointer) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = NULL;
-#line 5153 "RESTSupport.c"
+#line 5457 "RESTSupport.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = value->data[0].v_pointer;
-#line 5157 "RESTSupport.c"
+#line 5461 "RESTSupport.c"
 	} else {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = publishing_rest_support_xml_document_ref (value->data[0].v_pointer);
-#line 5161 "RESTSupport.c"
+#line 5465 "RESTSupport.c"
 	}
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 5165 "RESTSupport.c"
+#line 5469 "RESTSupport.c"
 }
 
 
 GParamSpec* publishing_rest_support_param_spec_xml_document (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingRESTSupportParamSpecXmlDocument* spec;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_REST_SUPPORT_TYPE_XML_DOCUMENT), NULL);
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return G_PARAM_SPEC (spec);
-#line 5179 "RESTSupport.c"
+#line 5483 "RESTSupport.c"
 }
 
 
 gpointer publishing_rest_support_value_get_xml_document (const GValue* value) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_XML_DOCUMENT), NULL);
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return value->data[0].v_pointer;
-#line 5188 "RESTSupport.c"
+#line 5492 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_value_set_xml_document (GValue* value, gpointer v_object) {
 	PublishingRESTSupportXmlDocument* old;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_XML_DOCUMENT));
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	old = value->data[0].v_pointer;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (v_object) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_REST_SUPPORT_TYPE_XML_DOCUMENT));
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = v_object;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_xml_document_ref (value->data[0].v_pointer);
-#line 5208 "RESTSupport.c"
+#line 5512 "RESTSupport.c"
 	} else {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 5212 "RESTSupport.c"
+#line 5516 "RESTSupport.c"
 	}
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (old) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_xml_document_unref (old);
-#line 5218 "RESTSupport.c"
+#line 5522 "RESTSupport.c"
 	}
 }
 
 
 void publishing_rest_support_value_take_xml_document (GValue* value, gpointer v_object) {
 	PublishingRESTSupportXmlDocument* old;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_XML_DOCUMENT));
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	old = value->data[0].v_pointer;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (v_object) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_REST_SUPPORT_TYPE_XML_DOCUMENT));
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = v_object;
-#line 5237 "RESTSupport.c"
+#line 5541 "RESTSupport.c"
 	} else {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 5241 "RESTSupport.c"
+#line 5545 "RESTSupport.c"
 	}
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (old) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_xml_document_unref (old);
-#line 5247 "RESTSupport.c"
+#line 5551 "RESTSupport.c"
 	}
 }
 
 
 static void publishing_rest_support_xml_document_class_init (PublishingRESTSupportXmlDocumentClass * klass) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_xml_document_parent_class = g_type_class_peek_parent (klass);
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportXmlDocumentClass *) klass)->finalize = publishing_rest_support_xml_document_finalize;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_type_class_add_private (klass, sizeof (PublishingRESTSupportXmlDocumentPrivate));
-#line 5259 "RESTSupport.c"
+#line 5563 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_xml_document_instance_init (PublishingRESTSupportXmlDocument * self) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv = PUBLISHING_REST_SUPPORT_XML_DOCUMENT_GET_PRIVATE (self);
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->ref_count = 1;
-#line 5268 "RESTSupport.c"
+#line 5572 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_xml_document_finalize (PublishingRESTSupportXmlDocument* obj) {
 	PublishingRESTSupportXmlDocument * self;
 	xmlDoc* _tmp0_ = NULL;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_REST_SUPPORT_TYPE_XML_DOCUMENT, PublishingRESTSupportXmlDocument);
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_destroy (self);
-#line 494 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 552 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->document;
-#line 494 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 552 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	xmlFreeDoc (_tmp0_);
-#line 5283 "RESTSupport.c"
+#line 5587 "RESTSupport.c"
 }
 
 
@@ -5301,24 +5612,24 @@ GType publishing_rest_support_xml_document_get_type (void) {
 gpointer publishing_rest_support_xml_document_ref (gpointer instance) {
 	PublishingRESTSupportXmlDocument* self;
 	self = instance;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return instance;
-#line 5308 "RESTSupport.c"
+#line 5612 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_xml_document_unref (gpointer instance) {
 	PublishingRESTSupportXmlDocument* self;
 	self = instance;
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		PUBLISHING_REST_SUPPORT_XML_DOCUMENT_GET_CLASS (self)->finalize (self);
-#line 481 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 5321 "RESTSupport.c"
+#line 5625 "RESTSupport.c"
 	}
 }
 
@@ -5333,21 +5644,21 @@ gchar* publishing_rest_support_decimal_entity_encode (const gchar* source) {
 	GString* _tmp23_ = NULL;
 	const gchar* _tmp24_ = NULL;
 	gchar* _tmp25_ = NULL;
-#line 567 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (source != NULL, NULL);
-#line 568 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = g_string_new ("");
-#line 568 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	encoded_str_builder = _tmp0_;
-#line 569 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 627 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = source;
-#line 569 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 627 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 569 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 627 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	current_char = _tmp2_;
-#line 570 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 628 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	while (TRUE) {
-#line 5350 "RESTSupport.c"
+#line 5654 "RESTSupport.c"
 		gint current_char_value = 0;
 		const gchar* _tmp3_ = NULL;
 		gunichar _tmp4_ = 0U;
@@ -5359,146 +5670,146 @@ gchar* publishing_rest_support_decimal_entity_encode (const gchar* source) {
 		const gchar* _tmp20_ = NULL;
 		const gchar* _tmp21_ = NULL;
 		gchar* _tmp22_ = NULL;
-#line 571 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 629 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp3_ = current_char;
-#line 571 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 629 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = g_utf8_get_char_validated (_tmp3_, (gssize) -1);
-#line 571 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 629 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		current_char_value = (gint) _tmp4_;
-#line 574 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 632 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp5_ = current_char_value;
-#line 574 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 632 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_tmp5_ < 1) {
-#line 575 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 633 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			break;
-#line 5374 "RESTSupport.c"
+#line 5678 "RESTSupport.c"
 		}
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp9_ = current_char_value;
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_tmp9_ < 128) {
-#line 5380 "RESTSupport.c"
+#line 5684 "RESTSupport.c"
 			gint _tmp10_ = 0;
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp10_ = current_char_value;
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp8_ = _tmp10_ != ((gint) '&');
-#line 5386 "RESTSupport.c"
+#line 5690 "RESTSupport.c"
 		} else {
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp8_ = FALSE;
-#line 5390 "RESTSupport.c"
+#line 5694 "RESTSupport.c"
 		}
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_tmp8_) {
-#line 5394 "RESTSupport.c"
+#line 5698 "RESTSupport.c"
 			gint _tmp11_ = 0;
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp11_ = current_char_value;
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp7_ = _tmp11_ != ((gint) '<');
-#line 5400 "RESTSupport.c"
+#line 5704 "RESTSupport.c"
 		} else {
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp7_ = FALSE;
-#line 5404 "RESTSupport.c"
+#line 5708 "RESTSupport.c"
 		}
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_tmp7_) {
-#line 5408 "RESTSupport.c"
+#line 5712 "RESTSupport.c"
 			gint _tmp12_ = 0;
-#line 580 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 638 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp12_ = current_char_value;
-#line 580 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 638 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp6_ = _tmp12_ != ((gint) '>');
-#line 5414 "RESTSupport.c"
+#line 5718 "RESTSupport.c"
 		} else {
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp6_ = FALSE;
-#line 5418 "RESTSupport.c"
+#line 5722 "RESTSupport.c"
 		}
-#line 579 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_tmp6_) {
-#line 5422 "RESTSupport.c"
+#line 5726 "RESTSupport.c"
 			GString* _tmp13_ = NULL;
 			const gchar* _tmp14_ = NULL;
 			gunichar _tmp15_ = 0U;
-#line 581 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 639 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp13_ = encoded_str_builder;
-#line 581 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 639 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp14_ = current_char;
-#line 581 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 639 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp15_ = g_utf8_get_char_validated (_tmp14_, (gssize) -1);
-#line 581 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 639 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_string_append_unichar (_tmp13_, _tmp15_);
-#line 5434 "RESTSupport.c"
+#line 5738 "RESTSupport.c"
 		} else {
 			GString* _tmp16_ = NULL;
 			gint _tmp17_ = 0;
 			gchar* _tmp18_ = NULL;
 			gchar* _tmp19_ = NULL;
-#line 583 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 641 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp16_ = encoded_str_builder;
-#line 583 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 641 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp17_ = current_char_value;
-#line 583 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 641 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp18_ = g_strdup_printf ("&#%d;", _tmp17_);
-#line 583 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 641 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp19_ = _tmp18_;
-#line 583 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 641 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_string_append (_tmp16_, _tmp19_);
-#line 583 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 641 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (_tmp19_);
-#line 5452 "RESTSupport.c"
+#line 5756 "RESTSupport.c"
 		}
-#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 643 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp20_ = current_char;
-#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 643 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp21_ = g_utf8_next_char (_tmp20_);
-#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 643 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp22_ = g_strdup (_tmp21_);
-#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 643 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (current_char);
-#line 585 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 643 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		current_char = _tmp22_;
-#line 5464 "RESTSupport.c"
+#line 5768 "RESTSupport.c"
 	}
-#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 646 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp23_ = encoded_str_builder;
-#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 646 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp24_ = _tmp23_->str;
-#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 646 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp25_ = g_strdup (_tmp24_);
-#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 646 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp25_;
-#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 646 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (current_char);
-#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 646 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_string_free0 (encoded_str_builder);
-#line 588 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 646 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 5480 "RESTSupport.c"
+#line 5784 "RESTSupport.c"
 }
 
 
 static SpitPublishingPublishable** _vala_array_dup2 (SpitPublishingPublishable** self, int length) {
 	SpitPublishingPublishable** result;
 	int i;
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = g_new0 (SpitPublishingPublishable*, length + 1);
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	for (i = 0; i < length; i++) {
-#line 5491 "RESTSupport.c"
+#line 5795 "RESTSupport.c"
 		SpitPublishingPublishable* _tmp0_ = NULL;
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp0_ = _g_object_ref0 (self[i]);
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		result[i] = _tmp0_;
-#line 5497 "RESTSupport.c"
+#line 5801 "RESTSupport.c"
 	}
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 5501 "RESTSupport.c"
+#line 5805 "RESTSupport.c"
 }
 
 
@@ -5510,44 +5821,44 @@ PublishingRESTSupportBatchUploader* publishing_rest_support_batch_uploader_const
 	gint _tmp1__length1 = 0;
 	PublishingRESTSupportSession* _tmp2_ = NULL;
 	PublishingRESTSupportSession* _tmp3_ = NULL;
-#line 600 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_SESSION (session), NULL);
-#line 600 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportBatchUploader*) g_type_create_instance (object_type);
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = publishables;
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0__length1 = publishables_length1;
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup2 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1__length1 = _tmp0__length1;
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->publishables = (_vala_array_free (self->priv->publishables, self->priv->publishables_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->publishables = _tmp1_;
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->publishables_length1 = _tmp1__length1;
-#line 601 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->_publishables_size_ = self->priv->publishables_length1;
-#line 602 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 660 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = session;
-#line 602 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 660 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = _publishing_rest_support_session_ref0 (_tmp2_);
-#line 602 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 660 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_publishing_rest_support_session_unref0 (self->priv->session);
-#line 602 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 660 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->session = _tmp3_;
-#line 600 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 5543 "RESTSupport.c"
+#line 5847 "RESTSupport.c"
 }
 
 
 static void _publishing_rest_support_batch_uploader_on_chunk_transmitted_publishing_rest_support_transaction_chunk_transmitted (PublishingRESTSupportTransaction* _sender, gint bytes_written_so_far, gint total_bytes, gpointer self) {
-#line 623 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 681 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_batch_uploader_on_chunk_transmitted ((PublishingRESTSupportBatchUploader*) self, bytes_written_so_far, total_bytes);
-#line 5550 "RESTSupport.c"
+#line 5854 "RESTSupport.c"
 }
 
 
@@ -5557,36 +5868,36 @@ static void publishing_rest_support_batch_uploader_send_files (PublishingRESTSup
 	gint _tmp0__length1 = 0;
 	gboolean _tmp23_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 605 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 663 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_BATCH_UPLOADER (self));
-#line 606 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 664 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->current_file = 0;
-#line 607 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 665 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	stop = FALSE;
-#line 608 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->publishables;
-#line 608 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0__length1 = self->priv->publishables_length1;
-#line 5570 "RESTSupport.c"
+#line 5874 "RESTSupport.c"
 	{
 		SpitPublishingPublishable** publishable_collection = NULL;
 		gint publishable_collection_length1 = 0;
 		gint _publishable_collection_size_ = 0;
 		gint publishable_it = 0;
-#line 608 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishable_collection = _tmp0_;
-#line 608 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishable_collection_length1 = _tmp0__length1;
-#line 608 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		for (publishable_it = 0; publishable_it < _tmp0__length1; publishable_it = publishable_it + 1) {
-#line 5582 "RESTSupport.c"
+#line 5886 "RESTSupport.c"
 			SpitPublishingPublishable* _tmp1_ = NULL;
 			SpitPublishingPublishable* publishable = NULL;
-#line 608 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp1_ = _g_object_ref0 (publishable_collection[publishable_it]);
-#line 608 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			publishable = _tmp1_;
-#line 5589 "RESTSupport.c"
+#line 5893 "RESTSupport.c"
 			{
 				GFile* file = NULL;
 				SpitPublishingPublishable* _tmp2_ = NULL;
@@ -5609,104 +5920,104 @@ static void publishing_rest_support_batch_uploader_send_files (PublishingRESTSup
 				guint _tmp20_ = 0U;
 				gboolean _tmp21_ = FALSE;
 				gint _tmp22_ = 0;
-#line 609 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 667 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp2_ = publishable;
-#line 609 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 667 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp3_ = spit_publishing_publishable_get_serialized_file (_tmp2_);
-#line 609 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 667 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				file = _tmp3_;
-#line 612 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 670 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp4_ = file;
-#line 612 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 670 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (_tmp4_ == NULL) {
-#line 5622 "RESTSupport.c"
+#line 5926 "RESTSupport.c"
 					gint _tmp5_ = 0;
-#line 613 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 671 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp5_ = self->priv->current_file;
-#line 613 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 671 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					self->priv->current_file = _tmp5_ + 1;
-#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 672 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_g_object_unref0 (file);
-#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 672 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_g_object_unref0 (publishable);
-#line 614 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 672 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					continue;
-#line 5634 "RESTSupport.c"
+#line 5938 "RESTSupport.c"
 				}
-#line 617 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 675 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp6_ = self->priv->current_file;
-#line 617 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 675 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp7_ = self->priv->publishables;
-#line 617 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 675 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp7__length1 = self->priv->publishables_length1;
-#line 617 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 675 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				fraction_complete = ((gdouble) _tmp6_) / _tmp7__length1;
-#line 618 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 676 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp8_ = self->priv->status_updated;
-#line 618 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 676 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp8__target = self->priv->status_updated_target;
-#line 618 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 676 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (_tmp8_ != NULL) {
-#line 5650 "RESTSupport.c"
+#line 5954 "RESTSupport.c"
 					SpitPublishingProgressCallback _tmp9_ = NULL;
 					void* _tmp9__target = NULL;
 					gint _tmp10_ = 0;
 					gdouble _tmp11_ = 0.0;
-#line 619 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 677 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp9_ = self->priv->status_updated;
-#line 619 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 677 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp9__target = self->priv->status_updated_target;
-#line 619 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 677 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp10_ = self->priv->current_file;
-#line 619 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 677 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp11_ = fraction_complete;
-#line 619 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 677 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp9_ (_tmp10_ + 1, _tmp11_, _tmp9__target);
-#line 5665 "RESTSupport.c"
+#line 5969 "RESTSupport.c"
 				}
-#line 621 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp12_ = self->priv->publishables;
-#line 621 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp12__length1 = self->priv->publishables_length1;
-#line 621 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp13_ = self->priv->current_file;
-#line 621 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp14_ = _tmp12_[_tmp13_];
-#line 621 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp15_ = publishing_rest_support_batch_uploader_create_transaction (self, _tmp14_);
-#line 621 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				txn = _tmp15_;
-#line 623 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 681 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp16_ = txn;
-#line 623 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 681 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_signal_connect (_tmp16_, "chunk-transmitted", (GCallback) _publishing_rest_support_batch_uploader_on_chunk_transmitted_publishing_rest_support_transaction_chunk_transmitted, self);
-#line 5683 "RESTSupport.c"
+#line 5987 "RESTSupport.c"
 				{
 					PublishingRESTSupportTransaction* _tmp17_ = NULL;
-#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 684 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp17_ = txn;
-#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 684 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					publishing_rest_support_transaction_execute (_tmp17_, &_inner_error_);
-#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 684 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 684 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 						if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 5694 "RESTSupport.c"
+#line 5998 "RESTSupport.c"
 							goto __catch3_spit_publishing_publishing_error;
 						}
-#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 684 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 						_publishing_rest_support_transaction_unref0 (txn);
-#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 684 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 						_g_object_unref0 (file);
-#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 684 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 						_g_object_unref0 (publishable);
-#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 684 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 						g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 684 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 						g_clear_error (&_inner_error_);
-#line 626 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 684 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 						return;
-#line 5709 "RESTSupport.c"
+#line 6013 "RESTSupport.c"
 					}
 				}
 				goto __finally3;
@@ -5714,82 +6025,82 @@ static void publishing_rest_support_batch_uploader_send_files (PublishingRESTSup
 				{
 					GError* err = NULL;
 					GError* _tmp18_ = NULL;
-#line 625 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 683 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					err = _inner_error_;
-#line 625 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 683 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_inner_error_ = NULL;
-#line 628 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 686 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp18_ = err;
-#line 628 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 686 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					g_signal_emit_by_name (self, "upload-error", _tmp18_);
-#line 629 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					stop = TRUE;
-#line 625 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 683 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_g_error_free0 (err);
-#line 5729 "RESTSupport.c"
+#line 6033 "RESTSupport.c"
 				}
 				__finally3:
-#line 625 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 683 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 625 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 683 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_publishing_rest_support_transaction_unref0 (txn);
-#line 625 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 683 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_g_object_unref0 (file);
-#line 625 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 683 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_g_object_unref0 (publishable);
-#line 625 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 683 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 625 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 683 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					g_clear_error (&_inner_error_);
-#line 625 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 683 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					return;
-#line 5746 "RESTSupport.c"
+#line 6050 "RESTSupport.c"
 				}
-#line 632 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 690 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp19_ = txn;
-#line 632 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 690 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_signal_parse_name ("chunk-transmitted", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp20_, NULL, FALSE);
-#line 632 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 690 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				g_signal_handlers_disconnect_matched (_tmp19_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp20_, 0, NULL, (GCallback) _publishing_rest_support_batch_uploader_on_chunk_transmitted_publishing_rest_support_transaction_chunk_transmitted, self);
-#line 634 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 692 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp21_ = stop;
-#line 634 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 692 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (_tmp21_) {
-#line 635 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 693 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_publishing_rest_support_transaction_unref0 (txn);
-#line 635 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 693 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_g_object_unref0 (file);
-#line 635 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 693 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_g_object_unref0 (publishable);
-#line 635 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 693 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					break;
-#line 5766 "RESTSupport.c"
+#line 6070 "RESTSupport.c"
 				}
-#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp22_ = self->priv->current_file;
-#line 637 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				self->priv->current_file = _tmp22_ + 1;
-#line 608 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_publishing_rest_support_transaction_unref0 (txn);
-#line 608 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_g_object_unref0 (file);
-#line 608 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_g_object_unref0 (publishable);
-#line 5778 "RESTSupport.c"
+#line 6082 "RESTSupport.c"
 			}
 		}
 	}
-#line 640 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 698 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp23_ = stop;
-#line 640 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 698 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!_tmp23_) {
-#line 5786 "RESTSupport.c"
+#line 6090 "RESTSupport.c"
 		gint _tmp24_ = 0;
-#line 641 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 699 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp24_ = self->priv->current_file;
-#line 641 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 699 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_signal_emit_by_name (self, "upload-complete", _tmp24_);
-#line 5792 "RESTSupport.c"
+#line 6096 "RESTSupport.c"
 	}
 }
 
@@ -5808,52 +6119,52 @@ static void publishing_rest_support_batch_uploader_on_chunk_transmitted (Publish
 	gdouble _tmp6_ = 0.0;
 	SpitPublishingProgressCallback _tmp7_ = NULL;
 	void* _tmp7__target = NULL;
-#line 644 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_BATCH_UPLOADER (self));
-#line 645 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 703 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->publishables;
-#line 645 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 703 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0__length1 = self->priv->publishables_length1;
-#line 645 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 703 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	file_span = 1.0 / _tmp0__length1;
-#line 646 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 704 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = bytes_written_so_far;
-#line 646 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 704 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = total_bytes;
-#line 646 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 704 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	this_file_fraction_complete = ((gdouble) _tmp1_) / _tmp2_;
-#line 647 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 705 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = self->priv->current_file;
-#line 647 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 705 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = file_span;
-#line 647 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 705 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = this_file_fraction_complete;
-#line 647 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 705 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = file_span;
-#line 647 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 705 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	fraction_complete = (_tmp3_ * _tmp4_) + (_tmp5_ * _tmp6_);
-#line 650 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = self->priv->status_updated;
-#line 650 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7__target = self->priv->status_updated_target;
-#line 650 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp7_ != NULL) {
-#line 5841 "RESTSupport.c"
+#line 6145 "RESTSupport.c"
 		SpitPublishingProgressCallback _tmp8_ = NULL;
 		void* _tmp8__target = NULL;
 		gint _tmp9_ = 0;
 		gdouble _tmp10_ = 0.0;
-#line 651 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp8_ = self->priv->status_updated;
-#line 651 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp8__target = self->priv->status_updated_target;
-#line 651 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp9_ = self->priv->current_file;
-#line 651 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp10_ = fraction_complete;
-#line 651 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp8_ (_tmp9_ + 1, _tmp10_, _tmp8__target);
-#line 5856 "RESTSupport.c"
+#line 6160 "RESTSupport.c"
 	}
 }
 
@@ -5862,17 +6173,17 @@ PublishingRESTSupportSession* publishing_rest_support_batch_uploader_get_session
 	PublishingRESTSupportSession* result = NULL;
 	PublishingRESTSupportSession* _tmp0_ = NULL;
 	PublishingRESTSupportSession* _tmp1_ = NULL;
-#line 654 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 712 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_BATCH_UPLOADER (self), NULL);
-#line 655 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->session;
-#line 655 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = _publishing_rest_support_session_ref0 (_tmp0_);
-#line 655 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp1_;
-#line 655 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 5875 "RESTSupport.c"
+#line 6179 "RESTSupport.c"
 }
 
 
@@ -5883,41 +6194,41 @@ SpitPublishingPublishable* publishing_rest_support_batch_uploader_get_current_pu
 	gint _tmp1_ = 0;
 	SpitPublishingPublishable* _tmp2_ = NULL;
 	SpitPublishingPublishable* _tmp3_ = NULL;
-#line 658 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_BATCH_UPLOADER (self), NULL);
-#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 717 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->publishables;
-#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 717 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0__length1 = self->priv->publishables_length1;
-#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 717 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->current_file;
-#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 717 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = _tmp0_[_tmp1_];
-#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 717 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 717 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp3_;
-#line 659 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 717 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 5902 "RESTSupport.c"
+#line 6206 "RESTSupport.c"
 }
 
 
 static PublishingRESTSupportTransaction* publishing_rest_support_batch_uploader_real_create_transaction (PublishingRESTSupportBatchUploader* self, SpitPublishingPublishable* publishable) {
-#line 662 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 720 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_rest_support_batch_uploader_create_transaction'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 662 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 720 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 5911 "RESTSupport.c"
+#line 6215 "RESTSupport.c"
 }
 
 
 PublishingRESTSupportTransaction* publishing_rest_support_batch_uploader_create_transaction (PublishingRESTSupportBatchUploader* self, SpitPublishingPublishable* publishable) {
-#line 662 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 720 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_BATCH_UPLOADER (self), NULL);
-#line 662 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 720 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return PUBLISHING_REST_SUPPORT_BATCH_UPLOADER_GET_CLASS (self)->create_transaction (self, publishable);
-#line 5920 "RESTSupport.c"
+#line 6224 "RESTSupport.c"
 }
 
 
@@ -5926,258 +6237,258 @@ void publishing_rest_support_batch_uploader_upload (PublishingRESTSupportBatchUp
 	void* _tmp0__target = NULL;
 	SpitPublishingPublishable** _tmp1_ = NULL;
 	gint _tmp1__length1 = 0;
-#line 664 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 722 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_BATCH_UPLOADER (self));
-#line 665 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 723 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = status_updated;
-#line 665 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 723 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0__target = status_updated_target;
-#line 665 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 723 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->status_updated = _tmp0_;
-#line 665 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 723 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->status_updated_target = _tmp0__target;
-#line 667 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 725 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->publishables;
-#line 667 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 725 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1__length1 = self->priv->publishables_length1;
-#line 667 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 725 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp1__length1 > 0) {
-#line 668 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 726 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_batch_uploader_send_files (self);
-#line 5947 "RESTSupport.c"
+#line 6251 "RESTSupport.c"
 	}
 }
 
 
 static void publishing_rest_support_value_batch_uploader_init (GValue* value) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	value->data[0].v_pointer = NULL;
-#line 5955 "RESTSupport.c"
+#line 6259 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_value_batch_uploader_free_value (GValue* value) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (value->data[0].v_pointer) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_batch_uploader_unref (value->data[0].v_pointer);
-#line 5964 "RESTSupport.c"
+#line 6268 "RESTSupport.c"
 	}
 }
 
 
 static void publishing_rest_support_value_batch_uploader_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (src_value->data[0].v_pointer) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		dest_value->data[0].v_pointer = publishing_rest_support_batch_uploader_ref (src_value->data[0].v_pointer);
-#line 5974 "RESTSupport.c"
+#line 6278 "RESTSupport.c"
 	} else {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 5978 "RESTSupport.c"
+#line 6282 "RESTSupport.c"
 	}
 }
 
 
 static gpointer publishing_rest_support_value_batch_uploader_peek_pointer (const GValue* value) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return value->data[0].v_pointer;
-#line 5986 "RESTSupport.c"
+#line 6290 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_value_batch_uploader_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (collect_values[0].v_pointer) {
-#line 5993 "RESTSupport.c"
+#line 6297 "RESTSupport.c"
 		PublishingRESTSupportBatchUploader* object;
 		object = collect_values[0].v_pointer;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 6000 "RESTSupport.c"
+#line 6304 "RESTSupport.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 6004 "RESTSupport.c"
+#line 6308 "RESTSupport.c"
 		}
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = publishing_rest_support_batch_uploader_ref (object);
-#line 6008 "RESTSupport.c"
+#line 6312 "RESTSupport.c"
 	} else {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 6012 "RESTSupport.c"
+#line 6316 "RESTSupport.c"
 	}
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 6016 "RESTSupport.c"
+#line 6320 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_value_batch_uploader_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingRESTSupportBatchUploader** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!object_p) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 6027 "RESTSupport.c"
+#line 6331 "RESTSupport.c"
 	}
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!value->data[0].v_pointer) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = NULL;
-#line 6033 "RESTSupport.c"
+#line 6337 "RESTSupport.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = value->data[0].v_pointer;
-#line 6037 "RESTSupport.c"
+#line 6341 "RESTSupport.c"
 	} else {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		*object_p = publishing_rest_support_batch_uploader_ref (value->data[0].v_pointer);
-#line 6041 "RESTSupport.c"
+#line 6345 "RESTSupport.c"
 	}
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 6045 "RESTSupport.c"
+#line 6349 "RESTSupport.c"
 }
 
 
 GParamSpec* publishing_rest_support_param_spec_batch_uploader (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingRESTSupportParamSpecBatchUploader* spec;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER), NULL);
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return G_PARAM_SPEC (spec);
-#line 6059 "RESTSupport.c"
+#line 6363 "RESTSupport.c"
 }
 
 
 gpointer publishing_rest_support_value_get_batch_uploader (const GValue* value) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER), NULL);
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return value->data[0].v_pointer;
-#line 6068 "RESTSupport.c"
+#line 6372 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_value_set_batch_uploader (GValue* value, gpointer v_object) {
 	PublishingRESTSupportBatchUploader* old;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER));
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	old = value->data[0].v_pointer;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (v_object) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER));
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = v_object;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_batch_uploader_ref (value->data[0].v_pointer);
-#line 6088 "RESTSupport.c"
+#line 6392 "RESTSupport.c"
 	} else {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 6092 "RESTSupport.c"
+#line 6396 "RESTSupport.c"
 	}
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (old) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_batch_uploader_unref (old);
-#line 6098 "RESTSupport.c"
+#line 6402 "RESTSupport.c"
 	}
 }
 
 
 void publishing_rest_support_value_take_batch_uploader (GValue* value, gpointer v_object) {
 	PublishingRESTSupportBatchUploader* old;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER));
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	old = value->data[0].v_pointer;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (v_object) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER));
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = v_object;
-#line 6117 "RESTSupport.c"
+#line 6421 "RESTSupport.c"
 	} else {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		value->data[0].v_pointer = NULL;
-#line 6121 "RESTSupport.c"
+#line 6425 "RESTSupport.c"
 	}
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (old) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_batch_uploader_unref (old);
-#line 6127 "RESTSupport.c"
+#line 6431 "RESTSupport.c"
 	}
 }
 
 
 static void publishing_rest_support_batch_uploader_class_init (PublishingRESTSupportBatchUploaderClass * klass) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_batch_uploader_parent_class = g_type_class_peek_parent (klass);
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportBatchUploaderClass *) klass)->finalize = publishing_rest_support_batch_uploader_finalize;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_type_class_add_private (klass, sizeof (PublishingRESTSupportBatchUploaderPrivate));
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportBatchUploaderClass *) klass)->create_transaction = publishing_rest_support_batch_uploader_real_create_transaction;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_new ("upload_complete", PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__INT, G_TYPE_NONE, 1, G_TYPE_INT);
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_new ("upload_error", PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1, G_TYPE_POINTER);
-#line 6145 "RESTSupport.c"
+#line 6449 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_batch_uploader_instance_init (PublishingRESTSupportBatchUploader * self) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv = PUBLISHING_REST_SUPPORT_BATCH_UPLOADER_GET_PRIVATE (self);
-#line 592 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 650 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->current_file = 0;
-#line 593 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->publishables = NULL;
-#line 593 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->publishables_length1 = 0;
-#line 593 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->_publishables_size_ = self->priv->publishables_length1;
-#line 594 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 652 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->session = NULL;
-#line 595 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 653 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->status_updated = NULL;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->ref_count = 1;
-#line 6166 "RESTSupport.c"
+#line 6470 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_batch_uploader_finalize (PublishingRESTSupportBatchUploader* obj) {
 	PublishingRESTSupportBatchUploader * self;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader);
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_destroy (self);
-#line 593 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->publishables = (_vala_array_free (self->priv->publishables, self->priv->publishables_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 594 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 652 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_publishing_rest_support_session_unref0 (self->priv->session);
-#line 6180 "RESTSupport.c"
+#line 6484 "RESTSupport.c"
 }
 
 
@@ -6198,24 +6509,24 @@ GType publishing_rest_support_batch_uploader_get_type (void) {
 gpointer publishing_rest_support_batch_uploader_ref (gpointer instance) {
 	PublishingRESTSupportBatchUploader* self;
 	self = instance;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return instance;
-#line 6205 "RESTSupport.c"
+#line 6509 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_batch_uploader_unref (gpointer instance) {
 	PublishingRESTSupportBatchUploader* self;
 	self = instance;
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		PUBLISHING_REST_SUPPORT_BATCH_UPLOADER_GET_CLASS (self)->finalize (self);
-#line 591 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 649 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 6218 "RESTSupport.c"
+#line 6522 "RESTSupport.c"
 	}
 }
 
@@ -6234,7 +6545,7 @@ static gunichar string_get_char (const gchar* self, glong index) {
 	result = _tmp1_;
 #line 1117 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 6237 "RESTSupport.c"
+#line 6541 "RESTSupport.c"
 }
 
 
@@ -6248,201 +6559,201 @@ gchar* publishing_rest_support_asciify_string (const gchar* s) {
 	GString* _tmp14_ = NULL;
 	const gchar* _tmp15_ = NULL;
 	gchar* _tmp16_ = NULL;
-#line 675 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (s != NULL, NULL);
-#line 676 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 734 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = s;
-#line 676 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 734 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = g_utf8_normalize (_tmp0_, (gssize) -1, G_NORMALIZE_DEFAULT);
-#line 676 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 734 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	t = _tmp1_;
-#line 678 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = g_string_new ("");
-#line 678 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	b = _tmp2_;
-#line 6263 "RESTSupport.c"
+#line 6567 "RESTSupport.c"
 	{
 		const gchar* u = NULL;
 		const gchar* _tmp3_ = NULL;
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp3_ = t;
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		u = _tmp3_;
-#line 6271 "RESTSupport.c"
+#line 6575 "RESTSupport.c"
 		{
 			gboolean _tmp4_ = FALSE;
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp4_ = TRUE;
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			while (TRUE) {
-#line 6278 "RESTSupport.c"
+#line 6582 "RESTSupport.c"
 				const gchar* _tmp7_ = NULL;
 				gunichar _tmp8_ = 0U;
 				gunichar c = 0U;
 				const gchar* _tmp9_ = NULL;
 				gunichar _tmp10_ = 0U;
 				gunichar _tmp11_ = 0U;
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (!_tmp4_) {
-#line 6287 "RESTSupport.c"
+#line 6591 "RESTSupport.c"
 					const gchar* _tmp5_ = NULL;
 					const gchar* _tmp6_ = NULL;
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp5_ = u;
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp6_ = g_utf8_next_char (_tmp5_);
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					u = _tmp6_;
-#line 6296 "RESTSupport.c"
+#line 6600 "RESTSupport.c"
 				}
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp4_ = FALSE;
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp7_ = u;
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp8_ = string_get_char (_tmp7_, (glong) 0);
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (!(_tmp8_ != ((gunichar) 0))) {
-#line 679 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					break;
-#line 6308 "RESTSupport.c"
+#line 6612 "RESTSupport.c"
 				}
-#line 680 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp9_ = u;
-#line 680 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp10_ = string_get_char (_tmp9_, (glong) 0);
-#line 680 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				c = _tmp10_;
-#line 681 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 739 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				_tmp11_ = c;
-#line 681 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 739 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 				if (((gint) _tmp11_) < 128) {
-#line 6320 "RESTSupport.c"
+#line 6624 "RESTSupport.c"
 					GString* _tmp12_ = NULL;
 					gunichar _tmp13_ = 0U;
-#line 682 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 740 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp12_ = b;
-#line 682 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 740 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					_tmp13_ = c;
-#line 682 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 740 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 					g_string_append_unichar (_tmp12_, _tmp13_);
-#line 6329 "RESTSupport.c"
+#line 6633 "RESTSupport.c"
 				}
 			}
 		}
 	}
-#line 685 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp14_ = b;
-#line 685 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp15_ = _tmp14_->str;
-#line 685 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp16_ = g_strdup (_tmp15_);
-#line 685 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp16_;
-#line 685 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_string_free0 (b);
-#line 685 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (t);
-#line 685 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 6348 "RESTSupport.c"
+#line 6652 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_google_session_real_get_user_name (PublishingRESTSupportGoogleSession* self) {
-#line 689 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_rest_support_google_session_get_user_name'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 689 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 6357 "RESTSupport.c"
+#line 6661 "RESTSupport.c"
 }
 
 
 gchar* publishing_rest_support_google_session_get_user_name (PublishingRESTSupportGoogleSession* self) {
-#line 689 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_SESSION (self), NULL);
-#line 689 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return PUBLISHING_REST_SUPPORT_GOOGLE_SESSION_GET_CLASS (self)->get_user_name (self);
-#line 6366 "RESTSupport.c"
+#line 6670 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_google_session_real_get_access_token (PublishingRESTSupportGoogleSession* self) {
-#line 690 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 748 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_rest_support_google_session_get_access_token'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 690 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 748 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 6375 "RESTSupport.c"
+#line 6679 "RESTSupport.c"
 }
 
 
 gchar* publishing_rest_support_google_session_get_access_token (PublishingRESTSupportGoogleSession* self) {
-#line 690 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 748 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_SESSION (self), NULL);
-#line 690 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 748 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return PUBLISHING_REST_SUPPORT_GOOGLE_SESSION_GET_CLASS (self)->get_access_token (self);
-#line 6384 "RESTSupport.c"
+#line 6688 "RESTSupport.c"
 }
 
 
 static gchar* publishing_rest_support_google_session_real_get_refresh_token (PublishingRESTSupportGoogleSession* self) {
-#line 691 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_rest_support_google_session_get_refresh_token'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 691 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return NULL;
-#line 6393 "RESTSupport.c"
+#line 6697 "RESTSupport.c"
 }
 
 
 gchar* publishing_rest_support_google_session_get_refresh_token (PublishingRESTSupportGoogleSession* self) {
-#line 691 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_SESSION (self), NULL);
-#line 691 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return PUBLISHING_REST_SUPPORT_GOOGLE_SESSION_GET_CLASS (self)->get_refresh_token (self);
-#line 6402 "RESTSupport.c"
+#line 6706 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_session_real_deauthenticate (PublishingRESTSupportGoogleSession* self) {
-#line 692 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 750 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_rest_support_google_session_deauthenticate'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 692 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 750 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return;
-#line 6411 "RESTSupport.c"
+#line 6715 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_google_session_deauthenticate (PublishingRESTSupportGoogleSession* self) {
-#line 692 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 750 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_SESSION (self));
-#line 692 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 750 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	PUBLISHING_REST_SUPPORT_GOOGLE_SESSION_GET_CLASS (self)->deauthenticate (self);
-#line 6420 "RESTSupport.c"
+#line 6724 "RESTSupport.c"
 }
 
 
 PublishingRESTSupportGoogleSession* publishing_rest_support_google_session_construct (GType object_type) {
 	PublishingRESTSupportGoogleSession* self = NULL;
-#line 688 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 746 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportGoogleSession*) publishing_rest_support_session_construct (object_type, NULL);
-#line 688 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 746 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 6430 "RESTSupport.c"
+#line 6734 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_session_class_init (PublishingRESTSupportGoogleSessionClass * klass) {
-#line 688 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 746 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_session_parent_class = g_type_class_peek_parent (klass);
-#line 688 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 746 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGoogleSessionClass *) klass)->get_user_name = publishing_rest_support_google_session_real_get_user_name;
-#line 688 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 746 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGoogleSessionClass *) klass)->get_access_token = publishing_rest_support_google_session_real_get_access_token;
-#line 688 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 746 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGoogleSessionClass *) klass)->get_refresh_token = publishing_rest_support_google_session_real_get_refresh_token;
-#line 688 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 746 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGoogleSessionClass *) klass)->deauthenticate = publishing_rest_support_google_session_real_deauthenticate;
-#line 6445 "RESTSupport.c"
+#line 6749 "RESTSupport.c"
 }
 
 
@@ -6469,50 +6780,50 @@ PublishingRESTSupportGooglePublisher* publishing_rest_support_google_publisher_c
 	PublishingRESTSupportGooglePublisherGoogleSessionImpl* _tmp2_ = NULL;
 	SpitPublishingService* _tmp3_ = NULL;
 	SpitPublishingPluginHost* _tmp4_ = NULL;
-#line 870 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 880 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_SERVICE (service), NULL);
-#line 870 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 880 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (host), NULL);
-#line 870 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 880 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (scope != NULL, NULL);
-#line 870 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 880 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportGooglePublisher*) g_object_new (object_type, NULL);
-#line 872 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = scope;
-#line 872 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 872 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->priv->scope);
-#line 872 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->scope = _tmp1_;
-#line 873 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 883 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = publishing_rest_support_google_publisher_google_session_impl_new ();
-#line 873 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 883 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_publishing_rest_support_session_unref0 (self->priv->session);
-#line 873 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 883 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->session = _tmp2_;
-#line 874 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 884 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = service;
-#line 874 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 884 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->service = _tmp3_;
-#line 875 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 885 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = host;
-#line 875 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 885 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->host = _tmp4_;
-#line 876 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 886 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->priv->web_auth_pane);
-#line 876 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 886 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->web_auth_pane = NULL;
-#line 870 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 880 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 6508 "RESTSupport.c"
+#line 6812 "RESTSupport.c"
 }
 
 
 static void _publishing_rest_support_google_publisher_on_web_auth_pane_authorized_publishing_rest_support_google_publisher_web_authentication_pane_authorized (PublishingRESTSupportGooglePublisherWebAuthenticationPane* _sender, const gchar* auth_code, gpointer self) {
-#line 880 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_on_web_auth_pane_authorized ((PublishingRESTSupportGooglePublisher*) self, auth_code);
-#line 6515 "RESTSupport.c"
+#line 6819 "RESTSupport.c"
 }
 
 
@@ -6523,50 +6834,50 @@ static void publishing_rest_support_google_publisher_on_web_auth_pane_authorized
 	const gchar* _tmp3_ = NULL;
 	gboolean _tmp4_ = FALSE;
 	const gchar* _tmp5_ = NULL;
-#line 879 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 879 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (auth_code != NULL);
-#line 880 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->web_auth_pane;
-#line 880 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("authorized", PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_WEB_AUTHENTICATION_PANE, &_tmp1_, NULL, FALSE);
-#line 880 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_web_auth_pane_authorized_publishing_rest_support_google_publisher_web_authentication_pane_authorized, self);
-#line 882 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 892 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = self->priv->scope;
-#line 882 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 892 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = auth_code;
-#line 882 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:882: EVENT: user authorized scope %s with auth_code %" \
+#line 892 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:892: EVENT: user authorized scope %s with auth_code %" \
 "s", _tmp2_, _tmp3_);
-#line 884 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 894 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = publishing_rest_support_google_publisher_is_running (self);
-#line 884 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 894 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!_tmp4_) {
-#line 885 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 895 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 6548 "RESTSupport.c"
+#line 6852 "RESTSupport.c"
 	}
-#line 887 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 897 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = auth_code;
-#line 887 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 897 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_do_get_access_tokens (self, _tmp5_);
-#line 6554 "RESTSupport.c"
+#line 6858 "RESTSupport.c"
 }
 
 
 static void _publishing_rest_support_google_publisher_on_get_access_tokens_complete_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
-#line 891 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 901 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_on_get_access_tokens_complete ((PublishingRESTSupportGooglePublisher*) self, _sender);
-#line 6561 "RESTSupport.c"
+#line 6865 "RESTSupport.c"
 }
 
 
 static void _publishing_rest_support_google_publisher_on_get_access_tokens_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
-#line 892 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 902 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_on_get_access_tokens_error ((PublishingRESTSupportGooglePublisher*) self, _sender, err);
-#line 6568 "RESTSupport.c"
+#line 6872 "RESTSupport.c"
 }
 
 
@@ -6579,44 +6890,44 @@ static void publishing_rest_support_google_publisher_on_get_access_tokens_comple
 	PublishingRESTSupportTransaction* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
-#line 890 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 890 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 891 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 901 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = txn;
-#line 891 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 901 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 891 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 901 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_get_access_tokens_complete_publishing_rest_support_transaction_completed, self);
-#line 892 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 902 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = txn;
-#line 892 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 902 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 892 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 902 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_get_access_tokens_error_publishing_rest_support_transaction_network_error, self);
-#line 894 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:894: %s", "EVENT: network transaction to exchange authorization code for access t" \
+#line 904 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:904: %s", "EVENT: network transaction to exchange authorization code for access t" \
 "okens " "completed successfully.");
-#line 897 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = publishing_rest_support_google_publisher_is_running (self);
-#line 897 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!_tmp4_) {
-#line 898 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 908 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 6605 "RESTSupport.c"
+#line 6909 "RESTSupport.c"
 	}
-#line 900 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 910 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = txn;
-#line 900 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 910 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = publishing_rest_support_transaction_get_response (_tmp5_);
-#line 900 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 910 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = _tmp6_;
-#line 900 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 910 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_do_extract_tokens (self, _tmp7_);
-#line 900 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 910 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp7_);
-#line 6617 "RESTSupport.c"
+#line 6921 "RESTSupport.c"
 }
 
 
@@ -6631,62 +6942,62 @@ static void publishing_rest_support_google_publisher_on_get_access_tokens_error 
 	gboolean _tmp7_ = FALSE;
 	SpitPublishingPluginHost* _tmp8_ = NULL;
 	GError* _tmp9_ = NULL;
-#line 903 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 913 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 903 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 913 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 905 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 915 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = txn;
-#line 905 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 915 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 905 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 915 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_get_access_tokens_complete_publishing_rest_support_transaction_completed, self);
-#line 906 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 916 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = txn;
-#line 906 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 916 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 906 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 916 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_get_access_tokens_error_publishing_rest_support_transaction_network_error, self);
-#line 908 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = txn;
-#line 908 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = publishing_rest_support_transaction_get_response (_tmp4_);
-#line 908 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = _tmp5_;
-#line 908 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_debug ("EVENT: network transaction to exchange authorization code for access t" \
 "okens " "failed; response = '%s'", _tmp6_);
-#line 908 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp6_);
-#line 911 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 921 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = publishing_rest_support_google_publisher_is_running (self);
-#line 911 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 921 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!_tmp7_) {
-#line 912 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 6664 "RESTSupport.c"
+#line 6968 "RESTSupport.c"
 	}
-#line 914 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 924 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8_ = self->priv->host;
-#line 914 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 924 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp9_ = err;
-#line 914 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 924 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spit_publishing_plugin_host_post_error (_tmp8_, _tmp9_);
-#line 6672 "RESTSupport.c"
+#line 6976 "RESTSupport.c"
 }
 
 
 static void _publishing_rest_support_google_publisher_on_refresh_access_token_transaction_completed_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
-#line 919 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 929 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_on_refresh_access_token_transaction_completed ((PublishingRESTSupportGooglePublisher*) self, _sender);
-#line 6679 "RESTSupport.c"
+#line 6983 "RESTSupport.c"
 }
 
 
 static void _publishing_rest_support_google_publisher_on_refresh_access_token_transaction_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
-#line 920 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_on_refresh_access_token_transaction_error ((PublishingRESTSupportGooglePublisher*) self, _sender, err);
-#line 6686 "RESTSupport.c"
+#line 6990 "RESTSupport.c"
 }
 
 
@@ -6701,54 +7012,54 @@ static void publishing_rest_support_google_publisher_on_refresh_access_token_tra
 	PublishingRESTSupportTransaction* _tmp7_ = NULL;
 	gchar* _tmp8_ = NULL;
 	gchar* _tmp9_ = NULL;
-#line 917 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 927 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 917 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 927 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 919 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 929 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = txn;
-#line 919 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 929 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 919 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 929 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_refresh_access_token_transaction_completed_publishing_rest_support_transaction_completed, self);
-#line 920 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = txn;
-#line 920 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 920 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_refresh_access_token_transaction_error_publishing_rest_support_transaction_network_error, self);
-#line 922 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:922: EVENT: refresh access token transaction complete" \
+#line 932 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:932: EVENT: refresh access token transaction complete" \
 "d successfully.");
-#line 924 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 934 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = publishing_rest_support_google_publisher_is_running (self);
-#line 924 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 934 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!_tmp4_) {
-#line 925 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 935 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 6725 "RESTSupport.c"
+#line 7029 "RESTSupport.c"
 	}
-#line 927 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 937 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = self->priv->session;
-#line 927 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 937 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = publishing_rest_support_session_is_authenticated (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession));
-#line 927 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 937 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp6_) {
-#line 928 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 6735 "RESTSupport.c"
+#line 7039 "RESTSupport.c"
 	}
-#line 930 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = txn;
-#line 930 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8_ = publishing_rest_support_transaction_get_response (_tmp7_);
-#line 930 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp9_ = _tmp8_;
-#line 930 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_do_extract_tokens (self, _tmp9_);
-#line 930 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp9_);
-#line 6747 "RESTSupport.c"
+#line 7051 "RESTSupport.c"
 }
 
 
@@ -6764,62 +7075,62 @@ static void publishing_rest_support_google_publisher_on_refresh_access_token_tra
 	guint _tmp8_ = 0U;
 	SpitPublishingPluginHost* _tmp9_ = NULL;
 	GError* _tmp10_ = NULL;
-#line 933 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 943 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 933 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 943 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 935 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 945 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = txn;
-#line 935 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 945 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 935 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 945 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_refresh_access_token_transaction_completed_publishing_rest_support_transaction_completed, self);
-#line 936 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 946 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = txn;
-#line 936 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 946 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 936 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 946 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_refresh_access_token_transaction_error_publishing_rest_support_transaction_network_error, self);
-#line 938 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:938: EVENT: refresh access token transaction caused a" \
+#line 948 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:948: EVENT: refresh access token transaction caused a" \
 " network error.");
-#line 940 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp4_ = publishing_rest_support_google_publisher_is_running (self);
-#line 940 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	if (!_tmp4_) {
-#line 941 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		return;
-#line 6787 "RESTSupport.c"
-	}
-#line 943 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp5_ = self->priv->session;
-#line 943 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp6_ = publishing_rest_support_session_is_authenticated (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession));
-#line 943 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	if (_tmp6_) {
-#line 944 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		return;
-#line 6797 "RESTSupport.c"
-	}
-#line 948 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp7_ = txn;
-#line 948 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp8_ = publishing_rest_support_transaction_get_status_code (_tmp7_);
-#line 948 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	if (_tmp8_ == ((guint) 400)) {
-#line 949 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		publishing_rest_support_google_publisher_do_logout (self);
 #line 950 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp4_ = publishing_rest_support_google_publisher_is_running (self);
+#line 950 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if (!_tmp4_) {
+#line 951 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 6809 "RESTSupport.c"
+#line 7091 "RESTSupport.c"
 	}
 #line 953 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp5_ = self->priv->session;
+#line 953 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp6_ = publishing_rest_support_session_is_authenticated (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession));
+#line 953 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if (_tmp6_) {
+#line 954 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		return;
+#line 7101 "RESTSupport.c"
+	}
+#line 958 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp7_ = txn;
+#line 958 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp8_ = publishing_rest_support_transaction_get_status_code (_tmp7_);
+#line 958 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if (_tmp8_ == ((guint) 400)) {
+#line 959 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		publishing_rest_support_google_publisher_do_logout (self);
+#line 960 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		return;
+#line 7113 "RESTSupport.c"
+	}
+#line 963 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp9_ = self->priv->host;
-#line 953 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp10_ = err;
-#line 953 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spit_publishing_plugin_host_post_error (_tmp9_, _tmp10_);
-#line 6817 "RESTSupport.c"
+#line 7121 "RESTSupport.c"
 }
 
 
@@ -6829,34 +7140,34 @@ static void publishing_rest_support_google_publisher_on_refresh_token_available 
 	PublishingRESTSupportGooglePublisherGoogleSessionImpl* _tmp2_ = NULL;
 	const gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
-#line 956 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 966 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 956 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 966 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (token != NULL);
-#line 957 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 967 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = token;
-#line 957 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:957: EVENT: an OAuth refresh token has become availab" \
+#line 967 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:967: EVENT: an OAuth refresh token has become availab" \
 "le; token = '%s'.", _tmp0_);
-#line 959 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 969 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = publishing_rest_support_google_publisher_is_running (self);
-#line 959 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 969 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!_tmp1_) {
-#line 960 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 970 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 6841 "RESTSupport.c"
+#line 7145 "RESTSupport.c"
 	}
-#line 962 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 972 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = self->priv->session;
-#line 962 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 972 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = token;
-#line 962 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 972 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = g_strdup (_tmp3_);
-#line 962 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 972 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp2_->refresh_token);
-#line 962 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 972 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_->refresh_token = _tmp4_;
-#line 6853 "RESTSupport.c"
+#line 7157 "RESTSupport.c"
 }
 
 
@@ -6866,50 +7177,50 @@ static void publishing_rest_support_google_publisher_on_access_token_available (
 	PublishingRESTSupportGooglePublisherGoogleSessionImpl* _tmp2_ = NULL;
 	const gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
-#line 965 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 965 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (token != NULL);
-#line 966 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 976 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = token;
-#line 966 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:966: EVENT: an OAuth access token has become availabl" \
+#line 976 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:976: EVENT: an OAuth access token has become availabl" \
 "e; token = '%s'.", _tmp0_);
-#line 968 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 978 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = publishing_rest_support_google_publisher_is_running (self);
-#line 968 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 978 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!_tmp1_) {
-#line 969 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 979 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 6877 "RESTSupport.c"
+#line 7181 "RESTSupport.c"
 	}
-#line 971 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = self->priv->session;
-#line 971 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = token;
-#line 971 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = g_strdup (_tmp3_);
-#line 971 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp2_->access_token);
-#line 971 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_->access_token = _tmp4_;
-#line 973 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 983 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_do_fetch_username (self);
-#line 6891 "RESTSupport.c"
+#line 7195 "RESTSupport.c"
 }
 
 
 static void _publishing_rest_support_google_publisher_on_fetch_username_transaction_completed_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
-#line 977 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_on_fetch_username_transaction_completed ((PublishingRESTSupportGooglePublisher*) self, _sender);
-#line 6898 "RESTSupport.c"
+#line 7202 "RESTSupport.c"
 }
 
 
 static void _publishing_rest_support_google_publisher_on_fetch_username_transaction_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
-#line 978 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_on_fetch_username_transaction_error ((PublishingRESTSupportGooglePublisher*) self, _sender, err);
-#line 6905 "RESTSupport.c"
+#line 7209 "RESTSupport.c"
 }
 
 
@@ -6922,44 +7233,44 @@ static void publishing_rest_support_google_publisher_on_fetch_username_transacti
 	PublishingRESTSupportTransaction* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
-#line 976 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 986 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 976 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 986 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 977 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = txn;
-#line 977 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 977 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_fetch_username_transaction_completed_publishing_rest_support_transaction_completed, self);
-#line 978 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = txn;
-#line 978 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 978 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_fetch_username_transaction_error_publishing_rest_support_transaction_network_error, self);
-#line 980 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:980: EVENT: username fetch transaction completed succ" \
+#line 990 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:990: EVENT: username fetch transaction completed succ" \
 "essfully.");
-#line 982 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = publishing_rest_support_google_publisher_is_running (self);
-#line 982 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!_tmp4_) {
-#line 983 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 993 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 6942 "RESTSupport.c"
+#line 7246 "RESTSupport.c"
 	}
-#line 985 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = txn;
-#line 985 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = publishing_rest_support_transaction_get_response (_tmp5_);
-#line 985 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = _tmp6_;
-#line 985 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_do_extract_username (self, _tmp7_);
-#line 985 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp7_);
-#line 6954 "RESTSupport.c"
+#line 7258 "RESTSupport.c"
 }
 
 
@@ -6971,40 +7282,40 @@ static void publishing_rest_support_google_publisher_on_fetch_username_transacti
 	gboolean _tmp4_ = FALSE;
 	SpitPublishingPluginHost* _tmp5_ = NULL;
 	GError* _tmp6_ = NULL;
-#line 988 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 998 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 988 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 998 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 990 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = txn;
-#line 990 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 990 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_fetch_username_transaction_completed_publishing_rest_support_transaction_completed, self);
-#line 991 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = txn;
-#line 991 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 991 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_rest_support_google_publisher_on_fetch_username_transaction_error_publishing_rest_support_transaction_network_error, self);
-#line 993 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:993: EVENT: username fetch transaction caused a netwo" \
-"rk error");
-#line 995 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:1003: EVENT: username fetch transaction caused a netw" \
+"ork error");
+#line 1005 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = publishing_rest_support_google_publisher_is_running (self);
-#line 995 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!_tmp4_) {
-#line 996 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1006 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 6990 "RESTSupport.c"
+#line 7294 "RESTSupport.c"
 	}
-#line 998 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = self->priv->host;
-#line 998 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = err;
-#line 998 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spit_publishing_plugin_host_post_error (_tmp5_, _tmp6_);
-#line 6998 "RESTSupport.c"
+#line 7302 "RESTSupport.c"
 }
 
 
@@ -7015,49 +7326,49 @@ static void publishing_rest_support_google_publisher_do_get_access_tokens (Publi
 	const gchar* _tmp2_ = NULL;
 	PublishingRESTSupportGooglePublisherGetAccessTokensTransaction* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1001 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1011 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 1001 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1011 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (auth_code != NULL);
-#line 1002 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:1002: ACTION: exchanging authorization code for acces" \
+#line 1012 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:1012: ACTION: exchanging authorization code for acces" \
 "s & refresh tokens");
-#line 1004 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->host;
-#line 1004 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spit_publishing_plugin_host_install_login_wait_pane (_tmp0_);
-#line 1006 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->session;
-#line 1006 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = auth_code;
-#line 1006 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = publishing_rest_support_google_publisher_get_access_tokens_transaction_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp2_);
-#line 1006 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1016 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	tokens_txn = _tmp3_;
-#line 1007 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1017 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (tokens_txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_rest_support_google_publisher_on_get_access_tokens_complete_publishing_rest_support_transaction_completed, self, 0);
-#line 1008 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1018 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (tokens_txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_rest_support_google_publisher_on_get_access_tokens_error_publishing_rest_support_transaction_network_error, self, 0);
-#line 7031 "RESTSupport.c"
+#line 7335 "RESTSupport.c"
 	{
-#line 1011 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1021 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (tokens_txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 1011 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1021 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1011 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1021 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 7039 "RESTSupport.c"
+#line 7343 "RESTSupport.c"
 				goto __catch4_spit_publishing_publishing_error;
 			}
-#line 1011 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1021 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_publishing_rest_support_transaction_unref0 (tokens_txn);
-#line 1011 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1021 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1011 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1021 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 1011 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1021 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 7050 "RESTSupport.c"
+#line 7354 "RESTSupport.c"
 		}
 	}
 	goto __finally4;
@@ -7066,36 +7377,36 @@ static void publishing_rest_support_google_publisher_do_get_access_tokens (Publi
 		GError* err = NULL;
 		SpitPublishingPluginHost* _tmp4_ = NULL;
 		GError* _tmp5_ = NULL;
-#line 1010 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		err = _inner_error_;
-#line 1010 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = NULL;
-#line 1013 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1023 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = self->priv->host;
-#line 1013 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1023 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp5_ = err;
-#line 1013 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1023 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		spit_publishing_plugin_host_post_error (_tmp4_, _tmp5_);
-#line 1010 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_error_free0 (err);
-#line 7071 "RESTSupport.c"
+#line 7375 "RESTSupport.c"
 	}
 	__finally4:
-#line 1010 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1010 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_publishing_rest_support_transaction_unref0 (tokens_txn);
-#line 1010 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1010 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 1010 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 7084 "RESTSupport.c"
+#line 7388 "RESTSupport.c"
 	}
-#line 1001 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1011 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_publishing_rest_support_transaction_unref0 (tokens_txn);
-#line 7088 "RESTSupport.c"
+#line 7392 "RESTSupport.c"
 }
 
 
@@ -7132,110 +7443,110 @@ static void publishing_rest_support_google_publisher_do_hosted_web_authenticatio
 	PublishingRESTSupportGooglePublisherWebAuthenticationPane* _tmp28_ = NULL;
 	SpitPublishingPluginHost* _tmp29_ = NULL;
 	PublishingRESTSupportGooglePublisherWebAuthenticationPane* _tmp30_ = NULL;
-#line 1017 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1027 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 1018 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:1018: ACTION: running OAuth authentication flow in ho" \
+#line 1028 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:1028: ACTION: running OAuth authentication flow in ho" \
 "sted web pane.");
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = soup_uri_encode ("urn:ietf:wg:oauth:2.0:oob", NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = _tmp0_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = g_strconcat ("https://accounts.google.com/o/oauth2/auth?" "response_type=code&" "client_id=" PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_OAUTH_CLIENT_ID "&" "redirect_uri=", _tmp1_, NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = _tmp2_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = g_strconcat (_tmp3_, "&", NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = _tmp4_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = g_strconcat (_tmp5_, "scope=", NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = _tmp6_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8_ = self->priv->scope;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp9_ = soup_uri_encode (_tmp8_, NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp10_ = _tmp9_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp11_ = g_strconcat (_tmp7_, _tmp10_, NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp12_ = _tmp11_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp13_ = g_strconcat (_tmp12_, "+", NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp14_ = _tmp13_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp15_ = soup_uri_encode ("https://www.googleapis.com/auth/userinfo.profile", NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp16_ = _tmp15_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp17_ = g_strconcat (_tmp14_, _tmp16_, NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp18_ = _tmp17_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp19_ = g_strconcat (_tmp18_, "&", NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp20_ = _tmp19_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp21_ = g_strconcat (_tmp20_, "state=connect&", NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp22_ = _tmp21_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp23_ = g_strconcat (_tmp22_, "access_type=offline&", NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp24_ = _tmp23_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp25_ = g_strconcat (_tmp24_, "approval_prompt=force", NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp26_ = _tmp25_;
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp24_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp22_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp20_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp18_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp16_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp14_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp12_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp10_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp7_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp5_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp3_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp1_);
-#line 1020 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	user_authorization_url = _tmp26_;
-#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1040 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp27_ = publishing_rest_support_google_publisher_web_authentication_pane_new (user_authorization_url);
-#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1040 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->priv->web_auth_pane);
-#line 1030 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1040 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv->web_auth_pane = _tmp27_;
-#line 1031 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp28_ = self->priv->web_auth_pane;
-#line 1031 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_connect_object (_tmp28_, "authorized", (GCallback) _publishing_rest_support_google_publisher_on_web_auth_pane_authorized_publishing_rest_support_google_publisher_web_authentication_pane_authorized, self, 0);
-#line 1033 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp29_ = self->priv->host;
-#line 1033 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp30_ = self->priv->web_auth_pane;
-#line 1033 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spit_publishing_plugin_host_install_dialog_pane (_tmp29_, G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, SPIT_PUBLISHING_TYPE_DIALOG_PANE, SpitPublishingDialogPane), SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 1017 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1027 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (user_authorization_url);
-#line 7227 "RESTSupport.c"
+#line 7531 "RESTSupport.c"
 }
 
 
@@ -7245,45 +7556,45 @@ static void publishing_rest_support_google_publisher_do_exchange_refresh_token_f
 	PublishingRESTSupportGooglePublisherGoogleSessionImpl* _tmp1_ = NULL;
 	PublishingRESTSupportGooglePublisherRefreshAccessTokenTransaction* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1037 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1047 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 1038 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:1038: ACTION: exchanging OAuth refresh token for OAut" \
+#line 1048 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:1048: ACTION: exchanging OAuth refresh token for OAut" \
 "h access token.");
-#line 1040 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1050 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->host;
-#line 1040 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1050 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spit_publishing_plugin_host_install_login_wait_pane (_tmp0_);
-#line 1042 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1052 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->session;
-#line 1042 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1052 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = publishing_rest_support_google_publisher_refresh_access_token_transaction_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession));
-#line 1042 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1052 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	txn = _tmp2_;
-#line 1044 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1054 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_rest_support_google_publisher_on_refresh_access_token_transaction_completed_publishing_rest_support_transaction_completed, self, 0);
-#line 1045 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1055 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_rest_support_google_publisher_on_refresh_access_token_transaction_error_publishing_rest_support_transaction_network_error, self, 0);
-#line 7255 "RESTSupport.c"
+#line 7559 "RESTSupport.c"
 	{
-#line 1048 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1058 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 1048 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1058 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1048 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1058 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 7263 "RESTSupport.c"
+#line 7567 "RESTSupport.c"
 				goto __catch5_spit_publishing_publishing_error;
 			}
-#line 1048 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1058 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_publishing_rest_support_transaction_unref0 (txn);
-#line 1048 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1058 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1048 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1058 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			g_clear_error (&_inner_error_);
-#line 1048 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1058 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 7274 "RESTSupport.c"
+#line 7578 "RESTSupport.c"
 		}
 	}
 	goto __finally5;
@@ -7292,43 +7603,43 @@ static void publishing_rest_support_google_publisher_do_exchange_refresh_token_f
 		GError* err = NULL;
 		SpitPublishingPluginHost* _tmp3_ = NULL;
 		GError* _tmp4_ = NULL;
-#line 1047 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		err = _inner_error_;
-#line 1047 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = NULL;
-#line 1050 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1060 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp3_ = self->priv->host;
-#line 1050 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1060 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = err;
-#line 1050 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1060 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		spit_publishing_plugin_host_post_error (_tmp3_, _tmp4_);
-#line 1047 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_error_free0 (err);
-#line 7295 "RESTSupport.c"
+#line 7599 "RESTSupport.c"
 	}
 	__finally5:
-#line 1047 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1047 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_publishing_rest_support_transaction_unref0 (txn);
-#line 1047 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1047 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 1047 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 7308 "RESTSupport.c"
+#line 7612 "RESTSupport.c"
 	}
-#line 1037 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1047 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_publishing_rest_support_transaction_unref0 (txn);
-#line 7312 "RESTSupport.c"
+#line 7616 "RESTSupport.c"
 }
 
 
 static gpointer _json_object_ref0 (gpointer self) {
-#line 1067 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self ? json_object_ref (self) : NULL;
-#line 7319 "RESTSupport.c"
+#line 7623 "RESTSupport.c"
 }
 
 
@@ -7348,30 +7659,30 @@ static void publishing_rest_support_google_publisher_do_extract_tokens (Publishi
 	JsonObject* _tmp29_ = NULL;
 	gboolean _tmp30_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 1054 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1064 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 1054 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1064 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (response_body != NULL);
-#line 1055 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:1055: ACTION: extracting OAuth tokens from body of se" \
+#line 1065 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:1065: ACTION: extracting OAuth tokens from body of se" \
 "rver response");
-#line 1057 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1067 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = json_parser_new ();
-#line 1057 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1067 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	parser = _tmp0_;
-#line 7349 "RESTSupport.c"
+#line 7653 "RESTSupport.c"
 	{
 		JsonParser* _tmp1_ = NULL;
 		const gchar* _tmp2_ = NULL;
-#line 1060 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1070 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp1_ = parser;
-#line 1060 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1070 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2_ = response_body;
-#line 1060 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1070 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		json_parser_load_from_data (_tmp1_, _tmp2_, (gssize) -1, &_inner_error_);
-#line 1060 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1070 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7361 "RESTSupport.c"
+#line 7665 "RESTSupport.c"
 			goto __catch6_g_error;
 		}
 	}
@@ -7386,183 +7697,183 @@ static void publishing_rest_support_google_publisher_do_extract_tokens (Publishi
 		gchar* _tmp7_ = NULL;
 		GError* _tmp8_ = NULL;
 		GError* _tmp9_ = NULL;
-#line 1059 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		err = _inner_error_;
-#line 1059 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = NULL;
-#line 1062 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp3_ = self->priv->host;
-#line 1062 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = err;
-#line 1062 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp5_ = _tmp4_->message;
-#line 1062 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp6_ = g_strconcat ("Couldn't parse JSON response: ", _tmp5_, NULL);
-#line 1062 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp7_ = _tmp6_;
-#line 1062 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp8_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, _tmp7_);
-#line 1062 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp9_ = _tmp8_;
-#line 1062 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		spit_publishing_plugin_host_post_error (_tmp3_, _tmp9_);
-#line 1062 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_error_free0 (_tmp9_);
-#line 1062 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp7_);
-#line 1064 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1074 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_error_free0 (err);
-#line 1064 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1074 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_object_unref0 (parser);
-#line 1064 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1074 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 7406 "RESTSupport.c"
+#line 7710 "RESTSupport.c"
 	}
 	__finally6:
-#line 1059 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1059 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_object_unref0 (parser);
-#line 1059 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1059 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 1059 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 7419 "RESTSupport.c"
+#line 7723 "RESTSupport.c"
 	}
-#line 1067 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp10_ = parser;
-#line 1067 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp11_ = json_parser_get_root (_tmp10_);
-#line 1067 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp12_ = json_node_get_object (_tmp11_);
-#line 1067 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp13_ = _json_object_ref0 (_tmp12_);
-#line 1067 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	response_obj = _tmp13_;
-#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp15_ = response_obj;
-#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp16_ = json_object_has_member (_tmp15_, "access_token");
-#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (!_tmp16_) {
-#line 7437 "RESTSupport.c"
+#line 7741 "RESTSupport.c"
 		JsonObject* _tmp17_ = NULL;
 		gboolean _tmp18_ = FALSE;
-#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp17_ = response_obj;
-#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp18_ = json_object_has_member (_tmp17_, "refresh_token");
-#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp14_ = !_tmp18_;
-#line 7446 "RESTSupport.c"
+#line 7750 "RESTSupport.c"
 	} else {
-#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp14_ = FALSE;
-#line 7450 "RESTSupport.c"
+#line 7754 "RESTSupport.c"
 	}
-#line 1069 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1079 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp14_) {
-#line 7454 "RESTSupport.c"
+#line 7758 "RESTSupport.c"
 		SpitPublishingPluginHost* _tmp19_ = NULL;
 		GError* _tmp20_ = NULL;
 		GError* _tmp21_ = NULL;
-#line 1070 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp19_ = self->priv->host;
-#line 1070 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp20_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "neither access_token nor refresh_token not present in server response");
-#line 1070 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp21_ = _tmp20_;
-#line 1070 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		spit_publishing_plugin_host_post_error (_tmp19_, _tmp21_);
-#line 1070 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_error_free0 (_tmp21_);
-#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_json_object_unref0 (response_obj);
-#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_object_unref0 (parser);
-#line 1072 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 7474 "RESTSupport.c"
+#line 7778 "RESTSupport.c"
 	}
-#line 1075 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp22_ = response_obj;
-#line 1075 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp23_ = json_object_has_member (_tmp22_, "refresh_token");
-#line 1075 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp23_) {
-#line 7482 "RESTSupport.c"
+#line 7786 "RESTSupport.c"
 		gchar* refresh_token = NULL;
 		JsonObject* _tmp24_ = NULL;
 		const gchar* _tmp25_ = NULL;
 		gchar* _tmp26_ = NULL;
 		const gchar* _tmp27_ = NULL;
-#line 1076 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp24_ = response_obj;
-#line 1076 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp25_ = json_object_get_string_member (_tmp24_, "refresh_token");
-#line 1076 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp26_ = g_strdup (_tmp25_);
-#line 1076 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		refresh_token = _tmp26_;
-#line 1078 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp27_ = refresh_token;
-#line 1078 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (g_strcmp0 (_tmp27_, "") != 0) {
-#line 7500 "RESTSupport.c"
+#line 7804 "RESTSupport.c"
 			const gchar* _tmp28_ = NULL;
-#line 1079 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1089 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp28_ = refresh_token;
-#line 1079 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1089 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			publishing_rest_support_google_publisher_on_refresh_token_available (self, _tmp28_);
-#line 7506 "RESTSupport.c"
+#line 7810 "RESTSupport.c"
 		}
-#line 1075 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (refresh_token);
-#line 7510 "RESTSupport.c"
+#line 7814 "RESTSupport.c"
 	}
-#line 1082 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1092 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp29_ = response_obj;
-#line 1082 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1092 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp30_ = json_object_has_member (_tmp29_, "access_token");
-#line 1082 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1092 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp30_) {
-#line 7518 "RESTSupport.c"
+#line 7822 "RESTSupport.c"
 		gchar* access_token = NULL;
 		JsonObject* _tmp31_ = NULL;
 		const gchar* _tmp32_ = NULL;
 		gchar* _tmp33_ = NULL;
 		const gchar* _tmp34_ = NULL;
-#line 1083 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1093 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp31_ = response_obj;
-#line 1083 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1093 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp32_ = json_object_get_string_member (_tmp31_, "access_token");
-#line 1083 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1093 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp33_ = g_strdup (_tmp32_);
-#line 1083 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1093 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		access_token = _tmp33_;
-#line 1085 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1095 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp34_ = access_token;
-#line 1085 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1095 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (g_strcmp0 (_tmp34_, "") != 0) {
-#line 7536 "RESTSupport.c"
+#line 7840 "RESTSupport.c"
 			const gchar* _tmp35_ = NULL;
-#line 1086 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1096 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp35_ = access_token;
-#line 1086 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1096 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			publishing_rest_support_google_publisher_on_access_token_available (self, _tmp35_);
-#line 7542 "RESTSupport.c"
+#line 7846 "RESTSupport.c"
 		}
-#line 1082 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1092 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (access_token);
-#line 7546 "RESTSupport.c"
+#line 7850 "RESTSupport.c"
 	}
-#line 1054 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1064 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_json_object_unref0 (response_obj);
-#line 1054 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1064 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (parser);
-#line 7552 "RESTSupport.c"
+#line 7856 "RESTSupport.c"
 }
 
 
@@ -7573,36 +7884,36 @@ static void publishing_rest_support_google_publisher_do_fetch_username (Publishi
 	PublishingRESTSupportGooglePublisherGoogleSessionImpl* _tmp2_ = NULL;
 	PublishingRESTSupportGooglePublisherUsernameFetchTransaction* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1090 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 1091 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:1091: ACTION: running network transaction to fetch us" \
+#line 1101 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:1101: ACTION: running network transaction to fetch us" \
 "ername.");
-#line 1093 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1103 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->host;
-#line 1093 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1103 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spit_publishing_plugin_host_install_login_wait_pane (_tmp0_);
-#line 1094 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1104 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->priv->host;
-#line 1094 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1104 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp1_, TRUE);
-#line 1096 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1106 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = self->priv->session;
-#line 1096 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1106 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = publishing_rest_support_google_publisher_username_fetch_transaction_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_SESSION, PublishingRESTSupportGoogleSession));
-#line 1096 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1106 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	txn = _tmp3_;
-#line 1097 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1107 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_rest_support_google_publisher_on_fetch_username_transaction_completed_publishing_rest_support_transaction_completed, self, 0);
-#line 1098 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1108 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_rest_support_google_publisher_on_fetch_username_transaction_error_publishing_rest_support_transaction_network_error, self, 0);
-#line 7585 "RESTSupport.c"
+#line 7889 "RESTSupport.c"
 	{
-#line 1101 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1111 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 1101 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1111 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7591 "RESTSupport.c"
+#line 7895 "RESTSupport.c"
 			goto __catch7_g_error;
 		}
 	}
@@ -7612,36 +7923,36 @@ static void publishing_rest_support_google_publisher_do_fetch_username (Publishi
 		GError* err = NULL;
 		SpitPublishingPluginHost* _tmp4_ = NULL;
 		GError* _tmp5_ = NULL;
-#line 1100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		err = _inner_error_;
-#line 1100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = NULL;
-#line 1103 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1113 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = self->priv->host;
-#line 1103 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1113 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp5_ = err;
-#line 1103 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1113 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		spit_publishing_plugin_host_post_error (_tmp4_, _tmp5_);
-#line 1100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_error_free0 (err);
-#line 7613 "RESTSupport.c"
+#line 7917 "RESTSupport.c"
 	}
 	__finally7:
-#line 1100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_publishing_rest_support_transaction_unref0 (txn);
-#line 1100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 1100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 7626 "RESTSupport.c"
+#line 7930 "RESTSupport.c"
 	}
-#line 1090 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1100 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_publishing_rest_support_transaction_unref0 (txn);
-#line 7630 "RESTSupport.c"
+#line 7934 "RESTSupport.c"
 }
 
 
@@ -7660,30 +7971,30 @@ static void publishing_rest_support_google_publisher_do_extract_username (Publis
 	PublishingRESTSupportGooglePublisherGoogleSessionImpl* _tmp32_ = NULL;
 	gboolean _tmp33_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 1107 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 1107 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (response_body != NULL);
-#line 1108 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_debug ("RESTSupport.vala:1108: ACTION: extracting username from body of server" \
+#line 1118 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	g_debug ("RESTSupport.vala:1118: ACTION: extracting username from body of server" \
 " response");
-#line 1110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = json_parser_new ();
-#line 1110 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	parser = _tmp0_;
-#line 7659 "RESTSupport.c"
+#line 7963 "RESTSupport.c"
 	{
 		JsonParser* _tmp1_ = NULL;
 		const gchar* _tmp2_ = NULL;
-#line 1113 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp1_ = parser;
-#line 1113 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2_ = response_body;
-#line 1113 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		json_parser_load_from_data (_tmp1_, _tmp2_, (gssize) -1, &_inner_error_);
-#line 1113 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7671 "RESTSupport.c"
+#line 7975 "RESTSupport.c"
 			goto __catch8_g_error;
 		}
 	}
@@ -7698,177 +8009,177 @@ static void publishing_rest_support_google_publisher_do_extract_username (Publis
 		gchar* _tmp7_ = NULL;
 		GError* _tmp8_ = NULL;
 		GError* _tmp9_ = NULL;
-#line 1112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		err = _inner_error_;
-#line 1112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_inner_error_ = NULL;
-#line 1115 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp3_ = self->priv->host;
-#line 1115 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = err;
-#line 1115 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp5_ = _tmp4_->message;
-#line 1115 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp6_ = g_strconcat ("Couldn't parse JSON response: ", _tmp5_, NULL);
-#line 1115 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp7_ = _tmp6_;
-#line 1115 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp8_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, _tmp7_);
-#line 1115 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp9_ = _tmp8_;
-#line 1115 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		spit_publishing_plugin_host_post_error (_tmp3_, _tmp9_);
-#line 1115 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_error_free0 (_tmp9_);
-#line 1115 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp7_);
-#line 1117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1127 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_error_free0 (err);
-#line 1117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1127 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_object_unref0 (parser);
-#line 1117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1127 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 7716 "RESTSupport.c"
+#line 8020 "RESTSupport.c"
 	}
 	__finally8:
-#line 1112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_object_unref0 (parser);
-#line 1112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		g_clear_error (&_inner_error_);
-#line 1112 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		return;
-#line 7729 "RESTSupport.c"
+#line 8033 "RESTSupport.c"
 	}
-#line 1120 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp10_ = parser;
-#line 1120 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp11_ = json_parser_get_root (_tmp10_);
-#line 1120 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp12_ = json_node_get_object (_tmp11_);
-#line 1120 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp13_ = _json_object_ref0 (_tmp12_);
-#line 1120 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1130 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	response_obj = _tmp13_;
-#line 1122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1132 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp14_ = response_obj;
-#line 1122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1132 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp15_ = json_object_has_member (_tmp14_, "name");
-#line 1122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1132 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp15_) {
-#line 7747 "RESTSupport.c"
+#line 8051 "RESTSupport.c"
 		gchar* username = NULL;
 		JsonObject* _tmp16_ = NULL;
 		const gchar* _tmp17_ = NULL;
 		gchar* _tmp18_ = NULL;
 		const gchar* _tmp19_ = NULL;
-#line 1123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp16_ = response_obj;
-#line 1123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp17_ = json_object_get_string_member (_tmp16_, "name");
-#line 1123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp18_ = g_strdup (_tmp17_);
-#line 1123 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		username = _tmp18_;
-#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1135 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp19_ = username;
-#line 1125 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1135 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (g_strcmp0 (_tmp19_, "") != 0) {
-#line 7765 "RESTSupport.c"
+#line 8069 "RESTSupport.c"
 			PublishingRESTSupportGooglePublisherGoogleSessionImpl* _tmp20_ = NULL;
 			const gchar* _tmp21_ = NULL;
 			gchar* _tmp22_ = NULL;
-#line 1126 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp20_ = self->priv->session;
-#line 1126 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp21_ = username;
-#line 1126 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp22_ = g_strdup (_tmp21_);
-#line 1126 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (_tmp20_->user_name);
-#line 1126 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1136 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp20_->user_name = _tmp22_;
-#line 7779 "RESTSupport.c"
+#line 8083 "RESTSupport.c"
 		}
-#line 1122 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1132 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (username);
-#line 7783 "RESTSupport.c"
+#line 8087 "RESTSupport.c"
 	}
-#line 1129 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp23_ = response_obj;
-#line 1129 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp24_ = json_object_has_member (_tmp23_, "access_token");
-#line 1129 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp24_) {
-#line 7791 "RESTSupport.c"
+#line 8095 "RESTSupport.c"
 		gchar* access_token = NULL;
 		JsonObject* _tmp25_ = NULL;
 		const gchar* _tmp26_ = NULL;
 		gchar* _tmp27_ = NULL;
 		const gchar* _tmp28_ = NULL;
-#line 1130 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1140 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp25_ = response_obj;
-#line 1130 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1140 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp26_ = json_object_get_string_member (_tmp25_, "access_token");
-#line 1130 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1140 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp27_ = g_strdup (_tmp26_);
-#line 1130 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1140 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		access_token = _tmp27_;
-#line 1132 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1142 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp28_ = access_token;
-#line 1132 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1142 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (g_strcmp0 (_tmp28_, "") != 0) {
-#line 7809 "RESTSupport.c"
+#line 8113 "RESTSupport.c"
 			PublishingRESTSupportGooglePublisherGoogleSessionImpl* _tmp29_ = NULL;
 			const gchar* _tmp30_ = NULL;
 			gchar* _tmp31_ = NULL;
-#line 1133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1143 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp29_ = self->priv->session;
-#line 1133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1143 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp30_ = access_token;
-#line 1133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1143 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp31_ = g_strdup (_tmp30_);
-#line 1133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1143 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_g_free0 (_tmp29_->access_token);
-#line 1133 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1143 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp29_->access_token = _tmp31_;
-#line 7823 "RESTSupport.c"
+#line 8127 "RESTSupport.c"
 		}
-#line 1129 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (access_token);
-#line 7827 "RESTSupport.c"
+#line 8131 "RESTSupport.c"
 	}
-#line 1138 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1148 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp32_ = self->priv->session;
-#line 1138 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1148 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp33_ = publishing_rest_support_session_is_authenticated (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession));
-#line 1138 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1148 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp33_, "session.is_authenticated()");
-#line 1140 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1150 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_on_login_flow_complete (self);
-#line 1107 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_json_object_unref0 (response_obj);
-#line 1107 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1117 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (parser);
-#line 7841 "RESTSupport.c"
+#line 8145 "RESTSupport.c"
 }
 
 
 SpitPublishingPluginHost* publishing_rest_support_google_publisher_get_host (PublishingRESTSupportGooglePublisher* self) {
 	SpitPublishingPluginHost* result = NULL;
 	SpitPublishingPluginHost* _tmp0_ = NULL;
-#line 1143 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1153 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self), NULL);
-#line 1144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1154 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->host;
-#line 1144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1154 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp0_;
-#line 1144 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1154 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 7856 "RESTSupport.c"
+#line 8160 "RESTSupport.c"
 }
 
 
@@ -7876,177 +8187,177 @@ PublishingRESTSupportGoogleSession* publishing_rest_support_google_publisher_get
 	PublishingRESTSupportGoogleSession* result = NULL;
 	PublishingRESTSupportGooglePublisherGoogleSessionImpl* _tmp0_ = NULL;
 	PublishingRESTSupportGoogleSession* _tmp1_ = NULL;
-#line 1147 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1157 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self), NULL);
-#line 1148 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1158 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->session;
-#line 1148 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1158 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = _publishing_rest_support_session_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_SESSION, PublishingRESTSupportGoogleSession));
-#line 1148 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1158 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp1_;
-#line 1148 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1158 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 7874 "RESTSupport.c"
+#line 8178 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_google_publisher_start_oauth_flow (PublishingRESTSupportGooglePublisher* self, const gchar* refresh_token) {
 	gboolean _tmp0_ = FALSE;
 	const gchar* _tmp1_ = NULL;
-#line 1151 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1161 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 1152 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1162 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = refresh_token;
-#line 1152 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1162 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp1_ != NULL) {
-#line 7887 "RESTSupport.c"
+#line 8191 "RESTSupport.c"
 		const gchar* _tmp2_ = NULL;
-#line 1152 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1162 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp2_ = refresh_token;
-#line 1152 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1162 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp0_ = g_strcmp0 (_tmp2_, "") != 0;
-#line 7893 "RESTSupport.c"
+#line 8197 "RESTSupport.c"
 	} else {
-#line 1152 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1162 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp0_ = FALSE;
-#line 7897 "RESTSupport.c"
+#line 8201 "RESTSupport.c"
 	}
-#line 1152 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1162 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	if (_tmp0_) {
-#line 7901 "RESTSupport.c"
+#line 8205 "RESTSupport.c"
 		PublishingRESTSupportGooglePublisherGoogleSessionImpl* _tmp3_ = NULL;
 		const gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
-#line 1153 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp3_ = self->priv->session;
-#line 1153 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp4_ = refresh_token;
-#line 1153 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp5_ = g_strdup (_tmp4_);
-#line 1153 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_g_free0 (_tmp3_->refresh_token);
-#line 1153 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp3_->refresh_token = _tmp5_;
-#line 1154 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1164 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_google_publisher_do_exchange_refresh_token_for_access_token (self);
-#line 7917 "RESTSupport.c"
+#line 8221 "RESTSupport.c"
 	} else {
 		gboolean _tmp6_ = FALSE;
-#line 1156 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1166 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		_tmp6_ = publishing_rest_support_google_publisher_web_authentication_pane_is_cache_dirty ();
-#line 1156 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1166 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		if (_tmp6_) {
-#line 7924 "RESTSupport.c"
+#line 8228 "RESTSupport.c"
 			SpitPublishingPluginHost* _tmp7_ = NULL;
 			const gchar* _tmp8_ = NULL;
-#line 1157 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1167 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp7_ = self->priv->host;
-#line 1157 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1167 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			_tmp8_ = _ ("You have already logged in and out of a Google service during this Sho" \
 "twell session.\n" \
 "\n" \
 "To continue publishing to Google services, quit and restart Shotwell, " \
 "then try publishing again.");
-#line 1157 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1167 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			spit_publishing_plugin_host_install_static_message_pane (_tmp7_, _tmp8_, SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 1158 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1168 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 			return;
-#line 7935 "RESTSupport.c"
+#line 8239 "RESTSupport.c"
 		}
-#line 1161 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1171 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 		publishing_rest_support_google_publisher_do_hosted_web_authentication (self);
-#line 7939 "RESTSupport.c"
+#line 8243 "RESTSupport.c"
 	}
 }
 
 
 static void publishing_rest_support_google_publisher_real_on_login_flow_complete (PublishingRESTSupportGooglePublisher* self) {
-#line 1165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1175 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_rest_support_google_publisher_on_login_flow_complete'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 1165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1175 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return;
-#line 7949 "RESTSupport.c"
+#line 8253 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_google_publisher_on_login_flow_complete (PublishingRESTSupportGooglePublisher* self) {
-#line 1165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1175 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 1165 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1175 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_GET_CLASS (self)->on_login_flow_complete (self);
-#line 7958 "RESTSupport.c"
+#line 8262 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_real_do_logout (PublishingRESTSupportGooglePublisher* self) {
-#line 1167 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1177 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_rest_support_google_publisher_do_logout'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 1167 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1177 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return;
-#line 7967 "RESTSupport.c"
+#line 8271 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_google_publisher_do_logout (PublishingRESTSupportGooglePublisher* self) {
-#line 1167 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1177 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 1167 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1177 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_GET_CLASS (self)->do_logout (self);
-#line 7976 "RESTSupport.c"
+#line 8280 "RESTSupport.c"
 }
 
 
 static gboolean publishing_rest_support_google_publisher_real_is_running (PublishingRESTSupportGooglePublisher* self) {
-#line 1169 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_rest_support_google_publisher_is_running'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 1169 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return FALSE;
-#line 7985 "RESTSupport.c"
+#line 8289 "RESTSupport.c"
 }
 
 
 gboolean publishing_rest_support_google_publisher_is_running (PublishingRESTSupportGooglePublisher* self) {
-#line 1169 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self), FALSE);
-#line 1169 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1179 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_GET_CLASS (self)->is_running (self);
-#line 7994 "RESTSupport.c"
+#line 8298 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_real_start (PublishingRESTSupportGooglePublisher* self) {
-#line 1171 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_rest_support_google_publisher_start'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 1171 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return;
-#line 8003 "RESTSupport.c"
+#line 8307 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_google_publisher_start (PublishingRESTSupportGooglePublisher* self) {
-#line 1171 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 1171 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1181 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_GET_CLASS (self)->start (self);
-#line 8012 "RESTSupport.c"
+#line 8316 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_real_stop (PublishingRESTSupportGooglePublisher* self) {
-#line 1173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1183 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_rest_support_google_publisher_stop'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 1173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1183 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return;
-#line 8021 "RESTSupport.c"
+#line 8325 "RESTSupport.c"
 }
 
 
 void publishing_rest_support_google_publisher_stop (PublishingRESTSupportGooglePublisher* self) {
-#line 1173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1183 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_PUBLISHER (self));
-#line 1173 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1183 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_GET_CLASS (self)->stop (self);
-#line 8030 "RESTSupport.c"
+#line 8334 "RESTSupport.c"
 }
 
 
@@ -8055,46 +8366,46 @@ static SpitPublishingService* publishing_rest_support_google_publisher_real_get_
 	SpitPublishingService* result = NULL;
 	SpitPublishingService* _tmp0_ = NULL;
 	SpitPublishingService* _tmp1_ = NULL;
-#line 1175 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1185 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher);
-#line 1176 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1186 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->priv->service;
-#line 1176 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1186 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 1176 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1186 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp1_;
-#line 1176 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 1186 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 8049 "RESTSupport.c"
+#line 8353 "RESTSupport.c"
 }
 
 
 static PublishingRESTSupportGooglePublisherGoogleSessionImpl* publishing_rest_support_google_publisher_google_session_impl_construct (GType object_type) {
 	PublishingRESTSupportGooglePublisherGoogleSessionImpl* self = NULL;
-#line 704 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 762 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportGooglePublisherGoogleSessionImpl*) publishing_rest_support_google_session_construct (object_type);
-#line 705 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 763 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->access_token);
-#line 705 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 763 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->access_token = NULL;
-#line 706 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 764 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->user_name);
-#line 706 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 764 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->user_name = NULL;
-#line 707 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 765 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->refresh_token);
-#line 707 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 765 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->refresh_token = NULL;
-#line 704 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 762 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 8071 "RESTSupport.c"
+#line 8375 "RESTSupport.c"
 }
 
 
 static PublishingRESTSupportGooglePublisherGoogleSessionImpl* publishing_rest_support_google_publisher_google_session_impl_new (void) {
-#line 704 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 762 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_google_publisher_google_session_impl_construct (PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_GOOGLE_SESSION_IMPL);
-#line 8078 "RESTSupport.c"
+#line 8382 "RESTSupport.c"
 }
 
 
@@ -8102,15 +8413,15 @@ static gboolean publishing_rest_support_google_publisher_google_session_impl_rea
 	PublishingRESTSupportGooglePublisherGoogleSessionImpl * self;
 	gboolean result = FALSE;
 	const gchar* _tmp0_ = NULL;
-#line 710 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 768 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_GOOGLE_SESSION_IMPL, PublishingRESTSupportGooglePublisherGoogleSessionImpl);
-#line 711 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 769 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->access_token;
-#line 711 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 769 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp0_ != NULL;
-#line 711 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 769 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 8094 "RESTSupport.c"
+#line 8398 "RESTSupport.c"
 }
 
 
@@ -8120,21 +8431,21 @@ static gchar* publishing_rest_support_google_publisher_google_session_impl_real_
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 714 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 772 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_GOOGLE_SESSION_IMPL, PublishingRESTSupportGooglePublisherGoogleSessionImpl);
-#line 715 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 773 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->user_name;
-#line 715 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 773 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp0_ != NULL, "user_name != null");
-#line 716 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->user_name;
-#line 716 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 716 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp2_;
-#line 716 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 8118 "RESTSupport.c"
+#line 8422 "RESTSupport.c"
 }
 
 
@@ -8144,21 +8455,21 @@ static gchar* publishing_rest_support_google_publisher_google_session_impl_real_
 	gboolean _tmp0_ = FALSE;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 719 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 777 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_GOOGLE_SESSION_IMPL, PublishingRESTSupportGooglePublisherGoogleSessionImpl);
-#line 720 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 778 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = publishing_rest_support_session_is_authenticated (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession));
-#line 720 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 778 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp0_, "is_authenticated()");
-#line 721 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 779 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->access_token;
-#line 721 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 779 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 721 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 779 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp2_;
-#line 721 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 779 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 8142 "RESTSupport.c"
+#line 8446 "RESTSupport.c"
 }
 
 
@@ -8168,60 +8479,60 @@ static gchar* publishing_rest_support_google_publisher_google_session_impl_real_
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 724 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 782 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_GOOGLE_SESSION_IMPL, PublishingRESTSupportGooglePublisherGoogleSessionImpl);
-#line 725 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 783 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = self->refresh_token;
-#line 725 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 783 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp0_ != NULL, "refresh_token != null");
-#line 726 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 784 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = self->refresh_token;
-#line 726 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 784 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 726 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 784 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp2_;
-#line 726 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 784 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 8166 "RESTSupport.c"
+#line 8470 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_google_session_impl_real_deauthenticate (PublishingRESTSupportGoogleSession* base) {
 	PublishingRESTSupportGooglePublisherGoogleSessionImpl * self;
-#line 729 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 787 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_GOOGLE_SESSION_IMPL, PublishingRESTSupportGooglePublisherGoogleSessionImpl);
-#line 730 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 788 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->access_token);
-#line 730 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 788 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->access_token = NULL;
-#line 731 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 789 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->user_name);
-#line 731 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 789 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->user_name = NULL;
-#line 732 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 790 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->refresh_token);
-#line 732 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 790 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->refresh_token = NULL;
-#line 8186 "RESTSupport.c"
+#line 8490 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_google_session_impl_class_init (PublishingRESTSupportGooglePublisherGoogleSessionImplClass * klass) {
-#line 699 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 757 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_google_session_impl_parent_class = g_type_class_peek_parent (klass);
-#line 699 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 757 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportSessionClass *) klass)->finalize = publishing_rest_support_google_publisher_google_session_impl_finalize;
-#line 699 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 757 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportSessionClass *) klass)->is_authenticated = publishing_rest_support_google_publisher_google_session_impl_real_is_authenticated;
-#line 699 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 757 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGoogleSessionClass *) klass)->get_user_name = publishing_rest_support_google_publisher_google_session_impl_real_get_user_name;
-#line 699 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 757 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGoogleSessionClass *) klass)->get_access_token = publishing_rest_support_google_publisher_google_session_impl_real_get_access_token;
-#line 699 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 757 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGoogleSessionClass *) klass)->get_refresh_token = publishing_rest_support_google_publisher_google_session_impl_real_get_refresh_token;
-#line 699 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 757 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGoogleSessionClass *) klass)->deauthenticate = publishing_rest_support_google_publisher_google_session_impl_real_deauthenticate;
-#line 8205 "RESTSupport.c"
+#line 8509 "RESTSupport.c"
 }
 
 
@@ -8231,17 +8542,17 @@ static void publishing_rest_support_google_publisher_google_session_impl_instanc
 
 static void publishing_rest_support_google_publisher_google_session_impl_finalize (PublishingRESTSupportSession* obj) {
 	PublishingRESTSupportGooglePublisherGoogleSessionImpl * self;
-#line 699 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 757 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_GOOGLE_SESSION_IMPL, PublishingRESTSupportGooglePublisherGoogleSessionImpl);
-#line 700 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 758 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->access_token);
-#line 701 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 759 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->user_name);
-#line 702 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 760 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->refresh_token);
-#line 699 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 757 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	PUBLISHING_REST_SUPPORT_SESSION_CLASS (publishing_rest_support_google_publisher_google_session_impl_parent_class)->finalize (obj);
-#line 8225 "RESTSupport.c"
+#line 8529 "RESTSupport.c"
 }
 
 
@@ -8257,115 +8568,38 @@ static GType publishing_rest_support_google_publisher_google_session_impl_get_ty
 }
 
 
-static void _publishing_rest_support_google_publisher_web_authentication_pane_on_page_load_changed_webkit_web_view_load_changed (WebKitWebView* _sender, WebKitLoadEvent load_event, gpointer self) {
-#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	publishing_rest_support_google_publisher_web_authentication_pane_on_page_load_changed ((PublishingRESTSupportGooglePublisherWebAuthenticationPane*) self, load_event);
-#line 8244 "RESTSupport.c"
-}
-
-
-static gboolean __lambda4_ (PublishingRESTSupportGooglePublisherWebAuthenticationPane* self) {
-	gboolean result = FALSE;
-#line 754 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	result = FALSE;
-#line 754 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	return result;
-#line 8254 "RESTSupport.c"
-}
-
-
-static gboolean ___lambda4__webkit_web_view_context_menu (WebKitWebView* _sender, WebKitContextMenu* context_menu, GdkEvent* event, WebKitHitTestResult* hit_test_result, gpointer self) {
-	gboolean result;
-	result = __lambda4_ ((PublishingRESTSupportGooglePublisherWebAuthenticationPane*) self);
-#line 754 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	return result;
-#line 8263 "RESTSupport.c"
-}
-
-
 static PublishingRESTSupportGooglePublisherWebAuthenticationPane* publishing_rest_support_google_publisher_web_authentication_pane_construct (GType object_type, const gchar* auth_sequence_start_url) {
 	PublishingRESTSupportGooglePublisherWebAuthenticationPane * self = NULL;
 	const gchar* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-	GtkBox* _tmp2_ = NULL;
-	WebKitWebView* _tmp3_ = NULL;
-	WebKitWebView* _tmp4_ = NULL;
-	WebKitSettings* _tmp5_ = NULL;
-	WebKitWebView* _tmp6_ = NULL;
-	WebKitWebView* _tmp7_ = NULL;
-	GtkBox* _tmp8_ = NULL;
-	WebKitWebView* _tmp9_ = NULL;
-#line 745 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 799 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (auth_sequence_start_url != NULL, NULL);
-#line 745 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self = (PublishingRESTSupportGooglePublisherWebAuthenticationPane*) g_object_new (object_type, NULL);
-#line 746 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 800 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = auth_sequence_start_url;
-#line 746 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp1_ = g_strdup (_tmp0_);
-#line 746 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_g_free0 (self->priv->auth_sequence_start_url);
-#line 746 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv->auth_sequence_start_url = _tmp1_;
-#line 748 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp2_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 748 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_object_ref_sink (_tmp2_);
-#line 748 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_g_object_unref0 (self->priv->pane_widget);
-#line 748 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv->pane_widget = _tmp2_;
-#line 750 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp3_ = (WebKitWebView*) webkit_web_view_new ();
-#line 750 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_object_ref_sink (_tmp3_);
-#line 750 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_g_object_unref0 (self->priv->webview);
-#line 750 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv->webview = _tmp3_;
-#line 751 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp4_ = self->priv->webview;
-#line 751 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp5_ = webkit_web_view_get_settings (_tmp4_);
-#line 751 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	webkit_settings_set_enable_plugins (_tmp5_, FALSE);
-#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp6_ = self->priv->webview;
-#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_signal_connect_object (_tmp6_, "load-changed", (GCallback) _publishing_rest_support_google_publisher_web_authentication_pane_on_page_load_changed_webkit_web_view_load_changed, self, 0);
-#line 754 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp7_ = self->priv->webview;
-#line 754 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_signal_connect_object (_tmp7_, "context-menu", (GCallback) ___lambda4__webkit_web_view_context_menu, self, 0);
-#line 756 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp8_ = self->priv->pane_widget;
-#line 756 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp9_ = self->priv->webview;
-#line 756 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	gtk_box_pack_start (_tmp8_, G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
-#line 745 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 800 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	self = (PublishingRESTSupportGooglePublisherWebAuthenticationPane*) g_object_new (object_type, "login-uri", _tmp0_, NULL);
+#line 799 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 8329 "RESTSupport.c"
+#line 8556 "RESTSupport.c"
 }
 
 
 static PublishingRESTSupportGooglePublisherWebAuthenticationPane* publishing_rest_support_google_publisher_web_authentication_pane_new (const gchar* auth_sequence_start_url) {
-#line 745 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 799 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_google_publisher_web_authentication_pane_construct (PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_WEB_AUTHENTICATION_PANE, auth_sequence_start_url);
-#line 8336 "RESTSupport.c"
+#line 8563 "RESTSupport.c"
 }
 
 
 static gboolean publishing_rest_support_google_publisher_web_authentication_pane_is_cache_dirty (void) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 760 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 804 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = publishing_rest_support_google_publisher_web_authentication_pane_cache_dirty;
-#line 760 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 804 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	result = _tmp0_;
-#line 760 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 804 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return result;
-#line 8349 "RESTSupport.c"
+#line 8576 "RESTSupport.c"
 }
 
 
@@ -8392,7 +8626,7 @@ static gint string_index_of (const gchar* self, const gchar* needle, gint start_
 	_tmp3_ = _result_;
 #line 990 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp3_ != NULL) {
-#line 8376 "RESTSupport.c"
+#line 8603 "RESTSupport.c"
 		gchar* _tmp4_ = NULL;
 #line 991 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp4_ = _result_;
@@ -8400,13 +8634,13 @@ static gint string_index_of (const gchar* self, const gchar* needle, gint start_
 		result = (gint) (_tmp4_ - ((gchar*) self));
 #line 991 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 8384 "RESTSupport.c"
+#line 8611 "RESTSupport.c"
 	} else {
 #line 993 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		result = -1;
 #line 993 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 8390 "RESTSupport.c"
+#line 8617 "RESTSupport.c"
 	}
 }
 
@@ -8430,7 +8664,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 	_tmp3_ = end;
 #line 1296 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp3_ == NULL) {
-#line 8414 "RESTSupport.c"
+#line 8641 "RESTSupport.c"
 		glong _tmp4_ = 0L;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp4_ = maxlen;
@@ -8438,7 +8672,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = _tmp4_;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 8422 "RESTSupport.c"
+#line 8649 "RESTSupport.c"
 	} else {
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -8450,7 +8684,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = (glong) (_tmp5_ - _tmp6_);
 #line 1299 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 8434 "RESTSupport.c"
+#line 8661 "RESTSupport.c"
 	}
 }
 
@@ -8474,21 +8708,21 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	_tmp1_ = offset;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp1_ >= ((glong) 0)) {
-#line 8458 "RESTSupport.c"
+#line 8685 "RESTSupport.c"
 		glong _tmp2_ = 0L;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = len;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = _tmp2_ >= ((glong) 0);
-#line 8464 "RESTSupport.c"
+#line 8691 "RESTSupport.c"
 	} else {
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = FALSE;
-#line 8468 "RESTSupport.c"
+#line 8695 "RESTSupport.c"
 	}
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp0_) {
-#line 8472 "RESTSupport.c"
+#line 8699 "RESTSupport.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 		glong _tmp5_ = 0L;
@@ -8500,7 +8734,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp5_ = string_strnlen ((gchar*) self, _tmp3_ + _tmp4_);
 #line 1310 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = _tmp5_;
-#line 8484 "RESTSupport.c"
+#line 8711 "RESTSupport.c"
 	} else {
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
@@ -8510,13 +8744,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp7_ = _tmp6_;
 #line 1312 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = (glong) _tmp7_;
-#line 8494 "RESTSupport.c"
+#line 8721 "RESTSupport.c"
 	}
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp8_ = offset;
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp8_ < ((glong) 0)) {
-#line 8500 "RESTSupport.c"
+#line 8727 "RESTSupport.c"
 		glong _tmp9_ = 0L;
 		glong _tmp10_ = 0L;
 		glong _tmp11_ = 0L;
@@ -8530,7 +8764,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp11_ = offset;
 #line 1317 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp11_ >= ((glong) 0), NULL);
-#line 8514 "RESTSupport.c"
+#line 8741 "RESTSupport.c"
 	} else {
 		glong _tmp12_ = 0L;
 		glong _tmp13_ = 0L;
@@ -8540,13 +8774,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp13_ = string_length;
 #line 1319 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp12_ <= _tmp13_, NULL);
-#line 8524 "RESTSupport.c"
+#line 8751 "RESTSupport.c"
 	}
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp14_ = len;
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp14_ < ((glong) 0)) {
-#line 8530 "RESTSupport.c"
+#line 8757 "RESTSupport.c"
 		glong _tmp15_ = 0L;
 		glong _tmp16_ = 0L;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -8555,7 +8789,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp16_ = offset;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		len = _tmp15_ - _tmp16_;
-#line 8539 "RESTSupport.c"
+#line 8766 "RESTSupport.c"
 	}
 #line 1324 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp17_ = offset;
@@ -8575,265 +8809,116 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	result = _tmp22_;
 #line 1325 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 8559 "RESTSupport.c"
+#line 8786 "RESTSupport.c"
 }
 
 
-static void publishing_rest_support_google_publisher_web_authentication_pane_on_page_load (PublishingRESTSupportGooglePublisherWebAuthenticationPane* self) {
-	GtkBox* _tmp0_ = NULL;
-	GdkWindow* _tmp1_ = NULL;
-	GdkCursor* _tmp2_ = NULL;
-	GdkCursor* _tmp3_ = NULL;
+static void publishing_rest_support_google_publisher_web_authentication_pane_real_on_page_load (ShotwellPluginsCommonWebAuthenticationPane* base) {
+	PublishingRESTSupportGooglePublisherWebAuthenticationPane * self;
 	gchar* page_title = NULL;
-	WebKitWebView* _tmp4_ = NULL;
-	const gchar* _tmp5_ = NULL;
-	gchar* _tmp6_ = NULL;
-	const gchar* _tmp7_ = NULL;
-	gint _tmp8_ = 0;
-#line 763 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_return_if_fail (PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_IS_WEB_AUTHENTICATION_PANE (self));
-#line 764 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp0_ = self->priv->pane_widget;
-#line 764 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp1_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 764 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp2_ = gdk_cursor_new (GDK_LEFT_PTR);
-#line 764 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp3_ = _tmp2_;
-#line 764 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	gdk_window_set_cursor (_tmp1_, _tmp3_);
-#line 764 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_g_object_unref0 (_tmp3_);
-#line 766 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp4_ = self->priv->webview;
-#line 766 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp5_ = webkit_web_view_get_title (_tmp4_);
-#line 766 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp6_ = g_strdup (_tmp5_);
-#line 766 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	page_title = _tmp6_;
-#line 767 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp7_ = page_title;
-#line 767 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp8_ = string_index_of (_tmp7_, "state=connect", 0);
-#line 767 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	if (_tmp8_ > 0) {
-#line 8602 "RESTSupport.c"
-		gint auth_code_field_start = 0;
-		const gchar* _tmp9_ = NULL;
-		gint _tmp10_ = 0;
-		gint _tmp11_ = 0;
-		gchar* auth_code = NULL;
-		const gchar* _tmp12_ = NULL;
-		gint _tmp13_ = 0;
-		gchar* _tmp14_ = NULL;
-		const gchar* _tmp15_ = NULL;
-#line 768 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		_tmp9_ = page_title;
-#line 768 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		_tmp10_ = string_index_of (_tmp9_, "code=", 0);
-#line 768 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		auth_code_field_start = _tmp10_;
-#line 769 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		_tmp11_ = auth_code_field_start;
-#line 769 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		if (_tmp11_ < 0) {
-#line 770 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-			_g_free0 (page_title);
-#line 770 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-			return;
-#line 8626 "RESTSupport.c"
-		}
-#line 772 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		_tmp12_ = page_title;
-#line 772 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		_tmp13_ = auth_code_field_start;
-#line 772 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		_tmp14_ = string_substring (_tmp12_, (glong) (_tmp13_ + 5), (glong) -1);
-#line 772 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		auth_code = _tmp14_;
-#line 775 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		publishing_rest_support_google_publisher_web_authentication_pane_cache_dirty = TRUE;
-#line 777 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		_tmp15_ = auth_code;
-#line 777 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		g_signal_emit_by_name (self, "authorized", _tmp15_);
-#line 767 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		_g_free0 (auth_code);
-#line 8644 "RESTSupport.c"
-	}
-#line 763 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_g_free0 (page_title);
-#line 8648 "RESTSupport.c"
-}
-
-
-static void publishing_rest_support_google_publisher_web_authentication_pane_on_load_started (PublishingRESTSupportGooglePublisherWebAuthenticationPane* self) {
-	GtkBox* _tmp0_ = NULL;
-	GdkWindow* _tmp1_ = NULL;
-	GdkCursor* _tmp2_ = NULL;
-	GdkCursor* _tmp3_ = NULL;
-#line 781 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_return_if_fail (PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_IS_WEB_AUTHENTICATION_PANE (self));
-#line 782 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp0_ = self->priv->pane_widget;
-#line 782 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp1_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 782 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp2_ = gdk_cursor_new (GDK_WATCH);
-#line 782 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp3_ = _tmp2_;
-#line 782 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	gdk_window_set_cursor (_tmp1_, _tmp3_);
-#line 782 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_g_object_unref0 (_tmp3_);
-#line 8671 "RESTSupport.c"
-}
-
-
-static void publishing_rest_support_google_publisher_web_authentication_pane_on_page_load_changed (PublishingRESTSupportGooglePublisherWebAuthenticationPane* self, WebKitLoadEvent load_event) {
-	WebKitLoadEvent _tmp0_ = 0;
-#line 785 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_return_if_fail (PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_IS_WEB_AUTHENTICATION_PANE (self));
-#line 786 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp0_ = load_event;
-#line 786 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	switch (_tmp0_) {
-#line 786 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		case WEBKIT_LOAD_STARTED:
-#line 8685 "RESTSupport.c"
-		{
-#line 788 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-			publishing_rest_support_google_publisher_web_authentication_pane_on_load_started (self);
-#line 789 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-			break;
-#line 8691 "RESTSupport.c"
-		}
-#line 786 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		case WEBKIT_LOAD_FINISHED:
-#line 8695 "RESTSupport.c"
-		{
-#line 791 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-			publishing_rest_support_google_publisher_web_authentication_pane_on_page_load (self);
-#line 792 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-			break;
-#line 8701 "RESTSupport.c"
-		}
-		default:
-#line 786 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-		break;
-#line 8706 "RESTSupport.c"
-	}
-#line 795 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	return;
-#line 8710 "RESTSupport.c"
-}
-
-
-static SpitPublishingDialogPaneGeometryOptions publishing_rest_support_google_publisher_web_authentication_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base) {
-	PublishingRESTSupportGooglePublisherWebAuthenticationPane * self;
-	SpitPublishingDialogPaneGeometryOptions result = 0;
-#line 798 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_WEB_AUTHENTICATION_PANE, PublishingRESTSupportGooglePublisherWebAuthenticationPane);
-#line 799 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
-#line 799 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	return result;
-#line 8723 "RESTSupport.c"
-}
-
-
-static GtkWidget* publishing_rest_support_google_publisher_web_authentication_pane_real_get_widget (SpitPublishingDialogPane* base) {
-	PublishingRESTSupportGooglePublisherWebAuthenticationPane * self;
-	GtkWidget* result = NULL;
-	GtkBox* _tmp0_ = NULL;
-	GtkWidget* _tmp1_ = NULL;
-#line 802 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_WEB_AUTHENTICATION_PANE, PublishingRESTSupportGooglePublisherWebAuthenticationPane);
-#line 803 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp0_ = self->priv->pane_widget;
-#line 803 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 803 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	result = _tmp1_;
-#line 803 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	return result;
-#line 8742 "RESTSupport.c"
-}
-
-
-static void publishing_rest_support_google_publisher_web_authentication_pane_real_on_pane_installed (SpitPublishingDialogPane* base) {
-	PublishingRESTSupportGooglePublisherWebAuthenticationPane * self;
 	WebKitWebView* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-#line 806 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	WebKitWebView* _tmp1_ = NULL;
+	const gchar* _tmp2_ = NULL;
+	gchar* _tmp3_ = NULL;
+	gchar* _tmp4_ = NULL;
+	const gchar* _tmp5_ = NULL;
+	gint _tmp6_ = 0;
+#line 807 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_WEB_AUTHENTICATION_PANE, PublishingRESTSupportGooglePublisherWebAuthenticationPane);
-#line 807 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp0_ = self->priv->webview;
-#line 807 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_tmp1_ = self->priv->auth_sequence_start_url;
-#line 807 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	webkit_web_view_load_uri (_tmp0_, _tmp1_);
-#line 8758 "RESTSupport.c"
-}
-
-
-static void publishing_rest_support_google_publisher_web_authentication_pane_real_on_pane_uninstalled (SpitPublishingDialogPane* base) {
-	PublishingRESTSupportGooglePublisherWebAuthenticationPane * self;
+#line 808 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp0_ = shotwell_plugins_common_web_authentication_pane_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane));
+#line 808 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp1_ = _tmp0_;
+#line 808 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp2_ = webkit_web_view_get_title (_tmp1_);
+#line 808 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp3_ = g_strdup (_tmp2_);
+#line 808 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp4_ = _tmp3_;
+#line 808 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_g_object_unref0 (_tmp1_);
+#line 808 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	page_title = _tmp4_;
+#line 809 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp5_ = page_title;
+#line 809 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_tmp6_ = string_index_of (_tmp5_, "state=connect", 0);
+#line 809 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	if (_tmp6_ > 0) {
+#line 8822 "RESTSupport.c"
+		gint auth_code_field_start = 0;
+		const gchar* _tmp7_ = NULL;
+		gint _tmp8_ = 0;
+		gint _tmp9_ = 0;
+		gchar* auth_code = NULL;
+		const gchar* _tmp10_ = NULL;
+		gint _tmp11_ = 0;
+		gchar* _tmp12_ = NULL;
+		const gchar* _tmp13_ = NULL;
 #line 810 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_WEB_AUTHENTICATION_PANE, PublishingRESTSupportGooglePublisherWebAuthenticationPane);
-#line 8766 "RESTSupport.c"
+		_tmp7_ = page_title;
+#line 810 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp8_ = string_index_of (_tmp7_, "code=", 0);
+#line 810 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		auth_code_field_start = _tmp8_;
+#line 811 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp9_ = auth_code_field_start;
+#line 811 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		if (_tmp9_ < 0) {
+#line 812 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			_g_free0 (page_title);
+#line 812 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+			return;
+#line 8846 "RESTSupport.c"
+		}
+#line 814 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp10_ = page_title;
+#line 814 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp11_ = auth_code_field_start;
+#line 814 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp12_ = string_substring (_tmp10_, (glong) (_tmp11_ + 5), (glong) -1);
+#line 814 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		auth_code = _tmp12_;
+#line 817 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		publishing_rest_support_google_publisher_web_authentication_pane_cache_dirty = TRUE;
+#line 819 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_tmp13_ = auth_code;
+#line 819 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		g_signal_emit_by_name (self, "authorized", _tmp13_);
+#line 809 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+		_g_free0 (auth_code);
+#line 8864 "RESTSupport.c"
+	}
+#line 807 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	_g_free0 (page_title);
+#line 8868 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_web_authentication_pane_class_init (PublishingRESTSupportGooglePublisherWebAuthenticationPaneClass * klass) {
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 794 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_web_authentication_pane_parent_class = g_type_class_peek_parent (klass);
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	g_type_class_add_private (klass, sizeof (PublishingRESTSupportGooglePublisherWebAuthenticationPanePrivate));
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 794 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+	((ShotwellPluginsCommonWebAuthenticationPaneClass *) klass)->on_page_load = publishing_rest_support_google_publisher_web_authentication_pane_real_on_page_load;
+#line 794 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_rest_support_google_publisher_web_authentication_pane_finalize;
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 794 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_signal_new ("authorized", PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_WEB_AUTHENTICATION_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
-#line 8779 "RESTSupport.c"
-}
-
-
-static void publishing_rest_support_google_publisher_web_authentication_pane_spit_publishing_dialog_pane_interface_init (SpitPublishingDialogPaneIface * iface) {
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	publishing_rest_support_google_publisher_web_authentication_pane_spit_publishing_dialog_pane_parent_iface = g_type_interface_peek_parent (iface);
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	iface->get_preferred_geometry = (SpitPublishingDialogPaneGeometryOptions (*)(SpitPublishingDialogPane*)) publishing_rest_support_google_publisher_web_authentication_pane_real_get_preferred_geometry;
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	iface->get_widget = (GtkWidget* (*)(SpitPublishingDialogPane*)) publishing_rest_support_google_publisher_web_authentication_pane_real_get_widget;
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_rest_support_google_publisher_web_authentication_pane_real_on_pane_installed;
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_rest_support_google_publisher_web_authentication_pane_real_on_pane_uninstalled;
-#line 8794 "RESTSupport.c"
+#line 8881 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_web_authentication_pane_instance_init (PublishingRESTSupportGooglePublisherWebAuthenticationPane * self) {
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	self->priv = PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_WEB_AUTHENTICATION_PANE_GET_PRIVATE (self);
-#line 8801 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_web_authentication_pane_finalize (GObject* obj) {
 	PublishingRESTSupportGooglePublisherWebAuthenticationPane * self;
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 794 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_WEB_AUTHENTICATION_PANE, PublishingRESTSupportGooglePublisherWebAuthenticationPane);
-#line 739 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_g_object_unref0 (self->priv->webview);
-#line 740 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_g_object_unref0 (self->priv->pane_widget);
-#line 741 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
-	_g_free0 (self->priv->auth_sequence_start_url);
-#line 736 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 794 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	G_OBJECT_CLASS (publishing_rest_support_google_publisher_web_authentication_pane_parent_class)->finalize (obj);
-#line 8817 "RESTSupport.c"
+#line 8895 "RESTSupport.c"
 }
 
 
@@ -8841,10 +8926,8 @@ static GType publishing_rest_support_google_publisher_web_authentication_pane_ge
 	static volatile gsize publishing_rest_support_google_publisher_web_authentication_pane_type_id__volatile = 0;
 	if (g_once_init_enter (&publishing_rest_support_google_publisher_web_authentication_pane_type_id__volatile)) {
 		static const GTypeInfo g_define_type_info = { sizeof (PublishingRESTSupportGooglePublisherWebAuthenticationPaneClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) publishing_rest_support_google_publisher_web_authentication_pane_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (PublishingRESTSupportGooglePublisherWebAuthenticationPane), 0, (GInstanceInitFunc) publishing_rest_support_google_publisher_web_authentication_pane_instance_init, NULL };
-		static const GInterfaceInfo spit_publishing_dialog_pane_info = { (GInterfaceInitFunc) publishing_rest_support_google_publisher_web_authentication_pane_spit_publishing_dialog_pane_interface_init, (GInterfaceFinalizeFunc) NULL, NULL};
 		GType publishing_rest_support_google_publisher_web_authentication_pane_type_id;
-		publishing_rest_support_google_publisher_web_authentication_pane_type_id = g_type_register_static (G_TYPE_OBJECT, "PublishingRESTSupportGooglePublisherWebAuthenticationPane", &g_define_type_info, 0);
-		g_type_add_interface_static (publishing_rest_support_google_publisher_web_authentication_pane_type_id, SPIT_PUBLISHING_TYPE_DIALOG_PANE, &spit_publishing_dialog_pane_info);
+		publishing_rest_support_google_publisher_web_authentication_pane_type_id = g_type_register_static (SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, "PublishingRESTSupportGooglePublisherWebAuthenticationPane", &g_define_type_info, 0);
 		g_once_init_leave (&publishing_rest_support_google_publisher_web_authentication_pane_type_id__volatile, publishing_rest_support_google_publisher_web_authentication_pane_type_id);
 	}
 	return publishing_rest_support_google_publisher_web_authentication_pane_type_id__volatile;
@@ -8855,43 +8938,43 @@ static PublishingRESTSupportGooglePublisherGetAccessTokensTransaction* publishin
 	PublishingRESTSupportGooglePublisherGetAccessTokensTransaction* self = NULL;
 	PublishingRESTSupportSession* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 817 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 827 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_SESSION (session), NULL);
-#line 817 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 827 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (auth_code != NULL, NULL);
-#line 818 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 828 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = session;
-#line 818 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 828 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportGooglePublisherGetAccessTokensTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, _tmp0_, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_GET_ACCESS_TOKENS_TRANSACTION_ENDPOINT_URL, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 820 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 830 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = auth_code;
-#line 820 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 830 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "code", _tmp1_);
-#line 821 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 831 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "client_id", PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_OAUTH_CLIENT_ID);
-#line 822 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 832 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "client_secret", PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_OAUTH_CLIENT_SECRET);
-#line 823 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 833 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "redirect_uri", "urn:ietf:wg:oauth:2.0:oob");
-#line 824 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 834 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "grant_type", "authorization_code");
-#line 817 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 827 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 8861 "RESTSupport.c"
+#line 8937 "RESTSupport.c"
 }
 
 
 static PublishingRESTSupportGooglePublisherGetAccessTokensTransaction* publishing_rest_support_google_publisher_get_access_tokens_transaction_new (PublishingRESTSupportSession* session, const gchar* auth_code) {
-#line 817 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 827 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_google_publisher_get_access_tokens_transaction_construct (PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_GET_ACCESS_TOKENS_TRANSACTION, session, auth_code);
-#line 8868 "RESTSupport.c"
+#line 8944 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_get_access_tokens_transaction_class_init (PublishingRESTSupportGooglePublisherGetAccessTokensTransactionClass * klass) {
-#line 814 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 824 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_get_access_tokens_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 8875 "RESTSupport.c"
+#line 8951 "RESTSupport.c"
 }
 
 
@@ -8917,45 +9000,45 @@ static PublishingRESTSupportGooglePublisherRefreshAccessTokenTransaction* publis
 	PublishingRESTSupportSession* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 831 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 841 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_SESSION (session), NULL);
-#line 832 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = session;
-#line 832 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportGooglePublisherRefreshAccessTokenTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, _tmp0_, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_REFRESH_ACCESS_TOKEN_TRANSACTION_ENDPOINT_URL, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 834 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 844 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "client_id", PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_OAUTH_CLIENT_ID);
-#line 835 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 845 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "client_secret", PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_OAUTH_CLIENT_SECRET);
-#line 836 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = session;
-#line 836 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = publishing_rest_support_google_session_get_refresh_token (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_SESSION, PublishingRESTSupportGoogleSession));
-#line 836 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = _tmp2_;
-#line 836 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "refresh_token", _tmp3_);
-#line 836 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp3_);
-#line 837 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 847 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "grant_type", "refresh_token");
-#line 831 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 841 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 8925 "RESTSupport.c"
+#line 9001 "RESTSupport.c"
 }
 
 
 static PublishingRESTSupportGooglePublisherRefreshAccessTokenTransaction* publishing_rest_support_google_publisher_refresh_access_token_transaction_new (PublishingRESTSupportSession* session) {
-#line 831 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 841 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_google_publisher_refresh_access_token_transaction_construct (PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_REFRESH_ACCESS_TOKEN_TRANSACTION, session);
-#line 8932 "RESTSupport.c"
+#line 9008 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_refresh_access_token_transaction_class_init (PublishingRESTSupportGooglePublisherRefreshAccessTokenTransactionClass * klass) {
-#line 828 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 838 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_refresh_access_token_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 8939 "RESTSupport.c"
+#line 9015 "RESTSupport.c"
 }
 
 
@@ -8980,28 +9063,28 @@ static PublishingRESTSupportGooglePublisherAuthenticatedTransaction* publishing_
 	PublishingRESTSupportGoogleSession* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	PublishingRESTSupportHttpMethod _tmp2_ = 0;
-#line 842 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_SESSION (session), NULL);
-#line 842 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (endpoint_url != NULL, NULL);
-#line 844 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = session;
-#line 844 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = endpoint_url;
-#line 844 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = method;
-#line 844 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportGooglePublisherAuthenticatedTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, _tmp2_);
-#line 842 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 8978 "RESTSupport.c"
+#line 9054 "RESTSupport.c"
 }
 
 
 static PublishingRESTSupportGooglePublisherAuthenticatedTransaction* publishing_rest_support_google_publisher_authenticated_transaction_new_with_endpoint_url (PublishingRESTSupportGoogleSession* session, const gchar* endpoint_url, PublishingRESTSupportHttpMethod method) {
-#line 842 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_google_publisher_authenticated_transaction_construct_with_endpoint_url (PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_AUTHENTICATED_TRANSACTION, session, endpoint_url, method);
-#line 8985 "RESTSupport.c"
+#line 9061 "RESTSupport.c"
 }
 
 
@@ -9017,57 +9100,57 @@ PublishingRESTSupportGooglePublisherAuthenticatedTransaction* publishing_rest_su
 	gchar* _tmp7_ = NULL;
 	gchar* _tmp8_ = NULL;
 	gchar* _tmp9_ = NULL;
-#line 847 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_SESSION (session), NULL);
-#line 847 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (endpoint_url != NULL, NULL);
-#line 849 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 859 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = session;
-#line 849 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 859 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp1_ = endpoint_url;
-#line 849 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 859 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp2_ = method;
-#line 849 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 859 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportGooglePublisherAuthenticatedTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, _tmp2_);
-#line 850 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp3_ = session;
-#line 850 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp4_ = publishing_rest_support_session_is_authenticated (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession));
-#line 850 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_vala_assert (_tmp4_, "session.is_authenticated()");
-#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 862 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp5_ = session;
-#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 862 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp6_ = publishing_rest_support_google_session_get_access_token (_tmp5_);
-#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 862 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp7_ = _tmp6_;
-#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 862 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp8_ = g_strconcat ("Bearer ", _tmp7_, NULL);
-#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 862 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp9_ = _tmp8_;
-#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 862 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_transaction_add_header (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "Authorization", _tmp9_);
-#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 862 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp9_);
-#line 852 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 862 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (_tmp7_);
-#line 847 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 9037 "RESTSupport.c"
+#line 9113 "RESTSupport.c"
 }
 
 
 PublishingRESTSupportGooglePublisherAuthenticatedTransaction* publishing_rest_support_google_publisher_authenticated_transaction_new (PublishingRESTSupportGoogleSession* session, const gchar* endpoint_url, PublishingRESTSupportHttpMethod method) {
-#line 847 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_google_publisher_authenticated_transaction_construct (PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_AUTHENTICATED_TRANSACTION, session, endpoint_url, method);
-#line 9044 "RESTSupport.c"
+#line 9120 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_authenticated_transaction_class_init (PublishingRESTSupportGooglePublisherAuthenticatedTransactionClass * klass) {
-#line 841 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 851 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_authenticated_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 9051 "RESTSupport.c"
+#line 9127 "RESTSupport.c"
 }
 
 
@@ -9090,29 +9173,29 @@ GType publishing_rest_support_google_publisher_authenticated_transaction_get_typ
 static PublishingRESTSupportGooglePublisherUsernameFetchTransaction* publishing_rest_support_google_publisher_username_fetch_transaction_construct (GType object_type, PublishingRESTSupportGoogleSession* session) {
 	PublishingRESTSupportGooglePublisherUsernameFetchTransaction* self = NULL;
 	PublishingRESTSupportGoogleSession* _tmp0_ = NULL;
-#line 859 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 869 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_SESSION (session), NULL);
-#line 860 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_tmp0_ = session;
-#line 860 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = (PublishingRESTSupportGooglePublisherUsernameFetchTransaction*) publishing_rest_support_google_publisher_authenticated_transaction_construct (object_type, _tmp0_, PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_USERNAME_FETCH_TRANSACTION_ENDPOINT_URL, PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET);
-#line 859 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 869 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return self;
-#line 9082 "RESTSupport.c"
+#line 9158 "RESTSupport.c"
 }
 
 
 static PublishingRESTSupportGooglePublisherUsernameFetchTransaction* publishing_rest_support_google_publisher_username_fetch_transaction_new (PublishingRESTSupportGoogleSession* session) {
-#line 859 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 869 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	return publishing_rest_support_google_publisher_username_fetch_transaction_construct (PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_TYPE_USERNAME_FETCH_TRANSACTION, session);
-#line 9089 "RESTSupport.c"
+#line 9165 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_username_fetch_transaction_class_init (PublishingRESTSupportGooglePublisherUsernameFetchTransactionClass * klass) {
-#line 856 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 866 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_username_fetch_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 9096 "RESTSupport.c"
+#line 9172 "RESTSupport.c"
 }
 
 
@@ -9133,61 +9216,61 @@ static GType publishing_rest_support_google_publisher_username_fetch_transaction
 
 
 static void publishing_rest_support_google_publisher_class_init (PublishingRESTSupportGooglePublisherClass * klass) {
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_parent_class = g_type_class_peek_parent (klass);
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	g_type_class_add_private (klass, sizeof (PublishingRESTSupportGooglePublisherPrivate));
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGooglePublisherClass *) klass)->on_login_flow_complete = publishing_rest_support_google_publisher_real_on_login_flow_complete;
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGooglePublisherClass *) klass)->do_logout = publishing_rest_support_google_publisher_real_do_logout;
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGooglePublisherClass *) klass)->is_running = publishing_rest_support_google_publisher_real_is_running;
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGooglePublisherClass *) klass)->start = publishing_rest_support_google_publisher_real_start;
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	((PublishingRESTSupportGooglePublisherClass *) klass)->stop = publishing_rest_support_google_publisher_real_stop;
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_rest_support_google_publisher_finalize;
-#line 9133 "RESTSupport.c"
+#line 9209 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_spit_publishing_publisher_interface_init (SpitPublishingPublisherIface * iface) {
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	publishing_rest_support_google_publisher_spit_publishing_publisher_parent_iface = g_type_interface_peek_parent (iface);
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	iface->is_running = (gboolean (*)(SpitPublishingPublisher*)) publishing_rest_support_google_publisher_is_running;
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	iface->start = (void (*)(SpitPublishingPublisher*)) publishing_rest_support_google_publisher_start;
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	iface->stop = (void (*)(SpitPublishingPublisher*)) publishing_rest_support_google_publisher_stop;
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	iface->get_service = (SpitPublishingService* (*)(SpitPublishingPublisher*)) publishing_rest_support_google_publisher_real_get_service;
-#line 9148 "RESTSupport.c"
+#line 9224 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_instance_init (PublishingRESTSupportGooglePublisher * self) {
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self->priv = PUBLISHING_REST_SUPPORT_GOOGLE_PUBLISHER_GET_PRIVATE (self);
-#line 9155 "RESTSupport.c"
+#line 9231 "RESTSupport.c"
 }
 
 
 static void publishing_rest_support_google_publisher_finalize (GObject* obj) {
 	PublishingRESTSupportGooglePublisher * self;
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher);
-#line 864 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_free0 (self->priv->scope);
-#line 865 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 875 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_publishing_rest_support_session_unref0 (self->priv->session);
-#line 866 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 876 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	_g_object_unref0 (self->priv->web_auth_pane);
-#line 695 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/common/RESTSupport.vala"
 	G_OBJECT_CLASS (publishing_rest_support_google_publisher_parent_class)->finalize (obj);
-#line 9171 "RESTSupport.c"
+#line 9247 "RESTSupport.c"
 }
 
 

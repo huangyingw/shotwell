@@ -618,7 +618,7 @@ static void spit_publishing_concrete_publishing_host_real_post_error (SpitPublis
 #line 80 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SPIT_PUBLISHING_TYPE_CONCRETE_PUBLISHING_HOST, SpitPublishingConcretePublishingHost);
 #line 81 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"
-	_tmp0_ = _ ("Publishing to %s can't continue because an error occurred:");
+	_tmp0_ = _ ("Publishing to %s can’t continue because an error occurred:");
 #line 81 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"
 	_tmp1_ = self->priv->active_publisher;
 #line 81 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"
@@ -1273,7 +1273,7 @@ static SpitPublishingProgressCallback spit_publishing_concrete_publishing_host_r
 #line 215 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"
 						if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 1272 "PublishingPluginHost.c"
-							goto __catch34_spit_publishing_publishing_error;
+							goto __catch35_spit_publishing_publishing_error;
 						}
 #line 215 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"
 						_g_object_unref0 (wrapper);
@@ -1293,8 +1293,8 @@ static SpitPublishingProgressCallback spit_publishing_concrete_publishing_host_r
 					_g_object_unref0 (wrapper);
 #line 1291 "PublishingPluginHost.c"
 				}
-				goto __finally34;
-				__catch34_spit_publishing_publishing_error:
+				goto __finally35;
+				__catch35_spit_publishing_publishing_error:
 				{
 					GError* err = NULL;
 					GError* _tmp16_ = NULL;
@@ -1331,7 +1331,7 @@ static SpitPublishingProgressCallback spit_publishing_concrete_publishing_host_r
 					return result;
 #line 1329 "PublishingPluginHost.c"
 				}
-				__finally34:
+				__finally35:
 #line 212 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 212 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"

@@ -10,10 +10,12 @@
 #include <glib-object.h>
 #include <libsoup/soup.h>
 #include "shotwell-plugin-dev-1.0.h"
+#include <gio/gio.h>
 #include <gee.h>
 #include <libxml/tree.h>
-#include <gio/gio.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk/gdk.h>
+#include <webkit2/webkit2.h>
 
 G_BEGIN_DECLS
 
@@ -118,6 +120,17 @@ typedef struct _PublishingRESTSupportGooglePublisherPrivate PublishingRESTSuppor
 typedef struct _PublishingRESTSupportGooglePublisherAuthenticatedTransaction PublishingRESTSupportGooglePublisherAuthenticatedTransaction;
 typedef struct _PublishingRESTSupportGooglePublisherAuthenticatedTransactionClass PublishingRESTSupportGooglePublisherAuthenticatedTransactionClass;
 typedef struct _PublishingRESTSupportGooglePublisherAuthenticatedTransactionPrivate PublishingRESTSupportGooglePublisherAuthenticatedTransactionPrivate;
+
+#define SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE (shotwell_plugins_common_web_authentication_pane_get_type ())
+#define SHOTWELL_PLUGINS_COMMON_WEB_AUTHENTICATION_PANE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane))
+#define SHOTWELL_PLUGINS_COMMON_WEB_AUTHENTICATION_PANE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPaneClass))
+#define SHOTWELL_PLUGINS_COMMON_IS_WEB_AUTHENTICATION_PANE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE))
+#define SHOTWELL_PLUGINS_COMMON_IS_WEB_AUTHENTICATION_PANE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE))
+#define SHOTWELL_PLUGINS_COMMON_WEB_AUTHENTICATION_PANE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPaneClass))
+
+typedef struct _ShotwellPluginsCommonWebAuthenticationPane ShotwellPluginsCommonWebAuthenticationPane;
+typedef struct _ShotwellPluginsCommonWebAuthenticationPaneClass ShotwellPluginsCommonWebAuthenticationPaneClass;
+typedef struct _ShotwellPluginsCommonWebAuthenticationPanePrivate ShotwellPluginsCommonWebAuthenticationPanePrivate;
 
 struct _PublishingRESTSupportSession {
 	GTypeInstance parent_instance;
@@ -236,6 +249,16 @@ struct _PublishingRESTSupportGooglePublisherAuthenticatedTransactionClass {
 	PublishingRESTSupportTransactionClass parent_class;
 };
 
+struct _ShotwellPluginsCommonWebAuthenticationPane {
+	GObject parent_instance;
+	ShotwellPluginsCommonWebAuthenticationPanePrivate * priv;
+};
+
+struct _ShotwellPluginsCommonWebAuthenticationPaneClass {
+	GObjectClass parent_class;
+	void (*on_page_load) (ShotwellPluginsCommonWebAuthenticationPane* self);
+};
+
 
 gchar* publishing_rest_support_hmac_sha1 (const gchar* key, const gchar* message);
 gpointer publishing_rest_support_session_ref (gpointer instance);
@@ -254,6 +277,7 @@ gchar* publishing_rest_support_session_get_endpoint_url (PublishingRESTSupportSe
 void publishing_rest_support_session_stop_transactions (PublishingRESTSupportSession* self);
 gboolean publishing_rest_support_session_are_transactions_stopped (PublishingRESTSupportSession* self);
 void publishing_rest_support_session_send_wire_message (PublishingRESTSupportSession* self, SoupMessage* message);
+void publishing_rest_support_session_set_insecure (PublishingRESTSupportSession* self);
 GType publishing_rest_support_http_method_get_type (void) G_GNUC_CONST;
 gchar* publishing_rest_support_http_method_to_string (PublishingRESTSupportHttpMethod self);
 PublishingRESTSupportHttpMethod publishing_rest_support_http_method_from_string (const gchar* str);
@@ -280,6 +304,7 @@ PublishingRESTSupportTransaction* publishing_rest_support_transaction_new (Publi
 PublishingRESTSupportTransaction* publishing_rest_support_transaction_construct (GType object_type, PublishingRESTSupportSession* parent_session, PublishingRESTSupportHttpMethod method);
 PublishingRESTSupportTransaction* publishing_rest_support_transaction_new_with_endpoint_url (PublishingRESTSupportSession* parent_session, const gchar* endpoint_url, PublishingRESTSupportHttpMethod method);
 PublishingRESTSupportTransaction* publishing_rest_support_transaction_construct_with_endpoint_url (GType object_type, PublishingRESTSupportSession* parent_session, const gchar* endpoint_url, PublishingRESTSupportHttpMethod method);
+gchar* publishing_rest_support_transaction_detailed_error_from_tls_flags (PublishingRESTSupportTransaction* self, GTlsCertificate** cert);
 void publishing_rest_support_transaction_check_response (PublishingRESTSupportTransaction* self, SoupMessage* message, GError** error);
 PublishingRESTSupportArgument** publishing_rest_support_transaction_get_arguments (PublishingRESTSupportTransaction* self, int* result_length1);
 PublishingRESTSupportArgument** publishing_rest_support_transaction_get_sorted_arguments (PublishingRESTSupportTransaction* self, int* result_length1);
@@ -375,6 +400,13 @@ PublishingRESTSupportGooglePublisherAuthenticatedTransaction* publishing_rest_su
 #define RESOURCES_TRANSLATORS _ ("translator-credits")
 GdkPixbuf** resources_load_icon_set (GFile* icon_file, int* result_length1);
 GdkPixbuf** resources_load_from_resource (const gchar* resource_path, int* result_length1);
+GType shotwell_plugins_common_web_authentication_pane_get_type (void) G_GNUC_CONST;
+void shotwell_plugins_common_web_authentication_pane_on_page_load (ShotwellPluginsCommonWebAuthenticationPane* self);
+void shotwell_plugins_common_web_authentication_pane_set_cursor (ShotwellPluginsCommonWebAuthenticationPane* self, GdkCursorType type);
+WebKitWebView* shotwell_plugins_common_web_authentication_pane_get_view (ShotwellPluginsCommonWebAuthenticationPane* self);
+ShotwellPluginsCommonWebAuthenticationPane* shotwell_plugins_common_web_authentication_pane_construct (GType object_type);
+SpitPublishingDialogPaneGeometryOptions shotwell_plugins_common_web_authentication_pane_get_preferred_geometry (ShotwellPluginsCommonWebAuthenticationPane* self);
+gchar* shotwell_plugins_common_web_authentication_pane_get_login_uri (ShotwellPluginsCommonWebAuthenticationPane* self);
 
 
 G_END_DECLS

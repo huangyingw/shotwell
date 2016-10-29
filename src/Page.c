@@ -5050,7 +5050,7 @@ static void page_init_load_ui (Page* self, const gchar* ui_filename) {
 #line 561 "/home/jens/Source/shotwell/src/Page.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5053 "Page.c"
-			goto __catch241_g_error;
+			goto __catch254_g_error;
 		}
 #line 561 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = self->priv->merge_ids;
@@ -5060,8 +5060,8 @@ static void page_init_load_ui (Page* self, const gchar* ui_filename) {
 		_vala_array_add250 (&self->priv->merge_ids, &self->priv->merge_ids_length1, &self->priv->_merge_ids_size_, _tmp2_);
 #line 5062 "Page.c"
 	}
-	goto __finally241;
-	__catch241_g_error:
+	goto __finally254;
+	__catch254_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp9_ = NULL;
@@ -5106,7 +5106,7 @@ static void page_init_load_ui (Page* self, const gchar* ui_filename) {
 		_g_error_free0 (err);
 #line 5108 "Page.c"
 	}
-	__finally241:
+	__finally254:
 #line 560 "/home/jens/Source/shotwell/src/Page.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 560 "/home/jens/Source/shotwell/src/Page.vala"
@@ -15219,7 +15219,7 @@ static void drag_and_drop_handler_on_drag_begin (DragAndDropHandler* self, GdkDr
 #line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 15222 "Page.c"
-			goto __catch242_g_error;
+			goto __catch255_g_error;
 		}
 #line 2495 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp20_ = self->priv->event_source;
@@ -15231,8 +15231,8 @@ static void drag_and_drop_handler_on_drag_begin (DragAndDropHandler* self, GdkDr
 		_g_object_unref0 (icon);
 #line 15233 "Page.c"
 	}
-	goto __finally242;
-	__catch242_g_error:
+	goto __finally255;
+	__catch255_g_error:
 	{
 		GError* err = NULL;
 		ThumbnailSource* _tmp22_ = NULL;
@@ -15262,7 +15262,7 @@ static void drag_and_drop_handler_on_drag_begin (DragAndDropHandler* self, GdkDr
 		_g_error_free0 (err);
 #line 15264 "Page.c"
 	}
-	__finally242:
+	__finally255:
 #line 2493 "/home/jens/Source/shotwell/src/Page.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2493 "/home/jens/Source/shotwell/src/Page.vala"

@@ -13,7 +13,6 @@
 #include <string.h>
 #include <float.h>
 #include <math.h>
-#include <gee.h>
 #include <gio/gio.h>
 
 
@@ -39,8 +38,10 @@ typedef struct _ConfigurationEngineIface ConfigurationEngineIface;
 typedef struct _GSettingsConfigurationEngine GSettingsConfigurationEngine;
 typedef struct _GSettingsConfigurationEngineClass GSettingsConfigurationEngineClass;
 typedef struct _GSettingsConfigurationEnginePrivate GSettingsConfigurationEnginePrivate;
-#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 #define _g_free0(var) (var = (g_free (var), NULL))
+#define _g_settings_schema_unref0(var) ((var == NULL) ? NULL : (var = (g_settings_schema_unref (var), NULL)))
+#define _g_settings_schema_source_unref0(var) ((var == NULL) ? NULL : (var = (g_settings_schema_source_unref (var), NULL)))
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 #define _g_regex_unref0(var) ((var == NULL) ? NULL : (var = (g_regex_unref (var), NULL)))
 #define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
 
@@ -70,6 +71,12 @@ typedef enum  {
 	CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING,
 	CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY,
 	CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING,
+	CONFIGURABLE_PROPERTY_EXPORT_CONSTRAINT,
+	CONFIGURABLE_PROPERTY_EXPORT_EXPORT_FORMAT_MODE,
+	CONFIGURABLE_PROPERTY_EXPORT_EXPORT_METADATA,
+	CONFIGURABLE_PROPERTY_EXPORT_PHOTO_FILE_FORMAT,
+	CONFIGURABLE_PROPERTY_EXPORT_QUALITY,
+	CONFIGURABLE_PROPERTY_EXPORT_SCALE,
 	CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP,
 	CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP,
 	CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED,
@@ -127,6 +134,8 @@ struct _ConfigurationEngineIface {
 	gchar* (*get_name) (ConfigurationEngine* self);
 	gint (*get_int_property) (ConfigurationEngine* self, ConfigurableProperty p, GError** error);
 	void (*set_int_property) (ConfigurationEngine* self, ConfigurableProperty p, gint val, GError** error);
+	gint (*get_enum_property) (ConfigurationEngine* self, ConfigurableProperty p, GError** error);
+	void (*set_enum_property) (ConfigurationEngine* self, ConfigurableProperty p, gint val, GError** error);
 	gchar* (*get_string_property) (ConfigurationEngine* self, ConfigurableProperty p, GError** error);
 	void (*set_string_property) (ConfigurationEngine* self, ConfigurableProperty p, const gchar* val, GError** error);
 	gboolean (*get_bool_property) (ConfigurationEngine* self, ConfigurableProperty p, GError** error);
@@ -156,7 +165,6 @@ struct _GSettingsConfigurationEngineClass {
 };
 
 struct _GSettingsConfigurationEnginePrivate {
-	GeeSet* known_schemas;
 	gchar** schema_names;
 	gint schema_names_length1;
 	gint _schema_names_size_;
@@ -185,6 +193,7 @@ enum  {
 #define GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME GSETTINGS_CONFIGURATION_ENGINE_PREFS_SCHEMA_NAME ".window"
 #define GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME GSETTINGS_CONFIGURATION_ENGINE_PREFS_SCHEMA_NAME ".files"
 #define GSETTINGS_CONFIGURATION_ENGINE_EDITING_PREFS_SCHEMA_NAME GSETTINGS_CONFIGURATION_ENGINE_PREFS_SCHEMA_NAME ".editing"
+#define GSETTINGS_CONFIGURATION_ENGINE_EXPORT_PREFS_SCHEMA_NAME GSETTINGS_CONFIGURATION_ENGINE_PREFS_SCHEMA_NAME ".export"
 #define GSETTINGS_CONFIGURATION_ENGINE_VIDEO_SCHEMA_NAME GSETTINGS_CONFIGURATION_ENGINE_ROOT_SCHEMA_NAME ".video"
 #define GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME GSETTINGS_CONFIGURATION_ENGINE_ROOT_SCHEMA_NAME ".printing"
 #define GSETTINGS_CONFIGURATION_ENGINE_SHARING_SCHEMA_NAME GSETTINGS_CONFIGURATION_ENGINE_ROOT_SCHEMA_NAME ".sharing"
@@ -195,10 +204,11 @@ enum  {
 #define GSETTINGS_CONFIGURATION_ENGINE_PLUGINS_ENABLE_DISABLE_SCHEMA_NAME GSETTINGS_CONFIGURATION_ENGINE_ROOT_SCHEMA_NAME ".plugins.enable-state"
 GSettingsConfigurationEngine* gsettings_configuration_engine_new (void);
 GSettingsConfigurationEngine* gsettings_configuration_engine_construct (GType object_type);
-static gboolean gsettings_configuration_engine_schema_has_key (GSettingsConfigurationEngine* self, GSettings* schema_object, const gchar* key);
 static void gsettings_configuration_engine_check_key_valid (GSettingsConfigurationEngine* self, const gchar* schema, const gchar* key, GError** error);
 static gboolean gsettings_configuration_engine_get_gs_bool (GSettingsConfigurationEngine* self, const gchar* schema, const gchar* key, GError** error);
 static void gsettings_configuration_engine_set_gs_bool (GSettingsConfigurationEngine* self, const gchar* schema, const gchar* key, gboolean value, GError** error);
+static void gsettings_configuration_engine_set_gs_enum (GSettingsConfigurationEngine* self, const gchar* schema, const gchar* key, gint value, GError** error);
+static gint gsettings_configuration_engine_get_gs_enum (GSettingsConfigurationEngine* self, const gchar* schema, const gchar* key, GError** error);
 static gint gsettings_configuration_engine_get_gs_int (GSettingsConfigurationEngine* self, const gchar* schema, const gchar* key, GError** error);
 static void gsettings_configuration_engine_set_gs_int (GSettingsConfigurationEngine* self, const gchar* schema, const gchar* key, gint value, GError** error);
 static gdouble gsettings_configuration_engine_get_gs_double (GSettingsConfigurationEngine* self, const gchar* schema, const gchar* key, GError** error);
@@ -212,6 +222,8 @@ static gchar* gsettings_configuration_engine_get_plugin_enable_disable_name (con
 static gchar* gsettings_configuration_engine_make_plugin_schema_name (const gchar* domain, const gchar* id);
 static gchar* gsettings_configuration_engine_make_gsettings_key (const gchar* gconf_key);
 static gchar* gsettings_configuration_engine_real_get_name (ConfigurationEngine* base);
+static gint gsettings_configuration_engine_real_get_enum_property (ConfigurationEngine* base, ConfigurableProperty p, GError** error);
+static void gsettings_configuration_engine_real_set_enum_property (ConfigurationEngine* base, ConfigurableProperty p, gint val, GError** error);
 static gint gsettings_configuration_engine_real_get_int_property (ConfigurationEngine* base, ConfigurableProperty p, GError** error);
 static void gsettings_configuration_engine_real_set_int_property (ConfigurationEngine* base, ConfigurableProperty p, gint val, GError** error);
 static gchar* gsettings_configuration_engine_real_get_string_property (ConfigurationEngine* base, ConfigurableProperty p, GError** error);
@@ -236,15 +248,19 @@ GFile* app_dirs_get_settings_migrator_bin (void);
 static void gsettings_configuration_engine_finalize (GObject* obj);
 static void _vala_array_destroy (gpointer array, gint array_length, GDestroyNotify destroy_func);
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
-static gint _vala_array_length (gpointer array);
 
 
 GSettingsConfigurationEngine* gsettings_configuration_engine_construct (GType object_type) {
 	GSettingsConfigurationEngine * self = NULL;
-	GeeHashSet* _tmp0_ = NULL;
+	gchar** _tmp0_ = NULL;
 	gchar** _tmp1_ = NULL;
-	gchar** _tmp2_ = NULL;
-	gchar** _tmp6_ = NULL;
+	gint _tmp1__length1 = 0;
+	gchar* _tmp2_ = NULL;
+	gchar* _tmp3_ = NULL;
+	gchar** _tmp4_ = NULL;
+	gint _tmp4__length1 = 0;
+	gchar* _tmp5_ = NULL;
+	gchar* _tmp6_ = NULL;
 	gchar** _tmp7_ = NULL;
 	gint _tmp7__length1 = 0;
 	gchar* _tmp8_ = NULL;
@@ -498,22 +514,22 @@ GSettingsConfigurationEngine* gsettings_configuration_engine_construct (GType ob
 	gchar* _tmp194_ = NULL;
 	gchar* _tmp195_ = NULL;
 	gchar** _tmp196_ = NULL;
-	gchar** _tmp197_ = NULL;
-	gint _tmp197__length1 = 0;
+	gint _tmp196__length1 = 0;
+	gchar* _tmp197_ = NULL;
 	gchar* _tmp198_ = NULL;
-	gchar* _tmp199_ = NULL;
-	gchar** _tmp200_ = NULL;
-	gint _tmp200__length1 = 0;
+	gchar** _tmp199_ = NULL;
+	gint _tmp199__length1 = 0;
+	gchar* _tmp200_ = NULL;
 	gchar* _tmp201_ = NULL;
-	gchar* _tmp202_ = NULL;
-	gchar** _tmp203_ = NULL;
-	gint _tmp203__length1 = 0;
+	gchar** _tmp202_ = NULL;
+	gint _tmp202__length1 = 0;
+	gchar* _tmp203_ = NULL;
 	gchar* _tmp204_ = NULL;
-	gchar* _tmp205_ = NULL;
-	gchar** _tmp206_ = NULL;
-	gint _tmp206__length1 = 0;
+	gchar** _tmp205_ = NULL;
+	gint _tmp205__length1 = 0;
+	gchar* _tmp206_ = NULL;
 	gchar* _tmp207_ = NULL;
-	gchar* _tmp208_ = NULL;
+	gchar** _tmp208_ = NULL;
 	gchar** _tmp209_ = NULL;
 	gint _tmp209__length1 = 0;
 	gchar* _tmp210_ = NULL;
@@ -750,1790 +766,1887 @@ GSettingsConfigurationEngine* gsettings_configuration_engine_construct (GType ob
 	gint _tmp383__length1 = 0;
 	gchar* _tmp384_ = NULL;
 	gchar* _tmp385_ = NULL;
+	gchar** _tmp386_ = NULL;
+	gint _tmp386__length1 = 0;
+	gchar* _tmp387_ = NULL;
+	gchar* _tmp388_ = NULL;
+	gchar** _tmp389_ = NULL;
+	gint _tmp389__length1 = 0;
+	gchar* _tmp390_ = NULL;
+	gchar* _tmp391_ = NULL;
+	gchar** _tmp392_ = NULL;
+	gint _tmp392__length1 = 0;
+	gchar* _tmp393_ = NULL;
+	gchar* _tmp394_ = NULL;
+	gchar** _tmp395_ = NULL;
+	gint _tmp395__length1 = 0;
+	gchar* _tmp396_ = NULL;
+	gchar* _tmp397_ = NULL;
+	gchar** _tmp398_ = NULL;
+	gint _tmp398__length1 = 0;
+	gchar* _tmp399_ = NULL;
+	gchar* _tmp400_ = NULL;
+	gchar** _tmp401_ = NULL;
+	gint _tmp401__length1 = 0;
+	gchar* _tmp402_ = NULL;
+	gchar* _tmp403_ = NULL;
+	gchar** _tmp404_ = NULL;
+	gint _tmp404__length1 = 0;
+	gchar* _tmp405_ = NULL;
+	gchar* _tmp406_ = NULL;
+	gchar** _tmp407_ = NULL;
+	gint _tmp407__length1 = 0;
+	gchar* _tmp408_ = NULL;
+	gchar* _tmp409_ = NULL;
+	gchar** _tmp410_ = NULL;
+	gint _tmp410__length1 = 0;
+	gchar* _tmp411_ = NULL;
+	gchar* _tmp412_ = NULL;
+	gchar** _tmp413_ = NULL;
+	gint _tmp413__length1 = 0;
+	gchar* _tmp414_ = NULL;
+	gchar* _tmp415_ = NULL;
 #line 29 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = (GSettingsConfigurationEngine*) g_object_new (object_type, NULL);
 #line 30 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp0_ = gee_hash_set_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL, NULL, NULL, NULL);
+	_tmp0_ = g_new0 (gchar*, CONFIGURABLE_PROPERTY_NUM_PROPERTIES + 1);
 #line 30 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_object_unref0 (self->priv->known_schemas);
-#line 30 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	self->priv->known_schemas = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_SET, GeeSet);
-#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp2_ = _tmp1_ = g_settings_list_schemas ();
-#line 764 "GSettingsEngine.c"
-	{
-		gchar** current_schema_collection = NULL;
-		gint current_schema_collection_length1 = 0;
-		gint _current_schema_collection_size_ = 0;
-		gint current_schema_it = 0;
-#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		current_schema_collection = _tmp2_;
-#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		current_schema_collection_length1 = _vala_array_length (_tmp1_);
-#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		for (current_schema_it = 0; current_schema_it < _vala_array_length (_tmp1_); current_schema_it = current_schema_it + 1) {
-#line 776 "GSettingsEngine.c"
-			gchar* _tmp3_ = NULL;
-			gchar* current_schema = NULL;
-#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			_tmp3_ = g_strdup (current_schema_collection[current_schema_it]);
-#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			current_schema = _tmp3_;
-#line 783 "GSettingsEngine.c"
-			{
-				GeeSet* _tmp4_ = NULL;
-				const gchar* _tmp5_ = NULL;
-#line 33 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-				_tmp4_ = self->priv->known_schemas;
-#line 33 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-				_tmp5_ = current_schema;
-#line 33 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-				gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, GEE_TYPE_COLLECTION, GeeCollection), _tmp5_);
-#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-				_g_free0 (current_schema);
-#line 795 "GSettingsEngine.c"
-			}
-		}
-	}
-#line 35 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp6_ = g_new0 (gchar*, CONFIGURABLE_PROPERTY_NUM_PROPERTIES + 1);
-#line 35 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self->priv->schema_names = (_vala_array_free (self->priv->schema_names, self->priv->schema_names_length1, (GDestroyNotify) g_free), NULL);
-#line 35 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	self->priv->schema_names = _tmp6_;
-#line 35 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 30 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	self->priv->schema_names = _tmp0_;
+#line 30 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self->priv->schema_names_length1 = CONFIGURABLE_PROPERTY_NUM_PROPERTIES;
-#line 35 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 30 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self->priv->_schema_names_size_ = self->priv->schema_names_length1;
-#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp1_ = self->priv->schema_names;
+#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp1__length1 = self->priv->schema_names_length1;
+#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp2_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
+#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp1_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY]);
+#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp1_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY] = _tmp2_;
+#line 32 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp3_ = _tmp1_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY];
+#line 33 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp4_ = self->priv->schema_names;
+#line 33 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp4__length1 = self->priv->schema_names_length1;
+#line 33 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp5_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 33 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp4_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME]);
+#line 33 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp4_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME] = _tmp5_;
+#line 33 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp6_ = _tmp4_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME];
+#line 34 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7_ = self->priv->schema_names;
-#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 34 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7__length1 = self->priv->schema_names_length1;
-#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 34 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp8_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
-#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp7_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY]);
-#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp7_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY] = _tmp8_;
-#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp9_ = _tmp7_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY];
-#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 34 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp7_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS]);
+#line 34 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp7_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS] = _tmp8_;
+#line 34 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp9_ = _tmp7_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS];
+#line 35 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp10_ = self->priv->schema_names;
-#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 35 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp10__length1 = self->priv->schema_names_length1;
-#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp11_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp10_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME]);
-#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp10_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME] = _tmp11_;
-#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp12_ = _tmp10_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME];
-#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 35 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp11_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SYSTEM_DESKTOP_SCHEMA_NAME);
+#line 35 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp10_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE]);
+#line 35 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp10_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE] = _tmp11_;
+#line 35 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp12_ = _tmp10_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE];
+#line 36 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp13_ = self->priv->schema_names;
-#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 36 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp13__length1 = self->priv->schema_names_length1;
-#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp14_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
-#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp13_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS]);
-#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp13_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS] = _tmp14_;
-#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp15_ = _tmp13_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS];
-#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 36 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp14_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SYSTEM_DESKTOP_SCHEMA_NAME);
+#line 36 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp13_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE]);
+#line 36 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp13_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE] = _tmp14_;
+#line 36 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp15_ = _tmp13_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE];
+#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp16_ = self->priv->schema_names;
-#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp16__length1 = self->priv->schema_names_length1;
-#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp17_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SYSTEM_DESKTOP_SCHEMA_NAME);
-#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp16_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE]);
-#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp16_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE] = _tmp17_;
-#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp18_ = _tmp16_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE];
-#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp17_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SYSTEM_SCREENSAVER_SCHEMA_NAME);
+#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp16_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE]);
+#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp16_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE] = _tmp17_;
+#line 37 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp18_ = _tmp16_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE];
+#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp19_ = self->priv->schema_names;
-#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp19__length1 = self->priv->schema_names_length1;
-#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp20_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SYSTEM_DESKTOP_SCHEMA_NAME);
-#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp19_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE]);
-#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp19_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE] = _tmp20_;
-#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp21_ = _tmp19_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE];
-#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp20_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SYSTEM_SCREENSAVER_SCHEMA_NAME);
+#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp19_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE]);
+#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp19_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE] = _tmp20_;
+#line 38 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp21_ = _tmp19_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE];
+#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp22_ = self->priv->schema_names;
-#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp22__length1 = self->priv->schema_names_length1;
-#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp23_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SYSTEM_SCREENSAVER_SCHEMA_NAME);
-#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp22_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE]);
-#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp22_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE] = _tmp23_;
-#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp24_ = _tmp22_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE];
-#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp23_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
+#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp22_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN]);
+#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp22_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN] = _tmp23_;
+#line 39 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp24_ = _tmp22_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN];
+#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp25_ = self->priv->schema_names;
-#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp25__length1 = self->priv->schema_names_length1;
-#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp26_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SYSTEM_SCREENSAVER_SCHEMA_NAME);
-#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp25_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE]);
-#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp25_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE] = _tmp26_;
-#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp27_ = _tmp25_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE];
-#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp26_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
+#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp25_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM]);
+#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp25_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM] = _tmp26_;
+#line 40 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp27_ = _tmp25_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM];
+#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp28_ = self->priv->schema_names;
-#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp28__length1 = self->priv->schema_names_length1;
-#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp29_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
-#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp28_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN]);
-#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp28_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN] = _tmp29_;
-#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp30_ = _tmp28_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN];
-#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp29_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME);
+#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp28_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT]);
+#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp28_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT] = _tmp29_;
+#line 41 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp30_ = _tmp28_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT];
+#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp31_ = self->priv->schema_names;
-#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp31__length1 = self->priv->schema_names_length1;
-#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp32_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
-#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp31_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM]);
-#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp31_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM] = _tmp32_;
-#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp33_ = _tmp31_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM];
-#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp32_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME);
+#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp31_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE]);
+#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp31_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE] = _tmp32_;
+#line 42 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp33_ = _tmp31_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE];
+#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp34_ = self->priv->schema_names;
-#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp34__length1 = self->priv->schema_names_length1;
-#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp35_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME);
-#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp34_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT]);
-#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp34_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT] = _tmp35_;
-#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp36_ = _tmp34_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT];
-#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp34_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH]);
+#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp34_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH] = _tmp35_;
+#line 43 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp36_ = _tmp34_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH];
+#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp37_ = self->priv->schema_names;
-#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp37__length1 = self->priv->schema_names_length1;
-#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp38_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME);
-#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp37_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE]);
-#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp37_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE] = _tmp38_;
-#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp39_ = _tmp37_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE];
-#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp38_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp37_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES]);
+#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp37_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES] = _tmp38_;
+#line 44 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp39_ = _tmp37_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES];
+#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp40_ = self->priv->schema_names;
-#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp40__length1 = self->priv->schema_names_length1;
-#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp41_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME);
-#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp40_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH]);
-#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp40_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH] = _tmp41_;
-#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp42_ = _tmp40_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH];
-#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp41_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp40_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES]);
+#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp40_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES] = _tmp41_;
+#line 45 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp42_ = _tmp40_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES];
+#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp43_ = self->priv->schema_names;
-#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp43__length1 = self->priv->schema_names_length1;
-#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp44_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp43_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES]);
-#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp43_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES] = _tmp44_;
-#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp45_ = _tmp43_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES];
-#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp43_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR]);
+#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp43_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR] = _tmp44_;
+#line 46 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp45_ = _tmp43_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR];
+#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp46_ = self->priv->schema_names;
-#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp46__length1 = self->priv->schema_names_length1;
-#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp47_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp46_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES]);
-#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp46_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES] = _tmp47_;
-#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp48_ = _tmp46_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES];
-#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp46_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR]);
+#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp46_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR] = _tmp47_;
+#line 47 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp48_ = _tmp46_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR];
+#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp49_ = self->priv->schema_names;
-#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp49__length1 = self->priv->schema_names_length1;
-#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp50_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp49_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR]);
-#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp49_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR] = _tmp50_;
-#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp51_ = _tmp49_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR];
-#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp49_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR]);
+#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp49_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR] = _tmp50_;
+#line 48 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp51_ = _tmp49_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR];
+#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp52_ = self->priv->schema_names;
-#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp52__length1 = self->priv->schema_names_length1;
-#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp53_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp52_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR]);
-#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp52_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR] = _tmp53_;
-#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp54_ = _tmp52_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR];
-#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp52_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS]);
+#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp52_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS] = _tmp53_;
+#line 49 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp54_ = _tmp52_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS];
+#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp55_ = self->priv->schema_names;
-#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp55__length1 = self->priv->schema_names_length1;
-#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp56_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp55_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR]);
-#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp55_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR] = _tmp56_;
-#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp57_ = _tmp55_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR];
-#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp55_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS]);
+#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp55_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS] = _tmp56_;
+#line 50 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp57_ = _tmp55_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS];
+#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp58_ = self->priv->schema_names;
-#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp58__length1 = self->priv->schema_names_length1;
-#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp59_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp58_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS]);
-#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp58_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS] = _tmp59_;
-#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp60_ = _tmp58_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS];
-#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp58_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES]);
+#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp58_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES] = _tmp59_;
+#line 51 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp60_ = _tmp58_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES];
+#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp61_ = self->priv->schema_names;
-#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp61__length1 = self->priv->schema_names_length1;
-#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp62_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp61_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS]);
-#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp61_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS] = _tmp62_;
-#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp63_ = _tmp61_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS];
-#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp61_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS]);
+#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp61_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS] = _tmp62_;
+#line 52 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp63_ = _tmp61_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS];
+#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp64_ = self->priv->schema_names;
-#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp64__length1 = self->priv->schema_names_length1;
-#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp65_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp64_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES]);
-#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp64_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES] = _tmp65_;
-#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp66_ = _tmp64_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES];
-#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp64_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS]);
+#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp64_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS] = _tmp65_;
+#line 53 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp66_ = _tmp64_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS];
+#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp67_ = self->priv->schema_names;
-#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp67__length1 = self->priv->schema_names_length1;
-#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp68_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp67_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS]);
-#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp67_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS] = _tmp68_;
-#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp69_ = _tmp67_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS];
-#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp67_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING]);
+#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp67_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING] = _tmp68_;
+#line 54 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp69_ = _tmp67_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING];
+#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp70_ = self->priv->schema_names;
-#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp70__length1 = self->priv->schema_names_length1;
-#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp71_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp70_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS]);
-#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp70_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS] = _tmp71_;
-#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp72_ = _tmp70_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS];
-#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp70_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY]);
+#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp70_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY] = _tmp71_;
+#line 55 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp72_ = _tmp70_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY];
+#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp73_ = self->priv->schema_names;
-#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp73__length1 = self->priv->schema_names_length1;
-#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp74_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp73_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING]);
-#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp73_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING] = _tmp74_;
-#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp75_ = _tmp73_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING];
-#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp73_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING]);
+#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp73_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING] = _tmp74_;
+#line 56 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp75_ = _tmp73_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING];
+#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp76_ = self->priv->schema_names;
-#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp76__length1 = self->priv->schema_names_length1;
-#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp77_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp76_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY]);
-#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp76_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY] = _tmp77_;
-#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp78_ = _tmp76_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY];
-#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp77_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_EXPORT_PREFS_SCHEMA_NAME);
+#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp76_[CONFIGURABLE_PROPERTY_EXPORT_CONSTRAINT]);
+#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp76_[CONFIGURABLE_PROPERTY_EXPORT_CONSTRAINT] = _tmp77_;
+#line 57 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp78_ = _tmp76_[CONFIGURABLE_PROPERTY_EXPORT_CONSTRAINT];
+#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp79_ = self->priv->schema_names;
-#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp79__length1 = self->priv->schema_names_length1;
-#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp80_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp79_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING]);
-#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp79_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING] = _tmp80_;
-#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp81_ = _tmp79_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING];
-#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp80_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_EXPORT_PREFS_SCHEMA_NAME);
+#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp79_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_FORMAT_MODE]);
+#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp79_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_FORMAT_MODE] = _tmp80_;
+#line 58 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp81_ = _tmp79_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_FORMAT_MODE];
+#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp82_ = self->priv->schema_names;
-#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp82__length1 = self->priv->schema_names_length1;
-#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp83_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_EDITING_PREFS_SCHEMA_NAME);
-#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp82_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP]);
-#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp82_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP] = _tmp83_;
-#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp84_ = _tmp82_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP];
-#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp83_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_EXPORT_PREFS_SCHEMA_NAME);
+#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp82_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_METADATA]);
+#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp82_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_METADATA] = _tmp83_;
+#line 59 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp84_ = _tmp82_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_METADATA];
+#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp85_ = self->priv->schema_names;
-#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp85__length1 = self->priv->schema_names_length1;
-#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp86_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_EDITING_PREFS_SCHEMA_NAME);
-#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp85_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP]);
-#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp85_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP] = _tmp86_;
-#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp87_ = _tmp85_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP];
-#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp86_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_EXPORT_PREFS_SCHEMA_NAME);
+#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp85_[CONFIGURABLE_PROPERTY_EXPORT_PHOTO_FILE_FORMAT]);
+#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp85_[CONFIGURABLE_PROPERTY_EXPORT_PHOTO_FILE_FORMAT] = _tmp86_;
+#line 60 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp87_ = _tmp85_[CONFIGURABLE_PROPERTY_EXPORT_PHOTO_FILE_FORMAT];
+#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp88_ = self->priv->schema_names;
-#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp88__length1 = self->priv->schema_names_length1;
-#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp89_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp88_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED]);
-#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp88_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED] = _tmp89_;
-#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp90_ = _tmp88_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED];
-#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp89_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_EXPORT_PREFS_SCHEMA_NAME);
+#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp88_[CONFIGURABLE_PROPERTY_EXPORT_QUALITY]);
+#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp88_[CONFIGURABLE_PROPERTY_EXPORT_QUALITY] = _tmp89_;
+#line 61 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp90_ = _tmp88_[CONFIGURABLE_PROPERTY_EXPORT_QUALITY];
+#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp91_ = self->priv->schema_names;
-#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp91__length1 = self->priv->schema_names_length1;
-#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp92_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
-#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp91_[CONFIGURABLE_PROPERTY_IMPORT_DIR]);
-#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp91_[CONFIGURABLE_PROPERTY_IMPORT_DIR] = _tmp92_;
-#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp93_ = _tmp91_[CONFIGURABLE_PROPERTY_IMPORT_DIR];
-#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp92_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_EXPORT_PREFS_SCHEMA_NAME);
+#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp91_[CONFIGURABLE_PROPERTY_EXPORT_SCALE]);
+#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp91_[CONFIGURABLE_PROPERTY_EXPORT_SCALE] = _tmp92_;
+#line 62 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp93_ = _tmp91_[CONFIGURABLE_PROPERTY_EXPORT_SCALE];
+#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp94_ = self->priv->schema_names;
-#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp94__length1 = self->priv->schema_names_length1;
-#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp95_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp94_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY]);
-#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp94_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY] = _tmp95_;
-#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp96_ = _tmp94_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY];
-#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp95_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_EDITING_PREFS_SCHEMA_NAME);
+#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp94_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP]);
+#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp94_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP] = _tmp95_;
+#line 63 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp96_ = _tmp94_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP];
+#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp97_ = self->priv->schema_names;
-#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp97__length1 = self->priv->schema_names_length1;
-#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp98_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_CROP_SCHEMA_NAME);
-#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp97_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT]);
-#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp97_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT] = _tmp98_;
-#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp99_ = _tmp97_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT];
-#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp98_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_EDITING_PREFS_SCHEMA_NAME);
+#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp97_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP]);
+#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp97_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP] = _tmp98_;
+#line 64 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp99_ = _tmp97_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP];
+#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp100_ = self->priv->schema_names;
-#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp100__length1 = self->priv->schema_names_length1;
-#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp101_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_CROP_SCHEMA_NAME);
-#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp100_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE]);
-#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp100_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE] = _tmp101_;
-#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp102_ = _tmp100_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE];
-#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp101_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp100_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED]);
+#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp100_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED] = _tmp101_;
+#line 65 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp102_ = _tmp100_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED];
+#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp103_ = self->priv->schema_names;
-#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp103__length1 = self->priv->schema_names_length1;
-#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp104_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_CROP_SCHEMA_NAME);
-#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp103_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH]);
-#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp103_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH] = _tmp104_;
-#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp105_ = _tmp103_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH];
-#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp104_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
+#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp103_[CONFIGURABLE_PROPERTY_IMPORT_DIR]);
+#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp103_[CONFIGURABLE_PROPERTY_IMPORT_DIR] = _tmp104_;
+#line 66 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp105_ = _tmp103_[CONFIGURABLE_PROPERTY_IMPORT_DIR];
+#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp106_ = self->priv->schema_names;
-#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp106__length1 = self->priv->schema_names_length1;
-#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp107_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SHARING_SCHEMA_NAME);
-#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp106_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE]);
-#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp106_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE] = _tmp107_;
-#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp108_ = _tmp106_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE];
-#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp107_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp106_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY]);
+#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp106_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY] = _tmp107_;
+#line 67 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp108_ = _tmp106_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY];
+#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp109_ = self->priv->schema_names;
-#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp109__length1 = self->priv->schema_names_length1;
-#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp110_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_IMPORTING_SCHEMA_NAME);
-#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp109_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE]);
-#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp109_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE] = _tmp110_;
-#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp111_ = _tmp109_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE];
-#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp110_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_CROP_SCHEMA_NAME);
+#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp109_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT]);
+#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp109_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT] = _tmp110_;
+#line 68 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp111_ = _tmp109_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT];
+#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp112_ = self->priv->schema_names;
-#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp112__length1 = self->priv->schema_names_length1;
-#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp113_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp112_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING]);
-#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp112_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING] = _tmp113_;
-#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp114_ = _tmp112_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING];
-#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp113_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_CROP_SCHEMA_NAME);
+#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp112_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE]);
+#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp112_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE] = _tmp113_;
+#line 69 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp114_ = _tmp112_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE];
+#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp115_ = self->priv->schema_names;
-#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp115__length1 = self->priv->schema_names_length1;
-#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp116_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp115_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY]);
-#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp115_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY] = _tmp116_;
-#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp117_ = _tmp115_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY];
-#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp116_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_CROP_SCHEMA_NAME);
+#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp115_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH]);
+#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp115_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH] = _tmp116_;
+#line 70 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp117_ = _tmp115_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH];
+#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp118_ = self->priv->schema_names;
-#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp118__length1 = self->priv->schema_names_length1;
-#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp119_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME);
-#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp118_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT]);
-#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp118_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT] = _tmp119_;
-#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp120_ = _tmp118_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT];
-#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp119_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SHARING_SCHEMA_NAME);
+#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp118_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE]);
+#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp118_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE] = _tmp119_;
+#line 71 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp120_ = _tmp118_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE];
+#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp121_ = self->priv->schema_names;
-#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp121__length1 = self->priv->schema_names_length1;
-#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp122_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME);
-#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp121_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE]);
-#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp121_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE] = _tmp122_;
-#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp123_ = _tmp121_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE];
-#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp122_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_IMPORTING_SCHEMA_NAME);
+#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp121_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE]);
+#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp121_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE] = _tmp122_;
+#line 72 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp123_ = _tmp121_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE];
+#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp124_ = self->priv->schema_names;
-#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp124__length1 = self->priv->schema_names_length1;
-#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp125_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME);
-#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp124_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH]);
-#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp124_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH] = _tmp125_;
-#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp126_ = _tmp124_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH];
-#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp125_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp124_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING]);
+#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp124_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING] = _tmp125_;
+#line 73 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp126_ = _tmp124_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING];
+#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp127_ = self->priv->schema_names;
-#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp127__length1 = self->priv->schema_names_length1;
-#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp128_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp127_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS]);
-#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp127_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS] = _tmp128_;
-#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp129_ = _tmp127_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS];
-#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp127_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY]);
+#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp127_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY] = _tmp128_;
+#line 74 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp129_ = _tmp127_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY];
+#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp130_ = self->priv->schema_names;
-#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp130__length1 = self->priv->schema_names_length1;
-#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp131_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp130_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE]);
-#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp130_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE] = _tmp131_;
-#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp132_ = _tmp130_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE];
-#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp131_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME);
+#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp130_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT]);
+#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp130_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT] = _tmp131_;
+#line 75 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp132_ = _tmp130_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT];
+#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp133_ = self->priv->schema_names;
-#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp133__length1 = self->priv->schema_names_length1;
-#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp134_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp133_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE]);
-#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp133_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE] = _tmp134_;
-#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp135_ = _tmp133_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE];
-#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp134_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME);
+#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp133_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE]);
+#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp133_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE] = _tmp134_;
+#line 76 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp135_ = _tmp133_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE];
+#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp136_ = self->priv->schema_names;
-#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp136__length1 = self->priv->schema_names_length1;
-#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp137_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
-#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp136_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT]);
-#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp136_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT] = _tmp137_;
-#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp138_ = _tmp136_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT];
-#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp137_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_WINDOW_PREFS_SCHEMA_NAME);
+#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp136_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH]);
+#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp136_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH] = _tmp137_;
+#line 77 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp138_ = _tmp136_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH];
+#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp139_ = self->priv->schema_names;
-#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp139__length1 = self->priv->schema_names_length1;
-#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp140_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
-#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp139_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT]);
-#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp139_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT] = _tmp140_;
-#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp141_ = _tmp139_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT];
-#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp140_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp139_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS]);
+#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp139_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS] = _tmp140_;
+#line 78 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp141_ = _tmp139_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS];
+#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp142_ = self->priv->schema_names;
-#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp142__length1 = self->priv->schema_names_length1;
-#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp143_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
-#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp142_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI]);
-#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp142_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI] = _tmp143_;
-#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp144_ = _tmp142_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI];
-#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp143_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp142_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE]);
+#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp142_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE] = _tmp143_;
+#line 79 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp144_ = _tmp142_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE];
+#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp145_ = self->priv->schema_names;
-#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp145__length1 = self->priv->schema_names_length1;
-#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp146_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
-#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp145_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS]);
-#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp145_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS] = _tmp146_;
-#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp147_ = _tmp145_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS];
-#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp146_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp145_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE]);
+#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp145_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE] = _tmp146_;
+#line 80 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp147_ = _tmp145_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE];
+#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp148_ = self->priv->schema_names;
-#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp148__length1 = self->priv->schema_names_length1;
-#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp149_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
-#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp148_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH]);
-#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp148_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH] = _tmp149_;
-#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp150_ = _tmp148_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH];
-#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp148_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT]);
+#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp148_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT] = _tmp149_;
+#line 81 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp150_ = _tmp148_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT];
+#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp151_ = self->priv->schema_names;
-#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp151__length1 = self->priv->schema_names_length1;
-#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp152_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
-#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp151_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE]);
-#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp151_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE] = _tmp152_;
-#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp153_ = _tmp151_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE];
-#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp151_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT]);
+#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp151_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT] = _tmp152_;
+#line 82 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp153_ = _tmp151_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT];
+#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp154_ = self->priv->schema_names;
-#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp154__length1 = self->priv->schema_names_length1;
-#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp155_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
-#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp154_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO]);
-#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp154_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO] = _tmp155_;
-#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp156_ = _tmp154_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO];
-#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp154_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI]);
+#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp154_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI] = _tmp155_;
+#line 83 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp156_ = _tmp154_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI];
+#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp157_ = self->priv->schema_names;
-#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp157__length1 = self->priv->schema_names_length1;
-#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp158_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
-#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp157_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES]);
-#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp157_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES] = _tmp158_;
-#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp159_ = _tmp157_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES];
-#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp157_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS]);
+#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp157_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS] = _tmp158_;
+#line 84 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp159_ = _tmp157_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS];
+#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp160_ = self->priv->schema_names;
-#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp160__length1 = self->priv->schema_names_length1;
-#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp161_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
-#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp160_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION]);
-#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp160_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION] = _tmp161_;
-#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp162_ = _tmp160_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION];
-#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp160_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH]);
+#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp160_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH] = _tmp161_;
+#line 85 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp162_ = _tmp160_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH];
+#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp163_ = self->priv->schema_names;
-#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp163__length1 = self->priv->schema_names_length1;
-#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp164_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
-#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp163_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT]);
-#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp163_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT] = _tmp164_;
-#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp165_ = _tmp163_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT];
-#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp163_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE]);
+#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp163_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE] = _tmp164_;
+#line 86 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp165_ = _tmp163_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE];
+#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp166_ = self->priv->schema_names;
-#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp166__length1 = self->priv->schema_names_length1;
-#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp167_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
-#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp166_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT]);
-#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp166_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT] = _tmp167_;
-#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp168_ = _tmp166_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT];
-#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp167_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
+#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp166_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO]);
+#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp166_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO] = _tmp167_;
+#line 87 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp168_ = _tmp166_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO];
+#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp169_ = self->priv->schema_names;
-#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp169__length1 = self->priv->schema_names_length1;
-#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp170_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp169_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG]);
-#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp169_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG] = _tmp170_;
-#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp171_ = _tmp169_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG];
-#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp170_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
+#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp169_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES]);
+#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp169_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES] = _tmp170_;
+#line 88 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp171_ = _tmp169_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES];
+#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp172_ = self->priv->schema_names;
-#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp172__length1 = self->priv->schema_names_length1;
-#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp173_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp172_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION]);
-#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp172_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION] = _tmp173_;
-#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp174_ = _tmp172_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION];
-#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp173_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
+#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp172_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION]);
+#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp172_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION] = _tmp173_;
+#line 89 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp174_ = _tmp172_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION];
+#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp175_ = self->priv->schema_names;
-#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp175__length1 = self->priv->schema_names_length1;
-#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp176_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SLIDESHOW_PREFS_SCHEMA_NAME);
-#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp175_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY]);
-#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp175_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY] = _tmp176_;
-#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp177_ = _tmp175_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY];
-#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp176_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_PRINTING_SCHEMA_NAME);
+#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp175_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT]);
+#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp175_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT] = _tmp176_;
+#line 90 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp177_ = _tmp175_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT];
+#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp178_ = self->priv->schema_names;
-#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp178__length1 = self->priv->schema_names_length1;
-#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp179_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SLIDESHOW_PREFS_SCHEMA_NAME);
-#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp178_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY]);
-#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp178_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY] = _tmp179_;
-#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp180_ = _tmp178_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY];
-#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp179_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
+#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp178_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT]);
+#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp178_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT] = _tmp179_;
+#line 91 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp180_ = _tmp178_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT];
+#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp181_ = self->priv->schema_names;
-#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp181__length1 = self->priv->schema_names_length1;
-#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp182_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SLIDESHOW_PREFS_SCHEMA_NAME);
-#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp181_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID]);
-#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp181_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID] = _tmp182_;
-#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp183_ = _tmp181_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID];
-#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp182_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp181_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG]);
+#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp181_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG] = _tmp182_;
+#line 92 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp183_ = _tmp181_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG];
+#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp184_ = self->priv->schema_names;
-#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp184__length1 = self->priv->schema_names_length1;
-#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp185_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SLIDESHOW_PREFS_SCHEMA_NAME);
-#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp184_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE]);
-#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp184_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE] = _tmp185_;
-#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp186_ = _tmp184_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE];
-#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp185_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp184_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION]);
+#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp184_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION] = _tmp185_;
+#line 93 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp186_ = _tmp184_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION];
+#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp187_ = self->priv->schema_names;
-#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp187__length1 = self->priv->schema_names_length1;
-#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp188_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
-#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp187_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME]);
-#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp187_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME] = _tmp188_;
-#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp189_ = _tmp187_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME];
-#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp188_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SLIDESHOW_PREFS_SCHEMA_NAME);
+#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp187_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY]);
+#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp187_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY] = _tmp188_;
+#line 94 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp189_ = _tmp187_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY];
+#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp190_ = self->priv->schema_names;
-#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp190__length1 = self->priv->schema_names_length1;
-#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp191_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
-#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp190_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES]);
-#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp190_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES] = _tmp191_;
-#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp192_ = _tmp190_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES];
-#line 99 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp191_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SLIDESHOW_PREFS_SCHEMA_NAME);
+#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp190_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY]);
+#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp190_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY] = _tmp191_;
+#line 95 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp192_ = _tmp190_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY];
+#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp193_ = self->priv->schema_names;
-#line 99 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp193__length1 = self->priv->schema_names_length1;
+#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp194_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SLIDESHOW_PREFS_SCHEMA_NAME);
+#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp193_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID]);
+#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp193_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID] = _tmp194_;
+#line 96 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp195_ = _tmp193_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID];
+#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp196_ = self->priv->schema_names;
+#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp196__length1 = self->priv->schema_names_length1;
+#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp197_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_SLIDESHOW_PREFS_SCHEMA_NAME);
+#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp196_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE]);
+#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp196_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE] = _tmp197_;
+#line 97 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp198_ = _tmp196_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE];
+#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp199_ = self->priv->schema_names;
+#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp199__length1 = self->priv->schema_names_length1;
+#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp200_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_UI_PREFS_SCHEMA_NAME);
+#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp199_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME]);
+#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp199_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME] = _tmp200_;
+#line 98 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp201_ = _tmp199_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME];
 #line 99 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp194_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_VIDEO_SCHEMA_NAME);
+	_tmp202_ = self->priv->schema_names;
 #line 99 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp193_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE]);
+	_tmp202__length1 = self->priv->schema_names_length1;
 #line 99 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp193_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE] = _tmp194_;
+	_tmp203_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_FILES_PREFS_SCHEMA_NAME);
 #line 99 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp195_ = _tmp193_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE];
-#line 101 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp196_ = g_new0 (gchar*, CONFIGURABLE_PROPERTY_NUM_PROPERTIES + 1);
-#line 101 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp202_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES]);
+#line 99 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp202_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES] = _tmp203_;
+#line 99 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp204_ = _tmp202_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES];
+#line 100 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp205_ = self->priv->schema_names;
+#line 100 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp205__length1 = self->priv->schema_names_length1;
+#line 100 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp206_ = g_strdup (GSETTINGS_CONFIGURATION_ENGINE_VIDEO_SCHEMA_NAME);
+#line 100 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp205_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE]);
+#line 100 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp205_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE] = _tmp206_;
+#line 100 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp207_ = _tmp205_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE];
+#line 102 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp208_ = g_new0 (gchar*, CONFIGURABLE_PROPERTY_NUM_PROPERTIES + 1);
+#line 102 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self->priv->key_names = (_vala_array_free (self->priv->key_names, self->priv->key_names_length1, (GDestroyNotify) g_free), NULL);
-#line 101 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	self->priv->key_names = _tmp196_;
-#line 101 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 102 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	self->priv->key_names = _tmp208_;
+#line 102 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self->priv->key_names_length1 = CONFIGURABLE_PROPERTY_NUM_PROPERTIES;
-#line 101 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 102 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self->priv->_key_names_size_ = self->priv->key_names_length1;
-#line 103 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp197_ = self->priv->key_names;
-#line 103 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp197__length1 = self->priv->key_names_length1;
-#line 103 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp198_ = g_strdup ("auto-import");
-#line 103 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp197_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY]);
-#line 103 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp197_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY] = _tmp198_;
-#line 103 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp199_ = _tmp197_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY];
 #line 104 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp200_ = self->priv->key_names;
-#line 104 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp200__length1 = self->priv->key_names_length1;
-#line 104 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp201_ = g_strdup ("background-color");
-#line 104 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp200_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME]);
-#line 104 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp200_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME] = _tmp201_;
-#line 104 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp202_ = _tmp200_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME];
-#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp203_ = self->priv->key_names;
-#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp203__length1 = self->priv->key_names_length1;
-#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp204_ = g_strdup ("commit-metadata");
-#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp203_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS]);
-#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp203_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS] = _tmp204_;
-#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp205_ = _tmp203_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS];
-#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp206_ = self->priv->key_names;
-#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp206__length1 = self->priv->key_names_length1;
-#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp207_ = g_strdup ("picture-uri");
-#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp206_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE]);
-#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp206_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE] = _tmp207_;
-#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp208_ = _tmp206_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE];
-#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp209_ = self->priv->key_names;
-#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 104 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp209__length1 = self->priv->key_names_length1;
-#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp210_ = g_strdup ("picture-options");
-#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp209_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE]);
-#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp209_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE] = _tmp210_;
-#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp211_ = _tmp209_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE];
-#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 104 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp210_ = g_strdup ("auto-import");
+#line 104 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp209_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY]);
+#line 104 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp209_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY] = _tmp210_;
+#line 104 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp211_ = _tmp209_[CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY];
+#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp212_ = self->priv->key_names;
-#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp212__length1 = self->priv->key_names_length1;
-#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp213_ = g_strdup ("picture-uri");
-#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp212_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE]);
-#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp212_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE] = _tmp213_;
-#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp214_ = _tmp212_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE];
-#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp213_ = g_strdup ("background-color");
+#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp212_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME]);
+#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp212_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME] = _tmp213_;
+#line 105 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp214_ = _tmp212_[CONFIGURABLE_PROPERTY_BG_COLOR_NAME];
+#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp215_ = self->priv->key_names;
-#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp215__length1 = self->priv->key_names_length1;
-#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp216_ = g_strdup ("picture-options");
-#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp215_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE]);
-#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp215_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE] = _tmp216_;
-#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp217_ = _tmp215_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE];
-#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp216_ = g_strdup ("commit-metadata");
+#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp215_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS]);
+#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp215_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS] = _tmp216_;
+#line 106 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp217_ = _tmp215_[CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS];
+#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp218_ = self->priv->key_names;
-#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp218__length1 = self->priv->key_names_length1;
-#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp219_ = g_strdup ("directory-pattern");
-#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp218_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN]);
-#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp218_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN] = _tmp219_;
-#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp220_ = _tmp218_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN];
-#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp219_ = g_strdup ("picture-uri");
+#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp218_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE]);
+#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp218_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE] = _tmp219_;
+#line 107 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp220_ = _tmp218_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE];
+#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp221_ = self->priv->key_names;
-#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp221__length1 = self->priv->key_names_length1;
-#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp222_ = g_strdup ("directory-pattern-custom");
-#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp221_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM]);
-#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp221_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM] = _tmp222_;
-#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp223_ = _tmp221_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM];
-#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp222_ = g_strdup ("picture-options");
+#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp221_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE]);
+#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp221_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE] = _tmp222_;
+#line 108 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp223_ = _tmp221_[CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE];
+#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp224_ = self->priv->key_names;
-#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp224__length1 = self->priv->key_names_length1;
-#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp225_ = g_strdup ("direct-height");
-#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp224_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT]);
-#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp224_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT] = _tmp225_;
-#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp226_ = _tmp224_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT];
-#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp225_ = g_strdup ("picture-uri");
+#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp224_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE]);
+#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp224_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE] = _tmp225_;
+#line 109 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp226_ = _tmp224_[CONFIGURABLE_PROPERTY_SCREENSAVER_FILE];
+#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp227_ = self->priv->key_names;
-#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp227__length1 = self->priv->key_names_length1;
-#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp228_ = g_strdup ("direct-maximize");
-#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp227_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE]);
-#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp227_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE] = _tmp228_;
-#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp229_ = _tmp227_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE];
-#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp228_ = g_strdup ("picture-options");
+#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp227_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE]);
+#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp227_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE] = _tmp228_;
+#line 110 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp229_ = _tmp227_[CONFIGURABLE_PROPERTY_SCREENSAVER_MODE];
+#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp230_ = self->priv->key_names;
-#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp230__length1 = self->priv->key_names_length1;
-#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp231_ = g_strdup ("direct-width");
-#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp230_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH]);
-#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp230_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH] = _tmp231_;
-#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp232_ = _tmp230_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH];
-#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp231_ = g_strdup ("directory-pattern");
+#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp230_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN]);
+#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp230_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN] = _tmp231_;
+#line 111 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp232_ = _tmp230_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN];
+#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp233_ = self->priv->key_names;
-#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp233__length1 = self->priv->key_names_length1;
-#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp234_ = g_strdup ("display-basic-properties");
-#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp233_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES]);
-#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp233_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES] = _tmp234_;
-#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp235_ = _tmp233_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES];
-#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp234_ = g_strdup ("directory-pattern-custom");
+#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp233_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM]);
+#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp233_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM] = _tmp234_;
+#line 112 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp235_ = _tmp233_[CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM];
+#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp236_ = self->priv->key_names;
-#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp236__length1 = self->priv->key_names_length1;
-#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp237_ = g_strdup ("display-extended-properties");
-#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp236_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES]);
-#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp236_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES] = _tmp237_;
-#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp238_ = _tmp236_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES];
-#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp237_ = g_strdup ("direct-height");
+#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp236_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT]);
+#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp236_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT] = _tmp237_;
+#line 113 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp238_ = _tmp236_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT];
+#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp239_ = self->priv->key_names;
-#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp239__length1 = self->priv->key_names_length1;
-#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp240_ = g_strdup ("display-sidebar");
-#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp239_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR]);
-#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp239_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR] = _tmp240_;
-#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp241_ = _tmp239_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR];
-#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp240_ = g_strdup ("direct-maximize");
+#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp239_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE]);
+#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp239_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE] = _tmp240_;
+#line 114 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp241_ = _tmp239_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE];
+#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp242_ = self->priv->key_names;
-#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp242__length1 = self->priv->key_names_length1;
-#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp243_ = g_strdup ("display-toolbar");
-#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp242_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR]);
-#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp242_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR] = _tmp243_;
-#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp244_ = _tmp242_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR];
-#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp243_ = g_strdup ("direct-width");
+#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp242_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH]);
+#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp242_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH] = _tmp243_;
+#line 115 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp244_ = _tmp242_[CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH];
+#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp245_ = self->priv->key_names;
-#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp245__length1 = self->priv->key_names_length1;
-#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp246_ = g_strdup ("display-search-bar");
-#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp245_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR]);
-#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp245_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR] = _tmp246_;
-#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp247_ = _tmp245_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR];
-#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp246_ = g_strdup ("display-basic-properties");
+#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp245_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES]);
+#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp245_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES] = _tmp246_;
+#line 116 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp247_ = _tmp245_[CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES];
+#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp248_ = self->priv->key_names;
-#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp248__length1 = self->priv->key_names_length1;
-#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp249_ = g_strdup ("display-photo-ratings");
-#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp248_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS]);
-#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp248_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS] = _tmp249_;
-#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp250_ = _tmp248_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS];
-#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp249_ = g_strdup ("display-extended-properties");
+#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp248_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES]);
+#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp248_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES] = _tmp249_;
+#line 117 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp250_ = _tmp248_[CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES];
+#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp251_ = self->priv->key_names;
-#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp251__length1 = self->priv->key_names_length1;
-#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp252_ = g_strdup ("display-photo-tags");
-#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp251_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS]);
-#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp251_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS] = _tmp252_;
-#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp253_ = _tmp251_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS];
-#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp252_ = g_strdup ("display-sidebar");
+#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp251_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR]);
+#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp251_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR] = _tmp252_;
+#line 118 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp253_ = _tmp251_[CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR];
+#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp254_ = self->priv->key_names;
-#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp254__length1 = self->priv->key_names_length1;
-#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp255_ = g_strdup ("display-photo-titles");
-#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp254_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES]);
-#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp254_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES] = _tmp255_;
-#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp256_ = _tmp254_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES];
-#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp255_ = g_strdup ("display-toolbar");
+#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp254_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR]);
+#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp254_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR] = _tmp255_;
+#line 119 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp256_ = _tmp254_[CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR];
+#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp257_ = self->priv->key_names;
-#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp257__length1 = self->priv->key_names_length1;
-#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp258_ = g_strdup ("display-photo-comments");
-#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp257_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS]);
-#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp257_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS] = _tmp258_;
-#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp259_ = _tmp257_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS];
-#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp258_ = g_strdup ("display-search-bar");
+#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp257_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR]);
+#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp257_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR] = _tmp258_;
+#line 120 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp259_ = _tmp257_[CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR];
+#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp260_ = self->priv->key_names;
-#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp260__length1 = self->priv->key_names_length1;
-#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp261_ = g_strdup ("display-event-comments");
-#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp260_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS]);
-#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp260_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS] = _tmp261_;
-#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp262_ = _tmp260_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS];
-#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp261_ = g_strdup ("display-photo-ratings");
+#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp260_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS]);
+#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp260_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS] = _tmp261_;
+#line 121 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp262_ = _tmp260_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS];
+#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp263_ = self->priv->key_names;
-#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp263__length1 = self->priv->key_names_length1;
-#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp264_ = g_strdup ("event-photos-sort-ascending");
-#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp263_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING]);
-#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp263_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING] = _tmp264_;
-#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp265_ = _tmp263_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING];
-#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp264_ = g_strdup ("display-photo-tags");
+#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp263_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS]);
+#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp263_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS] = _tmp264_;
+#line 122 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp265_ = _tmp263_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS];
+#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp266_ = self->priv->key_names;
-#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp266__length1 = self->priv->key_names_length1;
-#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp267_ = g_strdup ("event-photos-sort-by");
-#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp266_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY]);
-#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp266_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY] = _tmp267_;
-#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp268_ = _tmp266_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY];
-#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp267_ = g_strdup ("display-photo-titles");
+#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp266_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES]);
+#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp266_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES] = _tmp267_;
+#line 123 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp268_ = _tmp266_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES];
+#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp269_ = self->priv->key_names;
-#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp269__length1 = self->priv->key_names_length1;
-#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp270_ = g_strdup ("events-sort-ascending");
-#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp269_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING]);
-#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp269_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING] = _tmp270_;
-#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp271_ = _tmp269_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING];
-#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp270_ = g_strdup ("display-photo-comments");
+#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp269_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS]);
+#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp269_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS] = _tmp270_;
+#line 124 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp271_ = _tmp269_[CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS];
+#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp272_ = self->priv->key_names;
-#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp272__length1 = self->priv->key_names_length1;
-#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp273_ = g_strdup ("external-photo-editor");
-#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp272_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP]);
-#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp272_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP] = _tmp273_;
-#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp274_ = _tmp272_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP];
-#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp273_ = g_strdup ("display-event-comments");
+#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp272_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS]);
+#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp272_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS] = _tmp273_;
+#line 125 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp274_ = _tmp272_[CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS];
+#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp275_ = self->priv->key_names;
-#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp275__length1 = self->priv->key_names_length1;
-#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp276_ = g_strdup ("external-raw-editor");
-#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp275_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP]);
-#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp275_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP] = _tmp276_;
-#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp277_ = _tmp275_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP];
-#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp276_ = g_strdup ("event-photos-sort-ascending");
+#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp275_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING]);
+#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp275_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING] = _tmp276_;
+#line 126 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp277_ = _tmp275_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING];
+#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp278_ = self->priv->key_names;
-#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp278__length1 = self->priv->key_names_length1;
-#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp279_ = g_strdup ("hide-photos-already-imported");
-#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp278_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED]);
-#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp278_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED] = _tmp279_;
-#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp280_ = _tmp278_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED];
-#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp279_ = g_strdup ("event-photos-sort-by");
+#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp278_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY]);
+#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp278_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY] = _tmp279_;
+#line 127 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp280_ = _tmp278_[CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY];
+#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp281_ = self->priv->key_names;
-#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp281__length1 = self->priv->key_names_length1;
-#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp282_ = g_strdup ("import-dir");
-#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp281_[CONFIGURABLE_PROPERTY_IMPORT_DIR]);
-#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp281_[CONFIGURABLE_PROPERTY_IMPORT_DIR] = _tmp282_;
-#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp283_ = _tmp281_[CONFIGURABLE_PROPERTY_IMPORT_DIR];
-#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp282_ = g_strdup ("events-sort-ascending");
+#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp281_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING]);
+#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp281_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING] = _tmp282_;
+#line 128 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp283_ = _tmp281_[CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING];
+#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp284_ = self->priv->key_names;
-#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp284__length1 = self->priv->key_names_length1;
-#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp285_ = g_strdup ("keep-relativity");
-#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp284_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY]);
-#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp284_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY] = _tmp285_;
-#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp286_ = _tmp284_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY];
-#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp285_ = g_strdup ("constraint");
+#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp284_[CONFIGURABLE_PROPERTY_EXPORT_CONSTRAINT]);
+#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp284_[CONFIGURABLE_PROPERTY_EXPORT_CONSTRAINT] = _tmp285_;
+#line 129 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp286_ = _tmp284_[CONFIGURABLE_PROPERTY_EXPORT_CONSTRAINT];
+#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp287_ = self->priv->key_names;
-#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp287__length1 = self->priv->key_names_length1;
-#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp288_ = g_strdup ("last-crop-height");
-#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp287_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT]);
-#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp287_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT] = _tmp288_;
-#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp289_ = _tmp287_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT];
-#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp288_ = g_strdup ("export-format-mode");
+#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp287_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_FORMAT_MODE]);
+#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp287_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_FORMAT_MODE] = _tmp288_;
+#line 130 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp289_ = _tmp287_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_FORMAT_MODE];
+#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp290_ = self->priv->key_names;
-#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp290__length1 = self->priv->key_names_length1;
-#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp291_ = g_strdup ("last-crop-menu-choice");
-#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp290_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE]);
-#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp290_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE] = _tmp291_;
-#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp292_ = _tmp290_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE];
-#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp291_ = g_strdup ("export-metadata");
+#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp290_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_METADATA]);
+#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp290_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_METADATA] = _tmp291_;
+#line 131 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp292_ = _tmp290_[CONFIGURABLE_PROPERTY_EXPORT_EXPORT_METADATA];
+#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp293_ = self->priv->key_names;
-#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp293__length1 = self->priv->key_names_length1;
-#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp294_ = g_strdup ("last-crop-width");
-#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp293_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH]);
-#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp293_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH] = _tmp294_;
-#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp295_ = _tmp293_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH];
-#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp294_ = g_strdup ("photo-file-format");
+#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp293_[CONFIGURABLE_PROPERTY_EXPORT_PHOTO_FILE_FORMAT]);
+#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp293_[CONFIGURABLE_PROPERTY_EXPORT_PHOTO_FILE_FORMAT] = _tmp294_;
+#line 132 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp295_ = _tmp293_[CONFIGURABLE_PROPERTY_EXPORT_PHOTO_FILE_FORMAT];
+#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp296_ = self->priv->key_names;
-#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp296__length1 = self->priv->key_names_length1;
-#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp297_ = g_strdup ("last-used-service");
-#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp296_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE]);
-#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp296_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE] = _tmp297_;
-#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp298_ = _tmp296_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE];
-#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp297_ = g_strdup ("quality");
+#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp296_[CONFIGURABLE_PROPERTY_EXPORT_QUALITY]);
+#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp296_[CONFIGURABLE_PROPERTY_EXPORT_QUALITY] = _tmp297_;
+#line 133 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp298_ = _tmp296_[CONFIGURABLE_PROPERTY_EXPORT_QUALITY];
+#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp299_ = self->priv->key_names;
-#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp299__length1 = self->priv->key_names_length1;
-#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp300_ = g_strdup ("last-used-dataimports-service");
-#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp299_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE]);
-#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp299_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE] = _tmp300_;
-#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp301_ = _tmp299_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE];
-#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp300_ = g_strdup ("scale");
+#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp299_[CONFIGURABLE_PROPERTY_EXPORT_SCALE]);
+#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp299_[CONFIGURABLE_PROPERTY_EXPORT_SCALE] = _tmp300_;
+#line 134 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp301_ = _tmp299_[CONFIGURABLE_PROPERTY_EXPORT_SCALE];
+#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp302_ = self->priv->key_names;
-#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp302__length1 = self->priv->key_names_length1;
-#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp303_ = g_strdup ("library-photos-sort-ascending");
-#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp302_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING]);
-#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp302_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING] = _tmp303_;
-#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp304_ = _tmp302_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING];
-#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp303_ = g_strdup ("external-photo-editor");
+#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp302_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP]);
+#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp302_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP] = _tmp303_;
+#line 135 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp304_ = _tmp302_[CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP];
+#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp305_ = self->priv->key_names;
-#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp305__length1 = self->priv->key_names_length1;
-#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp306_ = g_strdup ("library-photos-sort-by");
-#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp305_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY]);
-#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp305_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY] = _tmp306_;
-#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp307_ = _tmp305_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY];
-#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp306_ = g_strdup ("external-raw-editor");
+#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp305_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP]);
+#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp305_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP] = _tmp306_;
+#line 136 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp307_ = _tmp305_[CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP];
+#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp308_ = self->priv->key_names;
-#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp308__length1 = self->priv->key_names_length1;
-#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp309_ = g_strdup ("library-height");
-#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp308_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT]);
-#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp308_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT] = _tmp309_;
-#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp310_ = _tmp308_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT];
-#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp309_ = g_strdup ("hide-photos-already-imported");
+#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp308_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED]);
+#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp308_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED] = _tmp309_;
+#line 137 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp310_ = _tmp308_[CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED];
+#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp311_ = self->priv->key_names;
-#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp311__length1 = self->priv->key_names_length1;
-#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp312_ = g_strdup ("library-maximize");
-#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp311_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE]);
-#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp311_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE] = _tmp312_;
-#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp313_ = _tmp311_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE];
-#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp312_ = g_strdup ("import-dir");
+#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp311_[CONFIGURABLE_PROPERTY_IMPORT_DIR]);
+#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp311_[CONFIGURABLE_PROPERTY_IMPORT_DIR] = _tmp312_;
+#line 138 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp313_ = _tmp311_[CONFIGURABLE_PROPERTY_IMPORT_DIR];
+#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp314_ = self->priv->key_names;
-#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp314__length1 = self->priv->key_names_length1;
-#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp315_ = g_strdup ("library-width");
-#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp314_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH]);
-#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp314_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH] = _tmp315_;
-#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp316_ = _tmp314_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH];
-#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp315_ = g_strdup ("keep-relativity");
+#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp314_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY]);
+#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp314_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY] = _tmp315_;
+#line 139 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp316_ = _tmp314_[CONFIGURABLE_PROPERTY_KEEP_RELATIVITY];
+#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp317_ = self->priv->key_names;
-#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp317__length1 = self->priv->key_names_length1;
-#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp318_ = g_strdup ("modify-originals");
-#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp317_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS]);
-#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp317_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS] = _tmp318_;
-#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp319_ = _tmp317_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS];
-#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp318_ = g_strdup ("last-crop-height");
+#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp317_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT]);
+#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp317_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT] = _tmp318_;
+#line 140 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp319_ = _tmp317_[CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT];
+#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp320_ = self->priv->key_names;
-#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp320__length1 = self->priv->key_names_length1;
-#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp321_ = g_strdup ("photo-thumbnail-scale");
-#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp320_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE]);
-#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp320_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE] = _tmp321_;
-#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp322_ = _tmp320_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE];
-#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp321_ = g_strdup ("last-crop-menu-choice");
+#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp320_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE]);
+#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp320_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE] = _tmp321_;
+#line 141 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp322_ = _tmp320_[CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE];
+#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp323_ = self->priv->key_names;
-#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp323__length1 = self->priv->key_names_length1;
-#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp324_ = g_strdup ("pin-toolbar-state");
-#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp323_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE]);
-#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp323_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE] = _tmp324_;
-#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp325_ = _tmp323_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE];
-#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp324_ = g_strdup ("last-crop-width");
+#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp323_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH]);
+#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp323_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH] = _tmp324_;
+#line 142 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp325_ = _tmp323_[CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH];
+#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp326_ = self->priv->key_names;
-#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp326__length1 = self->priv->key_names_length1;
-#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp327_ = g_strdup ("content-height");
-#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp326_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT]);
-#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp326_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT] = _tmp327_;
-#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp328_ = _tmp326_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT];
-#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp327_ = g_strdup ("last-used-service");
+#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp326_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE]);
+#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp326_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE] = _tmp327_;
+#line 143 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp328_ = _tmp326_[CONFIGURABLE_PROPERTY_LAST_USED_SERVICE];
+#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp329_ = self->priv->key_names;
-#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp329__length1 = self->priv->key_names_length1;
-#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp330_ = g_strdup ("content-layout");
-#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp329_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT]);
-#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp329_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT] = _tmp330_;
-#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp331_ = _tmp329_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT];
-#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp330_ = g_strdup ("last-used-dataimports-service");
+#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp329_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE]);
+#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp329_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE] = _tmp330_;
+#line 144 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp331_ = _tmp329_[CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE];
+#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp332_ = self->priv->key_names;
-#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp332__length1 = self->priv->key_names_length1;
-#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp333_ = g_strdup ("content-ppi");
-#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp332_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI]);
-#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp332_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI] = _tmp333_;
-#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp334_ = _tmp332_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI];
-#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp333_ = g_strdup ("library-photos-sort-ascending");
+#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp332_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING]);
+#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp332_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING] = _tmp333_;
+#line 145 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp334_ = _tmp332_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING];
+#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp335_ = self->priv->key_names;
-#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp335__length1 = self->priv->key_names_length1;
-#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp336_ = g_strdup ("content-units");
-#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp335_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS]);
-#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp335_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS] = _tmp336_;
-#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp337_ = _tmp335_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS];
-#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp336_ = g_strdup ("library-photos-sort-by");
+#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp335_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY]);
+#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp335_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY] = _tmp336_;
+#line 146 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp337_ = _tmp335_[CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY];
+#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp338_ = self->priv->key_names;
-#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp338__length1 = self->priv->key_names_length1;
-#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp339_ = g_strdup ("content-width");
-#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp338_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH]);
-#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp338_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH] = _tmp339_;
-#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp340_ = _tmp338_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH];
-#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp339_ = g_strdup ("library-height");
+#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp338_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT]);
+#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp338_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT] = _tmp339_;
+#line 147 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp340_ = _tmp338_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT];
+#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp341_ = self->priv->key_names;
-#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp341__length1 = self->priv->key_names_length1;
-#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp342_ = g_strdup ("images-per-page");
-#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp341_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE]);
-#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp341_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE] = _tmp342_;
-#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp343_ = _tmp341_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE];
-#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp342_ = g_strdup ("library-maximize");
+#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp341_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE]);
+#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp341_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE] = _tmp342_;
+#line 148 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp343_ = _tmp341_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE];
+#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp344_ = self->priv->key_names;
-#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp344__length1 = self->priv->key_names_length1;
-#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp345_ = g_strdup ("match-aspect-ratio");
-#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp344_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO]);
-#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp344_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO] = _tmp345_;
-#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp346_ = _tmp344_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO];
-#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp345_ = g_strdup ("library-width");
+#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp344_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH]);
+#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp344_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH] = _tmp345_;
+#line 149 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp346_ = _tmp344_[CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH];
+#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp347_ = self->priv->key_names;
-#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp347__length1 = self->priv->key_names_length1;
-#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp348_ = g_strdup ("print-titles");
-#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp347_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES]);
-#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp347_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES] = _tmp348_;
-#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp349_ = _tmp347_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES];
-#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp348_ = g_strdup ("modify-originals");
+#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp347_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS]);
+#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp347_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS] = _tmp348_;
+#line 150 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp349_ = _tmp347_[CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS];
+#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp350_ = self->priv->key_names;
-#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp350__length1 = self->priv->key_names_length1;
-#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp351_ = g_strdup ("size-selection");
-#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp350_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION]);
-#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp350_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION] = _tmp351_;
-#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp352_ = _tmp350_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION];
-#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp351_ = g_strdup ("photo-thumbnail-scale");
+#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp350_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE]);
+#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp350_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE] = _tmp351_;
+#line 151 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp352_ = _tmp350_[CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE];
+#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp353_ = self->priv->key_names;
-#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp353__length1 = self->priv->key_names_length1;
-#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp354_ = g_strdup ("titles-font");
-#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp353_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT]);
-#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp353_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT] = _tmp354_;
-#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp355_ = _tmp353_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT];
-#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp354_ = g_strdup ("pin-toolbar-state");
+#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp353_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE]);
+#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp353_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE] = _tmp354_;
+#line 152 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp355_ = _tmp353_[CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE];
+#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp356_ = self->priv->key_names;
-#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp356__length1 = self->priv->key_names_length1;
-#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp357_ = g_strdup ("raw-developer-default");
-#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp356_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT]);
-#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp356_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT] = _tmp357_;
-#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp358_ = _tmp356_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT];
-#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp357_ = g_strdup ("content-height");
+#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp356_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT]);
+#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp356_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT] = _tmp357_;
+#line 153 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp358_ = _tmp356_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT];
+#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp359_ = self->priv->key_names;
-#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp359__length1 = self->priv->key_names_length1;
-#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp360_ = g_strdup ("show-welcome-dialog");
-#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp359_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG]);
-#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp359_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG] = _tmp360_;
-#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp361_ = _tmp359_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG];
-#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp360_ = g_strdup ("content-layout");
+#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp359_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT]);
+#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp359_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT] = _tmp360_;
+#line 154 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp361_ = _tmp359_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT];
+#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp362_ = self->priv->key_names;
-#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp362__length1 = self->priv->key_names_length1;
-#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp363_ = g_strdup ("sidebar-position");
-#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp362_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION]);
-#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp362_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION] = _tmp363_;
-#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp364_ = _tmp362_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION];
-#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp363_ = g_strdup ("content-ppi");
+#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp362_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI]);
+#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp362_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI] = _tmp363_;
+#line 155 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp364_ = _tmp362_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI];
+#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp365_ = self->priv->key_names;
-#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp365__length1 = self->priv->key_names_length1;
-#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp366_ = g_strdup ("delay");
-#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp365_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY]);
-#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp365_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY] = _tmp366_;
-#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp367_ = _tmp365_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY];
-#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp366_ = g_strdup ("content-units");
+#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp365_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS]);
+#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp365_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS] = _tmp366_;
+#line 156 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp367_ = _tmp365_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS];
+#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp368_ = self->priv->key_names;
-#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp368__length1 = self->priv->key_names_length1;
-#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp369_ = g_strdup ("transition-delay");
-#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp368_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY]);
-#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp368_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY] = _tmp369_;
-#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp370_ = _tmp368_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY];
-#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp369_ = g_strdup ("content-width");
+#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp368_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH]);
+#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp368_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH] = _tmp369_;
+#line 157 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp370_ = _tmp368_[CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH];
+#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp371_ = self->priv->key_names;
-#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp371__length1 = self->priv->key_names_length1;
-#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp372_ = g_strdup ("transition-effect-id");
-#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp371_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID]);
-#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp371_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID] = _tmp372_;
-#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp373_ = _tmp371_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID];
-#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp372_ = g_strdup ("images-per-page");
+#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp371_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE]);
+#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp371_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE] = _tmp372_;
+#line 158 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp373_ = _tmp371_[CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE];
+#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp374_ = self->priv->key_names;
-#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp374__length1 = self->priv->key_names_length1;
-#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp375_ = g_strdup ("show-title");
-#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp374_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE]);
-#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp374_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE] = _tmp375_;
-#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp376_ = _tmp374_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE];
-#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp375_ = g_strdup ("match-aspect-ratio");
+#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp374_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO]);
+#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp374_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO] = _tmp375_;
+#line 159 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp376_ = _tmp374_[CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO];
+#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp377_ = self->priv->key_names;
-#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp377__length1 = self->priv->key_names_length1;
-#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp378_ = g_strdup ("use-24-hour-time");
-#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp377_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME]);
-#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp377_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME] = _tmp378_;
-#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp379_ = _tmp377_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME];
-#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp378_ = g_strdup ("print-titles");
+#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp377_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES]);
+#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp377_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES] = _tmp378_;
+#line 160 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp379_ = _tmp377_[CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES];
+#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp380_ = self->priv->key_names;
-#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp380__length1 = self->priv->key_names_length1;
-#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp381_ = g_strdup ("use-lowercase-filenames");
-#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp380_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES]);
-#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp380_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES] = _tmp381_;
-#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp382_ = _tmp380_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES];
-#line 165 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp381_ = g_strdup ("size-selection");
+#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp380_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION]);
+#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp380_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION] = _tmp381_;
+#line 161 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp382_ = _tmp380_[CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION];
+#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp383_ = self->priv->key_names;
-#line 165 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp383__length1 = self->priv->key_names_length1;
+#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp384_ = g_strdup ("titles-font");
+#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp383_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT]);
+#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp383_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT] = _tmp384_;
+#line 162 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp385_ = _tmp383_[CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT];
+#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp386_ = self->priv->key_names;
+#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp386__length1 = self->priv->key_names_length1;
+#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp387_ = g_strdup ("raw-developer-default");
+#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp386_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT]);
+#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp386_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT] = _tmp387_;
+#line 163 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp388_ = _tmp386_[CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT];
+#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp389_ = self->priv->key_names;
+#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp389__length1 = self->priv->key_names_length1;
+#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp390_ = g_strdup ("show-welcome-dialog");
+#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp389_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG]);
+#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp389_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG] = _tmp390_;
+#line 164 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp391_ = _tmp389_[CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG];
 #line 165 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp384_ = g_strdup ("interpreter-state-cookie");
+	_tmp392_ = self->priv->key_names;
 #line 165 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_free0 (_tmp383_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE]);
+	_tmp392__length1 = self->priv->key_names_length1;
 #line 165 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp383_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE] = _tmp384_;
+	_tmp393_ = g_strdup ("sidebar-position");
 #line 165 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp385_ = _tmp383_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE];
+	_g_free0 (_tmp392_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION]);
+#line 165 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp392_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION] = _tmp393_;
+#line 165 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp394_ = _tmp392_[CONFIGURABLE_PROPERTY_SIDEBAR_POSITION];
+#line 166 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp395_ = self->priv->key_names;
+#line 166 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp395__length1 = self->priv->key_names_length1;
+#line 166 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp396_ = g_strdup ("delay");
+#line 166 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp395_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY]);
+#line 166 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp395_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY] = _tmp396_;
+#line 166 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp397_ = _tmp395_[CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY];
+#line 167 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp398_ = self->priv->key_names;
+#line 167 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp398__length1 = self->priv->key_names_length1;
+#line 167 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp399_ = g_strdup ("transition-delay");
+#line 167 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp398_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY]);
+#line 167 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp398_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY] = _tmp399_;
+#line 167 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp400_ = _tmp398_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY];
+#line 168 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp401_ = self->priv->key_names;
+#line 168 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp401__length1 = self->priv->key_names_length1;
+#line 168 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp402_ = g_strdup ("transition-effect-id");
+#line 168 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp401_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID]);
+#line 168 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp401_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID] = _tmp402_;
+#line 168 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp403_ = _tmp401_[CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID];
+#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp404_ = self->priv->key_names;
+#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp404__length1 = self->priv->key_names_length1;
+#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp405_ = g_strdup ("show-title");
+#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp404_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE]);
+#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp404_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE] = _tmp405_;
+#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp406_ = _tmp404_[CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE];
+#line 170 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp407_ = self->priv->key_names;
+#line 170 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp407__length1 = self->priv->key_names_length1;
+#line 170 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp408_ = g_strdup ("use-24-hour-time");
+#line 170 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp407_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME]);
+#line 170 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp407_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME] = _tmp408_;
+#line 170 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp409_ = _tmp407_[CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME];
+#line 171 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp410_ = self->priv->key_names;
+#line 171 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp410__length1 = self->priv->key_names_length1;
+#line 171 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp411_ = g_strdup ("use-lowercase-filenames");
+#line 171 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp410_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES]);
+#line 171 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp410_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES] = _tmp411_;
+#line 171 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp412_ = _tmp410_[CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES];
+#line 172 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp413_ = self->priv->key_names;
+#line 172 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp413__length1 = self->priv->key_names_length1;
+#line 172 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp414_ = g_strdup ("interpreter-state-cookie");
+#line 172 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_free0 (_tmp413_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE]);
+#line 172 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp413_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE] = _tmp414_;
+#line 172 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp415_ = _tmp413_[CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE];
 #line 29 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return self;
-#line 2333 "GSettingsEngine.c"
+#line 2490 "GSettingsEngine.c"
 }
 
 
 GSettingsConfigurationEngine* gsettings_configuration_engine_new (void) {
 #line 29 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return gsettings_configuration_engine_construct (TYPE_GSETTINGS_CONFIGURATION_ENGINE);
-#line 2340 "GSettingsEngine.c"
+#line 2497 "GSettingsEngine.c"
 }
 
 
-static gboolean gsettings_configuration_engine_schema_has_key (GSettingsConfigurationEngine* self, GSettings* schema_object, const gchar* key) {
-	gboolean result = FALSE;
-	GSettings* _tmp0_ = NULL;
-	gchar** _tmp1_ = NULL;
-	gchar** _tmp2_ = NULL;
-#line 168 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	g_return_val_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self), FALSE);
-#line 168 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	g_return_val_if_fail (G_IS_SETTINGS (schema_object), FALSE);
-#line 168 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	g_return_val_if_fail (key != NULL, FALSE);
-#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp0_ = schema_object;
-#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp2_ = _tmp1_ = g_settings_list_keys (_tmp0_);
-#line 2359 "GSettingsEngine.c"
-	{
-		gchar** current_key_collection = NULL;
-		gint current_key_collection_length1 = 0;
-		gint _current_key_collection_size_ = 0;
-		gint current_key_it = 0;
-#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		current_key_collection = _tmp2_;
-#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		current_key_collection_length1 = _vala_array_length (_tmp1_);
-#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		for (current_key_it = 0; current_key_it < _vala_array_length (_tmp1_); current_key_it = current_key_it + 1) {
-#line 2371 "GSettingsEngine.c"
-			gchar* _tmp3_ = NULL;
-			gchar* current_key = NULL;
-#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			_tmp3_ = g_strdup (current_key_collection[current_key_it]);
-#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			current_key = _tmp3_;
-#line 2378 "GSettingsEngine.c"
-			{
-				const gchar* _tmp4_ = NULL;
-				const gchar* _tmp5_ = NULL;
-#line 170 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-				_tmp4_ = current_key;
-#line 170 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-				_tmp5_ = key;
-#line 170 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-				if (g_strcmp0 (_tmp4_, _tmp5_) == 0) {
-#line 171 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-					result = TRUE;
-#line 171 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-					_g_free0 (current_key);
-#line 171 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-					current_key_collection = (_vala_array_free (current_key_collection, current_key_collection_length1, (GDestroyNotify) g_free), NULL);
-#line 171 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-					return result;
-#line 2396 "GSettingsEngine.c"
-				}
-#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-				_g_free0 (current_key);
-#line 2400 "GSettingsEngine.c"
-			}
-		}
-#line 169 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		current_key_collection = (_vala_array_free (current_key_collection, current_key_collection_length1, (GDestroyNotify) g_free), NULL);
-#line 2405 "GSettingsEngine.c"
-	}
-#line 174 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	result = FALSE;
-#line 174 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	return result;
-#line 2411 "GSettingsEngine.c"
+static gpointer _g_settings_schema_source_ref0 (gpointer self) {
+#line 176 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	return self ? g_settings_schema_source_ref (self) : NULL;
+#line 2504 "GSettingsEngine.c"
 }
 
 
 static void gsettings_configuration_engine_check_key_valid (GSettingsConfigurationEngine* self, const gchar* schema, const gchar* key, GError** error) {
-	GeeSet* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-	gboolean _tmp2_ = FALSE;
-	GSettings* schema_object = NULL;
-	const gchar* _tmp8_ = NULL;
-	GSettings* _tmp9_ = NULL;
-	GSettings* _tmp10_ = NULL;
-	const gchar* _tmp11_ = NULL;
-	gboolean _tmp12_ = FALSE;
+	GSettingsSchemaSource* schema_source = NULL;
+	GSettingsSchemaSource* _tmp0_ = NULL;
+	GSettingsSchemaSource* _tmp1_ = NULL;
+	GSettingsSchema* settings_scheme = NULL;
+	GSettingsSchemaSource* _tmp2_ = NULL;
+	const gchar* _tmp3_ = NULL;
+	GSettingsSchema* _tmp4_ = NULL;
+	GSettingsSchema* _tmp5_ = NULL;
+	GSettingsSchema* _tmp11_ = NULL;
+	const gchar* _tmp12_ = NULL;
+	gboolean _tmp13_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 177 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 175 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self));
-#line 177 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 175 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (schema != NULL);
-#line 177 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 175 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (key != NULL);
-#line 178 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp0_ = self->priv->known_schemas;
-#line 178 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp1_ = schema;
-#line 178 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp2_ = gee_collection_contains (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_COLLECTION, GeeCollection), _tmp1_);
-#line 178 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	if (!_tmp2_) {
-#line 2440 "GSettingsEngine.c"
-		const gchar* _tmp3_ = NULL;
-		gchar* _tmp4_ = NULL;
-		gchar* _tmp5_ = NULL;
-		GError* _tmp6_ = NULL;
-		GError* _tmp7_ = NULL;
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_tmp3_ = schema;
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_tmp4_ = g_strdup_printf ("schema '%s' is not installed", _tmp3_);
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_tmp5_ = _tmp4_;
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_tmp6_ = g_error_new_literal (CONFIGURATION_ERROR, CONFIGURATION_ERROR_ENGINE_ERROR, _tmp5_);
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_tmp7_ = _tmp6_;
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_g_free0 (_tmp5_);
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_inner_error_ = _tmp7_;
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			g_propagate_error (error, _inner_error_);
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			return;
-#line 2466 "GSettingsEngine.c"
-		} else {
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			g_clear_error (&_inner_error_);
-#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			return;
-#line 2474 "GSettingsEngine.c"
-		}
-	}
-#line 181 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp8_ = schema;
-#line 181 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp9_ = g_settings_new (_tmp8_);
-#line 181 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	schema_object = _tmp9_;
-#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp10_ = schema_object;
-#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp11_ = key;
-#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_tmp12_ = gsettings_configuration_engine_schema_has_key (self, _tmp10_, _tmp11_);
-#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	if (!_tmp12_) {
-#line 2491 "GSettingsEngine.c"
-		const gchar* _tmp13_ = NULL;
-		const gchar* _tmp14_ = NULL;
-		gchar* _tmp15_ = NULL;
-		gchar* _tmp16_ = NULL;
-		GError* _tmp17_ = NULL;
-		GError* _tmp18_ = NULL;
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_tmp13_ = schema;
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_tmp14_ = key;
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_tmp15_ = g_strdup_printf ("schema '%s' does not define key '%s'", _tmp13_, _tmp14_);
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_tmp16_ = _tmp15_;
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_tmp17_ = g_error_new_literal (CONFIGURATION_ERROR, CONFIGURATION_ERROR_ENGINE_ERROR, _tmp16_);
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_tmp18_ = _tmp17_;
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_g_free0 (_tmp16_);
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		_inner_error_ = _tmp18_;
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			g_propagate_error (error, _inner_error_);
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			_g_object_unref0 (schema_object);
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			return;
-#line 2522 "GSettingsEngine.c"
-		} else {
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			_g_object_unref0 (schema_object);
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			g_clear_error (&_inner_error_);
-#line 184 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-			return;
-#line 2532 "GSettingsEngine.c"
-		}
-	}
+#line 176 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp0_ = g_settings_schema_source_get_default ();
+#line 176 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp1_ = _g_settings_schema_source_ref0 (_tmp0_);
+#line 176 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	schema_source = _tmp1_;
 #line 177 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_object_unref0 (schema_object);
-#line 2537 "GSettingsEngine.c"
+	_tmp2_ = schema_source;
+#line 177 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp3_ = schema;
+#line 177 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp4_ = g_settings_schema_source_lookup (_tmp2_, _tmp3_, TRUE);
+#line 177 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	settings_scheme = _tmp4_;
+#line 178 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp5_ = settings_scheme;
+#line 178 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	if (_tmp5_ == NULL) {
+#line 2545 "GSettingsEngine.c"
+		const gchar* _tmp6_ = NULL;
+		gchar* _tmp7_ = NULL;
+		gchar* _tmp8_ = NULL;
+		GError* _tmp9_ = NULL;
+		GError* _tmp10_ = NULL;
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_tmp6_ = schema;
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_tmp7_ = g_strdup_printf ("schema '%s' is not installed", _tmp6_);
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_tmp8_ = _tmp7_;
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_tmp9_ = g_error_new_literal (CONFIGURATION_ERROR, CONFIGURATION_ERROR_ENGINE_ERROR, _tmp8_);
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_tmp10_ = _tmp9_;
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_g_free0 (_tmp8_);
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_inner_error_ = _tmp10_;
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		if (_inner_error_->domain == CONFIGURATION_ERROR) {
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_propagate_error (error, _inner_error_);
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			_g_settings_schema_unref0 (settings_scheme);
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			_g_settings_schema_source_unref0 (schema_source);
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return;
+#line 2575 "GSettingsEngine.c"
+		} else {
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			_g_settings_schema_unref0 (settings_scheme);
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			_g_settings_schema_source_unref0 (schema_source);
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_clear_error (&_inner_error_);
+#line 179 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return;
+#line 2587 "GSettingsEngine.c"
+		}
+	}
+#line 182 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp11_ = settings_scheme;
+#line 182 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp12_ = key;
+#line 182 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp13_ = g_settings_schema_has_key (_tmp11_, _tmp12_);
+#line 182 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	if (!_tmp13_) {
+#line 2598 "GSettingsEngine.c"
+		const gchar* _tmp14_ = NULL;
+		const gchar* _tmp15_ = NULL;
+		gchar* _tmp16_ = NULL;
+		gchar* _tmp17_ = NULL;
+		GError* _tmp18_ = NULL;
+		GError* _tmp19_ = NULL;
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_tmp14_ = schema;
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_tmp15_ = key;
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_tmp16_ = g_strdup_printf ("schema '%s' does not define key '%s'", _tmp14_, _tmp15_);
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_tmp17_ = _tmp16_;
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_tmp18_ = g_error_new_literal (CONFIGURATION_ERROR, CONFIGURATION_ERROR_ENGINE_ERROR, _tmp17_);
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_tmp19_ = _tmp18_;
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_g_free0 (_tmp17_);
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		_inner_error_ = _tmp19_;
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		if (_inner_error_->domain == CONFIGURATION_ERROR) {
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_propagate_error (error, _inner_error_);
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			_g_settings_schema_unref0 (settings_scheme);
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			_g_settings_schema_source_unref0 (schema_source);
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return;
+#line 2631 "GSettingsEngine.c"
+		} else {
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			_g_settings_schema_unref0 (settings_scheme);
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			_g_settings_schema_source_unref0 (schema_source);
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_clear_error (&_inner_error_);
+#line 183 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return;
+#line 2643 "GSettingsEngine.c"
+		}
+	}
+#line 175 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_settings_schema_unref0 (settings_scheme);
+#line 175 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_settings_schema_source_unref0 (schema_source);
+#line 2650 "GSettingsEngine.c"
 }
 
 
@@ -2548,56 +2661,56 @@ static gboolean gsettings_configuration_engine_get_gs_bool (GSettingsConfigurati
 	const gchar* _tmp5_ = NULL;
 	gboolean _tmp6_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 187 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self), FALSE);
-#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 187 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (schema != NULL, FALSE);
-#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 187 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (key != NULL, FALSE);
-#line 189 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = schema;
-#line 189 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = key;
-#line 189 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_check_key_valid (self, _tmp0_, _tmp1_, &_inner_error_);
-#line 189 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 189 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 189 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 189 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return FALSE;
-#line 2572 "GSettingsEngine.c"
+#line 2685 "GSettingsEngine.c"
 		} else {
-#line 189 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 189 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 189 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 188 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return FALSE;
-#line 2580 "GSettingsEngine.c"
+#line 2693 "GSettingsEngine.c"
 		}
 	}
-#line 191 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 190 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = schema;
-#line 191 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 190 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = g_settings_new (_tmp2_);
-#line 191 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 190 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_object = _tmp3_;
-#line 193 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 192 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = schema_object;
-#line 193 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 192 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = key;
-#line 193 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 192 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = g_settings_get_boolean (_tmp4_, _tmp5_);
-#line 193 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 192 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _tmp6_;
-#line 193 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 192 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_object_unref0 (schema_object);
-#line 193 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 192 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 2601 "GSettingsEngine.c"
+#line 2714 "GSettingsEngine.c"
 }
 
 
@@ -2611,54 +2724,179 @@ static void gsettings_configuration_engine_set_gs_bool (GSettingsConfigurationEn
 	const gchar* _tmp5_ = NULL;
 	gboolean _tmp6_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 195 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self));
-#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 195 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (schema != NULL);
-#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 195 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (key != NULL);
-#line 197 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = schema;
-#line 197 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = key;
-#line 197 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_check_key_valid (self, _tmp0_, _tmp1_, &_inner_error_);
-#line 197 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 197 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 197 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 197 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 2635 "GSettingsEngine.c"
+#line 2748 "GSettingsEngine.c"
 		} else {
-#line 197 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 197 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 197 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 2643 "GSettingsEngine.c"
+#line 2756 "GSettingsEngine.c"
 		}
 	}
-#line 199 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 198 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = schema;
-#line 199 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 198 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = g_settings_new (_tmp2_);
-#line 199 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 198 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_object = _tmp3_;
-#line 201 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 200 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = schema_object;
-#line 201 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 200 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = key;
-#line 201 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 200 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = value;
-#line 201 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 200 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_settings_set_boolean (_tmp4_, _tmp5_, _tmp6_);
-#line 196 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 195 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_object_unref0 (schema_object);
-#line 2662 "GSettingsEngine.c"
+#line 2775 "GSettingsEngine.c"
+}
+
+
+static void gsettings_configuration_engine_set_gs_enum (GSettingsConfigurationEngine* self, const gchar* schema, const gchar* key, gint value, GError** error) {
+	const gchar* _tmp0_ = NULL;
+	const gchar* _tmp1_ = NULL;
+	GSettings* schema_object = NULL;
+	const gchar* _tmp2_ = NULL;
+	GSettings* _tmp3_ = NULL;
+	GSettings* _tmp4_ = NULL;
+	const gchar* _tmp5_ = NULL;
+	gint _tmp6_ = 0;
+	GError * _inner_error_ = NULL;
+#line 203 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	g_return_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self));
+#line 203 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	g_return_if_fail (schema != NULL);
+#line 203 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	g_return_if_fail (key != NULL);
+#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp0_ = schema;
+#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp1_ = key;
+#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	gsettings_configuration_engine_check_key_valid (self, _tmp0_, _tmp1_, &_inner_error_);
+#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		if (_inner_error_->domain == CONFIGURATION_ERROR) {
+#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_propagate_error (error, _inner_error_);
+#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return;
+#line 2809 "GSettingsEngine.c"
+		} else {
+#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_clear_error (&_inner_error_);
+#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return;
+#line 2817 "GSettingsEngine.c"
+		}
+	}
+#line 206 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp2_ = schema;
+#line 206 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp3_ = g_settings_new (_tmp2_);
+#line 206 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	schema_object = _tmp3_;
+#line 207 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp4_ = schema_object;
+#line 207 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp5_ = key;
+#line 207 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp6_ = value;
+#line 207 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	g_settings_set_enum (_tmp4_, _tmp5_, _tmp6_);
+#line 203 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_object_unref0 (schema_object);
+#line 2836 "GSettingsEngine.c"
+}
+
+
+static gint gsettings_configuration_engine_get_gs_enum (GSettingsConfigurationEngine* self, const gchar* schema, const gchar* key, GError** error) {
+	gint result = 0;
+	const gchar* _tmp0_ = NULL;
+	const gchar* _tmp1_ = NULL;
+	GSettings* schema_object = NULL;
+	const gchar* _tmp2_ = NULL;
+	GSettings* _tmp3_ = NULL;
+	GSettings* _tmp4_ = NULL;
+	const gchar* _tmp5_ = NULL;
+	gint _tmp6_ = 0;
+	GError * _inner_error_ = NULL;
+#line 210 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	g_return_val_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self), 0);
+#line 210 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	g_return_val_if_fail (schema != NULL, 0);
+#line 210 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	g_return_val_if_fail (key != NULL, 0);
+#line 211 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp0_ = schema;
+#line 211 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp1_ = key;
+#line 211 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	gsettings_configuration_engine_check_key_valid (self, _tmp0_, _tmp1_, &_inner_error_);
+#line 211 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 211 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		if (_inner_error_->domain == CONFIGURATION_ERROR) {
+#line 211 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_propagate_error (error, _inner_error_);
+#line 211 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return 0;
+#line 2871 "GSettingsEngine.c"
+		} else {
+#line 211 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 211 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_clear_error (&_inner_error_);
+#line 211 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return 0;
+#line 2879 "GSettingsEngine.c"
+		}
+	}
+#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp2_ = schema;
+#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp3_ = g_settings_new (_tmp2_);
+#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	schema_object = _tmp3_;
+#line 214 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp4_ = schema_object;
+#line 214 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp5_ = key;
+#line 214 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp6_ = g_settings_get_enum (_tmp4_, _tmp5_);
+#line 214 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	result = _tmp6_;
+#line 214 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_g_object_unref0 (schema_object);
+#line 214 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	return result;
+#line 2900 "GSettingsEngine.c"
 }
 
 
@@ -2673,56 +2911,56 @@ static gint gsettings_configuration_engine_get_gs_int (GSettingsConfigurationEng
 	const gchar* _tmp5_ = NULL;
 	gint _tmp6_ = 0;
 	GError * _inner_error_ = NULL;
-#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 217 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self), 0);
-#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 217 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (schema != NULL, 0);
-#line 204 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 217 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (key != NULL, 0);
-#line 205 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 218 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = schema;
-#line 205 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 218 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = key;
-#line 205 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 218 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_check_key_valid (self, _tmp0_, _tmp1_, &_inner_error_);
-#line 205 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 218 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 205 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 218 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 205 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 218 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 205 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 218 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return 0;
-#line 2697 "GSettingsEngine.c"
+#line 2935 "GSettingsEngine.c"
 		} else {
-#line 205 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 218 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 205 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 218 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 205 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 218 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return 0;
-#line 2705 "GSettingsEngine.c"
+#line 2943 "GSettingsEngine.c"
 		}
 	}
-#line 207 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 220 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = schema;
-#line 207 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 220 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = g_settings_new (_tmp2_);
-#line 207 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 220 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_object = _tmp3_;
-#line 209 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 222 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = schema_object;
-#line 209 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 222 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = key;
-#line 209 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 222 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = g_settings_get_int (_tmp4_, _tmp5_);
-#line 209 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 222 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _tmp6_;
-#line 209 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 222 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_object_unref0 (schema_object);
-#line 209 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 222 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 2726 "GSettingsEngine.c"
+#line 2964 "GSettingsEngine.c"
 }
 
 
@@ -2736,54 +2974,54 @@ static void gsettings_configuration_engine_set_gs_int (GSettingsConfigurationEng
 	const gchar* _tmp5_ = NULL;
 	gint _tmp6_ = 0;
 	GError * _inner_error_ = NULL;
-#line 212 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 225 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self));
-#line 212 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 225 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (schema != NULL);
-#line 212 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 225 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (key != NULL);
-#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 226 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = schema;
-#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 226 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = key;
-#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 226 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_check_key_valid (self, _tmp0_, _tmp1_, &_inner_error_);
-#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 226 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 226 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 226 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 226 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 2760 "GSettingsEngine.c"
+#line 2998 "GSettingsEngine.c"
 		} else {
-#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 226 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 226 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 213 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 226 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 2768 "GSettingsEngine.c"
+#line 3006 "GSettingsEngine.c"
 		}
 	}
-#line 215 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 228 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = schema;
-#line 215 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 228 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = g_settings_new (_tmp2_);
-#line 215 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 228 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_object = _tmp3_;
-#line 217 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 230 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = schema_object;
-#line 217 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 230 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = key;
-#line 217 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 230 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = value;
-#line 217 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 230 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_settings_set_int (_tmp4_, _tmp5_, _tmp6_);
-#line 212 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 225 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_object_unref0 (schema_object);
-#line 2787 "GSettingsEngine.c"
+#line 3025 "GSettingsEngine.c"
 }
 
 
@@ -2798,56 +3036,56 @@ static gdouble gsettings_configuration_engine_get_gs_double (GSettingsConfigurat
 	const gchar* _tmp5_ = NULL;
 	gdouble _tmp6_ = 0.0;
 	GError * _inner_error_ = NULL;
-#line 220 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 233 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self), 0.0);
-#line 220 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 233 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (schema != NULL, 0.0);
-#line 220 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 233 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (key != NULL, 0.0);
-#line 221 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 234 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = schema;
-#line 221 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 234 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = key;
-#line 221 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 234 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_check_key_valid (self, _tmp0_, _tmp1_, &_inner_error_);
-#line 221 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 234 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 221 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 234 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 221 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 234 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 221 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 234 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return 0.0;
-#line 2822 "GSettingsEngine.c"
+#line 3060 "GSettingsEngine.c"
 		} else {
-#line 221 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 234 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 221 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 234 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 221 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 234 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return 0.0;
-#line 2830 "GSettingsEngine.c"
+#line 3068 "GSettingsEngine.c"
 		}
 	}
-#line 223 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 236 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = schema;
-#line 223 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 236 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = g_settings_new (_tmp2_);
-#line 223 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 236 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_object = _tmp3_;
-#line 225 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 238 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = schema_object;
-#line 225 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 238 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = key;
-#line 225 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 238 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = g_settings_get_double (_tmp4_, _tmp5_);
-#line 225 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 238 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _tmp6_;
-#line 225 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 238 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_object_unref0 (schema_object);
-#line 225 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 238 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 2851 "GSettingsEngine.c"
+#line 3089 "GSettingsEngine.c"
 }
 
 
@@ -2861,54 +3099,54 @@ static void gsettings_configuration_engine_set_gs_double (GSettingsConfiguration
 	const gchar* _tmp5_ = NULL;
 	gdouble _tmp6_ = 0.0;
 	GError * _inner_error_ = NULL;
-#line 228 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 241 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self));
-#line 228 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 241 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (schema != NULL);
-#line 228 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 241 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (key != NULL);
-#line 229 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 242 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = schema;
-#line 229 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 242 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = key;
-#line 229 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 242 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_check_key_valid (self, _tmp0_, _tmp1_, &_inner_error_);
-#line 229 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 242 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 229 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 242 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 229 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 242 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 229 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 242 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 2885 "GSettingsEngine.c"
+#line 3123 "GSettingsEngine.c"
 		} else {
-#line 229 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 242 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 229 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 242 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 229 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 242 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 2893 "GSettingsEngine.c"
+#line 3131 "GSettingsEngine.c"
 		}
 	}
-#line 231 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 244 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = schema;
-#line 231 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 244 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = g_settings_new (_tmp2_);
-#line 231 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 244 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_object = _tmp3_;
-#line 233 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 246 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = schema_object;
-#line 233 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 246 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = key;
-#line 233 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 246 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = value;
-#line 233 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 246 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_settings_set_double (_tmp4_, _tmp5_, _tmp6_);
-#line 228 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 241 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_object_unref0 (schema_object);
-#line 2912 "GSettingsEngine.c"
+#line 3150 "GSettingsEngine.c"
 }
 
 
@@ -2923,56 +3161,56 @@ static gchar* gsettings_configuration_engine_get_gs_string (GSettingsConfigurati
 	const gchar* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 236 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 249 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self), NULL);
-#line 236 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 249 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (schema != NULL, NULL);
-#line 236 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 249 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (key != NULL, NULL);
-#line 237 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 250 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = schema;
-#line 237 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 250 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = key;
-#line 237 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 250 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_check_key_valid (self, _tmp0_, _tmp1_, &_inner_error_);
-#line 237 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 250 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 237 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 250 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 237 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 250 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 237 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 250 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return NULL;
-#line 2947 "GSettingsEngine.c"
+#line 3185 "GSettingsEngine.c"
 		} else {
-#line 237 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 250 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 237 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 250 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 237 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 250 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return NULL;
-#line 2955 "GSettingsEngine.c"
+#line 3193 "GSettingsEngine.c"
 		}
 	}
-#line 239 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 252 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = schema;
-#line 239 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 252 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = g_settings_new (_tmp2_);
-#line 239 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 252 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_object = _tmp3_;
-#line 241 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 254 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = schema_object;
-#line 241 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 254 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = key;
-#line 241 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 254 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = g_settings_get_string (_tmp4_, _tmp5_);
-#line 241 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 254 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _tmp6_;
-#line 241 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 254 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_object_unref0 (schema_object);
-#line 241 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 254 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 2976 "GSettingsEngine.c"
+#line 3214 "GSettingsEngine.c"
 }
 
 
@@ -2986,56 +3224,56 @@ static void gsettings_configuration_engine_set_gs_string (GSettingsConfiguration
 	const gchar* _tmp5_ = NULL;
 	const gchar* _tmp6_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 244 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 257 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self));
-#line 244 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 257 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (schema != NULL);
-#line 244 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 257 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (key != NULL);
-#line 244 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 257 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (value != NULL);
-#line 245 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 258 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = schema;
-#line 245 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 258 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = key;
-#line 245 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 258 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_check_key_valid (self, _tmp0_, _tmp1_, &_inner_error_);
-#line 245 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 258 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 245 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 258 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 245 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 258 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 245 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 258 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 3012 "GSettingsEngine.c"
+#line 3250 "GSettingsEngine.c"
 		} else {
-#line 245 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 258 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 245 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 258 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 245 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 258 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 3020 "GSettingsEngine.c"
+#line 3258 "GSettingsEngine.c"
 		}
 	}
-#line 247 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 260 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = schema;
-#line 247 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 260 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = g_settings_new (_tmp2_);
-#line 247 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 260 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_object = _tmp3_;
-#line 249 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 262 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = schema_object;
-#line 249 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 262 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = key;
-#line 249 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 262 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = value;
-#line 249 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 262 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_settings_set_string (_tmp4_, _tmp5_, _tmp6_);
-#line 244 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 257 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_object_unref0 (schema_object);
-#line 3039 "GSettingsEngine.c"
+#line 3277 "GSettingsEngine.c"
 }
 
 
@@ -3048,52 +3286,52 @@ static void gsettings_configuration_engine_reset_gs_to_default (GSettingsConfigu
 	GSettings* _tmp4_ = NULL;
 	const gchar* _tmp5_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 252 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 265 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (IS_GSETTINGS_CONFIGURATION_ENGINE (self));
-#line 252 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 265 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (schema != NULL);
-#line 252 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 265 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (key != NULL);
-#line 253 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 266 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = schema;
-#line 253 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 266 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = key;
-#line 253 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 266 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_check_key_valid (self, _tmp0_, _tmp1_, &_inner_error_);
-#line 253 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 266 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 253 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 266 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 253 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 266 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 253 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 266 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 3072 "GSettingsEngine.c"
+#line 3310 "GSettingsEngine.c"
 		} else {
-#line 253 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 266 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 253 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 266 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 253 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 266 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 3080 "GSettingsEngine.c"
+#line 3318 "GSettingsEngine.c"
 		}
 	}
-#line 255 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 268 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = schema;
-#line 255 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 268 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = g_settings_new (_tmp2_);
-#line 255 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 268 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_object = _tmp3_;
-#line 257 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 270 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = schema_object;
-#line 257 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 270 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = key;
-#line 257 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 270 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_settings_reset (_tmp4_, _tmp5_);
-#line 252 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 265 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_object_unref0 (schema_object);
-#line 3097 "GSettingsEngine.c"
+#line 3335 "GSettingsEngine.c"
 }
 
 
@@ -3106,7 +3344,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 	g_return_val_if_fail (old != NULL, NULL);
 #line 1380 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	g_return_val_if_fail (replacement != NULL, NULL);
-#line 3110 "GSettingsEngine.c"
+#line 3348 "GSettingsEngine.c"
 	{
 		GRegex* regex = NULL;
 		const gchar* _tmp0_ = NULL;
@@ -3137,8 +3375,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 3141 "GSettingsEngine.c"
-				goto __catch189_g_regex_error;
+#line 3379 "GSettingsEngine.c"
+				goto __catch202_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3146,7 +3384,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 3150 "GSettingsEngine.c"
+#line 3388 "GSettingsEngine.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp6_ = regex;
@@ -3162,8 +3400,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 3166 "GSettingsEngine.c"
-				goto __catch189_g_regex_error;
+#line 3404 "GSettingsEngine.c"
+				goto __catch202_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -3173,7 +3411,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 3177 "GSettingsEngine.c"
+#line 3415 "GSettingsEngine.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp9_ = _tmp5_;
@@ -3187,10 +3425,10 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 3191 "GSettingsEngine.c"
+#line 3429 "GSettingsEngine.c"
 	}
-	goto __finally189;
-	__catch189_g_regex_error:
+	goto __finally202;
+	__catch202_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -3201,9 +3439,9 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_assert_not_reached ();
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_g_error_free0 (e);
-#line 3205 "GSettingsEngine.c"
+#line 3443 "GSettingsEngine.c"
 	}
-	__finally189:
+	__finally202:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -3212,7 +3450,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_clear_error (&_inner_error_);
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return NULL;
-#line 3216 "GSettingsEngine.c"
+#line 3454 "GSettingsEngine.c"
 	}
 }
 
@@ -3236,7 +3474,7 @@ static gchar* string_strip (const gchar* self) {
 	result = _result_;
 #line 1210 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 3240 "GSettingsEngine.c"
+#line 3478 "GSettingsEngine.c"
 }
 
 
@@ -3251,49 +3489,49 @@ static gchar* gsettings_configuration_engine_clean_plugin_id (const gchar* id) {
 	const gchar* _tmp5_ = NULL;
 	gboolean _tmp6_ = FALSE;
 	gchar* _tmp8_ = NULL;
-#line 260 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 273 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (id != NULL, NULL);
-#line 261 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 274 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = id;
-#line 261 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 274 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = string_replace (_tmp0_, "/", "-");
-#line 261 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 274 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	cleaned = _tmp1_;
-#line 262 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 275 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = cleaned;
-#line 262 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 275 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = string_strip (_tmp2_);
-#line 262 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 275 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (cleaned);
-#line 262 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 275 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	cleaned = _tmp3_;
-#line 264 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 277 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = cleaned;
-#line 264 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 277 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = is_string_empty (_tmp5_);
-#line 264 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 277 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (!_tmp6_) {
-#line 3277 "GSettingsEngine.c"
+#line 3515 "GSettingsEngine.c"
 		const gchar* _tmp7_ = NULL;
-#line 264 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 277 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp7_ = cleaned;
-#line 264 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 277 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = _tmp7_;
-#line 3283 "GSettingsEngine.c"
+#line 3521 "GSettingsEngine.c"
 	} else {
-#line 264 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 277 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = NULL;
-#line 3287 "GSettingsEngine.c"
+#line 3525 "GSettingsEngine.c"
 	}
-#line 264 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 277 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp8_ = g_strdup (_tmp4_);
-#line 264 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 277 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _tmp8_;
-#line 264 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 277 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (cleaned);
-#line 264 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 277 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 3297 "GSettingsEngine.c"
+#line 3535 "GSettingsEngine.c"
 }
 
 
@@ -3307,49 +3545,49 @@ static gchar* gsettings_configuration_engine_get_plugin_enable_disable_name (con
 	gchar* _tmp5_ = NULL;
 	const gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
-#line 267 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 280 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (id != NULL, NULL);
-#line 268 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 281 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = id;
-#line 268 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 281 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = gsettings_configuration_engine_clean_plugin_id (_tmp0_);
-#line 268 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 281 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	cleaned_id = _tmp1_;
-#line 269 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 282 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = cleaned_id;
-#line 269 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 282 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (_tmp2_ == NULL) {
-#line 3323 "GSettingsEngine.c"
+#line 3561 "GSettingsEngine.c"
 		gchar* _tmp3_ = NULL;
-#line 270 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 283 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = g_strdup ("default");
-#line 270 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 283 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (cleaned_id);
-#line 270 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 283 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		cleaned_id = _tmp3_;
-#line 3331 "GSettingsEngine.c"
+#line 3569 "GSettingsEngine.c"
 	}
-#line 272 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 285 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = cleaned_id;
-#line 272 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 285 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = string_replace (_tmp4_, "org.yorba.shotwell.", "");
-#line 272 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 285 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (cleaned_id);
-#line 272 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 285 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	cleaned_id = _tmp5_;
-#line 273 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 286 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = cleaned_id;
-#line 273 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 286 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7_ = string_replace (_tmp6_, ".", "-");
-#line 273 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 286 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (cleaned_id);
-#line 273 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 286 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	cleaned_id = _tmp7_;
-#line 275 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 288 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = cleaned_id;
-#line 275 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 288 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 3353 "GSettingsEngine.c"
+#line 3591 "GSettingsEngine.c"
 }
 
 
@@ -3364,51 +3602,51 @@ static gchar* gsettings_configuration_engine_make_plugin_schema_name (const gcha
 	const gchar* _tmp6_ = NULL;
 	const gchar* _tmp7_ = NULL;
 	gchar* _tmp8_ = NULL;
-#line 278 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 291 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (domain != NULL, NULL);
-#line 278 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 291 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (id != NULL, NULL);
-#line 279 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 292 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = id;
-#line 279 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 292 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = gsettings_configuration_engine_clean_plugin_id (_tmp0_);
-#line 279 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 292 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	cleaned_id = _tmp1_;
-#line 280 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 293 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = cleaned_id;
-#line 280 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 293 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (_tmp2_ == NULL) {
-#line 3382 "GSettingsEngine.c"
+#line 3620 "GSettingsEngine.c"
 		gchar* _tmp3_ = NULL;
-#line 281 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 294 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = g_strdup ("default");
-#line 281 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 294 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (cleaned_id);
-#line 281 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 294 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		cleaned_id = _tmp3_;
-#line 3390 "GSettingsEngine.c"
+#line 3628 "GSettingsEngine.c"
 	}
-#line 282 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 295 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = cleaned_id;
-#line 282 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 295 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = string_replace (_tmp4_, ".", "-");
-#line 282 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 295 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (cleaned_id);
-#line 282 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 295 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	cleaned_id = _tmp5_;
-#line 284 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 297 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = domain;
-#line 284 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 297 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7_ = cleaned_id;
-#line 284 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 297 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp8_ = g_strdup_printf ("org.yorba.shotwell.%s.%s", _tmp6_, _tmp7_);
-#line 284 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 297 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _tmp8_;
-#line 284 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 297 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (cleaned_id);
-#line 284 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 297 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 3412 "GSettingsEngine.c"
+#line 3650 "GSettingsEngine.c"
 }
 
 
@@ -3416,17 +3654,17 @@ static gchar* gsettings_configuration_engine_make_gsettings_key (const gchar* gc
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 287 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (gconf_key != NULL, NULL);
-#line 288 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 301 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = gconf_key;
-#line 288 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 301 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = string_replace (_tmp0_, "_", "-");
-#line 288 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 301 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _tmp1_;
-#line 288 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 301 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 3430 "GSettingsEngine.c"
+#line 3668 "GSettingsEngine.c"
 }
 
 
@@ -3434,15 +3672,140 @@ static gchar* gsettings_configuration_engine_real_get_name (ConfigurationEngine*
 	GSettingsConfigurationEngine * self;
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 291 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 304 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 292 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = g_strdup ("GSettings");
-#line 292 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _tmp0_;
-#line 292 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 3446 "GSettingsEngine.c"
+#line 3684 "GSettingsEngine.c"
+}
+
+
+static gint gsettings_configuration_engine_real_get_enum_property (ConfigurationEngine* base, ConfigurableProperty p, GError** error) {
+	GSettingsConfigurationEngine * self;
+	gint result = 0;
+	gint _tmp0_ = 0;
+	gchar** _tmp1_ = NULL;
+	gint _tmp1__length1 = 0;
+	ConfigurableProperty _tmp2_ = 0;
+	const gchar* _tmp3_ = NULL;
+	gchar** _tmp4_ = NULL;
+	gint _tmp4__length1 = 0;
+	ConfigurableProperty _tmp5_ = 0;
+	const gchar* _tmp6_ = NULL;
+	gint _tmp7_ = 0;
+	GError * _inner_error_ = NULL;
+#line 308 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp1_ = self->priv->schema_names;
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp1__length1 = self->priv->schema_names_length1;
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp2_ = p;
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp3_ = _tmp1_[_tmp2_];
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp4_ = self->priv->key_names;
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp4__length1 = self->priv->key_names_length1;
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp5_ = p;
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp6_ = _tmp4_[_tmp5_];
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp7_ = gsettings_configuration_engine_get_gs_enum (self, _tmp3_, _tmp6_, &_inner_error_);
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp0_ = _tmp7_;
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		if (_inner_error_->domain == CONFIGURATION_ERROR) {
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_propagate_error (error, _inner_error_);
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return 0;
+#line 3732 "GSettingsEngine.c"
+		} else {
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_clear_error (&_inner_error_);
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return 0;
+#line 3740 "GSettingsEngine.c"
+		}
+	}
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	result = _tmp0_;
+#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	return result;
+#line 3747 "GSettingsEngine.c"
+}
+
+
+static void gsettings_configuration_engine_real_set_enum_property (ConfigurationEngine* base, ConfigurableProperty p, gint val, GError** error) {
+	GSettingsConfigurationEngine * self;
+	gchar** _tmp0_ = NULL;
+	gint _tmp0__length1 = 0;
+	ConfigurableProperty _tmp1_ = 0;
+	const gchar* _tmp2_ = NULL;
+	gchar** _tmp3_ = NULL;
+	gint _tmp3__length1 = 0;
+	ConfigurableProperty _tmp4_ = 0;
+	const gchar* _tmp5_ = NULL;
+	gint _tmp6_ = 0;
+	ConfigurableProperty _tmp7_ = 0;
+	GError * _inner_error_ = NULL;
+#line 312 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp0_ = self->priv->schema_names;
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp0__length1 = self->priv->schema_names_length1;
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp1_ = p;
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp2_ = _tmp0_[_tmp1_];
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp3_ = self->priv->key_names;
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp3__length1 = self->priv->key_names_length1;
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp4_ = p;
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp5_ = _tmp3_[_tmp4_];
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp6_ = val;
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	gsettings_configuration_engine_set_gs_enum (self, _tmp2_, _tmp5_, _tmp6_, &_inner_error_);
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		if (_inner_error_->domain == CONFIGURATION_ERROR) {
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_propagate_error (error, _inner_error_);
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return;
+#line 3794 "GSettingsEngine.c"
+		} else {
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			g_clear_error (&_inner_error_);
+#line 313 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+			return;
+#line 3802 "GSettingsEngine.c"
+		}
+	}
+#line 314 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	_tmp7_ = p;
+#line 314 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CONFIGURATION_ENGINE, ConfigurationEngine), "property-changed", _tmp7_);
+#line 3809 "GSettingsEngine.c"
 }
 
 
@@ -3460,52 +3823,52 @@ static gint gsettings_configuration_engine_real_get_int_property (ConfigurationE
 	const gchar* _tmp6_ = NULL;
 	gint _tmp7_ = 0;
 	GError * _inner_error_ = NULL;
-#line 295 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 317 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = self->priv->schema_names;
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1__length1 = self->priv->schema_names_length1;
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = p;
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = _tmp1_[_tmp2_];
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = self->priv->key_names;
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4__length1 = self->priv->key_names_length1;
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = p;
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = _tmp4_[_tmp5_];
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7_ = gsettings_configuration_engine_get_gs_int (self, _tmp3_, _tmp6_, &_inner_error_);
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = _tmp7_;
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return 0;
-#line 3494 "GSettingsEngine.c"
+#line 3857 "GSettingsEngine.c"
 		} else {
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return 0;
-#line 3502 "GSettingsEngine.c"
+#line 3865 "GSettingsEngine.c"
 		}
 	}
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _tmp0_;
-#line 296 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 318 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 3509 "GSettingsEngine.c"
+#line 3872 "GSettingsEngine.c"
 }
 
 
@@ -3522,52 +3885,52 @@ static void gsettings_configuration_engine_real_set_int_property (ConfigurationE
 	gint _tmp6_ = 0;
 	ConfigurableProperty _tmp7_ = 0;
 	GError * _inner_error_ = NULL;
-#line 299 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 321 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = self->priv->schema_names;
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0__length1 = self->priv->schema_names_length1;
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = p;
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = _tmp0_[_tmp1_];
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = self->priv->key_names;
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3__length1 = self->priv->key_names_length1;
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = p;
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = _tmp3_[_tmp4_];
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = val;
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_set_gs_int (self, _tmp2_, _tmp5_, _tmp6_, &_inner_error_);
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 3556 "GSettingsEngine.c"
+#line 3919 "GSettingsEngine.c"
 		} else {
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 300 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 3564 "GSettingsEngine.c"
+#line 3927 "GSettingsEngine.c"
 		}
 	}
-#line 301 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 323 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7_ = p;
-#line 301 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 323 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CONFIGURATION_ENGINE, ConfigurationEngine), "property-changed", _tmp7_);
-#line 3571 "GSettingsEngine.c"
+#line 3934 "GSettingsEngine.c"
 }
 
 
@@ -3590,7 +3953,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 	_tmp3_ = end;
 #line 1296 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp3_ == NULL) {
-#line 3594 "GSettingsEngine.c"
+#line 3957 "GSettingsEngine.c"
 		glong _tmp4_ = 0L;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp4_ = maxlen;
@@ -3598,7 +3961,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = _tmp4_;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 3602 "GSettingsEngine.c"
+#line 3965 "GSettingsEngine.c"
 	} else {
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -3610,7 +3973,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = (glong) (_tmp5_ - _tmp6_);
 #line 1299 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 3614 "GSettingsEngine.c"
+#line 3977 "GSettingsEngine.c"
 	}
 }
 
@@ -3634,21 +3997,21 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	_tmp1_ = offset;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp1_ >= ((glong) 0)) {
-#line 3638 "GSettingsEngine.c"
+#line 4001 "GSettingsEngine.c"
 		glong _tmp2_ = 0L;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = len;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = _tmp2_ >= ((glong) 0);
-#line 3644 "GSettingsEngine.c"
+#line 4007 "GSettingsEngine.c"
 	} else {
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = FALSE;
-#line 3648 "GSettingsEngine.c"
+#line 4011 "GSettingsEngine.c"
 	}
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp0_) {
-#line 3652 "GSettingsEngine.c"
+#line 4015 "GSettingsEngine.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 		glong _tmp5_ = 0L;
@@ -3660,7 +4023,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp5_ = string_strnlen ((gchar*) self, _tmp3_ + _tmp4_);
 #line 1310 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = _tmp5_;
-#line 3664 "GSettingsEngine.c"
+#line 4027 "GSettingsEngine.c"
 	} else {
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
@@ -3670,13 +4033,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp7_ = _tmp6_;
 #line 1312 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = (glong) _tmp7_;
-#line 3674 "GSettingsEngine.c"
+#line 4037 "GSettingsEngine.c"
 	}
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp8_ = offset;
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp8_ < ((glong) 0)) {
-#line 3680 "GSettingsEngine.c"
+#line 4043 "GSettingsEngine.c"
 		glong _tmp9_ = 0L;
 		glong _tmp10_ = 0L;
 		glong _tmp11_ = 0L;
@@ -3690,7 +4053,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp11_ = offset;
 #line 1317 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp11_ >= ((glong) 0), NULL);
-#line 3694 "GSettingsEngine.c"
+#line 4057 "GSettingsEngine.c"
 	} else {
 		glong _tmp12_ = 0L;
 		glong _tmp13_ = 0L;
@@ -3700,13 +4063,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp13_ = string_length;
 #line 1319 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp12_ <= _tmp13_, NULL);
-#line 3704 "GSettingsEngine.c"
+#line 4067 "GSettingsEngine.c"
 	}
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp14_ = len;
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp14_ < ((glong) 0)) {
-#line 3710 "GSettingsEngine.c"
+#line 4073 "GSettingsEngine.c"
 		glong _tmp15_ = 0L;
 		glong _tmp16_ = 0L;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -3715,7 +4078,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp16_ = offset;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		len = _tmp15_ - _tmp16_;
-#line 3719 "GSettingsEngine.c"
+#line 4082 "GSettingsEngine.c"
 	}
 #line 1324 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp17_ = offset;
@@ -3735,7 +4098,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	result = _tmp22_;
 #line 1325 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 3739 "GSettingsEngine.c"
+#line 4102 "GSettingsEngine.c"
 }
 
 
@@ -3756,72 +4119,72 @@ static gchar* gsettings_configuration_engine_real_get_string_property (Configura
 	gchar* _tmp7_ = NULL;
 	ConfigurableProperty _tmp8_ = 0;
 	GError * _inner_error_ = NULL;
-#line 304 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 326 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = self->priv->schema_names;
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0__length1 = self->priv->schema_names_length1;
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = p;
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = _tmp0_[_tmp1_];
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = self->priv->key_names;
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3__length1 = self->priv->key_names_length1;
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = p;
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = _tmp3_[_tmp4_];
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = gsettings_configuration_engine_get_gs_string (self, _tmp2_, _tmp5_, &_inner_error_);
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gs_result = _tmp6_;
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return NULL;
-#line 3790 "GSettingsEngine.c"
+#line 4153 "GSettingsEngine.c"
 		} else {
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 305 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 327 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return NULL;
-#line 3798 "GSettingsEngine.c"
+#line 4161 "GSettingsEngine.c"
 		}
 	}
-#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 331 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7_ = g_strdup (gs_result);
-#line 309 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 331 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_result_ = _tmp7_;
-#line 310 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 332 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp8_ = p;
-#line 310 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 332 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (_tmp8_ == CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE) {
-#line 3809 "GSettingsEngine.c"
+#line 4172 "GSettingsEngine.c"
 		gchar* _tmp9_ = NULL;
-#line 311 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 333 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp9_ = string_substring (gs_result, (glong) 7, (glong) -1);
-#line 311 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 333 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (_result_);
-#line 311 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 333 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_result_ = _tmp9_;
-#line 3817 "GSettingsEngine.c"
+#line 4180 "GSettingsEngine.c"
 	}
-#line 314 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 336 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _result_;
-#line 314 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 336 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (gs_result);
-#line 314 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 336 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 3825 "GSettingsEngine.c"
+#line 4188 "GSettingsEngine.c"
 }
 
 
@@ -3843,96 +4206,96 @@ static void gsettings_configuration_engine_real_set_string_property (Configurati
 	const gchar* _tmp13_ = NULL;
 	ConfigurableProperty _tmp14_ = 0;
 	GError * _inner_error_ = NULL;
-#line 317 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 317 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (val != NULL);
-#line 319 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 341 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = val;
-#line 319 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 341 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 319 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 341 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	converted_val = _tmp1_;
-#line 320 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 342 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = p;
-#line 320 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 342 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (_tmp3_ == CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE) {
-#line 320 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 342 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp2_ = TRUE;
-#line 3863 "GSettingsEngine.c"
+#line 4226 "GSettingsEngine.c"
 	} else {
 		ConfigurableProperty _tmp4_ = 0;
-#line 321 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = p;
-#line 321 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp2_ = _tmp4_ == CONFIGURABLE_PROPERTY_SCREENSAVER_FILE;
-#line 3870 "GSettingsEngine.c"
+#line 4233 "GSettingsEngine.c"
 	}
-#line 320 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 342 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (_tmp2_) {
-#line 3874 "GSettingsEngine.c"
+#line 4237 "GSettingsEngine.c"
 		const gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
-#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 344 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp5_ = val;
-#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 344 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = g_strconcat ("file://", _tmp5_, NULL);
-#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 344 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (converted_val);
-#line 322 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 344 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		converted_val = _tmp6_;
-#line 3885 "GSettingsEngine.c"
+#line 4248 "GSettingsEngine.c"
 	}
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7_ = self->priv->schema_names;
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7__length1 = self->priv->schema_names_length1;
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp8_ = p;
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp9_ = _tmp7_[_tmp8_];
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp10_ = self->priv->key_names;
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp10__length1 = self->priv->key_names_length1;
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp11_ = p;
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp12_ = _tmp10_[_tmp11_];
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp13_ = converted_val;
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_set_gs_string (self, _tmp9_, _tmp12_, _tmp13_, &_inner_error_);
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (converted_val);
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 3917 "GSettingsEngine.c"
+#line 4280 "GSettingsEngine.c"
 		} else {
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (converted_val);
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 325 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 3927 "GSettingsEngine.c"
+#line 4290 "GSettingsEngine.c"
 		}
 	}
-#line 326 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 348 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp14_ = p;
-#line 326 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 348 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CONFIGURATION_ENGINE, ConfigurationEngine), "property-changed", _tmp14_);
-#line 317 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (converted_val);
-#line 3936 "GSettingsEngine.c"
+#line 4299 "GSettingsEngine.c"
 }
 
 
@@ -3950,52 +4313,52 @@ static gboolean gsettings_configuration_engine_real_get_bool_property (Configura
 	const gchar* _tmp6_ = NULL;
 	gboolean _tmp7_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 329 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = self->priv->schema_names;
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1__length1 = self->priv->schema_names_length1;
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = p;
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = _tmp1_[_tmp2_];
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = self->priv->key_names;
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4__length1 = self->priv->key_names_length1;
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = p;
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = _tmp4_[_tmp5_];
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7_ = gsettings_configuration_engine_get_gs_bool (self, _tmp3_, _tmp6_, &_inner_error_);
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = _tmp7_;
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return FALSE;
-#line 3984 "GSettingsEngine.c"
+#line 4347 "GSettingsEngine.c"
 		} else {
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return FALSE;
-#line 3992 "GSettingsEngine.c"
+#line 4355 "GSettingsEngine.c"
 		}
 	}
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _tmp0_;
-#line 330 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 352 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 3999 "GSettingsEngine.c"
+#line 4362 "GSettingsEngine.c"
 }
 
 
@@ -4012,52 +4375,52 @@ static void gsettings_configuration_engine_real_set_bool_property (Configuration
 	gboolean _tmp6_ = FALSE;
 	ConfigurableProperty _tmp7_ = 0;
 	GError * _inner_error_ = NULL;
-#line 333 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 355 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = self->priv->schema_names;
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0__length1 = self->priv->schema_names_length1;
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = p;
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = _tmp0_[_tmp1_];
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = self->priv->key_names;
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3__length1 = self->priv->key_names_length1;
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = p;
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = _tmp3_[_tmp4_];
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = val;
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_set_gs_bool (self, _tmp2_, _tmp5_, _tmp6_, &_inner_error_);
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 4046 "GSettingsEngine.c"
+#line 4409 "GSettingsEngine.c"
 		} else {
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 334 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 356 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 4054 "GSettingsEngine.c"
+#line 4417 "GSettingsEngine.c"
 		}
 	}
-#line 335 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 357 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7_ = p;
-#line 335 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 357 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CONFIGURATION_ENGINE, ConfigurationEngine), "property-changed", _tmp7_);
-#line 4061 "GSettingsEngine.c"
+#line 4424 "GSettingsEngine.c"
 }
 
 
@@ -4075,52 +4438,52 @@ static gdouble gsettings_configuration_engine_real_get_double_property (Configur
 	const gchar* _tmp6_ = NULL;
 	gdouble _tmp7_ = 0.0;
 	GError * _inner_error_ = NULL;
-#line 338 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 360 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = self->priv->schema_names;
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1__length1 = self->priv->schema_names_length1;
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = p;
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = _tmp1_[_tmp2_];
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = self->priv->key_names;
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4__length1 = self->priv->key_names_length1;
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = p;
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = _tmp4_[_tmp5_];
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7_ = gsettings_configuration_engine_get_gs_double (self, _tmp3_, _tmp6_, &_inner_error_);
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = _tmp7_;
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return 0.0;
-#line 4109 "GSettingsEngine.c"
+#line 4472 "GSettingsEngine.c"
 		} else {
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return 0.0;
-#line 4117 "GSettingsEngine.c"
+#line 4480 "GSettingsEngine.c"
 		}
 	}
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	result = _tmp0_;
-#line 339 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return result;
-#line 4124 "GSettingsEngine.c"
+#line 4487 "GSettingsEngine.c"
 }
 
 
@@ -4137,52 +4500,52 @@ static void gsettings_configuration_engine_real_set_double_property (Configurati
 	gdouble _tmp6_ = 0.0;
 	ConfigurableProperty _tmp7_ = 0;
 	GError * _inner_error_ = NULL;
-#line 342 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 364 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = self->priv->schema_names;
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0__length1 = self->priv->schema_names_length1;
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = p;
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = _tmp0_[_tmp1_];
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = self->priv->key_names;
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3__length1 = self->priv->key_names_length1;
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = p;
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = _tmp3_[_tmp4_];
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp6_ = val;
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	gsettings_configuration_engine_set_gs_double (self, _tmp2_, _tmp5_, _tmp6_, &_inner_error_);
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_propagate_error (error, _inner_error_);
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 4171 "GSettingsEngine.c"
+#line 4534 "GSettingsEngine.c"
 		} else {
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 343 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 365 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 4179 "GSettingsEngine.c"
+#line 4542 "GSettingsEngine.c"
 		}
 	}
-#line 344 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 366 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp7_ = p;
-#line 344 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 366 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CONFIGURATION_ENGINE, ConfigurationEngine), "property-changed", _tmp7_);
-#line 4186 "GSettingsEngine.c"
+#line 4549 "GSettingsEngine.c"
 }
 
 
@@ -4194,23 +4557,23 @@ static gboolean gsettings_configuration_engine_real_get_plugin_bool (Configurati
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 369 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 369 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (domain != NULL, FALSE);
-#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 369 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (id != NULL, FALSE);
-#line 347 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 369 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (key != NULL, FALSE);
-#line 348 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 370 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = domain;
-#line 348 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 370 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = id;
-#line 348 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 370 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = gsettings_configuration_engine_make_plugin_schema_name (_tmp0_, _tmp1_);
-#line 348 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 370 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_name = _tmp2_;
-#line 4214 "GSettingsEngine.c"
+#line 4577 "GSettingsEngine.c"
 	{
 		gboolean _tmp3_ = FALSE;
 		const gchar* _tmp4_ = NULL;
@@ -4218,84 +4581,84 @@ static gboolean gsettings_configuration_engine_real_get_plugin_bool (Configurati
 		gchar* _tmp6_ = NULL;
 		gboolean _tmp7_ = FALSE;
 		gboolean _tmp8_ = FALSE;
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = key;
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp5_ = gsettings_configuration_engine_make_gsettings_key (_tmp4_);
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = _tmp5_;
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp7_ = gsettings_configuration_engine_get_gs_bool (self, schema_name, _tmp6_, &_inner_error_);
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp8_ = _tmp7_;
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (_tmp6_);
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = _tmp8_;
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4240 "GSettingsEngine.c"
-				goto __catch190_configuration_error;
+#line 4603 "GSettingsEngine.c"
+				goto __catch203_configuration_error;
 			}
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return FALSE;
-#line 4251 "GSettingsEngine.c"
+#line 4614 "GSettingsEngine.c"
 		}
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		result = _tmp3_;
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 351 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return result;
-#line 4259 "GSettingsEngine.c"
+#line 4622 "GSettingsEngine.c"
 	}
-	goto __finally190;
-	__catch190_configuration_error:
+	goto __finally203;
+	__catch203_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp9_ = NULL;
 		const gchar* _tmp10_ = NULL;
 		gboolean _tmp11_ = FALSE;
-#line 350 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 350 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 353 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 375 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp9_ = err;
-#line 353 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 375 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp10_ = _tmp9_->message;
-#line 353 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_critical ("GSettingsEngine.vala:353: GSettingsConfigurationEngine: error: %s", _tmp10_);
-#line 354 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 375 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_critical ("GSettingsEngine.vala:375: GSettingsConfigurationEngine: error: %s", _tmp10_);
+#line 376 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp11_ = def;
-#line 354 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 376 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		result = _tmp11_;
-#line 354 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 376 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 354 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 376 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 354 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 376 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return result;
-#line 4288 "GSettingsEngine.c"
+#line 4651 "GSettingsEngine.c"
 	}
-	__finally190:
-#line 350 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally203:
+#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
-#line 350 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 350 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_clear_error (&_inner_error_);
-#line 350 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return FALSE;
-#line 4299 "GSettingsEngine.c"
+#line 4662 "GSettingsEngine.c"
 }
 
 
@@ -4306,94 +4669,94 @@ static void gsettings_configuration_engine_real_set_plugin_bool (ConfigurationEn
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 358 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 380 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 358 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 380 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (domain != NULL);
-#line 358 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 380 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (id != NULL);
-#line 358 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 380 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (key != NULL);
-#line 359 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 381 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = domain;
-#line 359 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 381 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = id;
-#line 359 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 381 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = gsettings_configuration_engine_make_plugin_schema_name (_tmp0_, _tmp1_);
-#line 359 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 381 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_name = _tmp2_;
-#line 4326 "GSettingsEngine.c"
+#line 4689 "GSettingsEngine.c"
 	{
 		const gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		gboolean _tmp6_ = FALSE;
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = key;
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = gsettings_configuration_engine_make_gsettings_key (_tmp3_);
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp5_ = _tmp4_;
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = val;
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		gsettings_configuration_engine_set_gs_bool (self, schema_name, _tmp5_, _tmp6_, &_inner_error_);
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (_tmp5_);
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4348 "GSettingsEngine.c"
-				goto __catch191_configuration_error;
+#line 4711 "GSettingsEngine.c"
+				goto __catch204_configuration_error;
 			}
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 362 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 4359 "GSettingsEngine.c"
+#line 4722 "GSettingsEngine.c"
 		}
 	}
-	goto __finally191;
-	__catch191_configuration_error:
+	goto __finally204;
+	__catch204_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
 		const gchar* _tmp8_ = NULL;
-#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 364 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 386 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp7_ = err;
-#line 364 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 386 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp8_ = _tmp7_->message;
-#line 364 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_critical ("GSettingsEngine.vala:364: GSettingsConfigurationEngine: error: %s", _tmp8_);
-#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 386 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_critical ("GSettingsEngine.vala:386: GSettingsConfigurationEngine: error: %s", _tmp8_);
+#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 4380 "GSettingsEngine.c"
+#line 4743 "GSettingsEngine.c"
 	}
-	__finally191:
-#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally204:
+#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_clear_error (&_inner_error_);
-#line 361 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return;
-#line 4393 "GSettingsEngine.c"
+#line 4756 "GSettingsEngine.c"
 	}
-#line 358 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 380 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
-#line 4397 "GSettingsEngine.c"
+#line 4760 "GSettingsEngine.c"
 }
 
 
@@ -4405,23 +4768,23 @@ static gdouble gsettings_configuration_engine_real_get_plugin_double (Configurat
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 368 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 390 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 368 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 390 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (domain != NULL, 0.0);
-#line 368 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 390 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (id != NULL, 0.0);
-#line 368 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 390 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (key != NULL, 0.0);
-#line 369 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 391 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = domain;
-#line 369 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 391 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = id;
-#line 369 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 391 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = gsettings_configuration_engine_make_plugin_schema_name (_tmp0_, _tmp1_);
-#line 369 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 391 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_name = _tmp2_;
-#line 4425 "GSettingsEngine.c"
+#line 4788 "GSettingsEngine.c"
 	{
 		gdouble _tmp3_ = 0.0;
 		const gchar* _tmp4_ = NULL;
@@ -4429,84 +4792,84 @@ static gdouble gsettings_configuration_engine_real_get_plugin_double (Configurat
 		gchar* _tmp6_ = NULL;
 		gdouble _tmp7_ = 0.0;
 		gdouble _tmp8_ = 0.0;
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = key;
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp5_ = gsettings_configuration_engine_make_gsettings_key (_tmp4_);
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = _tmp5_;
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp7_ = gsettings_configuration_engine_get_gs_double (self, schema_name, _tmp6_, &_inner_error_);
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp8_ = _tmp7_;
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (_tmp6_);
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = _tmp8_;
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4451 "GSettingsEngine.c"
-				goto __catch192_configuration_error;
+#line 4814 "GSettingsEngine.c"
+				goto __catch205_configuration_error;
 			}
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return 0.0;
-#line 4462 "GSettingsEngine.c"
+#line 4825 "GSettingsEngine.c"
 		}
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		result = _tmp3_;
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return result;
-#line 4470 "GSettingsEngine.c"
+#line 4833 "GSettingsEngine.c"
 	}
-	goto __finally192;
-	__catch192_configuration_error:
+	goto __finally205;
+	__catch205_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp9_ = NULL;
 		const gchar* _tmp10_ = NULL;
 		gdouble _tmp11_ = 0.0;
-#line 371 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 371 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 374 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 396 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp9_ = err;
-#line 374 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 396 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp10_ = _tmp9_->message;
-#line 374 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_critical ("GSettingsEngine.vala:374: GSettingsConfigurationEngine: error: %s", _tmp10_);
-#line 375 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 396 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_critical ("GSettingsEngine.vala:396: GSettingsConfigurationEngine: error: %s", _tmp10_);
+#line 397 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp11_ = def;
-#line 375 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 397 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		result = _tmp11_;
-#line 375 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 397 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 375 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 397 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 375 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 397 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return result;
-#line 4499 "GSettingsEngine.c"
+#line 4862 "GSettingsEngine.c"
 	}
-	__finally192:
-#line 371 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally205:
+#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
-#line 371 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 371 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_clear_error (&_inner_error_);
-#line 371 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return 0.0;
-#line 4510 "GSettingsEngine.c"
+#line 4873 "GSettingsEngine.c"
 }
 
 
@@ -4517,94 +4880,94 @@ static void gsettings_configuration_engine_real_set_plugin_double (Configuration
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 379 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 401 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 379 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 401 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (domain != NULL);
-#line 379 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 401 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (id != NULL);
-#line 379 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 401 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (key != NULL);
-#line 380 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 402 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = domain;
-#line 380 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 402 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = id;
-#line 380 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 402 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = gsettings_configuration_engine_make_plugin_schema_name (_tmp0_, _tmp1_);
-#line 380 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 402 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_name = _tmp2_;
-#line 4537 "GSettingsEngine.c"
+#line 4900 "GSettingsEngine.c"
 	{
 		const gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		gdouble _tmp6_ = 0.0;
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = key;
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = gsettings_configuration_engine_make_gsettings_key (_tmp3_);
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp5_ = _tmp4_;
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = val;
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		gsettings_configuration_engine_set_gs_double (self, schema_name, _tmp5_, _tmp6_, &_inner_error_);
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (_tmp5_);
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4559 "GSettingsEngine.c"
-				goto __catch193_configuration_error;
+#line 4922 "GSettingsEngine.c"
+				goto __catch206_configuration_error;
 			}
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 4570 "GSettingsEngine.c"
+#line 4933 "GSettingsEngine.c"
 		}
 	}
-	goto __finally193;
-	__catch193_configuration_error:
+	goto __finally206;
+	__catch206_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
 		const gchar* _tmp8_ = NULL;
-#line 382 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 382 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 385 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 407 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp7_ = err;
-#line 385 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 407 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp8_ = _tmp7_->message;
-#line 385 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_critical ("GSettingsEngine.vala:385: GSettingsConfigurationEngine: error: %s", _tmp8_);
-#line 382 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 407 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_critical ("GSettingsEngine.vala:407: GSettingsConfigurationEngine: error: %s", _tmp8_);
+#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 4591 "GSettingsEngine.c"
+#line 4954 "GSettingsEngine.c"
 	}
-	__finally193:
-#line 382 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally206:
+#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 382 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 382 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 382 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_clear_error (&_inner_error_);
-#line 382 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return;
-#line 4604 "GSettingsEngine.c"
+#line 4967 "GSettingsEngine.c"
 	}
-#line 379 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 401 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
-#line 4608 "GSettingsEngine.c"
+#line 4971 "GSettingsEngine.c"
 }
 
 
@@ -4616,23 +4979,23 @@ static gint gsettings_configuration_engine_real_get_plugin_int (ConfigurationEng
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 389 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 411 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 389 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 411 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (domain != NULL, 0);
-#line 389 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 411 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (id != NULL, 0);
-#line 389 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 411 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (key != NULL, 0);
-#line 390 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 412 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = domain;
-#line 390 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 412 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = id;
-#line 390 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 412 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = gsettings_configuration_engine_make_plugin_schema_name (_tmp0_, _tmp1_);
-#line 390 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 412 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_name = _tmp2_;
-#line 4636 "GSettingsEngine.c"
+#line 4999 "GSettingsEngine.c"
 	{
 		gint _tmp3_ = 0;
 		const gchar* _tmp4_ = NULL;
@@ -4640,84 +5003,84 @@ static gint gsettings_configuration_engine_real_get_plugin_int (ConfigurationEng
 		gchar* _tmp6_ = NULL;
 		gint _tmp7_ = 0;
 		gint _tmp8_ = 0;
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = key;
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp5_ = gsettings_configuration_engine_make_gsettings_key (_tmp4_);
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = _tmp5_;
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp7_ = gsettings_configuration_engine_get_gs_int (self, schema_name, _tmp6_, &_inner_error_);
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp8_ = _tmp7_;
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (_tmp6_);
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = _tmp8_;
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4662 "GSettingsEngine.c"
-				goto __catch194_configuration_error;
+#line 5025 "GSettingsEngine.c"
+				goto __catch207_configuration_error;
 			}
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return 0;
-#line 4673 "GSettingsEngine.c"
+#line 5036 "GSettingsEngine.c"
 		}
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		result = _tmp3_;
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return result;
-#line 4681 "GSettingsEngine.c"
+#line 5044 "GSettingsEngine.c"
 	}
-	goto __finally194;
-	__catch194_configuration_error:
+	goto __finally207;
+	__catch207_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp9_ = NULL;
 		const gchar* _tmp10_ = NULL;
 		gint _tmp11_ = 0;
-#line 392 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 392 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 395 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 417 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp9_ = err;
-#line 395 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 417 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp10_ = _tmp9_->message;
-#line 395 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_critical ("GSettingsEngine.vala:395: GSettingsConfigurationEngine: error: %s", _tmp10_);
-#line 396 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 417 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_critical ("GSettingsEngine.vala:417: GSettingsConfigurationEngine: error: %s", _tmp10_);
+#line 418 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp11_ = def;
-#line 396 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 418 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		result = _tmp11_;
-#line 396 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 418 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 396 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 418 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 396 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 418 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return result;
-#line 4710 "GSettingsEngine.c"
+#line 5073 "GSettingsEngine.c"
 	}
-	__finally194:
-#line 392 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally207:
+#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
-#line 392 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 392 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_clear_error (&_inner_error_);
-#line 392 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return 0;
-#line 4721 "GSettingsEngine.c"
+#line 5084 "GSettingsEngine.c"
 }
 
 
@@ -4728,94 +5091,94 @@ static void gsettings_configuration_engine_real_set_plugin_int (ConfigurationEng
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 400 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 422 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 400 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 422 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (domain != NULL);
-#line 400 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 422 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (id != NULL);
-#line 400 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 422 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (key != NULL);
-#line 401 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 423 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = domain;
-#line 401 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 423 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = id;
-#line 401 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 423 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = gsettings_configuration_engine_make_plugin_schema_name (_tmp0_, _tmp1_);
-#line 401 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 423 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_name = _tmp2_;
-#line 4748 "GSettingsEngine.c"
+#line 5111 "GSettingsEngine.c"
 	{
 		const gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		gint _tmp6_ = 0;
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = key;
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = gsettings_configuration_engine_make_gsettings_key (_tmp3_);
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp5_ = _tmp4_;
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = val;
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		gsettings_configuration_engine_set_gs_int (self, schema_name, _tmp5_, _tmp6_, &_inner_error_);
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (_tmp5_);
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4770 "GSettingsEngine.c"
-				goto __catch195_configuration_error;
+#line 5133 "GSettingsEngine.c"
+				goto __catch208_configuration_error;
 			}
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 4781 "GSettingsEngine.c"
+#line 5144 "GSettingsEngine.c"
 		}
 	}
-	goto __finally195;
-	__catch195_configuration_error:
+	goto __finally208;
+	__catch208_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
 		const gchar* _tmp8_ = NULL;
-#line 403 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 403 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 406 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 428 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp7_ = err;
-#line 406 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 428 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp8_ = _tmp7_->message;
-#line 406 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_critical ("GSettingsEngine.vala:406: GSettingsConfigurationEngine: error: %s", _tmp8_);
-#line 403 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 428 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_critical ("GSettingsEngine.vala:428: GSettingsConfigurationEngine: error: %s", _tmp8_);
+#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 4802 "GSettingsEngine.c"
+#line 5165 "GSettingsEngine.c"
 	}
-	__finally195:
-#line 403 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally208:
+#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 403 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 403 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 403 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_clear_error (&_inner_error_);
-#line 403 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return;
-#line 4815 "GSettingsEngine.c"
+#line 5178 "GSettingsEngine.c"
 	}
-#line 400 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 422 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
-#line 4819 "GSettingsEngine.c"
+#line 5182 "GSettingsEngine.c"
 }
 
 
@@ -4827,23 +5190,23 @@ static gchar* gsettings_configuration_engine_real_get_plugin_string (Configurati
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 410 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 432 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 410 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 432 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (domain != NULL, NULL);
-#line 410 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 432 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (id != NULL, NULL);
-#line 410 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 432 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (key != NULL, NULL);
-#line 411 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 433 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = domain;
-#line 411 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 433 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = id;
-#line 411 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 433 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = gsettings_configuration_engine_make_plugin_schema_name (_tmp0_, _tmp1_);
-#line 411 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 433 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_name = _tmp2_;
-#line 4847 "GSettingsEngine.c"
+#line 5210 "GSettingsEngine.c"
 	{
 		gchar* _tmp3_ = NULL;
 		const gchar* _tmp4_ = NULL;
@@ -4852,93 +5215,93 @@ static gchar* gsettings_configuration_engine_real_get_plugin_string (Configurati
 		gchar* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = key;
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp5_ = gsettings_configuration_engine_make_gsettings_key (_tmp4_);
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = _tmp5_;
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp7_ = gsettings_configuration_engine_get_gs_string (self, schema_name, _tmp6_, &_inner_error_);
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp8_ = _tmp7_;
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (_tmp6_);
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = _tmp8_;
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4874 "GSettingsEngine.c"
-				goto __catch196_configuration_error;
+#line 5237 "GSettingsEngine.c"
+				goto __catch209_configuration_error;
 			}
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return NULL;
-#line 4885 "GSettingsEngine.c"
+#line 5248 "GSettingsEngine.c"
 		}
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp9_ = _tmp3_;
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = NULL;
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		result = _tmp9_;
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (_tmp3_);
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return result;
-#line 4899 "GSettingsEngine.c"
+#line 5262 "GSettingsEngine.c"
 	}
-	goto __finally196;
-	__catch196_configuration_error:
+	goto __finally209;
+	__catch209_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp10_ = NULL;
 		const gchar* _tmp11_ = NULL;
 		const gchar* _tmp12_ = NULL;
 		gchar* _tmp13_ = NULL;
-#line 413 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 413 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 416 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 438 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp10_ = err;
-#line 416 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 438 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp11_ = _tmp10_->message;
-#line 416 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_critical ("GSettingsEngine.vala:416: GSettingsConfigurationEngine: error: %s", _tmp11_);
-#line 417 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 438 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_critical ("GSettingsEngine.vala:438: GSettingsConfigurationEngine: error: %s", _tmp11_);
+#line 439 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp12_ = def;
-#line 417 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 439 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp13_ = g_strdup (_tmp12_);
-#line 417 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 439 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		result = _tmp13_;
-#line 417 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 439 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 417 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 439 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 417 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 439 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return result;
-#line 4931 "GSettingsEngine.c"
+#line 5294 "GSettingsEngine.c"
 	}
-	__finally196:
-#line 413 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally209:
+#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
-#line 413 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 413 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_clear_error (&_inner_error_);
-#line 413 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return NULL;
-#line 4942 "GSettingsEngine.c"
+#line 5305 "GSettingsEngine.c"
 }
 
 
@@ -4949,94 +5312,94 @@ static void gsettings_configuration_engine_real_set_plugin_string (Configuration
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 421 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 443 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 421 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 443 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (domain != NULL);
-#line 421 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 443 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (id != NULL);
-#line 421 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 443 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (key != NULL);
-#line 422 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 444 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = domain;
-#line 422 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 444 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = id;
-#line 422 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 444 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = gsettings_configuration_engine_make_plugin_schema_name (_tmp0_, _tmp1_);
-#line 422 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 444 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_name = _tmp2_;
-#line 4969 "GSettingsEngine.c"
+#line 5332 "GSettingsEngine.c"
 	{
 		const gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		const gchar* _tmp6_ = NULL;
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = key;
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = gsettings_configuration_engine_make_gsettings_key (_tmp3_);
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp5_ = _tmp4_;
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = val;
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		gsettings_configuration_engine_set_gs_string (self, schema_name, _tmp5_, _tmp6_, &_inner_error_);
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (_tmp5_);
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4991 "GSettingsEngine.c"
-				goto __catch197_configuration_error;
+#line 5354 "GSettingsEngine.c"
+				goto __catch210_configuration_error;
 			}
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 5002 "GSettingsEngine.c"
+#line 5365 "GSettingsEngine.c"
 		}
 	}
-	goto __finally197;
-	__catch197_configuration_error:
+	goto __finally210;
+	__catch210_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
 		const gchar* _tmp8_ = NULL;
-#line 424 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 424 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 427 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 449 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp7_ = err;
-#line 427 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 449 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp8_ = _tmp7_->message;
-#line 427 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_critical ("GSettingsEngine.vala:427: GSettingsConfigurationEngine: error: %s", _tmp8_);
-#line 424 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 449 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_critical ("GSettingsEngine.vala:449: GSettingsConfigurationEngine: error: %s", _tmp8_);
+#line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 5023 "GSettingsEngine.c"
+#line 5386 "GSettingsEngine.c"
 	}
-	__finally197:
-#line 424 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally210:
+#line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 424 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 424 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 424 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_clear_error (&_inner_error_);
-#line 424 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return;
-#line 5036 "GSettingsEngine.c"
+#line 5399 "GSettingsEngine.c"
 	}
-#line 421 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 443 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
-#line 5040 "GSettingsEngine.c"
+#line 5403 "GSettingsEngine.c"
 }
 
 
@@ -5047,91 +5410,91 @@ static void gsettings_configuration_engine_real_unset_plugin_key (ConfigurationE
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 431 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 453 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 431 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 453 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (domain != NULL);
-#line 431 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 453 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (id != NULL);
-#line 431 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 453 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (key != NULL);
-#line 432 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 454 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = domain;
-#line 432 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 454 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = id;
-#line 432 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 454 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = gsettings_configuration_engine_make_plugin_schema_name (_tmp0_, _tmp1_);
-#line 432 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 454 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	schema_name = _tmp2_;
-#line 5067 "GSettingsEngine.c"
+#line 5430 "GSettingsEngine.c"
 	{
 		const gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
-#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = key;
-#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = gsettings_configuration_engine_make_gsettings_key (_tmp3_);
-#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp5_ = _tmp4_;
-#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		gsettings_configuration_engine_reset_gs_to_default (self, schema_name, _tmp5_, &_inner_error_);
-#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (_tmp5_);
-#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5086 "GSettingsEngine.c"
-				goto __catch198_configuration_error;
+#line 5449 "GSettingsEngine.c"
+				goto __catch211_configuration_error;
 			}
-#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
-#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 5097 "GSettingsEngine.c"
+#line 5460 "GSettingsEngine.c"
 		}
 	}
-	goto __finally198;
-	__catch198_configuration_error:
+	goto __finally211;
+	__catch211_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
 		const gchar* _tmp7_ = NULL;
-#line 434 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 434 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 437 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 459 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = err;
-#line 437 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 459 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp7_ = _tmp6_->message;
-#line 437 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_critical ("GSettingsEngine.vala:437: GSettingsConfigurationEngine: error: %s", _tmp7_);
-#line 434 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 459 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_critical ("GSettingsEngine.vala:459: GSettingsConfigurationEngine: error: %s", _tmp7_);
+#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 5118 "GSettingsEngine.c"
+#line 5481 "GSettingsEngine.c"
 	}
-	__finally198:
-#line 434 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally211:
+#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 434 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (schema_name);
-#line 434 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 434 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_clear_error (&_inner_error_);
-#line 434 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return;
-#line 5131 "GSettingsEngine.c"
+#line 5494 "GSettingsEngine.c"
 	}
-#line 431 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 453 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
-#line 5135 "GSettingsEngine.c"
+#line 5498 "GSettingsEngine.c"
 }
 
 
@@ -5142,96 +5505,96 @@ static FuzzyPropertyState gsettings_configuration_engine_real_is_plugin_enabled 
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 441 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 463 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 441 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 463 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_val_if_fail (id != NULL, 0);
-#line 442 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 464 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = id;
-#line 442 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 464 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = gsettings_configuration_engine_get_plugin_enable_disable_name (_tmp0_);
-#line 442 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 464 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	enable_disable_name = _tmp1_;
-#line 5156 "GSettingsEngine.c"
+#line 5519 "GSettingsEngine.c"
 	{
 		FuzzyPropertyState _tmp2_ = 0;
 		gboolean _tmp3_ = FALSE;
 		gboolean _tmp4_ = FALSE;
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = gsettings_configuration_engine_get_gs_bool (self, GSETTINGS_CONFIGURATION_ENGINE_PLUGINS_ENABLE_DISABLE_SCHEMA_NAME, enable_disable_name, &_inner_error_);
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = _tmp4_;
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5169 "GSettingsEngine.c"
-				goto __catch199_configuration_error;
+#line 5532 "GSettingsEngine.c"
+				goto __catch212_configuration_error;
 			}
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (enable_disable_name);
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return 0;
-#line 5180 "GSettingsEngine.c"
+#line 5543 "GSettingsEngine.c"
 		}
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (_tmp3_) {
-#line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 468 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_tmp2_ = FUZZY_PROPERTY_STATE_ENABLED;
-#line 5186 "GSettingsEngine.c"
+#line 5549 "GSettingsEngine.c"
 		} else {
-#line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 468 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_tmp2_ = FUZZY_PROPERTY_STATE_DISABLED;
-#line 5190 "GSettingsEngine.c"
+#line 5553 "GSettingsEngine.c"
 		}
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		result = _tmp2_;
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (enable_disable_name);
-#line 445 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return result;
-#line 5198 "GSettingsEngine.c"
+#line 5561 "GSettingsEngine.c"
 	}
-	goto __finally199;
-	__catch199_configuration_error:
+	goto __finally212;
+	__catch212_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
 		const gchar* _tmp6_ = NULL;
-#line 444 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 466 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 444 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 466 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 448 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 470 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp5_ = err;
-#line 448 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 470 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = _tmp5_->message;
-#line 448 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_critical ("GSettingsEngine.vala:448: GSettingsConfigurationEngine: error: %s", _tmp6_);
-#line 449 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 470 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_critical ("GSettingsEngine.vala:470: GSettingsConfigurationEngine: error: %s", _tmp6_);
+#line 471 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		result = FUZZY_PROPERTY_STATE_UNKNOWN;
-#line 449 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 471 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 449 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 471 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (enable_disable_name);
-#line 449 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 471 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return result;
-#line 5224 "GSettingsEngine.c"
+#line 5587 "GSettingsEngine.c"
 	}
-	__finally199:
-#line 444 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally212:
+#line 466 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (enable_disable_name);
-#line 444 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 466 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 444 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 466 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_clear_error (&_inner_error_);
-#line 444 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 466 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	return 0;
-#line 5235 "GSettingsEngine.c"
+#line 5598 "GSettingsEngine.c"
 }
 
 
@@ -5241,77 +5604,77 @@ static void gsettings_configuration_engine_real_set_plugin_enabled (Configuratio
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 453 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 475 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 453 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 475 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	g_return_if_fail (id != NULL);
-#line 454 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 476 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = id;
-#line 454 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 476 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = gsettings_configuration_engine_get_plugin_enable_disable_name (_tmp0_);
-#line 454 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 476 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	enable_disable_name = _tmp1_;
-#line 5255 "GSettingsEngine.c"
+#line 5618 "GSettingsEngine.c"
 	{
 		gboolean _tmp2_ = FALSE;
-#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 479 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp2_ = enabled;
-#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 479 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		gsettings_configuration_engine_set_gs_bool (self, GSETTINGS_CONFIGURATION_ENGINE_PLUGINS_ENABLE_DISABLE_SCHEMA_NAME, enable_disable_name, _tmp2_, &_inner_error_);
-#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 479 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 479 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5266 "GSettingsEngine.c"
-				goto __catch200_configuration_error;
+#line 5629 "GSettingsEngine.c"
+				goto __catch213_configuration_error;
 			}
-#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 479 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (enable_disable_name);
-#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 479 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 479 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			g_clear_error (&_inner_error_);
-#line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 479 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			return;
-#line 5277 "GSettingsEngine.c"
+#line 5640 "GSettingsEngine.c"
 		}
 	}
-	goto __finally200;
-	__catch200_configuration_error:
+	goto __finally213;
+	__catch213_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
 		const gchar* _tmp4_ = NULL;
-#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 478 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 478 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 459 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 481 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp3_ = err;
-#line 459 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 481 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp4_ = _tmp3_->message;
-#line 459 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_critical ("GSettingsEngine.vala:459: GSettingsConfigurationEngine: error: %s", _tmp4_);
-#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 481 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_critical ("GSettingsEngine.vala:481: GSettingsConfigurationEngine: error: %s", _tmp4_);
+#line 478 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 5298 "GSettingsEngine.c"
+#line 5661 "GSettingsEngine.c"
 	}
-	__finally200:
-#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally213:
+#line 478 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 478 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (enable_disable_name);
-#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 478 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 478 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_clear_error (&_inner_error_);
-#line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 478 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return;
-#line 5311 "GSettingsEngine.c"
+#line 5674 "GSettingsEngine.c"
 	}
-#line 453 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 475 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (enable_disable_name);
-#line 5315 "GSettingsEngine.c"
+#line 5678 "GSettingsEngine.c"
 }
 
 
@@ -5324,70 +5687,70 @@ void gsettings_configuration_engine_run_gsettings_migrator (void) {
 	gchar* _tmp4_ = NULL;
 	gchar* _tmp5_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 468 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 490 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp0_ = app_dirs_get_settings_migrator_bin ();
-#line 468 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 490 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp1_ = _tmp0_;
-#line 468 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 490 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp2_ = g_file_get_path (_tmp1_);
-#line 468 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 490 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp3_ = _tmp2_;
-#line 468 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 490 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp4_ = g_strconcat ("sh ", _tmp3_, NULL);
-#line 468 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 490 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_tmp5_ = _tmp4_;
-#line 468 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 490 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (_tmp3_);
-#line 468 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 490 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_object_unref0 (_tmp1_);
-#line 468 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 490 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	cmd_line = _tmp5_;
-#line 5346 "GSettingsEngine.c"
+#line 5709 "GSettingsEngine.c"
 	{
-#line 471 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 493 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_spawn_command_line_sync (cmd_line, NULL, NULL, NULL, &_inner_error_);
-#line 471 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 493 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 5352 "GSettingsEngine.c"
-			goto __catch201_g_error;
+#line 5715 "GSettingsEngine.c"
+			goto __catch214_g_error;
 		}
 	}
-	goto __finally201;
-	__catch201_g_error:
+	goto __finally214;
+	__catch214_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
 		const gchar* _tmp7_ = NULL;
-#line 470 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 492 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		err = _inner_error_;
-#line 470 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 492 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_inner_error_ = NULL;
-#line 473 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 495 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp6_ = err;
-#line 473 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 495 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_tmp7_ = _tmp6_->message;
-#line 473 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-		g_message ("GSettingsEngine.vala:473: Error running shotwell-settings-migrator: %s", _tmp7_);
-#line 470 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 495 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+		g_message ("GSettingsEngine.vala:495: Error running shotwell-settings-migrator: %s", _tmp7_);
+#line 492 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_error_free0 (err);
-#line 5374 "GSettingsEngine.c"
+#line 5737 "GSettingsEngine.c"
 	}
-	__finally201:
-#line 470 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	__finally214:
+#line 492 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 470 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 492 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		_g_free0 (cmd_line);
-#line 470 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 492 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 470 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 492 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		g_clear_error (&_inner_error_);
-#line 470 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 492 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		return;
-#line 5387 "GSettingsEngine.c"
+#line 5750 "GSettingsEngine.c"
 	}
-#line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+#line 489 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (cmd_line);
-#line 5391 "GSettingsEngine.c"
+#line 5754 "GSettingsEngine.c"
 }
 
 
@@ -5398,7 +5761,7 @@ static void gsettings_configuration_engine_class_init (GSettingsConfigurationEng
 	g_type_class_add_private (klass, sizeof (GSettingsConfigurationEnginePrivate));
 #line 7 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	G_OBJECT_CLASS (klass)->finalize = gsettings_configuration_engine_finalize;
-#line 5402 "GSettingsEngine.c"
+#line 5765 "GSettingsEngine.c"
 }
 
 
@@ -5407,6 +5770,10 @@ static void gsettings_configuration_engine_configuration_engine_interface_init (
 	gsettings_configuration_engine_configuration_engine_parent_iface = g_type_interface_peek_parent (iface);
 #line 7 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	iface->get_name = (gchar* (*)(ConfigurationEngine*)) gsettings_configuration_engine_real_get_name;
+#line 7 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	iface->get_enum_property = (gint (*)(ConfigurationEngine*, ConfigurableProperty, GError**)) gsettings_configuration_engine_real_get_enum_property;
+#line 7 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
+	iface->set_enum_property = (void (*)(ConfigurationEngine*, ConfigurableProperty, gint, GError**)) gsettings_configuration_engine_real_set_enum_property;
 #line 7 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	iface->get_int_property = (gint (*)(ConfigurationEngine*, ConfigurableProperty, GError**)) gsettings_configuration_engine_real_get_int_property;
 #line 7 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -5445,14 +5812,14 @@ static void gsettings_configuration_engine_configuration_engine_interface_init (
 	iface->is_plugin_enabled = (FuzzyPropertyState (*)(ConfigurationEngine*, const gchar*)) gsettings_configuration_engine_real_is_plugin_enabled;
 #line 7 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	iface->set_plugin_enabled = (void (*)(ConfigurationEngine*, const gchar*, gboolean)) gsettings_configuration_engine_real_set_plugin_enabled;
-#line 5449 "GSettingsEngine.c"
+#line 5816 "GSettingsEngine.c"
 }
 
 
 static void gsettings_configuration_engine_instance_init (GSettingsConfigurationEngine * self) {
 #line 7 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self->priv = GSETTINGS_CONFIGURATION_ENGINE_GET_PRIVATE (self);
-#line 5456 "GSettingsEngine.c"
+#line 5823 "GSettingsEngine.c"
 }
 
 
@@ -5460,15 +5827,13 @@ static void gsettings_configuration_engine_finalize (GObject* obj) {
 	GSettingsConfigurationEngine * self;
 #line 7 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_GSETTINGS_CONFIGURATION_ENGINE, GSettingsConfigurationEngine);
-#line 25 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
-	_g_object_unref0 (self->priv->known_schemas);
 #line 26 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self->priv->schema_names = (_vala_array_free (self->priv->schema_names, self->priv->schema_names_length1, (GDestroyNotify) g_free), NULL);
 #line 27 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	self->priv->key_names = (_vala_array_free (self->priv->key_names, self->priv->key_names_length1, (GDestroyNotify) g_free), NULL);
 #line 7 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	G_OBJECT_CLASS (gsettings_configuration_engine_parent_class)->finalize (obj);
-#line 5472 "GSettingsEngine.c"
+#line 5837 "GSettingsEngine.c"
 }
 
 
@@ -5501,18 +5866,6 @@ static void _vala_array_destroy (gpointer array, gint array_length, GDestroyNoti
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func) {
 	_vala_array_destroy (array, array_length, destroy_func);
 	g_free (array);
-}
-
-
-static gint _vala_array_length (gpointer array) {
-	int length;
-	length = 0;
-	if (array) {
-		while (((gpointer*) array)[length]) {
-			length++;
-		}
-	}
-	return length;
 }
 
 

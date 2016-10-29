@@ -1802,7 +1802,7 @@ void thumbnail_cache_generate_for_photo (Thumbnails* thumbnails, PhotoFileReader
 #line 300 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1805 "ThumbnailCache.c"
-			goto __catch223_g_error;
+			goto __catch236_g_error;
 		}
 #line 300 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 		_tmp9_ = _tmp4_;
@@ -1816,8 +1816,8 @@ void thumbnail_cache_generate_for_photo (Thumbnails* thumbnails, PhotoFileReader
 		_g_object_unref0 (_tmp4_);
 #line 1818 "ThumbnailCache.c"
 	}
-	goto __finally223;
-	__catch223_g_error:
+	goto __finally236;
+	__catch236_g_error:
 	{
 		GError* err = NULL;
 		GdkPixbuf* _tmp10_ = NULL;
@@ -1839,7 +1839,7 @@ void thumbnail_cache_generate_for_photo (Thumbnails* thumbnails, PhotoFileReader
 #line 305 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 			_g_error_free0 (err);
 #line 1842 "ThumbnailCache.c"
-			goto __finally223;
+			goto __finally236;
 		}
 #line 305 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 		_tmp13_ = _tmp10_;
@@ -1855,7 +1855,7 @@ void thumbnail_cache_generate_for_photo (Thumbnails* thumbnails, PhotoFileReader
 		_g_error_free0 (err);
 #line 1857 "ThumbnailCache.c"
 	}
-	__finally223:
+	__finally236:
 #line 299 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 299 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
@@ -2390,11 +2390,11 @@ static void thumbnail_cache_async_fetch_completion_callback (BackgroundJob* back
 #line 423 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2393 "ThumbnailCache.c"
-				goto __catch224_g_error;
+				goto __catch237_g_error;
 			}
 		}
-		goto __finally224;
-		__catch224_g_error:
+		goto __finally237;
+		__catch237_g_error:
 		{
 			GError* err = NULL;
 			ThumbnailCacheAsyncFetchJob* _tmp14_ = NULL;
@@ -2418,7 +2418,7 @@ static void thumbnail_cache_async_fetch_completion_callback (BackgroundJob* back
 			_g_error_free0 (err);
 #line 2420 "ThumbnailCache.c"
 		}
-		__finally224:
+		__finally237:
 #line 422 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 422 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
@@ -2771,11 +2771,11 @@ static void _thumbnail_cache_duplicate (ThumbnailCache* self, ThumbnailSource* s
 #line 494 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2774 "ThumbnailCache.c"
-			goto __catch225_g_error;
+			goto __catch238_g_error;
 		}
 	}
-	goto __finally225;
-	__catch225_g_error:
+	goto __finally238;
+	__catch238_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp9_ = NULL;
@@ -2802,7 +2802,7 @@ static void _thumbnail_cache_duplicate (ThumbnailCache* self, ThumbnailSource* s
 		_g_error_free0 (err);
 #line 2804 "ThumbnailCache.c"
 	}
-	__finally225:
+	__finally238:
 #line 493 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 493 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
@@ -2946,11 +2946,11 @@ static void _thumbnail_cache_remove (ThumbnailCache* self, ThumbnailSource* sour
 #line 529 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2949 "ThumbnailCache.c"
-			goto __catch226_g_error;
+			goto __catch239_g_error;
 		}
 	}
-	goto __finally226;
-	__catch226_g_error:
+	goto __finally239;
+	__catch239_g_error:
 	{
 		GError* err = NULL;
 #line 528 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
@@ -2961,7 +2961,7 @@ static void _thumbnail_cache_remove (ThumbnailCache* self, ThumbnailSource* sour
 		_g_error_free0 (err);
 #line 2963 "ThumbnailCache.c"
 	}
-	__finally226:
+	__finally239:
 #line 528 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 528 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
@@ -4079,7 +4079,7 @@ static void thumbnail_cache_async_fetch_job_real_execute (BackgroundJob* base) {
 #line 125 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4081 "ThumbnailCache.c"
-				goto __catch227_g_error;
+				goto __catch240_g_error;
 			}
 #line 125 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 			_tmp6_ = _tmp1_;
@@ -4148,8 +4148,8 @@ static void thumbnail_cache_async_fetch_job_real_execute (BackgroundJob* base) {
 		_g_object_unref0 (_tmp8_);
 #line 4149 "ThumbnailCache.c"
 	}
-	goto __finally227;
-	__catch227_g_error:
+	goto __finally240;
+	__catch240_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp17_ = NULL;
@@ -4168,11 +4168,11 @@ static void thumbnail_cache_async_fetch_job_real_execute (BackgroundJob* base) {
 #line 137 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4170 "ThumbnailCache.c"
-					goto __catch228_g_error;
+					goto __catch241_g_error;
 				}
 			}
-			goto __finally228;
-			__catch228_g_error:
+			goto __finally241;
+			__catch241_g_error:
 			{
 				GError* generr = NULL;
 				GError* _tmp18_ = NULL;
@@ -4193,7 +4193,7 @@ static void thumbnail_cache_async_fetch_job_real_execute (BackgroundJob* base) {
 				_g_error_free0 (generr);
 #line 4194 "ThumbnailCache.c"
 			}
-			__finally228:
+			__finally241:
 #line 136 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 136 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
@@ -4225,7 +4225,7 @@ static void thumbnail_cache_async_fetch_job_real_execute (BackgroundJob* base) {
 		_g_error_free0 (err);
 #line 4226 "ThumbnailCache.c"
 	}
-	__finally227:
+	__finally240:
 #line 122 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 122 "/home/jens/Source/shotwell/src/ThumbnailCache.vala"

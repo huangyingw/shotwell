@@ -6002,7 +6002,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp1__length1 = _result__length1;
 #line 818 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp2_ = _ ("Wallet (2 x 3 in.)");
+	_tmp2_ = _ ("Wallet (2 × 3 in.)");
 #line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp3_, (gdouble) 3, MEASUREMENT_UNIT_INCHES);
 #line 818 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6016,7 +6016,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6__length1 = _result__length1;
 #line 821 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp7_ = _ ("Notecard (3 x 5 in.)");
+	_tmp7_ = _ ("Notecard (3 × 5 in.)");
 #line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp8_, (gdouble) 5, MEASUREMENT_UNIT_INCHES);
 #line 821 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6030,7 +6030,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp11__length1 = _result__length1;
 #line 824 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp12_ = _ ("4 x 6 in.");
+	_tmp12_ = _ ("4 × 6 in.");
 #line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp13_, (gdouble) 6, MEASUREMENT_UNIT_INCHES);
 #line 824 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6044,7 +6044,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp16__length1 = _result__length1;
 #line 827 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp17_ = _ ("5 x 7 in.");
+	_tmp17_ = _ ("5 × 7 in.");
 #line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp18_, (gdouble) 7, MEASUREMENT_UNIT_INCHES);
 #line 827 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6058,7 +6058,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp21__length1 = _result__length1;
 #line 830 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp22_ = _ ("8 x 10 in.");
+	_tmp22_ = _ ("8 × 10 in.");
 #line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp23_, (gdouble) 10, MEASUREMENT_UNIT_INCHES);
 #line 830 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6072,7 +6072,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp26__length1 = _result__length1;
 #line 833 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp27_ = _ ("11 x 14 in.");
+	_tmp27_ = _ ("11 × 14 in.");
 #line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp28_, (gdouble) 14, MEASUREMENT_UNIT_INCHES);
 #line 833 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6086,7 +6086,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp31__length1 = _result__length1;
 #line 836 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp32_ = _ ("16 x 20 in.");
+	_tmp32_ = _ ("16 × 20 in.");
 #line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp33_, (gdouble) 20, MEASUREMENT_UNIT_INCHES);
 #line 836 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6112,7 +6112,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp40__length1 = _result__length1;
 #line 842 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp41_ = _ ("Metric Wallet (9 x 13 cm)");
+	_tmp41_ = _ ("Metric Wallet (9 × 13 cm)");
 #line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp42_, (gdouble) 13, MEASUREMENT_UNIT_CENTIMETERS);
 #line 842 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6126,7 +6126,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp45__length1 = _result__length1;
 #line 845 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp46_ = _ ("Postcard (10 x 15 cm)");
+	_tmp46_ = _ ("Postcard (10 × 15 cm)");
 #line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp47_, (gdouble) 15, MEASUREMENT_UNIT_CENTIMETERS);
 #line 845 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6140,7 +6140,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp50__length1 = _result__length1;
 #line 848 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp51_ = _ ("13 x 18 cm");
+	_tmp51_ = _ ("13 × 18 cm");
 #line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp52_, (gdouble) 18, MEASUREMENT_UNIT_CENTIMETERS);
 #line 848 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6154,7 +6154,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp55__length1 = _result__length1;
 #line 851 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp56_ = _ ("18 x 24 cm");
+	_tmp56_ = _ ("18 × 24 cm");
 #line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp57_, (gdouble) 24, MEASUREMENT_UNIT_CENTIMETERS);
 #line 851 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6168,7 +6168,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp60__length1 = _result__length1;
 #line 854 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp61_ = _ ("20 x 30 cm");
+	_tmp61_ = _ ("20 × 30 cm");
 #line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp62_, (gdouble) 30, MEASUREMENT_UNIT_CENTIMETERS);
 #line 854 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6182,7 +6182,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp65__length1 = _result__length1;
 #line 857 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp66_ = _ ("24 x 40 cm");
+	_tmp66_ = _ ("24 × 40 cm");
 #line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp67_, (gdouble) 40, MEASUREMENT_UNIT_CENTIMETERS);
 #line 857 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6196,7 +6196,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp70__length1 = _result__length1;
 #line 860 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp71_ = _ ("30 x 40 cm");
+	_tmp71_ = _ ("30 × 40 cm");
 #line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	measurement_init (&_tmp72_, (gdouble) 40, MEASUREMENT_UNIT_CENTIMETERS);
 #line 860 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6378,7 +6378,7 @@ void print_manager_spool_photo (PrintManager* self, GeeCollection* to_print) {
 #line 889 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp12_ = _tmp11_;
 #line 889 "/home/jens/Source/shotwell/src/Printing.vala"
-	_tmp13_ = _ ("Printing...");
+	_tmp13_ = _ ("Printing…");
 #line 889 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp14_ = self->priv->cancellable;
 #line 889 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6415,7 +6415,7 @@ void print_manager_spool_photo (PrintManager* self, GeeCollection* to_print) {
 #line 893 "/home/jens/Source/shotwell/src/Printing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6417 "Printing.c"
-			goto __catch457_g_error;
+			goto __catch470_g_error;
 		}
 #line 895 "/home/jens/Source/shotwell/src/Printing.vala"
 		if (_result_ == GTK_PRINT_OPERATION_RESULT_APPLY) {
@@ -6433,8 +6433,8 @@ void print_manager_spool_photo (PrintManager* self, GeeCollection* to_print) {
 #line 6433 "Printing.c"
 		}
 	}
-	goto __finally457;
-	__catch457_g_error:
+	goto __finally470;
+	__catch470_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp22_ = NULL;
@@ -6460,7 +6460,7 @@ void print_manager_spool_photo (PrintManager* self, GeeCollection* to_print) {
 		_g_error_free0 (e);
 #line 6461 "Printing.c"
 	}
-	__finally457:
+	__finally470:
 #line 892 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 892 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -7984,7 +7984,7 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 #line 1089 "/home/jens/Source/shotwell/src/Printing.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 7986 "Printing.c"
-				goto __catch458_g_error;
+				goto __catch471_g_error;
 			}
 #line 1090 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp52_ = photo_pixbuf;
@@ -8111,7 +8111,7 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 #line 1104 "/home/jens/Source/shotwell/src/Printing.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8113 "Printing.c"
-				goto __catch458_g_error;
+				goto __catch471_g_error;
 			}
 #line 1105 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp85_ = photo_pixbuf;
@@ -8137,8 +8137,8 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 		cairo_paint (_tmp89_);
 #line 8138 "Printing.c"
 	}
-	goto __finally458;
-	__catch458_g_error:
+	goto __finally471;
+	__catch471_g_error:
 	{
 		GError* e = NULL;
 		PrintJob* _tmp90_ = NULL;
@@ -8173,7 +8173,7 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 		_g_error_free0 (e);
 #line 8174 "Printing.c"
 	}
-	__finally458:
+	__finally471:
 #line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1086 "/home/jens/Source/shotwell/src/Printing.vala"

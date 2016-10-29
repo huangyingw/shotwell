@@ -54,6 +54,7 @@ namespace Publishing {
 			protected void notify_authentication_failed (Spit.Publishing.PublishingError err);
 			protected void notify_wire_message_unqueued (Soup.Message message);
 			public void send_wire_message (Soup.Message message);
+			public void set_insecure ();
 			public void stop_transactions ();
 			public signal void authenticated ();
 			public signal void authentication_failed (Spit.Publishing.PublishingError err);
@@ -65,6 +66,7 @@ namespace Publishing {
 			public void add_argument (string name, string value);
 			protected virtual void add_header (string key, string value);
 			protected void check_response (Soup.Message message) throws Spit.Publishing.PublishingError;
+			public string detailed_error_from_tls_flags (out GLib.TlsCertificate cert);
 			public virtual void execute () throws Spit.Publishing.PublishingError;
 			public Publishing.RESTSupport.Argument[] get_arguments ();
 			public string? get_endpoint_url ();
@@ -136,4 +138,20 @@ namespace Resources {
 	public static Gdk.Pixbuf[]? load_from_resource (string resource_path);
 	[CCode (cheader_filename = "shotwell-plugin-common.h")]
 	public static Gdk.Pixbuf[]? load_icon_set (GLib.File? icon_file);
+}
+namespace Shotwell {
+	namespace Plugins {
+		namespace Common {
+			[CCode (cheader_filename = "shotwell-plugin-common.h")]
+			public abstract class WebAuthenticationPane : Spit.Publishing.DialogPane, GLib.Object {
+				public WebAuthenticationPane ();
+				public override void constructed ();
+				public WebKit.WebView get_view ();
+				public abstract void on_page_load ();
+				protected void set_cursor (Gdk.CursorType type);
+				public string login_uri { owned get; construct; }
+				public Spit.Publishing.DialogPane.GeometryOptions preferred_geometry { get; construct; }
+			}
+		}
+	}
 }

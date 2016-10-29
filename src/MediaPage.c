@@ -1107,13 +1107,13 @@ GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length
 #define TRANSLATABLE "translatable"
 void media_page_on_export (MediaPage* self);
 static void _media_page_on_export_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_EXPORT_MENU _ ("_Export...")
+#define RESOURCES_EXPORT_MENU _ ("_Export…")
 static void _vala_array_add297 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void media_page_on_send_to (MediaPage* self);
 static void _media_page_on_send_to_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_SEND_TO_MENU _ ("Send _To...")
+#define RESOURCES_SEND_TO_MENU _ ("Send _To…")
 static void _vala_array_add298 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_SEND_TO_CONTEXT_MENU _ ("Send T_o...")
+#define RESOURCES_SEND_TO_CONTEXT_MENU _ ("Send T_o…")
 static void _vala_array_add299 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_REMOVE_LABEL _ ("_Remove")
 static void media_page_on_remove_from_library (MediaPage* self);
@@ -1131,13 +1131,13 @@ static void _media_page_on_new_event_gtk_action_callback (GtkAction* action, gpo
 static void _vala_array_add302 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void media_page_on_add_tags (MediaPage* self);
 static void _media_page_on_add_tags_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_ADD_TAGS_MENU _ ("Add _Tags...")
+#define RESOURCES_ADD_TAGS_MENU _ ("Add _Tags…")
 static void _vala_array_add303 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_ADD_TAGS_CONTEXT_MENU _ ("_Add Tags...")
+#define RESOURCES_ADD_TAGS_CONTEXT_MENU _ ("_Add Tags…")
 static void _vala_array_add304 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void media_page_on_modify_tags (MediaPage* self);
 static void _media_page_on_modify_tags_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_MODIFY_TAGS_MENU _ ("Modif_y Tags...")
+#define RESOURCES_MODIFY_TAGS_MENU _ ("Modif_y Tags…")
 static void _vala_array_add305 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_ZOOM_IN_LABEL _ ("Zoom _In")
 void media_page_on_increase_size (MediaPage* self);
@@ -1185,11 +1185,11 @@ static void _media_page_on_rate_five_gtk_action_callback (GtkAction* action, gpo
 static void _vala_array_add318 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 void media_page_on_edit_title (MediaPage* self);
 static void _media_page_on_edit_title_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_EDIT_TITLE_MENU _ ("Edit _Title...")
+#define RESOURCES_EDIT_TITLE_MENU _ ("Edit _Title…")
 static void _vala_array_add319 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 void media_page_on_edit_comment (MediaPage* self);
 static void _media_page_on_edit_comment_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_EDIT_COMMENT_MENU _ ("Edit _Comment...")
+#define RESOURCES_EDIT_COMMENT_MENU _ ("Edit _Comment…")
 static void _vala_array_add320 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void _vala_array_add321 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 #define RESOURCES_FILTER_PHOTOS_MENU _ ("_Filter Photos")
@@ -1216,7 +1216,7 @@ static void _vala_array_add328 (GtkToggleActionEntry** array, int* length, int* 
 void media_page_on_display_ratings (MediaPage* self, GtkAction* action);
 static void _media_page_on_display_ratings_gtk_action_callback (GtkAction* action, gpointer self);
 #define RESOURCES_VIEW_RATINGS_MENU _ ("_Ratings")
-#define RESOURCES_VIEW_RATINGS_TOOLTIP _ ("Display each photo's rating")
+#define RESOURCES_VIEW_RATINGS_TOOLTIP _ ("Display each photo’s rating")
 static void _vala_array_add329 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value);
 void media_page_on_display_tags (MediaPage* self, GtkAction* action);
 static void _media_page_on_display_tags_gtk_action_callback (GtkAction* action, gpointer self);
@@ -4344,7 +4344,7 @@ static GtkToggleActionEntry* media_page_real_init_collect_toggle_action_entries 
 #line 469 "/home/jens/Source/shotwell/src/MediaPage.vala"
 	tags.label = _tmp32_;
 #line 470 "/home/jens/Source/shotwell/src/MediaPage.vala"
-	_tmp33_ = _ ("Display each photo's tags");
+	_tmp33_ = _ ("Display each photo’s tags");
 #line 470 "/home/jens/Source/shotwell/src/MediaPage.vala"
 	tags.tooltip = _tmp33_;
 #line 471 "/home/jens/Source/shotwell/src/MediaPage.vala"
@@ -6227,11 +6227,11 @@ void media_page_on_play_video (MediaPage* self) {
 #line 721 "/home/jens/Source/shotwell/src/MediaPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6230 "MediaPage.c"
-			goto __catch548_g_error;
+			goto __catch561_g_error;
 		}
 	}
-	goto __finally548;
-	__catch548_g_error:
+	goto __finally561;
+	__catch561_g_error:
 	{
 		GError* e = NULL;
 		const gchar* _tmp17_ = NULL;
@@ -6261,7 +6261,7 @@ void media_page_on_play_video (MediaPage* self) {
 		_g_error_free0 (e);
 #line 6263 "MediaPage.c"
 	}
-	__finally548:
+	__finally561:
 #line 720 "/home/jens/Source/shotwell/src/MediaPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 720 "/home/jens/Source/shotwell/src/MediaPage.vala"

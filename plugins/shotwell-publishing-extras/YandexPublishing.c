@@ -15,8 +15,8 @@
 #include <glib/gi18n-lib.h>
 #include "shotwell-plugin-common.h"
 #include <webkit2/webkit2.h>
-#include <gtk/gtk.h>
 #include <gdk/gdk.h>
+#include <gtk/gtk.h>
 #include <gee.h>
 #include <libsoup/soup.h>
 #include <glib/gstdio.h>
@@ -82,9 +82,9 @@ typedef struct _PublishingYandexSessionPrivate PublishingYandexSessionPrivate;
 typedef struct _PublishingYandexWebAuthPane PublishingYandexWebAuthPane;
 typedef struct _PublishingYandexWebAuthPaneClass PublishingYandexWebAuthPaneClass;
 typedef struct _PublishingYandexWebAuthPanePrivate PublishingYandexWebAuthPanePrivate;
-#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 #define _g_regex_unref0(var) ((var == NULL) ? NULL : (var = (g_regex_unref (var), NULL)))
 #define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 #define _g_match_info_unref0(var) ((var == NULL) ? NULL : (var = (g_match_info_unref (var), NULL)))
 #define __vala_WebKitNavigationAction_free0(var) ((var == NULL) ? NULL : (var = (_vala_WebKitNavigationAction_free (var), NULL)))
 
@@ -177,20 +177,16 @@ struct _PublishingYandexSessionPrivate {
 };
 
 struct _PublishingYandexWebAuthPane {
-	GObject parent_instance;
+	ShotwellPluginsCommonWebAuthenticationPane parent_instance;
 	PublishingYandexWebAuthPanePrivate * priv;
 };
 
 struct _PublishingYandexWebAuthPaneClass {
-	GObjectClass parent_class;
+	ShotwellPluginsCommonWebAuthenticationPaneClass parent_class;
 };
 
 struct _PublishingYandexWebAuthPanePrivate {
-	WebKitWebView* webview;
-	GtkBox* pane_widget;
-	GtkScrolledWindow* webview_frame;
 	GRegex* re;
-	gchar* login_url;
 };
 
 struct _PublishingYandexPublishOptions {
@@ -283,7 +279,6 @@ static SpitPublishingServiceIface* yandex_service_spit_publishing_service_parent
 static gpointer publishing_yandex_transaction_parent_class = NULL;
 static gpointer publishing_yandex_session_parent_class = NULL;
 static gpointer publishing_yandex_web_auth_pane_parent_class = NULL;
-static SpitPublishingDialogPaneIface* publishing_yandex_web_auth_pane_spit_publishing_dialog_pane_parent_iface = NULL;
 static gpointer publishing_yandex_publish_options_parent_class = NULL;
 static gpointer publishing_yandex_publishing_options_pane_parent_class = NULL;
 static SpitPublishingDialogPaneIface* publishing_yandex_publishing_options_pane_spit_publishing_dialog_pane_parent_iface = NULL;
@@ -339,20 +334,12 @@ enum  {
 };
 PublishingYandexWebAuthPane* publishing_yandex_web_auth_pane_new (const gchar* login_url);
 PublishingYandexWebAuthPane* publishing_yandex_web_auth_pane_construct (GType object_type, const gchar* login_url);
-static void publishing_yandex_web_auth_pane_on_page_load_changed (PublishingYandexWebAuthPane* self, WebKitLoadEvent load_event);
-static void _publishing_yandex_web_auth_pane_on_page_load_changed_webkit_web_view_load_changed (WebKitWebView* _sender, WebKitLoadEvent load_event, gpointer self);
+static void publishing_yandex_web_auth_pane_real_constructed (GObject* base);
 static gboolean publishing_yandex_web_auth_pane_on_decide_policy (PublishingYandexWebAuthPane* self, WebKitPolicyDecision* decision, WebKitPolicyDecisionType type);
 static gboolean _publishing_yandex_web_auth_pane_on_decide_policy_webkit_web_view_decide_policy (WebKitWebView* _sender, WebKitPolicyDecision* decision, WebKitPolicyDecisionType type, gpointer self);
-static gboolean __lambda4_ (PublishingYandexWebAuthPane* self);
-static gboolean ___lambda4__webkit_web_view_context_menu (WebKitWebView* _sender, WebKitContextMenu* context_menu, GdkEvent* event, WebKitHitTestResult* hit_test_result, gpointer self);
-static void publishing_yandex_web_auth_pane_on_page_load (PublishingYandexWebAuthPane* self);
+static void publishing_yandex_web_auth_pane_real_on_page_load (ShotwellPluginsCommonWebAuthenticationPane* base);
 static WebKitNavigationAction* _vala_WebKitNavigationAction_copy (WebKitNavigationAction* self);
 static void _vala_WebKitNavigationAction_free (WebKitNavigationAction* self);
-static void publishing_yandex_web_auth_pane_on_load_started (PublishingYandexWebAuthPane* self);
-static GtkWidget* publishing_yandex_web_auth_pane_real_get_widget (SpitPublishingDialogPane* base);
-static SpitPublishingDialogPaneGeometryOptions publishing_yandex_web_auth_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base);
-static void publishing_yandex_web_auth_pane_real_on_pane_installed (SpitPublishingDialogPane* base);
-static void publishing_yandex_web_auth_pane_real_on_pane_uninstalled (SpitPublishingDialogPane* base);
 static void publishing_yandex_web_auth_pane_finalize (GObject* obj);
 gpointer publishing_yandex_publish_options_ref (gpointer instance);
 void publishing_yandex_publish_options_unref (gpointer instance);
@@ -475,7 +462,7 @@ static gint yandex_service_real_get_pluggable_interface (SpitPluggable* base, gi
 	result = _tmp2_;
 #line 9 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 479 "YandexPublishing.c"
+#line 466 "YandexPublishing.c"
 }
 
 
@@ -488,7 +475,7 @@ static const gchar* yandex_service_real_get_id (SpitPluggable* base) {
 	result = "org.yorba.shotwell.publishing.yandex-fotki";
 #line 13 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 492 "YandexPublishing.c"
+#line 479 "YandexPublishing.c"
 }
 
 
@@ -501,7 +488,7 @@ static const gchar* yandex_service_real_get_pluggable_name (SpitPluggable* base)
 	result = "Yandex.Fotki";
 #line 17 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 505 "YandexPublishing.c"
+#line 492 "YandexPublishing.c"
 }
 
 
@@ -568,7 +555,7 @@ static void yandex_service_real_get_info (SpitPluggable* base, SpitPluggableInfo
 	_g_free0 ((*info).license);
 #line 28 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	(*info).license = _tmp8_;
-#line 572 "YandexPublishing.c"
+#line 559 "YandexPublishing.c"
 }
 
 
@@ -589,7 +576,7 @@ static SpitPublishingPublisher* yandex_service_real_create_publisher (SpitPublis
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher);
 #line 32 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 593 "YandexPublishing.c"
+#line 580 "YandexPublishing.c"
 }
 
 
@@ -602,7 +589,7 @@ static SpitPublishingPublisherMediaType yandex_service_real_get_supported_media 
 	result = SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO;
 #line 36 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 606 "YandexPublishing.c"
+#line 593 "YandexPublishing.c"
 }
 
 
@@ -610,7 +597,7 @@ static void yandex_service_real_activation (SpitPluggable* base, gboolean enable
 	YandexService * self;
 #line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_YANDEX_SERVICE, YandexService);
-#line 614 "YandexPublishing.c"
+#line 601 "YandexPublishing.c"
 }
 
 
@@ -620,21 +607,21 @@ YandexService* yandex_service_construct (GType object_type) {
 	self = (YandexService*) g_object_new (object_type, NULL);
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return self;
-#line 624 "YandexPublishing.c"
+#line 611 "YandexPublishing.c"
 }
 
 
 YandexService* yandex_service_new (void) {
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return yandex_service_construct (TYPE_YANDEX_SERVICE);
-#line 631 "YandexPublishing.c"
+#line 618 "YandexPublishing.c"
 }
 
 
 static void yandex_service_class_init (YandexServiceClass * klass) {
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	yandex_service_parent_class = g_type_class_peek_parent (klass);
-#line 638 "YandexPublishing.c"
+#line 625 "YandexPublishing.c"
 }
 
 
@@ -651,7 +638,7 @@ static void yandex_service_spit_pluggable_interface_init (SpitPluggableIface * i
 	iface->get_info = (void (*)(SpitPluggable*, SpitPluggableInfo*)) yandex_service_real_get_info;
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	iface->activation = (void (*)(SpitPluggable*, gboolean)) yandex_service_real_activation;
-#line 655 "YandexPublishing.c"
+#line 642 "YandexPublishing.c"
 }
 
 
@@ -662,7 +649,7 @@ static void yandex_service_spit_publishing_service_interface_init (SpitPublishin
 	iface->create_publisher = (SpitPublishingPublisher* (*)(SpitPublishingService*, SpitPublishingPluginHost*)) yandex_service_real_create_publisher;
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	iface->get_supported_media = (SpitPublishingPublisherMediaType (*)(SpitPublishingService*)) yandex_service_real_get_supported_media;
-#line 666 "YandexPublishing.c"
+#line 653 "YandexPublishing.c"
 }
 
 
@@ -707,14 +694,14 @@ PublishingYandexTransaction* publishing_yandex_transaction_construct_with_url (G
 	publishing_yandex_transaction_add_headers (self);
 #line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return self;
-#line 711 "YandexPublishing.c"
+#line 698 "YandexPublishing.c"
 }
 
 
 PublishingYandexTransaction* publishing_yandex_transaction_new_with_url (PublishingYandexSession* session, const gchar* url, PublishingRESTSupportHttpMethod method) {
 #line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return publishing_yandex_transaction_construct_with_url (PUBLISHING_YANDEX_TYPE_TRANSACTION, session, url, method);
-#line 718 "YandexPublishing.c"
+#line 705 "YandexPublishing.c"
 }
 
 
@@ -737,7 +724,7 @@ static void publishing_yandex_transaction_add_headers (PublishingYandexTransacti
 	_publishing_rest_support_session_unref0 (_tmp1_);
 #line 56 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (_tmp3_) {
-#line 741 "YandexPublishing.c"
+#line 728 "YandexPublishing.c"
 		PublishingRESTSupportSession* _tmp4_ = NULL;
 		PublishingYandexSession* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -766,7 +753,7 @@ static void publishing_yandex_transaction_add_headers (PublishingYandexTransacti
 		_publishing_rest_support_session_unref0 (_tmp5_);
 #line 58 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_rest_support_transaction_add_header (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "Connection", "close");
-#line 770 "YandexPublishing.c"
+#line 757 "YandexPublishing.c"
 	}
 }
 
@@ -787,14 +774,14 @@ PublishingYandexTransaction* publishing_yandex_transaction_construct (GType obje
 	publishing_yandex_transaction_add_headers (self);
 #line 62 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return self;
-#line 791 "YandexPublishing.c"
+#line 778 "YandexPublishing.c"
 }
 
 
 PublishingYandexTransaction* publishing_yandex_transaction_new (PublishingYandexSession* session, PublishingRESTSupportHttpMethod method) {
 #line 62 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return publishing_yandex_transaction_construct (PUBLISHING_YANDEX_TYPE_TRANSACTION, session, method);
-#line 798 "YandexPublishing.c"
+#line 785 "YandexPublishing.c"
 }
 
 
@@ -813,14 +800,14 @@ void publishing_yandex_transaction_add_data (PublishingYandexTransaction* self, 
 	_tmp1_ = type;
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_rest_support_transaction_set_custom_payload (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), _tmp0_, _tmp1_, (gulong) 0);
-#line 817 "YandexPublishing.c"
+#line 804 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_transaction_class_init (PublishingYandexTransactionClass * klass) {
 #line 49 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 824 "YandexPublishing.c"
+#line 811 "YandexPublishing.c"
 }
 
 
@@ -846,14 +833,14 @@ PublishingYandexSession* publishing_yandex_session_construct (GType object_type)
 	self = (PublishingYandexSession*) publishing_rest_support_session_construct (object_type, NULL);
 #line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return self;
-#line 850 "YandexPublishing.c"
+#line 837 "YandexPublishing.c"
 }
 
 
 PublishingYandexSession* publishing_yandex_session_new (void) {
 #line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return publishing_yandex_session_construct (PUBLISHING_YANDEX_TYPE_SESSION);
-#line 857 "YandexPublishing.c"
+#line 844 "YandexPublishing.c"
 }
 
 
@@ -869,7 +856,7 @@ static gboolean publishing_yandex_session_real_is_authenticated (PublishingRESTS
 	result = _tmp0_ != NULL;
 #line 79 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 873 "YandexPublishing.c"
+#line 860 "YandexPublishing.c"
 }
 
 
@@ -880,7 +867,7 @@ void publishing_yandex_session_deauthenticate (PublishingYandexSession* self) {
 	_g_free0 (self->priv->auth_token);
 #line 83 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->auth_token = NULL;
-#line 884 "YandexPublishing.c"
+#line 871 "YandexPublishing.c"
 }
 
 
@@ -899,7 +886,7 @@ void publishing_yandex_session_set_auth_token (PublishingYandexSession* self, co
 	_g_free0 (self->priv->auth_token);
 #line 87 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->auth_token = _tmp1_;
-#line 903 "YandexPublishing.c"
+#line 890 "YandexPublishing.c"
 }
 
 
@@ -917,7 +904,7 @@ gchar* publishing_yandex_session_get_auth_token (PublishingYandexSession* self) 
 	result = _tmp1_;
 #line 91 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 921 "YandexPublishing.c"
+#line 908 "YandexPublishing.c"
 }
 
 
@@ -930,7 +917,7 @@ static void publishing_yandex_session_class_init (PublishingYandexSessionClass *
 	g_type_class_add_private (klass, sizeof (PublishingYandexSessionPrivate));
 #line 72 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	((PublishingRESTSupportSessionClass *) klass)->is_authenticated = publishing_yandex_session_real_is_authenticated;
-#line 934 "YandexPublishing.c"
+#line 921 "YandexPublishing.c"
 }
 
 
@@ -939,7 +926,7 @@ static void publishing_yandex_session_instance_init (PublishingYandexSession * s
 	self->priv = PUBLISHING_YANDEX_SESSION_GET_PRIVATE (self);
 #line 73 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->auth_token = NULL;
-#line 943 "YandexPublishing.c"
+#line 930 "YandexPublishing.c"
 }
 
 
@@ -951,7 +938,7 @@ static void publishing_yandex_session_finalize (PublishingRESTSupportSession* ob
 	_g_free0 (self->priv->auth_token);
 #line 72 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	PUBLISHING_REST_SUPPORT_SESSION_CLASS (publishing_yandex_session_parent_class)->finalize (obj);
-#line 955 "YandexPublishing.c"
+#line 942 "YandexPublishing.c"
 }
 
 
@@ -967,279 +954,167 @@ GType publishing_yandex_session_get_type (void) {
 }
 
 
-static void _publishing_yandex_web_auth_pane_on_page_load_changed_webkit_web_view_load_changed (WebKitWebView* _sender, WebKitLoadEvent load_event, gpointer self) {
-#line 124 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	publishing_yandex_web_auth_pane_on_page_load_changed ((PublishingYandexWebAuthPane*) self, load_event);
-#line 974 "YandexPublishing.c"
+PublishingYandexWebAuthPane* publishing_yandex_web_auth_pane_construct (GType object_type, const gchar* login_url) {
+	PublishingYandexWebAuthPane * self = NULL;
+	const gchar* _tmp0_ = NULL;
+#line 101 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_return_val_if_fail (login_url != NULL, NULL);
+#line 102 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	_tmp0_ = login_url;
+#line 102 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	self = (PublishingYandexWebAuthPane*) g_object_new (object_type, "login-uri", _tmp0_, "preferred-geometry", SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_RESIZABLE, NULL);
+#line 101 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	return self;
+#line 969 "YandexPublishing.c"
+}
+
+
+PublishingYandexWebAuthPane* publishing_yandex_web_auth_pane_new (const gchar* login_url) {
+#line 101 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	return publishing_yandex_web_auth_pane_construct (PUBLISHING_YANDEX_TYPE_WEB_AUTH_PANE, login_url);
+#line 976 "YandexPublishing.c"
 }
 
 
 static gboolean _publishing_yandex_web_auth_pane_on_decide_policy_webkit_web_view_decide_policy (WebKitWebView* _sender, WebKitPolicyDecision* decision, WebKitPolicyDecisionType type, gpointer self) {
 	gboolean result;
 	result = publishing_yandex_web_auth_pane_on_decide_policy ((PublishingYandexWebAuthPane*) self, decision, type);
-#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 983 "YandexPublishing.c"
+#line 985 "YandexPublishing.c"
 }
 
 
-static gboolean __lambda4_ (PublishingYandexWebAuthPane* self) {
-	gboolean result = FALSE;
-#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	result = FALSE;
-#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	return result;
-#line 993 "YandexPublishing.c"
-}
-
-
-static gboolean ___lambda4__webkit_web_view_context_menu (WebKitWebView* _sender, WebKitContextMenu* context_menu, GdkEvent* event, WebKitHitTestResult* hit_test_result, gpointer self) {
-	gboolean result;
-	result = __lambda4_ ((PublishingYandexWebAuthPane*) self);
-#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	return result;
-#line 1002 "YandexPublishing.c"
-}
-
-
-PublishingYandexWebAuthPane* publishing_yandex_web_auth_pane_construct (GType object_type, const gchar* login_url) {
-	PublishingYandexWebAuthPane * self = NULL;
-	const gchar* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-	GtkBox* _tmp7_ = NULL;
-	GtkScrolledWindow* _tmp8_ = NULL;
-	GtkScrolledWindow* _tmp9_ = NULL;
-	GtkScrolledWindow* _tmp10_ = NULL;
-	WebKitWebView* _tmp11_ = NULL;
-	WebKitWebView* _tmp12_ = NULL;
-	WebKitSettings* _tmp13_ = NULL;
-	WebKitWebView* _tmp14_ = NULL;
-	WebKitWebView* _tmp15_ = NULL;
-	WebKitWebView* _tmp16_ = NULL;
-	GtkScrolledWindow* _tmp17_ = NULL;
-	WebKitWebView* _tmp18_ = NULL;
-	GtkBox* _tmp19_ = NULL;
-	GtkScrolledWindow* _tmp20_ = NULL;
+static void publishing_yandex_web_auth_pane_real_constructed (GObject* base) {
+	PublishingYandexWebAuthPane * self;
+	WebKitWebView* _tmp3_ = NULL;
+	WebKitWebView* _tmp4_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_return_val_if_fail (login_url != NULL, NULL);
-#line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self = (PublishingYandexWebAuthPane*) g_object_new (object_type, NULL);
 #line 107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp0_ = login_url;
-#line 107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp1_ = g_strdup (_tmp0_);
-#line 107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_g_free0 (self->priv->login_url);
-#line 107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self->priv->login_url = _tmp1_;
-#line 1037 "YandexPublishing.c"
+	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_WEB_AUTH_PANE, PublishingYandexWebAuthPane);
+#line 996 "YandexPublishing.c"
 	{
+		GRegex* _tmp0_ = NULL;
+		GRegex* _tmp1_ = NULL;
 		GRegex* _tmp2_ = NULL;
-		GRegex* _tmp3_ = NULL;
-		GRegex* _tmp4_ = NULL;
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		_tmp3_ = g_regex_new ("(.*)#access_token=([a-zA-Z0-9]*)&", 0, 0, &_inner_error_);
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		_tmp2_ = _tmp3_;
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		_tmp1_ = g_regex_new ("(.*)#access_token=([a-zA-Z0-9]*)&", 0, 0, &_inner_error_);
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		_tmp0_ = _tmp1_;
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 1050 "YandexPublishing.c"
+#line 1009 "YandexPublishing.c"
 				goto __catch39_g_regex_error;
 			}
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			g_clear_error (&_inner_error_);
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			return NULL;
-#line 1059 "YandexPublishing.c"
-		}
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		_tmp4_ = _tmp2_;
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		_tmp2_ = NULL;
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		_g_regex_unref0 (self->priv->re);
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		self->priv->re = _tmp4_;
 #line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		_g_regex_unref0 (_tmp2_);
-#line 1071 "YandexPublishing.c"
+			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			g_clear_error (&_inner_error_);
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			return;
+#line 1018 "YandexPublishing.c"
+		}
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		_tmp2_ = _tmp0_;
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		_tmp0_ = NULL;
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		_g_regex_unref0 (self->priv->re);
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		self->priv->re = _tmp2_;
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		_g_regex_unref0 (_tmp0_);
+#line 1030 "YandexPublishing.c"
 	}
 	goto __finally39;
 	__catch39_g_regex_error:
 	{
 		GError* e = NULL;
-		GError* _tmp5_ = NULL;
-		const gchar* _tmp6_ = NULL;
-#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		e = _inner_error_;
-#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_inner_error_ = NULL;
-#line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		_tmp5_ = e;
-#line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		_tmp6_ = _tmp5_->message;
-#line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		g_critical ("YandexPublishing.vala:112: %s", _tmp6_);
-#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		g_assert_not_reached ();
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_error_free0 (e);
-#line 1091 "YandexPublishing.c"
+#line 1044 "YandexPublishing.c"
 	}
 	__finally39:
-#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		return NULL;
-#line 1102 "YandexPublishing.c"
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		return;
+#line 1055 "YandexPublishing.c"
 	}
-#line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp7_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_object_ref_sink (_tmp7_);
-#line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_g_object_unref0 (self->priv->pane_widget);
-#line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self->priv->pane_widget = _tmp7_;
-#line 117 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp8_ = (GtkScrolledWindow*) gtk_scrolled_window_new (NULL, NULL);
-#line 117 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_object_ref_sink (_tmp8_);
-#line 117 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_g_object_unref0 (self->priv->webview_frame);
-#line 117 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self->priv->webview_frame = _tmp8_;
-#line 118 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp9_ = self->priv->webview_frame;
-#line 118 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	gtk_scrolled_window_set_shadow_type (_tmp9_, GTK_SHADOW_ETCHED_IN);
-#line 119 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp10_ = self->priv->webview_frame;
-#line 119 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	gtk_scrolled_window_set_policy (_tmp10_, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp11_ = (WebKitWebView*) webkit_web_view_new ();
-#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_object_ref_sink (_tmp11_);
-#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_g_object_unref0 (self->priv->webview);
-#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self->priv->webview = _tmp11_;
-#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp12_ = self->priv->webview;
-#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp13_ = webkit_web_view_get_settings (_tmp12_);
-#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	webkit_settings_set_enable_plugins (_tmp13_, FALSE);
-#line 124 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp14_ = self->priv->webview;
-#line 124 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_signal_connect_object (_tmp14_, "load-changed", (GCallback) _publishing_yandex_web_auth_pane_on_page_load_changed_webkit_web_view_load_changed, self, 0);
-#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp15_ = self->priv->webview;
-#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_signal_connect_object (_tmp15_, "decide-policy", (GCallback) _publishing_yandex_web_auth_pane_on_decide_policy_webkit_web_view_decide_policy, self, 0);
-#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp16_ = self->priv->webview;
-#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_signal_connect_object (_tmp16_, "context-menu", (GCallback) ___lambda4__webkit_web_view_context_menu, self, 0);
-#line 128 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp17_ = self->priv->webview_frame;
-#line 128 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp18_ = self->priv->webview;
-#line 128 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_widget_get_type (), GtkWidget));
-#line 129 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp19_ = self->priv->pane_widget;
-#line 129 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp20_ = self->priv->webview_frame;
-#line 129 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	gtk_box_pack_start (_tmp19_, G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
-#line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	return self;
-#line 1168 "YandexPublishing.c"
+#line 114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	_tmp3_ = shotwell_plugins_common_web_authentication_pane_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane));
+#line 114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	_tmp4_ = _tmp3_;
+#line 114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_signal_connect_object (_tmp4_, "decide-policy", (GCallback) _publishing_yandex_web_auth_pane_on_decide_policy_webkit_web_view_decide_policy, self, 0);
+#line 114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	_g_object_unref0 (_tmp4_);
+#line 1065 "YandexPublishing.c"
 }
 
 
-PublishingYandexWebAuthPane* publishing_yandex_web_auth_pane_new (const gchar* login_url) {
-#line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	return publishing_yandex_web_auth_pane_construct (PUBLISHING_YANDEX_TYPE_WEB_AUTH_PANE, login_url);
-#line 1175 "YandexPublishing.c"
-}
-
-
-static void publishing_yandex_web_auth_pane_on_page_load (PublishingYandexWebAuthPane* self) {
-	GtkBox* _tmp0_ = NULL;
-	GdkWindow* _tmp1_ = NULL;
-	GdkCursor* _tmp2_ = NULL;
-	GdkCursor* _tmp3_ = NULL;
-#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_return_if_fail (PUBLISHING_YANDEX_IS_WEB_AUTH_PANE (self));
-#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp0_ = self->priv->pane_widget;
-#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp1_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp2_ = gdk_cursor_new (GDK_LEFT_PTR);
-#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp3_ = _tmp2_;
-#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	gdk_window_set_cursor (_tmp1_, _tmp3_);
-#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_g_object_unref0 (_tmp3_);
-#line 1198 "YandexPublishing.c"
+static void publishing_yandex_web_auth_pane_real_on_page_load (ShotwellPluginsCommonWebAuthenticationPane* base) {
+	PublishingYandexWebAuthPane * self;
+#line 117 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_WEB_AUTH_PANE, PublishingYandexWebAuthPane);
+#line 1073 "YandexPublishing.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 140 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 123 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 1205 "YandexPublishing.c"
+#line 1080 "YandexPublishing.c"
 }
 
 
 static WebKitNavigationAction* _vala_WebKitNavigationAction_copy (WebKitNavigationAction* self) {
-#line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 124 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return g_boxed_copy (webkit_navigation_action_get_type (), self);
-#line 1212 "YandexPublishing.c"
+#line 1087 "YandexPublishing.c"
 }
 
 
 static gpointer __vala_WebKitNavigationAction_copy0 (gpointer self) {
-#line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 124 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return self ? _vala_WebKitNavigationAction_copy (self) : NULL;
-#line 1219 "YandexPublishing.c"
+#line 1094 "YandexPublishing.c"
 }
 
 
 static void _vala_WebKitNavigationAction_free (WebKitNavigationAction* self) {
-#line 155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_boxed_free (webkit_navigation_action_get_type (), self);
-#line 1226 "YandexPublishing.c"
+#line 1101 "YandexPublishing.c"
 }
 
 
 static gboolean publishing_yandex_web_auth_pane_on_decide_policy (PublishingYandexWebAuthPane* self, WebKitPolicyDecision* decision, WebKitPolicyDecisionType type) {
 	gboolean result = FALSE;
 	WebKitPolicyDecisionType _tmp0_ = 0;
-#line 136 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 119 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_YANDEX_IS_WEB_AUTH_PANE (self), FALSE);
-#line 136 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 119 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (WEBKIT_IS_POLICY_DECISION (decision), FALSE);
-#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = type;
-#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	switch (_tmp0_) {
-#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		case WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION:
-#line 1243 "YandexPublishing.c"
+#line 1118 "YandexPublishing.c"
 		{
 			WebKitNavigationPolicyDecision* n_decision = NULL;
 			WebKitPolicyDecision* _tmp1_ = NULL;
@@ -1261,54 +1136,54 @@ static gboolean publishing_yandex_web_auth_pane_on_decide_policy (PublishingYand
 			const gchar* _tmp14_ = NULL;
 			GMatchInfo* _tmp15_ = NULL;
 			gboolean _tmp16_ = FALSE;
-			WebKitPolicyDecision* _tmp32_ = NULL;
-#line 140 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			WebKitPolicyDecision* _tmp28_ = NULL;
+#line 123 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp1_ = decision;
-#line 140 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 123 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp2_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, webkit_navigation_policy_decision_get_type (), WebKitNavigationPolicyDecision));
-#line 140 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 123 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			n_decision = _tmp2_;
-#line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 124 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp3_ = n_decision;
-#line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 124 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp4_ = webkit_navigation_policy_decision_get_navigation_action (_tmp3_);
-#line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 124 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp5_ = _tmp4_;
-#line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 124 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp6_ = __vala_WebKitNavigationAction_copy0 (_tmp5_);
-#line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 124 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			action = _tmp6_;
-#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp7_ = action;
-#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp8_ = webkit_navigation_action_get_request (_tmp7_);
-#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp9_ = webkit_uri_request_get_uri (_tmp8_);
-#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp10_ = _tmp9_;
-#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp11_ = g_strdup (_tmp10_);
-#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			uri = _tmp11_;
-#line 143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp12_ = uri;
-#line 143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			g_debug ("YandexPublishing.vala:143: Navigating to '%s'", _tmp12_);
-#line 145 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			g_debug ("YandexPublishing.vala:126: Navigating to '%s'", _tmp12_);
+#line 128 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			info = NULL;
-#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp13_ = self->priv->re;
-#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp14_ = uri;
-#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp16_ = g_regex_match (_tmp13_, _tmp14_, 0, &_tmp15_);
-#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_g_match_info_unref0 (info);
-#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			info = _tmp15_;
-#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			if (_tmp16_) {
-#line 1312 "YandexPublishing.c"
+#line 1187 "YandexPublishing.c"
 				gchar* access_token = NULL;
 				GMatchInfo* _tmp17_ = NULL;
 				gchar** _tmp18_ = NULL;
@@ -1319,243 +1194,111 @@ static gboolean publishing_yandex_web_auth_pane_on_decide_policy (PublishingYand
 				gchar* _tmp22_ = NULL;
 				gchar* _tmp23_ = NULL;
 				const gchar* _tmp24_ = NULL;
-				GtkBox* _tmp25_ = NULL;
-				GdkWindow* _tmp26_ = NULL;
-				GdkCursor* _tmp27_ = NULL;
-				GdkCursor* _tmp28_ = NULL;
-				const gchar* _tmp29_ = NULL;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+				const gchar* _tmp25_ = NULL;
+#line 131 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp17_ = info;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 131 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp19_ = _tmp18_ = g_match_info_fetch_all (_tmp17_);
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 131 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp20_ = _tmp19_;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 131 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp20__length1 = _vala_array_length (_tmp18_);
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 131 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp21_ = _tmp20_[2];
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 131 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp22_ = g_strdup (_tmp21_);
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 131 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp23_ = _tmp22_;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 131 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp20_ = (_vala_array_free (_tmp20_, _tmp20__length1, (GDestroyNotify) g_free), NULL);
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 131 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				access_token = _tmp23_;
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp24_ = access_token;
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-				g_debug ("YandexPublishing.vala:150: Load completed: %s", _tmp24_);
-#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-				_tmp25_ = self->priv->pane_widget;
-#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-				_tmp26_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_widget_get_type (), GtkWidget));
-#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-				_tmp27_ = gdk_cursor_new (GDK_LEFT_PTR);
-#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-				_tmp28_ = _tmp27_;
-#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-				gdk_window_set_cursor (_tmp26_, _tmp28_);
-#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-				_g_object_unref0 (_tmp28_);
-#line 152 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-				_tmp29_ = access_token;
-#line 152 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-				if (_tmp29_ != NULL) {
-#line 1366 "YandexPublishing.c"
-					const gchar* _tmp30_ = NULL;
-					WebKitPolicyDecision* _tmp31_ = NULL;
-#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					_tmp30_ = access_token;
-#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					g_signal_emit_by_name (self, "login-succeeded", _tmp30_);
-#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					_tmp31_ = decision;
-#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					webkit_policy_decision_ignore (_tmp31_);
-#line 155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					_g_free0 (access_token);
-#line 155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					_g_match_info_unref0 (info);
-#line 155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					_g_free0 (uri);
-#line 155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					__vala_WebKitNavigationAction_free0 (action);
-#line 155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					_g_object_unref0 (n_decision);
-#line 155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					break;
-#line 1389 "YandexPublishing.c"
-				} else {
-#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					g_signal_emit_by_name (self, "login-failed");
-#line 1393 "YandexPublishing.c"
-				}
-#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-				_g_free0 (access_token);
-#line 1397 "YandexPublishing.c"
-			}
-#line 159 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			_tmp32_ = decision;
-#line 159 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			webkit_policy_decision_use (_tmp32_);
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			_g_match_info_unref0 (info);
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			_g_free0 (uri);
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			__vala_WebKitNavigationAction_free0 (action);
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			_g_object_unref0 (n_decision);
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			break;
-#line 1413 "YandexPublishing.c"
-		}
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+				g_debug ("YandexPublishing.vala:133: Load completed: %s", _tmp24_);
+#line 134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+				shotwell_plugins_common_web_authentication_pane_set_cursor (G_TYPE_CHECK_INSTANCE_CAST (self, SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane), GDK_LEFT_PTR);
+#line 135 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+				_tmp25_ = access_token;
+#line 135 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+				if (_tmp25_ != NULL) {
+#line 1227 "YandexPublishing.c"
+					const gchar* _tmp26_ = NULL;
+					WebKitPolicyDecision* _tmp27_ = NULL;
+#line 136 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					_tmp26_ = access_token;
+#line 136 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					g_signal_emit_by_name (self, "login-succeeded", _tmp26_);
+#line 137 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					_tmp27_ = decision;
+#line 137 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					webkit_policy_decision_ignore (_tmp27_);
 #line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					_g_free0 (access_token);
+#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					_g_match_info_unref0 (info);
+#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					_g_free0 (uri);
+#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					__vala_WebKitNavigationAction_free0 (action);
+#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					_g_object_unref0 (n_decision);
+#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					break;
+#line 1250 "YandexPublishing.c"
+				} else {
+#line 140 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					g_signal_emit_by_name (self, "login-failed");
+#line 1254 "YandexPublishing.c"
+				}
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+				_g_free0 (access_token);
+#line 1258 "YandexPublishing.c"
+			}
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			_tmp28_ = decision;
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			webkit_policy_decision_use (_tmp28_);
+#line 143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			_g_match_info_unref0 (info);
+#line 143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			_g_free0 (uri);
+#line 143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			__vala_WebKitNavigationAction_free0 (action);
+#line 143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			_g_object_unref0 (n_decision);
+#line 143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			break;
+#line 1274 "YandexPublishing.c"
+		}
+#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		case WEBKIT_POLICY_DECISION_TYPE_RESPONSE:
-#line 1417 "YandexPublishing.c"
+#line 1278 "YandexPublishing.c"
 		{
-			WebKitPolicyDecision* _tmp33_ = NULL;
-#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			_tmp33_ = decision;
-#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			webkit_policy_decision_use (_tmp33_);
-#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			WebKitPolicyDecision* _tmp29_ = NULL;
+#line 145 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			_tmp29_ = decision;
+#line 145 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+			webkit_policy_decision_use (_tmp29_);
+#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			break;
-#line 1426 "YandexPublishing.c"
+#line 1287 "YandexPublishing.c"
 		}
 		default:
 		{
-#line 165 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			result = FALSE;
-#line 165 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return result;
-#line 1434 "YandexPublishing.c"
+#line 1295 "YandexPublishing.c"
 		}
 	}
-#line 167 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	result = TRUE;
-#line 167 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 1441 "YandexPublishing.c"
-}
-
-
-static void publishing_yandex_web_auth_pane_on_load_started (PublishingYandexWebAuthPane* self) {
-	GtkBox* _tmp0_ = NULL;
-	GdkWindow* _tmp1_ = NULL;
-	GdkCursor* _tmp2_ = NULL;
-	GdkCursor* _tmp3_ = NULL;
-#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_return_if_fail (PUBLISHING_YANDEX_IS_WEB_AUTH_PANE (self));
-#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp0_ = self->priv->pane_widget;
-#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp1_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp2_ = gdk_cursor_new (GDK_WATCH);
-#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp3_ = _tmp2_;
-#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	gdk_window_set_cursor (_tmp1_, _tmp3_);
-#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_g_object_unref0 (_tmp3_);
-#line 1464 "YandexPublishing.c"
-}
-
-
-static void publishing_yandex_web_auth_pane_on_page_load_changed (PublishingYandexWebAuthPane* self, WebKitLoadEvent load_event) {
-	WebKitLoadEvent _tmp0_ = 0;
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_return_if_fail (PUBLISHING_YANDEX_IS_WEB_AUTH_PANE (self));
-#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp0_ = load_event;
-#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	switch (_tmp0_) {
-#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		case WEBKIT_LOAD_STARTED:
-#line 1478 "YandexPublishing.c"
-		{
-#line 177 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			publishing_yandex_web_auth_pane_on_load_started (self);
-#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			break;
-#line 1484 "YandexPublishing.c"
-		}
-#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		case WEBKIT_LOAD_FINISHED:
-#line 1488 "YandexPublishing.c"
-		{
-#line 180 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			publishing_yandex_web_auth_pane_on_page_load (self);
-#line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-			break;
-#line 1494 "YandexPublishing.c"
-		}
-		default:
-#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		break;
-#line 1499 "YandexPublishing.c"
-	}
-#line 184 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	return;
-#line 1503 "YandexPublishing.c"
-}
-
-
-static GtkWidget* publishing_yandex_web_auth_pane_real_get_widget (SpitPublishingDialogPane* base) {
-	PublishingYandexWebAuthPane * self;
-	GtkWidget* result = NULL;
-	GtkBox* _tmp0_ = NULL;
-	GtkWidget* _tmp1_ = NULL;
-#line 187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_WEB_AUTH_PANE, PublishingYandexWebAuthPane);
-#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp0_ = self->priv->pane_widget;
-#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	result = _tmp1_;
-#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	return result;
-#line 1522 "YandexPublishing.c"
-}
-
-
-static SpitPublishingDialogPaneGeometryOptions publishing_yandex_web_auth_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base) {
-	PublishingYandexWebAuthPane * self;
-	SpitPublishingDialogPaneGeometryOptions result = 0;
-#line 191 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_WEB_AUTH_PANE, PublishingYandexWebAuthPane);
-#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_RESIZABLE;
-#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	return result;
-#line 1535 "YandexPublishing.c"
-}
-
-
-static void publishing_yandex_web_auth_pane_real_on_pane_installed (SpitPublishingDialogPane* base) {
-	PublishingYandexWebAuthPane * self;
-	WebKitWebView* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-#line 195 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_WEB_AUTH_PANE, PublishingYandexWebAuthPane);
-#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp0_ = self->priv->webview;
-#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp1_ = self->priv->login_url;
-#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	webkit_web_view_load_uri (_tmp0_, _tmp1_);
-#line 1551 "YandexPublishing.c"
-}
-
-
-static void publishing_yandex_web_auth_pane_real_on_pane_uninstalled (SpitPublishingDialogPane* base) {
-	PublishingYandexWebAuthPane * self;
-#line 199 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_WEB_AUTH_PANE, PublishingYandexWebAuthPane);
-#line 1559 "YandexPublishing.c"
+#line 1302 "YandexPublishing.c"
 }
 
 
@@ -1565,42 +1308,23 @@ static void publishing_yandex_web_auth_pane_class_init (PublishingYandexWebAuthP
 #line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingYandexWebAuthPanePrivate));
 #line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	((GObjectClass *) klass)->constructed = publishing_yandex_web_auth_pane_real_constructed;
+#line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	((ShotwellPluginsCommonWebAuthenticationPaneClass *) klass)->on_page_load = publishing_yandex_web_auth_pane_real_on_page_load;
+#line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_yandex_web_auth_pane_finalize;
 #line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_new ("login_succeeded", PUBLISHING_YANDEX_TYPE_WEB_AUTH_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
 #line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_new ("login_failed", PUBLISHING_YANDEX_TYPE_WEB_AUTH_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 1574 "YandexPublishing.c"
-}
-
-
-static void publishing_yandex_web_auth_pane_spit_publishing_dialog_pane_interface_init (SpitPublishingDialogPaneIface * iface) {
-#line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	publishing_yandex_web_auth_pane_spit_publishing_dialog_pane_parent_iface = g_type_interface_peek_parent (iface);
-#line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	iface->get_widget = (GtkWidget* (*)(SpitPublishingDialogPane*)) publishing_yandex_web_auth_pane_real_get_widget;
-#line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	iface->get_preferred_geometry = (SpitPublishingDialogPaneGeometryOptions (*)(SpitPublishingDialogPane*)) publishing_yandex_web_auth_pane_real_get_preferred_geometry;
-#line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_yandex_web_auth_pane_real_on_pane_installed;
-#line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_yandex_web_auth_pane_real_on_pane_uninstalled;
-#line 1589 "YandexPublishing.c"
+#line 1321 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_web_auth_pane_instance_init (PublishingYandexWebAuthPane * self) {
 #line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv = PUBLISHING_YANDEX_WEB_AUTH_PANE_GET_PRIVATE (self);
-#line 96 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self->priv->webview = NULL;
-#line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self->priv->pane_widget = NULL;
-#line 98 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self->priv->webview_frame = NULL;
-#line 101 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	self->priv->login_url = NULL;
-#line 1604 "YandexPublishing.c"
+#line 1328 "YandexPublishing.c"
 }
 
 
@@ -1609,18 +1333,10 @@ static void publishing_yandex_web_auth_pane_finalize (GObject* obj) {
 #line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_YANDEX_TYPE_WEB_AUTH_PANE, PublishingYandexWebAuthPane);
 #line 96 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_g_object_unref0 (self->priv->webview);
-#line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_g_object_unref0 (self->priv->pane_widget);
-#line 98 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_g_object_unref0 (self->priv->webview_frame);
-#line 100 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_regex_unref0 (self->priv->re);
-#line 101 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_g_free0 (self->priv->login_url);
 #line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	G_OBJECT_CLASS (publishing_yandex_web_auth_pane_parent_class)->finalize (obj);
-#line 1624 "YandexPublishing.c"
+#line 1340 "YandexPublishing.c"
 }
 
 
@@ -1628,10 +1344,8 @@ GType publishing_yandex_web_auth_pane_get_type (void) {
 	static volatile gsize publishing_yandex_web_auth_pane_type_id__volatile = 0;
 	if (g_once_init_enter (&publishing_yandex_web_auth_pane_type_id__volatile)) {
 		static const GTypeInfo g_define_type_info = { sizeof (PublishingYandexWebAuthPaneClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) publishing_yandex_web_auth_pane_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (PublishingYandexWebAuthPane), 0, (GInstanceInitFunc) publishing_yandex_web_auth_pane_instance_init, NULL };
-		static const GInterfaceInfo spit_publishing_dialog_pane_info = { (GInterfaceInitFunc) publishing_yandex_web_auth_pane_spit_publishing_dialog_pane_interface_init, (GInterfaceFinalizeFunc) NULL, NULL};
 		GType publishing_yandex_web_auth_pane_type_id;
-		publishing_yandex_web_auth_pane_type_id = g_type_register_static (G_TYPE_OBJECT, "PublishingYandexWebAuthPane", &g_define_type_info, 0);
-		g_type_add_interface_static (publishing_yandex_web_auth_pane_type_id, SPIT_PUBLISHING_TYPE_DIALOG_PANE, &spit_publishing_dialog_pane_info);
+		publishing_yandex_web_auth_pane_type_id = g_type_register_static (SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, "PublishingYandexWebAuthPane", &g_define_type_info, 0);
 		g_once_init_leave (&publishing_yandex_web_auth_pane_type_id__volatile, publishing_yandex_web_auth_pane_type_id);
 	}
 	return publishing_yandex_web_auth_pane_type_id__volatile;
@@ -1640,238 +1354,238 @@ GType publishing_yandex_web_auth_pane_get_type (void) {
 
 PublishingYandexPublishOptions* publishing_yandex_publish_options_construct (GType object_type) {
 	PublishingYandexPublishOptions* self = NULL;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = (PublishingYandexPublishOptions*) g_type_create_instance (object_type);
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return self;
-#line 1648 "YandexPublishing.c"
+#line 1362 "YandexPublishing.c"
 }
 
 
 PublishingYandexPublishOptions* publishing_yandex_publish_options_new (void) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return publishing_yandex_publish_options_construct (PUBLISHING_YANDEX_TYPE_PUBLISH_OPTIONS);
-#line 1655 "YandexPublishing.c"
+#line 1369 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_value_publish_options_init (GValue* value) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 1662 "YandexPublishing.c"
+#line 1376 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_value_publish_options_free_value (GValue* value) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_publish_options_unref (value->data[0].v_pointer);
-#line 1671 "YandexPublishing.c"
+#line 1385 "YandexPublishing.c"
 	}
 }
 
 
 static void publishing_yandex_value_publish_options_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_yandex_publish_options_ref (src_value->data[0].v_pointer);
-#line 1681 "YandexPublishing.c"
+#line 1395 "YandexPublishing.c"
 	} else {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 1685 "YandexPublishing.c"
+#line 1399 "YandexPublishing.c"
 	}
 }
 
 
 static gpointer publishing_yandex_value_publish_options_peek_pointer (const GValue* value) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return value->data[0].v_pointer;
-#line 1693 "YandexPublishing.c"
+#line 1407 "YandexPublishing.c"
 }
 
 
 static gchar* publishing_yandex_value_publish_options_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 1700 "YandexPublishing.c"
+#line 1414 "YandexPublishing.c"
 		PublishingYandexPublishOptions* object;
 		object = collect_values[0].v_pointer;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1707 "YandexPublishing.c"
+#line 1421 "YandexPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1711 "YandexPublishing.c"
+#line 1425 "YandexPublishing.c"
 		}
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		value->data[0].v_pointer = publishing_yandex_publish_options_ref (object);
-#line 1715 "YandexPublishing.c"
+#line 1429 "YandexPublishing.c"
 	} else {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1719 "YandexPublishing.c"
+#line 1433 "YandexPublishing.c"
 	}
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return NULL;
-#line 1723 "YandexPublishing.c"
+#line 1437 "YandexPublishing.c"
 }
 
 
 static gchar* publishing_yandex_value_publish_options_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingYandexPublishOptions** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (!object_p) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 1734 "YandexPublishing.c"
+#line 1448 "YandexPublishing.c"
 	}
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (!value->data[0].v_pointer) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		*object_p = NULL;
-#line 1740 "YandexPublishing.c"
+#line 1454 "YandexPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 1744 "YandexPublishing.c"
+#line 1458 "YandexPublishing.c"
 	} else {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		*object_p = publishing_yandex_publish_options_ref (value->data[0].v_pointer);
-#line 1748 "YandexPublishing.c"
+#line 1462 "YandexPublishing.c"
 	}
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return NULL;
-#line 1752 "YandexPublishing.c"
+#line 1466 "YandexPublishing.c"
 }
 
 
 GParamSpec* publishing_yandex_param_spec_publish_options (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingYandexParamSpecPublishOptions* spec;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_YANDEX_TYPE_PUBLISH_OPTIONS), NULL);
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 1766 "YandexPublishing.c"
+#line 1480 "YandexPublishing.c"
 }
 
 
 gpointer publishing_yandex_value_get_publish_options (const GValue* value) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_YANDEX_TYPE_PUBLISH_OPTIONS), NULL);
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return value->data[0].v_pointer;
-#line 1775 "YandexPublishing.c"
+#line 1489 "YandexPublishing.c"
 }
 
 
 void publishing_yandex_value_set_publish_options (GValue* value, gpointer v_object) {
 	PublishingYandexPublishOptions* old;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_YANDEX_TYPE_PUBLISH_OPTIONS));
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (v_object) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_YANDEX_TYPE_PUBLISH_OPTIONS));
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_publish_options_ref (value->data[0].v_pointer);
-#line 1795 "YandexPublishing.c"
+#line 1509 "YandexPublishing.c"
 	} else {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1799 "YandexPublishing.c"
+#line 1513 "YandexPublishing.c"
 	}
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (old) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_publish_options_unref (old);
-#line 1805 "YandexPublishing.c"
+#line 1519 "YandexPublishing.c"
 	}
 }
 
 
 void publishing_yandex_value_take_publish_options (GValue* value, gpointer v_object) {
 	PublishingYandexPublishOptions* old;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_YANDEX_TYPE_PUBLISH_OPTIONS));
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (v_object) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_YANDEX_TYPE_PUBLISH_OPTIONS));
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1824 "YandexPublishing.c"
+#line 1538 "YandexPublishing.c"
 	} else {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1828 "YandexPublishing.c"
+#line 1542 "YandexPublishing.c"
 	}
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (old) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_publish_options_unref (old);
-#line 1834 "YandexPublishing.c"
+#line 1548 "YandexPublishing.c"
 	}
 }
 
 
 static void publishing_yandex_publish_options_class_init (PublishingYandexPublishOptionsClass * klass) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_publish_options_parent_class = g_type_class_peek_parent (klass);
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	((PublishingYandexPublishOptionsClass *) klass)->finalize = publishing_yandex_publish_options_finalize;
-#line 1844 "YandexPublishing.c"
+#line 1558 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_publish_options_instance_init (PublishingYandexPublishOptions * self) {
-#line 204 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->disable_comments = FALSE;
-#line 205 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 156 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->hide_original = FALSE;
-#line 208 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 159 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->destination_album = NULL;
-#line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->destination_album_url = NULL;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->ref_count = 1;
-#line 1859 "YandexPublishing.c"
+#line 1573 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_publish_options_finalize (PublishingYandexPublishOptions* obj) {
 	PublishingYandexPublishOptions * self;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_YANDEX_TYPE_PUBLISH_OPTIONS, PublishingYandexPublishOptions);
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 206 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (self->access_type);
-#line 208 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 159 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (self->destination_album);
-#line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (self->destination_album_url);
-#line 1875 "YandexPublishing.c"
+#line 1589 "YandexPublishing.c"
 }
 
 
@@ -1892,24 +1606,24 @@ GType publishing_yandex_publish_options_get_type (void) {
 gpointer publishing_yandex_publish_options_ref (gpointer instance) {
 	PublishingYandexPublishOptions* self;
 	self = instance;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return instance;
-#line 1900 "YandexPublishing.c"
+#line 1614 "YandexPublishing.c"
 }
 
 
 void publishing_yandex_publish_options_unref (gpointer instance) {
 	PublishingYandexPublishOptions* self;
 	self = instance;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		PUBLISHING_YANDEX_PUBLISH_OPTIONS_GET_CLASS (self)->finalize (self);
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 1913 "YandexPublishing.c"
+#line 1627 "YandexPublishing.c"
 	}
 }
 
@@ -1917,29 +1631,29 @@ void publishing_yandex_publish_options_unref (gpointer instance) {
 static SpitPublishingDialogPaneGeometryOptions publishing_yandex_publishing_options_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base) {
 	PublishingYandexPublishingOptionsPane * self;
 	SpitPublishingDialogPaneGeometryOptions result = 0;
-#line 224 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_PUBLISHING_OPTIONS_PANE, PublishingYandexPublishingOptionsPane);
-#line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 176 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
-#line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 176 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 1927 "YandexPublishing.c"
+#line 1641 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_publishing_options_pane_real_on_pane_installed (SpitPublishingDialogPane* base) {
 	PublishingYandexPublishingOptionsPane * self;
-#line 227 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_PUBLISHING_OPTIONS_PANE, PublishingYandexPublishingOptionsPane);
-#line 1935 "YandexPublishing.c"
+#line 1649 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_publishing_options_pane_real_on_pane_uninstalled (SpitPublishingDialogPane* base) {
 	PublishingYandexPublishingOptionsPane * self;
-#line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 180 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_PUBLISHING_OPTIONS_PANE, PublishingYandexPublishingOptionsPane);
-#line 1943 "YandexPublishing.c"
+#line 1657 "YandexPublishing.c"
 }
 
 
@@ -1948,31 +1662,31 @@ static GtkWidget* publishing_yandex_publishing_options_pane_real_get_widget (Spi
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_PUBLISHING_OPTIONS_PANE, PublishingYandexPublishingOptionsPane);
-#line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 183 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->box;
-#line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 183 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 183 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	result = _tmp1_;
-#line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 183 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 1962 "YandexPublishing.c"
+#line 1676 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_publishing_options_pane_on_publish_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 208 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_publishing_options_pane_on_publish_clicked ((PublishingYandexPublishingOptionsPane*) self);
-#line 1969 "YandexPublishing.c"
+#line 1683 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_publishing_options_pane_on_logout_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_publishing_options_pane_on_logout_clicked ((PublishingYandexPublishingOptionsPane*) self);
-#line 1976 "YandexPublishing.c"
+#line 1690 "YandexPublishing.c"
 }
 
 
@@ -1981,27 +1695,27 @@ PublishingYandexPublishingOptionsPane* publishing_yandex_publishing_options_pane
 	PublishingYandexPublishOptions* _tmp0_ = NULL;
 	GtkBox* _tmp1_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 235 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_YANDEX_IS_PUBLISH_OPTIONS (options), NULL);
-#line 235 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (GEE_IS_HASH_MAP (list), NULL);
-#line 235 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (host), NULL);
-#line 235 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = (PublishingYandexPublishingOptionsPane*) g_object_new (object_type, NULL);
-#line 237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = options;
-#line 237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->options = _tmp0_;
-#line 239 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 190 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 239 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 190 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_object_ref_sink (_tmp1_);
-#line 239 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 190 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (self->priv->box);
-#line 239 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 190 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->box = _tmp1_;
-#line 2005 "YandexPublishing.c"
+#line 1719 "YandexPublishing.c"
 	{
 		GtkBuilder* _tmp2_ = NULL;
 		GtkBuilder* _tmp3_ = NULL;
@@ -2026,44 +1740,44 @@ PublishingYandexPublishingOptionsPane* publishing_yandex_publishing_options_pane
 		GtkBox* _tmp33_ = NULL;
 		GtkBox* _tmp34_ = NULL;
 		GtkAlignment* _tmp35_ = NULL;
-#line 242 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp2_ = gtk_builder_new ();
-#line 242 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_object_unref0 (self->priv->builder);
-#line 242 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		self->priv->builder = _tmp2_;
-#line 243 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp3_ = self->priv->builder;
-#line 243 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		gtk_builder_add_from_resource (_tmp3_, PLUGIN_RESOURCE_PATH "/yandex_publish_model.ui", &_inner_error_);
-#line 243 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2042 "YandexPublishing.c"
+#line 1756 "YandexPublishing.c"
 			goto __catch40_g_error;
 		}
-#line 245 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp4_ = self->priv->builder;
-#line 245 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		gtk_builder_connect_signals (_tmp4_, NULL);
-#line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 197 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp5_ = self->priv->builder;
-#line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 197 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp6_ = gtk_builder_get_object (_tmp5_, "alignment");
-#line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 197 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp7_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp6_, gtk_alignment_get_type ()) ? ((GtkAlignment*) _tmp6_) : NULL);
-#line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 197 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		align = _tmp7_;
-#line 248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 199 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp8_ = self->priv->builder;
-#line 248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 199 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp9_ = gtk_builder_get_object (_tmp8_, "album_list");
-#line 248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 199 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp10_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp9_, gtk_combo_box_text_get_type ()) ? ((GtkComboBoxText*) _tmp9_) : NULL);
-#line 248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 199 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_object_unref0 (self->priv->album_list);
-#line 248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 199 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		self->priv->album_list = _tmp10_;
-#line 2067 "YandexPublishing.c"
+#line 1781 "YandexPublishing.c"
 		{
 			GeeIterator* _key_it = NULL;
 			GeeHashMap* _tmp11_ = NULL;
@@ -2072,25 +1786,25 @@ PublishingYandexPublishingOptionsPane* publishing_yandex_publishing_options_pane
 			GeeSet* _tmp14_ = NULL;
 			GeeIterator* _tmp15_ = NULL;
 			GeeIterator* _tmp16_ = NULL;
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp11_ = list;
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp12_ = gee_abstract_map_get_keys (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, GEE_TYPE_MAP, GeeMap));
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp13_ = _tmp12_;
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp14_ = _tmp13_;
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp15_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp16_ = _tmp15_;
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_g_object_unref0 (_tmp14_);
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_key_it = _tmp16_;
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			while (TRUE) {
-#line 2094 "YandexPublishing.c"
+#line 1808 "YandexPublishing.c"
 				GeeIterator* _tmp17_ = NULL;
 				gboolean _tmp18_ = FALSE;
 				gchar* key = NULL;
@@ -2098,83 +1812,83 @@ PublishingYandexPublishingOptionsPane* publishing_yandex_publishing_options_pane
 				gpointer _tmp20_ = NULL;
 				GtkComboBoxText* _tmp21_ = NULL;
 				const gchar* _tmp22_ = NULL;
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp17_ = _key_it;
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp18_ = gee_iterator_next (_tmp17_);
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (!_tmp18_) {
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					break;
-#line 2110 "YandexPublishing.c"
+#line 1824 "YandexPublishing.c"
 				}
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp19_ = _key_it;
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp20_ = gee_iterator_get (_tmp19_);
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				key = (gchar*) _tmp20_;
-#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 201 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp21_ = self->priv->album_list;
-#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 201 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp22_ = key;
-#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 201 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				gtk_combo_box_text_append_text (_tmp21_, _tmp22_);
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_g_free0 (key);
-#line 2126 "YandexPublishing.c"
+#line 1840 "YandexPublishing.c"
 			}
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_g_object_unref0 (_key_it);
-#line 2130 "YandexPublishing.c"
+#line 1844 "YandexPublishing.c"
 		}
-#line 252 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp23_ = self->priv->album_list;
-#line 252 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 205 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp24_ = self->priv->builder;
-#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 205 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp25_ = gtk_builder_get_object (_tmp24_, "publish_button");
-#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 205 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp26_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp25_, gtk_button_get_type ()) ? ((GtkButton*) _tmp25_) : NULL);
-#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 205 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_object_unref0 (self->priv->publish_button);
-#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 205 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		self->priv->publish_button = _tmp26_;
-#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 206 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp27_ = self->priv->builder;
-#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 206 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp28_ = gtk_builder_get_object (_tmp27_, "logout_button");
-#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 206 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp29_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp28_, gtk_button_get_type ()) ? ((GtkButton*) _tmp28_) : NULL);
-#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 206 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_object_unref0 (self->priv->logout_button);
-#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 206 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		self->priv->logout_button = _tmp29_;
-#line 257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 208 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp30_ = self->priv->publish_button;
-#line 257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 208 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_signal_connect_object (_tmp30_, "clicked", (GCallback) _publishing_yandex_publishing_options_pane_on_publish_clicked_gtk_button_clicked, self, 0);
-#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp31_ = self->priv->logout_button;
-#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_signal_connect_object (_tmp31_, "clicked", (GCallback) _publishing_yandex_publishing_options_pane_on_logout_clicked_gtk_button_clicked, self, 0);
-#line 260 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp32_ = align;
-#line 260 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp33_ = self->priv->box;
-#line 260 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		gtk_widget_reparent (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_widget_get_type (), GtkWidget), G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, gtk_widget_get_type (), GtkWidget));
-#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp34_ = self->priv->box;
-#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp35_ = align;
-#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		gtk_box_set_child_packing (_tmp34_, G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0, GTK_PACK_START);
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_object_unref0 (align);
-#line 2178 "YandexPublishing.c"
+#line 1892 "YandexPublishing.c"
 	}
 	goto __finally40;
 	__catch40_g_error:
@@ -2182,50 +1896,50 @@ PublishingYandexPublishingOptionsPane* publishing_yandex_publishing_options_pane
 		GError* e = NULL;
 		GError* _tmp36_ = NULL;
 		const gchar* _tmp37_ = NULL;
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		e = _inner_error_;
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_inner_error_ = NULL;
-#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp36_ = e;
-#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp37_ = _tmp36_->message;
-#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		g_warning ("YandexPublishing.vala:263: Could not load UI: %s", _tmp37_);
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		g_warning ("YandexPublishing.vala:214: Could not load UI: %s", _tmp37_);
+#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_error_free0 (e);
-#line 2198 "YandexPublishing.c"
+#line 1912 "YandexPublishing.c"
 	}
 	__finally40:
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return NULL;
-#line 2209 "YandexPublishing.c"
+#line 1923 "YandexPublishing.c"
 	}
-#line 235 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return self;
-#line 2213 "YandexPublishing.c"
+#line 1927 "YandexPublishing.c"
 }
 
 
 PublishingYandexPublishingOptionsPane* publishing_yandex_publishing_options_pane_new (PublishingYandexPublishOptions* options, GeeHashMap* list, SpitPublishingPluginHost* host) {
-#line 235 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return publishing_yandex_publishing_options_pane_construct (PUBLISHING_YANDEX_TYPE_PUBLISHING_OPTIONS_PANE, options, list, host);
-#line 2220 "YandexPublishing.c"
+#line 1934 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_publishing_options_pane_on_logout_clicked (PublishingYandexPublishingOptionsPane* self) {
-#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 218 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 268 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 219 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_emit_by_name (self, "logout");
-#line 2229 "YandexPublishing.c"
+#line 1943 "YandexPublishing.c"
 }
 
 
@@ -2254,136 +1968,136 @@ static void publishing_yandex_publishing_options_pane_on_publish_clicked (Publis
 	GtkComboBoxText* _tmp19_ = NULL;
 	PublishingYandexPublishOptions* _tmp20_ = NULL;
 	gchar* _tmp21_ = NULL;
-#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->options;
-#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = self->priv->album_list;
-#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = gtk_combo_box_text_get_active_text (_tmp1_);
-#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp0_->destination_album);
-#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_->destination_album = _tmp2_;
-#line 274 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = self->priv->builder;
-#line 274 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = gtk_builder_get_object (_tmp3_, "hide_original_check");
-#line 274 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp4_, gtk_check_button_get_type ()) ? ((GtkCheckButton*) _tmp4_) : NULL);
-#line 274 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	tmp = _tmp5_;
-#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 226 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp6_ = self->priv->options;
-#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 226 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp7_ = tmp;
-#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 226 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp8_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 226 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp9_ = _tmp8_;
-#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 226 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp6_->hide_original = _tmp9_;
-#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 228 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp10_ = self->priv->builder;
-#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 228 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp11_ = gtk_builder_get_object (_tmp10_, "disable_comments_check");
-#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 228 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp12_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp11_, gtk_check_button_get_type ()) ? ((GtkCheckButton*) _tmp11_) : NULL);
-#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 228 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (tmp);
-#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 228 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	tmp = _tmp12_;
-#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp13_ = self->priv->options;
-#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp14_ = tmp;
-#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp15_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp16_ = _tmp15_;
-#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp13_->disable_comments = _tmp16_;
-#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp17_ = self->priv->builder;
-#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp18_ = gtk_builder_get_object (_tmp17_, "access_type_list");
-#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp19_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp18_, gtk_combo_box_text_get_type ()) ? ((GtkComboBoxText*) _tmp18_) : NULL);
-#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	access_type = _tmp19_;
-#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp20_ = self->priv->options;
-#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp21_ = gtk_combo_box_text_get_active_text (access_type);
-#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp20_->access_type);
-#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp20_->access_type = _tmp21_;
-#line 283 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_emit_by_name (self, "publish");
-#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (access_type);
-#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (tmp);
-#line 2330 "YandexPublishing.c"
+#line 2044 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_publishing_options_pane_class_init (PublishingYandexPublishingOptionsPaneClass * klass) {
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_publishing_options_pane_parent_class = g_type_class_peek_parent (klass);
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingYandexPublishingOptionsPanePrivate));
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_yandex_publishing_options_pane_finalize;
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_new ("publish", PUBLISHING_YANDEX_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_new ("logout", PUBLISHING_YANDEX_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 2345 "YandexPublishing.c"
+#line 2059 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_publishing_options_pane_spit_publishing_dialog_pane_interface_init (SpitPublishingDialogPaneIface * iface) {
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_publishing_options_pane_spit_publishing_dialog_pane_parent_iface = g_type_interface_peek_parent (iface);
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	iface->get_preferred_geometry = (SpitPublishingDialogPaneGeometryOptions (*)(SpitPublishingDialogPane*)) publishing_yandex_publishing_options_pane_real_get_preferred_geometry;
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_yandex_publishing_options_pane_real_on_pane_installed;
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_yandex_publishing_options_pane_real_on_pane_uninstalled;
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	iface->get_widget = (GtkWidget* (*)(SpitPublishingDialogPane*)) publishing_yandex_publishing_options_pane_real_get_widget;
-#line 2360 "YandexPublishing.c"
+#line 2074 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_publishing_options_pane_instance_init (PublishingYandexPublishingOptionsPane * self) {
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv = PUBLISHING_YANDEX_PUBLISHING_OPTIONS_PANE_GET_PRIVATE (self);
-#line 2367 "YandexPublishing.c"
+#line 2081 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_publishing_options_pane_finalize (GObject* obj) {
 	PublishingYandexPublishingOptionsPane * self;
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_YANDEX_TYPE_PUBLISHING_OPTIONS_PANE, PublishingYandexPublishingOptionsPane);
-#line 213 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 164 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (self->priv->box);
-#line 214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (self->priv->builder);
-#line 215 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 166 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (self->priv->logout_button);
-#line 216 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 167 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (self->priv->publish_button);
-#line 217 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (self->priv->album_list);
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	G_OBJECT_CLASS (publishing_yandex_publishing_options_pane_parent_class)->finalize (obj);
-#line 2387 "YandexPublishing.c"
+#line 2101 "YandexPublishing.c"
 }
 
 
@@ -2407,32 +2121,32 @@ PublishingYandexUploader* publishing_yandex_uploader_construct (GType object_typ
 	SpitPublishingPublishable** _tmp1_ = NULL;
 	gint _tmp1__length1 = 0;
 	PublishingYandexPublishOptions* _tmp2_ = NULL;
-#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_YANDEX_IS_SESSION (session), NULL);
-#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_YANDEX_IS_PUBLISH_OPTIONS (options), NULL);
-#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 242 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = session;
-#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 242 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = photos;
-#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 242 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1__length1 = photos_length1;
-#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 242 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = (PublishingYandexUploader*) publishing_rest_support_batch_uploader_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, _tmp1__length1);
-#line 293 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 244 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = options;
-#line 293 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 244 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->options = _tmp2_;
-#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return self;
-#line 2429 "YandexPublishing.c"
+#line 2143 "YandexPublishing.c"
 }
 
 
 PublishingYandexUploader* publishing_yandex_uploader_new (PublishingYandexSession* session, PublishingYandexPublishOptions* options, SpitPublishingPublishable** photos, int photos_length1) {
-#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return publishing_yandex_uploader_construct (PUBLISHING_YANDEX_TYPE_UPLOADER, session, options, photos, photos_length1);
-#line 2436 "YandexPublishing.c"
+#line 2150 "YandexPublishing.c"
 }
 
 
@@ -2446,65 +2160,65 @@ static PublishingRESTSupportTransaction* publishing_yandex_uploader_real_create_
 	SpitPublishingPublishable* _tmp4_ = NULL;
 	PublishingYandexUploadTransaction* _tmp5_ = NULL;
 	PublishingRESTSupportTransaction* _tmp6_ = NULL;
-#line 296 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_UPLOADER, PublishingYandexUploader);
-#line 296 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
-#line 297 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_debug ("YandexPublishing.vala:297: create transaction");
-#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_debug ("YandexPublishing.vala:248: create transaction");
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = publishing_rest_support_batch_uploader_get_session (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader));
-#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_YANDEX_TYPE_SESSION, PublishingYandexSession);
-#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = self->priv->options;
-#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = publishing_rest_support_batch_uploader_get_current_publishable (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader));
-#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = _tmp3_;
-#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = publishing_yandex_upload_transaction_new (_tmp1_, _tmp2_, _tmp4_);
-#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp6_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction);
-#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (_tmp4_);
-#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishing_rest_support_session_unref0 (_tmp1_);
-#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	result = _tmp6_;
-#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 2478 "YandexPublishing.c"
+#line 2192 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_uploader_class_init (PublishingYandexUploaderClass * klass) {
-#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 238 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_uploader_parent_class = g_type_class_peek_parent (klass);
-#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 238 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	((PublishingRESTSupportBatchUploaderClass *) klass)->finalize = publishing_yandex_uploader_finalize;
-#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 238 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingYandexUploaderPrivate));
-#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 238 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	((PublishingRESTSupportBatchUploaderClass *) klass)->create_transaction = publishing_yandex_uploader_real_create_transaction;
-#line 2491 "YandexPublishing.c"
+#line 2205 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_uploader_instance_init (PublishingYandexUploader * self) {
-#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 238 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv = PUBLISHING_YANDEX_UPLOADER_GET_PRIVATE (self);
-#line 2498 "YandexPublishing.c"
+#line 2212 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_uploader_finalize (PublishingRESTSupportBatchUploader* obj) {
 	PublishingYandexUploader * self;
-#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 238 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_YANDEX_TYPE_UPLOADER, PublishingYandexUploader);
-#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 238 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	PUBLISHING_REST_SUPPORT_BATCH_UPLOADER_CLASS (publishing_yandex_uploader_parent_class)->finalize (obj);
-#line 2508 "YandexPublishing.c"
+#line 2222 "YandexPublishing.c"
 }
 
 
@@ -2524,7 +2238,7 @@ static gchar* bool_to_string (gboolean self) {
 	gchar* result = NULL;
 #line 37 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (self) {
-#line 2528 "YandexPublishing.c"
+#line 2242 "YandexPublishing.c"
 		gchar* _tmp0_ = NULL;
 #line 38 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = g_strdup ("true");
@@ -2532,7 +2246,7 @@ static gchar* bool_to_string (gboolean self) {
 		result = _tmp0_;
 #line 38 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 2536 "YandexPublishing.c"
+#line 2250 "YandexPublishing.c"
 	} else {
 		gchar* _tmp1_ = NULL;
 #line 40 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -2541,15 +2255,15 @@ static gchar* bool_to_string (gboolean self) {
 		result = _tmp1_;
 #line 40 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 2545 "YandexPublishing.c"
+#line 2259 "YandexPublishing.c"
 	}
 }
 
 
 static void _vala_SoupMultipart_free (SoupMultipart* self) {
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_boxed_free (soup_multipart_get_type (), self);
-#line 2553 "YandexPublishing.c"
+#line 2267 "YandexPublishing.c"
 }
 
 
@@ -2593,27 +2307,27 @@ static guint8* string_get_data (const gchar* self, int* result_length1) {
 	if (result_length1) {
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		*result_length1 = _tmp4__length1;
-#line 2597 "YandexPublishing.c"
+#line 2311 "YandexPublishing.c"
 	}
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	result = _tmp4_;
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 2603 "YandexPublishing.c"
+#line 2317 "YandexPublishing.c"
 }
 
 
 static void _g_free0_ (gpointer var) {
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	var = (g_free (var), NULL);
-#line 2610 "YandexPublishing.c"
+#line 2324 "YandexPublishing.c"
 }
 
 
 static void _vala_SoupBuffer_free (SoupBuffer* self) {
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_boxed_free (soup_buffer_get_type (), self);
-#line 2617 "YandexPublishing.c"
+#line 2331 "YandexPublishing.c"
 }
 
 
@@ -2686,91 +2400,91 @@ PublishingYandexUploadTransaction* publishing_yandex_upload_transaction_construc
 	gchar* _tmp67_ = NULL;
 	SoupMessageHeaders* _tmp68_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_YANDEX_IS_SESSION (session), NULL);
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_YANDEX_IS_PUBLISH_OPTIONS (options), NULL);
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (photo), NULL);
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = session;
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = options;
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = _tmp1_->destination_album_url;
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = (PublishingYandexUploadTransaction*) publishing_yandex_transaction_construct_with_url (object_type, _tmp0_, _tmp2_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 306 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_rest_support_transaction_set_custom_payload (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "qwe", "image/jpeg", (gulong) 1);
-#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = photo;
-#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = spit_publishing_publishable_get_publishing_name (_tmp3_);
-#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp6_ = options;
-#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp7_ = _tmp6_->destination_album;
-#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp8_ = options;
-#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp9_ = _tmp8_->destination_album_url;
-#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_debug ("YandexPublishing.vala:308: Uploading '%s' -> %s : %s", _tmp5_, _tmp7_, _tmp9_);
-#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_debug ("YandexPublishing.vala:259: Uploading '%s' -> %s : %s", _tmp5_, _tmp7_, _tmp9_);
+#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp5_);
-#line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp10_ = soup_multipart_new ("multipart/form-data");
-#line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	message_parts = _tmp10_;
-#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp11_ = photo;
-#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp12_ = spit_publishing_publishable_get_publishing_name (_tmp11_);
-#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp13_ = _tmp12_;
-#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	soup_multipart_append_form_string (message_parts, "title", _tmp13_);
-#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp13_);
-#line 312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp14_ = options;
-#line 312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp15_ = _tmp14_->hide_original;
-#line 312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp16_ = bool_to_string (_tmp15_);
-#line 312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp17_ = _tmp16_;
-#line 312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	soup_multipart_append_form_string (message_parts, "hide_original", _tmp17_);
-#line 312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp17_);
-#line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp18_ = options;
-#line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp19_ = _tmp18_->disable_comments;
-#line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp20_ = bool_to_string (_tmp19_);
-#line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp21_ = _tmp20_;
-#line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	soup_multipart_append_form_string (message_parts, "disable_comments", _tmp21_);
-#line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp21_);
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp22_ = options;
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp23_ = _tmp22_->access_type;
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp24_ = g_utf8_strdown (_tmp23_, (gssize) -1);
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp25_ = _tmp24_;
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	soup_multipart_append_form_string (message_parts, "access", _tmp25_);
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp25_);
-#line 2774 "YandexPublishing.c"
+#line 2488 "YandexPublishing.c"
 	{
 		SpitPublishingPublishable* _tmp26_ = NULL;
 		GFile* _tmp27_ = NULL;
@@ -2779,46 +2493,46 @@ PublishingYandexUploadTransaction* publishing_yandex_upload_transaction_construc
 		gchar* _tmp30_ = NULL;
 		gchar* _tmp31_ = NULL;
 		gsize _tmp32_ = 0UL;
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp26_ = photo;
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp27_ = spit_publishing_publishable_get_serialized_file (_tmp26_);
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp28_ = _tmp27_;
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp29_ = g_file_get_path (_tmp28_);
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp30_ = _tmp29_;
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_file_get_contents (_tmp30_, &_tmp31_, &_tmp32_, &_inner_error_);
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_free0 (photo_data);
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		photo_data = _tmp31_;
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		data_length = _tmp32_;
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_free0 (_tmp30_);
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_object_unref0 (_tmp28_);
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			if (_inner_error_->domain == G_FILE_ERROR) {
-#line 2809 "YandexPublishing.c"
+#line 2523 "YandexPublishing.c"
 				goto __catch41_g_file_error;
 			}
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_g_free0 (photo_data);
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			__vala_SoupMultipart_free0 (message_parts);
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return NULL;
-#line 2822 "YandexPublishing.c"
+#line 2536 "YandexPublishing.c"
 		}
 	}
 	goto __finally41;
@@ -2832,170 +2546,170 @@ PublishingYandexUploadTransaction* publishing_yandex_upload_transaction_construc
 		gchar* _tmp37_ = NULL;
 		GError* _tmp38_ = NULL;
 		const gchar* _tmp39_ = NULL;
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		e = _inner_error_;
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_inner_error_ = NULL;
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp33_ = photo;
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp34_ = spit_publishing_publishable_get_serialized_file (_tmp33_);
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp35_ = _tmp34_;
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp36_ = g_file_get_path (_tmp35_);
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp37_ = _tmp36_;
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp38_ = e;
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp39_ = _tmp38_->message;
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		g_critical ("YandexPublishing.vala:322: Failed to read data file '%s': %s", _tmp37_, _tmp39_);
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		g_critical ("YandexPublishing.vala:273: Failed to read data file '%s': %s", _tmp37_, _tmp39_);
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_free0 (_tmp37_);
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_object_unref0 (_tmp35_);
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_error_free0 (e);
-#line 2862 "YandexPublishing.c"
+#line 2576 "YandexPublishing.c"
 	}
 	__finally41:
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_free0 (photo_data);
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		__vala_SoupMultipart_free0 (message_parts);
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return NULL;
-#line 2877 "YandexPublishing.c"
+#line 2591 "YandexPublishing.c"
 	}
-#line 325 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 276 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp40_ = soup_multipart_get_length (message_parts);
-#line 325 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 276 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	image_part_num = _tmp40_;
-#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp41_ = string_get_data (photo_data, &_tmp41__length1);
-#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp42_ = _tmp41_;
-#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp42__length1 = _tmp41__length1;
-#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp43_ = soup_buffer_new (SOUP_MEMORY_COPY, _tmp42_ + 0, ((gint) data_length) - 0);
-#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	bindable_data = _tmp43_;
-#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp44_ = photo;
-#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp45_ = spit_publishing_publishable_get_serialized_file (_tmp44_);
-#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp46_ = _tmp45_;
-#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp47_ = g_file_get_path (_tmp46_);
-#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp48_ = _tmp47_;
-#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	soup_multipart_append_form_file (message_parts, "", _tmp48_, "image/jpeg", bindable_data);
-#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp48_);
-#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (_tmp46_);
-#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 283 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	soup_multipart_get_part (message_parts, image_part_num, &_tmp49_, &_tmp50_);
-#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 283 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	image_part_header = _tmp49_;
-#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 283 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	image_part_body = _tmp50_;
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp51_ = g_str_hash;
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp52_ = g_str_equal;
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp53_ = g_hash_table_new_full (_tmp51_, _tmp52_, _g_free0_, _g_free0_);
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_result_ = _tmp53_;
-#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp54_ = g_strdup ("name");
-#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp55_ = g_strdup ("image");
-#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_hash_table_insert (_result_, _tmp54_, _tmp55_);
-#line 336 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp56_ = g_strdup ("filename");
-#line 336 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp57_ = g_strdup ("unused");
-#line 336 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_hash_table_insert (_result_, _tmp56_, _tmp57_);
-#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	soup_message_headers_set_content_disposition (image_part_header, "form-data", _result_);
-#line 340 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp58_ = publishing_rest_support_transaction_get_endpoint_url (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
-#line 340 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp59_ = _tmp58_;
-#line 340 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp60_ = soup_form_request_new_from_multipart (_tmp59_, message_parts);
-#line 340 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp61_ = _tmp60_;
-#line 340 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp59_);
-#line 340 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	outbound_message = _tmp61_;
-#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp62_ = outbound_message->request_headers;
-#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp63_ = session;
-#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp64_ = publishing_yandex_session_get_auth_token (_tmp63_);
-#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp65_ = _tmp64_;
-#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp66_ = g_strdup_printf ("OAuth %s", _tmp65_);
-#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp67_ = _tmp66_;
-#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	soup_message_headers_append (_tmp62_, "Authorization", _tmp67_);
-#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp67_);
-#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp65_);
-#line 342 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 293 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp68_ = outbound_message->request_headers;
-#line 342 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 293 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	soup_message_headers_append (_tmp68_, "Connection", "close");
-#line 343 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 294 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_rest_support_transaction_set_message (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), outbound_message);
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (outbound_message);
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_hash_table_unref0 (_result_);
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	__vala_SoupBuffer_free0 (bindable_data);
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (photo_data);
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	__vala_SoupMultipart_free0 (message_parts);
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return self;
-#line 2985 "YandexPublishing.c"
+#line 2699 "YandexPublishing.c"
 }
 
 
 PublishingYandexUploadTransaction* publishing_yandex_upload_transaction_new (PublishingYandexSession* session, PublishingYandexPublishOptions* options, SpitPublishingPublishable* photo) {
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return publishing_yandex_upload_transaction_construct (PUBLISHING_YANDEX_TYPE_UPLOAD_TRANSACTION, session, options, photo);
-#line 2992 "YandexPublishing.c"
+#line 2706 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_upload_transaction_class_init (PublishingYandexUploadTransactionClass * klass) {
-#line 302 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 253 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_upload_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 2999 "YandexPublishing.c"
+#line 2713 "YandexPublishing.c"
 }
 
 
@@ -3022,48 +2736,48 @@ PublishingYandexYandexPublisher* publishing_yandex_yandex_publisher_construct (G
 	PublishingYandexSession* _tmp2_ = NULL;
 	GeeHashMap* _tmp3_ = NULL;
 	PublishingYandexPublishOptions* _tmp4_ = NULL;
-#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_SERVICE (service), NULL);
-#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (host), NULL);
-#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = (PublishingYandexYandexPublisher*) g_object_new (object_type, NULL);
-#line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 315 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = service;
-#line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 315 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->service = _tmp0_;
-#line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = host;
-#line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->host = _tmp1_;
-#line 366 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 317 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = publishing_yandex_session_new ();
-#line 366 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 317 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishing_rest_support_session_unref0 (self->priv->session);
-#line 366 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 317 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->session = _tmp2_;
-#line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 318 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 318 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (self->priv->album_list);
-#line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 318 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->album_list = _tmp3_;
-#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = publishing_yandex_publish_options_new ();
-#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishing_yandex_publish_options_unref0 (self->priv->options);
-#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->options = _tmp4_;
-#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return self;
-#line 3060 "YandexPublishing.c"
+#line 2774 "YandexPublishing.c"
 }
 
 
 PublishingYandexYandexPublisher* publishing_yandex_yandex_publisher_new (SpitPublishingService* service, SpitPublishingPluginHost* host) {
-#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return publishing_yandex_yandex_publisher_construct (PUBLISHING_YANDEX_TYPE_YANDEX_PUBLISHER, service, host);
-#line 3067 "YandexPublishing.c"
+#line 2781 "YandexPublishing.c"
 }
 
 
@@ -3071,46 +2785,46 @@ gchar* publishing_yandex_yandex_publisher_get_persistent_auth_token (PublishingY
 	gchar* result = NULL;
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self), NULL);
-#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = spit_host_interface_get_config_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "auth_token", NULL);
-#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	result = _tmp1_;
-#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 3085 "YandexPublishing.c"
+#line 2799 "YandexPublishing.c"
 }
 
 
 void publishing_yandex_yandex_publisher_set_persistent_auth_token (PublishingYandexYandexPublisher* self, const gchar* auth_token) {
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 326 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 326 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (auth_token != NULL);
-#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = auth_token;
-#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_host_interface_set_config_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "auth_token", _tmp1_);
-#line 3102 "YandexPublishing.c"
+#line 2816 "YandexPublishing.c"
 }
 
 
 void publishing_yandex_yandex_publisher_invalidate_persistent_session (PublishingYandexYandexPublisher* self) {
 	SpitPublishingPluginHost* _tmp0_ = NULL;
-#line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 330 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_host_interface_unset_config_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "auth_token");
-#line 3114 "YandexPublishing.c"
+#line 2828 "YandexPublishing.c"
 }
 
 
@@ -3119,21 +2833,21 @@ gboolean publishing_yandex_yandex_publisher_is_persistent_session_available (Pub
 	gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
-#line 383 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self), FALSE);
-#line 384 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = publishing_yandex_yandex_publisher_get_persistent_auth_token (self);
-#line 384 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = _tmp0_;
-#line 384 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = _tmp1_ != NULL;
-#line 384 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp1_);
-#line 384 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	result = _tmp2_;
-#line 384 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 3137 "YandexPublishing.c"
+#line 2851 "YandexPublishing.c"
 }
 
 
@@ -3141,15 +2855,15 @@ static gboolean publishing_yandex_yandex_publisher_real_is_running (SpitPublishi
 	PublishingYandexYandexPublisher * self;
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_YANDEX_PUBLISHER, PublishingYandexYandexPublisher);
-#line 388 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->running;
-#line 388 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	result = _tmp0_;
-#line 388 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 3153 "YandexPublishing.c"
+#line 2867 "YandexPublishing.c"
 }
 
 
@@ -3158,62 +2872,62 @@ static SpitPublishingService* publishing_yandex_yandex_publisher_real_get_servic
 	SpitPublishingService* result = NULL;
 	SpitPublishingService* _tmp0_ = NULL;
 	SpitPublishingService* _tmp1_ = NULL;
-#line 391 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 342 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_YANDEX_PUBLISHER, PublishingYandexYandexPublisher);
-#line 392 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 343 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->service;
-#line 392 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 343 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 392 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 343 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	result = _tmp1_;
-#line 392 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 343 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 3172 "YandexPublishing.c"
+#line 2886 "YandexPublishing.c"
 }
 
 
 static gchar* publishing_yandex_yandex_publisher_check_response (PublishingYandexYandexPublisher* self, PublishingRESTSupportXmlDocument* doc) {
 	gchar* result = NULL;
-#line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 346 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self), NULL);
-#line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 346 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_XML_DOCUMENT (doc), NULL);
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	result = NULL;
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 3186 "YandexPublishing.c"
+#line 2900 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_yandex_publisher_parse_album_entry (PublishingYandexYandexPublisher* self, xmlNode* e, GError** error) {
 	gchar* title = NULL;
 	gchar* link = NULL;
-#line 399 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 400 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 351 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	title = NULL;
-#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 352 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	link = NULL;
-#line 3199 "YandexPublishing.c"
+#line 2913 "YandexPublishing.c"
 	{
 		xmlNode* c = NULL;
 		xmlNode* _tmp0_ = NULL;
 		xmlNode* _tmp1_ = NULL;
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp0_ = e;
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp1_ = _tmp0_->children;
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		c = _tmp1_;
-#line 3210 "YandexPublishing.c"
+#line 2924 "YandexPublishing.c"
 		{
 			gboolean _tmp2_ = FALSE;
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp2_ = TRUE;
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			while (TRUE) {
-#line 3217 "YandexPublishing.c"
+#line 2931 "YandexPublishing.c"
 				xmlNode* _tmp5_ = NULL;
 				xmlNode* _tmp6_ = NULL;
 				const gchar* _tmp7_ = NULL;
@@ -3222,156 +2936,156 @@ static void publishing_yandex_yandex_publisher_parse_album_entry (PublishingYand
 				const gchar* _tmp12_ = NULL;
 				gboolean _tmp18_ = FALSE;
 				const gchar* _tmp19_ = NULL;
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (!_tmp2_) {
-#line 3228 "YandexPublishing.c"
+#line 2942 "YandexPublishing.c"
 					xmlNode* _tmp3_ = NULL;
 					xmlNode* _tmp4_ = NULL;
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp3_ = c;
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp4_ = _tmp3_->next;
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					c = _tmp4_;
-#line 3237 "YandexPublishing.c"
+#line 2951 "YandexPublishing.c"
 				}
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp2_ = FALSE;
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp5_ = c;
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (!(_tmp5_ != NULL)) {
-#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					break;
-#line 3247 "YandexPublishing.c"
+#line 2961 "YandexPublishing.c"
 				}
-#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 355 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp6_ = c;
-#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 355 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp7_ = _tmp6_->name;
-#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 355 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (g_strcmp0 (_tmp7_, "title") == 0) {
-#line 3255 "YandexPublishing.c"
+#line 2969 "YandexPublishing.c"
 					xmlNode* _tmp8_ = NULL;
 					gchar* _tmp9_ = NULL;
-#line 405 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 356 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp8_ = c;
-#line 405 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 356 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp9_ = (gchar*) xmlNodeGetContent (_tmp8_);
-#line 405 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 356 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_g_free0 (title);
-#line 405 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 356 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					title = _tmp9_;
-#line 3266 "YandexPublishing.c"
+#line 2980 "YandexPublishing.c"
 				}
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp11_ = c;
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp12_ = _tmp11_->name;
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (g_strcmp0 (_tmp12_, "link") == 0) {
-#line 3274 "YandexPublishing.c"
+#line 2988 "YandexPublishing.c"
 					xmlNode* _tmp13_ = NULL;
 					gchar* _tmp14_ = NULL;
 					gchar* _tmp15_ = NULL;
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp13_ = c;
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp14_ = (gchar*) xmlGetProp (_tmp13_, (xmlChar*) "rel");
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp15_ = _tmp14_;
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp10_ = g_strcmp0 (_tmp15_, "photos") == 0;
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_g_free0 (_tmp15_);
-#line 3288 "YandexPublishing.c"
+#line 3002 "YandexPublishing.c"
 				} else {
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp10_ = FALSE;
-#line 3292 "YandexPublishing.c"
+#line 3006 "YandexPublishing.c"
 				}
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (_tmp10_) {
-#line 3296 "YandexPublishing.c"
+#line 3010 "YandexPublishing.c"
 					xmlNode* _tmp16_ = NULL;
 					gchar* _tmp17_ = NULL;
-#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp16_ = c;
-#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp17_ = (gchar*) xmlGetProp (_tmp16_, (xmlChar*) "href");
-#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_g_free0 (link);
-#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					link = _tmp17_;
-#line 3307 "YandexPublishing.c"
+#line 3021 "YandexPublishing.c"
 				}
-#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp19_ = title;
-#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (_tmp19_ != NULL) {
-#line 3313 "YandexPublishing.c"
+#line 3027 "YandexPublishing.c"
 					const gchar* _tmp20_ = NULL;
-#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp20_ = link;
-#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp18_ = _tmp20_ != NULL;
-#line 3319 "YandexPublishing.c"
+#line 3033 "YandexPublishing.c"
 				} else {
-#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp18_ = FALSE;
-#line 3323 "YandexPublishing.c"
+#line 3037 "YandexPublishing.c"
 				}
-#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (_tmp18_) {
-#line 3327 "YandexPublishing.c"
+#line 3041 "YandexPublishing.c"
 					const gchar* _tmp21_ = NULL;
 					const gchar* _tmp22_ = NULL;
 					GeeHashMap* _tmp23_ = NULL;
 					const gchar* _tmp24_ = NULL;
 					const gchar* _tmp25_ = NULL;
-#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp21_ = title;
-#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp22_ = link;
-#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-					g_debug ("YandexPublishing.vala:411: Added album: '%s', link: %s", _tmp21_, _tmp22_);
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+					g_debug ("YandexPublishing.vala:362: Added album: '%s', link: %s", _tmp21_, _tmp22_);
+#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp23_ = self->priv->album_list;
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp24_ = title;
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp25_ = link;
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp24_, _tmp25_);
-#line 413 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_g_free0 (title);
-#line 413 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					title = NULL;
-#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_g_free0 (link);
-#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					link = NULL;
-#line 415 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 366 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					break;
-#line 3357 "YandexPublishing.c"
+#line 3071 "YandexPublishing.c"
 				}
 			}
 		}
 	}
-#line 399 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (link);
-#line 399 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (title);
-#line 3366 "YandexPublishing.c"
+#line 3080 "YandexPublishing.c"
 }
 
 
 static gchar* _publishing_yandex_yandex_publisher_check_response_publishing_rest_support_xml_document_check_for_error_response (PublishingRESTSupportXmlDocument* doc, gpointer self) {
 	gchar* result;
 	result = publishing_yandex_yandex_publisher_check_response ((PublishingYandexYandexPublisher*) self, doc);
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	return result;
-#line 3375 "YandexPublishing.c"
+#line 3089 "YandexPublishing.c"
 }
 
 
@@ -3384,71 +3098,71 @@ void publishing_yandex_yandex_publisher_parse_album_creation (PublishingYandexYa
 	xmlNode* _tmp3_ = NULL;
 	xmlNode* _tmp4_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (data != NULL);
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = data;
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = publishing_rest_support_xml_document_parse_string (_tmp0_, _publishing_yandex_yandex_publisher_check_response_publishing_rest_support_xml_document_check_for_error_response, self, &_inner_error_);
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	doc = _tmp1_;
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_propagate_error (error, _inner_error_);
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 3406 "YandexPublishing.c"
+#line 3120 "YandexPublishing.c"
 		} else {
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 3414 "YandexPublishing.c"
+#line 3128 "YandexPublishing.c"
 		}
 	}
-#line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 373 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = doc;
-#line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 373 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = publishing_rest_support_xml_document_get_root_node (_tmp2_);
-#line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 373 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	root = _tmp3_;
-#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = root;
-#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_parse_album_entry (self, _tmp4_, &_inner_error_);
-#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_propagate_error (error, _inner_error_);
-#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (doc);
-#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 3437 "YandexPublishing.c"
+#line 3151 "YandexPublishing.c"
 		} else {
-#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (doc);
-#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 3447 "YandexPublishing.c"
+#line 3161 "YandexPublishing.c"
 		}
 	}
-#line 420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishing_rest_support_xml_document_unref0 (doc);
-#line 3452 "YandexPublishing.c"
+#line 3166 "YandexPublishing.c"
 }
 
 
@@ -3460,144 +3174,144 @@ void publishing_yandex_yandex_publisher_parse_album_list (PublishingYandexYandex
 	PublishingRESTSupportXmlDocument* _tmp2_ = NULL;
 	xmlNode* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (data != NULL);
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = data;
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = publishing_rest_support_xml_document_parse_string (_tmp0_, _publishing_yandex_yandex_publisher_check_response_publishing_rest_support_xml_document_check_for_error_response, self, &_inner_error_);
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	doc = _tmp1_;
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_propagate_error (error, _inner_error_);
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 3482 "YandexPublishing.c"
+#line 3196 "YandexPublishing.c"
 		} else {
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 3490 "YandexPublishing.c"
+#line 3204 "YandexPublishing.c"
 		}
 	}
-#line 429 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = doc;
-#line 429 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = publishing_rest_support_xml_document_get_root_node (_tmp2_);
-#line 429 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	root = _tmp3_;
-#line 3499 "YandexPublishing.c"
+#line 3213 "YandexPublishing.c"
 	{
 		xmlNode* e = NULL;
 		xmlNode* _tmp4_ = NULL;
 		xmlNode* _tmp5_ = NULL;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp4_ = root;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp5_ = _tmp4_->children;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		e = _tmp5_;
-#line 3510 "YandexPublishing.c"
+#line 3224 "YandexPublishing.c"
 		{
 			gboolean _tmp6_ = FALSE;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp6_ = TRUE;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			while (TRUE) {
-#line 3517 "YandexPublishing.c"
+#line 3231 "YandexPublishing.c"
 				xmlNode* _tmp9_ = NULL;
 				xmlNode* _tmp10_ = NULL;
 				const gchar* _tmp11_ = NULL;
 				xmlNode* _tmp12_ = NULL;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (!_tmp6_) {
-#line 3524 "YandexPublishing.c"
+#line 3238 "YandexPublishing.c"
 					xmlNode* _tmp7_ = NULL;
 					xmlNode* _tmp8_ = NULL;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp7_ = e;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp8_ = _tmp7_->next;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					e = _tmp8_;
-#line 3533 "YandexPublishing.c"
+#line 3247 "YandexPublishing.c"
 				}
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp6_ = FALSE;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp9_ = e;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (!(_tmp9_ != NULL)) {
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					break;
-#line 3543 "YandexPublishing.c"
+#line 3257 "YandexPublishing.c"
 				}
-#line 432 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 383 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp10_ = e;
-#line 432 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 383 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp11_ = _tmp10_->name;
-#line 432 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 383 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (g_strcmp0 (_tmp11_, "entry") != 0) {
-#line 433 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 384 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					continue;
-#line 3553 "YandexPublishing.c"
+#line 3267 "YandexPublishing.c"
 				}
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp12_ = e;
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				publishing_yandex_yandex_publisher_parse_album_entry (self, _tmp12_, &_inner_error_);
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						g_propagate_error (error, _inner_error_);
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						_publishing_rest_support_xml_document_unref0 (doc);
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						return;
-#line 3569 "YandexPublishing.c"
+#line 3283 "YandexPublishing.c"
 					} else {
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						_publishing_rest_support_xml_document_unref0 (doc);
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						g_clear_error (&_inner_error_);
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						return;
-#line 3579 "YandexPublishing.c"
+#line 3293 "YandexPublishing.c"
 					}
 				}
 			}
 		}
 	}
-#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishing_rest_support_xml_document_unref0 (doc);
-#line 3587 "YandexPublishing.c"
+#line 3301 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_album_creation_complete_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
-#line 440 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 391 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_album_creation_complete ((PublishingYandexYandexPublisher*) self, _sender);
-#line 3594 "YandexPublishing.c"
+#line 3308 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_album_creation_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
-#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_album_creation_error ((PublishingYandexYandexPublisher*) self, _sender, err);
-#line 3601 "YandexPublishing.c"
+#line 3315 "YandexPublishing.c"
 }
 
 
@@ -3608,29 +3322,29 @@ static void publishing_yandex_yandex_publisher_album_creation_error (PublishingY
 	guint _tmp3_ = 0U;
 	GError* _tmp4_ = NULL;
 	const gchar* _tmp5_ = NULL;
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 390 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 390 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (t));
-#line 440 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 391 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = t;
-#line 440 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 391 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 440 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 391 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_album_creation_complete_publishing_rest_support_transaction_completed, self);
-#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = t;
-#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 392 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_album_creation_error_publishing_rest_support_transaction_network_error, self);
-#line 443 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = err;
-#line 443 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = _tmp4_->message;
-#line 443 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_warning ("YandexPublishing.vala:443: Album creation error: %s", _tmp5_);
-#line 3634 "YandexPublishing.c"
+#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_warning ("YandexPublishing.vala:394: Album creation error: %s", _tmp5_);
+#line 3348 "YandexPublishing.c"
 }
 
 
@@ -3646,51 +3360,51 @@ static void publishing_yandex_yandex_publisher_album_creation_complete (Publishi
 	gchar* _tmp13_ = NULL;
 	gboolean _tmp14_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 446 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 446 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (t));
-#line 447 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = t;
-#line 447 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 447 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_album_creation_complete_publishing_rest_support_transaction_completed, self);
-#line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 399 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = t;
-#line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 399 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 399 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_album_creation_error_publishing_rest_support_transaction_network_error, self);
-#line 3666 "YandexPublishing.c"
+#line 3380 "YandexPublishing.c"
 	{
 		PublishingRESTSupportTransaction* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp4_ = t;
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp5_ = publishing_rest_support_transaction_get_response (_tmp4_);
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp6_ = _tmp5_;
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_yandex_publisher_parse_album_creation (self, _tmp6_, &_inner_error_);
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_free0 (_tmp6_);
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 3685 "YandexPublishing.c"
+#line 3399 "YandexPublishing.c"
 				goto __catch42_spit_publishing_publishing_error;
 			}
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 3694 "YandexPublishing.c"
+#line 3408 "YandexPublishing.c"
 		}
 	}
 	goto __finally42;
@@ -3699,67 +3413,67 @@ static void publishing_yandex_yandex_publisher_album_creation_complete (Publishi
 		GError* err = NULL;
 		SpitPublishingPluginHost* _tmp7_ = NULL;
 		GError* _tmp8_ = NULL;
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		err = _inner_error_;
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_inner_error_ = NULL;
-#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp7_ = self->priv->host;
-#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp8_ = err;
-#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp7_, _tmp8_);
-#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 405 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_error_free0 (err);
-#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 405 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return;
-#line 3717 "YandexPublishing.c"
+#line 3431 "YandexPublishing.c"
 	}
 	__finally42:
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return;
-#line 3728 "YandexPublishing.c"
+#line 3442 "YandexPublishing.c"
 	}
-#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp9_ = self->priv->album_list;
-#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp10_ = self->priv->options;
-#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp11_ = _tmp10_->destination_album;
-#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp12_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp11_);
-#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp13_ = (gchar*) _tmp12_;
-#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp14_ = _tmp13_ != NULL;
-#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp13_);
-#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (_tmp14_) {
-#line 458 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 409 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_yandex_publisher_start_upload (self);
-#line 3748 "YandexPublishing.c"
+#line 3462 "YandexPublishing.c"
 	} else {
 		SpitPublishingPluginHost* _tmp15_ = NULL;
 		GError* _tmp16_ = NULL;
 		GError* _tmp17_ = NULL;
-#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp15_ = self->priv->host;
-#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp16_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_PROTOCOL_ERROR, "Server did not create album");
-#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp17_ = _tmp16_;
-#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp15_, _tmp17_);
-#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_error_free0 (_tmp17_);
-#line 3763 "YandexPublishing.c"
+#line 3477 "YandexPublishing.c"
 	}
 }
 
@@ -3776,59 +3490,59 @@ static void publishing_yandex_yandex_publisher_create_destination_album (Publish
 	const gchar* _tmp5_ = NULL;
 	PublishingYandexTransaction* _tmp6_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 463 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 415 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->options;
-#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 415 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = _tmp0_->destination_album;
-#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 415 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 415 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	album = _tmp2_;
-#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = g_strdup_printf ("<entry xmlns=\"http://www.w3.org/2005/Atom\" xmlns:f=\"yandex:fotki\">" \
 "<title>%s</title></entry>", album);
-#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	data = _tmp3_;
-#line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = self->priv->session;
-#line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = self->priv->service_url;
-#line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp6_ = publishing_yandex_transaction_new_with_url (_tmp4_, _tmp5_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	t = _tmp6_;
-#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_transaction_add_data (t, "application/atom+xml; charset=utf-8; type=entry", data);
-#line 471 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (t, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_yandex_yandex_publisher_album_creation_complete_publishing_rest_support_transaction_completed, self, 0);
-#line 472 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (t, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_yandex_yandex_publisher_album_creation_error_publishing_rest_support_transaction_network_error, self, 0);
-#line 3808 "YandexPublishing.c"
+#line 3522 "YandexPublishing.c"
 	{
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (t, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 3816 "YandexPublishing.c"
+#line 3530 "YandexPublishing.c"
 				goto __catch43_spit_publishing_publishing_error;
 			}
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_publishing_rest_support_transaction_unref0 (t);
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_g_free0 (data);
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_g_free0 (album);
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 3831 "YandexPublishing.c"
+#line 3545 "YandexPublishing.c"
 		}
 	}
 	goto __finally43;
@@ -3837,58 +3551,58 @@ static void publishing_yandex_yandex_publisher_create_destination_album (Publish
 		GError* err = NULL;
 		SpitPublishingPluginHost* _tmp7_ = NULL;
 		GError* _tmp8_ = NULL;
-#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		err = _inner_error_;
-#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_inner_error_ = NULL;
-#line 477 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp7_ = self->priv->host;
-#line 477 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp8_ = err;
-#line 477 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp7_, _tmp8_);
-#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_error_free0 (err);
-#line 3852 "YandexPublishing.c"
+#line 3566 "YandexPublishing.c"
 	}
 	__finally43:
-#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_publishing_rest_support_transaction_unref0 (t);
-#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_free0 (data);
-#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_free0 (album);
-#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return;
-#line 3869 "YandexPublishing.c"
+#line 3583 "YandexPublishing.c"
 	}
-#line 463 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishing_rest_support_transaction_unref0 (t);
-#line 463 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (data);
-#line 463 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (album);
-#line 3877 "YandexPublishing.c"
+#line 3591 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_on_upload_complete_publishing_rest_support_batch_uploader_upload_complete (PublishingRESTSupportBatchUploader* _sender, gint num_photos_published, gpointer self) {
-#line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 433 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_on_upload_complete ((PublishingYandexYandexPublisher*) self, _sender, num_photos_published);
-#line 3884 "YandexPublishing.c"
+#line 3598 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error (PublishingRESTSupportBatchUploader* _sender, GError* err, gpointer self) {
-#line 483 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 434 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_on_upload_error ((PublishingYandexYandexPublisher*) self, _sender, err);
-#line 3891 "YandexPublishing.c"
+#line 3605 "YandexPublishing.c"
 }
 
 
@@ -3900,51 +3614,51 @@ static void publishing_yandex_yandex_publisher_on_upload_complete (PublishingYan
 	gint _tmp4_ = 0;
 	SpitPublishingPluginHost* _tmp8_ = NULL;
 	SpitPublishingPluginHost* _tmp9_ = NULL;
-#line 481 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 432 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 481 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 432 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_BATCH_UPLOADER (uploader));
-#line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 433 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = uploader;
-#line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 433 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("upload-complete", PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, &_tmp1_, NULL, FALSE);
-#line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 433 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_on_upload_complete_publishing_rest_support_batch_uploader_upload_complete, self);
-#line 483 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 434 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = uploader;
-#line 483 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 434 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("upload-error", PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, &_tmp3_, NULL, FALSE);
-#line 483 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 434 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error, self);
-#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 436 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = num_published;
-#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 436 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (_tmp4_ == 0) {
-#line 3923 "YandexPublishing.c"
+#line 3637 "YandexPublishing.c"
 		SpitPublishingPluginHost* _tmp5_ = NULL;
 		GError* _tmp6_ = NULL;
 		GError* _tmp7_ = NULL;
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 437 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp5_ = self->priv->host;
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 437 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp6_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, "");
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 437 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp7_ = _tmp6_;
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 437 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp5_, _tmp7_);
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 437 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_error_free0 (_tmp7_);
-#line 3937 "YandexPublishing.c"
+#line 3651 "YandexPublishing.c"
 	}
-#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp8_ = self->priv->host;
-#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp8_, FALSE);
-#line 490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp9_ = self->priv->host;
-#line 490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_publishing_plugin_host_install_success_pane (_tmp9_);
-#line 3947 "YandexPublishing.c"
+#line 3661 "YandexPublishing.c"
 }
 
 
@@ -3955,29 +3669,29 @@ static void publishing_yandex_yandex_publisher_on_upload_error (PublishingYandex
 	guint _tmp3_ = 0U;
 	GError* _tmp4_ = NULL;
 	const gchar* _tmp5_ = NULL;
-#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 444 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 444 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_BATCH_UPLOADER (uploader));
-#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 445 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = uploader;
-#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 445 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("upload-complete", PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, &_tmp1_, NULL, FALSE);
-#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 445 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_on_upload_complete_publishing_rest_support_batch_uploader_upload_complete, self);
-#line 495 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 446 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = uploader;
-#line 495 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 446 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("upload-error", PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, &_tmp3_, NULL, FALSE);
-#line 495 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 446 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error, self);
-#line 497 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = err;
-#line 497 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = _tmp4_->message;
-#line 497 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_warning ("YandexPublishing.vala:497: Photo upload error: %s", _tmp5_);
-#line 3980 "YandexPublishing.c"
+#line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_warning ("YandexPublishing.vala:448: Photo upload error: %s", _tmp5_);
+#line 3694 "YandexPublishing.c"
 }
 
 
@@ -3989,37 +3703,37 @@ static void publishing_yandex_yandex_publisher_on_upload_status_updated (Publish
 	void* _tmp2__target = NULL;
 	gint _tmp3_ = 0;
 	gdouble _tmp4_ = 0.0;
-#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 501 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 452 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = completed_fraction;
-#line 501 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_debug ("YandexPublishing.vala:501: EVENT: uploader reports upload %.2f percent" \
+#line 452 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_debug ("YandexPublishing.vala:452: EVENT: uploader reports upload %.2f percent" \
 " complete.", 100.0 * _tmp0_);
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = self->priv->progress_reporter;
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1__target = self->priv->progress_reporter_target;
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_vala_assert (_tmp1_ != NULL, "progress_reporter != null");
-#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 456 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = self->priv->progress_reporter;
-#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 456 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2__target = self->priv->progress_reporter_target;
-#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 456 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = file_number;
-#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 456 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = completed_fraction;
-#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 456 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ (_tmp3_, _tmp4_, _tmp2__target);
-#line 4014 "YandexPublishing.c"
+#line 3728 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_on_upload_status_updated_spit_publishing_progress_callback (gint file_number, gdouble fraction_complete, gpointer self) {
-#line 519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_on_upload_status_updated ((PublishingYandexYandexPublisher*) self, file_number, fraction_complete);
-#line 4021 "YandexPublishing.c"
+#line 3735 "YandexPublishing.c"
 }
 
 
@@ -4044,100 +3758,100 @@ static void publishing_yandex_yandex_publisher_start_upload (PublishingYandexYan
 	PublishingYandexSession* _tmp13_ = NULL;
 	PublishingYandexPublishOptions* _tmp14_ = NULL;
 	PublishingYandexUploader* _tmp15_ = NULL;
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 459 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 509 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 509 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp0_, TRUE);
-#line 511 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 462 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = self->priv->host;
-#line 511 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 462 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = spit_publishing_plugin_host_serialize_publishables (_tmp1_, 0, FALSE, &_tmp2_, &_tmp3_);
-#line 511 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 462 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	(self->priv->progress_reporter_target_destroy_notify == NULL) ? NULL : (self->priv->progress_reporter_target_destroy_notify (self->priv->progress_reporter_target), NULL);
-#line 511 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 462 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->progress_reporter = NULL;
-#line 511 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 462 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->progress_reporter_target = NULL;
-#line 511 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 462 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->progress_reporter_target_destroy_notify = NULL;
-#line 511 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 462 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->progress_reporter = _tmp4_;
-#line 511 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 462 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->progress_reporter_target = _tmp2_;
-#line 511 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 462 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->progress_reporter_target_destroy_notify = _tmp3_;
-#line 513 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = self->priv->options;
-#line 513 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp6_ = self->priv->album_list;
-#line 513 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp7_ = self->priv->options;
-#line 513 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp8_ = _tmp7_->destination_album;
-#line 513 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp9_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp8_);
-#line 513 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp5_->destination_album_url);
-#line 513 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_->destination_album_url = (gchar*) _tmp9_;
-#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp10_ = self->priv->host;
-#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp12_ = spit_publishing_plugin_host_get_publishables (_tmp10_, &_tmp11_);
-#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishables = _tmp12_;
-#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishables_length1 = _tmp11_;
-#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishables_size_ = publishables_length1;
-#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 466 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp13_ = self->priv->session;
-#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 466 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp14_ = self->priv->options;
-#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 466 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp15_ = publishing_yandex_uploader_new (_tmp13_, _tmp14_, publishables, publishables_length1);
-#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 466 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	uploader = _tmp15_;
-#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (uploader, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader), "upload-complete", (GCallback) _publishing_yandex_yandex_publisher_on_upload_complete_publishing_rest_support_batch_uploader_upload_complete, self, 0);
-#line 518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (uploader, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader), "upload-error", (GCallback) _publishing_yandex_yandex_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error, self, 0);
-#line 519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_rest_support_batch_uploader_upload (G_TYPE_CHECK_INSTANCE_CAST (uploader, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader), _publishing_yandex_yandex_publisher_on_upload_status_updated_spit_publishing_progress_callback, self);
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 459 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishing_rest_support_batch_uploader_unref0 (uploader);
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 459 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishables = (_vala_array_free (publishables, publishables_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 4112 "YandexPublishing.c"
+#line 3826 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_yandex_publisher_on_logout (PublishingYandexYandexPublisher* self) {
 	gboolean _tmp0_ = FALSE;
 	PublishingYandexSession* _tmp1_ = NULL;
-#line 522 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 473 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (!_tmp0_) {
-#line 524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return;
-#line 4127 "YandexPublishing.c"
+#line 3841 "YandexPublishing.c"
 	}
-#line 526 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 477 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = self->priv->session;
-#line 526 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 477 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_session_deauthenticate (_tmp1_);
-#line 527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 478 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_invalidate_persistent_session (self);
-#line 529 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 480 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->running = FALSE;
-#line 531 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_publishing_publisher_start (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 4139 "YandexPublishing.c"
+#line 3853 "YandexPublishing.c"
 }
 
 
@@ -4155,64 +3869,64 @@ static void publishing_yandex_yandex_publisher_on_publish (PublishingYandexYande
 	gpointer _tmp10_ = NULL;
 	gchar* _tmp11_ = NULL;
 	gboolean _tmp12_ = FALSE;
-#line 534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->options;
-#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = _tmp0_->destination_album;
-#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = self->priv->album_list;
-#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = self->priv->options;
-#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = _tmp3_->destination_album;
-#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp4_);
-#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp6_ = (gchar*) _tmp5_;
-#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_debug ("YandexPublishing.vala:535: Going to publish to '%s' : %s", _tmp1_, _tmp6_);
-#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_debug ("YandexPublishing.vala:486: Going to publish to '%s' : %s", _tmp1_, _tmp6_);
+#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp6_);
-#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp7_ = self->priv->album_list;
-#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp8_ = self->priv->options;
-#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp9_ = _tmp8_->destination_album;
-#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp10_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp9_);
-#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp11_ = (gchar*) _tmp10_;
-#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp12_ = _tmp11_ == NULL;
-#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp11_);
-#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (_tmp12_) {
-#line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_yandex_publisher_create_destination_album (self);
-#line 4195 "YandexPublishing.c"
+#line 3909 "YandexPublishing.c"
 	} else {
-#line 539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_yandex_publisher_start_upload (self);
-#line 4199 "YandexPublishing.c"
+#line 3913 "YandexPublishing.c"
 	}
 }
 
 
 static void _publishing_yandex_yandex_publisher_service_get_album_list_complete_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
-#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_service_get_album_list_complete ((PublishingYandexYandexPublisher*) self, _sender);
-#line 4207 "YandexPublishing.c"
+#line 3921 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_service_get_album_list_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
-#line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 495 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_service_get_album_list_error ((PublishingYandexYandexPublisher*) self, _sender, err);
-#line 4214 "YandexPublishing.c"
+#line 3928 "YandexPublishing.c"
 }
 
 
@@ -4223,45 +3937,45 @@ void publishing_yandex_yandex_publisher_service_get_album_list_error (Publishing
 	guint _tmp3_ = 0U;
 	GError* _tmp4_ = NULL;
 	const gchar* _tmp5_ = NULL;
-#line 542 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 542 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (t));
-#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = t;
-#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_service_get_album_list_complete_publishing_rest_support_transaction_completed, self);
-#line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 495 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = t;
-#line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 495 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 495 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_service_get_album_list_error_publishing_rest_support_transaction_network_error, self);
-#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 497 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_invalidate_persistent_session (self);
-#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = err;
-#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = _tmp4_->message;
-#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_warning ("YandexPublishing.vala:547: Failed to get album list: %s", _tmp5_);
-#line 4249 "YandexPublishing.c"
+#line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_warning ("YandexPublishing.vala:498: Failed to get album list: %s", _tmp5_);
+#line 3963 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_on_publish_publishing_yandex_publishing_options_pane_publish (PublishingYandexPublishingOptionsPane* _sender, gpointer self) {
-#line 564 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_on_publish ((PublishingYandexYandexPublisher*) self);
-#line 4256 "YandexPublishing.c"
+#line 3970 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_on_logout_publishing_yandex_publishing_options_pane_logout (PublishingYandexPublishingOptionsPane* _sender, gpointer self) {
-#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 516 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_on_logout ((PublishingYandexYandexPublisher*) self);
-#line 4263 "YandexPublishing.c"
+#line 3977 "YandexPublishing.c"
 }
 
 
@@ -4280,61 +3994,61 @@ void publishing_yandex_yandex_publisher_service_get_album_list_complete (Publish
 	PublishingYandexPublishingOptionsPane* _tmp15_ = NULL;
 	SpitPublishingPluginHost* _tmp16_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 501 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 501 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (t));
-#line 551 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = t;
-#line 551 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 551 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_service_get_album_list_complete_publishing_rest_support_transaction_completed, self);
-#line 552 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = t;
-#line 552 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 552 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_service_get_album_list_error_publishing_rest_support_transaction_network_error, self);
-#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = t;
-#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = publishing_rest_support_transaction_get_response (_tmp4_);
-#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp6_ = _tmp5_;
-#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_debug ("YandexPublishing.vala:554: service_get_album_list_complete: %s", _tmp6_);
-#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_debug ("YandexPublishing.vala:505: service_get_album_list_complete: %s", _tmp6_);
+#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp6_);
-#line 4308 "YandexPublishing.c"
+#line 4022 "YandexPublishing.c"
 	{
 		PublishingRESTSupportTransaction* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp7_ = t;
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp8_ = publishing_rest_support_transaction_get_response (_tmp7_);
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp9_ = _tmp8_;
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_yandex_publisher_parse_album_list (self, _tmp9_, &_inner_error_);
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_free0 (_tmp9_);
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 4327 "YandexPublishing.c"
+#line 4041 "YandexPublishing.c"
 				goto __catch44_spit_publishing_publishing_error;
 			}
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 4336 "YandexPublishing.c"
+#line 4050 "YandexPublishing.c"
 		}
 	}
 	goto __finally44;
@@ -4343,52 +4057,52 @@ void publishing_yandex_yandex_publisher_service_get_album_list_complete (Publish
 		GError* err = NULL;
 		SpitPublishingPluginHost* _tmp10_ = NULL;
 		GError* _tmp11_ = NULL;
-#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		err = _inner_error_;
-#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_inner_error_ = NULL;
-#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 509 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp10_ = self->priv->host;
-#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 509 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp11_ = err;
-#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 509 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp10_, _tmp11_);
-#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_error_free0 (err);
-#line 4357 "YandexPublishing.c"
+#line 4071 "YandexPublishing.c"
 	}
 	__finally44:
-#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return;
-#line 4368 "YandexPublishing.c"
+#line 4082 "YandexPublishing.c"
 	}
-#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp12_ = self->priv->options;
-#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp13_ = self->priv->album_list;
-#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp14_ = self->priv->host;
-#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp15_ = publishing_yandex_publishing_options_pane_new (_tmp12_, _tmp13_, _tmp14_);
-#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_options_pane = _tmp15_;
-#line 564 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (publishing_options_pane, "publish", (GCallback) _publishing_yandex_yandex_publisher_on_publish_publishing_yandex_publishing_options_pane_publish, self, 0);
-#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 516 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (publishing_options_pane, "logout", (GCallback) _publishing_yandex_yandex_publisher_on_logout_publishing_yandex_publishing_options_pane_logout, self, 0);
-#line 566 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp16_ = self->priv->host;
-#line 566 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_publishing_plugin_host_install_dialog_pane (_tmp16_, G_TYPE_CHECK_INSTANCE_CAST (publishing_options_pane, SPIT_PUBLISHING_TYPE_DIALOG_PANE, SpitPublishingDialogPane), SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 501 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (publishing_options_pane);
-#line 4390 "YandexPublishing.c"
+#line 4104 "YandexPublishing.c"
 }
 
 
@@ -4400,50 +4114,50 @@ void publishing_yandex_yandex_publisher_service_get_album_list (PublishingYandex
 	const gchar* _tmp3_ = NULL;
 	PublishingYandexTransaction* _tmp4_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (url != NULL);
-#line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = url;
-#line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (self->priv->service_url);
-#line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->service_url = _tmp1_;
-#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = self->priv->session;
-#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = url;
-#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = publishing_yandex_transaction_new_with_url (_tmp2_, _tmp3_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET);
-#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	t = _tmp4_;
-#line 573 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (t, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_yandex_yandex_publisher_service_get_album_list_complete_publishing_rest_support_transaction_completed, self, 0);
-#line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 525 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (t, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_yandex_yandex_publisher_service_get_album_list_error_publishing_rest_support_transaction_network_error, self, 0);
-#line 4426 "YandexPublishing.c"
+#line 4140 "YandexPublishing.c"
 	{
-#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (t, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 4434 "YandexPublishing.c"
+#line 4148 "YandexPublishing.c"
 				goto __catch45_spit_publishing_publishing_error;
 			}
-#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_publishing_rest_support_transaction_unref0 (t);
-#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 4445 "YandexPublishing.c"
+#line 4159 "YandexPublishing.c"
 		}
 	}
 	goto __finally45;
@@ -4452,50 +4166,50 @@ void publishing_yandex_yandex_publisher_service_get_album_list (PublishingYandex
 		GError* err = NULL;
 		SpitPublishingPluginHost* _tmp5_ = NULL;
 		GError* _tmp6_ = NULL;
-#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		err = _inner_error_;
-#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_inner_error_ = NULL;
-#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 530 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp5_ = self->priv->host;
-#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 530 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp6_ = err;
-#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 530 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp5_, _tmp6_);
-#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_error_free0 (err);
-#line 4466 "YandexPublishing.c"
+#line 4180 "YandexPublishing.c"
 	}
 	__finally45:
-#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_publishing_rest_support_transaction_unref0 (t);
-#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return;
-#line 4479 "YandexPublishing.c"
+#line 4193 "YandexPublishing.c"
 	}
-#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishing_rest_support_transaction_unref0 (t);
-#line 4483 "YandexPublishing.c"
+#line 4197 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_fetch_account_complete_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_fetch_account_complete ((PublishingYandexYandexPublisher*) self, _sender);
-#line 4490 "YandexPublishing.c"
+#line 4204 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_fetch_account_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
-#line 585 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_fetch_account_error ((PublishingYandexYandexPublisher*) self, _sender, err);
-#line 4497 "YandexPublishing.c"
+#line 4211 "YandexPublishing.c"
 }
 
 
@@ -4506,29 +4220,29 @@ void publishing_yandex_yandex_publisher_fetch_account_error (PublishingYandexYan
 	guint _tmp3_ = 0U;
 	GError* _tmp4_ = NULL;
 	const gchar* _tmp5_ = NULL;
-#line 583 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 583 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (t));
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = t;
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_fetch_account_complete_publishing_rest_support_transaction_completed, self);
-#line 585 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = t;
-#line 585 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 585 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_fetch_account_error_publishing_rest_support_transaction_network_error, self);
-#line 587 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 538 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = err;
-#line 587 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 538 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = _tmp4_->message;
-#line 587 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_warning ("YandexPublishing.vala:587: Failed to fetch account info: %s", _tmp5_);
-#line 4530 "YandexPublishing.c"
+#line 538 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_warning ("YandexPublishing.vala:538: Failed to fetch account info: %s", _tmp5_);
+#line 4244 "YandexPublishing.c"
 }
 
 
@@ -4541,33 +4255,33 @@ void publishing_yandex_yandex_publisher_fetch_account_complete (PublishingYandex
 	gchar* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (t));
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 542 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = t;
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 542 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 542 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_fetch_account_complete_publishing_rest_support_transaction_completed, self);
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = t;
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_yandex_yandex_publisher_fetch_account_error_publishing_rest_support_transaction_network_error, self);
-#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = t;
-#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = publishing_rest_support_transaction_get_response (_tmp4_);
-#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp6_ = _tmp5_;
-#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_debug ("YandexPublishing.vala:594: account info: %s", _tmp6_);
-#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_debug ("YandexPublishing.vala:545: account info: %s", _tmp6_);
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp6_);
-#line 4569 "YandexPublishing.c"
+#line 4283 "YandexPublishing.c"
 	{
 		PublishingRESTSupportXmlDocument* doc = NULL;
 		PublishingRESTSupportTransaction* _tmp7_ = NULL;
@@ -4578,114 +4292,114 @@ void publishing_yandex_yandex_publisher_fetch_account_complete (PublishingYandex
 		xmlNode* root = NULL;
 		PublishingRESTSupportXmlDocument* _tmp12_ = NULL;
 		xmlNode* _tmp13_ = NULL;
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp7_ = t;
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp8_ = publishing_rest_support_transaction_get_response (_tmp7_);
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp9_ = _tmp8_;
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp10_ = publishing_rest_support_xml_document_parse_string (_tmp9_, _publishing_yandex_yandex_publisher_check_response_publishing_rest_support_xml_document_check_for_error_response, self, &_inner_error_);
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp11_ = _tmp10_;
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_free0 (_tmp9_);
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		doc = _tmp11_;
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 4598 "YandexPublishing.c"
+#line 4312 "YandexPublishing.c"
 				goto __catch46_spit_publishing_publishing_error;
 			}
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 4607 "YandexPublishing.c"
+#line 4321 "YandexPublishing.c"
 		}
-#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 548 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp12_ = doc;
-#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 548 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp13_ = publishing_rest_support_xml_document_get_root_node (_tmp12_);
-#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 548 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		root = _tmp13_;
-#line 4615 "YandexPublishing.c"
+#line 4329 "YandexPublishing.c"
 		{
 			xmlNode* work = NULL;
 			xmlNode* _tmp14_ = NULL;
 			xmlNode* _tmp15_ = NULL;
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp14_ = root;
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_tmp15_ = _tmp14_->children;
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			work = _tmp15_;
-#line 4626 "YandexPublishing.c"
+#line 4340 "YandexPublishing.c"
 			{
 				gboolean _tmp16_ = FALSE;
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				_tmp16_ = TRUE;
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 				while (TRUE) {
-#line 4633 "YandexPublishing.c"
+#line 4347 "YandexPublishing.c"
 					xmlNode* _tmp19_ = NULL;
 					xmlNode* _tmp20_ = NULL;
 					const gchar* _tmp21_ = NULL;
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					if (!_tmp16_) {
-#line 4639 "YandexPublishing.c"
+#line 4353 "YandexPublishing.c"
 						xmlNode* _tmp17_ = NULL;
 						xmlNode* _tmp18_ = NULL;
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						_tmp17_ = work;
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						_tmp18_ = _tmp17_->next;
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						work = _tmp18_;
-#line 4648 "YandexPublishing.c"
+#line 4362 "YandexPublishing.c"
 					}
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp16_ = FALSE;
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp19_ = work;
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					if (!(_tmp19_ != NULL)) {
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						break;
-#line 4658 "YandexPublishing.c"
+#line 4372 "YandexPublishing.c"
 					}
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 551 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp20_ = work;
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 551 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					_tmp21_ = _tmp20_->name;
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 551 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 					if (g_strcmp0 (_tmp21_, "workspace") != 0) {
-#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 552 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						continue;
-#line 4668 "YandexPublishing.c"
+#line 4382 "YandexPublishing.c"
 					}
 					{
 						xmlNode* c = NULL;
 						xmlNode* _tmp22_ = NULL;
 						xmlNode* _tmp23_ = NULL;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						_tmp22_ = work;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						_tmp23_ = _tmp22_->children;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 						c = _tmp23_;
-#line 4680 "YandexPublishing.c"
+#line 4394 "YandexPublishing.c"
 						{
 							gboolean _tmp24_ = FALSE;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 							_tmp24_ = TRUE;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 							while (TRUE) {
-#line 4687 "YandexPublishing.c"
+#line 4401 "YandexPublishing.c"
 								xmlNode* _tmp27_ = NULL;
 								xmlNode* _tmp28_ = NULL;
 								const gchar* _tmp29_ = NULL;
@@ -4693,52 +4407,52 @@ void publishing_yandex_yandex_publisher_fetch_account_complete (PublishingYandex
 								gchar* _tmp31_ = NULL;
 								gchar* _tmp32_ = NULL;
 								gboolean _tmp33_ = FALSE;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								if (!_tmp24_) {
-#line 4697 "YandexPublishing.c"
+#line 4411 "YandexPublishing.c"
 									xmlNode* _tmp25_ = NULL;
 									xmlNode* _tmp26_ = NULL;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									_tmp25_ = c;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									_tmp26_ = _tmp25_->next;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									c = _tmp26_;
-#line 4706 "YandexPublishing.c"
+#line 4420 "YandexPublishing.c"
 								}
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								_tmp24_ = FALSE;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								_tmp27_ = c;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								if (!(_tmp27_ != NULL)) {
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									break;
-#line 4716 "YandexPublishing.c"
+#line 4430 "YandexPublishing.c"
 								}
-#line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								_tmp28_ = c;
-#line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								_tmp29_ = _tmp28_->name;
-#line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								if (g_strcmp0 (_tmp29_, "collection") != 0) {
-#line 604 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									continue;
-#line 4726 "YandexPublishing.c"
+#line 4440 "YandexPublishing.c"
 								}
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								_tmp30_ = c;
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								_tmp31_ = (gchar*) xmlGetProp (_tmp30_, (xmlChar*) "id");
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								_tmp32_ = _tmp31_;
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								_tmp33_ = g_strcmp0 (_tmp32_, "album-list") == 0;
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								_g_free0 (_tmp32_);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 								if (_tmp33_) {
-#line 4740 "YandexPublishing.c"
+#line 4454 "YandexPublishing.c"
 									gchar* url = NULL;
 									xmlNode* _tmp34_ = NULL;
 									gchar* _tmp35_ = NULL;
@@ -4746,31 +4460,31 @@ void publishing_yandex_yandex_publisher_fetch_account_complete (PublishingYandex
 									gchar* _tmp37_ = NULL;
 									gchar* _tmp38_ = NULL;
 									const gchar* _tmp39_ = NULL;
-#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									_tmp34_ = c;
-#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									_tmp35_ = (gchar*) xmlGetProp (_tmp34_, (xmlChar*) "href");
-#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									url = _tmp35_;
-#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 560 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									_tmp36_ = self->priv->session;
-#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 560 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									_tmp37_ = publishing_yandex_session_get_auth_token (_tmp36_);
-#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 560 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									_tmp38_ = _tmp37_;
-#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 560 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									publishing_yandex_yandex_publisher_set_persistent_auth_token (self, _tmp38_);
-#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 560 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									_g_free0 (_tmp38_);
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									_tmp39_ = url;
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									publishing_yandex_yandex_publisher_service_get_album_list (self, _tmp39_);
-#line 611 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 562 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									_g_free0 (url);
-#line 611 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 562 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 									break;
-#line 4772 "YandexPublishing.c"
+#line 4486 "YandexPublishing.c"
 								}
 							}
 						}
@@ -4778,9 +4492,9 @@ void publishing_yandex_yandex_publisher_fetch_account_complete (PublishingYandex
 				}
 			}
 		}
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_publishing_rest_support_xml_document_unref0 (doc);
-#line 4782 "YandexPublishing.c"
+#line 4496 "YandexPublishing.c"
 	}
 	goto __finally46;
 	__catch46_spit_publishing_publishing_error:
@@ -4788,30 +4502,30 @@ void publishing_yandex_yandex_publisher_fetch_account_complete (PublishingYandex
 		GError* err = NULL;
 		SpitPublishingPluginHost* _tmp40_ = NULL;
 		GError* _tmp41_ = NULL;
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		err = _inner_error_;
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_inner_error_ = NULL;
-#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 567 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp40_ = self->priv->host;
-#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 567 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp41_ = err;
-#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 567 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp40_, _tmp41_);
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_error_free0 (err);
-#line 4802 "YandexPublishing.c"
+#line 4516 "YandexPublishing.c"
 	}
 	__finally46:
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return;
-#line 4813 "YandexPublishing.c"
+#line 4527 "YandexPublishing.c"
 	}
 }
 
@@ -4823,46 +4537,46 @@ void publishing_yandex_yandex_publisher_fetch_account_information (PublishingYan
 	PublishingYandexSession* _tmp2_ = NULL;
 	PublishingYandexTransaction* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 571 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 571 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (auth_token != NULL);
-#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->session;
-#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = auth_token;
-#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_session_set_auth_token (_tmp0_, _tmp1_);
-#line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = self->priv->session;
-#line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = publishing_yandex_transaction_new_with_url (_tmp2_, "http://api-fotki.yandex.ru/api/me/", PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET);
-#line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	t = _tmp3_;
-#line 624 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (t, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_yandex_yandex_publisher_fetch_account_complete_publishing_rest_support_transaction_completed, self, 0);
-#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (t, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_yandex_yandex_publisher_fetch_account_error_publishing_rest_support_transaction_network_error, self, 0);
-#line 4845 "YandexPublishing.c"
+#line 4559 "YandexPublishing.c"
 	{
-#line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (t, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 4853 "YandexPublishing.c"
+#line 4567 "YandexPublishing.c"
 				goto __catch47_spit_publishing_publishing_error;
 			}
-#line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			_publishing_rest_support_transaction_unref0 (t);
-#line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 			return;
-#line 4864 "YandexPublishing.c"
+#line 4578 "YandexPublishing.c"
 		}
 	}
 	goto __finally47;
@@ -4871,36 +4585,36 @@ void publishing_yandex_yandex_publisher_fetch_account_information (PublishingYan
 		GError* err = NULL;
 		SpitPublishingPluginHost* _tmp4_ = NULL;
 		GError* _tmp5_ = NULL;
-#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		err = _inner_error_;
-#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_inner_error_ = NULL;
-#line 630 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 581 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp4_ = self->priv->host;
-#line 630 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 581 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp5_ = err;
-#line 630 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 581 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp4_, _tmp5_);
-#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_error_free0 (err);
-#line 4885 "YandexPublishing.c"
+#line 4599 "YandexPublishing.c"
 	}
 	__finally47:
-#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_publishing_rest_support_transaction_unref0 (t);
-#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return;
-#line 4898 "YandexPublishing.c"
+#line 4612 "YandexPublishing.c"
 	}
-#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 571 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishing_rest_support_transaction_unref0 (t);
-#line 4902 "YandexPublishing.c"
+#line 4616 "YandexPublishing.c"
 }
 
 
@@ -4909,50 +4623,50 @@ static void publishing_yandex_yandex_publisher_web_auth_login_succeeded (Publish
 	SpitPublishingPluginHost* _tmp1_ = NULL;
 	SpitPublishingPluginHost* _tmp2_ = NULL;
 	const gchar* _tmp3_ = NULL;
-#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 585 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 585 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (access_token != NULL);
-#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = access_token;
-#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_debug ("YandexPublishing.vala:635: login succeeded with token %s", _tmp0_);
-#line 637 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_debug ("YandexPublishing.vala:586: login succeeded with token %s", _tmp0_);
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = self->priv->host;
-#line 637 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp1_, TRUE);
-#line 638 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = self->priv->host;
-#line 638 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_publishing_plugin_host_install_account_fetch_wait_pane (_tmp2_);
-#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = access_token;
-#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_fetch_account_information (self, _tmp3_);
-#line 4931 "YandexPublishing.c"
+#line 4645 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_yandex_publisher_web_auth_login_failed (PublishingYandexYandexPublisher* self) {
-#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 644 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_debug ("YandexPublishing.vala:644: login failed");
-#line 4940 "YandexPublishing.c"
+#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_debug ("YandexPublishing.vala:595: login failed");
+#line 4654 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_web_auth_login_succeeded_publishing_yandex_web_auth_pane_login_succeeded (PublishingYandexWebAuthPane* _sender, const gchar* success_url, gpointer self) {
-#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_web_auth_login_succeeded ((PublishingYandexYandexPublisher*) self, success_url);
-#line 4947 "YandexPublishing.c"
+#line 4661 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_web_auth_login_failed_publishing_yandex_web_auth_pane_login_failed (PublishingYandexWebAuthPane* _sender, gpointer self) {
-#line 652 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_web_auth_login_failed ((PublishingYandexYandexPublisher*) self);
-#line 4954 "YandexPublishing.c"
+#line 4668 "YandexPublishing.c"
 }
 
 
@@ -4965,61 +4679,61 @@ static void publishing_yandex_yandex_publisher_start_web_auth (PublishingYandexY
 	PublishingYandexWebAuthPane* _tmp5_ = NULL;
 	SpitPublishingPluginHost* _tmp6_ = NULL;
 	PublishingYandexWebAuthPane* _tmp7_ = NULL;
-#line 647 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 648 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 648 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp0_, FALSE);
-#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = g_strdup_printf ("http://oauth.yandex.ru/authorize?client_id=%s&response_type=token", PUBLISHING_YANDEX_client_id);
-#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = _tmp1_;
-#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp3_ = publishing_yandex_web_auth_pane_new (_tmp2_);
-#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (self->priv->web_auth_pane);
-#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->web_auth_pane = _tmp3_;
-#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (_tmp2_);
-#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp4_ = self->priv->web_auth_pane;
-#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (_tmp4_, "login-succeeded", (GCallback) _publishing_yandex_yandex_publisher_web_auth_login_succeeded_publishing_yandex_web_auth_pane_login_succeeded, self, 0);
-#line 652 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp5_ = self->priv->web_auth_pane;
-#line 652 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_signal_connect_object (_tmp5_, "login-failed", (GCallback) _publishing_yandex_yandex_publisher_web_auth_login_failed_publishing_yandex_web_auth_pane_login_failed, self, 0);
-#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp6_ = self->priv->host;
-#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp7_ = self->priv->web_auth_pane;
-#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_publishing_plugin_host_install_dialog_pane (_tmp6_, G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, SPIT_PUBLISHING_TYPE_DIALOG_PANE, SpitPublishingDialogPane), SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 4999 "YandexPublishing.c"
+#line 4713 "YandexPublishing.c"
 }
 
 
 static void _publishing_yandex_yandex_publisher_start_web_auth_spit_publishing_login_callback (gpointer self) {
-#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_start_web_auth ((PublishingYandexYandexPublisher*) self);
-#line 5006 "YandexPublishing.c"
+#line 4720 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_yandex_publisher_show_welcome_page (PublishingYandexYandexPublisher* self) {
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 608 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_return_if_fail (PUBLISHING_YANDEX_IS_YANDEX_PUBLISHER (self));
-#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = _ ("You are not currently logged into Yandex.Fotki.");
-#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_publishing_plugin_host_install_welcome_pane (_tmp0_, _tmp1_, _publishing_yandex_yandex_publisher_start_web_auth_spit_publishing_login_callback, self);
-#line 5021 "YandexPublishing.c"
+#line 4735 "YandexPublishing.c"
 }
 
 
@@ -5028,152 +4742,152 @@ static void publishing_yandex_yandex_publisher_real_start (SpitPublishingPublish
 	gboolean _tmp0_ = FALSE;
 	SpitPublishingPluginHost* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
-#line 662 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_YANDEX_PUBLISHER, PublishingYandexYandexPublisher);
-#line 663 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 663 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (_tmp0_) {
-#line 664 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 615 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		return;
-#line 5038 "YandexPublishing.c"
+#line 4752 "YandexPublishing.c"
 	}
-#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp1_ = self->priv->host;
-#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (_tmp1_ == NULL) {
-#line 667 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-		g_error ("YandexPublishing.vala:667: YandexPublisher: start( ): can't start; thi" \
+#line 618 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+		g_error ("YandexPublishing.vala:618: YandexPublisher: start( ): can't start; thi" \
 "s publisher is not restartable.");
-#line 5046 "YandexPublishing.c"
+#line 4760 "YandexPublishing.c"
 	}
-#line 669 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_debug ("YandexPublishing.vala:669: YandexPublisher: starting interaction.");
-#line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_debug ("YandexPublishing.vala:620: YandexPublisher: starting interaction.");
+#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->running = TRUE;
-#line 673 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 624 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = publishing_yandex_yandex_publisher_is_persistent_session_available (self);
-#line 673 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 624 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	if (_tmp2_) {
-#line 5056 "YandexPublishing.c"
+#line 4770 "YandexPublishing.c"
 		PublishingYandexSession* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
-#line 674 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp3_ = self->priv->session;
-#line 674 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp4_ = publishing_yandex_yandex_publisher_get_persistent_auth_token (self);
-#line 674 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp5_ = _tmp4_;
-#line 674 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_session_set_auth_token (_tmp3_, _tmp5_);
-#line 674 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_free0 (_tmp5_);
-#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp6_ = publishing_yandex_yandex_publisher_get_persistent_auth_token (self);
-#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_tmp7_ = _tmp6_;
-#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_yandex_publisher_fetch_account_information (self, _tmp7_);
-#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		_g_free0 (_tmp7_);
-#line 5080 "YandexPublishing.c"
+#line 4794 "YandexPublishing.c"
 	} else {
-#line 678 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 629 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 		publishing_yandex_yandex_publisher_show_welcome_page (self);
-#line 5084 "YandexPublishing.c"
+#line 4798 "YandexPublishing.c"
 	}
 }
 
 
 static void publishing_yandex_yandex_publisher_real_stop (SpitPublishingPublisher* base) {
 	PublishingYandexYandexPublisher * self;
-#line 682 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 633 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YANDEX_TYPE_YANDEX_PUBLISHER, PublishingYandexYandexPublisher);
-#line 683 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	g_debug ("YandexPublishing.vala:683: YandexPublisher: stop( ) invoked.");
-#line 685 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+	g_debug ("YandexPublishing.vala:634: YandexPublisher: stop( ) invoked.");
+#line 636 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->host = NULL;
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->running = FALSE;
-#line 5099 "YandexPublishing.c"
+#line 4813 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_yandex_publisher_class_init (PublishingYandexYandexPublisherClass * klass) {
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_parent_class = g_type_class_peek_parent (klass);
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingYandexYandexPublisherPrivate));
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_yandex_yandex_publisher_finalize;
-#line 5110 "YandexPublishing.c"
+#line 4824 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_yandex_publisher_spit_publishing_publisher_interface_init (SpitPublishingPublisherIface * iface) {
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	publishing_yandex_yandex_publisher_spit_publishing_publisher_parent_iface = g_type_interface_peek_parent (iface);
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	iface->is_running = (gboolean (*)(SpitPublishingPublisher*)) publishing_yandex_yandex_publisher_real_is_running;
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	iface->get_service = (SpitPublishingService* (*)(SpitPublishingPublisher*)) publishing_yandex_yandex_publisher_real_get_service;
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	iface->start = (void (*)(SpitPublishingPublisher*)) publishing_yandex_yandex_publisher_real_start;
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	iface->stop = (void (*)(SpitPublishingPublisher*)) publishing_yandex_yandex_publisher_real_stop;
-#line 5125 "YandexPublishing.c"
+#line 4839 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_yandex_publisher_instance_init (PublishingYandexYandexPublisher * self) {
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv = PUBLISHING_YANDEX_YANDEX_PUBLISHER_GET_PRIVATE (self);
-#line 348 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->host = NULL;
-#line 349 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->progress_reporter = NULL;
-#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->service = NULL;
-#line 352 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->service_url = NULL;
-#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 305 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->album_list = NULL;
-#line 357 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->running = FALSE;
-#line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->web_auth_pane = NULL;
-#line 5146 "YandexPublishing.c"
+#line 4860 "YandexPublishing.c"
 }
 
 
 static void publishing_yandex_yandex_publisher_finalize (GObject* obj) {
 	PublishingYandexYandexPublisher * self;
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_YANDEX_TYPE_YANDEX_PUBLISHER, PublishingYandexYandexPublisher);
-#line 349 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	(self->priv->progress_reporter_target_destroy_notify == NULL) ? NULL : (self->priv->progress_reporter_target_destroy_notify (self->priv->progress_reporter_target), NULL);
-#line 349 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->progress_reporter = NULL;
-#line 349 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->progress_reporter_target = NULL;
-#line 349 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	self->priv->progress_reporter_target_destroy_notify = NULL;
-#line 352 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 (self->priv->service_url);
-#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 305 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (self->priv->album_list);
-#line 355 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 306 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishing_yandex_publish_options_unref0 (self->priv->options);
-#line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_object_unref0 (self->priv->web_auth_pane);
-#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_publishing_rest_support_session_unref0 (self->priv->session);
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
+#line 298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	G_OBJECT_CLASS (publishing_yandex_yandex_publisher_parent_class)->finalize (obj);
-#line 5174 "YandexPublishing.c"
+#line 4888 "YandexPublishing.c"
 }
 
 

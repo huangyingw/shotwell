@@ -237,11 +237,11 @@ static Application* application_construct (GType object_type, gboolean is_direct
 #line 53 "/home/jens/Source/shotwell/src/Application.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 240 "Application.c"
-			goto __catch547_g_error;
+			goto __catch560_g_error;
 		}
 	}
-	goto __finally547;
-	__catch547_g_error:
+	goto __finally560;
+	__catch560_g_error:
 	{
 		GError* e = NULL;
 #line 52 "/home/jens/Source/shotwell/src/Application.vala"
@@ -254,7 +254,7 @@ static Application* application_construct (GType object_type, gboolean is_direct
 		_g_error_free0 (e);
 #line 256 "Application.c"
 	}
-	__finally547:
+	__finally560:
 #line 52 "/home/jens/Source/shotwell/src/Application.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 52 "/home/jens/Source/shotwell/src/Application.vala"

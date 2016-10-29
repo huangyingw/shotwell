@@ -40,7 +40,7 @@ void library_exec(string[] mounts) {
     }
     
     // validate the databases prior to using them
-    message("Verifying database ...");
+    message("Verifying database…");
     string errormsg = null;
     string app_version;
     int schema_version;
@@ -51,24 +51,24 @@ void library_exec(string[] mounts) {
         break;
         
         case Db.VerifyResult.FUTURE_VERSION:
-            errormsg = _("Your photo library is not compatible with this version of Shotwell.  It appears it was created by Shotwell %s (schema %d).  This version is %s (schema %d).  Please use the latest version of Shotwell.").printf(
+            errormsg = _("Your photo library is not compatible with this version of Shotwell. It appears it was created by Shotwell %s (schema %d). This version is %s (schema %d). Please use the latest version of Shotwell.").printf(
                 app_version, schema_version, Resources.APP_VERSION, DatabaseTable.SCHEMA_VERSION);
         break;
         
         case Db.VerifyResult.UPGRADE_ERROR:
-            errormsg = _("Shotwell was unable to upgrade your photo library from version %s (schema %d) to %s (schema %d).  For more information please check the Shotwell Wiki at %s").printf(
+            errormsg = _("Shotwell was unable to upgrade your photo library from version %s (schema %d) to %s (schema %d). For more information please check the Shotwell Wiki at %s").printf(
                 app_version, schema_version, Resources.APP_VERSION, DatabaseTable.SCHEMA_VERSION,
                 Resources.HOME_URL);
         break;
         
         case Db.VerifyResult.NO_UPGRADE_AVAILABLE:
-            errormsg = _("Your photo library is not compatible with this version of Shotwell.  It appears it was created by Shotwell %s (schema %d).  This version is %s (schema %d).  Please clear your library by deleting %s and re-import your photos.").printf(
+            errormsg = _("Your photo library is not compatible with this version of Shotwell. It appears it was created by Shotwell %s (schema %d). This version is %s (schema %d). Please clear your library by deleting %s and re-import your photos.").printf(
                 app_version, schema_version, Resources.APP_VERSION, DatabaseTable.SCHEMA_VERSION,
                 AppDirs.get_data_dir().get_path());
         break;
         
         default:
-            errormsg = _("Unknown error attempting to verify Shotwell's database: %s").printf(
+            errormsg = _("Unknown error attempting to verify Shotwell’s database: %s").printf(
                 result.to_string());
         break;
     }
@@ -291,7 +291,7 @@ public OptionEntry[] get_options() {
         return entries;
     
     OptionEntry datadir = { "datadir", 'd', 0, OptionArg.FILENAME, &data_dir,
-        _("Path to Shotwell's private data"), _("DIRECTORY") };
+        _("Path to Shotwell’s private data"), _("DIRECTORY") };
     entries += datadir;
     
     OptionEntry no_monitoring = { "no-runtime-monitoring", 0, 0, OptionArg.NONE, &no_runtime_monitoring,
@@ -299,11 +299,11 @@ public OptionEntry[] get_options() {
     entries += no_monitoring;
     
     OptionEntry no_startup = { "no-startup-progress", 0, 0, OptionArg.NONE, &no_startup_progress,
-        _("Don't display startup progress meter"), null };
+        _("Don’t display startup progress meter"), null };
     entries += no_startup;
     
     OptionEntry version = { "version", 'V', 0, OptionArg.NONE, &show_version, 
-        _("Show the application's version"), null };
+        _("Show the application’s version"), null };
     entries += version;
     
     OptionEntry terminator = { null, 0, 0, 0, null, null, null };
@@ -339,7 +339,7 @@ void main(string[] args) {
             Resources.APP_GETTEXT_PACKAGE);
     } catch (Error e) {
         print(e.message + "\n");
-        print(_("Run '%s --help' to see a full list of available command line options.\n"), args[0]);
+        print(_("Run “%s --help” to see a full list of available command line options.\n"), args[0]);
         AppDirs.terminate();
         return;
     }

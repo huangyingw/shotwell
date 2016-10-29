@@ -1213,7 +1213,7 @@ PublishingUIAccountFetchWaitPane* publishing_ui_account_fetch_wait_pane_construc
 	PublishingUIAccountFetchWaitPane * self = NULL;
 	const gchar* _tmp0_ = NULL;
 #line 122 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp0_ = _ ("Fetching account information...");
+	_tmp0_ = _ ("Fetching account information…");
 #line 122 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self = (PublishingUIAccountFetchWaitPane*) publishing_ui_static_message_pane_construct (object_type, _tmp0_, FALSE);
 #line 121 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
@@ -1256,7 +1256,7 @@ PublishingUILoginWaitPane* publishing_ui_login_wait_pane_construct (GType object
 	PublishingUILoginWaitPane * self = NULL;
 	const gchar* _tmp0_ = NULL;
 #line 128 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp0_ = _ ("Logging in...");
+	_tmp0_ = _ ("Logging in…");
 #line 128 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self = (PublishingUILoginWaitPane*) publishing_ui_static_message_pane_construct (object_type, _tmp0_, FALSE);
 #line 127 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"

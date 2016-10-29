@@ -1415,7 +1415,7 @@ static void offline_page_on_remove_from_library (OfflinePage* self) {
 #line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp20_ = _tmp19_;
 #line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-		_tmp21_ = _ ("Deleting...");
+		_tmp21_ = _ ("Deleting…");
 #line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp22_ = progress_dialog_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_window_get_type (), GtkWindow), _tmp21_, NULL);
 #line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"

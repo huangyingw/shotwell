@@ -37,7 +37,7 @@ public class RajceService : Object, Spit.Pluggable, Spit.Publishing.Service
     public void get_info(ref Spit.PluggableInfo info)
 	{
         info.authors = "rajce.net developers";
-        info.copyright = _("Copyright (C) 2013 rajce.net");
+        info.copyright = _("Copyright © 2013 rajce.net");
         info.translators = Resources.TRANSLATORS;
         info.version = _VERSION;
         info.website_name = Resources.WEBSITE_NAME;
@@ -892,7 +892,7 @@ internal class AuthenticationPane : Spit.Publishing.DialogPane, Object
 			label2.set_label(_("_Email address") );
 			label3.set_label(_("_Password") );
 			remember_checkbutton.set_label(_("_Remember") );
-			login_button.set_label(_("Login") );
+			login_button.set_label(_("Log in") );
 			
             username_entry.changed.connect(on_user_changed);
             password_entry.changed.connect(on_password_changed);

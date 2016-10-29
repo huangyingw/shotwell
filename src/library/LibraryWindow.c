@@ -2078,14 +2078,14 @@ LibraryWindow* library_window_construct (GType object_type, ProgressMonitor prog
 #line 181 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 			_g_object_unref0 (ui_file);
 #line 2081 "LibraryWindow.c"
-			goto __catch38_g_error;
+			goto __catch39_g_error;
 		}
 #line 179 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 		_g_object_unref0 (ui_file);
 #line 2086 "LibraryWindow.c"
 	}
-	goto __finally38;
-	__catch38_g_error:
+	goto __finally39;
+	__catch39_g_error:
 	{
 		GError* e = NULL;
 		const gchar* _tmp27_ = NULL;
@@ -2101,7 +2101,7 @@ LibraryWindow* library_window_construct (GType object_type, ProgressMonitor prog
 		_g_error_free0 (e);
 #line 2103 "LibraryWindow.c"
 	}
-	__finally38:
+	__finally39:
 #line 179 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 179 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -2936,7 +2936,7 @@ static GtkActionEntry* library_window_create_common_actions (LibraryWindow* self
 #line 283 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	import = _tmp1_;
 #line 285 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
-	_tmp2_ = _ ("_Import From Folder...");
+	_tmp2_ = _ ("_Import From Folder…");
 #line 285 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	import.label = _tmp2_;
 #line 286 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -2966,7 +2966,7 @@ static GtkActionEntry* library_window_create_common_actions (LibraryWindow* self
 #line 289 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	import_from_external = _tmp6_;
 #line 293 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
-	_tmp7_ = _ ("Import From _Application...");
+	_tmp7_ = _ ("Import From _Application…");
 #line 293 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	import_from_external.label = _tmp7_;
 #line 294 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -3152,7 +3152,7 @@ static GtkActionEntry* library_window_create_common_actions (LibraryWindow* self
 #line 327 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	new_search = _tmp34_;
 #line 329 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
-	_tmp35_ = _ ("Ne_w Saved Search...");
+	_tmp35_ = _ ("Ne_w Saved Search…");
 #line 329 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	new_search.label = _tmp35_;
 #line 330 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -5932,7 +5932,7 @@ static void library_window_on_empty_trash (LibraryWindow* self) {
 #line 726 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	_tmp7_ = _ ("Empty Trash");
 #line 726 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
-	_tmp8_ = _ ("Emptying Trash...");
+	_tmp8_ = _ ("Emptying Trash…");
 #line 726 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	remove_from_app (G_TYPE_CHECK_INSTANCE_CAST (to_remove, GEE_TYPE_COLLECTION, GeeCollection), _tmp7_, _tmp8_);
 #line 728 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -7949,7 +7949,7 @@ static void library_window_on_camera_added (LibraryWindow* self, DiscoveredCamer
 #line 1088 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 7951 "LibraryWindow.c"
-			goto __catch39_g_error;
+			goto __catch40_g_error;
 		}
 #line 1088 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 		_tmp12_ = _tmp9_;
@@ -7963,8 +7963,8 @@ static void library_window_on_camera_added (LibraryWindow* self, DiscoveredCamer
 		_g_object_unref0 (_tmp9_);
 #line 7964 "LibraryWindow.c"
 	}
-	goto __finally39;
-	__catch39_g_error:
+	goto __finally40;
+	__catch40_g_error:
 	{
 		GError* err = NULL;
 #line 1087 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -7975,7 +7975,7 @@ static void library_window_on_camera_added (LibraryWindow* self, DiscoveredCamer
 		_g_error_free0 (err);
 #line 7976 "LibraryWindow.c"
 	}
-	__finally39:
+	__finally40:
 #line 1087 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1087 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -8624,7 +8624,7 @@ static void library_window_on_library_monitor_discovery_started (LibraryWindow* 
 #line 1246 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	g_return_if_fail (IS_LIBRARY_WINDOW (self));
 #line 1247 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
-	_tmp0_ = _ ("Updating library...");
+	_tmp0_ = _ ("Updating library…");
 #line 1247 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	library_window_start_pulse_background_progress_bar (self, _tmp0_, LIBRARY_WINDOW_STARTUP_SCAN_PROGRESS_PRIORITY);
 #line 8630 "LibraryWindow.c"
@@ -8656,7 +8656,7 @@ static void library_window_on_library_monitor_auto_update_progress (LibraryWindo
 		gint _tmp2_ = 0;
 		gint _tmp3_ = 0;
 #line 1258 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
-		_tmp1_ = _ ("Updating library...");
+		_tmp1_ = _ ("Updating library…");
 #line 1258 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 		_tmp2_ = completed_files;
 #line 1258 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -8673,7 +8673,7 @@ static void library_window_on_library_monitor_auto_import_preparing (LibraryWind
 #line 1263 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	g_return_if_fail (IS_LIBRARY_WINDOW (self));
 #line 1264 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
-	_tmp0_ = _ ("Preparing to auto-import photos...");
+	_tmp0_ = _ ("Preparing to auto-import photos…");
 #line 1264 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	library_window_start_pulse_background_progress_bar (self, _tmp0_, LIBRARY_WINDOW_REALTIME_IMPORT_PROGRESS_PRIORITY);
 #line 8679 "LibraryWindow.c"
@@ -8687,7 +8687,7 @@ static void library_window_on_library_monitor_auto_import_progress (LibraryWindo
 #line 1268 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	g_return_if_fail (IS_LIBRARY_WINDOW (self));
 #line 1269 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
-	_tmp0_ = _ ("Auto-importing photos...");
+	_tmp0_ = _ ("Auto-importing photos…");
 #line 1269 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	_tmp1_ = completed_bytes;
 #line 1269 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -8714,7 +8714,7 @@ static void library_window_on_metadata_writer_progress (LibraryWindow* self, gui
 		guint _tmp2_ = 0U;
 		guint _tmp3_ = 0U;
 #line 1277 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
-		_tmp1_ = _ ("Writing metadata to files...");
+		_tmp1_ = _ ("Writing metadata to files…");
 #line 1277 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 		_tmp2_ = completed;
 #line 1277 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -9989,7 +9989,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 9991 "LibraryWindow.c"
-				goto __catch41_g_regex_error;
+				goto __catch42_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -10014,7 +10014,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 10016 "LibraryWindow.c"
-				goto __catch41_g_regex_error;
+				goto __catch42_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -10040,8 +10040,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		return result;
 #line 10041 "LibraryWindow.c"
 	}
-	goto __finally41;
-	__catch41_g_regex_error:
+	goto __finally42;
+	__catch42_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -10054,7 +10054,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_error_free0 (e);
 #line 10055 "LibraryWindow.c"
 	}
-	__finally41:
+	__finally42:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -10128,7 +10128,7 @@ void library_window_mounted_camera_shell_notification (LibraryWindow* self, cons
 #line 1535 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 10130 "LibraryWindow.c"
-			goto __catch40_g_error;
+			goto __catch41_g_error;
 		}
 #line 1535 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 		_tmp9_ = _tmp6_;
@@ -10142,8 +10142,8 @@ void library_window_mounted_camera_shell_notification (LibraryWindow* self, cons
 		_g_object_unref0 (_tmp6_);
 #line 10143 "LibraryWindow.c"
 	}
-	goto __finally40;
-	__catch40_g_error:
+	goto __finally41;
+	__catch41_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp10_ = NULL;
@@ -10168,7 +10168,7 @@ void library_window_mounted_camera_shell_notification (LibraryWindow* self, cons
 		return;
 #line 10169 "LibraryWindow.c"
 	}
-	__finally40:
+	__finally41:
 #line 1534 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1534 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"

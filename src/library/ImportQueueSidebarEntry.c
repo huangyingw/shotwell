@@ -213,7 +213,7 @@ static void library_import_queue_sidebar_entry_on_destroying_page (LibraryImport
 static void _library_import_queue_sidebar_entry_on_destroying_page_sidebar_page_representative_destroying_page (SidebarPageRepresentative* _sender, Page* page, gpointer self);
 void library_hideable_page_entry_set_visible (LibraryHideablePageEntry* self, gboolean value);
 static gchar* library_import_queue_sidebar_entry_real_get_sidebar_name (SidebarSimplePageEntry* base);
-#define IMPORT_QUEUE_PAGE_NAME _ ("Importing...")
+#define IMPORT_QUEUE_PAGE_NAME _ ("Importing…")
 static gchar* library_import_queue_sidebar_entry_real_get_sidebar_icon (SidebarSimplePageEntry* base);
 #define RESOURCES_ICON_IMPORTING "go-down"
 static Page* library_import_queue_sidebar_entry_real_create_page (SidebarSimplePageEntry* base);

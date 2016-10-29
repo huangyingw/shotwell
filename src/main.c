@@ -835,11 +835,11 @@ void library_exec (gchar** mounts, int mounts_length1) {
 #line 35 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 838 "main.c"
-			goto __catch206_g_error;
+			goto __catch219_g_error;
 		}
 	}
-	goto __finally206;
-	__catch206_g_error:
+	goto __finally219;
+	__catch219_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
@@ -860,7 +860,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 		return;
 #line 862 "main.c"
 	}
-	__finally206:
+	__finally219:
 #line 34 "/home/jens/Source/shotwell/src/main.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 34 "/home/jens/Source/shotwell/src/main.vala"
@@ -872,7 +872,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 #line 873 "main.c"
 	}
 #line 43 "/home/jens/Source/shotwell/src/main.vala"
-	g_message ("main.vala:43: Verifying database ...");
+	g_message ("main.vala:43: Verifying database…");
 #line 44 "/home/jens/Source/shotwell/src/main.vala"
 	errormsg = NULL;
 #line 47 "/home/jens/Source/shotwell/src/main.vala"
@@ -906,9 +906,9 @@ void library_exec (gchar** mounts, int mounts_length1) {
 			gint _tmp15_ = 0;
 			gchar* _tmp16_ = NULL;
 #line 54 "/home/jens/Source/shotwell/src/main.vala"
-			_tmp13_ = _ ("Your photo library is not compatible with this version of Shotwell.  I" \
-"t appears it was created by Shotwell %s (schema %d).  This version is " \
-"%s (schema %d).  Please use the latest version of Shotwell.");
+			_tmp13_ = _ ("Your photo library is not compatible with this version of Shotwell. It" \
+" appears it was created by Shotwell %s (schema %d). This version is %s" \
+" (schema %d). Please use the latest version of Shotwell.");
 #line 54 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp14_ = app_version;
 #line 54 "/home/jens/Source/shotwell/src/main.vala"
@@ -933,8 +933,8 @@ void library_exec (gchar** mounts, int mounts_length1) {
 			gchar* _tmp20_ = NULL;
 #line 59 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp17_ = _ ("Shotwell was unable to upgrade your photo library from version %s (sch" \
-"ema %d) to %s (schema %d).  For more information please check the Shot" \
-"well Wiki at %s");
+"ema %d) to %s (schema %d). For more information please check the Shotw" \
+"ell Wiki at %s");
 #line 59 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp18_ = app_version;
 #line 59 "/home/jens/Source/shotwell/src/main.vala"
@@ -962,10 +962,10 @@ void library_exec (gchar** mounts, int mounts_length1) {
 			gchar* _tmp27_ = NULL;
 			gchar* _tmp28_ = NULL;
 #line 65 "/home/jens/Source/shotwell/src/main.vala"
-			_tmp21_ = _ ("Your photo library is not compatible with this version of Shotwell.  I" \
-"t appears it was created by Shotwell %s (schema %d).  This version is " \
-"%s (schema %d).  Please clear your library by deleting %s and re-impor" \
-"t your photos.");
+			_tmp21_ = _ ("Your photo library is not compatible with this version of Shotwell. It" \
+" appears it was created by Shotwell %s (schema %d). This version is %s" \
+" (schema %d). Please clear your library by deleting %s and re-import y" \
+"our photos.");
 #line 65 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp22_ = app_version;
 #line 65 "/home/jens/Source/shotwell/src/main.vala"
@@ -999,7 +999,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 			GEnumValue* _tmp31_;
 			gchar* _tmp32_ = NULL;
 #line 71 "/home/jens/Source/shotwell/src/main.vala"
-			_tmp29_ = _ ("Unknown error attempting to verify Shotwell's database: %s");
+			_tmp29_ = _ ("Unknown error attempting to verify Shotwell’s database: %s");
 #line 71 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp30_ = _result_;
 #line 72 "/home/jens/Source/shotwell/src/main.vala"
@@ -1218,7 +1218,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 #line 109 "/home/jens/Source/shotwell/src/main.vala"
 					_g_free0 (icon_path);
 #line 1214 "main.c"
-					goto __catch207_g_error;
+					goto __catch220_g_error;
 				}
 #line 109 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp72_ = progress_dialog;
@@ -1230,8 +1230,8 @@ void library_exec (gchar** mounts, int mounts_length1) {
 				_g_free0 (icon_path);
 #line 1225 "main.c"
 			}
-			goto __finally207;
-			__catch207_g_error:
+			goto __finally220;
+			__catch220_g_error:
 			{
 				GError* err = NULL;
 				GError* _tmp73_ = NULL;
@@ -1251,7 +1251,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 				_g_error_free0 (err);
 #line 1245 "main.c"
 			}
-			__finally207:
+			__finally220:
 #line 107 "/home/jens/Source/shotwell/src/main.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 107 "/home/jens/Source/shotwell/src/main.vala"
@@ -1927,11 +1927,11 @@ void editing_exec (const gchar* filename) {
 #line 253 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1922 "main.c"
-			goto __catch208_g_error;
+			goto __catch221_g_error;
 		}
 	}
-	goto __finally208;
-	__catch208_g_error:
+	goto __finally221;
+	__catch221_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -1954,7 +1954,7 @@ void editing_exec (const gchar* filename) {
 		return;
 #line 1948 "main.c"
 	}
-	__finally208:
+	__finally221:
 #line 252 "/home/jens/Source/shotwell/src/main.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 252 "/home/jens/Source/shotwell/src/main.vala"
@@ -2174,7 +2174,7 @@ GOptionEntry* commandline_options_get_options (int* result_length1) {
 #line 2167 "main.c"
 	}
 #line 293 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp4_ = _ ("Path to Shotwell's private data");
+	_tmp4_ = _ ("Path to Shotwell’s private data");
 #line 293 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp5_ = _ ("DIRECTORY");
 #line 293 "/home/jens/Source/shotwell/src/main.vala"
@@ -2228,7 +2228,7 @@ GOptionEntry* commandline_options_get_options (int* result_length1) {
 #line 299 "/home/jens/Source/shotwell/src/main.vala"
 	_vala_array_add153 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp12_);
 #line 301 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp13_ = _ ("Don't display startup progress meter");
+	_tmp13_ = _ ("Don’t display startup progress meter");
 #line 301 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp14_.long_name = "no-startup-progress";
 #line 301 "/home/jens/Source/shotwell/src/main.vala"
@@ -2254,7 +2254,7 @@ GOptionEntry* commandline_options_get_options (int* result_length1) {
 #line 303 "/home/jens/Source/shotwell/src/main.vala"
 	_vala_array_add154 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp16_);
 #line 305 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp17_ = _ ("Show the application's version");
+	_tmp17_ = _ ("Show the application’s version");
 #line 305 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp18_.long_name = "version";
 #line 305 "/home/jens/Source/shotwell/src/main.vala"
@@ -2468,11 +2468,11 @@ void _vala_main (gchar** args, int args_length1) {
 #line 338 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2463 "main.c"
-			goto __catch209_g_error;
+			goto __catch222_g_error;
 		}
 	}
-	goto __finally209;
-	__catch209_g_error:
+	goto __finally222;
+	__catch222_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp15_ = NULL;
@@ -2500,7 +2500,7 @@ void _vala_main (gchar** args, int args_length1) {
 #line 341 "/home/jens/Source/shotwell/src/main.vala"
 		_g_free0 (_tmp18_);
 #line 342 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp19_ = _ ("Run '%s --help' to see a full list of available command line options.\n");
+		_tmp19_ = _ ("Run “%s --help” to see a full list of available command line options.\n");
 #line 342 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp20_ = args;
 #line 342 "/home/jens/Source/shotwell/src/main.vala"
@@ -2517,7 +2517,7 @@ void _vala_main (gchar** args, int args_length1) {
 		return;
 #line 2511 "main.c"
 	}
-	__finally209:
+	__finally222:
 #line 337 "/home/jens/Source/shotwell/src/main.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 337 "/home/jens/Source/shotwell/src/main.vala"
@@ -2926,7 +2926,7 @@ void _vala_main (gchar** args, int args_length1) {
 #line 442 "/home/jens/Source/shotwell/src/main.vala"
 				_g_object_unref0 (src);
 #line 2921 "main.c"
-				goto __catch210_g_error;
+				goto __catch223_g_error;
 			}
 #line 439 "/home/jens/Source/shotwell/src/main.vala"
 			_g_object_unref0 (dest);
@@ -2934,8 +2934,8 @@ void _vala_main (gchar** args, int args_length1) {
 			_g_object_unref0 (src);
 #line 2928 "main.c"
 		}
-		goto __finally210;
-		__catch210_g_error:
+		goto __finally223;
+		__catch223_g_error:
 		{
 			GError* _error_ = NULL;
 			GError* _tmp85_ = NULL;
@@ -2954,7 +2954,7 @@ void _vala_main (gchar** args, int args_length1) {
 			_g_error_free0 (_error_);
 #line 2948 "main.c"
 		}
-		__finally210:
+		__finally223:
 #line 439 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 439 "/home/jens/Source/shotwell/src/main.vala"

@@ -364,11 +364,11 @@ SpitDataImportsDataImportSource* spit_data_imports_data_import_source_construct 
 #line 46 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 367 "DataImportSource.c"
-				goto __catch202_g_error;
+				goto __catch215_g_error;
 			}
 		}
-		goto __finally202;
-		__catch202_g_error:
+		goto __finally215;
+		__catch215_g_error:
 		{
 			GError* e = NULL;
 			gchar* _tmp26_ = NULL;
@@ -399,7 +399,7 @@ SpitDataImportsDataImportSource* spit_data_imports_data_import_source_construct 
 			_g_error_free0 (e);
 #line 401 "DataImportSource.c"
 		}
-		__finally202:
+		__finally215:
 #line 45 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 45 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
@@ -583,7 +583,7 @@ SpitDataImportsDataImportSource* spit_data_imports_data_import_source_construct 
 #line 64 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 586 "DataImportSource.c"
-					goto __catch203_g_error;
+					goto __catch216_g_error;
 				}
 #line 65 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
 				_tmp57_ = preview_raw;
@@ -603,8 +603,8 @@ SpitDataImportsDataImportSource* spit_data_imports_data_import_source_construct 
 				preview_raw = (g_free (preview_raw), NULL);
 #line 605 "DataImportSource.c"
 			}
-			goto __finally203;
-			__catch203_g_error:
+			goto __finally216;
+			__catch216_g_error:
 			{
 				GError* e = NULL;
 				gchar* _tmp60_ = NULL;
@@ -631,7 +631,7 @@ SpitDataImportsDataImportSource* spit_data_imports_data_import_source_construct 
 				_g_error_free0 (e);
 #line 633 "DataImportSource.c"
 			}
-			__finally203:
+			__finally216:
 #line 63 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 63 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
@@ -670,14 +670,14 @@ SpitDataImportsDataImportSource* spit_data_imports_data_import_source_construct 
 #line 75 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 673 "DataImportSource.c"
-				goto __catch204_g_error;
+				goto __catch217_g_error;
 			}
 #line 75 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
 			self->priv->file_size = _tmp64_;
 #line 678 "DataImportSource.c"
 		}
-		goto __finally204;
-		__catch204_g_error:
+		goto __finally217;
+		__catch217_g_error:
 		{
 			GError* e = NULL;
 			gchar* _tmp67_ = NULL;
@@ -704,7 +704,7 @@ SpitDataImportsDataImportSource* spit_data_imports_data_import_source_construct 
 			_g_error_free0 (e);
 #line 706 "DataImportSource.c"
 		}
-		__finally204:
+		__finally217:
 #line 74 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 74 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
@@ -742,14 +742,14 @@ SpitDataImportsDataImportSource* spit_data_imports_data_import_source_construct 
 #line 80 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 745 "DataImportSource.c"
-				goto __catch205_g_error;
+				goto __catch218_g_error;
 			}
 #line 80 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
 			self->priv->modification_time = _tmp71_;
 #line 750 "DataImportSource.c"
 		}
-		goto __finally205;
-		__catch205_g_error:
+		goto __finally218;
+		__catch218_g_error:
 		{
 			GError* e = NULL;
 			gchar* _tmp74_ = NULL;
@@ -776,7 +776,7 @@ SpitDataImportsDataImportSource* spit_data_imports_data_import_source_construct 
 			_g_error_free0 (e);
 #line 778 "DataImportSource.c"
 		}
-		__finally205:
+		__finally218:
 #line 79 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 79 "/home/jens/Source/shotwell/src/data_imports/DataImportSource.vala"

@@ -1,16 +1,15 @@
-commit c52724c3d00e0aecaf98402c83b51e0cd5c9a6be
+commit 0a348fe98b77bf17b4cbe8a257eecffc966acbd7
 Author: Jens Georg <mail@jensge.org>
-Date:   Sun Oct 16 22:32:17 2016 +0200
+Date:   Mon Oct 24 20:09:08 2016 +0200
 
-    Prepare Shotwell 0.24.1
+    Prepare 0.25.0 release
 
     Signed-off-by: Jens Georg <mail@jensge.org>
 
 M	NEWS
-M	configure.ac
 M	debian/changelog
 
-commit 0be5c1be430cdc6b4ee7af0d0e52e10888b07a55
+commit ece15b26e968e76a9165ba4fdacfcde5a425fc38
 Author: Jens Georg <mail@jensge.org>
 Date:	Sun Oct 16 22:20:14 2016 +0200
 
@@ -20,7 +19,79 @@ Date:	Sun Oct 16 22:20:14 2016 +0200
 
 M	src/db/DatabaseTable.vala
 
-commit f79f3dd46473655b17bcf52ca3a8fadcf58502a5
+commit 68d021e037a95e77cea4afdd850378f1c52cd36e
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Oct 19 21:02:36 2016 +0200
+
+    Hide "Folder" sidebar when empty
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=719127
+
+M	src/folders/Branch.vala
+
+commit 1f07d737505a2c4ecc7c2ed0e415a9f8b9f4bd26
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Oct 18 22:28:33 2016 +0200
+
+    Blacklist vaapi decoder
+
+    That makes things actually slow since it start-up isn't the best in
+    the world
+    and doesn't like to be triggered from multiple threads, causing
+    the abort.
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=762416
+
+M	src/VideoSupport.vala
+M	thumbnailer/shotwell-video-thumbnailer.vala
+
+commit ec20147df422a340e7741586a193e50840bcb268
+Author: Rico Tzschichholz <ricotz@ubuntu.com>
+Date:	Tue Oct 18 10:40:54 2016 +0200
+
+    Remove superfluous parentheses
+
+M	plugins/shotwell-transitions/CircleEffect.vala
+
+commit 156a835a878a89767414dd12421af73a06c77c92
+Author: Marek Černocký <marek@manet.cz>
+Date:	Sun Oct 16 22:01:01 2016 +0200
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit 2db8881d70cd53fa2d26860a2598054798a06706
+Author: Gábor Kelemen <kelemeng@openscope.org>
+Date:	Tue Oct 11 07:45:50 2016 +0000
+
+    Update Hungarian translation
+
+M	po/hu.po
+
+commit be57cf35c101c8a3901d4a166e20cb2e1baa7fdb
+Author: Jordi Mas <jmas@softcatala.org>
+Date:	Sun Oct 9 20:02:48 2016 +0200
+
+    Update Catalan translation
+
+M	po/ca.po
+
+commit b7b9736c93ec86cc5d14ac7994b3ad18b10594b0
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Oct 9 18:53:48 2016 +0200
+
+    libraw.vapi: Remove member added by accident
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	vapi/libraw.vapi
+
+commit 0b56e8c667739120eba0eeee74cf7d2bbc4b5447
 Author: Jens Georg <mail@jensge.org>
 Date:	Sun Oct 9 18:42:17 2016 +0200
 
@@ -35,7 +106,35 @@ Date:	Sun Oct 9 18:42:17 2016 +0200
 
 M	plugins/shotwell-publishing/PiwigoPublishing.vala
 
-commit 42a2189a53163391f4776ba6e6c433d1aabbdf5e
+commit b3debfb7bf14d01afb008a9debd28160a8100071
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Oct 9 18:25:12 2016 +0200
+
+    libraw.vapi: Improve thumbnail binding
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	vapi/libraw.vapi
+
+commit aade605b107272bd5a2c189f2dfec7f4ce6eb227
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 8 21:41:43 2016 +0200
+
+    Fix typo in settings schema
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	misc/org.yorba.shotwell.gschema.xml
+
+commit 3d55565cd36130cd9a3fcfc49a925fa9d13a06b2
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Oct 9 08:55:32 2016 +0200
+
+    Update Polish translation
+
+M	po/pl.po
+
+commit 91f0804130cb87aaf0cdfe1c58b2740c4748fedd
 Author: Rico Tzschichholz <ricotz@ubuntu.com>
 Date:	Sat Oct 8 17:27:59 2016 +0200
 
@@ -47,7 +146,117 @@ Date:	Sat Oct 8 17:27:59 2016 +0200
 
 M	src/photos/PhotoMetadata.vala
 
-commit e8c60ee6ca74977bc28e1d5650f9c9d5c09e5e71
+commit 826f2947caefe311006bc45e9420ed325002ad00
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 8 16:50:36 2016 +0200
+
+    Port to new SoupSession API
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=767126
+
+M	configure.ac
+M	plugins/common/RESTSupport.vala
+M	plugins/shotwell-publishing/FacebookPublishing.vala
+
+commit 2782abad7798f48a4c6c032eafba3f19bc829767
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 1 00:26:26 2016 +0200
+
+    Make export dialog deprecated free
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Dialogs.vala
+
+commit e3c78dc5689d2f02efa70871521b71efafcb319c
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Oct 4 23:32:51 2016 +0200
+
+    Use GSettings default for export dialog
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	misc/org.yorba.shotwell.gschema.xml
+M	src/Dialogs.vala
+M	src/config/ConfigurationInterfaces.vala
+M	src/config/GSettingsEngine.vala
+
+commit 8b95f0de193e63fc7e87d1121d3ef8b26dceb86c
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Oct 4 22:33:14 2016 +0200
+
+    Persist export dialog settings
+
+    Based on original patch by Jonas Bushart.
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=716259
+
+M	misc/org.yorba.shotwell.gschema.xml
+M	src/Dialogs.vala
+M	src/config/ConfigurationInterfaces.vala
+M	src/config/GSettingsEngine.vala
+
+commit 1b73d9e16be8a73193062507c01877a937b305fc
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Oct 4 22:29:45 2016 +0200
+
+    Remove deprecated GSettings calls
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	common.am
+M	configure.ac
+M	src/config/GSettingsEngine.vala
+
+commit cb225f8db79e7b234447a37fc52e00f6e8a26903
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 8 14:26:21 2016 +0200
+
+    Update git.mk
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	git.mk
+
+commit b2b95c292d5440812e5c92ee4869727e1dbf71d0
+Author: Rafael Fontenelle <rafaelff@gnome.org>
+Date:	Thu Oct 6 11:47:55 2016 +0000
+
+    Updated Brazilian Portuguese translation
+
+M	po/pt_BR.po
+
+commit 8d823173ee9df9745c851556b7617e495c54a44d
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Oct 4 21:35:38 2016 +0200
+
+    Remove old GTK+ work-around
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Dialogs.vala
+
+commit ba8801a1e47d8e329b47db39678ebab6e02eef2a
+Author: Marek Černocký <marek@manet.cz>
+Date:	Tue Oct 4 14:22:12 2016 +0200
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit 58e1e1b744226654692a742064577c3452995d9b
+Author: Gábor Kelemen <kelemeng@openscope.org>
+Date:	Tue Oct 4 08:43:19 2016 +0000
+
+    Updated Hungarian translation
+
+M	po/hu.po
+
+commit 6afddeff92a119f5198c5c671e8431952bdd36ab
 Author: Jens Georg <mail@jensge.org>
 Date:	Mon Oct 3 22:12:01 2016 +0200
 
@@ -57,7 +266,212 @@ Date:	Mon Oct 3 22:12:01 2016 +0200
 
 M	plugins/shotwell-publishing/PiwigoPublishing.vala
 
-commit 0dd5368e0b33c22e3fb196b2776d56988aca0572
+commit fbee9252109833a0d63311408b114a01273aced7
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Mon Oct 3 15:19:08 2016 +0200
+
+    Update POTFILES.in
+
+M	po/POTFILES.in
+
+commit 8560752d671dfa4991dbdba3a4b57afb356efcc5
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Oct 3 14:39:24 2016 +0200
+
+    piwigo: Add option to show the certificate
+
+    So the user can inspect the certificate before proceeding
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=767473
+
+M	configure.ac
+M	plugins/common/RESTSupport.vala
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+M	plugins/shotwell-publishing/piwigo_ssl_failure_pane.ui
+M	publish.am
+
+commit 9c2aa03dde6538800ab3916635444c343058f462
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Oct 2 19:41:48 2016 +0200
+
+    piwigo: Add option to override the SSL verification
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=767473
+
+M	plugins/common/RESTSupport.vala
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+M
+plugins/shotwell-publishing/org.gnome.Shotwell.Publishing.gresource.xml
+A	plugins/shotwell-publishing/piwigo_ssl_failure_pane.ui
+
+commit 73007e5797dbcf4003d771ac0c4725989db513f1
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Mon Oct 3 13:23:23 2016 +0200
+
+    Updated Polish translation
+
+M	po/pl.po
+
+commit 1a76ac6f4210c0f3707dcc5e719377279ad85ddb
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Mon Oct 3 13:21:13 2016 +0200
+
+    Remove one more instance of double spaces
+
+M	src/Dialogs.vala
+
+commit b173946ec6ed21f6ec264b0e87dcdac8654e6c0c
+Author: Gábor Kelemen <kelemeng@openscope.org>
+Date:	Mon Oct 3 09:50:53 2016 +0000
+
+    Updated Hungarian translation
+
+M	po/hu.po
+
+commit ec738035daf4a7dd3373fd280a11f575a5985ec6
+Author: Marek Černocký <marek@manet.cz>
+Date:	Mon Oct 3 11:39:46 2016 +0200
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit 7ee95d4059c6f4ec8b5ee1583a73864d8b412540
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Oct 2 18:17:47 2016 +0200
+
+    Remove double spaces from translatable strings
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=772339
+
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+M	src/AppWindow.vala
+M	src/Dialogs.vala
+M	src/Exporter.vala
+M	src/camera/ImportPage.vala
+M	src/main.vala
+
+commit 3d2acfe4204629df7fe62098e2c1810949776dca
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Oct 2 18:12:57 2016 +0200
+
+    Fix spelling of "YouTube"
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=772339
+
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+
+commit 96a2343b3673c25fb398972cf1036ced664e3162
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Oct 2 18:11:51 2016 +0200
+
+    Fix spelling of "log in"
+
+    "Log in" is the verb, "login" is the noun.
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=772339
+
+M	plugins/shotwell-publishing-extras/RajcePublishing.vala
+M	plugins/shotwell-publishing-extras/gallery3_authentication_pane.ui
+M	plugins/shotwell-publishing-extras/rajce_authentication_pane.ui
+M	plugins/shotwell-publishing-extras/tumblr_authentication_pane.ui
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+M	plugins/shotwell-publishing/piwigo_authentication_pane.ui
+M	ui/shotwell.ui
+
+commit 7c0ad89676d662965388080f61d61359fd65fe35
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Oct 2 18:05:33 2016 +0200
+
+    Use Unicode in translatable strings
+
+    See https://developer.gnome.org/hig/stable/typography.html
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=772339
+
+M	misc/org.yorba.shotwell.gschema.xml
+M	misc/shotwell.appdata.xml.in
+M	plugins/shotwell-publishing-extras/GalleryConnector.vala
+M	plugins/shotwell-publishing-extras/RajcePublishing.vala
+M	plugins/shotwell-publishing-extras/TumblrPublishing.vala
+M	plugins/shotwell-publishing/FacebookPublishing.vala
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+M	src/AppWindow.vala
+M	src/Commands.vala
+M	src/Dialogs.vala
+M	src/MediaPage.vala
+M	src/Printing.vala
+M	src/Resources.vala
+M	src/camera/ImportPage.vala
+M	src/data_imports/DataImportsPluginHost.vala
+M	src/editing_tools/EditingTools.vala
+M	src/main.vala
+M	src/publishing/PublishingPluginHost.vala
+
+commit 9d2cf3536841ac0334c2ae6226fa3ed708a5b82b
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Oct 2 13:15:26 2016 +0200
+
+    Updated Polish translation
+
+M	po/pl.po
+
+commit 63f541a70fa8cee7b2e4e5db1f14951175aa9e42
+Author: Gábor Kelemen <kelemeng@openscope.org>
+Date:	Sun Oct 2 08:07:14 2016 +0000
+
+    Updated Hungarian translation
+
+M	po/hu.po
+
+commit 71f3951a5c9263b73e579435e7d738776679ba2f
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 1 18:16:14 2016 +0200
+
+    Introduce common class for WebKit authenticator
+
+    This was implemented/copied three times...
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=772295
+
+M	Makefile.am
+M	plugins/common/RESTSupport.vala
+A	plugins/common/WebAuthenticationPane.vala
+M	plugins/shotwell-publishing-extras/YandexPublishing.vala
+M	plugins/shotwell-publishing/FacebookPublishing.vala
+
+commit 5270d097485c7ca2f4729adc598d381c85491988
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 1 17:50:10 2016 +0200
+
+    build: Silence some C warnings
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	Makefile.am
+M	common.am
+
+commit cbb516968f97762cc3e80cc47a7a4904e8062772
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 1 16:11:55 2016 +0200
+
+    Remove deprecated call from util/image.vala
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/util/image.vala
+
+commit 389e23b763a851a93cb6b2b8e4bd0165e754d7c5
 Author: Rico Tzschichholz <ricotz@ubuntu.com>
 Date:	Fri Sep 30 18:58:54 2016 +0200
 
@@ -65,7 +479,101 @@ Date:	Fri Sep 30 18:58:54 2016 +0200
 
 M	src/Tag.vala
 
-commit 15fb6e8945c27915d1d3b934f2a3ee81daaea63d
+commit c5b028b808a0f35344872677a0bcd1ae2b625a5d
+Author: Daniel Mustieles <daniel.mustieles@gmail.com>
+Date:	Fri Sep 30 10:19:59 2016 +0000
+
+    Updated Spanish translation
+
+M	po/es.po
+
+commit 9dae1046df856f922419e57048d87ad878979f41
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Fri Sep 30 07:05:07 2016 +0000
+
+    Updated German translation
+
+M	po/de.po
+
+commit 87dfca02f666fb9e903dd8cdcc3fd6ac98111841
+Author: Marek Černocký <marek@manet.cz>
+Date:	Fri Sep 30 07:40:58 2016 +0200
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit 5f569b1bcf3c387243e3f63326413a7d7f572bad
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Sep 29 23:06:43 2016 +0200
+
+    Fix copy-paste error
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/photos/PhotoMetadata.vala
+
+commit cb79cb4e5681a5069fb66e655b747cece133a004
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Sep 29 13:12:38 2016 +0200
+
+    Replace ... with …
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=765149
+
+M	src/AppWindow.vala
+M	src/Dialogs.vala
+M	src/Printing.vala
+M	src/Resources.vala
+M	src/camera/ImportPage.vala
+M	src/direct/DirectPhotoPage.vala
+M	src/library/ImportQueuePage.vala
+M	src/library/LibraryWindow.vala
+M	src/library/OfflinePage.vala
+M	src/main.vala
+M	src/plugins/Plugins.vala
+M	src/publishing/PublishingUI.vala
+M	src/searches/Branch.vala
+M	src/sidebar/Tree.vala
+M	src/tags/HierarchicalTagUtilities.vala
+M	ui/direct.ui
+M	ui/events_directory.ui
+M	ui/import.ui
+M	ui/import_queue.ui
+M	ui/media.ui
+M	ui/offline.ui
+M	ui/photo.ui
+M	ui/trash.ui
+
+commit 515e311ca1f0bcef525e5beee7075a4474b87676
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Sep 29 08:55:48 2016 +0200
+
+    Bump gexiv2 requirement to 0.10.4
+
+    Necessary for a bugfix required for proper ACDSEE tag support
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
+commit 9218b13bd7ef86e8f3f7de7e98b6ac64f6dd162a
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Sep 20 21:19:31 2016 +0200
+
+    Support acdsee tags
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=718586
+
+M	shotwell.am
+M	src/photos/PhotoMetadata.vala
+A	vapi/misc.vapi
+
+commit 912cd8b707bf4fbe91c99314bd17fa928da23cf2
 Author: Jens Georg <mail@jensge.org>
 Date:	Wed Sep 28 23:32:01 2016 +0200
 
@@ -75,7 +583,7 @@ Date:	Wed Sep 28 23:32:01 2016 +0200
 
 M	src/Resources.vala
 
-commit a9104c1cf1ab2c586f1639536a50823019d026eb
+commit d821a4a49f357005bab6c71f0fb7116491d2bf96
 Author: Jens Georg <mail@jensge.org>
 Date:	Wed Sep 28 23:11:32 2016 +0200
 
@@ -87,7 +595,7 @@ Date:	Wed Sep 28 23:11:32 2016 +0200
 
 M	src/AppWindow.vala
 
-commit 147b6c87a0a6be6fa0d0e7b93313a13679ba2614
+commit f343d9a359e2924e2498c7287222f79e3e2d867c
 Author: Jens Georg <mail@jensge.org>
 Date:	Sat Sep 17 08:33:23 2016 +0200
 
@@ -102,7 +610,83 @@ M	src/Tag.vala
 M	src/core/ContainerSourceCollection.vala
 M	src/core/ViewCollection.vala
 
-commit 7424c5ddadfaee627641cd884423a32fa5afc330
+commit bddc2ea7151c81e8979b3342fc89921600d4b45d
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Sun Sep 25 17:16:35 2016 +0000
+
+    Updated German translation
+    (cherry picked from commit 230a0b28eb7b0a671ac549e85329beefddbc06eb)
+
+M	help/de/de.po
+
+commit 3a25208a2aa69a347a0d8a915dd8b8dd6c72614f
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sat Sep 24 22:20:06 2016 +0200
+
+    Updated Polish translation
+
+M	po/pl.po
+
+commit 968da8e0998ff561d29d6e8324461779618725ad
+Author: Benedikt M. Thoma <gnome@thomba.net>
+Date:	Fri Sep 23 17:11:56 2016 +0000
+
+    Updated German translation
+
+M	po/de.po
+
+commit 4e2911b6fa27b272552ea9f5d39ed85c55461010
+Author: Rafael Fontenelle <rafaelff@gnome.org>
+Date:	Fri Sep 23 00:35:09 2016 +0000
+
+    Updated Brazilian Portuguese translation
+
+M	po/pt_BR.po
+
+commit 3c9f707f29e5cee407603ef9128e843e35d42969
+Author: Rafael Fontenelle <rafaelff@gnome.org>
+Date:	Fri Sep 23 00:32:10 2016 +0000
+
+    Updated Brazilian Portuguese translation
+    (cherry picked from commit f4b68102e46f3fa896438db753b39f4b413107bb)
+
+M	po/pt_BR.po
+
+commit c056c251eb469e70d488c013b46b2a8f7875f038
+Author: Balázs Meskó <meskobalazs@gmail.com>
+Date:	Thu Sep 22 18:26:05 2016 +0000
+
+    Updated Hungarian translation
+
+M	po/hu.po
+
+commit 0ebdf12e12fc12899e72db4b59edf8d65d0e0e23
+Author: Jordi Mas <jmas@softcatala.org>
+Date:	Thu Sep 22 19:55:58 2016 +0200
+
+    Fix in Catalan translation
+
+M	po/ca.po
+
+commit 270f26ce715c1f178fd707e7a648ad4433ee87cc
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Sep 21 21:44:42 2016 +0200
+
+    Fix mixup when clicking Reset
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/editing_tools/EditingTools.vala
+
+commit 15bf3742ff2fd23605713d092d3d961fee58ab72
+Author: Marek Černocký <marek@manet.cz>
+Date:	Wed Sep 21 21:35:44 2016 +0200
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit dbe7eed4fe3e088319903385e0a07ed46154f512
 Author: Jens Georg <mail@jensge.org>
 Date:	Wed Sep 21 21:00:47 2016 +0200
 
@@ -114,7 +698,7 @@ Date:	Wed Sep 21 21:00:47 2016 +0200
 
 M	src/main.vala
 
-commit 7c1872f9353b1c0c067c1599f74460571db35145
+commit 0046657c9f16706231be2194ed3d085ccb543c05
 Author: Jens Georg <mail@jensge.org>
 Date:	Wed Sep 21 20:56:07 2016 +0200
 
@@ -128,31 +712,38 @@ Date:	Wed Sep 21 20:56:07 2016 +0200
 
 M	src/Event.vala
 
-commit 230a0b28eb7b0a671ac549e85329beefddbc06eb
-Author: Mario Blättermann <mario.blaettermann@gmail.com>
-Date:	Sun Sep 25 17:16:35 2016 +0000
+commit 36d0265618b504d1c1d6187bf04709dd60d0a9ce
+Author: Josh Freeman <josh@twilightedge.com>
+Date:	Sun Jul 3 20:44:04 2016 +0200
 
-    Updated German translation
+    Add contrast adjustments to settings
 
-M	help/de/de.po
+    Signed-off-by: Jens Georg <mail@jensge.org>
 
-commit f4b68102e46f3fa896438db753b39f4b413107bb
-Author: Rafael Fontenelle <rafaelff@gnome.org>
-Date:	Fri Sep 23 00:32:10 2016 +0000
+    https://bugzilla.gnome.org/show_bug.cgi?id=716660
 
-    Updated Brazilian Portuguese translation
+M	src/ColorTransformation.vala
+M	src/editing_tools/EditingTools.vala
 
-M	po/pt_BR.po
+commit bb1fa45a0de8cffda51363db0b6d5b4bbaf3592d
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Sep 20 21:10:15 2016 +0200
 
-commit 3fca18c23cb133590be1b472cc4b22f8effc81a7
+    Post-release version bump
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
+commit b6d70e14df54f4cf39f050682271f5cdd7b52aa8
 Author: Anders Jonsson <anders.jonsson@norsjovallen.se>
-Date:	Wed Sep 21 11:30:53 2016 +0000
+Date:	Wed Sep 21 11:26:55 2016 +0000
 
     Updated Swedish translation
 
 M	help/sv/sv.po
 
-commit 332173cf4a3e7110afc2a42b127f9e8c37b33369
+commit c6d5fe9bb77d97c534f8239c6331dc1f41df324b
 Author: Jens Georg <mail@jensge.org>
 Date:	Tue Sep 20 21:02:10 2016 +0200
 
@@ -163,7 +754,7 @@ Date:	Tue Sep 20 21:02:10 2016 +0200
 M	NEWS
 M	configure.ac
 
-commit 4b1dd6efebe919772914bffd8e6597e7780d378c
+commit 2d300134b66139f3dc18577bedf83266a3e0b13c
 Author: Jens Georg <mail@jensge.org>
 Date:	Sun Sep 18 20:02:34 2016 +0200
 
@@ -173,33 +764,43 @@ Date:	Sun Sep 18 20:02:34 2016 +0200
 
 M	src/core/DataObject.vala
 
-commit 728b17e779c2c27941ecfa74037beb1025f85fe6
+commit 14b8ae055f24b81b802ec83fcd2487c03a17630f
 Author: Bernd Homuth <dev@hmt.im>
 Date:	Mon Sep 19 15:00:09 2016 +0000
 
     Updated German translation
+    (cherry picked from commit 728b17e779c2c27941ecfa74037beb1025f85fe6)
 
 M	po/de.po
 
-commit 792debb70a038c4a4ae0ef7c68999aace045c516
+commit 611ccd55e58b40ab6a4a718a154ea0d001d8e433
 Author: Marek Černocký <marek@manet.cz>
-Date:	Mon Sep 19 08:52:56 2016 +0200
+Date:	Mon Sep 19 08:50:33 2016 +0200
 
     Updated Czech translation
 
 M	po/cs.po
 
-commit 0f346cc9cc410ede68f8b8d6abe113792f87a3e1
+commit c569aec6cd42816b39c81c0da65c5e8790915bd5
 Author: Christian Kirbach <Christian.Kirbach@gmail.com>
 Date:	Sun Sep 18 19:11:29 2016 +0000
 
     Updated German translation
+    (cherry picked from commit 0f346cc9cc410ede68f8b8d6abe113792f87a3e1)
 
 M	po/de.po
 
-commit 5ffc5577fddd4bcfab878ec06df7b980afd0a3fc
+commit 998f2217574d2afbbe54cd17e473eb6b511adc1b
+Author: Daniel Mustieles <daniel.mustieles@gmail.com>
+Date:	Tue Sep 13 20:25:15 2016 +0200
+
+    Updated Spanish translation
+
+M	po/es.po
+
+commit 15e7e747cddb9f38631a3f8f658d7201c3c7969a
 Author: Marek Černocký <marek@manet.cz>
-Date:	Tue Sep 13 11:17:14 2016 +0200
+Date:	Tue Sep 13 11:17:45 2016 +0200
 
     Updated Czech translation
 

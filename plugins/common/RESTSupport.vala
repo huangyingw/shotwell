@@ -33,7 +33,7 @@ public abstract class Session {
 
     public Session(string? endpoint_url = null) {
         this.endpoint_url = endpoint_url;
-        soup_session = new Soup.SessionAsync();
+        soup_session = new Soup.Session ();
         this.soup_session.ssl_use_system_ca_file = true;
     }
     
@@ -72,6 +72,11 @@ public abstract class Session {
         soup_session.send_message(message);
         
         soup_session.request_unqueued.disconnect(notify_wire_message_unqueued);
+    }
+
+    public void set_insecure () {
+        this.soup_session.ssl_use_system_ca_file = false;
+        this.soup_session.ssl_strict = false;
     }
 }
 
@@ -185,6 +190,59 @@ public class Transaction {
             this.err = err;
         }
     }
+
+    /* Texts copied from epiphany */
+    public string detailed_error_from_tls_flags (out TlsCertificate cert) {
+        TlsCertificateFlags tls_errors;
+        this.message.get_https_status (out cert, out tls_errors);
+
+        var list = new Gee.ArrayList<string> ();
+        if (TlsCertificateFlags.BAD_IDENTITY in tls_errors) {
+            /* Possible error message when a site presents a bad certificate. */
+            list.add (_("⚫ This website presented identification that belongs to a different website."));
+        }
+
+        if (TlsCertificateFlags.EXPIRED in tls_errors) {
+            /* Possible error message when a site presents a bad certificate. */
+            list.add (_("⚫ This website’s identification is too old to trust. Check the date on your computer’s calendar."));
+        }
+
+        if (TlsCertificateFlags.UNKNOWN_CA in tls_errors) {
+            /* Possible error message when a site presents a bad certificate. */
+            list.add (_("⚫ This website’s identification was not issued by a trusted organization."));
+        }
+
+        if (TlsCertificateFlags.GENERIC_ERROR in tls_errors) {
+            /* Possible error message when a site presents a bad certificate. */
+            list.add (_("⚫ This website’s identification could not be processed. It may be corrupted."));
+        }
+
+        if (TlsCertificateFlags.REVOKED in tls_errors) {
+            /* Possible error message when a site presents a bad certificate. */
+            list.add (_("⚫ This website’s identification has been revoked by the trusted organization that issued it."));
+        }
+
+        if (TlsCertificateFlags.INSECURE in tls_errors) {
+            /* Possible error message when a site presents a bad certificate. */
+            list.add (_("⚫ This website’s identification cannot be trusted because it uses very weak encryption."));
+        }
+
+        if (TlsCertificateFlags.NOT_ACTIVATED in tls_errors) {
+            /* Possible error message when a site presents a bad certificate. */
+            list.add (_("⚫ This website’s identification is only valid for future dates. Check the date on your computer’s calendar."));
+        }
+
+        var builder = new StringBuilder ();
+        if (list.size == 1) {
+            builder.append (list.get (0));
+        } else {
+            foreach (var entry in list) {
+                builder.append_printf ("%s\n", entry);
+            }
+        }
+
+        return builder.str;
+  }
 
     protected void check_response(Soup.Message message) throws Spit.Publishing.PublishingError {
         switch (message.status_code) {
@@ -733,37 +791,21 @@ public abstract class GooglePublisher : Object, Spit.Publishing.Publisher {
         }
     }
     
-    private class WebAuthenticationPane : Spit.Publishing.DialogPane, Object {
+    private class WebAuthenticationPane : Shotwell.Plugins.Common.WebAuthenticationPane {
         public static bool cache_dirty = false;
         
-        private WebKit.WebView webview;
-        private Gtk.Box pane_widget;
-        private string auth_sequence_start_url;
-
         public signal void authorized(string auth_code);
 
         public WebAuthenticationPane(string auth_sequence_start_url) {
-            this.auth_sequence_start_url = auth_sequence_start_url;
-
-            pane_widget = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-
-            webview = new WebKit.WebView();
-            webview.get_settings().enable_plugins = false;
-
-            webview.load_changed.connect(on_page_load_changed);
-            webview.context_menu.connect(() => { return false; });
-
-            pane_widget.pack_start(webview, true, true, 0);
+            Object (login_uri : auth_sequence_start_url);
         }
         
         public static bool is_cache_dirty() {
             return cache_dirty;
         }
         
-        private void on_page_load() {
-            pane_widget.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.LEFT_PTR));
-            
-            string page_title = webview.get_title();
+        public override void on_page_load() {
+            string page_title = get_view ().get_title();
             if (page_title.index_of("state=connect") > 0) {
                 int auth_code_field_start = page_title.index_of("code=");
                 if (auth_code_field_start < 0)
@@ -776,38 +818,6 @@ public abstract class GooglePublisher : Object, Spit.Publishing.Publisher {
 
                 authorized(auth_code);
             }
-        }
-
-        private void on_load_started() {
-            pane_widget.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.WATCH));
-        }
-
-        private void on_page_load_changed (WebKit.LoadEvent load_event) {
-            switch (load_event) {
-                case WebKit.LoadEvent.STARTED:
-                    on_load_started();
-                    break;
-                case WebKit.LoadEvent.FINISHED:
-                    on_page_load();
-                    break;
-            }
-
-            return;
-        }
-        
-        public Spit.Publishing.DialogPane.GeometryOptions get_preferred_geometry() {
-            return Spit.Publishing.DialogPane.GeometryOptions.NONE;
-        }
-        
-        public Gtk.Widget get_widget() {
-            return pane_widget;
-        }
-
-        public void on_pane_installed() {
-            webview.load_uri(auth_sequence_start_url);
-        }
-
-        public void on_pane_uninstalled() {
         }
     }
     
