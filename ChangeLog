@@ -1,4 +1,4 @@
-commit 0a348fe98b77bf17b4cbe8a257eecffc966acbd7
+commit 8cc28654affe568f156bc74a20fb4959160ac872
 Author: Jens Georg <mail@jensge.org>
 Date:   Mon Oct 24 20:09:08 2016 +0200
 
@@ -8,6 +8,16 @@ Date:   Mon Oct 24 20:09:08 2016 +0200
 
 M	NEWS
 M	debian/changelog
+
+commit cec1eee8af5a79d2091c9b9b6bc26fab0593105d
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Oct 24 21:07:33 2016 +0200
+
+    Distribute SSL ui panel
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	publish.am
 
 commit ece15b26e968e76a9165ba4fdacfcde5a425fc38
 Author: Jens Georg <mail@jensge.org>
