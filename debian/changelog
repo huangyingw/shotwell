@@ -1,15 +1,16 @@
-shotwell (0.25.0.1-1) unstable; urgency=medium
+shotwell (0.25.1-1) unstable; urgency=medium
 
   * New upstream release.
     - Fix uses 100% cpu for minutes at startup on a recent cpu
       (Closes: #777499).
+    - Refresh debian/patches/0100-ios8.patch.
   * debian/control:
     - Add libgcr-3-dev to Build-Depends.
     - Bump libgexiv2-dev B-D minimum version to 0.10.4.
     - Bump libglib2.0-dev B-D minimum version to 2.40.
     - Bump libgtk-3-dev B-D minimum version to 3.14.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 09 Nov 2016 21:32:48 +0100
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Fri, 25 Nov 2016 04:24:55 +0100
 
 shotwell (0.24.0-1) unstable; urgency=medium
 

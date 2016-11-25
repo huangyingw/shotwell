@@ -2,7 +2,7 @@ Description: Reset iOS 8 devices to download files
 Origin: https://bugzilla.gnome.org/show_bug.cgi?id=742295#c22
 Bug: https://bugzilla.gnome.org/show_bug.cgi?id=742295
 Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=792016
-Last-Update: 2016-02-22
+Last-Update: 2016-11-25
 ---
 This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 Index: trunk/src/camera/ImportPage.vala
@@ -25,7 +25,7 @@ Index: trunk/src/camera/ImportPage.vala
      }
      
      public override Gtk.Toolbar get_toolbar() {
-@@ -1154,11 +1163,14 @@ public class ImportPage : CheckerboardPa
+@@ -1140,11 +1149,14 @@ public class ImportPage : CheckerboardPa
          update_status(busy, false);
          
          refresh_error = null;
@@ -45,7 +45,7 @@ Index: trunk/src/camera/ImportPage.vala
          }
  
          update_status(true, refreshed);
-@@ -1263,13 +1275,15 @@ public class ImportPage : CheckerboardPa
+@@ -1249,13 +1261,15 @@ public class ImportPage : CheckerboardPa
          progress_bar.set_ellipsize(Pango.EllipsizeMode.NONE);
          progress_bar.set_text("");
          progress_bar.set_fraction(0.0);
@@ -63,7 +63,7 @@ Index: trunk/src/camera/ImportPage.vala
          if (refresh_result == GPhoto.Result.OK) {
              if (import_sources.get_count () == 0) {
                  this.set_page_message (this.get_view_empty_message ());
-@@ -1638,11 +1652,15 @@ public class ImportPage : CheckerboardPa
+@@ -1624,11 +1638,15 @@ public class ImportPage : CheckerboardPa
      }
      
      private void import(Gee.Iterable<DataObject> items) {
@@ -84,7 +84,7 @@ Index: trunk/src/camera/ImportPage.vala
          }
  
          update_status(true, refreshed);
-@@ -1778,12 +1796,15 @@ public class ImportPage : CheckerboardPa
+@@ -1764,12 +1782,15 @@ public class ImportPage : CheckerboardPa
      }
  
      private void close_import() {
