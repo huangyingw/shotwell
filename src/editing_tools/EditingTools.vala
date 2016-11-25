@@ -32,9 +32,6 @@ public abstract class EditingToolWindow : Gtk.Window {
     private bool user_moved = false;
 
     public EditingToolWindow(Gtk.Window container) {
-        // needed so that windows will appear properly in fullscreen mode
-        type_hint = Gdk.WindowTypeHint.UTILITY;
-
         set_decorated(false);
         set_transient_for(container);
 
@@ -52,7 +49,6 @@ public abstract class EditingToolWindow : Gtk.Window {
         focus_on_map = true;
         set_accept_focus(true);
         set_can_focus(true);
-        set_has_resize_grip(false);
 
         // Needed to prevent the (spurious) 'This event was synthesised outside of GDK'
         // warnings after a keypress.
@@ -90,7 +86,7 @@ public abstract class EditingToolWindow : Gtk.Window {
     }
 
     public override void realize() {
-        set_opacity(Resources.TRANSIENT_WINDOW_OPACITY);
+        (this as Gtk.Widget).set_opacity(Resources.TRANSIENT_WINDOW_OPACITY);
         
         base.realize();
     }
@@ -675,8 +671,8 @@ public class CropTool : EditingTool {
             constraint_combo.set_row_separator_func(constraint_combo_separator_func);
             constraint_combo.set_active(0);
 
-            pivot_reticle_button.set_image(new Gtk.Image.from_stock(Resources.CROP_PIVOT_RETICLE,
-                Gtk.IconSize.SMALL_TOOLBAR));
+            var image = new Gtk.Image.from_resource ("/org/gnome/Shotwell/crop-pivot-reticle.png");
+            pivot_reticle_button.set_image (image);
             pivot_reticle_button.set_tooltip_text(_("Pivot the crop rectangle between portrait and landscape orientations"));
 
             custom_width_entry.set_width_chars(4);
@@ -1240,8 +1236,13 @@ public class CropTool : EditingTool {
         }
 
         // make sure the cursor isn't set to a modify indicator
-        if (canvas != null)
-            canvas.get_drawing_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.LEFT_PTR));
+        if (canvas != null) {
+            var drawing_window = canvas.get_drawing_window ();
+            var display = drawing_window.get_display ();
+            var cursor = new Gdk.Cursor.for_display (display,
+                                                     Gdk.CursorType.LEFT_PTR);
+            drawing_window.set_cursor (cursor);
+        }
 
         crop_surface = null;
 
@@ -1435,8 +1436,10 @@ public class CropTool : EditingTool {
         }
 
         if (cursor_type != current_cursor_type) {
-            Gdk.Cursor cursor = new Gdk.Cursor(cursor_type);
-            canvas.get_drawing_window().set_cursor(cursor);
+            var drawing_window = canvas.get_drawing_window ();
+            var display = drawing_window.get_display ();
+            var cursor = new Gdk.Cursor.for_display (display, cursor_type);
+            drawing_window.set_cursor (cursor);
             current_cursor_type = cursor_type;
         }
     }
@@ -2058,8 +2061,9 @@ public class RedeyeTool : EditingTool {
 
         bind_window_handlers();
 
-        cached_arrow_cursor = new Gdk.Cursor(Gdk.CursorType.LEFT_PTR);
-        cached_grab_cursor = new Gdk.Cursor(Gdk.CursorType.FLEUR);
+        var display = canvas.get_drawing_window().get_display();
+        cached_arrow_cursor = new Gdk.Cursor.for_display(display, Gdk.CursorType.LEFT_PTR);
+        cached_grab_cursor = new Gdk.Cursor.for_display(display, Gdk.CursorType.FLEUR);
 
         DataCollection? owner = canvas.get_photo().get_membership();
         if (owner != null)
@@ -2205,7 +2209,7 @@ public class AdjustTool : EditingTool {
         public Gtk.Scale exposure_slider = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL,
             ExposureTransformation.MIN_PARAMETER, ExposureTransformation.MAX_PARAMETER,
             1.0);
-        public Gtk.HScale contrast_slider = new Gtk.HScale.with_range(
+        public Gtk.Scale contrast_slider = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL,
             ContrastTransformation.MIN_PARAMETER, ContrastTransformation.MAX_PARAMETER,
             1.0);
         public Gtk.Scale saturation_slider = new Gtk.Scale.with_range(Gtk.Orientation.HORIZONTAL,
@@ -2237,60 +2241,67 @@ public class AdjustTool : EditingTool {
             slider_organizer.set_column_homogeneous(false);
             slider_organizer.set_row_spacing(12);
             slider_organizer.set_column_spacing(12);
-            slider_organizer.set_margin_left(12);
+            slider_organizer.set_margin_start(12);
             slider_organizer.set_margin_bottom(12);
 
             Gtk.Label exposure_label = new Gtk.Label.with_mnemonic(_("Exposure:"));
-            exposure_label.set_alignment(0.0f, 0.5f);
+            exposure_label.halign = Gtk.Align.START;
+            exposure_label.valign = Gtk.Align.CENTER;
             slider_organizer.attach(exposure_label, 0, 0, 1, 1);
             slider_organizer.attach(exposure_slider, 1, 0, 1, 1);
             exposure_slider.set_size_request(SLIDER_WIDTH, -1);
             exposure_slider.set_draw_value(false);
-            exposure_slider.set_margin_right(0);
+            exposure_slider.set_margin_end(0);
 
             Gtk.Label contrast_label = new Gtk.Label.with_mnemonic(_("Contrast:"));
-            contrast_label.set_alignment(0.0f, 0.5f);
+            contrast_label.halign = Gtk.Align.START;
+            contrast_label.valign = Gtk.Align.CENTER;
             slider_organizer.attach(contrast_label, 0, 1, 1, 1);
             slider_organizer.attach(contrast_slider, 1, 1, 1, 1);
             contrast_slider.set_size_request(SLIDER_WIDTH, -1);
             contrast_slider.set_draw_value(false);
-            contrast_slider.set_margin_right(0);
+            contrast_slider.set_margin_end(0);
 
             Gtk.Label saturation_label = new Gtk.Label.with_mnemonic(_("Saturation:"));
-            saturation_label.set_alignment(0.0f, 0.5f);
+            saturation_label.halign = Gtk.Align.START;
+            saturation_label.valign = Gtk.Align.CENTER;
             slider_organizer.attach(saturation_label, 0, 2, 1, 1);
             slider_organizer.attach(saturation_slider, 1, 2, 1, 1);
             saturation_slider.set_size_request(SLIDER_WIDTH, -1);
             saturation_slider.set_draw_value(false);
-            saturation_slider.set_margin_right(0);
+            saturation_slider.set_margin_end(0);
 
             Gtk.Label tint_label = new Gtk.Label.with_mnemonic(_("Tint:"));
-            tint_label.set_alignment(0.0f, 0.5f);
+            tint_label.halign = Gtk.Align.START;
+            tint_label.valign = Gtk.Align.CENTER;
             slider_organizer.attach(tint_label, 0, 3, 1, 1);
             slider_organizer.attach(tint_slider, 1, 3, 1, 1);
             tint_slider.set_size_request(SLIDER_WIDTH, -1);
             tint_slider.set_draw_value(false);
-            tint_slider.set_margin_right(0);
+            tint_slider.set_margin_end(0);
 
             Gtk.Label temperature_label =
                 new Gtk.Label.with_mnemonic(_("Temperature:"));
-            temperature_label.set_alignment(0.0f, 0.5f);
+            temperature_label.halign = Gtk.Align.START;
+            temperature_label.valign = Gtk.Align.CENTER;
             slider_organizer.attach(temperature_label, 0, 4, 1, 1);
             slider_organizer.attach(temperature_slider, 1, 4, 1, 1);
             temperature_slider.set_size_request(SLIDER_WIDTH, -1);
             temperature_slider.set_draw_value(false);
-            temperature_slider.set_margin_right(0);
+            temperature_slider.set_margin_end(0);
 
             Gtk.Label shadows_label = new Gtk.Label.with_mnemonic(_("Shadows:"));
-            shadows_label.set_alignment(0.0f, 0.5f);
+            shadows_label.halign = Gtk.Align.START;
+            shadows_label.valign = Gtk.Align.CENTER;
             slider_organizer.attach(shadows_label, 0, 5, 1, 1);
             slider_organizer.attach(shadows_slider, 1, 5, 1, 1);
             shadows_slider.set_size_request(SLIDER_WIDTH, -1);
             shadows_slider.set_draw_value(false);
-            shadows_slider.set_margin_right(0);
+            shadows_slider.set_margin_end(0);
 
             Gtk.Label highlights_label = new Gtk.Label.with_mnemonic(_("Highlights:"));
-            highlights_label.set_alignment(0.0f, 0.5f);
+            highlights_label.halign = Gtk.Align.START;
+            highlights_label.valign = Gtk.Align.CENTER;
             slider_organizer.attach(highlights_label, 0, 6, 1, 1);
             slider_organizer.attach(highlights_slider, 1, 6, 1, 1);
             highlights_slider.set_size_request(SLIDER_WIDTH, -1);
@@ -2302,15 +2313,16 @@ public class AdjustTool : EditingTool {
             button_layouter.pack_start(reset_button, true, true, 1);
             button_layouter.pack_start(ok_button, true, true, 1);
 
-            Gtk.Alignment histogram_aligner = new Gtk.Alignment(0.0f, 0.0f, 0.0f, 0.0f);
-            histogram_aligner.add(histogram_manipulator);
-            histogram_aligner.set_padding(12, 8, 12, 12);
+            histogram_manipulator.set_margin_start (12);
+            histogram_manipulator.set_margin_end (12);
+            histogram_manipulator.set_margin_top (12);
+            histogram_manipulator.set_margin_bottom (8);
 
             Gtk.Box pane_layouter = new Gtk.Box(Gtk.Orientation.VERTICAL, 8);
-            pane_layouter.add(histogram_aligner);
+            pane_layouter.add(histogram_manipulator);
             pane_layouter.add(slider_organizer);
             pane_layouter.add(button_layouter);
-            pane_layouter.set_child_packing(histogram_aligner, true, true, 0, Gtk.PackType.START);
+            pane_layouter.set_child_packing(histogram_manipulator, true, true, 0, Gtk.PackType.START);
 
             add(pane_layouter);
         }

@@ -13,11 +13,11 @@
 #include <gee.h>
 #include <stdlib.h>
 #include <string.h>
-#include <float.h>
-#include <math.h>
 #include <pango/pango.h>
 #include <time.h>
 #include <glib/gi18n-lib.h>
+#include <float.h>
+#include <math.h>
 #include <gdk/gdk.h>
 #include <gio/gio.h>
 
@@ -720,10 +720,10 @@ void properties_add_line (Properties* self, const gchar* label_text, const gchar
 	gchar* _tmp4_ = NULL;
 	gchar* _tmp5_ = NULL;
 	gboolean _tmp6_ = FALSE;
-	GtkLabel* _tmp43_ = NULL;
-	guint _tmp44_ = 0U;
-	gboolean _tmp45_ = FALSE;
-	guint _tmp50_ = 0U;
+	GtkLabel* _tmp46_ = NULL;
+	guint _tmp47_ = 0U;
+	gboolean _tmp48_ = FALSE;
+	guint _tmp53_ = 0U;
 #line 15 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PROPERTIES (self));
 #line 15 "/home/jens/Source/shotwell/src/Properties.vala"
@@ -781,8 +781,9 @@ void properties_add_line (Properties* self, const gchar* label_text, const gchar
 		GtkScrolledWindow* _tmp26_ = NULL;
 		GtkTextView* _tmp27_ = NULL;
 		GtkLabel* _tmp28_ = NULL;
-		GtkScrolledWindow* _tmp29_ = NULL;
-		GtkWidget* _tmp30_ = NULL;
+		GtkLabel* _tmp29_ = NULL;
+		GtkScrolledWindow* _tmp30_ = NULL;
+		GtkWidget* _tmp31_ = NULL;
 #line 24 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp7_ = (GtkScrolledWindow*) gtk_scrolled_window_new (NULL, NULL);
 #line 24 "/home/jens/Source/shotwell/src/Properties.vala"
@@ -835,14 +836,14 @@ void properties_add_line (Properties* self, const gchar* label_text, const gchar
 		if (_tmp21_) {
 #line 37 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp19_ = "";
-#line 839 "Properties.c"
+#line 840 "Properties.c"
 		} else {
 			const gchar* _tmp22_ = NULL;
 #line 37 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp22_ = info_text;
 #line 37 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp19_ = _tmp22_;
-#line 846 "Properties.c"
+#line 847 "Properties.c"
 		}
 #line 37 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp23_ = view;
@@ -861,66 +862,68 @@ void properties_add_line (Properties* self, const gchar* label_text, const gchar
 #line 39 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp28_ = label;
 #line 39 "/home/jens/Source/shotwell/src/Properties.vala"
-		gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, gtk_misc_get_type (), GtkMisc), (gfloat) 1, (gfloat) 0);
+		gtk_label_set_xalign (_tmp28_, 1.0f);
 #line 40 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp29_ = info_scroll;
+		_tmp29_ = label;
 #line 40 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp30_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_widget_get_type (), GtkWidget));
-#line 40 "/home/jens/Source/shotwell/src/Properties.vala"
+		gtk_label_set_yalign (_tmp29_, 0.0f);
+#line 41 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp30_ = info_scroll;
+#line 41 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp31_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, gtk_widget_get_type (), GtkWidget));
+#line 41 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (info);
-#line 40 "/home/jens/Source/shotwell/src/Properties.vala"
-		info = _tmp30_;
+#line 41 "/home/jens/Source/shotwell/src/Properties.vala"
+		info = _tmp31_;
 #line 23 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (context);
 #line 23 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (view);
 #line 23 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (info_scroll);
-#line 880 "Properties.c"
+#line 885 "Properties.c"
 	} else {
 		GtkLabel* info_label = NULL;
-		GtkLabel* _tmp31_ = NULL;
-		const gchar* _tmp32_ = NULL;
+		GtkLabel* _tmp32_ = NULL;
 		const gchar* _tmp33_ = NULL;
-		gboolean _tmp34_ = FALSE;
-		GtkLabel* _tmp36_ = NULL;
+		const gchar* _tmp34_ = NULL;
+		gboolean _tmp35_ = FALSE;
 		GtkLabel* _tmp37_ = NULL;
 		GtkLabel* _tmp38_ = NULL;
 		GtkLabel* _tmp39_ = NULL;
 		GtkLabel* _tmp40_ = NULL;
 		GtkLabel* _tmp41_ = NULL;
-		GtkWidget* _tmp42_ = NULL;
-#line 42 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp31_ = (GtkLabel*) gtk_label_new ("");
-#line 42 "/home/jens/Source/shotwell/src/Properties.vala"
-		g_object_ref_sink (_tmp31_);
-#line 42 "/home/jens/Source/shotwell/src/Properties.vala"
-		info_label = _tmp31_;
+		GtkLabel* _tmp42_ = NULL;
+		GtkLabel* _tmp43_ = NULL;
+		GtkLabel* _tmp44_ = NULL;
+		GtkWidget* _tmp45_ = NULL;
 #line 43 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp33_ = info_text;
+		_tmp32_ = (GtkLabel*) gtk_label_new ("");
 #line 43 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp34_ = is_string_empty (_tmp33_);
+		g_object_ref_sink (_tmp32_);
 #line 43 "/home/jens/Source/shotwell/src/Properties.vala"
-		if (_tmp34_) {
-#line 43 "/home/jens/Source/shotwell/src/Properties.vala"
-			_tmp32_ = "";
-#line 908 "Properties.c"
-		} else {
-			const gchar* _tmp35_ = NULL;
-#line 43 "/home/jens/Source/shotwell/src/Properties.vala"
-			_tmp35_ = info_text;
-#line 43 "/home/jens/Source/shotwell/src/Properties.vala"
-			_tmp32_ = _tmp35_;
+		info_label = _tmp32_;
+#line 44 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp34_ = info_text;
+#line 44 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp35_ = is_string_empty (_tmp34_);
+#line 44 "/home/jens/Source/shotwell/src/Properties.vala"
+		if (_tmp35_) {
+#line 44 "/home/jens/Source/shotwell/src/Properties.vala"
+			_tmp33_ = "";
 #line 915 "Properties.c"
+		} else {
+			const gchar* _tmp36_ = NULL;
+#line 44 "/home/jens/Source/shotwell/src/Properties.vala"
+			_tmp36_ = info_text;
+#line 44 "/home/jens/Source/shotwell/src/Properties.vala"
+			_tmp33_ = _tmp36_;
+#line 922 "Properties.c"
 		}
-#line 43 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp36_ = info_label;
-#line 43 "/home/jens/Source/shotwell/src/Properties.vala"
-		gtk_label_set_markup (_tmp36_, _tmp32_);
 #line 44 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp37_ = info_label;
 #line 44 "/home/jens/Source/shotwell/src/Properties.vala"
-		gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, gtk_misc_get_type (), GtkMisc), (gfloat) 0, (gfloat) 5e-1);
+		gtk_label_set_markup (_tmp37_, _tmp33_);
 #line 45 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp38_ = info_label;
 #line 45 "/home/jens/Source/shotwell/src/Properties.vala"
@@ -928,63 +931,75 @@ void properties_add_line (Properties* self, const gchar* label_text, const gchar
 #line 46 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp39_ = info_label;
 #line 46 "/home/jens/Source/shotwell/src/Properties.vala"
-		gtk_label_set_selectable (_tmp39_, TRUE);
+		gtk_label_set_xalign (_tmp39_, 0.0f);
 #line 47 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp40_ = label;
+		_tmp40_ = info_label;
 #line 47 "/home/jens/Source/shotwell/src/Properties.vala"
-		gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, gtk_misc_get_type (), GtkMisc), (gfloat) 1, (gfloat) 5e-1);
+		gtk_label_set_yalign (_tmp40_, 0.5f);
 #line 48 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp41_ = info_label;
 #line 48 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp42_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, gtk_widget_get_type (), GtkWidget));
-#line 48 "/home/jens/Source/shotwell/src/Properties.vala"
+		gtk_label_set_selectable (_tmp41_, TRUE);
+#line 49 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp42_ = label;
+#line 49 "/home/jens/Source/shotwell/src/Properties.vala"
+		gtk_label_set_xalign (_tmp42_, 1.0f);
+#line 50 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp43_ = label;
+#line 50 "/home/jens/Source/shotwell/src/Properties.vala"
+		gtk_label_set_yalign (_tmp43_, 0.5f);
+#line 51 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp44_ = info_label;
+#line 51 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp45_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp44_, gtk_widget_get_type (), GtkWidget));
+#line 51 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (info);
-#line 48 "/home/jens/Source/shotwell/src/Properties.vala"
-		info = _tmp42_;
+#line 51 "/home/jens/Source/shotwell/src/Properties.vala"
+		info = _tmp45_;
 #line 23 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (info_label);
-#line 947 "Properties.c"
+#line 962 "Properties.c"
 	}
-#line 51 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp43_ = label;
-#line 51 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp44_ = self->priv->line_count;
-#line 51 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_grid_attach (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_grid_get_type (), GtkGrid), G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, gtk_widget_get_type (), GtkWidget), 0, (gint) _tmp44_, 1, 1);
-#line 53 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp45_ = multi_line;
-#line 53 "/home/jens/Source/shotwell/src/Properties.vala"
-	if (_tmp45_) {
-#line 959 "Properties.c"
-		GtkWidget* _tmp46_ = NULL;
-		guint _tmp47_ = 0U;
 #line 54 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp46_ = info;
+	_tmp46_ = label;
 #line 54 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp47_ = self->priv->line_count;
+	_tmp47_ = self->priv->line_count;
 #line 54 "/home/jens/Source/shotwell/src/Properties.vala"
-		gtk_grid_attach (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_grid_get_type (), GtkGrid), _tmp46_, 1, (gint) _tmp47_, 1, 2);
-#line 968 "Properties.c"
+	gtk_grid_attach (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_grid_get_type (), GtkGrid), G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, gtk_widget_get_type (), GtkWidget), 0, (gint) _tmp47_, 1, 1);
+#line 56 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp48_ = multi_line;
+#line 56 "/home/jens/Source/shotwell/src/Properties.vala"
+	if (_tmp48_) {
+#line 974 "Properties.c"
+		GtkWidget* _tmp49_ = NULL;
+		guint _tmp50_ = 0U;
+#line 57 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp49_ = info;
+#line 57 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp50_ = self->priv->line_count;
+#line 57 "/home/jens/Source/shotwell/src/Properties.vala"
+		gtk_grid_attach (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_grid_get_type (), GtkGrid), _tmp49_, 1, (gint) _tmp50_, 1, 2);
+#line 983 "Properties.c"
 	} else {
-		GtkWidget* _tmp48_ = NULL;
-		guint _tmp49_ = 0U;
-#line 56 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp48_ = info;
-#line 56 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp49_ = self->priv->line_count;
-#line 56 "/home/jens/Source/shotwell/src/Properties.vala"
-		gtk_grid_attach (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_grid_get_type (), GtkGrid), _tmp48_, 1, (gint) _tmp49_, 1, 1);
-#line 978 "Properties.c"
+		GtkWidget* _tmp51_ = NULL;
+		guint _tmp52_ = 0U;
+#line 59 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp51_ = info;
+#line 59 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp52_ = self->priv->line_count;
+#line 59 "/home/jens/Source/shotwell/src/Properties.vala"
+		gtk_grid_attach (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_grid_get_type (), GtkGrid), _tmp51_, 1, (gint) _tmp52_, 1, 1);
+#line 993 "Properties.c"
 	}
-#line 59 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp50_ = self->priv->line_count;
-#line 59 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->line_count = _tmp50_ + 1;
+#line 62 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp53_ = self->priv->line_count;
+#line 62 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->line_count = _tmp53_ + 1;
 #line 15 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_object_unref0 (info);
 #line 15 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_object_unref0 (label);
-#line 988 "Properties.c"
+#line 1003 "Properties.c"
 }
 
 
@@ -1030,7 +1045,7 @@ static gchar* g_time_format (struct tm *self, const gchar* format) {
 	buffer = (g_free (buffer), NULL);
 #line 2761 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 1034 "Properties.c"
+#line 1049 "Properties.c"
 }
 
 
@@ -1048,7 +1063,7 @@ static gchar string_get (const gchar* self, glong index) {
 	result = _tmp1_;
 #line 1087 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 1052 "Properties.c"
+#line 1067 "Properties.c"
 }
 
 
@@ -1071,7 +1086,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 	_tmp3_ = end;
 #line 1296 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp3_ == NULL) {
-#line 1075 "Properties.c"
+#line 1090 "Properties.c"
 		glong _tmp4_ = 0L;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp4_ = maxlen;
@@ -1079,7 +1094,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = _tmp4_;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 1083 "Properties.c"
+#line 1098 "Properties.c"
 	} else {
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -1091,7 +1106,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = (glong) (_tmp5_ - _tmp6_);
 #line 1299 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 1095 "Properties.c"
+#line 1110 "Properties.c"
 	}
 }
 
@@ -1115,21 +1130,21 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	_tmp1_ = offset;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp1_ >= ((glong) 0)) {
-#line 1119 "Properties.c"
+#line 1134 "Properties.c"
 		glong _tmp2_ = 0L;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = len;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = _tmp2_ >= ((glong) 0);
-#line 1125 "Properties.c"
+#line 1140 "Properties.c"
 	} else {
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = FALSE;
-#line 1129 "Properties.c"
+#line 1144 "Properties.c"
 	}
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp0_) {
-#line 1133 "Properties.c"
+#line 1148 "Properties.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 		glong _tmp5_ = 0L;
@@ -1141,7 +1156,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp5_ = string_strnlen ((gchar*) self, _tmp3_ + _tmp4_);
 #line 1310 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = _tmp5_;
-#line 1145 "Properties.c"
+#line 1160 "Properties.c"
 	} else {
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
@@ -1151,13 +1166,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp7_ = _tmp6_;
 #line 1312 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = (glong) _tmp7_;
-#line 1155 "Properties.c"
+#line 1170 "Properties.c"
 	}
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp8_ = offset;
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp8_ < ((glong) 0)) {
-#line 1161 "Properties.c"
+#line 1176 "Properties.c"
 		glong _tmp9_ = 0L;
 		glong _tmp10_ = 0L;
 		glong _tmp11_ = 0L;
@@ -1171,7 +1186,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp11_ = offset;
 #line 1317 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp11_ >= ((glong) 0), NULL);
-#line 1175 "Properties.c"
+#line 1190 "Properties.c"
 	} else {
 		glong _tmp12_ = 0L;
 		glong _tmp13_ = 0L;
@@ -1181,13 +1196,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp13_ = string_length;
 #line 1319 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp12_ <= _tmp13_, NULL);
-#line 1185 "Properties.c"
+#line 1200 "Properties.c"
 	}
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp14_ = len;
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp14_ < ((glong) 0)) {
-#line 1191 "Properties.c"
+#line 1206 "Properties.c"
 		glong _tmp15_ = 0L;
 		glong _tmp16_ = 0L;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -1196,7 +1211,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp16_ = offset;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		len = _tmp15_ - _tmp16_;
-#line 1200 "Properties.c"
+#line 1215 "Properties.c"
 	}
 #line 1324 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp17_ = offset;
@@ -1216,7 +1231,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	result = _tmp22_;
 #line 1325 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 1220 "Properties.c"
+#line 1235 "Properties.c"
 }
 
 
@@ -1229,46 +1244,46 @@ gchar* properties_get_prettyprint_time (Properties* self, struct tm* time) {
 	gchar* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
 	gchar _tmp5_ = '\0';
-#line 62 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 65 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_val_if_fail (IS_PROPERTIES (self), NULL);
-#line 62 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 65 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_val_if_fail (time != NULL, NULL);
-#line 63 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 66 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = resources_get_hh_mm_format_string ();
-#line 63 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 66 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp1_ = _tmp0_;
-#line 63 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 66 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp2_ = g_time_format (time, _tmp1_);
-#line 63 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 66 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp3_ = _tmp2_;
-#line 63 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 66 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (_tmp1_);
-#line 63 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 66 "/home/jens/Source/shotwell/src/Properties.vala"
 	timestring = _tmp3_;
-#line 65 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 68 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp4_ = timestring;
-#line 65 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 68 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp5_ = string_get (_tmp4_, (glong) 0);
-#line 65 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 68 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp5_ == '0') {
-#line 1255 "Properties.c"
+#line 1270 "Properties.c"
 		const gchar* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
-#line 66 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 69 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp6_ = timestring;
-#line 66 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 69 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp7_ = string_substring (_tmp6_, (glong) 1, (glong) -1);
-#line 66 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 69 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (timestring);
-#line 66 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 69 "/home/jens/Source/shotwell/src/Properties.vala"
 		timestring = _tmp7_;
-#line 1266 "Properties.c"
+#line 1281 "Properties.c"
 	}
-#line 68 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 71 "/home/jens/Source/shotwell/src/Properties.vala"
 	result = timestring;
-#line 68 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 71 "/home/jens/Source/shotwell/src/Properties.vala"
 	return result;
-#line 1272 "Properties.c"
+#line 1287 "Properties.c"
 }
 
 
@@ -1281,46 +1296,46 @@ gchar* properties_get_prettyprint_time_with_seconds (Properties* self, struct tm
 	gchar* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
 	gchar _tmp5_ = '\0';
-#line 71 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 74 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_val_if_fail (IS_PROPERTIES (self), NULL);
-#line 71 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 74 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_val_if_fail (time != NULL, NULL);
-#line 72 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 75 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = resources_get_hh_mm_ss_format_string ();
-#line 72 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 75 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp1_ = _tmp0_;
-#line 72 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 75 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp2_ = g_time_format (time, _tmp1_);
-#line 72 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 75 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp3_ = _tmp2_;
-#line 72 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 75 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (_tmp1_);
-#line 72 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 75 "/home/jens/Source/shotwell/src/Properties.vala"
 	timestring = _tmp3_;
-#line 74 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 77 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp4_ = timestring;
-#line 74 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 77 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp5_ = string_get (_tmp4_, (glong) 0);
-#line 74 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 77 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp5_ == '0') {
-#line 1307 "Properties.c"
+#line 1322 "Properties.c"
 		const gchar* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
-#line 75 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 78 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp6_ = timestring;
-#line 75 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 78 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp7_ = string_substring (_tmp6_, (glong) 1, (glong) -1);
-#line 75 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 78 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (timestring);
-#line 75 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 78 "/home/jens/Source/shotwell/src/Properties.vala"
 		timestring = _tmp7_;
-#line 1318 "Properties.c"
+#line 1333 "Properties.c"
 	}
-#line 77 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 80 "/home/jens/Source/shotwell/src/Properties.vala"
 	result = timestring;
-#line 77 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 80 "/home/jens/Source/shotwell/src/Properties.vala"
 	return result;
-#line 1324 "Properties.c"
+#line 1339 "Properties.c"
 }
 
 
@@ -1335,7 +1350,7 @@ static void g_time_local (time_t time, struct tm* result) {
 	*result = _result_;
 #line 2751 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return;
-#line 1339 "Properties.c"
+#line 1354 "Properties.c"
 }
 
 
@@ -1350,165 +1365,165 @@ gchar* properties_get_prettyprint_date (Properties* self, struct tm* date) {
 	gint _tmp4_ = 0;
 	struct tm _tmp5_ = {0};
 	gint _tmp6_ = 0;
-#line 80 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_val_if_fail (IS_PROPERTIES (self), NULL);
-#line 80 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_val_if_fail (date != NULL, NULL);
-#line 81 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 84 "/home/jens/Source/shotwell/src/Properties.vala"
 	date_string = NULL;
-#line 82 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = time (NULL);
-#line 82 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_time_local (_tmp0_, &_tmp1_);
-#line 82 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
 	today = _tmp1_;
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp3_ = *date;
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp4_ = _tmp3_.tm_yday;
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp5_ = today;
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp6_ = _tmp5_.tm_yday;
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp4_ == _tmp6_) {
-#line 1376 "Properties.c"
+#line 1391 "Properties.c"
 		struct tm _tmp7_ = {0};
 		gint _tmp8_ = 0;
 		struct tm _tmp9_ = {0};
 		gint _tmp10_ = 0;
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp7_ = *date;
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp8_ = _tmp7_.tm_year;
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp9_ = today;
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp10_ = _tmp9_.tm_year;
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp2_ = _tmp8_ == _tmp10_;
-#line 1391 "Properties.c"
+#line 1406 "Properties.c"
 	} else {
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp2_ = FALSE;
-#line 1395 "Properties.c"
+#line 1410 "Properties.c"
 	}
-#line 83 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp2_) {
-#line 1399 "Properties.c"
+#line 1414 "Properties.c"
 		const gchar* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
-#line 84 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 87 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp11_ = _ ("Today");
-#line 84 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 87 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp12_ = g_strdup (_tmp11_);
-#line 84 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 87 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (date_string);
-#line 84 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 87 "/home/jens/Source/shotwell/src/Properties.vala"
 		date_string = _tmp12_;
-#line 1410 "Properties.c"
+#line 1425 "Properties.c"
 	} else {
 		gboolean _tmp13_ = FALSE;
 		struct tm _tmp14_ = {0};
 		gint _tmp15_ = 0;
 		struct tm _tmp16_ = {0};
 		gint _tmp17_ = 0;
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp14_ = *date;
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp15_ = _tmp14_.tm_yday;
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp16_ = today;
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp17_ = _tmp16_.tm_yday;
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp15_ == (_tmp17_ - 1)) {
-#line 1427 "Properties.c"
+#line 1442 "Properties.c"
 			struct tm _tmp18_ = {0};
 			gint _tmp19_ = 0;
 			struct tm _tmp20_ = {0};
 			gint _tmp21_ = 0;
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp18_ = *date;
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp19_ = _tmp18_.tm_year;
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp20_ = today;
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp21_ = _tmp20_.tm_year;
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp13_ = _tmp19_ == _tmp21_;
-#line 1442 "Properties.c"
+#line 1457 "Properties.c"
 		} else {
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp13_ = FALSE;
-#line 1446 "Properties.c"
+#line 1461 "Properties.c"
 		}
-#line 85 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp13_) {
-#line 1450 "Properties.c"
+#line 1465 "Properties.c"
 			const gchar* _tmp22_ = NULL;
 			gchar* _tmp23_ = NULL;
-#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 89 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp22_ = _ ("Yesterday");
-#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 89 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp23_ = g_strdup (_tmp22_);
-#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 89 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (date_string);
-#line 86 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 89 "/home/jens/Source/shotwell/src/Properties.vala"
 			date_string = _tmp23_;
-#line 1461 "Properties.c"
+#line 1476 "Properties.c"
 		} else {
 			struct tm _tmp24_ = {0};
 			gchar* _tmp25_ = NULL;
-#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 91 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp24_ = *date;
-#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 91 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp25_ = format_local_date (&_tmp24_);
-#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 91 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (date_string);
-#line 88 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 91 "/home/jens/Source/shotwell/src/Properties.vala"
 			date_string = _tmp25_;
-#line 1473 "Properties.c"
+#line 1488 "Properties.c"
 		}
 	}
-#line 91 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 94 "/home/jens/Source/shotwell/src/Properties.vala"
 	result = date_string;
-#line 91 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 94 "/home/jens/Source/shotwell/src/Properties.vala"
 	return result;
-#line 1480 "Properties.c"
+#line 1495 "Properties.c"
 }
 
 
 static void properties_real_get_single_properties (Properties* self, DataView* view) {
-#line 94 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 97 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_DATA_VIEW (view));
-#line 1487 "Properties.c"
+#line 1502 "Properties.c"
 }
 
 
 void properties_get_single_properties (Properties* self, DataView* view) {
-#line 94 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 97 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PROPERTIES (self));
-#line 94 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 97 "/home/jens/Source/shotwell/src/Properties.vala"
 	PROPERTIES_GET_CLASS (self)->get_single_properties (self, view);
-#line 1496 "Properties.c"
+#line 1511 "Properties.c"
 }
 
 
 static void properties_real_get_multiple_properties (Properties* self, GeeIterable* iter) {
-#line 97 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 100 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail ((iter == NULL) || GEE_IS_ITERABLE (iter));
-#line 1503 "Properties.c"
+#line 1518 "Properties.c"
 }
 
 
 void properties_get_multiple_properties (Properties* self, GeeIterable* iter) {
-#line 97 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 100 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PROPERTIES (self));
-#line 97 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 100 "/home/jens/Source/shotwell/src/Properties.vala"
 	PROPERTIES_GET_CLASS (self)->get_multiple_properties (self, iter);
-#line 1512 "Properties.c"
+#line 1527 "Properties.c"
 }
 
 
@@ -1525,306 +1540,306 @@ static void properties_real_get_properties (Properties* self, Page* current_page
 	gboolean _tmp12_ = FALSE;
 	GeeIterable* _tmp13_ = NULL;
 	gint _tmp15_ = 0;
-#line 100 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 103 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PAGE (current_page));
-#line 101 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 104 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = current_page;
-#line 101 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 104 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp1_ = page_get_view (_tmp0_);
-#line 101 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 104 "/home/jens/Source/shotwell/src/Properties.vala"
 	view = _tmp1_;
-#line 102 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 105 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp2_ = view;
-#line 102 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 105 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp2_ == NULL) {
-#line 103 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 106 "/home/jens/Source/shotwell/src/Properties.vala"
 		_data_collection_unref0 (view);
-#line 103 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 106 "/home/jens/Source/shotwell/src/Properties.vala"
 		return;
-#line 1545 "Properties.c"
+#line 1560 "Properties.c"
 	}
-#line 106 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 109 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp3_ = view;
-#line 106 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 109 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp4_ = view_collection_get_selected_count (_tmp3_);
-#line 106 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 109 "/home/jens/Source/shotwell/src/Properties.vala"
 	count = _tmp4_;
-#line 107 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 110 "/home/jens/Source/shotwell/src/Properties.vala"
 	iter = NULL;
-#line 108 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 111 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp5_ = count;
-#line 108 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 111 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp5_ != 0) {
-#line 1559 "Properties.c"
+#line 1574 "Properties.c"
 		ViewCollection* _tmp6_ = NULL;
 		GeeList* _tmp7_ = NULL;
-#line 109 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 112 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp6_ = view;
-#line 109 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 112 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp7_ = view_collection_get_selected (_tmp6_);
-#line 109 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 112 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (iter);
-#line 109 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 112 "/home/jens/Source/shotwell/src/Properties.vala"
 		iter = G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_ITERABLE, GeeIterable);
-#line 1570 "Properties.c"
+#line 1585 "Properties.c"
 	} else {
 		ViewCollection* _tmp8_ = NULL;
 		gint _tmp9_ = 0;
 		ViewCollection* _tmp10_ = NULL;
 		GeeCollection* _tmp11_ = NULL;
-#line 111 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 114 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp8_ = view;
-#line 111 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 114 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp9_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, TYPE_DATA_COLLECTION, DataCollection));
-#line 111 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 114 "/home/jens/Source/shotwell/src/Properties.vala"
 		count = _tmp9_;
-#line 112 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 115 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp10_ = view;
-#line 112 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 115 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp11_ = data_collection_get_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, TYPE_DATA_COLLECTION, DataCollection));
-#line 112 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 115 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (iter);
-#line 112 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 115 "/home/jens/Source/shotwell/src/Properties.vala"
 		iter = G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, GEE_TYPE_ITERABLE, GeeIterable);
-#line 1590 "Properties.c"
-	}
-#line 115 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp13_ = iter;
-#line 115 "/home/jens/Source/shotwell/src/Properties.vala"
-	if (_tmp13_ == NULL) {
-#line 115 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp12_ = TRUE;
-#line 1598 "Properties.c"
-	} else {
-		gint _tmp14_ = 0;
-#line 115 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp14_ = count;
-#line 115 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp12_ = _tmp14_ == 0;
 #line 1605 "Properties.c"
 	}
-#line 115 "/home/jens/Source/shotwell/src/Properties.vala"
-	if (_tmp12_) {
-#line 116 "/home/jens/Source/shotwell/src/Properties.vala"
-		_g_object_unref0 (iter);
-#line 116 "/home/jens/Source/shotwell/src/Properties.vala"
-		_data_collection_unref0 (view);
-#line 116 "/home/jens/Source/shotwell/src/Properties.vala"
-		return;
-#line 1615 "Properties.c"
+#line 118 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp13_ = iter;
+#line 118 "/home/jens/Source/shotwell/src/Properties.vala"
+	if (_tmp13_ == NULL) {
+#line 118 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp12_ = TRUE;
+#line 1613 "Properties.c"
+	} else {
+		gint _tmp14_ = 0;
+#line 118 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp14_ = count;
+#line 118 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp12_ = _tmp14_ == 0;
+#line 1620 "Properties.c"
 	}
 #line 118 "/home/jens/Source/shotwell/src/Properties.vala"
+	if (_tmp12_) {
+#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+		_g_object_unref0 (iter);
+#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+		_data_collection_unref0 (view);
+#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+		return;
+#line 1630 "Properties.c"
+	}
+#line 121 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp15_ = count;
-#line 118 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 121 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp15_ == 1) {
-#line 1621 "Properties.c"
+#line 1636 "Properties.c"
 		{
 			GeeIterator* _item_it = NULL;
 			GeeIterable* _tmp16_ = NULL;
 			GeeIterator* _tmp17_ = NULL;
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp16_ = iter;
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp17_ = gee_iterable_iterator (_tmp16_);
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 			_item_it = _tmp17_;
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 			while (TRUE) {
-#line 1634 "Properties.c"
+#line 1649 "Properties.c"
 				GeeIterator* _tmp18_ = NULL;
 				gboolean _tmp19_ = FALSE;
 				DataView* item = NULL;
 				GeeIterator* _tmp20_ = NULL;
 				gpointer _tmp21_ = NULL;
 				DataView* _tmp22_ = NULL;
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp18_ = _item_it;
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp19_ = gee_iterator_next (_tmp18_);
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 				if (!_tmp19_) {
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 					break;
-#line 1649 "Properties.c"
+#line 1664 "Properties.c"
 				}
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp20_ = _item_it;
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp21_ = gee_iterator_get (_tmp20_);
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 				item = (DataView*) _tmp21_;
-#line 120 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 123 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp22_ = item;
-#line 120 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 123 "/home/jens/Source/shotwell/src/Properties.vala"
 				properties_get_single_properties (self, _tmp22_);
-#line 121 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 124 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_object_unref0 (item);
-#line 121 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 124 "/home/jens/Source/shotwell/src/Properties.vala"
 				break;
-#line 1665 "Properties.c"
+#line 1680 "Properties.c"
 			}
-#line 119 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 122 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (_item_it);
-#line 1669 "Properties.c"
+#line 1684 "Properties.c"
 		}
 	} else {
 		GeeIterable* _tmp23_ = NULL;
-#line 124 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 127 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp23_ = iter;
-#line 124 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 127 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_get_multiple_properties (self, _tmp23_);
-#line 1677 "Properties.c"
+#line 1692 "Properties.c"
 	}
-#line 100 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 103 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_object_unref0 (iter);
-#line 100 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 103 "/home/jens/Source/shotwell/src/Properties.vala"
 	_data_collection_unref0 (view);
-#line 1683 "Properties.c"
+#line 1698 "Properties.c"
 }
 
 
 void properties_get_properties (Properties* self, Page* current_page) {
-#line 100 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 103 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PROPERTIES (self));
-#line 100 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 103 "/home/jens/Source/shotwell/src/Properties.vala"
 	PROPERTIES_GET_CLASS (self)->get_properties (self, current_page);
-#line 1692 "Properties.c"
+#line 1707 "Properties.c"
 }
 
 
 static void properties_real_clear_properties (Properties* self) {
 	GList* _tmp0_ = NULL;
-#line 129 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 132 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = gtk_container_get_children (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer));
-#line 1700 "Properties.c"
+#line 1715 "Properties.c"
 	{
 		GList* child_collection = NULL;
 		GList* child_it = NULL;
-#line 129 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 132 "/home/jens/Source/shotwell/src/Properties.vala"
 		child_collection = _tmp0_;
-#line 129 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 132 "/home/jens/Source/shotwell/src/Properties.vala"
 		for (child_it = child_collection; child_it != NULL; child_it = child_it->next) {
-#line 1708 "Properties.c"
+#line 1723 "Properties.c"
 			GtkWidget* _tmp1_ = NULL;
 			GtkWidget* child = NULL;
-#line 129 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 132 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp1_ = _g_object_ref0 ((GtkWidget*) child_it->data);
-#line 129 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 132 "/home/jens/Source/shotwell/src/Properties.vala"
 			child = _tmp1_;
-#line 1715 "Properties.c"
+#line 1730 "Properties.c"
 			{
 				GtkWidget* _tmp2_ = NULL;
-#line 130 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 133 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp2_ = child;
-#line 130 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 133 "/home/jens/Source/shotwell/src/Properties.vala"
 				gtk_container_remove (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), _tmp2_);
-#line 129 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 132 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_object_unref0 (child);
-#line 1724 "Properties.c"
+#line 1739 "Properties.c"
 			}
 		}
-#line 129 "/home/jens/Source/shotwell/src/Properties.vala"
-		_g_list_free0 (child_collection);
-#line 1729 "Properties.c"
-	}
 #line 132 "/home/jens/Source/shotwell/src/Properties.vala"
+		_g_list_free0 (child_collection);
+#line 1744 "Properties.c"
+	}
+#line 135 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->line_count = (guint) 0;
-#line 1733 "Properties.c"
+#line 1748 "Properties.c"
 }
 
 
 void properties_clear_properties (Properties* self) {
-#line 128 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 131 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PROPERTIES (self));
-#line 128 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 131 "/home/jens/Source/shotwell/src/Properties.vala"
 	PROPERTIES_GET_CLASS (self)->clear_properties (self);
-#line 1742 "Properties.c"
+#line 1757 "Properties.c"
 }
 
 
 void properties_update_properties (Properties* self, Page* page) {
 	Page* _tmp0_ = NULL;
-#line 135 "/home/jens/Source/shotwell/src/Properties.vala"
-	g_return_if_fail (IS_PROPERTIES (self));
-#line 135 "/home/jens/Source/shotwell/src/Properties.vala"
-	g_return_if_fail (IS_PAGE (page));
-#line 136 "/home/jens/Source/shotwell/src/Properties.vala"
-	properties_clear_properties (self);
-#line 137 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp0_ = page;
-#line 137 "/home/jens/Source/shotwell/src/Properties.vala"
-	properties_internal_update_properties (self, _tmp0_);
 #line 138 "/home/jens/Source/shotwell/src/Properties.vala"
+	g_return_if_fail (IS_PROPERTIES (self));
+#line 138 "/home/jens/Source/shotwell/src/Properties.vala"
+	g_return_if_fail (IS_PAGE (page));
+#line 139 "/home/jens/Source/shotwell/src/Properties.vala"
+	properties_clear_properties (self);
+#line 140 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp0_ = page;
+#line 140 "/home/jens/Source/shotwell/src/Properties.vala"
+	properties_internal_update_properties (self, _tmp0_);
+#line 141 "/home/jens/Source/shotwell/src/Properties.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 1760 "Properties.c"
+#line 1775 "Properties.c"
 }
 
 
 static void properties_real_internal_update_properties (Properties* self, Page* page) {
 	Page* _tmp0_ = NULL;
-#line 141 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 144 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PAGE (page));
-#line 142 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 145 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = page;
-#line 142 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 145 "/home/jens/Source/shotwell/src/Properties.vala"
 	properties_get_properties (self, _tmp0_);
-#line 1772 "Properties.c"
+#line 1787 "Properties.c"
 }
 
 
 void properties_internal_update_properties (Properties* self, Page* page) {
-#line 141 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 144 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PROPERTIES (self));
-#line 141 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 144 "/home/jens/Source/shotwell/src/Properties.vala"
 	PROPERTIES_GET_CLASS (self)->internal_update_properties (self, page);
-#line 1781 "Properties.c"
+#line 1796 "Properties.c"
 }
 
 
 void properties_unselect_text (Properties* self) {
 	GList* _tmp0_ = NULL;
-#line 145 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 148 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PROPERTIES (self));
-#line 146 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 149 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = gtk_container_get_children (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer));
-#line 1791 "Properties.c"
+#line 1806 "Properties.c"
 	{
 		GList* child_collection = NULL;
 		GList* child_it = NULL;
-#line 146 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 149 "/home/jens/Source/shotwell/src/Properties.vala"
 		child_collection = _tmp0_;
-#line 146 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 149 "/home/jens/Source/shotwell/src/Properties.vala"
 		for (child_it = child_collection; child_it != NULL; child_it = child_it->next) {
-#line 1799 "Properties.c"
+#line 1814 "Properties.c"
 			GtkWidget* _tmp1_ = NULL;
 			GtkWidget* child = NULL;
-#line 146 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 149 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp1_ = _g_object_ref0 ((GtkWidget*) child_it->data);
-#line 146 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 149 "/home/jens/Source/shotwell/src/Properties.vala"
 			child = _tmp1_;
-#line 1806 "Properties.c"
+#line 1821 "Properties.c"
 			{
 				GtkWidget* _tmp2_ = NULL;
-#line 147 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 150 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp2_ = child;
-#line 147 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 150 "/home/jens/Source/shotwell/src/Properties.vala"
 				if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp2_, gtk_label_get_type ())) {
-#line 1813 "Properties.c"
+#line 1828 "Properties.c"
 					GtkWidget* _tmp3_ = NULL;
-#line 148 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 151 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp3_ = child;
-#line 148 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 151 "/home/jens/Source/shotwell/src/Properties.vala"
 					gtk_label_select_region (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_label_get_type (), GtkLabel), 0, 0);
-#line 1819 "Properties.c"
+#line 1834 "Properties.c"
 				}
-#line 146 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 149 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_object_unref0 (child);
-#line 1823 "Properties.c"
+#line 1838 "Properties.c"
 			}
 		}
-#line 146 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 149 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_list_free0 (child_collection);
-#line 1828 "Properties.c"
+#line 1843 "Properties.c"
 	}
 }
 
@@ -1846,7 +1861,7 @@ static void properties_class_init (PropertiesClass * klass) {
 	((PropertiesClass *) klass)->internal_update_properties = properties_real_internal_update_properties;
 #line 7 "/home/jens/Source/shotwell/src/Properties.vala"
 	G_OBJECT_CLASS (klass)->finalize = properties_finalize;
-#line 1850 "Properties.c"
+#line 1865 "Properties.c"
 }
 
 
@@ -1855,7 +1870,7 @@ static void properties_instance_init (Properties * self) {
 	self->priv = PROPERTIES_GET_PRIVATE (self);
 #line 8 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->line_count = (guint) 0;
-#line 1859 "Properties.c"
+#line 1874 "Properties.c"
 }
 
 
@@ -1865,7 +1880,7 @@ static void properties_finalize (GObject* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PROPERTIES, Properties);
 #line 7 "/home/jens/Source/shotwell/src/Properties.vala"
 	G_OBJECT_CLASS (properties_parent_class)->finalize (obj);
-#line 1869 "Properties.c"
+#line 1884 "Properties.c"
 }
 
 
@@ -1883,18 +1898,18 @@ GType properties_get_type (void) {
 
 BasicProperties* basic_properties_construct (GType object_type) {
 	BasicProperties * self = NULL;
-#line 168 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 171 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = (BasicProperties*) properties_construct (object_type);
-#line 168 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 171 "/home/jens/Source/shotwell/src/Properties.vala"
 	return self;
-#line 1891 "Properties.c"
+#line 1906 "Properties.c"
 }
 
 
 BasicProperties* basic_properties_new (void) {
-#line 168 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 171 "/home/jens/Source/shotwell/src/Properties.vala"
 	return basic_properties_construct (TYPE_BASIC_PROPERTIES);
-#line 1898 "Properties.c"
+#line 1913 "Properties.c"
 }
 
 
@@ -1906,68 +1921,68 @@ static void basic_properties_real_clear_properties (Properties* base) {
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
 	gchar* _tmp5_ = NULL;
-#line 171 "/home/jens/Source/shotwell/src/Properties.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_BASIC_PROPERTIES, BasicProperties);
-#line 172 "/home/jens/Source/shotwell/src/Properties.vala"
-	PROPERTIES_CLASS (basic_properties_parent_class)->clear_properties (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties));
-#line 173 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp0_ = g_strdup ("");
-#line 173 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->title);
-#line 173 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->title = _tmp0_;
 #line 174 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->start_time = (time_t) 0;
+	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_BASIC_PROPERTIES, BasicProperties);
 #line 175 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->end_time = (time_t) 0;
+	PROPERTIES_CLASS (basic_properties_parent_class)->clear_properties (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties));
 #line 176 "/home/jens/Source/shotwell/src/Properties.vala"
-	dimensions_init (&self->priv->dimensions, 0, 0);
+	_tmp0_ = g_strdup ("");
+#line 176 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->title);
+#line 176 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->title = _tmp0_;
 #line 177 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->photo_count = -1;
+	self->priv->start_time = (time_t) 0;
 #line 178 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->event_count = -1;
+	self->priv->end_time = (time_t) 0;
 #line 179 "/home/jens/Source/shotwell/src/Properties.vala"
+	dimensions_init (&self->priv->dimensions, 0, 0);
+#line 180 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->photo_count = -1;
+#line 181 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->event_count = -1;
+#line 182 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->video_count = -1;
-#line 180 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp1_ = g_strdup ("");
-#line 180 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->exposure);
-#line 180 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->exposure = _tmp1_;
-#line 181 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp2_ = g_strdup ("");
-#line 181 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->aperture);
-#line 181 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->aperture = _tmp2_;
-#line 182 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp3_ = g_strdup ("");
-#line 182 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->iso);
-#line 182 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->iso = _tmp3_;
 #line 183 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp1_ = g_strdup ("");
+#line 183 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->exposure);
+#line 183 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->exposure = _tmp1_;
+#line 184 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp2_ = g_strdup ("");
+#line 184 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->aperture);
+#line 184 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->aperture = _tmp2_;
+#line 185 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp3_ = g_strdup ("");
+#line 185 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->iso);
+#line 185 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->iso = _tmp3_;
+#line 186 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->clip_duration = 0.0;
-#line 184 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 187 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp4_ = g_strdup ("");
-#line 184 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 187 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->raw_developer);
-#line 184 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 187 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->raw_developer = _tmp4_;
-#line 185 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 188 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp5_ = g_strdup ("");
-#line 185 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 188 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->raw_assoc);
-#line 185 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 188 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->raw_assoc = _tmp5_;
-#line 1964 "Properties.c"
+#line 1979 "Properties.c"
 }
 
 
 static gpointer _media_metadata_ref0 (gpointer self) {
-#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 203 "/home/jens/Source/shotwell/src/Properties.vala"
 	return self ? media_metadata_ref (self) : NULL;
-#line 1971 "Properties.c"
+#line 1986 "Properties.c"
 }
 
 
@@ -1981,46 +1996,46 @@ static void basic_properties_real_get_single_properties (Properties* base, DataV
 	gchar* _tmp4_ = NULL;
 	gboolean _tmp5_ = FALSE;
 	DataSource* _tmp6_ = NULL;
-#line 188 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 191 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_BASIC_PROPERTIES, BasicProperties);
-#line 188 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 191 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_DATA_VIEW (view));
-#line 189 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 192 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = view;
-#line 189 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 192 "/home/jens/Source/shotwell/src/Properties.vala"
 	PROPERTIES_CLASS (basic_properties_parent_class)->get_single_properties (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp0_);
-#line 191 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 194 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp1_ = view;
-#line 191 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 194 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp2_ = data_view_get_source (_tmp1_);
-#line 191 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 194 "/home/jens/Source/shotwell/src/Properties.vala"
 	source = _tmp2_;
-#line 193 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 196 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp3_ = source;
-#line 193 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 196 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp4_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_DATA_OBJECT, DataObject));
-#line 193 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 196 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->title);
-#line 193 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 196 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->title = _tmp4_;
-#line 195 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 198 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp6_ = source;
-#line 195 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 198 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp6_, TYPE_PHOTO_SOURCE)) {
-#line 195 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 198 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp5_ = TRUE;
-#line 2013 "Properties.c"
+#line 2028 "Properties.c"
 	} else {
 		DataSource* _tmp7_ = NULL;
-#line 195 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 198 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp7_ = source;
-#line 195 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 198 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp5_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp7_, TYPE_PHOTO_IMPORT_SOURCE);
-#line 2020 "Properties.c"
+#line 2035 "Properties.c"
 	}
-#line 195 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 198 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp5_) {
-#line 2024 "Properties.c"
+#line 2039 "Properties.c"
 		time_t _tmp8_ = 0;
 		DataSource* _tmp9_ = NULL;
 		time_t _tmp14_ = 0;
@@ -2032,75 +2047,75 @@ static void basic_properties_real_get_single_properties (Properties* base, DataV
 		DataSource* _tmp47_ = NULL;
 		gboolean _tmp50_ = FALSE;
 		DataSource* _tmp51_ = NULL;
-#line 196 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 199 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp9_ = source;
-#line 196 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 199 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp9_, TYPE_PHOTO_SOURCE)) {
-#line 2040 "Properties.c"
+#line 2055 "Properties.c"
 			DataSource* _tmp10_ = NULL;
 			time_t _tmp11_ = 0;
-#line 196 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 199 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp10_ = source;
-#line 196 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 199 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp11_ = media_source_get_exposure_time (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, TYPE_PHOTO_SOURCE, PhotoSource), TYPE_MEDIA_SOURCE, MediaSource));
-#line 196 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 199 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp8_ = _tmp11_;
-#line 2049 "Properties.c"
+#line 2064 "Properties.c"
 		} else {
 			DataSource* _tmp12_ = NULL;
 			time_t _tmp13_ = 0;
-#line 197 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp12_ = source;
-#line 197 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp13_ = import_source_get_exposure_time (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_PHOTO_IMPORT_SOURCE, PhotoImportSource), TYPE_IMPORT_SOURCE, ImportSource));
-#line 197 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp8_ = _tmp13_;
-#line 2059 "Properties.c"
+#line 2074 "Properties.c"
 		}
-#line 196 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 199 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->start_time = _tmp8_;
-#line 198 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 201 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp14_ = self->priv->start_time;
-#line 198 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 201 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->end_time = _tmp14_;
-#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 203 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp16_ = source;
-#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 203 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp16_, TYPE_PHOTO_SOURCE)) {
-#line 2071 "Properties.c"
+#line 2086 "Properties.c"
 			DataSource* _tmp17_ = NULL;
 			PhotoMetadata* _tmp18_ = NULL;
-#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 203 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp17_ = source;
-#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 203 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp18_ = photo_source_get_metadata (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, TYPE_PHOTO_SOURCE, PhotoSource));
-#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 203 "/home/jens/Source/shotwell/src/Properties.vala"
 			_media_metadata_unref0 (_tmp15_);
-#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 203 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp15_ = _tmp18_;
-#line 2082 "Properties.c"
+#line 2097 "Properties.c"
 		} else {
 			DataSource* _tmp19_ = NULL;
 			PhotoMetadata* _tmp20_ = NULL;
-#line 201 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 204 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp19_ = source;
-#line 201 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 204 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp20_ = photo_import_source_get_metadata (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, TYPE_PHOTO_IMPORT_SOURCE, PhotoImportSource));
-#line 201 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 204 "/home/jens/Source/shotwell/src/Properties.vala"
 			_media_metadata_unref0 (_tmp15_);
-#line 201 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 204 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp15_ = _tmp20_;
-#line 2094 "Properties.c"
+#line 2109 "Properties.c"
 		}
-#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 203 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp21_ = _media_metadata_ref0 (_tmp15_);
-#line 200 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 203 "/home/jens/Source/shotwell/src/Properties.vala"
 		metadata = _tmp21_;
-#line 203 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 206 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp22_ = metadata;
-#line 203 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 206 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp22_ != NULL) {
-#line 2104 "Properties.c"
+#line 2119 "Properties.c"
 			PhotoMetadata* _tmp23_ = NULL;
 			gchar* _tmp24_ = NULL;
 			const gchar* _tmp25_ = NULL;
@@ -2115,85 +2130,85 @@ static void basic_properties_real_get_single_properties (Properties* base, DataV
 			Dimensions* _tmp37_ = NULL;
 			Dimensions* _tmp38_ = NULL;
 			gboolean _tmp39_ = FALSE;
-#line 204 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 207 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp23_ = metadata;
-#line 204 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 207 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp24_ = photo_metadata_get_exposure_string (_tmp23_);
-#line 204 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 207 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (self->priv->exposure);
-#line 204 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 207 "/home/jens/Source/shotwell/src/Properties.vala"
 			self->priv->exposure = _tmp24_;
-#line 205 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 208 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp25_ = self->priv->exposure;
-#line 205 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 208 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (_tmp25_ == NULL) {
-#line 2131 "Properties.c"
+#line 2146 "Properties.c"
 				gchar* _tmp26_ = NULL;
-#line 206 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 209 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp26_ = g_strdup ("");
-#line 206 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 209 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_free0 (self->priv->exposure);
-#line 206 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 209 "/home/jens/Source/shotwell/src/Properties.vala"
 				self->priv->exposure = _tmp26_;
-#line 2139 "Properties.c"
+#line 2154 "Properties.c"
 			}
-#line 208 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 211 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp27_ = metadata;
-#line 208 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 211 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp28_ = photo_metadata_get_aperture_string (_tmp27_, TRUE);
-#line 208 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 211 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (self->priv->aperture);
-#line 208 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 211 "/home/jens/Source/shotwell/src/Properties.vala"
 			self->priv->aperture = _tmp28_;
-#line 209 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 212 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp29_ = self->priv->aperture;
-#line 209 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 212 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (_tmp29_ == NULL) {
-#line 2153 "Properties.c"
+#line 2168 "Properties.c"
 				gchar* _tmp30_ = NULL;
-#line 210 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 213 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp30_ = g_strdup ("");
-#line 210 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 213 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_free0 (self->priv->aperture);
-#line 210 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 213 "/home/jens/Source/shotwell/src/Properties.vala"
 				self->priv->aperture = _tmp30_;
-#line 2161 "Properties.c"
+#line 2176 "Properties.c"
 			}
-#line 212 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 215 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp31_ = metadata;
-#line 212 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 215 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp32_ = photo_metadata_get_iso_string (_tmp31_);
-#line 212 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 215 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (self->priv->iso);
-#line 212 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 215 "/home/jens/Source/shotwell/src/Properties.vala"
 			self->priv->iso = _tmp32_;
-#line 213 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 216 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp33_ = self->priv->iso;
-#line 213 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 216 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (_tmp33_ == NULL) {
-#line 2175 "Properties.c"
+#line 2190 "Properties.c"
 				gchar* _tmp34_ = NULL;
-#line 214 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp34_ = g_strdup ("");
-#line 214 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_free0 (self->priv->iso);
-#line 214 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
 				self->priv->iso = _tmp34_;
-#line 2183 "Properties.c"
+#line 2198 "Properties.c"
 			}
-#line 216 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 219 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp36_ = metadata;
-#line 216 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 219 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp37_ = photo_metadata_get_pixel_dimensions (_tmp36_);
-#line 216 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 219 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp38_ = _tmp37_;
-#line 216 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 219 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp39_ = _tmp38_ != NULL;
-#line 216 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 219 "/home/jens/Source/shotwell/src/Properties.vala"
 			_dimensions_free0 (_tmp38_);
-#line 216 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 219 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (_tmp39_) {
-#line 2197 "Properties.c"
+#line 2212 "Properties.c"
 				PhotoMetadata* _tmp40_ = NULL;
 				Orientation _tmp41_ = 0;
 				PhotoMetadata* _tmp42_ = NULL;
@@ -2201,71 +2216,71 @@ static void basic_properties_real_get_single_properties (Properties* base, DataV
 				Dimensions* _tmp44_ = NULL;
 				Dimensions _tmp45_ = {0};
 				Dimensions _tmp46_ = {0};
-#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 220 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp40_ = metadata;
-#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 220 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp41_ = photo_metadata_get_orientation (_tmp40_);
-#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 220 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp42_ = metadata;
-#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 220 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp43_ = photo_metadata_get_pixel_dimensions (_tmp42_);
-#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 220 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp44_ = _tmp43_;
-#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 220 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp45_ = *_tmp44_;
-#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 220 "/home/jens/Source/shotwell/src/Properties.vala"
 				orientation_rotate_dimensions (_tmp41_, &_tmp45_, &_tmp46_);
-#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 220 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp35_ = _tmp46_;
-#line 217 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 220 "/home/jens/Source/shotwell/src/Properties.vala"
 				_dimensions_free0 (_tmp44_);
-#line 2223 "Properties.c"
+#line 2238 "Properties.c"
 			} else {
-#line 218 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 221 "/home/jens/Source/shotwell/src/Properties.vala"
 				dimensions_init (&_tmp35_, 0, 0);
-#line 2227 "Properties.c"
+#line 2242 "Properties.c"
 			}
-#line 216 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 219 "/home/jens/Source/shotwell/src/Properties.vala"
 			self->priv->dimensions = _tmp35_;
-#line 2231 "Properties.c"
-		}
-#line 221 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp47_ = source;
-#line 221 "/home/jens/Source/shotwell/src/Properties.vala"
-		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp47_, TYPE_PHOTO_SOURCE)) {
-#line 2237 "Properties.c"
-			DataSource* _tmp48_ = NULL;
-			Dimensions _tmp49_ = {0};
-#line 222 "/home/jens/Source/shotwell/src/Properties.vala"
-			_tmp48_ = source;
-#line 222 "/home/jens/Source/shotwell/src/Properties.vala"
-			media_source_get_dimensions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, TYPE_PHOTO_SOURCE, PhotoSource), TYPE_MEDIA_SOURCE, MediaSource), PHOTO_EXCEPTION_NONE, &_tmp49_);
-#line 222 "/home/jens/Source/shotwell/src/Properties.vala"
-			self->priv->dimensions = _tmp49_;
 #line 2246 "Properties.c"
 		}
 #line 224 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp51_ = source;
+		_tmp47_ = source;
 #line 224 "/home/jens/Source/shotwell/src/Properties.vala"
-		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp51_, TYPE_PHOTO)) {
+		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp47_, TYPE_PHOTO_SOURCE)) {
 #line 2252 "Properties.c"
+			DataSource* _tmp48_ = NULL;
+			Dimensions _tmp49_ = {0};
+#line 225 "/home/jens/Source/shotwell/src/Properties.vala"
+			_tmp48_ = source;
+#line 225 "/home/jens/Source/shotwell/src/Properties.vala"
+			media_source_get_dimensions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, TYPE_PHOTO_SOURCE, PhotoSource), TYPE_MEDIA_SOURCE, MediaSource), PHOTO_EXCEPTION_NONE, &_tmp49_);
+#line 225 "/home/jens/Source/shotwell/src/Properties.vala"
+			self->priv->dimensions = _tmp49_;
+#line 2261 "Properties.c"
+		}
+#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp51_ = source;
+#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
+		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp51_, TYPE_PHOTO)) {
+#line 2267 "Properties.c"
 			DataSource* _tmp52_ = NULL;
 			PhotoFileFormat _tmp53_ = 0;
-#line 224 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp52_ = source;
-#line 224 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp53_ = photo_get_master_file_format (G_TYPE_CHECK_INSTANCE_CAST (_tmp52_, TYPE_PHOTO, Photo));
-#line 224 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp50_ = _tmp53_ == PHOTO_FILE_FORMAT_RAW;
-#line 2261 "Properties.c"
+#line 2276 "Properties.c"
 		} else {
-#line 224 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp50_ = FALSE;
-#line 2265 "Properties.c"
+#line 2280 "Properties.c"
 		}
-#line 224 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp50_) {
-#line 2269 "Properties.c"
+#line 2284 "Properties.c"
 			Photo* photo = NULL;
 			DataSource* _tmp54_ = NULL;
 			Photo* _tmp55_ = NULL;
@@ -2276,62 +2291,62 @@ static void basic_properties_real_get_single_properties (Properties* base, DataV
 			Photo* _tmp60_ = NULL;
 			gboolean _tmp61_ = FALSE;
 			gchar* _tmp63_ = NULL;
-#line 225 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 228 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp54_ = source;
-#line 225 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 228 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp55_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp54_, TYPE_PHOTO) ? ((Photo*) _tmp54_) : NULL);
-#line 225 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 228 "/home/jens/Source/shotwell/src/Properties.vala"
 			photo = _tmp55_;
-#line 226 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 229 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp56_ = photo;
-#line 226 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 229 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp57_ = photo_get_raw_developer (_tmp56_);
-#line 226 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 229 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp58_ = raw_developer_get_label (_tmp57_);
-#line 226 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 229 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (self->priv->raw_developer);
-#line 226 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 229 "/home/jens/Source/shotwell/src/Properties.vala"
 			self->priv->raw_developer = _tmp58_;
-#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp60_ = photo;
-#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp61_ = photo_is_raw_developer_available (_tmp60_, RAW_DEVELOPER_CAMERA);
-#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (_tmp61_) {
-#line 2302 "Properties.c"
+#line 2317 "Properties.c"
 				const gchar* _tmp62_ = NULL;
-#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp62_ = _ ("RAW+JPEG");
-#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp59_ = _tmp62_;
-#line 2308 "Properties.c"
+#line 2323 "Properties.c"
 			} else {
-#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp59_ = "";
-#line 2312 "Properties.c"
+#line 2327 "Properties.c"
 			}
-#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp63_ = g_strdup (_tmp59_);
-#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (self->priv->raw_assoc);
-#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
 			self->priv->raw_assoc = _tmp63_;
-#line 224 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 227 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (photo);
-#line 2322 "Properties.c"
+#line 2337 "Properties.c"
 		}
-#line 195 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 198 "/home/jens/Source/shotwell/src/Properties.vala"
 		_media_metadata_unref0 (metadata);
-#line 195 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 198 "/home/jens/Source/shotwell/src/Properties.vala"
 		_media_metadata_unref0 (_tmp15_);
-#line 2328 "Properties.c"
+#line 2343 "Properties.c"
 	} else {
 		DataSource* _tmp64_ = NULL;
-#line 229 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 232 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp64_ = source;
-#line 229 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 232 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp64_, TYPE_EVENT_SOURCE)) {
-#line 2335 "Properties.c"
+#line 2350 "Properties.c"
 			EventSource* event_source = NULL;
 			DataSource* _tmp65_ = NULL;
 			EventSource* _tmp66_ = NULL;
@@ -2348,77 +2363,77 @@ static void basic_properties_real_get_single_properties (Properties* base, DataV
 			gint _tmp75_ = 0;
 			gint _tmp76_ = 0;
 			gint _tmp77_ = 0;
-#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 233 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp65_ = source;
-#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 233 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp66_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp65_, TYPE_EVENT_SOURCE, EventSource));
-#line 230 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 233 "/home/jens/Source/shotwell/src/Properties.vala"
 			event_source = _tmp66_;
-#line 232 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 235 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp67_ = event_source;
-#line 232 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 235 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp68_ = event_source_get_start_time (_tmp67_);
-#line 232 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 235 "/home/jens/Source/shotwell/src/Properties.vala"
 			self->priv->start_time = _tmp68_;
-#line 233 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 236 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp69_ = event_source;
-#line 233 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 236 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp70_ = event_source_get_end_time (_tmp69_);
-#line 233 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 236 "/home/jens/Source/shotwell/src/Properties.vala"
 			self->priv->end_time = _tmp70_;
-#line 237 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 240 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp71_ = event_source;
-#line 237 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 240 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp72_ = event_source_get_media (_tmp71_);
-#line 237 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 240 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp73_ = _tmp72_;
-#line 237 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 240 "/home/jens/Source/shotwell/src/Properties.vala"
 			media_source_collection_count_media (_tmp73_, &_tmp74_, &_tmp75_);
-#line 237 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 240 "/home/jens/Source/shotwell/src/Properties.vala"
 			event_photo_count = _tmp74_;
-#line 237 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 240 "/home/jens/Source/shotwell/src/Properties.vala"
 			event_video_count = _tmp75_;
-#line 237 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 240 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (_tmp73_);
-#line 240 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 243 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp76_ = event_photo_count;
-#line 240 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 243 "/home/jens/Source/shotwell/src/Properties.vala"
 			self->priv->photo_count = _tmp76_;
-#line 241 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 244 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp77_ = event_video_count;
-#line 241 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 244 "/home/jens/Source/shotwell/src/Properties.vala"
 			self->priv->video_count = _tmp77_;
-#line 229 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 232 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (event_source);
-#line 2394 "Properties.c"
+#line 2409 "Properties.c"
 		} else {
 			gboolean _tmp78_ = FALSE;
 			DataSource* _tmp79_ = NULL;
-#line 242 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 245 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp79_ = source;
-#line 242 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 245 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp79_, TYPE_VIDEO_SOURCE)) {
-#line 242 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 245 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp78_ = TRUE;
-#line 2404 "Properties.c"
+#line 2419 "Properties.c"
 			} else {
 				DataSource* _tmp80_ = NULL;
-#line 242 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 245 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp80_ = source;
-#line 242 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 245 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp78_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp80_, TYPE_VIDEO_IMPORT_SOURCE);
-#line 2411 "Properties.c"
+#line 2426 "Properties.c"
 			}
-#line 242 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 245 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (_tmp78_) {
-#line 2415 "Properties.c"
+#line 2430 "Properties.c"
 				DataSource* _tmp81_ = NULL;
 				time_t _tmp94_ = 0;
-#line 243 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 246 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp81_ = source;
-#line 243 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 246 "/home/jens/Source/shotwell/src/Properties.vala"
 				if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp81_, TYPE_VIDEO_SOURCE)) {
-#line 2422 "Properties.c"
+#line 2437 "Properties.c"
 					Video* video = NULL;
 					DataSource* _tmp82_ = NULL;
 					Video* _tmp83_ = NULL;
@@ -2428,98 +2443,98 @@ static void basic_properties_real_get_single_properties (Properties* base, DataV
 					gboolean _tmp87_ = FALSE;
 					Video* _tmp90_ = NULL;
 					time_t _tmp91_ = 0;
-#line 244 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 247 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp82_ = source;
-#line 244 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 247 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp83_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp82_, TYPE_VIDEO, Video));
-#line 244 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 247 "/home/jens/Source/shotwell/src/Properties.vala"
 					video = _tmp83_;
-#line 245 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 248 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp84_ = video;
-#line 245 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 248 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp85_ = video_get_clip_duration (_tmp84_);
-#line 245 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 248 "/home/jens/Source/shotwell/src/Properties.vala"
 					self->priv->clip_duration = _tmp85_;
-#line 247 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 250 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp86_ = video;
-#line 247 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 250 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp87_ = video_get_is_interpretable (_tmp86_);
-#line 247 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 250 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp87_) {
-#line 2450 "Properties.c"
+#line 2465 "Properties.c"
 						Video* _tmp88_ = NULL;
 						Dimensions _tmp89_ = {0};
-#line 248 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 251 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp88_ = video;
-#line 248 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 251 "/home/jens/Source/shotwell/src/Properties.vala"
 						video_get_frame_dimensions (_tmp88_, &_tmp89_);
-#line 248 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 251 "/home/jens/Source/shotwell/src/Properties.vala"
 						self->priv->dimensions = _tmp89_;
-#line 2459 "Properties.c"
+#line 2474 "Properties.c"
 					}
-#line 250 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 253 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp90_ = video;
-#line 250 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 253 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp91_ = media_source_get_exposure_time (G_TYPE_CHECK_INSTANCE_CAST (_tmp90_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 250 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 253 "/home/jens/Source/shotwell/src/Properties.vala"
 					self->priv->start_time = _tmp91_;
-#line 243 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 246 "/home/jens/Source/shotwell/src/Properties.vala"
 					_g_object_unref0 (video);
-#line 2469 "Properties.c"
+#line 2484 "Properties.c"
 				} else {
 					DataSource* _tmp92_ = NULL;
 					time_t _tmp93_ = 0;
-#line 252 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 255 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp92_ = source;
-#line 252 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 255 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp93_ = import_source_get_exposure_time (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp92_, TYPE_VIDEO_IMPORT_SOURCE, VideoImportSource), TYPE_IMPORT_SOURCE, ImportSource));
-#line 252 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 255 "/home/jens/Source/shotwell/src/Properties.vala"
 					self->priv->start_time = _tmp93_;
-#line 2479 "Properties.c"
+#line 2494 "Properties.c"
 				}
-#line 254 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 257 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp94_ = self->priv->start_time;
-#line 254 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 257 "/home/jens/Source/shotwell/src/Properties.vala"
 				self->priv->end_time = _tmp94_;
-#line 2485 "Properties.c"
+#line 2500 "Properties.c"
 			}
 		}
 	}
-#line 188 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 191 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_object_unref0 (source);
-#line 2491 "Properties.c"
+#line 2506 "Properties.c"
 }
 
 
 static void basic_properties_real_get_multiple_properties (Properties* base, GeeIterable* iter) {
 	BasicProperties * self;
 	GeeIterable* _tmp0_ = NULL;
-#line 258 "/home/jens/Source/shotwell/src/Properties.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_BASIC_PROPERTIES, BasicProperties);
-#line 258 "/home/jens/Source/shotwell/src/Properties.vala"
-	g_return_if_fail ((iter == NULL) || GEE_IS_ITERABLE (iter));
-#line 259 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp0_ = iter;
-#line 259 "/home/jens/Source/shotwell/src/Properties.vala"
-	PROPERTIES_CLASS (basic_properties_parent_class)->get_multiple_properties (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp0_);
 #line 261 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->photo_count = 0;
+	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_BASIC_PROPERTIES, BasicProperties);
+#line 261 "/home/jens/Source/shotwell/src/Properties.vala"
+	g_return_if_fail ((iter == NULL) || GEE_IS_ITERABLE (iter));
 #line 262 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp0_ = iter;
+#line 262 "/home/jens/Source/shotwell/src/Properties.vala"
+	PROPERTIES_CLASS (basic_properties_parent_class)->get_multiple_properties (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp0_);
+#line 264 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->photo_count = 0;
+#line 265 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->video_count = 0;
-#line 2510 "Properties.c"
+#line 2525 "Properties.c"
 	{
 		GeeIterator* _view_it = NULL;
 		GeeIterable* _tmp1_ = NULL;
 		GeeIterator* _tmp2_ = NULL;
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp1_ = iter;
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp2_ = gee_iterable_iterator (_tmp1_);
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 		_view_it = _tmp2_;
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 		while (TRUE) {
-#line 2523 "Properties.c"
+#line 2538 "Properties.c"
 			GeeIterator* _tmp3_ = NULL;
 			gboolean _tmp4_ = FALSE;
 			DataView* view = NULL;
@@ -2530,156 +2545,156 @@ static void basic_properties_real_get_multiple_properties (Properties* base, Gee
 			DataSource* _tmp8_ = NULL;
 			gboolean _tmp9_ = FALSE;
 			DataSource* _tmp10_ = NULL;
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp3_ = _view_it;
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp4_ = gee_iterator_next (_tmp3_);
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (!_tmp4_) {
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 				break;
-#line 2542 "Properties.c"
+#line 2557 "Properties.c"
 			}
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp5_ = _view_it;
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp6_ = gee_iterator_get (_tmp5_);
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 			view = (DataView*) _tmp6_;
-#line 264 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 267 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp7_ = view;
-#line 264 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 267 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp8_ = data_view_get_source (_tmp7_);
-#line 264 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 267 "/home/jens/Source/shotwell/src/Properties.vala"
 			source = _tmp8_;
-#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 269 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp10_ = source;
-#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 269 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp10_, TYPE_PHOTO_SOURCE)) {
-#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 269 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp9_ = TRUE;
-#line 2562 "Properties.c"
+#line 2577 "Properties.c"
 			} else {
 				DataSource* _tmp11_ = NULL;
-#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 269 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp11_ = source;
-#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 269 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp9_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp11_, TYPE_PHOTO_IMPORT_SOURCE);
-#line 2569 "Properties.c"
+#line 2584 "Properties.c"
 			}
-#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 269 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (_tmp9_) {
-#line 2573 "Properties.c"
+#line 2588 "Properties.c"
 				time_t _tmp12_ = 0;
 				DataSource* _tmp13_ = NULL;
 				time_t exposure_time = 0;
 				time_t _tmp18_ = 0;
 				gint _tmp29_ = 0;
-#line 267 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 270 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp13_ = source;
-#line 267 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 270 "/home/jens/Source/shotwell/src/Properties.vala"
 				if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp13_, TYPE_PHOTO_SOURCE)) {
-#line 2583 "Properties.c"
+#line 2598 "Properties.c"
 					DataSource* _tmp14_ = NULL;
 					time_t _tmp15_ = 0;
-#line 268 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 271 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp14_ = source;
-#line 268 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 271 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp15_ = media_source_get_exposure_time (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_PHOTO_SOURCE, PhotoSource), TYPE_MEDIA_SOURCE, MediaSource));
-#line 268 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 271 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp12_ = _tmp15_;
-#line 2592 "Properties.c"
+#line 2607 "Properties.c"
 				} else {
 					DataSource* _tmp16_ = NULL;
 					time_t _tmp17_ = 0;
-#line 269 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 272 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp16_ = source;
-#line 269 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 272 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp17_ = import_source_get_exposure_time (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, TYPE_PHOTO_IMPORT_SOURCE, PhotoImportSource), TYPE_IMPORT_SOURCE, ImportSource));
-#line 269 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 272 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp12_ = _tmp17_;
-#line 2602 "Properties.c"
+#line 2617 "Properties.c"
 				}
-#line 267 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 270 "/home/jens/Source/shotwell/src/Properties.vala"
 				exposure_time = _tmp12_;
-#line 271 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 274 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp18_ = exposure_time;
-#line 271 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 274 "/home/jens/Source/shotwell/src/Properties.vala"
 				if (_tmp18_ != ((time_t) 0)) {
-#line 2610 "Properties.c"
+#line 2625 "Properties.c"
 					gboolean _tmp19_ = FALSE;
 					time_t _tmp20_ = 0;
 					gboolean _tmp24_ = FALSE;
 					time_t _tmp25_ = 0;
-#line 272 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp20_ = self->priv->start_time;
-#line 272 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp20_ == ((time_t) 0)) {
-#line 272 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp19_ = TRUE;
-#line 2621 "Properties.c"
+#line 2636 "Properties.c"
 					} else {
 						time_t _tmp21_ = 0;
 						time_t _tmp22_ = 0;
-#line 272 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp21_ = exposure_time;
-#line 272 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp22_ = self->priv->start_time;
-#line 272 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp19_ = _tmp21_ < _tmp22_;
-#line 2631 "Properties.c"
+#line 2646 "Properties.c"
 					}
-#line 272 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp19_) {
-#line 2635 "Properties.c"
+#line 2650 "Properties.c"
 						time_t _tmp23_ = 0;
-#line 273 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 276 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp23_ = exposure_time;
-#line 273 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 276 "/home/jens/Source/shotwell/src/Properties.vala"
 						self->priv->start_time = _tmp23_;
-#line 2641 "Properties.c"
+#line 2656 "Properties.c"
 					}
-#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 278 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp25_ = self->priv->end_time;
-#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 278 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp25_ == ((time_t) 0)) {
-#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 278 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp24_ = TRUE;
-#line 2649 "Properties.c"
+#line 2664 "Properties.c"
 					} else {
 						time_t _tmp26_ = 0;
 						time_t _tmp27_ = 0;
-#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 278 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp26_ = exposure_time;
-#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 278 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp27_ = self->priv->end_time;
-#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 278 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp24_ = _tmp26_ > _tmp27_;
-#line 2659 "Properties.c"
+#line 2674 "Properties.c"
 					}
-#line 275 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 278 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp24_) {
-#line 2663 "Properties.c"
+#line 2678 "Properties.c"
 						time_t _tmp28_ = 0;
-#line 276 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 279 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp28_ = exposure_time;
-#line 276 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 279 "/home/jens/Source/shotwell/src/Properties.vala"
 						self->priv->end_time = _tmp28_;
-#line 2669 "Properties.c"
+#line 2684 "Properties.c"
 					}
 				}
-#line 279 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 282 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp29_ = self->priv->photo_count;
-#line 279 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 282 "/home/jens/Source/shotwell/src/Properties.vala"
 				self->priv->photo_count = _tmp29_ + 1;
-#line 2676 "Properties.c"
+#line 2691 "Properties.c"
 			} else {
 				DataSource* _tmp30_ = NULL;
-#line 280 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 283 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp30_ = source;
-#line 280 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 283 "/home/jens/Source/shotwell/src/Properties.vala"
 				if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp30_, TYPE_EVENT_SOURCE)) {
-#line 2683 "Properties.c"
+#line 2698 "Properties.c"
 					EventSource* event_source = NULL;
 					DataSource* _tmp31_ = NULL;
 					EventSource* _tmp32_ = NULL;
@@ -2702,328 +2717,328 @@ static void basic_properties_real_get_multiple_properties (Properties* base, Gee
 					gint _tmp68_ = 0;
 					gint _tmp69_ = 0;
 					gint _tmp70_ = 0;
-#line 281 "/home/jens/Source/shotwell/src/Properties.vala"
-					_tmp31_ = source;
-#line 281 "/home/jens/Source/shotwell/src/Properties.vala"
-					_tmp32_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, TYPE_EVENT_SOURCE, EventSource));
-#line 281 "/home/jens/Source/shotwell/src/Properties.vala"
-					event_source = _tmp32_;
-#line 283 "/home/jens/Source/shotwell/src/Properties.vala"
-					_tmp33_ = self->priv->event_count;
-#line 283 "/home/jens/Source/shotwell/src/Properties.vala"
-					if (_tmp33_ == -1) {
 #line 284 "/home/jens/Source/shotwell/src/Properties.vala"
+					_tmp31_ = source;
+#line 284 "/home/jens/Source/shotwell/src/Properties.vala"
+					_tmp32_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, TYPE_EVENT_SOURCE, EventSource));
+#line 284 "/home/jens/Source/shotwell/src/Properties.vala"
+					event_source = _tmp32_;
+#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+					_tmp33_ = self->priv->event_count;
+#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+					if (_tmp33_ == -1) {
+#line 287 "/home/jens/Source/shotwell/src/Properties.vala"
 						self->priv->event_count = 0;
-#line 2718 "Properties.c"
+#line 2733 "Properties.c"
 					}
-#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 289 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp36_ = self->priv->start_time;
-#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 289 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp36_ == ((time_t) 0)) {
-#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 289 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp35_ = TRUE;
-#line 2726 "Properties.c"
+#line 2741 "Properties.c"
 					} else {
 						EventSource* _tmp37_ = NULL;
 						time_t _tmp38_ = 0;
 						time_t _tmp39_ = 0;
-#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 289 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp37_ = event_source;
-#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 289 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp38_ = event_source_get_start_time (_tmp37_);
-#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 289 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp39_ = self->priv->start_time;
-#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 289 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp35_ = _tmp38_ < _tmp39_;
-#line 2739 "Properties.c"
+#line 2754 "Properties.c"
 					}
-#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 289 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp35_) {
-#line 2743 "Properties.c"
+#line 2758 "Properties.c"
 						EventSource* _tmp40_ = NULL;
 						time_t _tmp41_ = 0;
-#line 287 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp40_ = event_source;
-#line 287 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp41_ = event_source_get_start_time (_tmp40_);
-#line 287 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp34_ = _tmp41_ != ((time_t) 0);
-#line 2752 "Properties.c"
+#line 2767 "Properties.c"
 					} else {
-#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 289 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp34_ = FALSE;
-#line 2756 "Properties.c"
+#line 2771 "Properties.c"
 					}
-#line 286 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 289 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp34_) {
-#line 2760 "Properties.c"
+#line 2775 "Properties.c"
 						EventSource* _tmp42_ = NULL;
 						time_t _tmp43_ = 0;
-#line 288 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 291 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp42_ = event_source;
-#line 288 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 291 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp43_ = event_source_get_start_time (_tmp42_);
-#line 288 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 291 "/home/jens/Source/shotwell/src/Properties.vala"
 						self->priv->start_time = _tmp43_;
-#line 2769 "Properties.c"
+#line 2784 "Properties.c"
 					}
-#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp46_ = self->priv->end_time;
-#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp46_ == ((time_t) 0)) {
-#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp45_ = TRUE;
-#line 2777 "Properties.c"
+#line 2792 "Properties.c"
 					} else {
 						EventSource* _tmp47_ = NULL;
 						time_t _tmp48_ = 0;
 						time_t _tmp49_ = 0;
-#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp47_ = event_source;
-#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp48_ = event_source_get_end_time (_tmp47_);
-#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp49_ = self->priv->end_time;
-#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp45_ = _tmp48_ > _tmp49_;
-#line 2790 "Properties.c"
+#line 2805 "Properties.c"
 					}
-#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp45_) {
-#line 2794 "Properties.c"
+#line 2809 "Properties.c"
 						EventSource* _tmp50_ = NULL;
 						time_t _tmp51_ = 0;
-#line 291 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 294 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp50_ = event_source;
-#line 291 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 294 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp51_ = event_source_get_end_time (_tmp50_);
-#line 291 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 294 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp44_ = _tmp51_ != ((time_t) 0);
-#line 2803 "Properties.c"
+#line 2818 "Properties.c"
 					} else {
-#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp44_ = FALSE;
-#line 2807 "Properties.c"
+#line 2822 "Properties.c"
 					}
-#line 290 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp44_) {
-#line 2811 "Properties.c"
+#line 2826 "Properties.c"
 						EventSource* _tmp52_ = NULL;
 						time_t _tmp53_ = 0;
-#line 292 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 295 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp52_ = event_source;
-#line 292 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 295 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp53_ = event_source_get_end_time (_tmp52_);
-#line 292 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 295 "/home/jens/Source/shotwell/src/Properties.vala"
 						self->priv->end_time = _tmp53_;
-#line 2820 "Properties.c"
+#line 2835 "Properties.c"
 					} else {
 						gboolean _tmp54_ = FALSE;
 						time_t _tmp55_ = 0;
-#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 296 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp55_ = self->priv->end_time;
-#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 296 "/home/jens/Source/shotwell/src/Properties.vala"
 						if (_tmp55_ == ((time_t) 0)) {
-#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 296 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp54_ = TRUE;
-#line 2830 "Properties.c"
+#line 2845 "Properties.c"
 						} else {
 							EventSource* _tmp56_ = NULL;
 							time_t _tmp57_ = 0;
 							time_t _tmp58_ = 0;
-#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 296 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp56_ = event_source;
-#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 296 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp57_ = event_source_get_start_time (_tmp56_);
-#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 296 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp58_ = self->priv->end_time;
-#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 296 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp54_ = _tmp57_ > _tmp58_;
-#line 2843 "Properties.c"
+#line 2858 "Properties.c"
 						}
-#line 293 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 296 "/home/jens/Source/shotwell/src/Properties.vala"
 						if (_tmp54_) {
-#line 2847 "Properties.c"
+#line 2862 "Properties.c"
 							EventSource* _tmp59_ = NULL;
 							time_t _tmp60_ = 0;
-#line 294 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 297 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp59_ = event_source;
-#line 294 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 297 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp60_ = event_source_get_start_time (_tmp59_);
-#line 294 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 297 "/home/jens/Source/shotwell/src/Properties.vala"
 							self->priv->end_time = _tmp60_;
-#line 2856 "Properties.c"
+#line 2871 "Properties.c"
 						}
 					}
-#line 299 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 302 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp61_ = event_source;
-#line 299 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 302 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp62_ = event_source_get_media (_tmp61_);
-#line 299 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 302 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp63_ = _tmp62_;
-#line 299 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 302 "/home/jens/Source/shotwell/src/Properties.vala"
 					media_source_collection_count_media (_tmp63_, &_tmp64_, &_tmp65_);
-#line 299 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 302 "/home/jens/Source/shotwell/src/Properties.vala"
 					event_photo_count = _tmp64_;
-#line 299 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 302 "/home/jens/Source/shotwell/src/Properties.vala"
 					event_video_count = _tmp65_;
-#line 299 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 302 "/home/jens/Source/shotwell/src/Properties.vala"
 					_g_object_unref0 (_tmp63_);
-#line 302 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 305 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp66_ = self->priv->photo_count;
-#line 302 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 305 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp67_ = event_photo_count;
-#line 302 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 305 "/home/jens/Source/shotwell/src/Properties.vala"
 					self->priv->photo_count = _tmp66_ + _tmp67_;
-#line 303 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 306 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp68_ = self->priv->video_count;
-#line 303 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 306 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp69_ = event_video_count;
-#line 303 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 306 "/home/jens/Source/shotwell/src/Properties.vala"
 					self->priv->video_count = _tmp68_ + _tmp69_;
-#line 304 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 307 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp70_ = self->priv->event_count;
-#line 304 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 307 "/home/jens/Source/shotwell/src/Properties.vala"
 					self->priv->event_count = _tmp70_ + 1;
-#line 280 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 283 "/home/jens/Source/shotwell/src/Properties.vala"
 					_g_object_unref0 (event_source);
-#line 2891 "Properties.c"
+#line 2906 "Properties.c"
 				} else {
 					gboolean _tmp71_ = FALSE;
 					DataSource* _tmp72_ = NULL;
-#line 305 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 308 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp72_ = source;
-#line 305 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 308 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp72_, TYPE_VIDEO_SOURCE)) {
-#line 305 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 308 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp71_ = TRUE;
-#line 2901 "Properties.c"
+#line 2916 "Properties.c"
 					} else {
 						DataSource* _tmp73_ = NULL;
-#line 305 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 308 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp73_ = source;
-#line 305 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 308 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp71_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp73_, TYPE_VIDEO_IMPORT_SOURCE);
-#line 2908 "Properties.c"
+#line 2923 "Properties.c"
 					}
-#line 305 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 308 "/home/jens/Source/shotwell/src/Properties.vala"
 					if (_tmp71_) {
-#line 2912 "Properties.c"
+#line 2927 "Properties.c"
 						time_t _tmp74_ = 0;
 						DataSource* _tmp75_ = NULL;
 						time_t exposure_time = 0;
 						time_t _tmp80_ = 0;
 						gint _tmp91_ = 0;
-#line 306 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 309 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp75_ = source;
-#line 306 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 309 "/home/jens/Source/shotwell/src/Properties.vala"
 						if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp75_, TYPE_VIDEO_SOURCE)) {
-#line 2922 "Properties.c"
+#line 2937 "Properties.c"
 							DataSource* _tmp76_ = NULL;
 							time_t _tmp77_ = 0;
-#line 307 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 310 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp76_ = source;
-#line 307 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 310 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp77_ = media_source_get_exposure_time (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, TYPE_VIDEO_SOURCE, VideoSource), TYPE_MEDIA_SOURCE, MediaSource));
-#line 307 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 310 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp74_ = _tmp77_;
-#line 2931 "Properties.c"
+#line 2946 "Properties.c"
 						} else {
 							DataSource* _tmp78_ = NULL;
 							time_t _tmp79_ = 0;
-#line 308 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 311 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp78_ = source;
-#line 308 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 311 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp79_ = import_source_get_exposure_time (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp78_, TYPE_VIDEO_IMPORT_SOURCE, VideoImportSource), TYPE_IMPORT_SOURCE, ImportSource));
-#line 308 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 311 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp74_ = _tmp79_;
-#line 2941 "Properties.c"
+#line 2956 "Properties.c"
 						}
-#line 306 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 309 "/home/jens/Source/shotwell/src/Properties.vala"
 						exposure_time = _tmp74_;
-#line 310 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 313 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp80_ = exposure_time;
-#line 310 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 313 "/home/jens/Source/shotwell/src/Properties.vala"
 						if (_tmp80_ != ((time_t) 0)) {
-#line 2949 "Properties.c"
+#line 2964 "Properties.c"
 							gboolean _tmp81_ = FALSE;
 							time_t _tmp82_ = 0;
 							gboolean _tmp86_ = FALSE;
 							time_t _tmp87_ = 0;
-#line 311 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp82_ = self->priv->start_time;
-#line 311 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
 							if (_tmp82_ == ((time_t) 0)) {
-#line 311 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
 								_tmp81_ = TRUE;
-#line 2960 "Properties.c"
+#line 2975 "Properties.c"
 							} else {
 								time_t _tmp83_ = 0;
 								time_t _tmp84_ = 0;
-#line 311 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
 								_tmp83_ = exposure_time;
-#line 311 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
 								_tmp84_ = self->priv->start_time;
-#line 311 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
 								_tmp81_ = _tmp83_ < _tmp84_;
-#line 2970 "Properties.c"
+#line 2985 "Properties.c"
 							}
-#line 311 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
 							if (_tmp81_) {
-#line 2974 "Properties.c"
+#line 2989 "Properties.c"
 								time_t _tmp85_ = 0;
-#line 312 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 315 "/home/jens/Source/shotwell/src/Properties.vala"
 								_tmp85_ = exposure_time;
-#line 312 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 315 "/home/jens/Source/shotwell/src/Properties.vala"
 								self->priv->start_time = _tmp85_;
-#line 2980 "Properties.c"
+#line 2995 "Properties.c"
 							}
-#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 317 "/home/jens/Source/shotwell/src/Properties.vala"
 							_tmp87_ = self->priv->end_time;
-#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 317 "/home/jens/Source/shotwell/src/Properties.vala"
 							if (_tmp87_ == ((time_t) 0)) {
-#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 317 "/home/jens/Source/shotwell/src/Properties.vala"
 								_tmp86_ = TRUE;
-#line 2988 "Properties.c"
+#line 3003 "Properties.c"
 							} else {
 								time_t _tmp88_ = 0;
 								time_t _tmp89_ = 0;
-#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 317 "/home/jens/Source/shotwell/src/Properties.vala"
 								_tmp88_ = exposure_time;
-#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 317 "/home/jens/Source/shotwell/src/Properties.vala"
 								_tmp89_ = self->priv->end_time;
-#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 317 "/home/jens/Source/shotwell/src/Properties.vala"
 								_tmp86_ = _tmp88_ > _tmp89_;
-#line 2998 "Properties.c"
+#line 3013 "Properties.c"
 							}
-#line 314 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 317 "/home/jens/Source/shotwell/src/Properties.vala"
 							if (_tmp86_) {
-#line 3002 "Properties.c"
+#line 3017 "Properties.c"
 								time_t _tmp90_ = 0;
-#line 315 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 318 "/home/jens/Source/shotwell/src/Properties.vala"
 								_tmp90_ = exposure_time;
-#line 315 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 318 "/home/jens/Source/shotwell/src/Properties.vala"
 								self->priv->end_time = _tmp90_;
-#line 3008 "Properties.c"
+#line 3023 "Properties.c"
 							}
 						}
-#line 318 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 321 "/home/jens/Source/shotwell/src/Properties.vala"
 						_tmp91_ = self->priv->video_count;
-#line 318 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 321 "/home/jens/Source/shotwell/src/Properties.vala"
 						self->priv->video_count = _tmp91_ + 1;
-#line 3015 "Properties.c"
+#line 3030 "Properties.c"
 					}
 				}
 			}
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (source);
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (view);
-#line 3023 "Properties.c"
+#line 3038 "Properties.c"
 		}
-#line 263 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 266 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (_view_it);
-#line 3027 "Properties.c"
+#line 3042 "Properties.c"
 	}
 }
 
@@ -3033,37 +3048,37 @@ static void basic_properties_real_get_properties (Properties* base, Page* curren
 	Page* _tmp0_ = NULL;
 	time_t _tmp1_ = 0;
 	time_t _tmp3_ = 0;
-#line 323 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 326 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_BASIC_PROPERTIES, BasicProperties);
-#line 323 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 326 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PAGE (current_page));
-#line 324 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 327 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = current_page;
-#line 324 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 327 "/home/jens/Source/shotwell/src/Properties.vala"
 	PROPERTIES_CLASS (basic_properties_parent_class)->get_properties (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp0_);
-#line 326 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 329 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp1_ = self->priv->end_time;
-#line 326 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 329 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp1_ == ((time_t) 0)) {
-#line 3049 "Properties.c"
+#line 3064 "Properties.c"
 		time_t _tmp2_ = 0;
-#line 327 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 330 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp2_ = self->priv->start_time;
-#line 327 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 330 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->end_time = _tmp2_;
-#line 3055 "Properties.c"
+#line 3070 "Properties.c"
 	}
-#line 328 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 331 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp3_ = self->priv->start_time;
-#line 328 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 331 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp3_ == ((time_t) 0)) {
-#line 3061 "Properties.c"
+#line 3076 "Properties.c"
 		time_t _tmp4_ = 0;
-#line 329 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 332 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp4_ = self->priv->end_time;
-#line 329 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 332 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->start_time = _tmp4_;
-#line 3067 "Properties.c"
+#line 3082 "Properties.c"
 	}
 }
 
@@ -3084,94 +3099,94 @@ static void basic_properties_real_internal_update_properties (Properties* base, 
 	gboolean _tmp95_ = FALSE;
 	gboolean _tmp96_ = FALSE;
 	const gchar* _tmp97_ = NULL;
-#line 332 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 335 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_BASIC_PROPERTIES, BasicProperties);
-#line 332 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 335 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PAGE (page));
-#line 333 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 336 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = page;
-#line 333 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 336 "/home/jens/Source/shotwell/src/Properties.vala"
 	PROPERTIES_CLASS (basic_properties_parent_class)->internal_update_properties (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp0_);
-#line 336 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 339 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp2_ = self->priv->title;
-#line 336 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 339 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (g_strcmp0 (_tmp2_, "") == 0) {
-#line 3100 "Properties.c"
+#line 3115 "Properties.c"
 		Page* _tmp3_ = NULL;
-#line 336 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 339 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp3_ = page;
-#line 336 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 339 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp1_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, TYPE_TAG_PAGE);
-#line 3106 "Properties.c"
+#line 3121 "Properties.c"
 	} else {
-#line 336 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 339 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp1_ = FALSE;
-#line 3110 "Properties.c"
+#line 3125 "Properties.c"
 	}
-#line 336 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 339 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp1_) {
-#line 3114 "Properties.c"
+#line 3129 "Properties.c"
 		Page* _tmp4_ = NULL;
 		Tag* _tmp5_ = NULL;
 		Tag* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
-#line 337 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp4_ = page;
-#line 337 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp5_ = tag_page_get_tag (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_TAG_PAGE, TagPage));
-#line 337 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp6_ = _tmp5_;
-#line 337 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp7_ = tag_get_user_visible_name (_tmp6_);
-#line 337 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->title);
-#line 337 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->title = _tmp7_;
-#line 337 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (_tmp6_);
-#line 3133 "Properties.c"
+#line 3148 "Properties.c"
 	}
-#line 339 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 342 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp8_ = self->priv->title;
-#line 339 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 342 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (g_strcmp0 (_tmp8_, "") != 0) {
-#line 3139 "Properties.c"
+#line 3154 "Properties.c"
 		const gchar* _tmp9_ = NULL;
 		const gchar* _tmp10_ = NULL;
 		gchar* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
-#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 343 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp9_ = _ ("Title:");
-#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 343 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp10_ = self->priv->title;
-#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 343 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp11_ = guarded_markup_escape_text (_tmp10_);
-#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 343 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp12_ = _tmp11_;
-#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 343 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp9_, _tmp12_, FALSE);
-#line 340 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 343 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (_tmp12_);
-#line 3156 "Properties.c"
-	}
-#line 342 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp14_ = self->priv->photo_count;
-#line 342 "/home/jens/Source/shotwell/src/Properties.vala"
-	if (_tmp14_ >= 0) {
-#line 342 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp13_ = TRUE;
-#line 3164 "Properties.c"
-	} else {
-		gint _tmp15_ = 0;
-#line 342 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp15_ = self->priv->video_count;
-#line 342 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp13_ = _tmp15_ >= 0;
 #line 3171 "Properties.c"
 	}
-#line 342 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp14_ = self->priv->photo_count;
+#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
+	if (_tmp14_ >= 0) {
+#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp13_ = TRUE;
+#line 3179 "Properties.c"
+	} else {
+		gint _tmp15_ = 0;
+#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp15_ = self->priv->video_count;
+#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp13_ = _tmp15_ >= 0;
+#line 3186 "Properties.c"
+	}
+#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp13_) {
-#line 3175 "Properties.c"
+#line 3190 "Properties.c"
 		gchar* label = NULL;
 		const gchar* _tmp16_ = NULL;
 		gchar* _tmp17_ = NULL;
@@ -3191,17 +3206,17 @@ static void basic_properties_real_internal_update_properties (Properties* base, 
 		const gchar* _tmp39_ = NULL;
 		const gchar* _tmp40_ = NULL;
 		gint _tmp41_ = 0;
-#line 343 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 346 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp16_ = _ ("Items:");
-#line 343 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 346 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp17_ = g_strdup (_tmp16_);
-#line 343 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 346 "/home/jens/Source/shotwell/src/Properties.vala"
 		label = _tmp17_;
-#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 348 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp18_ = self->priv->event_count;
-#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 348 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp18_ >= 0) {
-#line 3205 "Properties.c"
+#line 3220 "Properties.c"
 			gchar* event_num_string = NULL;
 			gint _tmp19_ = 0;
 			const gchar* _tmp20_ = NULL;
@@ -3210,120 +3225,120 @@ static void basic_properties_real_internal_update_properties (Properties* base, 
 			const gchar* _tmp23_ = NULL;
 			const gchar* _tmp24_ = NULL;
 			gchar* _tmp25_ = NULL;
-#line 346 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 349 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp19_ = self->priv->event_count;
-#line 346 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 349 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp20_ = ngettext ("%d Event", "%d Events", (gulong) _tmp19_);
-#line 346 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 349 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp21_ = self->priv->event_count;
-#line 346 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 349 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp22_ = g_strdup_printf (_tmp20_, _tmp21_);
-#line 346 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 349 "/home/jens/Source/shotwell/src/Properties.vala"
 			event_num_string = _tmp22_;
-#line 349 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 352 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp23_ = label;
-#line 349 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 352 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp24_ = event_num_string;
-#line 349 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 352 "/home/jens/Source/shotwell/src/Properties.vala"
 			properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp23_, _tmp24_, FALSE);
-#line 350 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 353 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp25_ = g_strdup ("");
-#line 350 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 353 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (label);
-#line 350 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 353 "/home/jens/Source/shotwell/src/Properties.vala"
 			label = _tmp25_;
-#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 348 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (event_num_string);
-#line 3238 "Properties.c"
+#line 3253 "Properties.c"
 		}
-#line 353 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 356 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp26_ = self->priv->photo_count;
-#line 353 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 356 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp27_ = ngettext ("%d Photo", "%d Photos", (gulong) _tmp26_);
-#line 353 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 356 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp28_ = self->priv->photo_count;
-#line 353 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 356 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp29_ = g_strdup_printf (_tmp27_, _tmp28_);
-#line 353 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 356 "/home/jens/Source/shotwell/src/Properties.vala"
 		photo_num_string = _tmp29_;
-#line 355 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 358 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp30_ = self->priv->video_count;
-#line 355 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 358 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp31_ = ngettext ("%d Video", "%d Videos", (gulong) _tmp30_);
-#line 355 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 358 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp32_ = self->priv->video_count;
-#line 355 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 358 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp33_ = g_strdup_printf (_tmp31_, _tmp32_);
-#line 355 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 358 "/home/jens/Source/shotwell/src/Properties.vala"
 		video_num_string = _tmp33_;
-#line 358 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 361 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp35_ = self->priv->photo_count;
-#line 358 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 361 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp35_ == 0) {
-#line 3264 "Properties.c"
+#line 3279 "Properties.c"
 			gint _tmp36_ = 0;
-#line 358 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 361 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp36_ = self->priv->video_count;
-#line 358 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 361 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp34_ = _tmp36_ > 0;
-#line 3270 "Properties.c"
+#line 3285 "Properties.c"
 		} else {
-#line 358 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 361 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp34_ = FALSE;
-#line 3274 "Properties.c"
+#line 3289 "Properties.c"
 		}
-#line 358 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 361 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp34_) {
-#line 3278 "Properties.c"
+#line 3293 "Properties.c"
 			const gchar* _tmp37_ = NULL;
 			const gchar* _tmp38_ = NULL;
-#line 359 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 362 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp37_ = label;
-#line 359 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 362 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp38_ = video_num_string;
-#line 359 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 362 "/home/jens/Source/shotwell/src/Properties.vala"
 			properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp37_, _tmp38_, FALSE);
-#line 360 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 363 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (video_num_string);
-#line 360 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 363 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (photo_num_string);
-#line 360 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 363 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (label);
-#line 360 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 363 "/home/jens/Source/shotwell/src/Properties.vala"
 			return;
-#line 3295 "Properties.c"
+#line 3310 "Properties.c"
 		}
-#line 363 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 366 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp39_ = label;
-#line 363 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 366 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp40_ = photo_num_string;
-#line 363 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 366 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp39_, _tmp40_, FALSE);
-#line 365 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 368 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp41_ = self->priv->video_count;
-#line 365 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 368 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp41_ > 0) {
-#line 3307 "Properties.c"
+#line 3322 "Properties.c"
 			const gchar* _tmp42_ = NULL;
-#line 366 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 369 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp42_ = video_num_string;
-#line 366 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 369 "/home/jens/Source/shotwell/src/Properties.vala"
 			properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), "", _tmp42_, FALSE);
-#line 3313 "Properties.c"
+#line 3328 "Properties.c"
 		}
-#line 342 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (video_num_string);
-#line 342 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (photo_num_string);
-#line 342 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 345 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (label);
-#line 3321 "Properties.c"
+#line 3336 "Properties.c"
 	}
-#line 369 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 372 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp43_ = self->priv->start_time;
-#line 369 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 372 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp43_ != ((time_t) 0)) {
-#line 3327 "Properties.c"
+#line 3342 "Properties.c"
 		gchar* start_date = NULL;
 		time_t _tmp44_ = 0;
 		struct tm _tmp45_ = {0};
@@ -3342,139 +3357,139 @@ static void basic_properties_real_internal_update_properties (Properties* base, 
 		gchar* _tmp55_ = NULL;
 		const gchar* _tmp56_ = NULL;
 		const gchar* _tmp57_ = NULL;
-#line 370 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 373 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp44_ = self->priv->start_time;
-#line 370 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 373 "/home/jens/Source/shotwell/src/Properties.vala"
 		g_time_local (_tmp44_, &_tmp45_);
-#line 370 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 373 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp46_ = properties_get_prettyprint_date (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), &_tmp45_);
-#line 370 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 373 "/home/jens/Source/shotwell/src/Properties.vala"
 		start_date = _tmp46_;
-#line 371 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 374 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp47_ = self->priv->start_time;
-#line 371 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 374 "/home/jens/Source/shotwell/src/Properties.vala"
 		g_time_local (_tmp47_, &_tmp48_);
-#line 371 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 374 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp49_ = properties_get_prettyprint_time (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), &_tmp48_);
-#line 371 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 374 "/home/jens/Source/shotwell/src/Properties.vala"
 		start_time = _tmp49_;
-#line 372 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 375 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp50_ = self->priv->end_time;
-#line 372 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 375 "/home/jens/Source/shotwell/src/Properties.vala"
 		g_time_local (_tmp50_, &_tmp51_);
-#line 372 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 375 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp52_ = properties_get_prettyprint_date (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), &_tmp51_);
-#line 372 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 375 "/home/jens/Source/shotwell/src/Properties.vala"
 		end_date = _tmp52_;
-#line 373 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 376 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp53_ = self->priv->end_time;
-#line 373 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 376 "/home/jens/Source/shotwell/src/Properties.vala"
 		g_time_local (_tmp53_, &_tmp54_);
-#line 373 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 376 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp55_ = properties_get_prettyprint_time (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), &_tmp54_);
-#line 373 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 376 "/home/jens/Source/shotwell/src/Properties.vala"
 		end_time = _tmp55_;
-#line 375 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 378 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp56_ = start_date;
-#line 375 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 378 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp57_ = end_date;
-#line 375 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 378 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp56_, _tmp57_) == 0) {
-#line 3384 "Properties.c"
+#line 3399 "Properties.c"
 			const gchar* _tmp58_ = NULL;
 			const gchar* _tmp59_ = NULL;
 			const gchar* _tmp60_ = NULL;
 			const gchar* _tmp61_ = NULL;
-#line 377 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 380 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp58_ = _ ("Date:");
-#line 377 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 380 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp59_ = start_date;
-#line 377 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 380 "/home/jens/Source/shotwell/src/Properties.vala"
 			properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp58_, _tmp59_, FALSE);
-#line 379 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 382 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp60_ = start_time;
-#line 379 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 382 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp61_ = end_time;
-#line 379 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 382 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (g_strcmp0 (_tmp60_, _tmp61_) == 0) {
-#line 3401 "Properties.c"
+#line 3416 "Properties.c"
 				const gchar* _tmp62_ = NULL;
 				const gchar* _tmp63_ = NULL;
-#line 381 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 384 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp62_ = _ ("Time:");
-#line 381 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 384 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp63_ = start_time;
-#line 381 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 384 "/home/jens/Source/shotwell/src/Properties.vala"
 				properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp62_, _tmp63_, FALSE);
-#line 3410 "Properties.c"
+#line 3425 "Properties.c"
 			} else {
 				const gchar* _tmp64_ = NULL;
 				const gchar* _tmp65_ = NULL;
 				const gchar* _tmp66_ = NULL;
 				const gchar* _tmp67_ = NULL;
-#line 384 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 387 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp64_ = _ ("From:");
-#line 384 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 387 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp65_ = start_time;
-#line 384 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 387 "/home/jens/Source/shotwell/src/Properties.vala"
 				properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp64_, _tmp65_, FALSE);
-#line 385 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 388 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp66_ = _ ("To:");
-#line 385 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 388 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp67_ = end_time;
-#line 385 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 388 "/home/jens/Source/shotwell/src/Properties.vala"
 				properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp66_, _tmp67_, FALSE);
-#line 3428 "Properties.c"
+#line 3443 "Properties.c"
 			}
 		} else {
 			const gchar* _tmp68_ = NULL;
 			const gchar* _tmp69_ = NULL;
 			const gchar* _tmp70_ = NULL;
 			const gchar* _tmp71_ = NULL;
-#line 389 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 392 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp68_ = _ ("From:");
-#line 389 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 392 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp69_ = start_date;
-#line 389 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 392 "/home/jens/Source/shotwell/src/Properties.vala"
 			properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp68_, _tmp69_, FALSE);
-#line 390 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 393 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp70_ = _ ("To:");
-#line 390 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 393 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp71_ = end_date;
-#line 390 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 393 "/home/jens/Source/shotwell/src/Properties.vala"
 			properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp70_, _tmp71_, FALSE);
-#line 3447 "Properties.c"
+#line 3462 "Properties.c"
 		}
-#line 369 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 372 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (end_time);
-#line 369 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 372 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (end_date);
-#line 369 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 372 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (start_time);
-#line 369 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 372 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (start_date);
-#line 3457 "Properties.c"
+#line 3472 "Properties.c"
 	}
-#line 394 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 397 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp72_ = dimensions_has_area (&self->priv->dimensions);
-#line 394 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 397 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp72_) {
-#line 3463 "Properties.c"
+#line 3478 "Properties.c"
 		gchar* label = NULL;
 		const gchar* _tmp73_ = NULL;
 		gchar* _tmp74_ = NULL;
 		gboolean _tmp75_ = FALSE;
-#line 395 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp73_ = _ ("Size:");
-#line 395 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp74_ = g_strdup (_tmp73_);
-#line 395 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
 		label = _tmp74_;
-#line 397 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 400 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp75_ = dimensions_has_area (&self->priv->dimensions);
-#line 397 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 400 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp75_) {
-#line 3478 "Properties.c"
+#line 3493 "Properties.c"
 			const gchar* _tmp76_ = NULL;
 			Dimensions _tmp77_ = {0};
 			gint _tmp78_ = 0;
@@ -3483,402 +3498,402 @@ static void basic_properties_real_internal_update_properties (Properties* base, 
 			gchar* _tmp81_ = NULL;
 			gchar* _tmp82_ = NULL;
 			gchar* _tmp83_ = NULL;
-#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 401 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp76_ = label;
-#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 401 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp77_ = self->priv->dimensions;
-#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 401 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp78_ = _tmp77_.width;
-#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 401 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp79_ = self->priv->dimensions;
-#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 401 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp80_ = _tmp79_.height;
-#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 401 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp81_ = g_strdup_printf ("%d &#215; %d", _tmp78_, _tmp80_);
-#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 401 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp82_ = _tmp81_;
-#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 401 "/home/jens/Source/shotwell/src/Properties.vala"
 			properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp76_, _tmp82_, FALSE);
-#line 398 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 401 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (_tmp82_);
-#line 399 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 402 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp83_ = g_strdup ("");
-#line 399 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 402 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (label);
-#line 399 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 402 "/home/jens/Source/shotwell/src/Properties.vala"
 			label = _tmp83_;
-#line 3511 "Properties.c"
+#line 3526 "Properties.c"
 		}
-#line 394 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 397 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (label);
-#line 3515 "Properties.c"
+#line 3530 "Properties.c"
 	}
-#line 403 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 406 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp84_ = self->priv->clip_duration;
-#line 403 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 406 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp84_ > 0.0) {
-#line 3521 "Properties.c"
+#line 3536 "Properties.c"
 		const gchar* _tmp85_ = NULL;
 		const gchar* _tmp86_ = NULL;
 		gdouble _tmp87_ = 0.0;
 		gchar* _tmp88_ = NULL;
 		gchar* _tmp89_ = NULL;
-#line 404 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 407 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp85_ = _ ("Duration:");
-#line 404 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 407 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp86_ = _ ("%.1f seconds");
-#line 404 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 407 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp87_ = self->priv->clip_duration;
-#line 404 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 407 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp88_ = g_strdup_printf (_tmp86_, _tmp87_);
-#line 404 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 407 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp89_ = _tmp88_;
-#line 404 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 407 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp85_, _tmp89_, FALSE);
-#line 404 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 407 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (_tmp89_);
-#line 3541 "Properties.c"
-	}
-#line 407 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp90_ = self->priv->raw_developer;
-#line 407 "/home/jens/Source/shotwell/src/Properties.vala"
-	if (g_strcmp0 (_tmp90_, "") != 0) {
-#line 3547 "Properties.c"
-		const gchar* _tmp91_ = NULL;
-		const gchar* _tmp92_ = NULL;
-#line 408 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp91_ = _ ("Developer:");
-#line 408 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp92_ = self->priv->raw_developer;
-#line 408 "/home/jens/Source/shotwell/src/Properties.vala"
-		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp91_, _tmp92_, FALSE);
 #line 3556 "Properties.c"
 	}
-#line 412 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp93_ = self->priv->raw_assoc;
-#line 412 "/home/jens/Source/shotwell/src/Properties.vala"
-	if (g_strcmp0 (_tmp93_, "") != 0) {
+#line 410 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp90_ = self->priv->raw_developer;
+#line 410 "/home/jens/Source/shotwell/src/Properties.vala"
+	if (g_strcmp0 (_tmp90_, "") != 0) {
 #line 3562 "Properties.c"
-		const gchar* _tmp94_ = NULL;
-#line 413 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp94_ = self->priv->raw_assoc;
-#line 413 "/home/jens/Source/shotwell/src/Properties.vala"
-		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), "", _tmp94_, FALSE);
-#line 3568 "Properties.c"
+		const gchar* _tmp91_ = NULL;
+		const gchar* _tmp92_ = NULL;
+#line 411 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp91_ = _ ("Developer:");
+#line 411 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp92_ = self->priv->raw_developer;
+#line 411 "/home/jens/Source/shotwell/src/Properties.vala"
+		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp91_, _tmp92_, FALSE);
+#line 3571 "Properties.c"
 	}
 #line 415 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp97_ = self->priv->exposure;
+	_tmp93_ = self->priv->raw_assoc;
 #line 415 "/home/jens/Source/shotwell/src/Properties.vala"
-	if (g_strcmp0 (_tmp97_, "") != 0) {
-#line 415 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp96_ = TRUE;
-#line 3576 "Properties.c"
-	} else {
-		const gchar* _tmp98_ = NULL;
-#line 415 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp98_ = self->priv->aperture;
-#line 415 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp96_ = g_strcmp0 (_tmp98_, "") != 0;
+	if (g_strcmp0 (_tmp93_, "") != 0) {
+#line 3577 "Properties.c"
+		const gchar* _tmp94_ = NULL;
+#line 416 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp94_ = self->priv->raw_assoc;
+#line 416 "/home/jens/Source/shotwell/src/Properties.vala"
+		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), "", _tmp94_, FALSE);
 #line 3583 "Properties.c"
 	}
-#line 415 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 418 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp97_ = self->priv->exposure;
+#line 418 "/home/jens/Source/shotwell/src/Properties.vala"
+	if (g_strcmp0 (_tmp97_, "") != 0) {
+#line 418 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp96_ = TRUE;
+#line 3591 "Properties.c"
+	} else {
+		const gchar* _tmp98_ = NULL;
+#line 418 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp98_ = self->priv->aperture;
+#line 418 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp96_ = g_strcmp0 (_tmp98_, "") != 0;
+#line 3598 "Properties.c"
+	}
+#line 418 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp96_) {
-#line 415 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 418 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp95_ = TRUE;
-#line 3589 "Properties.c"
+#line 3604 "Properties.c"
 	} else {
 		const gchar* _tmp99_ = NULL;
-#line 415 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 418 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp99_ = self->priv->iso;
-#line 415 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 418 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp95_ = g_strcmp0 (_tmp99_, "") != 0;
-#line 3596 "Properties.c"
+#line 3611 "Properties.c"
 	}
-#line 415 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 418 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp95_) {
-#line 3600 "Properties.c"
+#line 3615 "Properties.c"
 		gchar* line = NULL;
 		const gchar* _tmp100_ = NULL;
 		const gchar* _tmp103_ = NULL;
 		gboolean _tmp112_ = FALSE;
 		gboolean _tmp113_ = FALSE;
 		const gchar* _tmp114_ = NULL;
-#line 416 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 419 "/home/jens/Source/shotwell/src/Properties.vala"
 		line = NULL;
-#line 419 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 422 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp100_ = self->priv->exposure;
-#line 419 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 422 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp100_, "") != 0) {
-#line 3613 "Properties.c"
+#line 3628 "Properties.c"
 			const gchar* _tmp101_ = NULL;
 			gchar* _tmp102_ = NULL;
-#line 420 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 423 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp101_ = self->priv->exposure;
-#line 420 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 423 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp102_ = g_strdup (_tmp101_);
-#line 420 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 423 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (line);
-#line 420 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 423 "/home/jens/Source/shotwell/src/Properties.vala"
 			line = _tmp102_;
-#line 3624 "Properties.c"
+#line 3639 "Properties.c"
 		}
-#line 422 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 425 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp103_ = self->priv->aperture;
-#line 422 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 425 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp103_, "") != 0) {
-#line 3630 "Properties.c"
+#line 3645 "Properties.c"
 			const gchar* _tmp104_ = NULL;
-#line 423 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 426 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp104_ = line;
-#line 423 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 426 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (_tmp104_ != NULL) {
-#line 3636 "Properties.c"
+#line 3651 "Properties.c"
 				const gchar* _tmp105_ = NULL;
 				const gchar* _tmp106_ = NULL;
 				gchar* _tmp107_ = NULL;
 				gchar* _tmp108_ = NULL;
 				gchar* _tmp109_ = NULL;
-#line 424 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 427 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp105_ = line;
-#line 424 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 427 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp106_ = self->priv->aperture;
-#line 424 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 427 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp107_ = g_strconcat (", ", _tmp106_, NULL);
-#line 424 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 427 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp108_ = _tmp107_;
-#line 424 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 427 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp109_ = g_strconcat (_tmp105_, _tmp108_, NULL);
-#line 424 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 427 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_free0 (line);
-#line 424 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 427 "/home/jens/Source/shotwell/src/Properties.vala"
 				line = _tmp109_;
-#line 424 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 427 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_free0 (_tmp108_);
-#line 3658 "Properties.c"
+#line 3673 "Properties.c"
 			} else {
 				const gchar* _tmp110_ = NULL;
 				gchar* _tmp111_ = NULL;
-#line 426 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 429 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp110_ = self->priv->aperture;
-#line 426 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 429 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp111_ = g_strdup (_tmp110_);
-#line 426 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 429 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_free0 (line);
-#line 426 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 429 "/home/jens/Source/shotwell/src/Properties.vala"
 				line = _tmp111_;
-#line 3670 "Properties.c"
+#line 3685 "Properties.c"
 			}
 		}
-#line 430 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 433 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp114_ = self->priv->exposure;
-#line 430 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 433 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp114_, "") == 0) {
-#line 430 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 433 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp113_ = TRUE;
-#line 3679 "Properties.c"
+#line 3694 "Properties.c"
 		} else {
 			const gchar* _tmp115_ = NULL;
-#line 430 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 433 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp115_ = self->priv->aperture;
-#line 430 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 433 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp113_ = g_strcmp0 (_tmp115_, "") == 0;
-#line 3686 "Properties.c"
+#line 3701 "Properties.c"
 		}
-#line 430 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 433 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp113_) {
-#line 3690 "Properties.c"
+#line 3705 "Properties.c"
 			const gchar* _tmp116_ = NULL;
-#line 430 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 433 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp116_ = self->priv->iso;
-#line 430 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 433 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp112_ = g_strcmp0 (_tmp116_, "") != 0;
-#line 3696 "Properties.c"
+#line 3711 "Properties.c"
 		} else {
-#line 430 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 433 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp112_ = FALSE;
-#line 3700 "Properties.c"
+#line 3715 "Properties.c"
 		}
-#line 430 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 433 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp112_) {
-#line 3704 "Properties.c"
+#line 3719 "Properties.c"
 			const gchar* _tmp117_ = NULL;
 			const gchar* _tmp125_ = NULL;
 			const gchar* _tmp126_ = NULL;
-#line 431 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 434 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp117_ = line;
-#line 431 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 434 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (_tmp117_ != NULL) {
-#line 3712 "Properties.c"
+#line 3727 "Properties.c"
 				const gchar* _tmp118_ = NULL;
 				const gchar* _tmp119_ = NULL;
 				gchar* _tmp120_ = NULL;
 				gchar* _tmp121_ = NULL;
 				gchar* _tmp122_ = NULL;
-#line 432 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 435 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp118_ = line;
-#line 432 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 435 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp119_ = self->priv->iso;
-#line 432 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 435 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp120_ = g_strconcat (", " "ISO ", _tmp119_, NULL);
-#line 432 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 435 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp121_ = _tmp120_;
-#line 432 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 435 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp122_ = g_strconcat (_tmp118_, _tmp121_, NULL);
-#line 432 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 435 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_free0 (line);
-#line 432 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 435 "/home/jens/Source/shotwell/src/Properties.vala"
 				line = _tmp122_;
-#line 432 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 435 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_free0 (_tmp121_);
-#line 3734 "Properties.c"
+#line 3749 "Properties.c"
 			} else {
 				const gchar* _tmp123_ = NULL;
 				gchar* _tmp124_ = NULL;
-#line 434 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 437 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp123_ = self->priv->iso;
-#line 434 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 437 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp124_ = g_strconcat ("ISO ", _tmp123_, NULL);
-#line 434 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 437 "/home/jens/Source/shotwell/src/Properties.vala"
 				_g_free0 (line);
-#line 434 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 437 "/home/jens/Source/shotwell/src/Properties.vala"
 				line = _tmp124_;
-#line 3746 "Properties.c"
+#line 3761 "Properties.c"
 			}
-#line 436 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 439 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp125_ = _ ("Exposure:");
-#line 436 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 439 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp126_ = line;
-#line 436 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 439 "/home/jens/Source/shotwell/src/Properties.vala"
 			properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp125_, _tmp126_, FALSE);
-#line 3754 "Properties.c"
+#line 3769 "Properties.c"
 		} else {
 			const gchar* _tmp127_ = NULL;
 			const gchar* _tmp130_ = NULL;
-#line 439 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 442 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp127_ = line;
-#line 439 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 442 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (_tmp127_ != NULL) {
-#line 3762 "Properties.c"
+#line 3777 "Properties.c"
 				const gchar* _tmp128_ = NULL;
 				const gchar* _tmp129_ = NULL;
-#line 440 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 443 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp128_ = _ ("Exposure:");
-#line 440 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 443 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp129_ = line;
-#line 440 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 443 "/home/jens/Source/shotwell/src/Properties.vala"
 				properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp128_, _tmp129_, FALSE);
-#line 3771 "Properties.c"
+#line 3786 "Properties.c"
 			}
-#line 443 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 446 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp130_ = self->priv->iso;
-#line 443 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 446 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (g_strcmp0 (_tmp130_, "") != 0) {
-#line 3777 "Properties.c"
+#line 3792 "Properties.c"
 				const gchar* _tmp131_ = NULL;
-#line 444 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 447 "/home/jens/Source/shotwell/src/Properties.vala"
 				_tmp131_ = line;
-#line 444 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 447 "/home/jens/Source/shotwell/src/Properties.vala"
 				if (_tmp131_ != NULL) {
-#line 3783 "Properties.c"
+#line 3798 "Properties.c"
 					const gchar* _tmp132_ = NULL;
 					gchar* _tmp133_ = NULL;
 					gchar* _tmp134_ = NULL;
-#line 445 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 448 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp132_ = self->priv->iso;
-#line 445 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 448 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp133_ = g_strconcat ("ISO ", _tmp132_, NULL);
-#line 445 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 448 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp134_ = _tmp133_;
-#line 445 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 448 "/home/jens/Source/shotwell/src/Properties.vala"
 					properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), "", _tmp134_, FALSE);
-#line 445 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 448 "/home/jens/Source/shotwell/src/Properties.vala"
 					_g_free0 (_tmp134_);
-#line 3797 "Properties.c"
+#line 3812 "Properties.c"
 				} else {
 					const gchar* _tmp135_ = NULL;
 					const gchar* _tmp136_ = NULL;
 					gchar* _tmp137_ = NULL;
 					gchar* _tmp138_ = NULL;
-#line 447 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 450 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp135_ = _ ("Exposure:");
-#line 447 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 450 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp136_ = self->priv->iso;
-#line 447 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 450 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp137_ = g_strconcat ("ISO ", _tmp136_, NULL);
-#line 447 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 450 "/home/jens/Source/shotwell/src/Properties.vala"
 					_tmp138_ = _tmp137_;
-#line 447 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 450 "/home/jens/Source/shotwell/src/Properties.vala"
 					properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp135_, _tmp138_, FALSE);
-#line 447 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 450 "/home/jens/Source/shotwell/src/Properties.vala"
 					_g_free0 (_tmp138_);
-#line 3815 "Properties.c"
+#line 3830 "Properties.c"
 				}
 			}
 		}
-#line 415 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 418 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (line);
-#line 3821 "Properties.c"
+#line 3836 "Properties.c"
 	}
 }
 
 
 static void basic_properties_class_init (BasicPropertiesClass * klass) {
-#line 153 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
 	basic_properties_parent_class = g_type_class_peek_parent (klass);
-#line 153 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_type_class_add_private (klass, sizeof (BasicPropertiesPrivate));
-#line 153 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
 	((PropertiesClass *) klass)->clear_properties = basic_properties_real_clear_properties;
-#line 153 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
 	((PropertiesClass *) klass)->get_single_properties = basic_properties_real_get_single_properties;
-#line 153 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
 	((PropertiesClass *) klass)->get_multiple_properties = basic_properties_real_get_multiple_properties;
-#line 153 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
 	((PropertiesClass *) klass)->get_properties = basic_properties_real_get_properties;
-#line 153 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
 	((PropertiesClass *) klass)->internal_update_properties = basic_properties_real_internal_update_properties;
-#line 153 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
 	G_OBJECT_CLASS (klass)->finalize = basic_properties_finalize;
-#line 3843 "Properties.c"
+#line 3858 "Properties.c"
 }
 
 
 static void basic_properties_instance_init (BasicProperties * self) {
 	time_t _tmp0_ = 0;
 	time_t _tmp1_ = 0;
-#line 153 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv = BASIC_PROPERTIES_GET_PRIVATE (self);
-#line 155 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 158 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = time (NULL);
-#line 155 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 158 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->start_time = _tmp0_;
-#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 159 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp1_ = time (NULL);
-#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 159 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->end_time = _tmp1_;
-#line 3860 "Properties.c"
+#line 3875 "Properties.c"
 }
 
 
 static void basic_properties_finalize (GObject* obj) {
 	BasicProperties * self;
-#line 153 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BASIC_PROPERTIES, BasicProperties);
-#line 154 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 157 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->title);
-#line 161 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 164 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->exposure);
-#line 162 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->aperture);
-#line 163 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->iso);
 #line 165 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->raw_developer);
+	_g_free0 (self->priv->aperture);
 #line 166 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->iso);
+#line 168 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->raw_developer);
+#line 169 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->raw_assoc);
-#line 153 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 156 "/home/jens/Source/shotwell/src/Properties.vala"
 	G_OBJECT_CLASS (basic_properties_parent_class)->finalize (obj);
-#line 3882 "Properties.c"
+#line 3897 "Properties.c"
 }
 
 
@@ -3897,9 +3912,9 @@ GType basic_properties_get_type (void) {
 static gboolean _gtk_widget_hide_on_delete_gtk_widget_delete_event (GtkWidget* _sender, GdkEventAny* event, gpointer self) {
 	gboolean result;
 	result = gtk_widget_hide_on_delete ((GtkWidget*) self);
-#line 646 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 649 "/home/jens/Source/shotwell/src/Properties.vala"
 	return result;
-#line 3903 "Properties.c"
+#line 3918 "Properties.c"
 }
 
 
@@ -3912,88 +3927,114 @@ ExtendedPropertiesWindow* extended_properties_window_construct (GType object_typ
 	const gchar* _tmp3_ = NULL;
 	GtkWindow* _tmp4_ = NULL;
 	ExtendedPropertiesWindowExtendedProperties* _tmp5_ = NULL;
-	GtkAlignment* alignment = NULL;
-	GtkAlignment* _tmp6_ = NULL;
+	ExtendedPropertiesWindowExtendedProperties* _tmp6_ = NULL;
 	ExtendedPropertiesWindowExtendedProperties* _tmp7_ = NULL;
-	GtkBox* _tmp8_ = NULL;
-#line 632 "/home/jens/Source/shotwell/src/Properties.vala"
+	ExtendedPropertiesWindowExtendedProperties* _tmp8_ = NULL;
+	ExtendedPropertiesWindowExtendedProperties* _tmp9_ = NULL;
+	ExtendedPropertiesWindowExtendedProperties* _tmp10_ = NULL;
+	ExtendedPropertiesWindowExtendedProperties* _tmp11_ = NULL;
+	ExtendedPropertiesWindowExtendedProperties* _tmp12_ = NULL;
+	ExtendedPropertiesWindowExtendedProperties* _tmp13_ = NULL;
+	GtkBox* _tmp14_ = NULL;
+	ExtendedPropertiesWindowExtendedProperties* _tmp15_ = NULL;
+#line 635 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_val_if_fail (GTK_IS_WINDOW (owner), NULL);
-#line 634 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp0_ = gtk_settings_get_default ();
-#line 634 "/home/jens/Source/shotwell/src/Properties.vala"
-	g_object_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, G_TYPE_OBJECT, GObject), "gtk-dialogs-use-header", &use_header, NULL);
-#line 635 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp2_ = use_header;
-#line 635 "/home/jens/Source/shotwell/src/Properties.vala"
-	if (_tmp2_) {
-#line 635 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp1_ = 1;
-#line 3932 "Properties.c"
-	} else {
-#line 635 "/home/jens/Source/shotwell/src/Properties.vala"
-		_tmp1_ = 0;
-#line 3936 "Properties.c"
-	}
-#line 635 "/home/jens/Source/shotwell/src/Properties.vala"
-	self = (ExtendedPropertiesWindow*) g_object_new (object_type, "use-header-bar", _tmp1_, NULL);
 #line 637 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_widget_add_events (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), (gint) (GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK));
+	_tmp0_ = gtk_settings_get_default ();
+#line 637 "/home/jens/Source/shotwell/src/Properties.vala"
+	g_object_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, G_TYPE_OBJECT, GObject), "gtk-dialogs-use-header", &use_header, NULL);
 #line 638 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_window_set_focus_on_map (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
-#line 639 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_window_set_accept_focus (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
+	_tmp2_ = use_header;
+#line 638 "/home/jens/Source/shotwell/src/Properties.vala"
+	if (_tmp2_) {
+#line 638 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp1_ = 1;
+#line 3953 "Properties.c"
+	} else {
+#line 638 "/home/jens/Source/shotwell/src/Properties.vala"
+		_tmp1_ = 0;
+#line 3957 "Properties.c"
+	}
+#line 638 "/home/jens/Source/shotwell/src/Properties.vala"
+	self = (ExtendedPropertiesWindow*) g_object_new (object_type, "use-header-bar", _tmp1_, NULL);
 #line 640 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_widget_set_can_focus (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), TRUE);
+	gtk_widget_add_events (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), (gint) (GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK));
 #line 641 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp3_ = _ ("Extended Information");
-#line 641 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp3_);
+	gtk_window_set_focus_on_map (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
 #line 642 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_window_set_position (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), GTK_WIN_POS_CENTER);
+	gtk_window_set_accept_focus (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
 #line 643 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp4_ = owner;
-#line 643 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_window_set_transient_for (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp4_);
+	gtk_widget_set_can_focus (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), TRUE);
 #line 644 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_window_set_type_hint (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), GDK_WINDOW_TYPE_HINT_DIALOG);
+	_tmp3_ = _ ("Extended Information");
+#line 644 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp3_);
+#line 645 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_window_set_position (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), GTK_WIN_POS_CENTER);
 #line 646 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp4_ = owner;
+#line 646 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_window_set_transient_for (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp4_);
+#line 647 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_window_set_type_hint (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), GDK_WINDOW_TYPE_HINT_DIALOG);
+#line 649 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), "delete-event", (GCallback) _gtk_widget_hide_on_delete_gtk_widget_delete_event, G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), 0);
-#line 648 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp5_ = extended_properties_window_extended_properties_new ();
-#line 648 "/home/jens/Source/shotwell/src/Properties.vala"
-	g_object_ref_sink (_tmp5_);
-#line 648 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_object_unref0 (self->priv->properties);
-#line 648 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->properties = _tmp5_;
-#line 649 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp6_ = (GtkAlignment*) gtk_alignment_new (0.5f, 0.5f, (gfloat) 1, (gfloat) 1);
-#line 649 "/home/jens/Source/shotwell/src/Properties.vala"
-	g_object_ref_sink (_tmp6_);
-#line 649 "/home/jens/Source/shotwell/src/Properties.vala"
-	alignment = _tmp6_;
-#line 650 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp7_ = self->priv->properties;
-#line 650 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (alignment, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget));
 #line 651 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_container_set_border_width (G_TYPE_CHECK_INSTANCE_CAST (alignment, gtk_container_get_type (), GtkContainer), (guint) 3);
+	_tmp5_ = extended_properties_window_extended_properties_new ();
+#line 651 "/home/jens/Source/shotwell/src/Properties.vala"
+	g_object_ref_sink (_tmp5_);
+#line 651 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_object_unref0 (self->priv->properties);
+#line 651 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->properties = _tmp5_;
 #line 652 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp8_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
+	_tmp6_ = self->priv->properties;
 #line 652 "/home/jens/Source/shotwell/src/Properties.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_box_get_type (), GtkBox), gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (alignment, gtk_widget_get_type (), GtkWidget));
-#line 632 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_object_unref0 (alignment);
-#line 632 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_FILL);
+#line 653 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp7_ = self->priv->properties;
+#line 653 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_FILL);
+#line 654 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp8_ = self->priv->properties;
+#line 654 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_widget_set_hexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_widget_get_type (), GtkWidget), TRUE);
+#line 655 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp9_ = self->priv->properties;
+#line 655 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_widget_set_vexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget), TRUE);
+#line 656 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp10_ = self->priv->properties;
+#line 656 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_widget_set_margin_top (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget), 3);
+#line 657 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp11_ = self->priv->properties;
+#line 657 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_widget_set_margin_bottom (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget), 3);
+#line 658 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp12_ = self->priv->properties;
+#line 658 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_widget_set_margin_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget), 3);
+#line 659 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp13_ = self->priv->properties;
+#line 659 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_widget_set_margin_end (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_widget_get_type (), GtkWidget), 3);
+#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp14_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
+#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp15_ = self->priv->properties;
+#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_box_get_type (), GtkBox), gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget));
+#line 635 "/home/jens/Source/shotwell/src/Properties.vala"
 	return self;
-#line 3990 "Properties.c"
+#line 4031 "Properties.c"
 }
 
 
 ExtendedPropertiesWindow* extended_properties_window_new (GtkWindow* owner) {
-#line 632 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 635 "/home/jens/Source/shotwell/src/Properties.vala"
 	return extended_properties_window_construct (TYPE_EXTENDED_PROPERTIES_WINDOW, owner);
-#line 3997 "Properties.c"
+#line 4038 "Properties.c"
 }
 
 
@@ -4010,64 +4051,64 @@ static gboolean extended_properties_window_real_button_press_event (GtkWidget* b
 	gdouble _tmp10_ = 0.0;
 	GdkEventButton* _tmp11_ = NULL;
 	guint32 _tmp12_ = 0U;
-#line 655 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 663 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EXTENDED_PROPERTIES_WINDOW, ExtendedPropertiesWindow);
-#line 655 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 663 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 657 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 665 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = event;
-#line 657 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 665 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp1_ = _tmp0_->button;
-#line 657 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 665 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp1_ != ((guint) 1)) {
-#line 4024 "Properties.c"
+#line 4065 "Properties.c"
 		gboolean _tmp2_ = FALSE;
-#line 658 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 666 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (GTK_WIDGET_CLASS (extended_properties_window_parent_class)->button_press_event != NULL) {
-#line 4028 "Properties.c"
+#line 4069 "Properties.c"
 			GdkEventButton* _tmp3_ = NULL;
 			gboolean _tmp4_ = FALSE;
-#line 658 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 666 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp3_ = event;
-#line 658 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 666 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp4_ = GTK_WIDGET_CLASS (extended_properties_window_parent_class)->button_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), gtk_widget_get_type (), GtkWidget), _tmp3_);
-#line 658 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 666 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp2_ = _tmp4_;
-#line 4037 "Properties.c"
+#line 4078 "Properties.c"
 		} else {
-#line 658 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 666 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp2_ = TRUE;
-#line 4041 "Properties.c"
+#line 4082 "Properties.c"
 		}
-#line 658 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 666 "/home/jens/Source/shotwell/src/Properties.vala"
 		result = _tmp2_;
-#line 658 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 666 "/home/jens/Source/shotwell/src/Properties.vala"
 		return result;
-#line 4047 "Properties.c"
+#line 4088 "Properties.c"
 	}
-#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 668 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp5_ = event;
-#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 668 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp6_ = _tmp5_->button;
-#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 668 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp7_ = event;
-#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 668 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp8_ = _tmp7_->x_root;
-#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 668 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp9_ = event;
-#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 668 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp10_ = _tmp9_->y_root;
-#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 668 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp11_ = event;
-#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 668 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp12_ = _tmp11_->time;
-#line 660 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 668 "/home/jens/Source/shotwell/src/Properties.vala"
 	gtk_window_begin_move_drag (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), (gint) _tmp6_, (gint) _tmp8_, (gint) _tmp10_, _tmp12_);
-#line 662 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 670 "/home/jens/Source/shotwell/src/Properties.vala"
 	result = TRUE;
-#line 662 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 670 "/home/jens/Source/shotwell/src/Properties.vala"
 	return result;
-#line 4071 "Properties.c"
+#line 4112 "Properties.c"
 }
 
 
@@ -4082,84 +4123,84 @@ static gboolean extended_properties_window_real_key_press_event (GtkWidget* base
 	GdkEventKey* _tmp5_ = NULL;
 	gboolean _tmp6_ = FALSE;
 	gboolean _tmp7_ = FALSE;
-#line 665 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 673 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EXTENDED_PROPERTIES_WINDOW, ExtendedPropertiesWindow);
-#line 665 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 673 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 667 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 675 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = event;
-#line 667 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 675 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp1_ = _tmp0_->keyval;
-#line 667 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 675 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp2_ = gdk_keyval_name (_tmp1_);
-#line 667 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 675 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (g_strcmp0 (_tmp2_, "Escape") == 0) {
-#line 668 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 676 "/home/jens/Source/shotwell/src/Properties.vala"
 		gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 669 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 677 "/home/jens/Source/shotwell/src/Properties.vala"
 		result = TRUE;
-#line 669 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 677 "/home/jens/Source/shotwell/src/Properties.vala"
 		return result;
-#line 4104 "Properties.c"
+#line 4145 "Properties.c"
 	}
-#line 672 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 680 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp3_ = app_window_get_instance ();
-#line 672 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 680 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp4_ = _tmp3_;
-#line 672 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 680 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp5_ = event;
-#line 672 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 680 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget), "key-press-event", _tmp5_, &_tmp6_);
-#line 672 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 680 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp7_ = _tmp6_;
-#line 672 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 680 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_object_unref0 (_tmp4_);
-#line 672 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 680 "/home/jens/Source/shotwell/src/Properties.vala"
 	result = _tmp7_;
-#line 672 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 680 "/home/jens/Source/shotwell/src/Properties.vala"
 	return result;
-#line 4122 "Properties.c"
+#line 4163 "Properties.c"
 }
 
 
 void extended_properties_window_update_properties (ExtendedPropertiesWindow* self, Page* page) {
 	ExtendedPropertiesWindowExtendedProperties* _tmp0_ = NULL;
 	Page* _tmp1_ = NULL;
-#line 675 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 683 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_EXTENDED_PROPERTIES_WINDOW (self));
-#line 675 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 683 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PAGE (page));
-#line 676 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 684 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = self->priv->properties;
-#line 676 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 684 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp1_ = page;
-#line 676 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 684 "/home/jens/Source/shotwell/src/Properties.vala"
 	properties_update_properties (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_PROPERTIES, Properties), _tmp1_);
-#line 4139 "Properties.c"
+#line 4180 "Properties.c"
 }
 
 
 static void extended_properties_window_real_show_all (GtkWidget* base) {
 	ExtendedPropertiesWindow * self;
 	ExtendedPropertiesWindowExtendedProperties* _tmp0_ = NULL;
-#line 679 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 687 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EXTENDED_PROPERTIES_WINDOW, ExtendedPropertiesWindow);
-#line 680 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 688 "/home/jens/Source/shotwell/src/Properties.vala"
 	GTK_WIDGET_CLASS (extended_properties_window_parent_class)->show_all (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), gtk_widget_get_type (), GtkWidget));
-#line 681 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 689 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = self->priv->properties;
-#line 681 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 689 "/home/jens/Source/shotwell/src/Properties.vala"
 	properties_unselect_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_PROPERTIES, Properties));
-#line 682 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 690 "/home/jens/Source/shotwell/src/Properties.vala"
 	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 4156 "Properties.c"
+#line 4197 "Properties.c"
 }
 
 
 static gpointer _dimensions_dup0 (gpointer self) {
-#line 495 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 498 "/home/jens/Source/shotwell/src/Properties.vala"
 	return self ? dimensions_dup (self) : NULL;
-#line 4163 "Properties.c"
+#line 4204 "Properties.c"
 }
 
 
@@ -4182,117 +4223,117 @@ static void extended_properties_window_extended_properties_real_clear_properties
 	gchar* _tmp14_ = NULL;
 	gchar* _tmp15_ = NULL;
 	gchar* _tmp16_ = NULL;
-#line 488 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 491 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EXTENDED_PROPERTIES_WINDOW_TYPE_EXTENDED_PROPERTIES, ExtendedPropertiesWindowExtendedProperties);
-#line 489 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 492 "/home/jens/Source/shotwell/src/Properties.vala"
 	PROPERTIES_CLASS (extended_properties_window_extended_properties_parent_class)->clear_properties (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties));
-#line 491 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp0_ = g_strdup ("");
-#line 491 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->file_path);
-#line 491 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->file_path = _tmp0_;
-#line 492 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp1_ = g_strdup ("");
-#line 492 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->development_path);
-#line 492 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->development_path = _tmp1_;
-#line 493 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->is_raw = FALSE;
 #line 494 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp0_ = g_strdup ("");
+#line 494 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->file_path);
+#line 494 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->file_path = _tmp0_;
+#line 495 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp1_ = g_strdup ("");
+#line 495 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->development_path);
+#line 495 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->development_path = _tmp1_;
+#line 496 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->is_raw = FALSE;
+#line 497 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->filesize = (guint64) 0;
-#line 495 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 498 "/home/jens/Source/shotwell/src/Properties.vala"
 	dimensions_init (&_tmp2_, 0, 0);
-#line 495 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 498 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp3_ = _dimensions_dup0 (&_tmp2_);
-#line 495 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 498 "/home/jens/Source/shotwell/src/Properties.vala"
 	_dimensions_free0 (self->priv->original_dim);
-#line 495 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 498 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->original_dim = _tmp3_;
-#line 496 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 499 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp4_ = g_strdup ("");
-#line 496 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 499 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->camera_make);
-#line 496 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 499 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->camera_make = _tmp4_;
-#line 497 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp5_ = g_strdup ("");
-#line 497 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->camera_model);
-#line 497 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->camera_model = _tmp5_;
-#line 498 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp6_ = g_strdup ("");
-#line 498 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->flash);
-#line 498 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->flash = _tmp6_;
-#line 499 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp7_ = g_strdup ("");
-#line 499 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->focal_length);
-#line 499 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->focal_length = _tmp7_;
 #line 500 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->gps_lat = (gdouble) -1;
+	_tmp5_ = g_strdup ("");
+#line 500 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->camera_model);
+#line 500 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->camera_model = _tmp5_;
 #line 501 "/home/jens/Source/shotwell/src/Properties.vala"
-	_tmp8_ = g_strdup ("");
+	_tmp6_ = g_strdup ("");
 #line 501 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->gps_lat_ref);
+	_g_free0 (self->priv->flash);
 #line 501 "/home/jens/Source/shotwell/src/Properties.vala"
-	self->priv->gps_lat_ref = _tmp8_;
+	self->priv->flash = _tmp6_;
 #line 502 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp7_ = g_strdup ("");
+#line 502 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->focal_length);
+#line 502 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->focal_length = _tmp7_;
+#line 503 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->gps_lat = (gdouble) -1;
+#line 504 "/home/jens/Source/shotwell/src/Properties.vala"
+	_tmp8_ = g_strdup ("");
+#line 504 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->gps_lat_ref);
+#line 504 "/home/jens/Source/shotwell/src/Properties.vala"
+	self->priv->gps_lat_ref = _tmp8_;
+#line 505 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->gps_long = (gdouble) -1;
-#line 503 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 506 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp9_ = g_strdup ("");
-#line 503 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 506 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->gps_long_ref);
-#line 503 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 506 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->gps_long_ref = _tmp9_;
-#line 504 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 507 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp10_ = g_strdup ("");
-#line 504 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 507 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->artist);
-#line 504 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 507 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->artist = _tmp10_;
-#line 505 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 508 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp11_ = g_strdup ("");
-#line 505 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 508 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->copyright);
-#line 505 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 508 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->copyright = _tmp11_;
-#line 506 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 509 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp12_ = g_strdup ("");
-#line 506 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 509 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->software);
-#line 506 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 509 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->software = _tmp12_;
-#line 507 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 510 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp13_ = g_strdup ("");
-#line 507 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 510 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->exposure_bias);
-#line 507 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 510 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->exposure_bias = _tmp13_;
-#line 508 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 511 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp14_ = g_strdup ("");
-#line 508 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 511 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->exposure_date);
-#line 508 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 511 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->exposure_date = _tmp14_;
-#line 509 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 512 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp15_ = g_strdup ("");
-#line 509 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 512 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->exposure_time);
-#line 509 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 512 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->exposure_time = _tmp15_;
-#line 510 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 513 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp16_ = g_strdup ("");
-#line 510 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 513 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->comment);
-#line 510 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 513 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->comment = _tmp16_;
-#line 4296 "Properties.c"
+#line 4337 "Properties.c"
 }
 
 
@@ -4305,35 +4346,35 @@ static void extended_properties_window_extended_properties_real_get_single_prope
 	DataSource* _tmp3_ = NULL;
 	DataSource* _tmp4_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 513 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 516 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EXTENDED_PROPERTIES_WINDOW_TYPE_EXTENDED_PROPERTIES, ExtendedPropertiesWindowExtendedProperties);
-#line 513 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 516 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_DATA_VIEW (view));
-#line 514 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 517 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = view;
-#line 514 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 517 "/home/jens/Source/shotwell/src/Properties.vala"
 	PROPERTIES_CLASS (extended_properties_window_extended_properties_parent_class)->get_single_properties (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp0_);
-#line 516 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 519 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp1_ = view;
-#line 516 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 519 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp2_ = data_view_get_source (_tmp1_);
-#line 516 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 519 "/home/jens/Source/shotwell/src/Properties.vala"
 	source = _tmp2_;
-#line 517 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 520 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp3_ = source;
-#line 517 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 520 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp3_ == NULL) {
-#line 518 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 521 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (source);
-#line 518 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 521 "/home/jens/Source/shotwell/src/Properties.vala"
 		return;
-#line 4331 "Properties.c"
+#line 4372 "Properties.c"
 	}
-#line 520 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp4_ = source;
-#line 520 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp4_, TYPE_MEDIA_SOURCE)) {
-#line 4337 "Properties.c"
+#line 4378 "Properties.c"
 		MediaSource* media = NULL;
 		DataSource* _tmp5_ = NULL;
 		MediaSource* _tmp6_ = NULL;
@@ -4397,364 +4438,364 @@ static void extended_properties_window_extended_properties_real_get_single_prope
 		gchar* _tmp72_ = NULL;
 		MediaSource* _tmp73_ = NULL;
 		gchar* _tmp74_ = NULL;
-#line 521 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 524 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp5_ = source;
-#line 521 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 524 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp6_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 521 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 524 "/home/jens/Source/shotwell/src/Properties.vala"
 		media = _tmp6_;
-#line 522 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 525 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp7_ = media;
-#line 522 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 525 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp8_ = media_source_get_master_file (_tmp7_);
-#line 522 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 525 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp9_ = _tmp8_;
-#line 522 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 525 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp10_ = g_file_get_path (_tmp9_);
-#line 522 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 525 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->file_path);
-#line 522 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 525 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->file_path = _tmp10_;
-#line 522 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 525 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (_tmp9_);
-#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 526 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp11_ = media;
-#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 526 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp12_ = media_source_get_file (_tmp11_);
-#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 526 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp13_ = _tmp12_;
-#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 526 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp14_ = g_file_get_path (_tmp13_);
-#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 526 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->development_path);
-#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 526 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->development_path = _tmp14_;
-#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 526 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (_tmp13_);
-#line 524 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 527 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp15_ = media;
-#line 524 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 527 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp16_ = media_source_get_master_filesize (_tmp15_);
-#line 524 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 527 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->filesize = _tmp16_;
-#line 529 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 532 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp17_ = media;
-#line 529 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 532 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp18_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp17_, TYPE_PHOTO) ? ((Photo*) _tmp17_) : NULL);
-#line 529 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 532 "/home/jens/Source/shotwell/src/Properties.vala"
 		photo = _tmp18_;
-#line 530 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 533 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp19_ = photo;
-#line 530 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 533 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp19_ == NULL) {
-#line 531 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 534 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (photo);
-#line 531 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 534 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (media);
-#line 531 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 534 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (source);
-#line 531 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 534 "/home/jens/Source/shotwell/src/Properties.vala"
 			return;
-#line 4459 "Properties.c"
+#line 4500 "Properties.c"
 		}
 		{
 			PhotoMetadata* _tmp20_ = NULL;
 			Photo* _tmp21_ = NULL;
 			PhotoMetadata* _tmp22_ = NULL;
 			PhotoMetadata* _tmp23_ = NULL;
-#line 540 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 543 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp21_ = photo;
-#line 540 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 543 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp22_ = photo_get_master_metadata (_tmp21_, &_inner_error_);
-#line 540 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 543 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp20_ = _tmp22_;
-#line 540 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 543 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4474 "Properties.c"
-				goto __catch435_g_error;
+#line 4515 "Properties.c"
+				goto __catch432_g_error;
 			}
-#line 540 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 543 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp23_ = _tmp20_;
-#line 540 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 543 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp20_ = NULL;
-#line 540 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 543 "/home/jens/Source/shotwell/src/Properties.vala"
 			_media_metadata_unref0 (metadata);
-#line 540 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 543 "/home/jens/Source/shotwell/src/Properties.vala"
 			metadata = _tmp23_;
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 			_media_metadata_unref0 (_tmp20_);
-#line 4487 "Properties.c"
+#line 4528 "Properties.c"
 		}
-		goto __finally435;
-		__catch435_g_error:
+		goto __finally432;
+		__catch432_g_error:
 		{
 			GError* e = NULL;
 			Photo* _tmp24_ = NULL;
 			PhotoMetadata* _tmp25_ = NULL;
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 			e = _inner_error_;
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 			_inner_error_ = NULL;
-#line 542 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 545 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp24_ = photo;
-#line 542 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 545 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp25_ = photo_source_get_metadata (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, TYPE_PHOTO_SOURCE, PhotoSource));
-#line 542 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 545 "/home/jens/Source/shotwell/src/Properties.vala"
 			_media_metadata_unref0 (metadata);
-#line 542 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 545 "/home/jens/Source/shotwell/src/Properties.vala"
 			metadata = _tmp25_;
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_error_free0 (e);
-#line 4509 "Properties.c"
+#line 4550 "Properties.c"
 		}
-		__finally435:
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+		__finally432:
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 			_media_metadata_unref0 (metadata);
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (photo);
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (media);
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (source);
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 			g_clear_error (&_inner_error_);
-#line 535 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 			return;
-#line 4528 "Properties.c"
+#line 4569 "Properties.c"
 		}
-#line 545 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 548 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp26_ = metadata;
-#line 545 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 548 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp26_ == NULL) {
-#line 546 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 549 "/home/jens/Source/shotwell/src/Properties.vala"
 			_media_metadata_unref0 (metadata);
-#line 546 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 549 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (photo);
-#line 546 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 549 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (media);
-#line 546 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 549 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (source);
-#line 546 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 549 "/home/jens/Source/shotwell/src/Properties.vala"
 			return;
-#line 4544 "Properties.c"
+#line 4585 "Properties.c"
 		}
-#line 553 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 556 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp27_ = metadata;
-#line 553 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 556 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp28_ = photo_metadata_get_exposure_date_time (_tmp27_);
-#line 553 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 556 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp29_ = _tmp28_;
-#line 553 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 556 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp30_ = _tmp29_ == NULL;
-#line 553 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 556 "/home/jens/Source/shotwell/src/Properties.vala"
 		_metadata_date_time_unref0 (_tmp29_);
-#line 553 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 556 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp30_) {
-#line 4558 "Properties.c"
+#line 4599 "Properties.c"
 			PhotoMetadata* _tmp31_ = NULL;
 			Photo* _tmp32_ = NULL;
 			time_t _tmp33_ = 0;
 			MetadataDateTime* _tmp34_ = NULL;
 			MetadataDateTime* _tmp35_ = NULL;
-#line 554 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 557 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp31_ = metadata;
-#line 554 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 557 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp32_ = photo;
-#line 554 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 557 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp33_ = media_source_get_timestamp (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 554 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 557 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp34_ = metadata_date_time_new (_tmp33_);
-#line 554 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 557 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp35_ = _tmp34_;
-#line 554 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 557 "/home/jens/Source/shotwell/src/Properties.vala"
 			photo_metadata_set_exposure_date_time (_tmp31_, _tmp35_, PHOTO_METADATA_SET_OPTION_ALL_DOMAINS);
-#line 554 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 557 "/home/jens/Source/shotwell/src/Properties.vala"
 			_metadata_date_time_unref0 (_tmp35_);
-#line 4578 "Properties.c"
+#line 4619 "Properties.c"
 		}
-#line 556 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 559 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp36_ = photo;
-#line 556 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 559 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp37_ = photo_get_master_file_format (_tmp36_);
-#line 556 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 559 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->is_raw = _tmp37_ == PHOTO_FILE_FORMAT_RAW;
-#line 557 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 560 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp38_ = metadata;
-#line 557 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 560 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp39_ = photo_metadata_get_pixel_dimensions (_tmp38_);
-#line 557 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 560 "/home/jens/Source/shotwell/src/Properties.vala"
 		_dimensions_free0 (self->priv->original_dim);
-#line 557 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 560 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->original_dim = _tmp39_;
-#line 558 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 561 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp40_ = metadata;
-#line 558 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 561 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp41_ = photo_metadata_get_camera_make (_tmp40_);
-#line 558 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 561 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->camera_make);
-#line 558 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 561 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->camera_make = _tmp41_;
-#line 559 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp42_ = metadata;
-#line 559 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp43_ = photo_metadata_get_camera_model (_tmp42_);
-#line 559 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->camera_model);
-#line 559 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->camera_model = _tmp43_;
-#line 560 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 563 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp44_ = metadata;
-#line 560 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 563 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp45_ = photo_metadata_get_flash_string (_tmp44_);
-#line 560 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 563 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->flash);
-#line 560 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 563 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->flash = _tmp45_;
-#line 561 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 564 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp46_ = metadata;
-#line 561 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 564 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp47_ = photo_metadata_get_focal_length_string (_tmp46_);
-#line 561 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 564 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->focal_length);
-#line 561 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 564 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->focal_length = _tmp47_;
-#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp48_ = metadata;
-#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
 		photo_metadata_get_gps (_tmp48_, &_tmp49_, &_tmp50_, &_tmp51_, &_tmp52_, &_tmp53_);
-#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->gps_long = _tmp49_;
-#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->gps_long_ref);
-#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->gps_long_ref = _tmp50_;
-#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->gps_lat = _tmp51_;
-#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->gps_lat_ref);
-#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->gps_lat_ref = _tmp52_;
-#line 562 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->gps_alt = _tmp53_;
-#line 563 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 566 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp54_ = metadata;
-#line 563 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 566 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp55_ = photo_metadata_get_artist (_tmp54_);
-#line 563 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 566 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->artist);
-#line 563 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 566 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->artist = _tmp55_;
-#line 564 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 567 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp56_ = metadata;
-#line 564 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 567 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp57_ = photo_metadata_get_copyright (_tmp56_);
-#line 564 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 567 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->copyright);
-#line 564 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 567 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->copyright = _tmp57_;
-#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 568 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp58_ = metadata;
-#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 568 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp59_ = photo_metadata_get_software (_tmp58_);
-#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 568 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->software);
-#line 565 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 568 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->software = _tmp59_;
-#line 566 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 569 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp60_ = metadata;
-#line 566 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 569 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp61_ = photo_metadata_get_exposure_bias (_tmp60_);
-#line 566 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 569 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->exposure_bias);
-#line 566 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 569 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->exposure_bias = _tmp61_;
-#line 567 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 570 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp62_ = metadata;
-#line 567 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 570 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp63_ = photo_metadata_get_exposure_date_time (_tmp62_);
-#line 567 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 570 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp64_ = _tmp63_;
-#line 567 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 570 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp65_ = metadata_date_time_get_timestamp (_tmp64_);
-#line 567 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 570 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp66_ = _tmp65_;
-#line 567 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 570 "/home/jens/Source/shotwell/src/Properties.vala"
 		_metadata_date_time_unref0 (_tmp64_);
-#line 567 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 570 "/home/jens/Source/shotwell/src/Properties.vala"
 		exposure_time_obj = _tmp66_;
-#line 568 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 571 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp67_ = exposure_time_obj;
-#line 568 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 571 "/home/jens/Source/shotwell/src/Properties.vala"
 		g_time_local (_tmp67_, &_tmp68_);
-#line 568 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 571 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp69_ = properties_get_prettyprint_date (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), &_tmp68_);
-#line 568 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 571 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->exposure_date);
-#line 568 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 571 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->exposure_date = _tmp69_;
-#line 569 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 572 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp70_ = exposure_time_obj;
-#line 569 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 572 "/home/jens/Source/shotwell/src/Properties.vala"
 		g_time_local (_tmp70_, &_tmp71_);
-#line 569 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 572 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp72_ = properties_get_prettyprint_time_with_seconds (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), &_tmp71_);
-#line 569 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 572 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->exposure_time);
-#line 569 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 572 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->exposure_time = _tmp72_;
-#line 570 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 573 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp73_ = media;
-#line 570 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 573 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp74_ = media_source_get_comment (_tmp73_);
-#line 570 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 573 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (self->priv->comment);
-#line 570 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 573 "/home/jens/Source/shotwell/src/Properties.vala"
 		self->priv->comment = _tmp74_;
-#line 520 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
 		_media_metadata_unref0 (metadata);
-#line 520 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (photo);
-#line 520 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 523 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_object_unref0 (media);
-#line 4724 "Properties.c"
+#line 4765 "Properties.c"
 	} else {
 		DataSource* _tmp75_ = NULL;
-#line 571 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 574 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp75_ = source;
-#line 571 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 574 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp75_, TYPE_EVENT_SOURCE)) {
-#line 4731 "Properties.c"
+#line 4772 "Properties.c"
 			Event* event = NULL;
 			DataSource* _tmp76_ = NULL;
 			Event* _tmp77_ = NULL;
 			Event* _tmp78_ = NULL;
 			gchar* _tmp79_ = NULL;
-#line 572 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 575 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp76_ = source;
-#line 572 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 575 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp77_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, TYPE_EVENT, Event));
-#line 572 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 575 "/home/jens/Source/shotwell/src/Properties.vala"
 			event = _tmp77_;
-#line 573 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 576 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp78_ = event;
-#line 573 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 576 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp79_ = event_source_get_comment (G_TYPE_CHECK_INSTANCE_CAST (_tmp78_, TYPE_EVENT_SOURCE, EventSource));
-#line 573 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 576 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (self->priv->comment);
-#line 573 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 576 "/home/jens/Source/shotwell/src/Properties.vala"
 			self->priv->comment = _tmp79_;
-#line 571 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 574 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_object_unref0 (event);
-#line 4753 "Properties.c"
+#line 4794 "Properties.c"
 		}
 	}
-#line 513 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 516 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_object_unref0 (source);
-#line 4758 "Properties.c"
+#line 4799 "Properties.c"
 }
 
 
@@ -4767,7 +4808,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 	g_return_val_if_fail (old != NULL, NULL);
 #line 1380 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	g_return_val_if_fail (replacement != NULL, NULL);
-#line 4771 "Properties.c"
+#line 4812 "Properties.c"
 	{
 		GRegex* regex = NULL;
 		const gchar* _tmp0_ = NULL;
@@ -4798,8 +4839,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 4802 "Properties.c"
-				goto __catch436_g_regex_error;
+#line 4843 "Properties.c"
+				goto __catch433_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4807,7 +4848,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 4811 "Properties.c"
+#line 4852 "Properties.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp6_ = regex;
@@ -4823,8 +4864,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 4827 "Properties.c"
-				goto __catch436_g_regex_error;
+#line 4868 "Properties.c"
+				goto __catch433_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -4834,7 +4875,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 4838 "Properties.c"
+#line 4879 "Properties.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp9_ = _tmp5_;
@@ -4848,10 +4889,10 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 4852 "Properties.c"
+#line 4893 "Properties.c"
 	}
-	goto __finally436;
-	__catch436_g_regex_error:
+	goto __finally433;
+	__catch433_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -4862,9 +4903,9 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_assert_not_reached ();
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_g_error_free0 (e);
-#line 4866 "Properties.c"
+#line 4907 "Properties.c"
 	}
-	__finally436:
+	__finally433:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -4873,7 +4914,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_clear_error (&_inner_error_);
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return NULL;
-#line 4877 "Properties.c"
+#line 4918 "Properties.c"
 	}
 }
 
@@ -4889,19 +4930,19 @@ static void extended_properties_window_extended_properties_real_internal_update_
 	gboolean _tmp117_ = FALSE;
 	const gchar* _tmp119_ = NULL;
 	gboolean _tmp120_ = FALSE;
-#line 577 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 580 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EXTENDED_PROPERTIES_WINDOW_TYPE_EXTENDED_PROPERTIES, ExtendedPropertiesWindowExtendedProperties);
-#line 577 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 580 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_return_if_fail (IS_PAGE (page));
-#line 578 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 581 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp0_ = page;
-#line 578 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 581 "/home/jens/Source/shotwell/src/Properties.vala"
 	PROPERTIES_CLASS (extended_properties_window_extended_properties_parent_class)->internal_update_properties (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp0_);
-#line 580 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp1_ = page;
-#line 580 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, TYPE_EVENTS_DIRECTORY_PAGE)) {
-#line 4905 "Properties.c"
+#line 4946 "Properties.c"
 	} else {
 		gchar* _tmp2_ = NULL;
 		gboolean _tmp3_ = FALSE;
@@ -4965,749 +5006,749 @@ static void extended_properties_window_extended_properties_real_internal_update_
 		gboolean _tmp108_ = FALSE;
 		const gchar* _tmp109_ = NULL;
 		const gchar* _tmp112_ = NULL;
-#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp4_ = self->priv->file_path;
-#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp4_, "") != 0) {
-#line 4973 "Properties.c"
+#line 5014 "Properties.c"
 			const gchar* _tmp5_ = NULL;
-#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp5_ = self->priv->file_path;
-#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp3_ = _tmp5_ != NULL;
-#line 4979 "Properties.c"
+#line 5020 "Properties.c"
 		} else {
-#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp3_ = FALSE;
-#line 4983 "Properties.c"
+#line 5024 "Properties.c"
 		}
-#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp3_) {
-#line 4987 "Properties.c"
+#line 5028 "Properties.c"
 			const gchar* _tmp6_ = NULL;
 			gchar* _tmp7_ = NULL;
-#line 584 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp6_ = self->priv->file_path;
-#line 584 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp7_ = string_replace (_tmp6_, "&", "&amp;");
-#line 584 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (_tmp2_);
-#line 584 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp2_ = _tmp7_;
-#line 4998 "Properties.c"
+#line 5039 "Properties.c"
 		} else {
 			gchar* _tmp8_ = NULL;
-#line 584 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp8_ = g_strdup (EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE);
-#line 584 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (_tmp2_);
-#line 584 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp2_ = _tmp8_;
-#line 5007 "Properties.c"
+#line 5048 "Properties.c"
 		}
-#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp9_ = _ ("Location:");
-#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp9_, _tmp2_, FALSE);
-#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 589 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp11_ = self->priv->filesize;
-#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 589 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp11_ > ((guint64) 0)) {
-#line 5017 "Properties.c"
+#line 5058 "Properties.c"
 			guint64 _tmp12_ = 0ULL;
 			gchar* _tmp13_ = NULL;
-#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 590 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp12_ = self->priv->filesize;
-#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 590 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp13_ = g_format_size_full ((guint64) ((gint64) _tmp12_), G_FORMAT_SIZE_DEFAULT);
-#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 590 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (_tmp10_);
-#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 590 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp10_ = _tmp13_;
-#line 5028 "Properties.c"
+#line 5069 "Properties.c"
 		} else {
 			gchar* _tmp14_ = NULL;
-#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 590 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp14_ = g_strdup (EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE);
-#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 590 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (_tmp10_);
-#line 587 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 590 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp10_ = _tmp14_;
-#line 5037 "Properties.c"
+#line 5078 "Properties.c"
 		}
-#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 589 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp15_ = _ ("File size:");
-#line 586 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 589 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp15_, _tmp10_, FALSE);
-#line 589 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 592 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp16_ = self->priv->is_raw;
-#line 589 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 592 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp16_) {
-#line 5047 "Properties.c"
+#line 5088 "Properties.c"
 			const gchar* _tmp17_ = NULL;
 			const gchar* _tmp18_ = NULL;
-#line 590 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp17_ = _ ("Current Development:");
-#line 590 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp18_ = self->priv->development_path;
-#line 590 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
 			properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp17_, _tmp18_, FALSE);
-#line 5056 "Properties.c"
+#line 5097 "Properties.c"
 		}
-#line 592 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp21_ = self->priv->original_dim;
-#line 592 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp21_ != NULL) {
-#line 5062 "Properties.c"
+#line 5103 "Properties.c"
 			Dimensions* _tmp22_ = NULL;
 			gboolean _tmp23_ = FALSE;
-#line 592 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp22_ = self->priv->original_dim;
-#line 592 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp23_ = dimensions_has_area (_tmp22_);
-#line 592 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp20_ = _tmp23_;
-#line 5071 "Properties.c"
+#line 5112 "Properties.c"
 		} else {
-#line 592 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp20_ = FALSE;
-#line 5075 "Properties.c"
+#line 5116 "Properties.c"
 		}
-#line 592 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp20_) {
-#line 5079 "Properties.c"
+#line 5120 "Properties.c"
 			Dimensions* _tmp24_ = NULL;
 			gint _tmp25_ = 0;
 			Dimensions* _tmp26_ = NULL;
 			gint _tmp27_ = 0;
 			gchar* _tmp28_ = NULL;
-#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp24_ = self->priv->original_dim;
-#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp25_ = (*_tmp24_).width;
-#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp26_ = self->priv->original_dim;
-#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp27_ = (*_tmp26_).height;
-#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp28_ = g_strdup_printf ("%d &#215; %d", _tmp25_, _tmp27_);
-#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (_tmp19_);
-#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp19_ = _tmp28_;
-#line 5099 "Properties.c"
+#line 5140 "Properties.c"
 		} else {
 			gchar* _tmp29_ = NULL;
-#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp29_ = g_strdup (EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE);
-#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (_tmp19_);
-#line 593 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp19_ = _tmp29_;
-#line 5108 "Properties.c"
+#line 5149 "Properties.c"
 		}
-#line 592 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp30_ = _ ("Original dimensions:");
-#line 592 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp30_, _tmp19_, FALSE);
-#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp33_ = self->priv->camera_make;
-#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp33_, "") != 0) {
-#line 5118 "Properties.c"
+#line 5159 "Properties.c"
 			const gchar* _tmp34_ = NULL;
-#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp34_ = self->priv->camera_make;
-#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp32_ = _tmp34_ != NULL;
-#line 5124 "Properties.c"
+#line 5165 "Properties.c"
 		} else {
-#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp32_ = FALSE;
-#line 5128 "Properties.c"
+#line 5169 "Properties.c"
 		}
-#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp32_) {
-#line 5132 "Properties.c"
+#line 5173 "Properties.c"
 			const gchar* _tmp35_ = NULL;
-#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 599 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp35_ = self->priv->camera_make;
-#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 599 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp31_ = _tmp35_;
-#line 5138 "Properties.c"
+#line 5179 "Properties.c"
 		} else {
-#line 596 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 599 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp31_ = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE;
-#line 5142 "Properties.c"
+#line 5183 "Properties.c"
 		}
-#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp36_ = _ ("Camera make:");
-#line 595 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp36_, _tmp31_, FALSE);
-#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp39_ = self->priv->camera_model;
-#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp39_, "") != 0) {
-#line 5152 "Properties.c"
+#line 5193 "Properties.c"
 			const gchar* _tmp40_ = NULL;
-#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp40_ = self->priv->camera_model;
-#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp38_ = _tmp40_ != NULL;
-#line 5158 "Properties.c"
+#line 5199 "Properties.c"
 		} else {
-#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp38_ = FALSE;
-#line 5162 "Properties.c"
+#line 5203 "Properties.c"
 		}
-#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp38_) {
-#line 5166 "Properties.c"
+#line 5207 "Properties.c"
 			const gchar* _tmp41_ = NULL;
-#line 599 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 602 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp41_ = self->priv->camera_model;
-#line 599 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 602 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp37_ = _tmp41_;
-#line 5172 "Properties.c"
+#line 5213 "Properties.c"
 		} else {
-#line 599 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 602 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp37_ = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE;
-#line 5176 "Properties.c"
+#line 5217 "Properties.c"
 		}
-#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp42_ = _ ("Camera model:");
-#line 598 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp42_, _tmp37_, FALSE);
-#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp45_ = self->priv->flash;
-#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp45_, "") != 0) {
-#line 5186 "Properties.c"
+#line 5227 "Properties.c"
 			const gchar* _tmp46_ = NULL;
-#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp46_ = self->priv->flash;
-#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp44_ = _tmp46_ != NULL;
-#line 5192 "Properties.c"
+#line 5233 "Properties.c"
 		} else {
-#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp44_ = FALSE;
-#line 5196 "Properties.c"
+#line 5237 "Properties.c"
 		}
-#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp44_) {
-#line 5200 "Properties.c"
+#line 5241 "Properties.c"
 			const gchar* _tmp47_ = NULL;
-#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp47_ = self->priv->flash;
-#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp43_ = _tmp47_;
-#line 5206 "Properties.c"
+#line 5247 "Properties.c"
 		} else {
-#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp43_ = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE;
-#line 5210 "Properties.c"
+#line 5251 "Properties.c"
 		}
-#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp48_ = _ ("Flash:");
-#line 601 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp48_, _tmp43_, FALSE);
-#line 603 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp51_ = self->priv->focal_length;
-#line 603 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp51_, "") != 0) {
-#line 5220 "Properties.c"
+#line 5261 "Properties.c"
 			const gchar* _tmp52_ = NULL;
-#line 603 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp52_ = self->priv->focal_length;
-#line 603 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp50_ = _tmp52_ != NULL;
-#line 5226 "Properties.c"
+#line 5267 "Properties.c"
 		} else {
-#line 603 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp50_ = FALSE;
-#line 5230 "Properties.c"
+#line 5271 "Properties.c"
 		}
-#line 603 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp50_) {
-#line 5234 "Properties.c"
+#line 5275 "Properties.c"
 			const gchar* _tmp53_ = NULL;
-#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 607 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp53_ = self->priv->focal_length;
-#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 607 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp49_ = _tmp53_;
-#line 5240 "Properties.c"
+#line 5281 "Properties.c"
 		} else {
-#line 604 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 607 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp49_ = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE;
-#line 5244 "Properties.c"
+#line 5285 "Properties.c"
 		}
-#line 603 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp54_ = _ ("Focal length:");
-#line 603 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp54_, _tmp49_, FALSE);
-#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp57_ = self->priv->exposure_date;
-#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp57_, "") != 0) {
-#line 5254 "Properties.c"
+#line 5295 "Properties.c"
 			const gchar* _tmp58_ = NULL;
-#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp58_ = self->priv->exposure_date;
-#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp56_ = _tmp58_ != NULL;
-#line 5260 "Properties.c"
+#line 5301 "Properties.c"
 		} else {
-#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp56_ = FALSE;
-#line 5264 "Properties.c"
+#line 5305 "Properties.c"
 		}
-#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp56_) {
-#line 5268 "Properties.c"
+#line 5309 "Properties.c"
 			const gchar* _tmp59_ = NULL;
-#line 607 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 610 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp59_ = self->priv->exposure_date;
-#line 607 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 610 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp55_ = _tmp59_;
-#line 5274 "Properties.c"
+#line 5315 "Properties.c"
 		} else {
-#line 607 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 610 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp55_ = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE;
-#line 5278 "Properties.c"
+#line 5319 "Properties.c"
 		}
-#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp60_ = _ ("Exposure date:");
-#line 606 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp60_, _tmp55_, FALSE);
-#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp63_ = self->priv->exposure_time;
-#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp63_, "") != 0) {
-#line 5288 "Properties.c"
+#line 5329 "Properties.c"
 			const gchar* _tmp64_ = NULL;
-#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp64_ = self->priv->exposure_time;
-#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp62_ = _tmp64_ != NULL;
-#line 5294 "Properties.c"
+#line 5335 "Properties.c"
 		} else {
-#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp62_ = FALSE;
-#line 5298 "Properties.c"
+#line 5339 "Properties.c"
 		}
-#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp62_) {
-#line 5302 "Properties.c"
+#line 5343 "Properties.c"
 			const gchar* _tmp65_ = NULL;
-#line 610 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 613 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp65_ = self->priv->exposure_time;
-#line 610 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 613 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp61_ = _tmp65_;
-#line 5308 "Properties.c"
+#line 5349 "Properties.c"
 		} else {
-#line 610 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 613 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp61_ = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE;
-#line 5312 "Properties.c"
+#line 5353 "Properties.c"
 		}
-#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp66_ = _ ("Exposure time:");
-#line 609 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp66_, _tmp61_, FALSE);
-#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp69_ = self->priv->exposure_bias;
-#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp69_, "") != 0) {
-#line 5322 "Properties.c"
+#line 5363 "Properties.c"
 			const gchar* _tmp70_ = NULL;
-#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp70_ = self->priv->exposure_bias;
-#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp68_ = _tmp70_ != NULL;
-#line 5328 "Properties.c"
+#line 5369 "Properties.c"
 		} else {
-#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp68_ = FALSE;
-#line 5332 "Properties.c"
+#line 5373 "Properties.c"
 		}
-#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp68_) {
-#line 5336 "Properties.c"
+#line 5377 "Properties.c"
 			const gchar* _tmp71_ = NULL;
-#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp71_ = self->priv->exposure_bias;
-#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp67_ = _tmp71_;
-#line 5342 "Properties.c"
+#line 5383 "Properties.c"
 		} else {
-#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp67_ = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE;
-#line 5346 "Properties.c"
+#line 5387 "Properties.c"
 		}
-#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp72_ = _ ("Exposure bias:");
-#line 612 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp72_, _tmp67_, FALSE);
-#line 614 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp76_ = self->priv->gps_lat;
-#line 614 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp76_ != ((gdouble) -1)) {
-#line 5356 "Properties.c"
+#line 5397 "Properties.c"
 			const gchar* _tmp77_ = NULL;
-#line 614 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp77_ = self->priv->gps_lat_ref;
-#line 614 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp75_ = g_strcmp0 (_tmp77_, "") != 0;
-#line 5362 "Properties.c"
+#line 5403 "Properties.c"
 		} else {
-#line 614 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp75_ = FALSE;
-#line 5366 "Properties.c"
+#line 5407 "Properties.c"
 		}
-#line 614 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp75_) {
-#line 5370 "Properties.c"
+#line 5411 "Properties.c"
 			const gchar* _tmp78_ = NULL;
-#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp78_ = self->priv->gps_lat_ref;
-#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp74_ = _tmp78_ != NULL;
-#line 5376 "Properties.c"
+#line 5417 "Properties.c"
 		} else {
-#line 614 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp74_ = FALSE;
-#line 5380 "Properties.c"
+#line 5421 "Properties.c"
 		}
-#line 614 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp74_) {
-#line 5384 "Properties.c"
+#line 5425 "Properties.c"
 			gdouble _tmp79_ = 0.0;
 			const gchar* _tmp80_ = NULL;
 			gchar* _tmp81_ = NULL;
-#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp79_ = self->priv->gps_lat;
-#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp80_ = self->priv->gps_lat_ref;
-#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp81_ = g_strdup_printf ("%f °%s", _tmp79_, _tmp80_);
-#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (_tmp73_);
-#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp73_ = _tmp81_;
-#line 5398 "Properties.c"
+#line 5439 "Properties.c"
 		} else {
 			gchar* _tmp82_ = NULL;
-#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp82_ = g_strdup (EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE);
-#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (_tmp73_);
-#line 615 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp73_ = _tmp82_;
-#line 5407 "Properties.c"
+#line 5448 "Properties.c"
 		}
-#line 614 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp83_ = _ ("GPS latitude:");
-#line 614 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp83_, _tmp73_, FALSE);
-#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp87_ = self->priv->gps_long;
-#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp87_ != ((gdouble) -1)) {
-#line 5417 "Properties.c"
+#line 5458 "Properties.c"
 			const gchar* _tmp88_ = NULL;
-#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp88_ = self->priv->gps_long_ref;
-#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp86_ = g_strcmp0 (_tmp88_, "") != 0;
-#line 5423 "Properties.c"
+#line 5464 "Properties.c"
 		} else {
-#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp86_ = FALSE;
-#line 5427 "Properties.c"
+#line 5468 "Properties.c"
 		}
-#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp86_) {
-#line 5431 "Properties.c"
+#line 5472 "Properties.c"
 			const gchar* _tmp89_ = NULL;
-#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 621 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp89_ = self->priv->gps_long_ref;
-#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 621 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp85_ = _tmp89_ != NULL;
-#line 5437 "Properties.c"
+#line 5478 "Properties.c"
 		} else {
-#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp85_ = FALSE;
-#line 5441 "Properties.c"
+#line 5482 "Properties.c"
 		}
-#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp85_) {
-#line 5445 "Properties.c"
+#line 5486 "Properties.c"
 			gdouble _tmp90_ = 0.0;
 			const gchar* _tmp91_ = NULL;
 			gchar* _tmp92_ = NULL;
-#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 621 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp90_ = self->priv->gps_long;
-#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 621 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp91_ = self->priv->gps_long_ref;
-#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 621 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp92_ = g_strdup_printf ("%f °%s", _tmp90_, _tmp91_);
-#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 621 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (_tmp84_);
-#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 621 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp84_ = _tmp92_;
-#line 5459 "Properties.c"
+#line 5500 "Properties.c"
 		} else {
 			gchar* _tmp93_ = NULL;
-#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 621 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp93_ = g_strdup (EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE);
-#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 621 "/home/jens/Source/shotwell/src/Properties.vala"
 			_g_free0 (_tmp84_);
-#line 618 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 621 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp84_ = _tmp93_;
-#line 5468 "Properties.c"
+#line 5509 "Properties.c"
 		}
-#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp94_ = _ ("GPS longitude:");
-#line 617 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp94_, _tmp84_, FALSE);
-#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 623 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp97_ = self->priv->artist;
-#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 623 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp97_, "") != 0) {
-#line 5478 "Properties.c"
+#line 5519 "Properties.c"
 			const gchar* _tmp98_ = NULL;
-#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 623 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp98_ = self->priv->artist;
-#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 623 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp96_ = _tmp98_ != NULL;
-#line 5484 "Properties.c"
+#line 5525 "Properties.c"
 		} else {
-#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 623 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp96_ = FALSE;
-#line 5488 "Properties.c"
+#line 5529 "Properties.c"
 		}
-#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 623 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp96_) {
-#line 5492 "Properties.c"
+#line 5533 "Properties.c"
 			const gchar* _tmp99_ = NULL;
-#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 623 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp99_ = self->priv->artist;
-#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 623 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp95_ = _tmp99_;
-#line 5498 "Properties.c"
+#line 5539 "Properties.c"
 		} else {
-#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 623 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp95_ = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE;
-#line 5502 "Properties.c"
+#line 5543 "Properties.c"
 		}
-#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 623 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp100_ = _ ("Artist:");
-#line 620 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 623 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp100_, _tmp95_, FALSE);
-#line 622 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 625 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp103_ = self->priv->copyright;
-#line 622 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 625 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp103_, "") != 0) {
-#line 5512 "Properties.c"
+#line 5553 "Properties.c"
 			const gchar* _tmp104_ = NULL;
-#line 622 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 625 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp104_ = self->priv->copyright;
-#line 622 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 625 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp102_ = _tmp104_ != NULL;
-#line 5518 "Properties.c"
+#line 5559 "Properties.c"
 		} else {
-#line 622 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 625 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp102_ = FALSE;
-#line 5522 "Properties.c"
+#line 5563 "Properties.c"
 		}
-#line 622 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 625 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp102_) {
-#line 5526 "Properties.c"
+#line 5567 "Properties.c"
 			const gchar* _tmp105_ = NULL;
-#line 622 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 625 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp105_ = self->priv->copyright;
-#line 622 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 625 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp101_ = _tmp105_;
-#line 5532 "Properties.c"
+#line 5573 "Properties.c"
 		} else {
-#line 622 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 625 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp101_ = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE;
-#line 5536 "Properties.c"
+#line 5577 "Properties.c"
 		}
-#line 622 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 625 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp106_ = _ ("Copyright:");
-#line 622 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 625 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp106_, _tmp101_, FALSE);
-#line 624 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp109_ = self->priv->software;
-#line 624 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (g_strcmp0 (_tmp109_, "") != 0) {
-#line 5546 "Properties.c"
+#line 5587 "Properties.c"
 			const gchar* _tmp110_ = NULL;
-#line 624 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp110_ = self->priv->software;
-#line 624 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp108_ = _tmp110_ != NULL;
-#line 5552 "Properties.c"
+#line 5593 "Properties.c"
 		} else {
-#line 624 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp108_ = FALSE;
-#line 5556 "Properties.c"
+#line 5597 "Properties.c"
 		}
-#line 624 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (_tmp108_) {
-#line 5560 "Properties.c"
+#line 5601 "Properties.c"
 			const gchar* _tmp111_ = NULL;
-#line 624 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp111_ = self->priv->software;
-#line 624 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp107_ = _tmp111_;
-#line 5566 "Properties.c"
+#line 5607 "Properties.c"
 		} else {
-#line 624 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp107_ = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE;
-#line 5570 "Properties.c"
+#line 5611 "Properties.c"
 		}
-#line 624 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp112_ = _ ("Software:");
-#line 624 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
 		properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp112_, _tmp107_, FALSE);
-#line 580 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (_tmp84_);
-#line 580 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (_tmp73_);
-#line 580 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (_tmp19_);
-#line 580 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (_tmp10_);
-#line 580 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 583 "/home/jens/Source/shotwell/src/Properties.vala"
 		_g_free0 (_tmp2_);
-#line 5586 "Properties.c"
+#line 5627 "Properties.c"
 	}
-#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 630 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp114_ = self->priv->comment;
-#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 630 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (g_strcmp0 (_tmp114_, "") != 0) {
-#line 5592 "Properties.c"
+#line 5633 "Properties.c"
 		const gchar* _tmp115_ = NULL;
-#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 630 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp115_ = self->priv->comment;
-#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 630 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp113_ = _tmp115_ != NULL;
-#line 5598 "Properties.c"
+#line 5639 "Properties.c"
 	} else {
-#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 630 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp113_ = FALSE;
-#line 5602 "Properties.c"
+#line 5643 "Properties.c"
 	}
-#line 627 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 630 "/home/jens/Source/shotwell/src/Properties.vala"
 	has_comment = _tmp113_;
-#line 628 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 631 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp117_ = has_comment;
-#line 628 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 631 "/home/jens/Source/shotwell/src/Properties.vala"
 	if (_tmp117_) {
-#line 5610 "Properties.c"
+#line 5651 "Properties.c"
 		const gchar* _tmp118_ = NULL;
-#line 628 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 631 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp118_ = self->priv->comment;
-#line 628 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 631 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp116_ = _tmp118_;
-#line 5616 "Properties.c"
+#line 5657 "Properties.c"
 	} else {
-#line 628 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 631 "/home/jens/Source/shotwell/src/Properties.vala"
 		_tmp116_ = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_NO_VALUE;
-#line 5620 "Properties.c"
+#line 5661 "Properties.c"
 	}
-#line 628 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 631 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp119_ = _ ("Comment:");
-#line 628 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 631 "/home/jens/Source/shotwell/src/Properties.vala"
 	_tmp120_ = has_comment;
-#line 628 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 631 "/home/jens/Source/shotwell/src/Properties.vala"
 	properties_add_line (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PROPERTIES, Properties), _tmp119_, _tmp116_, _tmp120_);
-#line 5628 "Properties.c"
+#line 5669 "Properties.c"
 }
 
 
 static ExtendedPropertiesWindowExtendedProperties* extended_properties_window_extended_properties_construct (GType object_type) {
 	ExtendedPropertiesWindowExtendedProperties * self = NULL;
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 460 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = (ExtendedPropertiesWindowExtendedProperties*) properties_construct (object_type);
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 460 "/home/jens/Source/shotwell/src/Properties.vala"
 	return self;
-#line 5638 "Properties.c"
+#line 5679 "Properties.c"
 }
 
 
 static ExtendedPropertiesWindowExtendedProperties* extended_properties_window_extended_properties_new (void) {
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 460 "/home/jens/Source/shotwell/src/Properties.vala"
 	return extended_properties_window_extended_properties_construct (EXTENDED_PROPERTIES_WINDOW_TYPE_EXTENDED_PROPERTIES);
-#line 5645 "Properties.c"
+#line 5686 "Properties.c"
 }
 
 
 static void extended_properties_window_extended_properties_class_init (ExtendedPropertiesWindowExtendedPropertiesClass * klass) {
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 460 "/home/jens/Source/shotwell/src/Properties.vala"
 	extended_properties_window_extended_properties_parent_class = g_type_class_peek_parent (klass);
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 460 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_type_class_add_private (klass, sizeof (ExtendedPropertiesWindowExtendedPropertiesPrivate));
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 460 "/home/jens/Source/shotwell/src/Properties.vala"
 	((PropertiesClass *) klass)->clear_properties = extended_properties_window_extended_properties_real_clear_properties;
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 460 "/home/jens/Source/shotwell/src/Properties.vala"
 	((PropertiesClass *) klass)->get_single_properties = extended_properties_window_extended_properties_real_get_single_properties;
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 460 "/home/jens/Source/shotwell/src/Properties.vala"
 	((PropertiesClass *) klass)->internal_update_properties = extended_properties_window_extended_properties_real_internal_update_properties;
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 460 "/home/jens/Source/shotwell/src/Properties.vala"
 	G_OBJECT_CLASS (klass)->finalize = extended_properties_window_extended_properties_finalize;
-#line 5662 "Properties.c"
+#line 5703 "Properties.c"
 }
 
 
 static void extended_properties_window_extended_properties_instance_init (ExtendedPropertiesWindowExtendedProperties * self) {
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 460 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv = EXTENDED_PROPERTIES_WINDOW_EXTENDED_PROPERTIES_GET_PRIVATE (self);
-#line 5669 "Properties.c"
+#line 5710 "Properties.c"
 }
 
 
 static void extended_properties_window_extended_properties_finalize (GObject* obj) {
 	ExtendedPropertiesWindowExtendedProperties * self;
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, EXTENDED_PROPERTIES_WINDOW_TYPE_EXTENDED_PROPERTIES, ExtendedPropertiesWindowExtendedProperties);
 #line 460 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->file_path);
-#line 462 "/home/jens/Source/shotwell/src/Properties.vala"
-	_dimensions_free0 (self->priv->original_dim);
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, EXTENDED_PROPERTIES_WINDOW_TYPE_EXTENDED_PROPERTIES, ExtendedPropertiesWindowExtendedProperties);
 #line 463 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->camera_make);
-#line 464 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->camera_model);
+	_g_free0 (self->priv->file_path);
 #line 465 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->flash);
+	_dimensions_free0 (self->priv->original_dim);
 #line 466 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->focal_length);
+	_g_free0 (self->priv->camera_make);
+#line 467 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->camera_model);
 #line 468 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->flash);
+#line 469 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->focal_length);
+#line 471 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->gps_lat_ref);
-#line 470 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->gps_long_ref);
-#line 472 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->artist);
 #line 473 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->copyright);
-#line 474 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->software);
+	_g_free0 (self->priv->gps_long_ref);
 #line 475 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->exposure_bias);
+	_g_free0 (self->priv->artist);
 #line 476 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->exposure_date);
+	_g_free0 (self->priv->copyright);
 #line 477 "/home/jens/Source/shotwell/src/Properties.vala"
-	_g_free0 (self->priv->exposure_time);
+	_g_free0 (self->priv->software);
+#line 478 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->exposure_bias);
 #line 479 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->exposure_date);
+#line 480 "/home/jens/Source/shotwell/src/Properties.vala"
+	_g_free0 (self->priv->exposure_time);
+#line 482 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->development_path);
-#line 486 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 489 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_free0 (self->priv->comment);
-#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 460 "/home/jens/Source/shotwell/src/Properties.vala"
 	G_OBJECT_CLASS (extended_properties_window_extended_properties_parent_class)->finalize (obj);
-#line 5711 "Properties.c"
+#line 5752 "Properties.c"
 }
 
 
@@ -5724,40 +5765,40 @@ static GType extended_properties_window_extended_properties_get_type (void) {
 
 
 static void extended_properties_window_class_init (ExtendedPropertiesWindowClass * klass) {
-#line 454 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
 	extended_properties_window_parent_class = g_type_class_peek_parent (klass);
-#line 454 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
 	g_type_class_add_private (klass, sizeof (ExtendedPropertiesWindowPrivate));
-#line 454 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
 	((GtkWidgetClass *) klass)->button_press_event = extended_properties_window_real_button_press_event;
-#line 454 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
 	((GtkWidgetClass *) klass)->key_press_event = extended_properties_window_real_key_press_event;
-#line 454 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
 	((GtkWidgetClass *) klass)->show_all = extended_properties_window_real_show_all;
-#line 454 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
 	G_OBJECT_CLASS (klass)->finalize = extended_properties_window_finalize;
-#line 5740 "Properties.c"
+#line 5781 "Properties.c"
 }
 
 
 static void extended_properties_window_instance_init (ExtendedPropertiesWindow * self) {
-#line 454 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv = EXTENDED_PROPERTIES_WINDOW_GET_PRIVATE (self);
-#line 455 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 458 "/home/jens/Source/shotwell/src/Properties.vala"
 	self->priv->properties = NULL;
-#line 5749 "Properties.c"
+#line 5790 "Properties.c"
 }
 
 
 static void extended_properties_window_finalize (GObject* obj) {
 	ExtendedPropertiesWindow * self;
-#line 454 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_EXTENDED_PROPERTIES_WINDOW, ExtendedPropertiesWindow);
-#line 455 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 458 "/home/jens/Source/shotwell/src/Properties.vala"
 	_g_object_unref0 (self->priv->properties);
-#line 454 "/home/jens/Source/shotwell/src/Properties.vala"
+#line 457 "/home/jens/Source/shotwell/src/Properties.vala"
 	G_OBJECT_CLASS (extended_properties_window_parent_class)->finalize (obj);
-#line 5761 "Properties.c"
+#line 5802 "Properties.c"
 }
 
 

@@ -623,7 +623,7 @@ static void spit_data_imports_welcome_import_meta_host_finalize (GObject* obj);
 SpitDataImportsService** spit_data_imports_load_services (gboolean load_all, int* result_length1);
 GeeCollection* plugins_get_pluggables_for_type (GType type, GCompareDataFunc compare_func, void* compare_func_target, GDestroyNotify compare_func_target_destroy_notify, gboolean include_disabled);
 gchar* plugins_get_pluggable_module_id (SpitPluggable* needle);
-static void _vala_array_add151 (SpitDataImportsService*** array, int* length, int* size, SpitDataImportsService* value);
+static void _vala_array_add69 (SpitDataImportsService*** array, int* length, int* size, SpitDataImportsService* value);
 static gint __lambda21_ (void* a, void* b);
 gint utf8_cs_compare (void* a, void* b);
 static gint ___lambda21____compar_fn_t (void* key1, void* key2);
@@ -3043,7 +3043,7 @@ SpitDataImportsService** spit_data_imports_load_all_services (int* result_length
 }
 
 
-static void _vala_array_add151 (SpitDataImportsService*** array, int* length, int* size, SpitDataImportsService* value) {
+static void _vala_array_add69 (SpitDataImportsService*** array, int* length, int* size, SpitDataImportsService* value) {
 #line 447 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
 	if ((*length) == (*size)) {
 #line 447 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
@@ -3239,7 +3239,7 @@ SpitDataImportsService** spit_data_imports_load_services (gboolean load_all, int
 #line 447 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
 			_tmp25_ = _g_object_ref0 (_tmp24_);
 #line 447 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
-			_vala_array_add151 (&loaded_services, &loaded_services_length1, &_loaded_services_size_, _tmp25_);
+			_vala_array_add69 (&loaded_services, &loaded_services_length1, &_loaded_services_size_, _tmp25_);
 #line 431 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
 			_g_object_unref0 (service);
 #line 431 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"

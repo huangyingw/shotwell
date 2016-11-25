@@ -3,12 +3,18 @@
 
     <info>
         <link type="guide" xref="index#edit"/>
-        <desc>Let Shotwell improve the brightness and contrast of a photo automatically.</desc>
+        <desc>Permita que Shotwell mejore el brillo y el contraste de una foto automáticamente.</desc>
         
         <link type="seealso" xref="edit-adjustments"/>
         
         <link type="next" xref="edit-adjustments"/>
     
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Marina Prado</mal:name>
+      <mal:email>mapraro93@hotmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
@@ -24,5 +30,5 @@
 
    <title>Mejora automática</title>
 
-    <p>Clicking on the <gui>Enhance</gui> button is a quick way to automatically adjust the brightness and contrast of your photo. It will often give you a photo that is correctly exposed. You can also use it as a starting point and then improve the adjustments by clicking on the <gui>Adjust</gui> button.</p>
+    <p>Pulsar en el botón <gui>Mejorar</gui> es una forma rápida de ajustar automáticamente el brillo y el contraste de la foto. Normalmente le ofrecerá una foto que esté correctamente expuesta. También puede utilizarlo como punto de partida y luego mejorar los ajustes pulsando en el botón <gui>Ajustar</gui>.</p>
 </page>

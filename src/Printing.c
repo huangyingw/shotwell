@@ -592,21 +592,21 @@ enum  {
 #define PRINT_MANAGER_IMAGE_DISTANCE 0.24
 static PrintManager* print_manager_new (void);
 static PrintManager* print_manager_construct (GType object_type);
-static void _vala_array_add278 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add279 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add280 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add281 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add282 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add283 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add284 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add285 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add286 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add287 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add288 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add289 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add290 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add291 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
-static void _vala_array_add292 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add112 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add113 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add114 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add115 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add116 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add117 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add118 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add119 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add120 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add121 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add122 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add123 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add124 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add125 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
+static void _vala_array_add126 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value);
 void print_manager_spool_photo (PrintManager* self, GeeCollection* to_print);
 gchar* data_object_get_name (DataObject* self);
 static void print_manager_on_begin_print (PrintManager* self, GtkPrintOperation* emitting_object, GtkPrintContext* job_context);
@@ -5635,7 +5635,7 @@ static PrintManager* print_manager_new (void) {
 }
 
 
-static void _vala_array_add278 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add112 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 818 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5652,7 +5652,7 @@ static void _vala_array_add278 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add279 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add113 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 821 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5669,7 +5669,7 @@ static void _vala_array_add279 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add280 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add114 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 824 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5686,7 +5686,7 @@ static void _vala_array_add280 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add281 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add115 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 827 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5703,7 +5703,7 @@ static void _vala_array_add281 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add282 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add116 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 830 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5720,7 +5720,7 @@ static void _vala_array_add282 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add283 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add117 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 833 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5737,7 +5737,7 @@ static void _vala_array_add283 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add284 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add118 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 836 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5754,7 +5754,7 @@ static void _vala_array_add284 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add285 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add119 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 839 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5771,7 +5771,7 @@ static void _vala_array_add285 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add286 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add120 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 842 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5788,7 +5788,7 @@ static void _vala_array_add286 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add287 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add121 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 845 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5805,7 +5805,7 @@ static void _vala_array_add287 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add288 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add122 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 848 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5822,7 +5822,7 @@ static void _vala_array_add288 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add289 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add123 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 851 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5839,7 +5839,7 @@ static void _vala_array_add289 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add290 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add124 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 854 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5856,7 +5856,7 @@ static void _vala_array_add290 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add291 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add125 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 857 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -5873,7 +5873,7 @@ static void _vala_array_add291 (StandardPrintSize*** array, int* length, int* si
 }
 
 
-static void _vala_array_add292 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
+static void _vala_array_add126 (StandardPrintSize*** array, int* length, int* size, StandardPrintSize* value) {
 #line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	if ((*length) == (*size)) {
 #line 860 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6010,7 +6010,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 818 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp5_ = standard_print_size_new (_tmp2_, &_tmp3_, &_tmp4_);
 #line 818 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add278 (&_result_, &_result__length1, &__result__size_, _tmp5_);
+	_vala_array_add112 (&_result_, &_result__length1, &__result__size_, _tmp5_);
 #line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp6_ = _result_;
 #line 821 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6024,7 +6024,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 821 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp10_ = standard_print_size_new (_tmp7_, &_tmp8_, &_tmp9_);
 #line 821 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add279 (&_result_, &_result__length1, &__result__size_, _tmp10_);
+	_vala_array_add113 (&_result_, &_result__length1, &__result__size_, _tmp10_);
 #line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp11_ = _result_;
 #line 824 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6038,7 +6038,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 824 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp15_ = standard_print_size_new (_tmp12_, &_tmp13_, &_tmp14_);
 #line 824 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add280 (&_result_, &_result__length1, &__result__size_, _tmp15_);
+	_vala_array_add114 (&_result_, &_result__length1, &__result__size_, _tmp15_);
 #line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp16_ = _result_;
 #line 827 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6052,7 +6052,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 827 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp20_ = standard_print_size_new (_tmp17_, &_tmp18_, &_tmp19_);
 #line 827 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add281 (&_result_, &_result__length1, &__result__size_, _tmp20_);
+	_vala_array_add115 (&_result_, &_result__length1, &__result__size_, _tmp20_);
 #line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp21_ = _result_;
 #line 830 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6066,7 +6066,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 830 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp25_ = standard_print_size_new (_tmp22_, &_tmp23_, &_tmp24_);
 #line 830 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add282 (&_result_, &_result__length1, &__result__size_, _tmp25_);
+	_vala_array_add116 (&_result_, &_result__length1, &__result__size_, _tmp25_);
 #line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp26_ = _result_;
 #line 833 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6080,7 +6080,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 833 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp30_ = standard_print_size_new (_tmp27_, &_tmp28_, &_tmp29_);
 #line 833 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add283 (&_result_, &_result__length1, &__result__size_, _tmp30_);
+	_vala_array_add117 (&_result_, &_result__length1, &__result__size_, _tmp30_);
 #line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp31_ = _result_;
 #line 836 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6094,7 +6094,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 836 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp35_ = standard_print_size_new (_tmp32_, &_tmp33_, &_tmp34_);
 #line 836 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add284 (&_result_, &_result__length1, &__result__size_, _tmp35_);
+	_vala_array_add118 (&_result_, &_result__length1, &__result__size_, _tmp35_);
 #line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp36_ = _result_;
 #line 839 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6106,7 +6106,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 839 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp39_ = standard_print_size_new ("-", &_tmp37_, &_tmp38_);
 #line 839 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add285 (&_result_, &_result__length1, &__result__size_, _tmp39_);
+	_vala_array_add119 (&_result_, &_result__length1, &__result__size_, _tmp39_);
 #line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp40_ = _result_;
 #line 842 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6120,7 +6120,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 842 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp44_ = standard_print_size_new (_tmp41_, &_tmp42_, &_tmp43_);
 #line 842 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add286 (&_result_, &_result__length1, &__result__size_, _tmp44_);
+	_vala_array_add120 (&_result_, &_result__length1, &__result__size_, _tmp44_);
 #line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp45_ = _result_;
 #line 845 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6134,7 +6134,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 845 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp49_ = standard_print_size_new (_tmp46_, &_tmp47_, &_tmp48_);
 #line 845 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add287 (&_result_, &_result__length1, &__result__size_, _tmp49_);
+	_vala_array_add121 (&_result_, &_result__length1, &__result__size_, _tmp49_);
 #line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp50_ = _result_;
 #line 848 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6148,7 +6148,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 848 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp54_ = standard_print_size_new (_tmp51_, &_tmp52_, &_tmp53_);
 #line 848 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add288 (&_result_, &_result__length1, &__result__size_, _tmp54_);
+	_vala_array_add122 (&_result_, &_result__length1, &__result__size_, _tmp54_);
 #line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp55_ = _result_;
 #line 851 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6162,7 +6162,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 851 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp59_ = standard_print_size_new (_tmp56_, &_tmp57_, &_tmp58_);
 #line 851 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add289 (&_result_, &_result__length1, &__result__size_, _tmp59_);
+	_vala_array_add123 (&_result_, &_result__length1, &__result__size_, _tmp59_);
 #line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp60_ = _result_;
 #line 854 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6176,7 +6176,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 854 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp64_ = standard_print_size_new (_tmp61_, &_tmp62_, &_tmp63_);
 #line 854 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add290 (&_result_, &_result__length1, &__result__size_, _tmp64_);
+	_vala_array_add124 (&_result_, &_result__length1, &__result__size_, _tmp64_);
 #line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp65_ = _result_;
 #line 857 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6190,7 +6190,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 857 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp69_ = standard_print_size_new (_tmp66_, &_tmp67_, &_tmp68_);
 #line 857 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add291 (&_result_, &_result__length1, &__result__size_, _tmp69_);
+	_vala_array_add125 (&_result_, &_result__length1, &__result__size_, _tmp69_);
 #line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp70_ = _result_;
 #line 860 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6204,7 +6204,7 @@ StandardPrintSize** print_manager_get_standard_sizes (PrintManager* self, int* r
 #line 860 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp74_ = standard_print_size_new (_tmp71_, &_tmp72_, &_tmp73_);
 #line 860 "/home/jens/Source/shotwell/src/Printing.vala"
-	_vala_array_add292 (&_result_, &_result__length1, &__result__size_, _tmp74_);
+	_vala_array_add126 (&_result_, &_result__length1, &__result__size_, _tmp74_);
 #line 864 "/home/jens/Source/shotwell/src/Printing.vala"
 	_tmp75_ = _result_;
 #line 864 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -6415,7 +6415,7 @@ void print_manager_spool_photo (PrintManager* self, GeeCollection* to_print) {
 #line 893 "/home/jens/Source/shotwell/src/Printing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6417 "Printing.c"
-			goto __catch470_g_error;
+			goto __catch467_g_error;
 		}
 #line 895 "/home/jens/Source/shotwell/src/Printing.vala"
 		if (_result_ == GTK_PRINT_OPERATION_RESULT_APPLY) {
@@ -6433,8 +6433,8 @@ void print_manager_spool_photo (PrintManager* self, GeeCollection* to_print) {
 #line 6433 "Printing.c"
 		}
 	}
-	goto __finally470;
-	__catch470_g_error:
+	goto __finally467;
+	__catch467_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp22_ = NULL;
@@ -6460,7 +6460,7 @@ void print_manager_spool_photo (PrintManager* self, GeeCollection* to_print) {
 		_g_error_free0 (e);
 #line 6461 "Printing.c"
 	}
-	__finally470:
+	__finally467:
 #line 892 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 892 "/home/jens/Source/shotwell/src/Printing.vala"
@@ -7984,7 +7984,7 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 #line 1089 "/home/jens/Source/shotwell/src/Printing.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 7986 "Printing.c"
-				goto __catch471_g_error;
+				goto __catch468_g_error;
 			}
 #line 1090 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp52_ = photo_pixbuf;
@@ -8111,7 +8111,7 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 #line 1104 "/home/jens/Source/shotwell/src/Printing.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8113 "Printing.c"
-				goto __catch471_g_error;
+				goto __catch468_g_error;
 			}
 #line 1105 "/home/jens/Source/shotwell/src/Printing.vala"
 			_tmp85_ = photo_pixbuf;
@@ -8137,8 +8137,8 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 		cairo_paint (_tmp89_);
 #line 8138 "Printing.c"
 	}
-	goto __finally471;
-	__catch471_g_error:
+	goto __finally468;
+	__catch468_g_error:
 	{
 		GError* e = NULL;
 		PrintJob* _tmp90_ = NULL;
@@ -8173,7 +8173,7 @@ static void print_manager_fit_image_to_canvas (PrintManager* self, Photo* photo,
 		_g_error_free0 (e);
 #line 8174 "Printing.c"
 	}
-	__finally471:
+	__finally468:
 #line 1086 "/home/jens/Source/shotwell/src/Printing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1086 "/home/jens/Source/shotwell/src/Printing.vala"

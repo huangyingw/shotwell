@@ -3,10 +3,16 @@
 
     <info>
         <link type="guide" xref="index#edit"/>
-        <desc>Improve the composition of a photo by cutting out parts of it.</desc>
+        <desc>Mejore la composición de una foto cortando partes de la misma.</desc>
         
         <link type="next" xref="edit-external"/>
     
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Marina Prado</mal:name>
+      <mal:email>mapraro93@hotmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
@@ -22,36 +28,35 @@
 
    <title>Recortar</title>
 
-    <p>To reduce the area of a photo and concentrate the viewer's attention on a smaller portion of it, use the Crop tool.
-    The crop tool is only available in full-window or fullscreen mode.</p>
+    <p>Para reducir el área de una foto y concentrar la atención del espectador en una parte más pequeña de ella, utilice la herramienta Recortar. La herramienta Recortar sólo está disponible en el modo a pantalla completa.</p>
 
 <steps>
  <item>
-  <p>Double-click on a photo to enter full-window mode, then press the <gui>Crop</gui> button on the toolbar.</p>
+  <p>Para entrar en el modo a pantalla completa, pulse dos veces en la foto y luego pulse el botón <gui>Recortar</gui> en la barra de herramientas.</p>
  </item>
  <item>
-  <p>A white box, the crop rectangle, will appear over the photo. The lighter portion of the photo within the crop rectangle represents what the photo will look like when you crop it.</p>
+  <p>Unas líneas blancas, que representan el rectángulo de recorte, aparecerán sobre la foto. La parte más clara de la foto dentro del rectángulo de recorte representa cómo se verá la foto cuando la recorte.</p>
  </item>
  <item>
-  <p>If you place your cursor in the middle of the box, you can move the box around. If you drag the edges of the box, you can adjust its size. As you move and adjust the crop box, you'll see four lines appear inside it, like a tic-tac-toe grid. These are <em>rule of thirds</em> lines.</p>
-  <p>You can also constrain the crop box to one of many common sizes. Choose a size from the drop-down list that suits your needs. If you press the flip button next to it, the orientation of the constraint will switch (from landscape to portrait).</p>
+  <p>Si coloca el cursor en el centro del recuadro, podrá moverlo. Si arrastra los bordes del recuadro, puede ajustar su tamaño. Al mover y ajustar la caja de recorte, verá aparecer cuatro líneas en su interior, como las cuadrículas para el tres en raya. Estas son las líneas de la <em>regla de los tercios</em>.</p>
+  <p>También puede limitar el recuadro a uno de los tamaños más comunes. Elija un tamaño de la lista desplegable que se adapte a sus necesidades. Si pulsa el botón voltear situado junto a esta, la orientación de la restricción cambiará (de horizontal a vertical).</p>
  </item>
  <item>
   <p>When you're happy with your crop outline, apply it by pressing the <gui>Crop</gui> button. Shotwell will display the cropped photo.</p>
  </item>
  <item>
-  <p>If you change your mind, press the <gui>Crop</gui> button again and fine-tune the crop.</p>
-  <p>If you press <gui>Cancel</gui> rather than <gui>Apply</gui>, Shotwell will return to the photo's previous crop dimensions.</p>
+  <p>Si cambia de opinión, pulse el botón <gui>Recortar</gui> de nuevo y ajuste el recorte.</p>
+  <p>Si pulsa el botón <gui>Cancelar</gui> en vez del botón <gui>Aplicar</gui>, Shotwell devolverá a la foto las dimensiones anteriores del recorte.</p>
  </item>
 </steps>
 
 <section>
  <title>¿Qué es la regla de los tercios?</title>
- <p>The <em>rule of thirds</em> helps you to choose a pleasing composition for a photo.</p>
- <p>Imagine that the scene is divided up into a 3x3 grid by two equally-spaced vertical lines and two equally-spaced horizontal lines. According to the rule, you're more likely to get a pleasing composition if you align major features (like the horizon, or a person's body) with one of the lines. Paying attention to the way features flow from one part of the grid to another can also help.</p>
- <p>Cropping a photo so that it conforms to the rule of thirds often results in a more visually appealing image.</p>
+ <p>La <em>regla de los tercios </em> le ayuda a elegir una composición satisfactoria para una foto.</p>
+ <p>Imagine que la escena se divide en una cuadrícula de 3x3 por dos líneas verticales espaciadas y por dos líneas horizontales igualmente espaciadas. De acuerdo con la regla, es más probable que obtenga una composición satisfactoria si alinea las características principales (como el horizonte o una persona) con una de estas líneas. Prestar atención a la forma en que las características van de una parte de la cuadrícula a la otra también puede ser de ayuda.</p>
+ <p>Recortar una foto siguiendo la regla de los tercios suele dar como resultado una imagen visualmente más satisfactoria.</p>
  <media type="image" src="figures/crop_thirds.jpg">
-  <p>Cropping a photo, using the "rule of thirds" lines to improve the composition.</p>
+  <p>Recorte una foto siguiendo las líneas de la «regla de los tercios» para mejorar la composición.</p>
  </media>
 </section>
 </page>

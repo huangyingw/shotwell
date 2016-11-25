@@ -1154,6 +1154,13 @@ static PhotoTable* photo_table_construct (GType object_type) {
 	sqlite3_stmt* _tmp36_ = NULL;
 	gint _tmp37_ = 0;
 	gint _tmp38_ = 0;
+	sqlite3* _tmp40_ = NULL;
+	sqlite3_stmt* _tmp41_ = NULL;
+	gint _tmp42_ = 0;
+	gint _tmp43_ = 0;
+	sqlite3_stmt* _tmp44_ = NULL;
+	gint _tmp45_ = 0;
+	gint _tmp46_ = 0;
 #line 112 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self = (PhotoTable*) database_table_construct (object_type);
 #line 114 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
@@ -1180,13 +1187,13 @@ static PhotoTable* photo_table_construct (GType object_type) {
 	_tmp6_ = res;
 #line 148 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp6_ != SQLITE_DONE) {
-#line 1184 "PhotoTable.c"
+#line 1191 "PhotoTable.c"
 		gint _tmp7_ = 0;
 #line 149 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp7_ = res;
 #line 149 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_fatal ("create photo table", _tmp7_);
-#line 1190 "PhotoTable.c"
+#line 1197 "PhotoTable.c"
 	}
 #line 153 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = database_table_db;
@@ -1212,19 +1219,18 @@ static PhotoTable* photo_table_construct (GType object_type) {
 	_tmp14_ = res2;
 #line 158 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp14_ != SQLITE_DONE) {
-#line 1216 "PhotoTable.c"
+#line 1223 "PhotoTable.c"
 		gint _tmp15_ = 0;
 #line 159 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp15_ = res2;
 #line 159 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_fatal ("create photo table", _tmp15_);
-#line 1222 "PhotoTable.c"
+#line 1229 "PhotoTable.c"
 	}
 #line 165 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = database_table_db;
 #line 165 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp18_ = sqlite3_prepare_v2 (_tmp16_, "CREATE UNIQUE INDEX IF NOT EXISTS PhotoTableMD5Format on PhotoTable(md" \
-"5, file_format)", -1, &_tmp17_, NULL);
+	_tmp18_ = sqlite3_prepare_v2 (_tmp16_, "DROP INDEX IF EXISTS PhotoTableMD5Format", -1, &_tmp17_, NULL);
 #line 165 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
 #line 165 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
@@ -1245,81 +1251,114 @@ static PhotoTable* photo_table_construct (GType object_type) {
 	_tmp22_ = res;
 #line 168 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp22_ != SQLITE_DONE) {
-#line 1248 "PhotoTable.c"
+#line 1255 "PhotoTable.c"
 		gint _tmp23_ = 0;
 #line 169 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp23_ = res;
 #line 169 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-		database_table_warning ("Failed to create index on md5 and file_format", _tmp23_);
-#line 1254 "PhotoTable.c"
+		database_table_warning ("Failed to drop old PhotoTable index", _tmp23_);
+#line 1261 "PhotoTable.c"
 	}
-#line 173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp24_ = database_table_db;
-#line 173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp26_ = sqlite3_prepare_v2 (_tmp24_, "CREATE INDEX IF NOT EXISTS PhotoTableThumbnailMD5Format on PhotoTable(" \
-"thumbnail_md5, file_format)", -1, &_tmp25_, NULL);
-#line 173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp26_ = sqlite3_prepare_v2 (_tmp24_, "CREATE INDEX IF NOT EXISTS PhotoTableMD5FormatV2 on PhotoTable(md5, fi" \
+"le_format)", -1, &_tmp25_, NULL);
+#line 172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp25_;
-#line 173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp26_;
-#line 174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp27_ = res;
-#line 174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp27_ == SQLITE_OK, "res == Sqlite.OK");
-#line 175 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp28_ = stmt;
-#line 175 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp29_ = sqlite3_step (_tmp28_);
-#line 175 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp29_;
-#line 176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 175 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp30_ = res;
-#line 176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 175 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp30_ != SQLITE_DONE) {
-#line 1280 "PhotoTable.c"
+#line 1287 "PhotoTable.c"
 		gint _tmp31_ = 0;
-#line 177 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp31_ = res;
-#line 177 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_warning ("Failed to create index on md5 and file_format", _tmp31_);
-#line 1286 "PhotoTable.c"
+#line 1293 "PhotoTable.c"
 	}
-#line 181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp32_ = database_table_db;
-#line 181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp34_ = sqlite3_prepare_v2 (_tmp32_, "CREATE INDEX IF NOT EXISTS PhotoTableThumbnailMD5MD5 on PhotoTable(thu" \
-"mbnail_md5, md5)", -1, &_tmp33_, NULL);
-#line 181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp34_ = sqlite3_prepare_v2 (_tmp32_, "CREATE INDEX IF NOT EXISTS PhotoTableThumbnailMD5Format on PhotoTable(" \
+"thumbnail_md5, file_format)", -1, &_tmp33_, NULL);
+#line 180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp33_;
-#line 181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp34_;
-#line 182 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp35_ = res;
-#line 182 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp35_ == SQLITE_OK, "res == Sqlite.OK");
-#line 183 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 182 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp36_ = stmt;
-#line 183 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 182 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp37_ = sqlite3_step (_tmp36_);
-#line 183 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 182 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp37_;
-#line 184 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 183 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp38_ = res;
-#line 184 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 183 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp38_ != SQLITE_DONE) {
-#line 1312 "PhotoTable.c"
+#line 1319 "PhotoTable.c"
 		gint _tmp39_ = 0;
-#line 185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 184 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp39_ = res;
-#line 185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-		database_table_warning ("Failed to create index on thumbnail_md5 and md5", _tmp39_);
-#line 1318 "PhotoTable.c"
+#line 184 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+		database_table_warning ("Failed to create index on md5 and file_format", _tmp39_);
+#line 1325 "PhotoTable.c"
 	}
 #line 188 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp40_ = database_table_db;
+#line 188 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp42_ = sqlite3_prepare_v2 (_tmp40_, "CREATE INDEX IF NOT EXISTS PhotoTableThumbnailMD5MD5 on PhotoTable(thu" \
+"mbnail_md5, md5)", -1, &_tmp41_, NULL);
+#line 188 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_sqlite3_finalize0 (stmt);
+#line 188 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	stmt = _tmp41_;
+#line 188 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	res = _tmp42_;
+#line 189 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp43_ = res;
+#line 189 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_vala_assert (_tmp43_ == SQLITE_OK, "res == Sqlite.OK");
+#line 190 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp44_ = stmt;
+#line 190 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp45_ = sqlite3_step (_tmp44_);
+#line 190 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	res = _tmp45_;
+#line 191 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp46_ = res;
+#line 191 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	if (_tmp46_ != SQLITE_DONE) {
+#line 1351 "PhotoTable.c"
+		gint _tmp47_ = 0;
+#line 192 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+		_tmp47_ = res;
+#line 192 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+		database_table_warning ("Failed to create index on thumbnail_md5 and md5", _tmp47_);
+#line 1357 "PhotoTable.c"
+	}
+#line 195 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_set_table_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), "PhotoTable");
 #line 112 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt2);
@@ -1327,21 +1366,21 @@ static PhotoTable* photo_table_construct (GType object_type) {
 	_sqlite3_finalize0 (stmt);
 #line 112 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return self;
-#line 1328 "PhotoTable.c"
+#line 1367 "PhotoTable.c"
 }
 
 
 static PhotoTable* photo_table_new (void) {
 #line 112 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return photo_table_construct (TYPE_PHOTO_TABLE);
-#line 1335 "PhotoTable.c"
+#line 1374 "PhotoTable.c"
 }
 
 
 static gpointer _database_table_ref0 (gpointer self) {
-#line 195 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return self ? database_table_ref (self) : NULL;
-#line 1342 "PhotoTable.c"
+#line 1381 "PhotoTable.c"
 }
 
 
@@ -1350,29 +1389,29 @@ PhotoTable* photo_table_get_instance (void) {
 	PhotoTable* _tmp0_ = NULL;
 	PhotoTable* _tmp2_ = NULL;
 	PhotoTable* _tmp3_ = NULL;
-#line 192 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 199 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = photo_table_instance;
-#line 192 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 199 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp0_ == NULL) {
-#line 1355 "PhotoTable.c"
+#line 1394 "PhotoTable.c"
 		PhotoTable* _tmp1_ = NULL;
-#line 193 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 200 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp1_ = photo_table_new ();
-#line 193 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 200 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_database_table_unref0 (photo_table_instance);
-#line 193 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 200 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		photo_table_instance = _tmp1_;
-#line 1363 "PhotoTable.c"
+#line 1402 "PhotoTable.c"
 	}
-#line 195 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = photo_table_instance;
-#line 195 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = _database_table_ref0 (_tmp2_);
-#line 195 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp3_;
-#line 195 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 1373 "PhotoTable.c"
+#line 1412 "PhotoTable.c"
 }
 
 
@@ -1523,433 +1562,433 @@ void photo_table_add (PhotoTable* self, PhotoRow* photo_row, PhotoID* result) {
 	PhotoRow* _tmp143_ = NULL;
 	PhotoRow* _tmp144_ = NULL;
 	PhotoID _tmp145_ = {0};
-#line 200 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 207 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 200 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 207 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_ROW (photo_row));
-#line 202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 209 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 209 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "INSERT INTO PhotoTable (filename, width, height, filesize, timestamp, " \
 "exposure_time, " "orientation, original_orientation, import_id, event_id, md5, thumbnail" \
 "_md5, " "exif_md5, time_created, file_format, title, rating, editable_id, devel" \
 "oper, comment) " "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", -1, &_tmp1_, NULL);
-#line 202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 209 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 209 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 209 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 208 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 215 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 208 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 215 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 210 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 217 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = now_sec ();
-#line 210 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 217 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	time_created = _tmp4_;
-#line 212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 219 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = stmt;
-#line 212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 219 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = photo_row;
-#line 212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 219 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = _tmp6_->master;
-#line 212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 219 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = _tmp7_->filepath;
-#line 212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 219 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = g_strdup (_tmp8_);
-#line 212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 219 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = g_free;
-#line 212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 219 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = sqlite3_bind_text (_tmp5_, 1, _tmp9_, -1, _tmp10_);
-#line 212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 219 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp11_;
-#line 213 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 220 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = res;
-#line 213 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 220 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp12_ == SQLITE_OK, "res == Sqlite.OK");
-#line 214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = stmt;
-#line 214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = photo_row;
-#line 214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = _tmp14_->master;
-#line 214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = _tmp15_->dim;
-#line 214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp17_ = _tmp16_.width;
-#line 214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp18_ = sqlite3_bind_int (_tmp13_, 2, _tmp17_);
-#line 214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp18_;
-#line 215 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp19_ = res;
-#line 215 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp19_ == SQLITE_OK, "res == Sqlite.OK");
-#line 216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp20_ = stmt;
-#line 216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp21_ = photo_row;
-#line 216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp22_ = _tmp21_->master;
-#line 216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp23_ = _tmp22_->dim;
-#line 216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp24_ = _tmp23_.height;
-#line 216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp25_ = sqlite3_bind_int (_tmp20_, 3, _tmp24_);
-#line 216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp25_;
-#line 217 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp26_ = res;
-#line 217 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp26_ == SQLITE_OK, "res == Sqlite.OK");
-#line 218 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 225 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp27_ = stmt;
-#line 218 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 225 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp28_ = photo_row;
-#line 218 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 225 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp29_ = _tmp28_->master;
-#line 218 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 225 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp30_ = _tmp29_->filesize;
-#line 218 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 225 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp31_ = sqlite3_bind_int64 (_tmp27_, 4, _tmp30_);
-#line 218 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 225 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp31_;
-#line 219 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp32_ = res;
-#line 219 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp32_ == SQLITE_OK, "res == Sqlite.OK");
-#line 220 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp33_ = stmt;
-#line 220 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp34_ = photo_row;
-#line 220 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp35_ = _tmp34_->master;
-#line 220 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp36_ = _tmp35_->timestamp;
-#line 220 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp37_ = sqlite3_bind_int64 (_tmp33_, 5, (gint64) _tmp36_);
-#line 220 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp37_;
-#line 221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp38_ = res;
-#line 221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp38_ == SQLITE_OK, "res == Sqlite.OK");
-#line 222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp39_ = stmt;
-#line 222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp40_ = photo_row;
-#line 222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp41_ = _tmp40_->exposure_time;
-#line 222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp42_ = sqlite3_bind_int64 (_tmp39_, 6, (gint64) _tmp41_);
-#line 222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp42_;
-#line 223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp43_ = res;
-#line 223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp43_ == SQLITE_OK, "res == Sqlite.OK");
-#line 224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp44_ = stmt;
-#line 224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp45_ = photo_row;
-#line 224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp46_ = _tmp45_->master;
-#line 224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp47_ = _tmp46_->original_orientation;
-#line 224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp48_ = sqlite3_bind_int (_tmp44_, 7, (gint) _tmp47_);
-#line 224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp48_;
-#line 225 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp49_ = res;
-#line 225 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp49_ == SQLITE_OK, "res == Sqlite.OK");
-#line 226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp50_ = stmt;
-#line 226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp51_ = photo_row;
-#line 226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp52_ = _tmp51_->master;
-#line 226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp53_ = _tmp52_->original_orientation;
-#line 226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp54_ = sqlite3_bind_int (_tmp50_, 8, (gint) _tmp53_);
-#line 226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp54_;
-#line 227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp55_ = res;
-#line 227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp55_ == SQLITE_OK, "res == Sqlite.OK");
-#line 228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp56_ = stmt;
-#line 228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp57_ = photo_row;
-#line 228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp58_ = _tmp57_->import_id;
-#line 228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp59_ = _tmp58_.id;
-#line 228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp60_ = sqlite3_bind_int64 (_tmp56_, 9, _tmp59_);
-#line 228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp60_;
-#line 229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 236 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp61_ = res;
-#line 229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 236 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp61_ == SQLITE_OK, "res == Sqlite.OK");
-#line 230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp62_ = stmt;
-#line 230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp63_ = sqlite3_bind_int64 (_tmp62_, 10, EVENT_ID_INVALID);
-#line 230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp63_;
-#line 231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 238 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp64_ = res;
-#line 231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 238 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp64_ == SQLITE_OK, "res == Sqlite.OK");
-#line 232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp65_ = stmt;
-#line 232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp66_ = photo_row;
-#line 232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp67_ = _tmp66_->md5;
-#line 232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp68_ = g_strdup (_tmp67_);
-#line 232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp69_ = g_free;
-#line 232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp70_ = sqlite3_bind_text (_tmp65_, 11, _tmp68_, -1, _tmp69_);
-#line 232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp70_;
-#line 233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 240 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp71_ = res;
-#line 233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 240 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp71_ == SQLITE_OK, "res == Sqlite.OK");
-#line 234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp72_ = stmt;
-#line 234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp73_ = photo_row;
-#line 234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp74_ = _tmp73_->thumbnail_md5;
-#line 234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp75_ = g_strdup (_tmp74_);
-#line 234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp76_ = g_free;
-#line 234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp77_ = sqlite3_bind_text (_tmp72_, 12, _tmp75_, -1, _tmp76_);
-#line 234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp77_;
-#line 235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp78_ = res;
-#line 235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp78_ == SQLITE_OK, "res == Sqlite.OK");
-#line 236 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 243 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp79_ = stmt;
-#line 236 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 243 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp80_ = photo_row;
-#line 236 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 243 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp81_ = _tmp80_->exif_md5;
-#line 236 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 243 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp82_ = g_strdup (_tmp81_);
-#line 236 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 243 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp83_ = g_free;
-#line 236 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 243 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp84_ = sqlite3_bind_text (_tmp79_, 13, _tmp82_, -1, _tmp83_);
-#line 236 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 243 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp84_;
-#line 237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp85_ = res;
-#line 237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp85_ == SQLITE_OK, "res == Sqlite.OK");
-#line 238 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 245 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp86_ = stmt;
-#line 238 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 245 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp87_ = time_created;
-#line 238 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 245 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp88_ = sqlite3_bind_int64 (_tmp86_, 14, (gint64) _tmp87_);
-#line 238 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 245 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp88_;
-#line 239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp89_ = res;
-#line 239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp89_ == SQLITE_OK, "res == Sqlite.OK");
-#line 240 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 247 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp90_ = stmt;
-#line 240 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 247 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp91_ = photo_row;
-#line 240 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 247 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp92_ = _tmp91_->master;
-#line 240 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 247 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp93_ = _tmp92_->file_format;
-#line 240 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 247 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp94_ = photo_file_format_serialize (_tmp93_);
-#line 240 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 247 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp95_ = sqlite3_bind_int (_tmp90_, 15, _tmp94_);
-#line 240 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 247 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp95_;
-#line 241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp96_ = res;
-#line 241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp96_ == SQLITE_OK, "res == Sqlite.OK");
-#line 242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp97_ = stmt;
-#line 242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp98_ = photo_row;
-#line 242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp99_ = _tmp98_->title;
-#line 242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp100_ = g_strdup (_tmp99_);
-#line 242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp101_ = g_free;
-#line 242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp102_ = sqlite3_bind_text (_tmp97_, 16, _tmp100_, -1, _tmp101_);
-#line 242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp102_;
-#line 243 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp103_ = res;
-#line 243 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp103_ == SQLITE_OK, "res == Sqlite.OK");
-#line 244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp104_ = stmt;
-#line 244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp105_ = photo_row;
-#line 244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp106_ = _tmp105_->rating;
-#line 244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp107_ = rating_serialize (_tmp106_);
-#line 244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp108_ = sqlite3_bind_int64 (_tmp104_, 17, (gint64) _tmp107_);
-#line 244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp108_;
-#line 245 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 252 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp109_ = res;
-#line 245 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 252 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp109_ == SQLITE_OK, "res == Sqlite.OK");
-#line 246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 253 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp110_ = stmt;
-#line 246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 253 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp111_ = sqlite3_bind_int64 (_tmp110_, 18, BACKING_PHOTO_ID_INVALID);
-#line 246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 253 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp111_;
-#line 247 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 254 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp112_ = res;
-#line 247 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 254 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp112_ == SQLITE_OK, "res == Sqlite.OK");
-#line 248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp113_ = stmt;
-#line 248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp114_ = photo_row;
-#line 248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp115_ = _tmp114_->developer;
-#line 248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp116_ = raw_developer_to_string (_tmp115_);
-#line 248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp117_ = g_free;
-#line 248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp118_ = sqlite3_bind_text (_tmp113_, 19, _tmp116_, -1, _tmp117_);
-#line 248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp118_;
-#line 249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 256 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp119_ = res;
-#line 249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 256 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp119_ == SQLITE_OK, "res == Sqlite.OK");
-#line 250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp120_ = stmt;
-#line 250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp121_ = photo_row;
-#line 250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp122_ = _tmp121_->comment;
-#line 250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp123_ = g_strdup (_tmp122_);
-#line 250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp124_ = g_free;
-#line 250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp125_ = sqlite3_bind_text (_tmp120_, 20, _tmp123_, -1, _tmp124_);
-#line 250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp125_;
-#line 251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 258 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp126_ = res;
-#line 251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 258 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp126_ == SQLITE_OK, "res == Sqlite.OK");
-#line 253 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 260 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp127_ = stmt;
-#line 253 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 260 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp128_ = sqlite3_step (_tmp127_);
-#line 253 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 260 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp128_;
-#line 254 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp129_ = res;
-#line 254 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp129_ != SQLITE_DONE) {
-#line 1880 "PhotoTable.c"
+#line 1919 "PhotoTable.c"
 		gint _tmp130_ = 0;
 		PhotoID _tmp132_ = {0};
-#line 255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 262 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp130_ = res;
-#line 255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 262 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp130_ != SQLITE_CONSTRAINT) {
-#line 1887 "PhotoTable.c"
+#line 1926 "PhotoTable.c"
 			gint _tmp131_ = 0;
-#line 256 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 263 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp131_ = res;
-#line 256 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 263 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			database_table_fatal ("add_photo", _tmp131_);
-#line 1893 "PhotoTable.c"
+#line 1932 "PhotoTable.c"
 		}
-#line 258 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		photo_id_init (&_tmp132_, PHOTO_ID_INVALID);
-#line 258 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		*result = _tmp132_;
-#line 258 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 258 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return;
-#line 1903 "PhotoTable.c"
+#line 1942 "PhotoTable.c"
 	}
-#line 262 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp133_ = photo_row;
-#line 262 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp134_ = database_table_db;
-#line 262 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp135_ = sqlite3_last_insert_rowid (_tmp134_);
-#line 262 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	photo_id_init (&_tmp133_->photo_id, _tmp135_);
-#line 263 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 270 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp136_ = photo_row;
-#line 263 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 270 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp137_ = photo_row;
-#line 263 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 270 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp138_ = _tmp137_->master;
-#line 263 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 270 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp139_ = _tmp138_->original_orientation;
-#line 263 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 270 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp136_->orientation = _tmp139_;
-#line 264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 271 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp140_ = photo_row;
-#line 264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 271 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	event_id_init (&_tmp140_->event_id, EVENT_ID_INVALID);
-#line 265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp141_ = photo_row;
-#line 265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp142_ = time_created;
-#line 265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp141_->time_created = (time_t) _tmp142_;
-#line 266 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 273 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp143_ = photo_row;
-#line 266 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 273 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp143_->flags = (guint64) 0;
-#line 268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 275 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp144_ = photo_row;
-#line 268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 275 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp145_ = _tmp144_->photo_id;
-#line 268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 275 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	*result = _tmp145_;
-#line 268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 275 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 275 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return;
-#line 1947 "PhotoTable.c"
+#line 1986 "PhotoTable.c"
 }
 
 
@@ -2060,322 +2099,322 @@ void photo_table_reimport (PhotoTable* self, PhotoRow* row, GError** error) {
 	BackingPhotoRow* _tmp101_ = NULL;
 	Orientation _tmp102_ = 0;
 	GError * _inner_error_ = NULL;
-#line 276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 283 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 283 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_ROW (row));
-#line 278 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 285 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 278 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 285 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "UPDATE PhotoTable SET width = ?, height = ?, filesize = ?, timestamp =" \
 " ?, " "exposure_time = ?, orientation = ?, original_orientation = ?, md5 = ?," \
 " " "exif_md5 = ?, thumbnail_md5 = ?, file_format = ?, title = ?, time_reim" \
 "ported = ? " "WHERE id = ?", -1, &_tmp1_, NULL);
-#line 278 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 285 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 278 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 285 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 278 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 285 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 283 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 290 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 283 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 290 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 285 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 292 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = now_sec ();
-#line 285 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 292 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	time_reimported = (time_t) _tmp4_;
-#line 287 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 294 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = stmt;
-#line 287 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 294 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = row;
-#line 287 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 294 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = _tmp6_->master;
-#line 287 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 294 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = _tmp7_->dim;
-#line 287 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 294 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = _tmp8_.width;
-#line 287 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 294 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = sqlite3_bind_int (_tmp5_, 1, _tmp9_);
-#line 287 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 294 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp10_;
-#line 288 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 295 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = res;
-#line 288 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 295 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp11_ == SQLITE_OK, "res == Sqlite.OK");
-#line 289 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 296 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = stmt;
-#line 289 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 296 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = row;
-#line 289 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 296 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = _tmp13_->master;
-#line 289 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 296 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = _tmp14_->dim;
-#line 289 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 296 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = _tmp15_.height;
-#line 289 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 296 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp17_ = sqlite3_bind_int (_tmp12_, 2, _tmp16_);
-#line 289 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 296 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp17_;
-#line 290 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 297 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp18_ = res;
-#line 290 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 297 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp18_ == SQLITE_OK, "res == Sqlite.OK");
-#line 291 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 298 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp19_ = stmt;
-#line 291 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 298 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp20_ = row;
-#line 291 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 298 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp21_ = _tmp20_->master;
-#line 291 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 298 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp22_ = _tmp21_->filesize;
-#line 291 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 298 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp23_ = sqlite3_bind_int64 (_tmp19_, 3, _tmp22_);
-#line 291 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 298 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp23_;
-#line 292 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 299 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp24_ = res;
-#line 292 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 299 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp24_ == SQLITE_OK, "res == Sqlite.OK");
-#line 293 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 300 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp25_ = stmt;
-#line 293 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 300 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp26_ = row;
-#line 293 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 300 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp27_ = _tmp26_->master;
-#line 293 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 300 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp28_ = _tmp27_->timestamp;
-#line 293 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 300 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp29_ = sqlite3_bind_int64 (_tmp25_, 4, (gint64) _tmp28_);
-#line 293 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 300 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp29_;
-#line 294 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 301 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp30_ = res;
-#line 294 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 301 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp30_ == SQLITE_OK, "res == Sqlite.OK");
-#line 295 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 302 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp31_ = stmt;
-#line 295 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 302 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp32_ = row;
-#line 295 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 302 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp33_ = _tmp32_->exposure_time;
-#line 295 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 302 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp34_ = sqlite3_bind_int64 (_tmp31_, 5, (gint64) _tmp33_);
-#line 295 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 302 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp34_;
-#line 296 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 303 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp35_ = res;
-#line 296 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 303 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp35_ == SQLITE_OK, "res == Sqlite.OK");
-#line 297 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 304 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp36_ = stmt;
-#line 297 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 304 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp37_ = row;
-#line 297 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 304 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp38_ = _tmp37_->master;
-#line 297 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 304 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp39_ = _tmp38_->original_orientation;
-#line 297 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 304 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp40_ = sqlite3_bind_int (_tmp36_, 6, (gint) _tmp39_);
-#line 297 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 304 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp40_;
-#line 298 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 305 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp41_ = res;
-#line 298 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 305 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp41_ == SQLITE_OK, "res == Sqlite.OK");
-#line 299 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 306 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp42_ = stmt;
-#line 299 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 306 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp43_ = row;
-#line 299 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 306 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp44_ = _tmp43_->master;
-#line 299 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 306 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp45_ = _tmp44_->original_orientation;
-#line 299 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 306 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp46_ = sqlite3_bind_int (_tmp42_, 7, (gint) _tmp45_);
-#line 299 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 306 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp46_;
-#line 300 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 307 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp47_ = res;
-#line 300 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 307 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp47_ == SQLITE_OK, "res == Sqlite.OK");
-#line 301 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 308 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp48_ = stmt;
-#line 301 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 308 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp49_ = row;
-#line 301 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 308 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp50_ = _tmp49_->md5;
-#line 301 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 308 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp51_ = g_strdup (_tmp50_);
-#line 301 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 308 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp52_ = g_free;
-#line 301 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 308 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp53_ = sqlite3_bind_text (_tmp48_, 8, _tmp51_, -1, _tmp52_);
-#line 301 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 308 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp53_;
-#line 302 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 309 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp54_ = res;
-#line 302 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 309 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp54_ == SQLITE_OK, "res == Sqlite.OK");
-#line 303 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 310 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp55_ = stmt;
-#line 303 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 310 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp56_ = row;
-#line 303 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 310 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp57_ = _tmp56_->exif_md5;
-#line 303 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 310 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp58_ = g_strdup (_tmp57_);
-#line 303 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 310 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp59_ = g_free;
-#line 303 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 310 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp60_ = sqlite3_bind_text (_tmp55_, 9, _tmp58_, -1, _tmp59_);
-#line 303 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 310 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp60_;
-#line 304 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 311 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp61_ = res;
-#line 304 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 311 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp61_ == SQLITE_OK, "res == Sqlite.OK");
-#line 305 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 312 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp62_ = stmt;
-#line 305 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 312 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp63_ = row;
-#line 305 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 312 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp64_ = _tmp63_->thumbnail_md5;
-#line 305 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 312 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp65_ = g_strdup (_tmp64_);
-#line 305 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 312 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp66_ = g_free;
-#line 305 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 312 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp67_ = sqlite3_bind_text (_tmp62_, 10, _tmp65_, -1, _tmp66_);
-#line 305 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 312 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp67_;
-#line 306 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 313 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp68_ = res;
-#line 306 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 313 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp68_ == SQLITE_OK, "res == Sqlite.OK");
-#line 307 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 314 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp69_ = stmt;
-#line 307 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 314 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp70_ = row;
-#line 307 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 314 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp71_ = _tmp70_->master;
-#line 307 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 314 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp72_ = _tmp71_->file_format;
-#line 307 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 314 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp73_ = photo_file_format_serialize (_tmp72_);
-#line 307 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 314 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp74_ = sqlite3_bind_int (_tmp69_, 11, _tmp73_);
-#line 307 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 314 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp74_;
-#line 308 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 315 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp75_ = res;
-#line 308 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 315 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp75_ == SQLITE_OK, "res == Sqlite.OK");
-#line 309 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 316 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp76_ = stmt;
-#line 309 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 316 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp77_ = row;
-#line 309 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 316 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp78_ = _tmp77_->title;
-#line 309 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 316 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp79_ = g_strdup (_tmp78_);
-#line 309 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 316 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp80_ = g_free;
-#line 309 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 316 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp81_ = sqlite3_bind_text (_tmp76_, 12, _tmp79_, -1, _tmp80_);
-#line 309 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 316 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp81_;
-#line 310 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 317 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp82_ = res;
-#line 310 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 317 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp82_ == SQLITE_OK, "res == Sqlite.OK");
-#line 311 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp83_ = stmt;
-#line 311 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp84_ = time_reimported;
-#line 311 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp85_ = sqlite3_bind_int64 (_tmp83_, 13, (gint64) _tmp84_);
-#line 311 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp85_;
-#line 312 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 319 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp86_ = res;
-#line 312 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 319 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp86_ == SQLITE_OK, "res == Sqlite.OK");
-#line 313 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 320 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp87_ = stmt;
-#line 313 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 320 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp88_ = row;
-#line 313 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 320 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp89_ = _tmp88_->photo_id;
-#line 313 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 320 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp90_ = _tmp89_.id;
-#line 313 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 320 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp91_ = sqlite3_bind_int64 (_tmp87_, 14, _tmp90_);
-#line 313 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 320 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp91_;
-#line 314 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 321 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp92_ = res;
-#line 314 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 321 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp92_ == SQLITE_OK, "res == Sqlite.OK");
-#line 316 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 323 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp93_ = stmt;
-#line 316 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 323 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp94_ = sqlite3_step (_tmp93_);
-#line 316 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 323 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp94_;
-#line 317 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 324 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp95_ = res;
-#line 317 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 324 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp95_ != SQLITE_DONE) {
-#line 2322 "PhotoTable.c"
+#line 2361 "PhotoTable.c"
 		gint _tmp96_ = 0;
-#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 325 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp96_ = res;
-#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 325 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_throw_error ("PhotoTable.reimport_master", _tmp96_, &_inner_error_);
-#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 325 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 325 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 325 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_propagate_error (error, _inner_error_);
-#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 325 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_sqlite3_finalize0 (stmt);
-#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 325 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				return;
-#line 2338 "PhotoTable.c"
+#line 2377 "PhotoTable.c"
 			} else {
-#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 325 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_sqlite3_finalize0 (stmt);
-#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 325 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 325 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_clear_error (&_inner_error_);
-#line 318 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 325 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				return;
-#line 2348 "PhotoTable.c"
+#line 2387 "PhotoTable.c"
 			}
 		}
 	}
-#line 320 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 327 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp97_ = row;
-#line 320 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 327 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp98_ = time_reimported;
-#line 320 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 327 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp97_->time_reimported = _tmp98_;
-#line 321 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 328 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp99_ = row;
-#line 321 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 328 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp100_ = row;
-#line 321 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 328 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp101_ = _tmp100_->master;
-#line 321 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 328 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp102_ = _tmp101_->original_orientation;
-#line 321 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 328 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp99_->orientation = _tmp102_;
-#line 276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 283 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 2370 "PhotoTable.c"
+#line 2409 "PhotoTable.c"
 }
 
 
@@ -2436,200 +2475,200 @@ gboolean photo_table_master_exif_updated (PhotoTable* self, PhotoID* photoID, gi
 	PhotoRow* _tmp52_ = NULL;
 	const gchar* _tmp53_ = NULL;
 	gchar* _tmp54_ = NULL;
-#line 324 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 331 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 324 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 331 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photoID != NULL, FALSE);
-#line 324 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 331 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (md5 != NULL, FALSE);
-#line 324 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 331 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_ROW (row), FALSE);
-#line 327 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 334 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 327 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 334 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "UPDATE PhotoTable SET filesize = ?, timestamp = ?, md5 = ?, exif_md5 =" \
 " ?," "thumbnail_md5 =? WHERE id = ?", -1, &_tmp1_, NULL);
-#line 327 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 334 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 327 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 334 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 327 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 334 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 330 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 337 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 330 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 337 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 332 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 339 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 332 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 339 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = filesize;
-#line 332 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 339 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = sqlite3_bind_int64 (_tmp4_, 1, _tmp5_);
-#line 332 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 339 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp6_;
-#line 333 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 340 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = res;
-#line 333 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 340 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp7_ == SQLITE_OK, "res == Sqlite.OK");
-#line 334 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 341 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = stmt;
-#line 334 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 341 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = timestamp;
-#line 334 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 341 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = sqlite3_bind_int64 (_tmp8_, 2, (gint64) _tmp9_);
-#line 334 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 341 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp10_;
-#line 335 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 342 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = res;
-#line 335 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 342 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp11_ == SQLITE_OK, "res == Sqlite.OK");
-#line 336 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 343 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = stmt;
-#line 336 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 343 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = md5;
-#line 336 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 343 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = g_strdup (_tmp13_);
-#line 336 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 343 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = g_free;
-#line 336 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 343 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = sqlite3_bind_text (_tmp12_, 3, _tmp14_, -1, _tmp15_);
-#line 336 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 343 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp16_;
-#line 337 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 344 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp17_ = res;
-#line 337 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 344 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp17_ == SQLITE_OK, "res == Sqlite.OK");
-#line 338 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 345 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp18_ = stmt;
-#line 338 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 345 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp19_ = exif_md5;
-#line 338 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 345 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp20_ = g_strdup (_tmp19_);
-#line 338 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 345 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp21_ = g_free;
-#line 338 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 345 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp22_ = sqlite3_bind_text (_tmp18_, 4, _tmp20_, -1, _tmp21_);
-#line 338 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 345 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp22_;
-#line 339 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 346 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp23_ = res;
-#line 339 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 346 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp23_ == SQLITE_OK, "res == Sqlite.OK");
-#line 340 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 347 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp24_ = stmt;
-#line 340 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 347 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp25_ = thumbnail_md5;
-#line 340 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 347 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp26_ = g_strdup (_tmp25_);
-#line 340 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 347 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp27_ = g_free;
-#line 340 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 347 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp28_ = sqlite3_bind_text (_tmp24_, 5, _tmp26_, -1, _tmp27_);
-#line 340 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 347 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp28_;
-#line 341 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 348 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp29_ = res;
-#line 341 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 348 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp29_ == SQLITE_OK, "res == Sqlite.OK");
-#line 342 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 349 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp30_ = stmt;
-#line 342 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 349 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp31_ = *photoID;
-#line 342 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 349 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp32_ = _tmp31_.id;
-#line 342 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 349 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp33_ = sqlite3_bind_int64 (_tmp30_, 6, _tmp32_);
-#line 342 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 349 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp33_;
-#line 343 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 350 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp34_ = res;
-#line 343 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 350 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp34_ == SQLITE_OK, "res == Sqlite.OK");
-#line 345 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 352 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp35_ = stmt;
-#line 345 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 352 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp36_ = sqlite3_step (_tmp35_);
-#line 345 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 352 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp36_;
-#line 346 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 353 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp37_ = res;
-#line 346 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 353 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp37_ != SQLITE_DONE) {
-#line 2549 "PhotoTable.c"
+#line 2588 "PhotoTable.c"
 		gint _tmp38_ = 0;
-#line 347 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 354 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp38_ = res;
-#line 347 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 354 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp38_ != SQLITE_CONSTRAINT) {
-#line 2555 "PhotoTable.c"
+#line 2594 "PhotoTable.c"
 			gint _tmp39_ = 0;
-#line 348 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 355 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp39_ = res;
-#line 348 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 355 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			database_table_fatal ("write_update_photo", _tmp39_);
-#line 2561 "PhotoTable.c"
+#line 2600 "PhotoTable.c"
 		}
-#line 350 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 357 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = FALSE;
-#line 350 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 357 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 350 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 357 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 2569 "PhotoTable.c"
+#line 2608 "PhotoTable.c"
 	}
-#line 353 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 360 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp40_ = row;
-#line 353 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 360 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp41_ = _tmp40_->master;
-#line 353 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 360 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp42_ = filesize;
-#line 353 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 360 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp41_->filesize = _tmp42_;
-#line 354 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 361 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp43_ = row;
-#line 354 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 361 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp44_ = _tmp43_->master;
-#line 354 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 361 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp45_ = timestamp;
-#line 354 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 361 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp44_->timestamp = (time_t) _tmp45_;
-#line 355 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 362 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp46_ = row;
-#line 355 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 362 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp47_ = md5;
-#line 355 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 362 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp48_ = g_strdup (_tmp47_);
-#line 355 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 362 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp46_->md5);
-#line 355 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 362 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp46_->md5 = _tmp48_;
-#line 356 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 363 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp49_ = row;
-#line 356 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 363 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp50_ = exif_md5;
-#line 356 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 363 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp51_ = g_strdup (_tmp50_);
-#line 356 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 363 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp49_->exif_md5);
-#line 356 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 363 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp49_->exif_md5 = _tmp51_;
-#line 357 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 364 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp52_ = row;
-#line 357 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 364 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp53_ = thumbnail_md5;
-#line 357 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 364 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp54_ = g_strdup (_tmp53_);
-#line 357 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 364 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp52_->thumbnail_md5);
-#line 357 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 364 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp52_->thumbnail_md5 = _tmp54_;
-#line 359 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 366 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = TRUE;
-#line 359 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 366 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 359 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 366 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 2623 "PhotoTable.c"
+#line 2662 "PhotoTable.c"
 }
 
 
@@ -2637,47 +2676,47 @@ static void photo_table_validate_orientation (PhotoTable* self, PhotoRow* row) {
 	gboolean _tmp0_ = FALSE;
 	PhotoRow* _tmp1_ = NULL;
 	Orientation _tmp2_ = 0;
-#line 370 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 377 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 370 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 377 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_ROW (row));
-#line 371 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 378 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = row;
-#line 371 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 378 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = _tmp1_->orientation;
-#line 371 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 378 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp2_ < ORIENTATION_MIN) {
-#line 371 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 378 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = TRUE;
-#line 2643 "PhotoTable.c"
+#line 2682 "PhotoTable.c"
 	} else {
 		PhotoRow* _tmp3_ = NULL;
 		Orientation _tmp4_ = 0;
-#line 372 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 379 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp3_ = row;
-#line 372 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 379 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp4_ = _tmp3_->orientation;
-#line 372 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 379 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = _tmp4_ > ORIENTATION_MAX;
-#line 2653 "PhotoTable.c"
+#line 2692 "PhotoTable.c"
 	}
-#line 371 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 378 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp0_) {
-#line 2657 "PhotoTable.c"
+#line 2696 "PhotoTable.c"
 		PhotoRow* _tmp5_ = NULL;
 		PhotoID _tmp6_ = {0};
 		PhotoRow* _tmp7_ = NULL;
-#line 374 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 381 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp5_ = row;
-#line 374 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 381 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp6_ = _tmp5_->photo_id;
-#line 374 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 381 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		photo_table_set_orientation (self, &_tmp6_, ORIENTATION_MIN);
-#line 375 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 382 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp7_ = row;
-#line 375 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 382 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp7_->orientation = ORIENTATION_MIN;
-#line 2671 "PhotoTable.c"
+#line 2710 "PhotoTable.c"
 	}
 }
 
@@ -2813,384 +2852,384 @@ PhotoRow* photo_table_get_row (PhotoTable* self, PhotoID* photo_id) {
 	sqlite3_stmt* _tmp123_ = NULL;
 	const gchar* _tmp124_ = NULL;
 	gchar* _tmp125_ = NULL;
-#line 379 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 386 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), NULL);
-#line 379 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 386 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, NULL);
-#line 381 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 388 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 381 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 388 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "SELECT filename, width, height, filesize, timestamp, exposure_time, or" \
 "ientation, " "original_orientation, import_id, event_id, transformations, md5, thumb" \
 "nail_md5, " "exif_md5, time_created, flags, rating, file_format, title, backlinks, " "time_reimported, editable_id, metadata_dirty, developer, develop_shotw" \
 "ell_id, " "develop_camera_id, develop_embedded_id, comment " "FROM PhotoTable WHERE id=?", -1, &_tmp1_, NULL);
-#line 381 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 388 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 381 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 388 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 381 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 388 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 389 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 396 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 389 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 396 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 391 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 398 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 391 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 398 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = *photo_id;
-#line 391 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 398 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = _tmp5_.id;
-#line 391 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 398 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = sqlite3_bind_int64 (_tmp4_, 1, _tmp6_);
-#line 391 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 398 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp7_;
-#line 392 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 399 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = res;
-#line 392 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 399 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp8_ == SQLITE_OK, "res == Sqlite.OK");
-#line 394 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 401 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = stmt;
-#line 394 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 401 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = sqlite3_step (_tmp9_);
-#line 394 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 401 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp10_ != SQLITE_ROW) {
-#line 395 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 402 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = NULL;
-#line 395 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 402 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 395 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 402 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 2851 "PhotoTable.c"
+#line 2890 "PhotoTable.c"
 	}
-#line 397 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 404 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = photo_row_new ();
-#line 397 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 404 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	row = _tmp11_;
-#line 398 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 405 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = row;
-#line 398 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 405 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = *photo_id;
-#line 398 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 405 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_->photo_id = _tmp13_;
-#line 399 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 406 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = row;
-#line 399 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 406 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = _tmp14_->master;
-#line 399 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 406 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = stmt;
-#line 399 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 406 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp17_ = sqlite3_column_text (_tmp16_, 0);
-#line 399 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 406 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp18_ = g_strdup (_tmp17_);
-#line 399 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 406 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp15_->filepath);
-#line 399 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 406 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_->filepath = _tmp18_;
-#line 400 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 407 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp19_ = row;
-#line 400 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 407 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp20_ = _tmp19_->master;
-#line 400 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 407 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp21_ = stmt;
-#line 400 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 407 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp22_ = sqlite3_column_int (_tmp21_, 1);
-#line 400 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 407 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp23_ = stmt;
-#line 400 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 407 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp24_ = sqlite3_column_int (_tmp23_, 2);
-#line 400 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 407 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	dimensions_init (&_tmp20_->dim, _tmp22_, _tmp24_);
-#line 401 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 408 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp25_ = row;
-#line 401 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 408 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp26_ = _tmp25_->master;
-#line 401 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 408 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp27_ = stmt;
-#line 401 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 408 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp28_ = sqlite3_column_int64 (_tmp27_, 3);
-#line 401 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 408 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp26_->filesize = _tmp28_;
-#line 402 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 409 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp29_ = row;
-#line 402 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 409 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp30_ = _tmp29_->master;
-#line 402 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 409 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp31_ = stmt;
-#line 402 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 409 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp32_ = sqlite3_column_int64 (_tmp31_, 4);
-#line 402 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 409 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp30_->timestamp = (time_t) _tmp32_;
-#line 403 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 410 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp33_ = row;
-#line 403 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 410 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp34_ = stmt;
-#line 403 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 410 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp35_ = sqlite3_column_int64 (_tmp34_, 5);
-#line 403 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 410 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp33_->exposure_time = (time_t) _tmp35_;
-#line 404 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 411 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp36_ = row;
-#line 404 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 411 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp37_ = stmt;
-#line 404 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 411 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp38_ = sqlite3_column_int (_tmp37_, 6);
-#line 404 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 411 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp36_->orientation = (Orientation) _tmp38_;
-#line 405 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 412 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp39_ = row;
-#line 405 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 412 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp40_ = _tmp39_->master;
-#line 405 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 412 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp41_ = stmt;
-#line 405 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 412 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp42_ = sqlite3_column_int (_tmp41_, 7);
-#line 405 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 412 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp40_->original_orientation = (Orientation) _tmp42_;
-#line 406 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 413 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp43_ = row;
-#line 406 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 413 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp44_ = stmt;
-#line 406 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 413 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp45_ = sqlite3_column_int64 (_tmp44_, 8);
-#line 406 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 413 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp43_->import_id.id = _tmp45_;
-#line 407 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 414 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp46_ = row;
-#line 407 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 414 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp47_ = stmt;
-#line 407 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 414 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp48_ = sqlite3_column_int64 (_tmp47_, 9);
-#line 407 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 414 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp46_->event_id.id = _tmp48_;
-#line 408 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp49_ = row;
-#line 408 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp50_ = stmt;
-#line 408 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp51_ = sqlite3_column_text (_tmp50_, 10);
-#line 408 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp52_ = photo_table_marshall_all_transformations (_tmp51_);
-#line 408 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_object_unref0 (_tmp49_->transformations);
-#line 408 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp49_->transformations = _tmp52_;
-#line 409 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp53_ = row;
-#line 409 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp54_ = stmt;
-#line 409 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp55_ = sqlite3_column_text (_tmp54_, 11);
-#line 409 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp56_ = g_strdup (_tmp55_);
-#line 409 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp53_->md5);
-#line 409 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp53_->md5 = _tmp56_;
-#line 410 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp57_ = row;
-#line 410 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp58_ = stmt;
-#line 410 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp59_ = sqlite3_column_text (_tmp58_, 12);
-#line 410 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp60_ = g_strdup (_tmp59_);
-#line 410 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp57_->thumbnail_md5);
-#line 410 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp57_->thumbnail_md5 = _tmp60_;
-#line 411 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 418 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp61_ = row;
-#line 411 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 418 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp62_ = stmt;
-#line 411 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 418 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp63_ = sqlite3_column_text (_tmp62_, 13);
-#line 411 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 418 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp64_ = g_strdup (_tmp63_);
-#line 411 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 418 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp61_->exif_md5);
-#line 411 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 418 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp61_->exif_md5 = _tmp64_;
-#line 412 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 419 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp65_ = row;
-#line 412 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 419 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp66_ = stmt;
-#line 412 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 419 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp67_ = sqlite3_column_int64 (_tmp66_, 14);
-#line 412 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 419 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp65_->time_created = (time_t) _tmp67_;
-#line 413 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 420 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp68_ = row;
-#line 413 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 420 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp69_ = stmt;
-#line 413 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 420 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp70_ = sqlite3_column_int64 (_tmp69_, 15);
-#line 413 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 420 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp68_->flags = (guint64) _tmp70_;
-#line 414 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp71_ = row;
-#line 414 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp72_ = stmt;
-#line 414 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp73_ = sqlite3_column_int (_tmp72_, 16);
-#line 414 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp74_ = rating_unserialize (_tmp73_);
-#line 414 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp71_->rating = _tmp74_;
-#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 422 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp75_ = row;
-#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 422 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp76_ = _tmp75_->master;
-#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 422 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp77_ = stmt;
-#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 422 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp78_ = sqlite3_column_int (_tmp77_, 17);
-#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 422 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp79_ = photo_file_format_unserialize (_tmp78_);
-#line 415 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 422 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp76_->file_format = _tmp79_;
-#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp80_ = row;
-#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp81_ = stmt;
-#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp82_ = sqlite3_column_text (_tmp81_, 18);
-#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp83_ = g_strdup (_tmp82_);
-#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp80_->title);
-#line 416 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp80_->title = _tmp83_;
-#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp84_ = row;
-#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp85_ = stmt;
-#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp86_ = sqlite3_column_text (_tmp85_, 19);
-#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp87_ = g_strdup (_tmp86_);
-#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp84_->backlinks);
-#line 417 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp84_->backlinks = _tmp87_;
-#line 418 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp88_ = row;
-#line 418 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp89_ = stmt;
-#line 418 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp90_ = sqlite3_column_int64 (_tmp89_, 20);
-#line 418 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp88_->time_reimported = (time_t) _tmp90_;
-#line 419 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 426 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp91_ = row;
-#line 419 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 426 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp92_ = stmt;
-#line 419 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 426 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp93_ = sqlite3_column_int64 (_tmp92_, 21);
-#line 419 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 426 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	backing_photo_id_init (&_tmp91_->editable_id, _tmp93_);
-#line 420 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 427 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp94_ = row;
-#line 420 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 427 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp95_ = stmt;
-#line 420 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 427 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp96_ = sqlite3_column_int (_tmp95_, 22);
-#line 420 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 427 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp94_->metadata_dirty = _tmp96_ != 0;
-#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp98_ = stmt;
-#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp99_ = sqlite3_column_text (_tmp98_, 23);
-#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp99_ != NULL) {
-#line 3093 "PhotoTable.c"
+#line 3132 "PhotoTable.c"
 		sqlite3_stmt* _tmp100_ = NULL;
 		const gchar* _tmp101_ = NULL;
 		RawDeveloper _tmp102_ = 0;
-#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp100_ = stmt;
-#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp101_ = sqlite3_column_text (_tmp100_, 23);
-#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp102_ = raw_developer_from_string (_tmp101_);
-#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp97_ = _tmp102_;
-#line 3105 "PhotoTable.c"
+#line 3144 "PhotoTable.c"
 	} else {
-#line 422 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 429 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp97_ = RAW_DEVELOPER_CAMERA;
-#line 3109 "PhotoTable.c"
+#line 3148 "PhotoTable.c"
 	}
-#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp103_ = row;
-#line 421 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp103_->developer = _tmp97_;
-#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 430 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp104_ = row;
-#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 430 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp105_ = _tmp104_->development_ids;
-#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 430 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp105__length1 = _tmp104_->development_ids_length1;
-#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 430 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp106_ = stmt;
-#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 430 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp107_ = sqlite3_column_int64 (_tmp106_, 24);
-#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 430 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	backing_photo_id_init (&_tmp108_, _tmp107_);
-#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 430 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp105_[RAW_DEVELOPER_SHOTWELL] = _tmp108_;
-#line 423 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 430 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp109_ = _tmp105_[RAW_DEVELOPER_SHOTWELL];
-#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 431 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp110_ = row;
-#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 431 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp111_ = _tmp110_->development_ids;
-#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 431 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp111__length1 = _tmp110_->development_ids_length1;
-#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 431 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp112_ = stmt;
-#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 431 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp113_ = sqlite3_column_int64 (_tmp112_, 25);
-#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 431 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	backing_photo_id_init (&_tmp114_, _tmp113_);
-#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 431 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp111_[RAW_DEVELOPER_CAMERA] = _tmp114_;
-#line 424 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 431 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp115_ = _tmp111_[RAW_DEVELOPER_CAMERA];
-#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 432 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp116_ = row;
-#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 432 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp117_ = _tmp116_->development_ids;
-#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 432 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp117__length1 = _tmp116_->development_ids_length1;
-#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 432 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp118_ = stmt;
-#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 432 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp119_ = sqlite3_column_int64 (_tmp118_, 26);
-#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 432 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	backing_photo_id_init (&_tmp120_, _tmp119_);
-#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 432 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp117_[RAW_DEVELOPER_EMBEDDED] = _tmp120_;
-#line 425 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 432 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp121_ = _tmp117_[RAW_DEVELOPER_EMBEDDED];
-#line 426 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 433 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp122_ = row;
-#line 426 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 433 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp123_ = stmt;
-#line 426 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 433 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp124_ = sqlite3_column_text (_tmp123_, 27);
-#line 426 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 433 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp125_ = g_strdup (_tmp124_);
-#line 426 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 433 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp122_->comment);
-#line 426 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 433 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp122_->comment = _tmp125_;
-#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 435 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = row;
-#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 435 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 428 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 435 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 3181 "PhotoTable.c"
+#line 3220 "PhotoTable.c"
 }
 
 
@@ -3204,33 +3243,33 @@ GeeArrayList* photo_table_get_all (PhotoTable* self) {
 	gint _tmp3_ = 0;
 	GeeArrayList* all = NULL;
 	GeeArrayList* _tmp4_ = NULL;
-#line 431 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 438 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), NULL);
-#line 433 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 440 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 433 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 440 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "SELECT id, filename, width, height, filesize, timestamp, exposure_time" \
 ", orientation, " "original_orientation, import_id, event_id, transformations, md5, thumb" \
 "nail_md5, " "exif_md5, time_created, flags, rating, file_format, title, backlinks, " \
 "time_reimported, " "editable_id, metadata_dirty, developer, develop_shotwell_id, develop_c" \
 "amera_id, " "develop_embedded_id, comment FROM PhotoTable", -1, &_tmp1_, NULL);
-#line 433 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 440 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 433 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 440 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 433 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 440 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 440 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 447 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 440 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 447 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 442 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 449 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = gee_array_list_new (TYPE_PHOTO_ROW, (GBoxedCopyFunc) photo_row_ref, photo_row_unref, NULL, NULL, NULL);
-#line 442 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 449 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	all = _tmp4_;
-#line 444 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	while (TRUE) {
-#line 3217 "PhotoTable.c"
+#line 3256 "PhotoTable.c"
 		sqlite3_stmt* _tmp5_ = NULL;
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
@@ -3354,365 +3393,365 @@ GeeArrayList* photo_table_get_all (PhotoTable* self) {
 		PhotoRow* _tmp124_ = NULL;
 		GeeArrayList* _tmp125_ = NULL;
 		PhotoRow* _tmp126_ = NULL;
-#line 444 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp5_ = stmt;
-#line 444 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp6_ = sqlite3_step (_tmp5_);
-#line 444 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		res = _tmp6_;
-#line 444 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp7_ = res;
-#line 444 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (!(_tmp7_ == SQLITE_ROW)) {
-#line 444 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			break;
-#line 3353 "PhotoTable.c"
+#line 3392 "PhotoTable.c"
 		}
-#line 445 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 452 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp8_ = photo_row_new ();
-#line 445 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 452 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		row = _tmp8_;
-#line 446 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 453 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp9_ = row;
-#line 446 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 453 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp10_ = stmt;
-#line 446 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 453 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp11_ = sqlite3_column_int64 (_tmp10_, 0);
-#line 446 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 453 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp9_->photo_id.id = _tmp11_;
-#line 447 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 454 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp12_ = row;
-#line 447 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 454 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp13_ = _tmp12_->master;
-#line 447 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 454 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp14_ = stmt;
-#line 447 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 454 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp15_ = sqlite3_column_text (_tmp14_, 1);
-#line 447 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 454 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp16_ = g_strdup (_tmp15_);
-#line 447 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 454 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (_tmp13_->filepath);
-#line 447 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 454 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp13_->filepath = _tmp16_;
-#line 448 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 455 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp17_ = row;
-#line 448 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 455 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp18_ = _tmp17_->master;
-#line 448 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 455 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp19_ = stmt;
-#line 448 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 455 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp20_ = sqlite3_column_int (_tmp19_, 2);
-#line 448 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 455 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp21_ = stmt;
-#line 448 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 455 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp22_ = sqlite3_column_int (_tmp21_, 3);
-#line 448 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 455 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		dimensions_init (&_tmp18_->dim, _tmp20_, _tmp22_);
-#line 449 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 456 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp23_ = row;
-#line 449 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 456 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp24_ = _tmp23_->master;
-#line 449 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 456 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp25_ = stmt;
-#line 449 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 456 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp26_ = sqlite3_column_int64 (_tmp25_, 4);
-#line 449 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 456 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp24_->filesize = _tmp26_;
-#line 450 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 457 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp27_ = row;
-#line 450 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 457 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp28_ = _tmp27_->master;
-#line 450 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 457 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp29_ = stmt;
-#line 450 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 457 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp30_ = sqlite3_column_int64 (_tmp29_, 5);
-#line 450 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 457 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp28_->timestamp = (time_t) _tmp30_;
-#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 458 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp31_ = row;
-#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 458 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp32_ = stmt;
-#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 458 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp33_ = sqlite3_column_int64 (_tmp32_, 6);
-#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 458 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp31_->exposure_time = (time_t) _tmp33_;
-#line 452 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 459 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp34_ = row;
-#line 452 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 459 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp35_ = stmt;
-#line 452 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 459 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp36_ = sqlite3_column_int (_tmp35_, 7);
-#line 452 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 459 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp34_->orientation = (Orientation) _tmp36_;
-#line 453 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 460 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp37_ = row;
-#line 453 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 460 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp38_ = _tmp37_->master;
-#line 453 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 460 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp39_ = stmt;
-#line 453 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 460 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp40_ = sqlite3_column_int (_tmp39_, 8);
-#line 453 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 460 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp38_->original_orientation = (Orientation) _tmp40_;
-#line 454 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 461 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp41_ = row;
-#line 454 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 461 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp42_ = stmt;
-#line 454 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 461 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp43_ = sqlite3_column_int64 (_tmp42_, 9);
-#line 454 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 461 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp41_->import_id.id = _tmp43_;
-#line 455 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 462 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp44_ = row;
-#line 455 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 462 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp45_ = stmt;
-#line 455 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 462 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp46_ = sqlite3_column_int64 (_tmp45_, 10);
-#line 455 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 462 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp44_->event_id.id = _tmp46_;
-#line 456 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp47_ = row;
-#line 456 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp48_ = stmt;
-#line 456 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp49_ = sqlite3_column_text (_tmp48_, 11);
-#line 456 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp50_ = photo_table_marshall_all_transformations (_tmp49_);
-#line 456 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_object_unref0 (_tmp47_->transformations);
-#line 456 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp47_->transformations = _tmp50_;
-#line 457 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp51_ = row;
-#line 457 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp52_ = stmt;
-#line 457 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp53_ = sqlite3_column_text (_tmp52_, 12);
-#line 457 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp54_ = g_strdup (_tmp53_);
-#line 457 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (_tmp51_->md5);
-#line 457 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp51_->md5 = _tmp54_;
-#line 458 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp55_ = row;
-#line 458 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp56_ = stmt;
-#line 458 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp57_ = sqlite3_column_text (_tmp56_, 13);
-#line 458 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp58_ = g_strdup (_tmp57_);
-#line 458 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (_tmp55_->thumbnail_md5);
-#line 458 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp55_->thumbnail_md5 = _tmp58_;
-#line 459 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 466 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp59_ = row;
-#line 459 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 466 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp60_ = stmt;
-#line 459 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 466 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp61_ = sqlite3_column_text (_tmp60_, 14);
-#line 459 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 466 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp62_ = g_strdup (_tmp61_);
-#line 459 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 466 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (_tmp59_->exif_md5);
-#line 459 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 466 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp59_->exif_md5 = _tmp62_;
-#line 460 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 467 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp63_ = row;
-#line 460 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 467 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp64_ = stmt;
-#line 460 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 467 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp65_ = sqlite3_column_int64 (_tmp64_, 15);
-#line 460 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 467 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp63_->time_created = (time_t) _tmp65_;
-#line 461 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 468 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp66_ = row;
-#line 461 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 468 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp67_ = stmt;
-#line 461 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 468 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp68_ = sqlite3_column_int64 (_tmp67_, 16);
-#line 461 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 468 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp66_->flags = (guint64) _tmp68_;
-#line 462 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp69_ = row;
-#line 462 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp70_ = stmt;
-#line 462 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp71_ = sqlite3_column_int (_tmp70_, 17);
-#line 462 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp72_ = rating_unserialize (_tmp71_);
-#line 462 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp69_->rating = _tmp72_;
-#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 470 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp73_ = row;
-#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 470 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp74_ = _tmp73_->master;
-#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 470 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp75_ = stmt;
-#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 470 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp76_ = sqlite3_column_int (_tmp75_, 18);
-#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 470 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp77_ = photo_file_format_unserialize (_tmp76_);
-#line 463 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 470 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp74_->file_format = _tmp77_;
-#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp78_ = row;
-#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp79_ = stmt;
-#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp80_ = sqlite3_column_text (_tmp79_, 19);
-#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp81_ = g_strdup (_tmp80_);
-#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (_tmp78_->title);
-#line 464 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp78_->title = _tmp81_;
-#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp82_ = row;
-#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp83_ = stmt;
-#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp84_ = sqlite3_column_text (_tmp83_, 20);
-#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp85_ = g_strdup (_tmp84_);
-#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (_tmp82_->backlinks);
-#line 465 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp82_->backlinks = _tmp85_;
-#line 466 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp86_ = row;
-#line 466 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp87_ = stmt;
-#line 466 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp88_ = sqlite3_column_int64 (_tmp87_, 21);
-#line 466 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp86_->time_reimported = (time_t) _tmp88_;
-#line 467 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 474 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp89_ = row;
-#line 467 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 474 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp90_ = stmt;
-#line 467 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 474 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp91_ = sqlite3_column_int64 (_tmp90_, 22);
-#line 467 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 474 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		backing_photo_id_init (&_tmp89_->editable_id, _tmp91_);
-#line 468 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 475 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp92_ = row;
-#line 468 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 475 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp93_ = stmt;
-#line 468 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 475 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp94_ = sqlite3_column_int (_tmp93_, 23);
-#line 468 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 475 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp92_->metadata_dirty = _tmp94_ != 0;
-#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 476 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp96_ = stmt;
-#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 476 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp97_ = sqlite3_column_text (_tmp96_, 24);
-#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 476 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp97_ != NULL) {
-#line 3597 "PhotoTable.c"
+#line 3636 "PhotoTable.c"
 			sqlite3_stmt* _tmp98_ = NULL;
 			const gchar* _tmp99_ = NULL;
 			RawDeveloper _tmp100_ = 0;
-#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 476 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp98_ = stmt;
-#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 476 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp99_ = sqlite3_column_text (_tmp98_, 24);
-#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 476 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp100_ = raw_developer_from_string (_tmp99_);
-#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 476 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp95_ = _tmp100_;
-#line 3609 "PhotoTable.c"
+#line 3648 "PhotoTable.c"
 		} else {
-#line 470 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 477 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp95_ = RAW_DEVELOPER_CAMERA;
-#line 3613 "PhotoTable.c"
+#line 3652 "PhotoTable.c"
 		}
-#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 476 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp101_ = row;
-#line 469 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 476 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp101_->developer = _tmp95_;
-#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 478 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp102_ = row;
-#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 478 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp103_ = _tmp102_->development_ids;
-#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 478 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp103__length1 = _tmp102_->development_ids_length1;
-#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 478 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp104_ = stmt;
-#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 478 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp105_ = sqlite3_column_int64 (_tmp104_, 25);
-#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 478 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		backing_photo_id_init (&_tmp106_, _tmp105_);
-#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 478 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp103_[RAW_DEVELOPER_SHOTWELL] = _tmp106_;
-#line 471 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 478 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp107_ = _tmp103_[RAW_DEVELOPER_SHOTWELL];
-#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 479 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp108_ = row;
-#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 479 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp109_ = _tmp108_->development_ids;
-#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 479 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp109__length1 = _tmp108_->development_ids_length1;
-#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 479 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp110_ = stmt;
-#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 479 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp111_ = sqlite3_column_int64 (_tmp110_, 26);
-#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 479 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		backing_photo_id_init (&_tmp112_, _tmp111_);
-#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 479 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp109_[RAW_DEVELOPER_CAMERA] = _tmp112_;
-#line 472 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 479 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp113_ = _tmp109_[RAW_DEVELOPER_CAMERA];
-#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 480 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp114_ = row;
-#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 480 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp115_ = _tmp114_->development_ids;
-#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 480 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp115__length1 = _tmp114_->development_ids_length1;
-#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 480 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp116_ = stmt;
-#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 480 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp117_ = sqlite3_column_int64 (_tmp116_, 27);
-#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 480 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		backing_photo_id_init (&_tmp118_, _tmp117_);
-#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 480 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp115_[RAW_DEVELOPER_EMBEDDED] = _tmp118_;
-#line 473 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 480 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp119_ = _tmp115_[RAW_DEVELOPER_EMBEDDED];
-#line 474 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 481 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp120_ = row;
-#line 474 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 481 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp121_ = stmt;
-#line 474 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 481 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp122_ = sqlite3_column_text (_tmp121_, 28);
-#line 474 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 481 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp123_ = g_strdup (_tmp122_);
-#line 474 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 481 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (_tmp120_->comment);
-#line 474 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 481 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp120_->comment = _tmp123_;
-#line 476 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 483 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp124_ = row;
-#line 476 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 483 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		photo_table_validate_orientation (self, _tmp124_);
-#line 478 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 485 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp125_ = all;
-#line 478 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 485 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp126_ = row;
-#line 478 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 485 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp125_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp126_);
-#line 444 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 451 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_photo_row_unref0 (row);
-#line 3691 "PhotoTable.c"
+#line 3730 "PhotoTable.c"
 	}
-#line 481 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 488 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = all;
-#line 481 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 488 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 481 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 488 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 3699 "PhotoTable.c"
+#line 3738 "PhotoTable.c"
 }
 
 
@@ -3883,498 +3922,498 @@ void photo_table_duplicate (PhotoTable* self, PhotoID* photo_id, const gchar* ne
 	sqlite3* _tmp163_ = NULL;
 	gint64 _tmp164_ = 0LL;
 	PhotoID _tmp165_ = {0};
-#line 486 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 486 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (photo_id != NULL);
-#line 486 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (new_filename != NULL);
-#line 486 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (editable_id != NULL);
-#line 486 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (develop_shotwell != NULL);
-#line 486 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (develop_camera_id != NULL);
-#line 486 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (develop_embedded_id != NULL);
-#line 490 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 497 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 490 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 497 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = photo_table_get_row (self, &_tmp0_);
-#line 490 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 497 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	original = _tmp1_;
-#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 500 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = database_table_db;
-#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 500 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = sqlite3_prepare_v2 (_tmp2_, "INSERT INTO PhotoTable (filename, width, height, filesize, " "timestamp, exposure_time, orientation, original_orientation, import_id" \
 ", event_id, " "transformations, md5, thumbnail_md5, exif_md5, time_created, flags, ra" \
 "ting, " "file_format, title, editable_id, developer, develop_shotwell_id, devel" \
 "op_camera_id, " "develop_embedded_id, comment) " "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," \
 " ?, ?, ?, ?)", -1, &_tmp3_, NULL);
-#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 500 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 500 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp3_;
-#line 493 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 500 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp4_;
-#line 500 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 507 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = res;
-#line 500 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 507 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp5_ == SQLITE_OK, "res == Sqlite.OK");
-#line 502 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 509 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = stmt;
-#line 502 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 509 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = new_filename;
-#line 502 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 509 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = g_strdup (_tmp7_);
-#line 502 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 509 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = g_free;
-#line 502 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 509 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = sqlite3_bind_text (_tmp6_, 1, _tmp8_, -1, _tmp9_);
-#line 502 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 509 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp10_;
-#line 503 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 510 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = res;
-#line 503 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 510 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp11_ == SQLITE_OK, "res == Sqlite.OK");
-#line 504 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 511 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = stmt;
-#line 504 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 511 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = original;
-#line 504 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 511 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = _tmp13_->master;
-#line 504 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 511 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = _tmp14_->dim;
-#line 504 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 511 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = _tmp15_.width;
-#line 504 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 511 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp17_ = sqlite3_bind_int (_tmp12_, 2, _tmp16_);
-#line 504 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 511 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp17_;
-#line 505 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 512 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp18_ = res;
-#line 505 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 512 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp18_ == SQLITE_OK, "res == Sqlite.OK");
-#line 506 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 513 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp19_ = stmt;
-#line 506 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 513 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp20_ = original;
-#line 506 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 513 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp21_ = _tmp20_->master;
-#line 506 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 513 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp22_ = _tmp21_->dim;
-#line 506 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 513 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp23_ = _tmp22_.height;
-#line 506 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 513 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp24_ = sqlite3_bind_int (_tmp19_, 3, _tmp23_);
-#line 506 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 513 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp24_;
-#line 507 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 514 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp25_ = res;
-#line 507 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 514 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp25_ == SQLITE_OK, "res == Sqlite.OK");
-#line 508 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 515 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp26_ = stmt;
-#line 508 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 515 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp27_ = original;
-#line 508 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 515 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp28_ = _tmp27_->master;
-#line 508 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 515 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp29_ = _tmp28_->filesize;
-#line 508 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 515 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp30_ = sqlite3_bind_int64 (_tmp26_, 4, _tmp29_);
-#line 508 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 515 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp30_;
-#line 509 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 516 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp31_ = res;
-#line 509 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 516 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp31_ == SQLITE_OK, "res == Sqlite.OK");
-#line 510 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 517 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp32_ = stmt;
-#line 510 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 517 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp33_ = original;
-#line 510 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 517 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp34_ = _tmp33_->master;
-#line 510 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 517 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp35_ = _tmp34_->timestamp;
-#line 510 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 517 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp36_ = sqlite3_bind_int64 (_tmp32_, 5, (gint64) _tmp35_);
-#line 510 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 517 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp36_;
-#line 511 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 518 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp37_ = res;
-#line 511 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 518 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp37_ == SQLITE_OK, "res == Sqlite.OK");
-#line 512 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 519 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp38_ = stmt;
-#line 512 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 519 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp39_ = original;
-#line 512 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 519 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp40_ = _tmp39_->exposure_time;
-#line 512 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 519 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp41_ = sqlite3_bind_int64 (_tmp38_, 6, (gint64) _tmp40_);
-#line 512 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 519 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp41_;
-#line 513 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 520 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp42_ = res;
-#line 513 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 520 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp42_ == SQLITE_OK, "res == Sqlite.OK");
-#line 514 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 521 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp43_ = stmt;
-#line 514 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 521 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp44_ = original;
-#line 514 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 521 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp45_ = _tmp44_->orientation;
-#line 514 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 521 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp46_ = sqlite3_bind_int (_tmp43_, 7, (gint) _tmp45_);
-#line 514 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 521 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp46_;
-#line 515 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 522 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp47_ = res;
-#line 515 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 522 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp47_ == SQLITE_OK, "res == Sqlite.OK");
-#line 516 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 523 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp48_ = stmt;
-#line 516 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 523 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp49_ = original;
-#line 516 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 523 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp50_ = _tmp49_->master;
-#line 516 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 523 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp51_ = _tmp50_->original_orientation;
-#line 516 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 523 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp52_ = sqlite3_bind_int (_tmp48_, 8, (gint) _tmp51_);
-#line 516 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 523 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp52_;
-#line 517 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 524 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp53_ = res;
-#line 517 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 524 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp53_ == SQLITE_OK, "res == Sqlite.OK");
-#line 518 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 525 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp54_ = stmt;
-#line 518 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 525 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp55_ = original;
-#line 518 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 525 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp56_ = _tmp55_->import_id;
-#line 518 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 525 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp57_ = _tmp56_.id;
-#line 518 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 525 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp58_ = sqlite3_bind_int64 (_tmp54_, 9, _tmp57_);
-#line 518 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 525 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp58_;
-#line 519 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 526 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp59_ = res;
-#line 519 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 526 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp59_ == SQLITE_OK, "res == Sqlite.OK");
-#line 520 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 527 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp60_ = stmt;
-#line 520 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 527 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp61_ = original;
-#line 520 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 527 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp62_ = _tmp61_->event_id;
-#line 520 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 527 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp63_ = _tmp62_.id;
-#line 520 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 527 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp64_ = sqlite3_bind_int64 (_tmp60_, 10, _tmp63_);
-#line 520 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 527 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp64_;
-#line 521 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 528 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp65_ = res;
-#line 521 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 528 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp65_ == SQLITE_OK, "res == Sqlite.OK");
-#line 522 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 529 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp66_ = stmt;
-#line 522 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 529 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp67_ = original;
-#line 522 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 529 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp68_ = _tmp67_->transformations;
-#line 522 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 529 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp69_ = photo_table_unmarshall_all_transformations (_tmp68_);
-#line 522 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 529 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp70_ = g_free;
-#line 522 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 529 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp71_ = sqlite3_bind_text (_tmp66_, 11, _tmp69_, -1, _tmp70_);
-#line 522 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 529 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp71_;
-#line 523 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 530 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp72_ = res;
-#line 523 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 530 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp72_ == SQLITE_OK, "res == Sqlite.OK");
-#line 524 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 531 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp73_ = stmt;
-#line 524 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 531 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp74_ = original;
-#line 524 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 531 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp75_ = _tmp74_->md5;
-#line 524 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 531 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp76_ = g_strdup (_tmp75_);
-#line 524 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 531 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp77_ = g_free;
-#line 524 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 531 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp78_ = sqlite3_bind_text (_tmp73_, 12, _tmp76_, -1, _tmp77_);
-#line 524 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 531 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp78_;
-#line 525 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 532 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp79_ = res;
-#line 525 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 532 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp79_ == SQLITE_OK, "res == Sqlite.OK");
-#line 526 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 533 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp80_ = stmt;
-#line 526 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 533 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp81_ = original;
-#line 526 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 533 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp82_ = _tmp81_->thumbnail_md5;
-#line 526 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 533 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp83_ = g_strdup (_tmp82_);
-#line 526 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 533 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp84_ = g_free;
-#line 526 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 533 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp85_ = sqlite3_bind_text (_tmp80_, 13, _tmp83_, -1, _tmp84_);
-#line 526 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 533 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp85_;
-#line 527 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 534 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp86_ = res;
-#line 527 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 534 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp86_ == SQLITE_OK, "res == Sqlite.OK");
-#line 528 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 535 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp87_ = stmt;
-#line 528 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 535 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp88_ = original;
-#line 528 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 535 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp89_ = _tmp88_->exif_md5;
-#line 528 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 535 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp90_ = g_strdup (_tmp89_);
-#line 528 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 535 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp91_ = g_free;
-#line 528 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 535 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp92_ = sqlite3_bind_text (_tmp87_, 14, _tmp90_, -1, _tmp91_);
-#line 528 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 535 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp92_;
-#line 529 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 536 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp93_ = res;
-#line 529 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 536 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp93_ == SQLITE_OK, "res == Sqlite.OK");
-#line 530 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 537 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp94_ = stmt;
-#line 530 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 537 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp95_ = now_sec ();
-#line 530 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 537 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp96_ = sqlite3_bind_int64 (_tmp94_, 15, (gint64) _tmp95_);
-#line 530 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 537 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp96_;
-#line 531 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 538 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp97_ = res;
-#line 531 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 538 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp97_ == SQLITE_OK, "res == Sqlite.OK");
-#line 532 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 539 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp98_ = stmt;
-#line 532 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 539 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp99_ = original;
-#line 532 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 539 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp100_ = _tmp99_->flags;
-#line 532 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 539 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp101_ = sqlite3_bind_int64 (_tmp98_, 16, (gint64) _tmp100_);
-#line 532 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 539 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp101_;
-#line 533 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 540 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp102_ = res;
-#line 533 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 540 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp102_ == SQLITE_OK, "res == Sqlite.OK");
-#line 534 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 541 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp103_ = stmt;
-#line 534 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 541 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp104_ = original;
-#line 534 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 541 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp105_ = _tmp104_->rating;
-#line 534 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 541 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp106_ = rating_serialize (_tmp105_);
-#line 534 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 541 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp107_ = sqlite3_bind_int64 (_tmp103_, 17, (gint64) _tmp106_);
-#line 534 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 541 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp107_;
-#line 535 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 542 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp108_ = res;
-#line 535 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 542 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp108_ == SQLITE_OK, "res == Sqlite.OK");
-#line 536 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp109_ = stmt;
-#line 536 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp110_ = original;
-#line 536 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp111_ = _tmp110_->master;
-#line 536 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp112_ = _tmp111_->file_format;
-#line 536 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp113_ = photo_file_format_serialize (_tmp112_);
-#line 536 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp114_ = sqlite3_bind_int (_tmp109_, 18, _tmp113_);
-#line 536 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp114_;
-#line 537 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 544 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp115_ = res;
-#line 537 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 544 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp115_ == SQLITE_OK, "res == Sqlite.OK");
-#line 538 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp116_ = stmt;
-#line 538 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp117_ = original;
-#line 538 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp118_ = _tmp117_->title;
-#line 538 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp119_ = g_strdup (_tmp118_);
-#line 538 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp120_ = g_free;
-#line 538 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp121_ = sqlite3_bind_text (_tmp116_, 19, _tmp119_, -1, _tmp120_);
-#line 538 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp121_;
-#line 539 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 546 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp122_ = res;
-#line 539 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 546 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp122_ == SQLITE_OK, "res == Sqlite.OK");
-#line 540 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 547 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp123_ = stmt;
-#line 540 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 547 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp124_ = *editable_id;
-#line 540 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 547 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp125_ = _tmp124_.id;
-#line 540 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 547 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp126_ = sqlite3_bind_int64 (_tmp123_, 20, _tmp125_);
-#line 540 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 547 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp126_;
-#line 541 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 548 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp127_ = res;
-#line 541 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 548 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp127_ == SQLITE_OK, "res == Sqlite.OK");
-#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 550 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp128_ = stmt;
-#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 550 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp129_ = original;
-#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 550 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp130_ = _tmp129_->developer;
-#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 550 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp131_ = raw_developer_to_string (_tmp130_);
-#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 550 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp132_ = g_free;
-#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 550 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp133_ = sqlite3_bind_text (_tmp128_, 21, _tmp131_, -1, _tmp132_);
-#line 543 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 550 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp133_;
-#line 544 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 551 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp134_ = res;
-#line 544 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 551 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp134_ == SQLITE_OK, "res == Sqlite.OK");
-#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 552 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp135_ = stmt;
-#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 552 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp136_ = *develop_shotwell;
-#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 552 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp137_ = _tmp136_.id;
-#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 552 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp138_ = sqlite3_bind_int64 (_tmp135_, 22, _tmp137_);
-#line 545 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 552 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp138_;
-#line 546 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 553 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp139_ = res;
-#line 546 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 553 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp139_ == SQLITE_OK, "res == Sqlite.OK");
-#line 547 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 554 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp140_ = stmt;
-#line 547 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 554 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp141_ = *develop_camera_id;
-#line 547 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 554 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp142_ = _tmp141_.id;
-#line 547 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 554 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp143_ = sqlite3_bind_int64 (_tmp140_, 23, _tmp142_);
-#line 547 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 554 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp143_;
-#line 548 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 555 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp144_ = res;
-#line 548 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 555 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp144_ == SQLITE_OK, "res == Sqlite.OK");
-#line 549 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 556 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp145_ = stmt;
-#line 549 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 556 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp146_ = *develop_embedded_id;
-#line 549 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 556 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp147_ = _tmp146_.id;
-#line 549 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 556 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp148_ = sqlite3_bind_int64 (_tmp145_, 24, _tmp147_);
-#line 549 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 556 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp148_;
-#line 550 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 557 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp149_ = res;
-#line 550 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 557 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp149_ == SQLITE_OK, "res == Sqlite.OK");
-#line 551 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 558 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp150_ = stmt;
-#line 551 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 558 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp151_ = original;
-#line 551 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 558 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp152_ = _tmp151_->comment;
-#line 551 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 558 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp153_ = g_strdup (_tmp152_);
-#line 551 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 558 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp154_ = g_free;
-#line 551 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 558 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp155_ = sqlite3_bind_text (_tmp150_, 25, _tmp153_, -1, _tmp154_);
-#line 551 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 558 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp155_;
-#line 552 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 559 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp156_ = res;
-#line 552 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 559 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp156_ == SQLITE_OK, "res == Sqlite.OK");
-#line 554 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 561 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp157_ = stmt;
-#line 554 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 561 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp158_ = sqlite3_step (_tmp157_);
-#line 554 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 561 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp158_;
-#line 555 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 562 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp159_ = res;
-#line 555 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 562 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp159_ != SQLITE_DONE) {
-#line 4316 "PhotoTable.c"
+#line 4355 "PhotoTable.c"
 		gint _tmp160_ = 0;
 		PhotoID _tmp162_ = {0};
-#line 556 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 563 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp160_ = res;
-#line 556 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 563 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp160_ != SQLITE_CONSTRAINT) {
-#line 4323 "PhotoTable.c"
+#line 4362 "PhotoTable.c"
 			gint _tmp161_ = 0;
-#line 557 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 564 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp161_ = res;
-#line 557 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 564 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			database_table_fatal ("duplicate", _tmp161_);
-#line 4329 "PhotoTable.c"
+#line 4368 "PhotoTable.c"
 		}
-#line 559 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		photo_id_init (&_tmp162_, PHOTO_ID_INVALID);
-#line 559 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		*result = _tmp162_;
-#line 559 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 559 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_photo_row_unref0 (original);
-#line 559 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return;
-#line 4341 "PhotoTable.c"
+#line 4380 "PhotoTable.c"
 	}
-#line 562 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 569 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp163_ = database_table_db;
-#line 562 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 569 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp164_ = sqlite3_last_insert_rowid (_tmp163_);
-#line 562 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 569 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	photo_id_init (&_tmp165_, _tmp164_);
-#line 562 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 569 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	*result = _tmp165_;
-#line 562 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 569 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 562 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 569 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_photo_row_unref0 (original);
-#line 562 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 569 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return;
-#line 4357 "PhotoTable.c"
+#line 4396 "PhotoTable.c"
 }
 
 
@@ -4385,37 +4424,37 @@ gboolean photo_table_set_title (PhotoTable* self, PhotoID* photo_id, const gchar
 	PhotoID _tmp3_ = {0};
 	gint64 _tmp4_ = 0LL;
 	gboolean _tmp5_ = FALSE;
-#line 565 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 572 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 565 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 572 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = new_title;
-#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp1_ != NULL) {
-#line 4376 "PhotoTable.c"
+#line 4415 "PhotoTable.c"
 		const gchar* _tmp2_ = NULL;
-#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp2_ = new_title;
-#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = _tmp2_;
-#line 4382 "PhotoTable.c"
+#line 4421 "PhotoTable.c"
 	} else {
-#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = "";
-#line 4386 "PhotoTable.c"
+#line 4425 "PhotoTable.c"
 	}
-#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = *photo_id;
-#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = _tmp3_.id;
-#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = database_table_update_text_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp4_, "title", _tmp0_);
-#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp5_;
-#line 566 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 4398 "PhotoTable.c"
+#line 4437 "PhotoTable.c"
 }
 
 
@@ -4426,37 +4465,37 @@ gboolean photo_table_set_comment (PhotoTable* self, PhotoID* photo_id, const gch
 	PhotoID _tmp3_ = {0};
 	gint64 _tmp4_ = 0LL;
 	gboolean _tmp5_ = FALSE;
-#line 569 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 576 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 569 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 576 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 570 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = new_comment;
-#line 570 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp1_ != NULL) {
-#line 4417 "PhotoTable.c"
+#line 4456 "PhotoTable.c"
 		const gchar* _tmp2_ = NULL;
-#line 570 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp2_ = new_comment;
-#line 570 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = _tmp2_;
-#line 4423 "PhotoTable.c"
+#line 4462 "PhotoTable.c"
 	} else {
-#line 570 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = "";
-#line 4427 "PhotoTable.c"
+#line 4466 "PhotoTable.c"
 	}
-#line 570 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = *photo_id;
-#line 570 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = _tmp3_.id;
-#line 570 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = database_table_update_text_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp4_, "comment", _tmp0_);
-#line 570 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp5_;
-#line 570 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 4439 "PhotoTable.c"
+#line 4478 "PhotoTable.c"
 }
 
 
@@ -4465,37 +4504,37 @@ void photo_table_set_filepath (PhotoTable* self, PhotoID* photo_id, const gchar*
 	gint64 _tmp1_ = 0LL;
 	const gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 580 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 580 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (photo_id != NULL);
-#line 573 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 580 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (filepath != NULL);
-#line 574 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 574 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 574 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = filepath;
-#line 574 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_update_text_by_id_2 (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "filename", _tmp2_, &_inner_error_);
-#line 574 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 574 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 574 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 574 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 4470 "PhotoTable.c"
+#line 4509 "PhotoTable.c"
 		} else {
-#line 574 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 574 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 574 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 4478 "PhotoTable.c"
+#line 4517 "PhotoTable.c"
 		}
 	}
 }
@@ -4506,35 +4545,35 @@ void photo_table_update_timestamp (PhotoTable* self, PhotoID* photo_id, time_t t
 	gint64 _tmp1_ = 0LL;
 	time_t _tmp2_ = 0;
 	GError * _inner_error_ = NULL;
-#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 584 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 577 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 584 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (photo_id != NULL);
-#line 578 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 578 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 578 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = timestamp;
-#line 578 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_update_int64_by_id_2 (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "timestamp", (gint64) _tmp2_, &_inner_error_);
-#line 578 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 578 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 578 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 578 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 4509 "PhotoTable.c"
+#line 4548 "PhotoTable.c"
 		} else {
-#line 578 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 578 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 578 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 4517 "PhotoTable.c"
+#line 4556 "PhotoTable.c"
 		}
 	}
 }
@@ -4546,23 +4585,23 @@ gboolean photo_table_set_exposure_time (PhotoTable* self, PhotoID* photo_id, tim
 	gint64 _tmp1_ = 0LL;
 	time_t _tmp2_ = 0;
 	gboolean _tmp3_ = FALSE;
-#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 588 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 581 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 588 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 582 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 589 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 582 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 589 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 582 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 589 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = time;
-#line 582 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 589 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = database_table_update_int64_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "exposure_time", (gint64) _tmp2_);
-#line 582 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 589 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp3_;
-#line 582 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 589 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 4545 "PhotoTable.c"
+#line 4584 "PhotoTable.c"
 }
 
 
@@ -4572,39 +4611,39 @@ void photo_table_set_import_id (PhotoTable* self, PhotoID* photo_id, ImportID* i
 	ImportID _tmp2_ = {0};
 	gint64 _tmp3_ = 0LL;
 	GError * _inner_error_ = NULL;
-#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 592 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 592 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (photo_id != NULL);
-#line 585 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 592 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (import_id != NULL);
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = *import_id;
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = _tmp2_.id;
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_update_int64_by_id_2 (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "import_id", _tmp3_, &_inner_error_);
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 4579 "PhotoTable.c"
+#line 4618 "PhotoTable.c"
 		} else {
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 586 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 593 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 4587 "PhotoTable.c"
+#line 4626 "PhotoTable.c"
 		}
 	}
 }
@@ -4627,71 +4666,71 @@ gboolean photo_table_remove_by_file (PhotoTable* self, GFile* file) {
 	sqlite3_stmt* _tmp10_ = NULL;
 	gint _tmp11_ = 0;
 	gint _tmp12_ = 0;
-#line 589 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 596 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 589 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 596 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
-#line 591 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 598 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 591 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 598 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "DELETE FROM PhotoTable WHERE filename=?", -1, &_tmp1_, NULL);
-#line 591 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 598 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 591 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 598 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 591 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 598 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 592 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 599 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 592 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 599 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 594 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 601 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 594 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 601 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = file;
-#line 594 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 601 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = g_file_get_path (_tmp5_);
-#line 594 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 601 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = g_free;
-#line 594 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 601 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = sqlite3_bind_text (_tmp4_, 1, _tmp6_, -1, _tmp7_);
-#line 594 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 601 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp8_;
-#line 595 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 602 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = res;
-#line 595 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 602 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp9_ == SQLITE_OK, "res == Sqlite.OK");
-#line 597 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 604 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = stmt;
-#line 597 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 604 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = sqlite3_step (_tmp10_);
-#line 597 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 604 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp11_;
-#line 598 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 605 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = res;
-#line 598 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 605 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp12_ != SQLITE_DONE) {
-#line 4654 "PhotoTable.c"
+#line 4693 "PhotoTable.c"
 		gint _tmp13_ = 0;
-#line 599 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 606 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp13_ = res;
-#line 599 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 606 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_warning ("remove", _tmp13_);
-#line 601 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = FALSE;
-#line 601 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 601 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 4666 "PhotoTable.c"
+#line 4705 "PhotoTable.c"
 	}
-#line 604 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 611 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = TRUE;
-#line 604 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 611 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 604 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 611 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 4674 "PhotoTable.c"
+#line 4713 "PhotoTable.c"
 }
 
 
@@ -4699,33 +4738,33 @@ void photo_table_remove (PhotoTable* self, PhotoID* photo_id, GError** error) {
 	PhotoID _tmp0_ = {0};
 	gint64 _tmp1_ = 0LL;
 	GError * _inner_error_ = NULL;
-#line 607 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 614 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 607 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 614 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (photo_id != NULL);
-#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 615 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 615 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 615 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_delete_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, &_inner_error_);
-#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 615 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 615 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 615 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 615 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 4700 "PhotoTable.c"
+#line 4739 "PhotoTable.c"
 		} else {
-#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 615 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 615 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 608 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 615 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 4708 "PhotoTable.c"
+#line 4747 "PhotoTable.c"
 		}
 	}
 }
@@ -4741,34 +4780,34 @@ GeeArrayList* photo_table_get_photos (PhotoTable* self) {
 	gint _tmp3_ = 0;
 	GeeArrayList* photo_ids = NULL;
 	GeeArrayList* _tmp4_ = NULL;
-#line 611 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 618 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), NULL);
-#line 613 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 620 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 613 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 620 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "SELECT id FROM PhotoTable", -1, &_tmp1_, NULL);
-#line 613 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 620 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 613 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 620 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 613 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 620 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 614 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 621 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 614 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 621 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 616 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 623 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = gee_array_list_new (TYPE_PHOTO_ID, (GBoxedCopyFunc) photo_id_dup, photo_id_free, NULL, NULL, NULL);
-#line 616 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 623 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	photo_ids = _tmp4_;
-#line 4744 "PhotoTable.c"
+#line 4783 "PhotoTable.c"
 	{
 		gboolean _tmp5_ = FALSE;
-#line 617 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 624 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp5_ = TRUE;
-#line 617 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 624 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		while (TRUE) {
-#line 4751 "PhotoTable.c"
+#line 4790 "PhotoTable.c"
 			sqlite3_stmt* _tmp6_ = NULL;
 			gint _tmp7_ = 0;
 			gint _tmp8_ = 0;
@@ -4776,62 +4815,62 @@ GeeArrayList* photo_table_get_photos (PhotoTable* self) {
 			sqlite3_stmt* _tmp12_ = NULL;
 			gint64 _tmp13_ = 0LL;
 			PhotoID _tmp14_ = {0};
-#line 617 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 624 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (!_tmp5_) {
-#line 4761 "PhotoTable.c"
+#line 4800 "PhotoTable.c"
 			}
-#line 617 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 624 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp5_ = FALSE;
-#line 618 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 625 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp6_ = stmt;
-#line 618 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 625 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp7_ = sqlite3_step (_tmp6_);
-#line 618 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 625 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			res = _tmp7_;
-#line 619 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 626 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp8_ = res;
-#line 619 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 626 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (_tmp8_ == SQLITE_DONE) {
-#line 620 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 627 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				break;
-#line 4777 "PhotoTable.c"
+#line 4816 "PhotoTable.c"
 			} else {
 				gint _tmp9_ = 0;
-#line 621 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 628 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp9_ = res;
-#line 621 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 628 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				if (_tmp9_ != SQLITE_ROW) {
-#line 4784 "PhotoTable.c"
+#line 4823 "PhotoTable.c"
 					gint _tmp10_ = 0;
-#line 622 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 629 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp10_ = res;
-#line 622 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 629 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					database_table_fatal ("get_photos", _tmp10_);
-#line 624 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 631 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					break;
-#line 4792 "PhotoTable.c"
+#line 4831 "PhotoTable.c"
 				}
 			}
-#line 627 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 634 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp11_ = photo_ids;
-#line 627 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 634 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp12_ = stmt;
-#line 627 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 634 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp13_ = sqlite3_column_int64 (_tmp12_, 0);
-#line 627 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 634 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			photo_id_init (&_tmp14_, _tmp13_);
-#line 627 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 634 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), &_tmp14_);
-#line 4805 "PhotoTable.c"
+#line 4844 "PhotoTable.c"
 		}
 	}
-#line 630 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 637 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = photo_ids;
-#line 630 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 637 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 630 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 637 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 4814 "PhotoTable.c"
+#line 4853 "PhotoTable.c"
 }
 
 
@@ -4841,23 +4880,23 @@ gboolean photo_table_set_orientation (PhotoTable* self, PhotoID* photo_id, Orien
 	gint64 _tmp1_ = 0LL;
 	Orientation _tmp2_ = 0;
 	gboolean _tmp3_ = FALSE;
-#line 633 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 640 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 633 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 640 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 634 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 641 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 634 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 641 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 634 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 641 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = orientation;
-#line 634 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 641 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = database_table_update_int_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "orientation", (gint) _tmp2_);
-#line 634 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 641 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp3_;
-#line 634 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 641 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 4840 "PhotoTable.c"
+#line 4879 "PhotoTable.c"
 }
 
 
@@ -4867,23 +4906,23 @@ gboolean photo_table_replace_flags (PhotoTable* self, PhotoID* photo_id, guint64
 	gint64 _tmp1_ = 0LL;
 	guint64 _tmp2_ = 0ULL;
 	gboolean _tmp3_ = FALSE;
-#line 637 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 644 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 637 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 644 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 638 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 645 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 638 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 645 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 638 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 645 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = flags;
-#line 638 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 645 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = database_table_update_int64_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "flags", (gint64) _tmp2_);
-#line 638 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 645 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp3_;
-#line 638 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 645 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 4866 "PhotoTable.c"
+#line 4905 "PhotoTable.c"
 }
 
 
@@ -4894,25 +4933,25 @@ gboolean photo_table_set_rating (PhotoTable* self, PhotoID* photo_id, Rating rat
 	Rating _tmp2_ = 0;
 	gint _tmp3_ = 0;
 	gboolean _tmp4_ = FALSE;
-#line 641 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 648 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 641 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 648 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 642 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 649 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 642 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 649 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 642 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 649 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = rating;
-#line 642 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 649 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = rating_serialize (_tmp2_);
-#line 642 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 649 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = database_table_update_int_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "rating", _tmp3_);
-#line 642 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 649 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp4_;
-#line 642 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 649 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 4895 "PhotoTable.c"
+#line 4934 "PhotoTable.c"
 }
 
 
@@ -4930,102 +4969,102 @@ gint photo_table_get_event_photo_count (PhotoTable* self, EventID* event_id) {
 	gint _tmp7_ = 0;
 	gint _tmp8_ = 0;
 	gint count = 0;
-#line 645 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 652 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), 0);
-#line 645 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 652 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (event_id != NULL, 0);
-#line 647 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 654 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 647 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 654 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "SELECT id FROM PhotoTable WHERE event_id = ?", -1, &_tmp1_, NULL);
-#line 647 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 654 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 647 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 654 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 647 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 654 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 648 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 655 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 648 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 655 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 650 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 657 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 650 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 657 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = *event_id;
-#line 650 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 657 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = _tmp5_.id;
-#line 650 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 657 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = sqlite3_bind_int64 (_tmp4_, 1, _tmp6_);
-#line 650 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 657 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp7_;
-#line 651 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 658 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = res;
-#line 651 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 658 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp8_ == SQLITE_OK, "res == Sqlite.OK");
-#line 653 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 660 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	count = 0;
-#line 4947 "PhotoTable.c"
+#line 4986 "PhotoTable.c"
 	{
 		gboolean _tmp9_ = FALSE;
-#line 654 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 661 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp9_ = TRUE;
-#line 654 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 661 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		while (TRUE) {
-#line 4954 "PhotoTable.c"
+#line 4993 "PhotoTable.c"
 			sqlite3_stmt* _tmp10_ = NULL;
 			gint _tmp11_ = 0;
 			gint _tmp12_ = 0;
 			gint _tmp15_ = 0;
-#line 654 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 661 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (!_tmp9_) {
-#line 4961 "PhotoTable.c"
+#line 5000 "PhotoTable.c"
 			}
-#line 654 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 661 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp9_ = FALSE;
-#line 655 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 662 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp10_ = stmt;
-#line 655 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 662 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp11_ = sqlite3_step (_tmp10_);
-#line 655 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 662 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			res = _tmp11_;
-#line 656 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 663 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp12_ = res;
-#line 656 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 663 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (_tmp12_ == SQLITE_DONE) {
-#line 657 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 664 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				break;
-#line 4977 "PhotoTable.c"
+#line 5016 "PhotoTable.c"
 			} else {
 				gint _tmp13_ = 0;
-#line 658 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 665 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp13_ = res;
-#line 658 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 665 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				if (_tmp13_ != SQLITE_ROW) {
-#line 4984 "PhotoTable.c"
+#line 5023 "PhotoTable.c"
 					gint _tmp14_ = 0;
-#line 659 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 666 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp14_ = res;
-#line 659 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 666 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					database_table_fatal ("get_event_photo_count", _tmp14_);
-#line 661 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 668 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					break;
-#line 4992 "PhotoTable.c"
+#line 5031 "PhotoTable.c"
 				}
 			}
-#line 664 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 671 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp15_ = count;
-#line 664 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 671 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			count = _tmp15_ + 1;
-#line 4999 "PhotoTable.c"
+#line 5038 "PhotoTable.c"
 		}
 	}
-#line 667 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 674 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = count;
-#line 667 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 674 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 667 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 674 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 5008 "PhotoTable.c"
+#line 5047 "PhotoTable.c"
 }
 
 
@@ -5044,50 +5083,50 @@ GeeArrayList* photo_table_get_event_source_ids (PhotoTable* self, EventID* event
 	gint _tmp8_ = 0;
 	GeeArrayList* _result_ = NULL;
 	GeeArrayList* _tmp9_ = NULL;
-#line 670 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 677 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), NULL);
-#line 670 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 677 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (event_id != NULL, NULL);
-#line 672 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 679 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 672 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 679 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "SELECT id FROM PhotoTable WHERE event_id = ?", -1, &_tmp1_, NULL);
-#line 672 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 679 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 672 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 679 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 672 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 679 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 673 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 680 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 673 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 680 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 675 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 682 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 675 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 682 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = *event_id;
-#line 675 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 682 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = _tmp5_.id;
-#line 675 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 682 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = sqlite3_bind_int64 (_tmp4_, 1, _tmp6_);
-#line 675 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 682 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp7_;
-#line 676 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 683 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = res;
-#line 676 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 683 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp8_ == SQLITE_OK, "res == Sqlite.OK");
-#line 678 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 685 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = gee_array_list_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
-#line 678 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 685 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_result_ = _tmp9_;
-#line 5063 "PhotoTable.c"
+#line 5102 "PhotoTable.c"
 	{
 		gboolean _tmp10_ = FALSE;
-#line 679 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 686 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp10_ = TRUE;
-#line 679 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 686 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		while (TRUE) {
-#line 5070 "PhotoTable.c"
+#line 5109 "PhotoTable.c"
 			sqlite3_stmt* _tmp11_ = NULL;
 			gint _tmp12_ = 0;
 			gint _tmp13_ = 0;
@@ -5097,68 +5136,68 @@ GeeArrayList* photo_table_get_event_source_ids (PhotoTable* self, EventID* event
 			PhotoID _tmp19_ = {0};
 			gchar* _tmp20_ = NULL;
 			gchar* _tmp21_ = NULL;
-#line 679 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 686 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (!_tmp10_) {
-#line 5082 "PhotoTable.c"
+#line 5121 "PhotoTable.c"
 			}
-#line 679 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 686 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp10_ = FALSE;
-#line 680 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 687 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp11_ = stmt;
-#line 680 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 687 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp12_ = sqlite3_step (_tmp11_);
-#line 680 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 687 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			res = _tmp12_;
-#line 681 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 688 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp13_ = res;
-#line 681 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 688 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (_tmp13_ == SQLITE_DONE) {
-#line 682 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 689 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				break;
-#line 5098 "PhotoTable.c"
+#line 5137 "PhotoTable.c"
 			} else {
 				gint _tmp14_ = 0;
-#line 683 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 690 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp14_ = res;
-#line 683 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 690 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				if (_tmp14_ != SQLITE_ROW) {
-#line 5105 "PhotoTable.c"
+#line 5144 "PhotoTable.c"
 					gint _tmp15_ = 0;
-#line 684 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 691 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp15_ = res;
-#line 684 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 691 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					database_table_fatal ("get_event_source_ids", _tmp15_);
-#line 686 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 693 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					break;
-#line 5113 "PhotoTable.c"
+#line 5152 "PhotoTable.c"
 				}
 			}
-#line 689 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 696 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp16_ = _result_;
-#line 689 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 696 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp17_ = stmt;
-#line 689 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 696 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp18_ = sqlite3_column_int64 (_tmp17_, 0);
-#line 689 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 696 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			photo_id_init (&_tmp19_, _tmp18_);
-#line 689 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 696 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp20_ = photo_id_upgrade_photo_id_to_source_id (&_tmp19_);
-#line 689 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 696 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp21_ = _tmp20_;
-#line 689 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 696 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp21_);
-#line 689 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 696 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (_tmp21_);
-#line 5132 "PhotoTable.c"
+#line 5171 "PhotoTable.c"
 		}
 	}
-#line 692 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 699 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _result_;
-#line 692 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 699 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 692 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 699 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 5141 "PhotoTable.c"
+#line 5180 "PhotoTable.c"
 }
 
 
@@ -5178,83 +5217,83 @@ gboolean photo_table_event_has_photos (PhotoTable* self, EventID* event_id) {
 	sqlite3_stmt* _tmp9_ = NULL;
 	gint _tmp10_ = 0;
 	gint _tmp11_ = 0;
-#line 695 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 702 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 695 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 702 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (event_id != NULL, FALSE);
-#line 697 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 704 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 697 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 704 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "SELECT id FROM PhotoTable WHERE event_id = ? LIMIT 1", -1, &_tmp1_, NULL);
-#line 697 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 704 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 697 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 704 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 697 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 704 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 698 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 705 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 698 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 705 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 700 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 707 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 700 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 707 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = *event_id;
-#line 700 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 707 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = _tmp5_.id;
-#line 700 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 707 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = sqlite3_bind_int64 (_tmp4_, 1, _tmp6_);
-#line 700 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 707 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp7_;
-#line 701 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 708 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = res;
-#line 701 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 708 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp8_ == SQLITE_OK, "res == Sqlite.OK");
-#line 703 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 710 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = stmt;
-#line 703 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 710 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = sqlite3_step (_tmp9_);
-#line 703 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 710 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp10_;
-#line 704 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 711 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = res;
-#line 704 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 711 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp11_ == SQLITE_DONE) {
-#line 705 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 712 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = FALSE;
-#line 705 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 712 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 705 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 712 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 5209 "PhotoTable.c"
+#line 5248 "PhotoTable.c"
 	} else {
 		gint _tmp12_ = 0;
-#line 706 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 713 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp12_ = res;
-#line 706 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 713 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp12_ != SQLITE_ROW) {
-#line 5216 "PhotoTable.c"
+#line 5255 "PhotoTable.c"
 			gint _tmp13_ = 0;
-#line 707 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 714 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp13_ = res;
-#line 707 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 714 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			database_table_fatal ("event_has_photos", _tmp13_);
-#line 709 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 716 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			result = FALSE;
-#line 709 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 716 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_sqlite3_finalize0 (stmt);
-#line 709 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 716 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return result;
-#line 5228 "PhotoTable.c"
+#line 5267 "PhotoTable.c"
 		}
 	}
-#line 712 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 719 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = TRUE;
-#line 712 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 719 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 712 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 719 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 5237 "PhotoTable.c"
+#line 5276 "PhotoTable.c"
 }
 
 
@@ -5277,79 +5316,79 @@ gboolean photo_table_drop_event (PhotoTable* self, EventID* event_id) {
 	sqlite3_stmt* _tmp12_ = NULL;
 	gint _tmp13_ = 0;
 	gint _tmp14_ = 0;
-#line 715 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 722 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 715 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 722 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (event_id != NULL, FALSE);
-#line 717 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 724 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 717 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 724 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "UPDATE PhotoTable SET event_id = ? WHERE event_id = ?", -1, &_tmp1_, NULL);
-#line 717 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 724 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 717 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 724 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 717 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 724 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 718 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 725 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 718 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 725 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 720 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 727 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 720 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 727 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = sqlite3_bind_int64 (_tmp4_, 1, EVENT_ID_INVALID);
-#line 720 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 727 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp5_;
-#line 721 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 728 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = res;
-#line 721 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 728 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp6_ == SQLITE_OK, "res == Sqlite.OK");
-#line 722 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 729 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = stmt;
-#line 722 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 729 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = *event_id;
-#line 722 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 729 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = _tmp8_.id;
-#line 722 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 729 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = sqlite3_bind_int64 (_tmp7_, 2, _tmp9_);
-#line 722 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 729 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp10_;
-#line 723 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 730 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = res;
-#line 723 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 730 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp11_ == SQLITE_OK, "res == Sqlite.OK");
-#line 725 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 732 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = stmt;
-#line 725 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 732 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = sqlite3_step (_tmp12_);
-#line 725 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 732 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp13_;
-#line 726 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 733 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = res;
-#line 726 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 733 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp14_ != SQLITE_DONE) {
-#line 5312 "PhotoTable.c"
+#line 5351 "PhotoTable.c"
 		gint _tmp15_ = 0;
-#line 727 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 734 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp15_ = res;
-#line 727 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 734 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_fatal ("drop_event", _tmp15_);
-#line 729 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 736 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = FALSE;
-#line 729 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 736 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 729 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 736 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 5324 "PhotoTable.c"
+#line 5363 "PhotoTable.c"
 	}
-#line 732 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 739 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = TRUE;
-#line 732 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 739 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 732 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 739 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 5332 "PhotoTable.c"
+#line 5371 "PhotoTable.c"
 }
 
 
@@ -5360,27 +5399,27 @@ gboolean photo_table_set_event (PhotoTable* self, PhotoID* photo_id, EventID* ev
 	EventID _tmp2_ = {0};
 	gint64 _tmp3_ = 0LL;
 	gboolean _tmp4_ = FALSE;
-#line 735 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 742 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 735 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 742 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 735 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 742 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (event_id != NULL, FALSE);
-#line 736 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 743 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 736 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 743 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 736 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 743 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = *event_id;
-#line 736 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 743 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = _tmp2_.id;
-#line 736 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 743 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = database_table_update_int64_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "event_id", _tmp3_);
-#line 736 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 743 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp4_;
-#line 736 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 743 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 5363 "PhotoTable.c"
+#line 5402 "PhotoTable.c"
 }
 
 
@@ -5397,78 +5436,78 @@ static gchar* photo_table_get_raw_transformations (PhotoTable* self, PhotoID* ph
 	gchar* _tmp6_ = NULL;
 	gboolean _tmp7_ = FALSE;
 	const gchar* _tmp8_ = NULL;
-#line 739 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 746 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), NULL);
-#line 739 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 746 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, NULL);
-#line 741 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 748 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 741 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 748 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 741 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 748 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = database_table_select_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "transformations", &_tmp2_);
-#line 741 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 748 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 741 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 748 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp2_;
-#line 741 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 748 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (!_tmp3_) {
-#line 742 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 749 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = NULL;
-#line 742 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 749 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 742 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 749 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 5402 "PhotoTable.c"
+#line 5441 "PhotoTable.c"
 	}
-#line 744 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 751 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 744 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 751 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = sqlite3_column_text (_tmp4_, 0);
-#line 744 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 751 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = g_strdup (_tmp5_);
-#line 744 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 751 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	trans = _tmp6_;
-#line 745 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = trans;
-#line 745 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp8_ == NULL) {
-#line 745 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp7_ = TRUE;
-#line 5418 "PhotoTable.c"
+#line 5457 "PhotoTable.c"
 	} else {
 		const gchar* _tmp9_ = NULL;
 		gint _tmp10_ = 0;
 		gint _tmp11_ = 0;
-#line 745 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp9_ = trans;
-#line 745 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp10_ = strlen (_tmp9_);
-#line 745 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp11_ = _tmp10_;
-#line 745 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp7_ = _tmp11_ == 0;
-#line 5431 "PhotoTable.c"
+#line 5470 "PhotoTable.c"
 	}
-#line 745 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp7_) {
-#line 746 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 753 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = NULL;
-#line 746 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 753 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (trans);
-#line 746 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 753 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 746 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 753 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 5443 "PhotoTable.c"
+#line 5482 "PhotoTable.c"
 	}
-#line 748 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 755 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = trans;
-#line 748 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 755 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 748 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 755 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 5451 "PhotoTable.c"
+#line 5490 "PhotoTable.c"
 }
 
 
@@ -5478,25 +5517,25 @@ static gboolean photo_table_set_raw_transformations (PhotoTable* self, PhotoID* 
 	gint64 _tmp1_ = 0LL;
 	const gchar* _tmp2_ = NULL;
 	gboolean _tmp3_ = FALSE;
-#line 751 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 758 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 751 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 758 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 751 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 758 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (trans != NULL, FALSE);
-#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 759 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 759 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 759 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = trans;
-#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 759 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = database_table_update_text_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "transformations", _tmp2_);
-#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 759 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp3_;
-#line 752 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 759 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 5479 "PhotoTable.c"
+#line 5518 "PhotoTable.c"
 }
 
 
@@ -5526,100 +5565,100 @@ gboolean photo_table_set_transformation_state (PhotoTable* self, PhotoID* photo_
 	sqlite3_stmt* _tmp19_ = NULL;
 	gint _tmp20_ = 0;
 	gint _tmp21_ = 0;
-#line 755 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 762 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 755 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 762 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 755 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 762 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail ((transformations == NULL) || GEE_IS_HASH_MAP (transformations), FALSE);
-#line 758 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 765 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 758 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 765 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "UPDATE PhotoTable SET orientation = ?, transformations = ? WHERE id = " \
 "?", -1, &_tmp1_, NULL);
-#line 758 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 765 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 758 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 765 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 758 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 765 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 760 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 767 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 760 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 767 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 762 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 769 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 762 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 769 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = orientation;
-#line 762 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 769 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = sqlite3_bind_int (_tmp4_, 1, (gint) _tmp5_);
-#line 762 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 769 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp6_;
-#line 763 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 770 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = res;
-#line 763 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 770 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp7_ == SQLITE_OK, "res == Sqlite.OK");
-#line 764 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 771 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = stmt;
-#line 764 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 771 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = transformations;
-#line 764 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 771 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = photo_table_unmarshall_all_transformations (_tmp9_);
-#line 764 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 771 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = g_free;
-#line 764 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 771 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = sqlite3_bind_text (_tmp8_, 2, _tmp10_, -1, _tmp11_);
-#line 764 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 771 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp12_;
-#line 765 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 772 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = res;
-#line 765 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 772 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp13_ == SQLITE_OK, "res == Sqlite.OK");
-#line 766 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 773 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = stmt;
-#line 766 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 773 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = *photo_id;
-#line 766 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 773 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = _tmp15_.id;
-#line 766 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 773 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp17_ = sqlite3_bind_int64 (_tmp14_, 3, _tmp16_);
-#line 766 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 773 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp17_;
-#line 767 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 774 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp18_ = res;
-#line 767 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 774 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp18_ == SQLITE_OK, "res == Sqlite.OK");
-#line 769 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 776 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp19_ = stmt;
-#line 769 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 776 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp20_ = sqlite3_step (_tmp19_);
-#line 769 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 776 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp20_;
-#line 770 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 777 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp21_ = res;
-#line 770 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 777 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp21_ != SQLITE_DONE) {
-#line 5581 "PhotoTable.c"
+#line 5620 "PhotoTable.c"
 		gint _tmp22_ = 0;
-#line 771 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 778 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp22_ = res;
-#line 771 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 778 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_fatal ("set_transformation_state", _tmp22_);
-#line 773 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 780 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = FALSE;
-#line 773 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 780 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 773 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 780 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 5593 "PhotoTable.c"
+#line 5632 "PhotoTable.c"
 	}
-#line 776 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 783 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = TRUE;
-#line 776 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 783 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 776 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 783 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 5601 "PhotoTable.c"
+#line 5640 "PhotoTable.c"
 }
 
 
@@ -5628,34 +5667,34 @@ GeeHashMap* photo_table_marshall_all_transformations (const gchar* trans) {
 	gboolean _tmp0_ = FALSE;
 	const gchar* _tmp1_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 780 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 787 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = trans;
-#line 780 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 787 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp1_ == NULL) {
-#line 780 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 787 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = TRUE;
-#line 5616 "PhotoTable.c"
+#line 5655 "PhotoTable.c"
 	} else {
 		const gchar* _tmp2_ = NULL;
 		gint _tmp3_ = 0;
 		gint _tmp4_ = 0;
-#line 780 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 787 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp2_ = trans;
-#line 780 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 787 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp3_ = strlen (_tmp2_);
-#line 780 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 787 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp4_ = _tmp3_;
-#line 780 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 787 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = _tmp4_ == 0;
-#line 5629 "PhotoTable.c"
+#line 5668 "PhotoTable.c"
 	}
-#line 780 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 787 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp0_) {
-#line 781 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 788 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = NULL;
-#line 781 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 788 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 5637 "PhotoTable.c"
+#line 5676 "PhotoTable.c"
 	}
 	{
 		GKeyFile* keyfile = NULL;
@@ -5677,79 +5716,79 @@ GeeHashMap* photo_table_marshall_all_transformations (const gchar* trans) {
 		gint _objects_size_ = 0;
 		gchar** _tmp17_ = NULL;
 		gint _tmp17__length1 = 0;
-#line 784 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp5_ = g_key_file_new ();
-#line 784 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		keyfile = _tmp5_;
-#line 785 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp7_ = keyfile;
-#line 785 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp8_ = trans;
-#line 785 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp9_ = trans;
-#line 785 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp10_ = strlen (_tmp9_);
-#line 785 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp11_ = _tmp10_;
-#line 785 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp12_ = g_key_file_load_from_data (_tmp7_, _tmp8_, (gsize) _tmp11_, G_KEY_FILE_NONE, &_inner_error_);
-#line 785 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp6_ = _tmp12_;
-#line 785 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 785 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_key_file_unref0 (keyfile);
-#line 5681 "PhotoTable.c"
+#line 5720 "PhotoTable.c"
 			goto __catch15_g_error;
 		}
-#line 785 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (!_tmp6_) {
-#line 786 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 793 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			result = NULL;
-#line 786 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 793 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_key_file_unref0 (keyfile);
-#line 786 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 793 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return result;
-#line 5692 "PhotoTable.c"
+#line 5731 "PhotoTable.c"
 		}
-#line 788 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 795 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp13_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, TYPE_KEY_VALUE_MAP, (GBoxedCopyFunc) key_value_map_ref, key_value_map_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 788 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 795 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		map = _tmp13_;
-#line 790 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp14_ = keyfile;
-#line 790 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp16_ = g_key_file_get_groups (_tmp14_, &_tmp15_);
-#line 790 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		objects = _tmp16_;
-#line 790 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		objects_length1 = _tmp15_;
-#line 790 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_objects_size_ = objects_length1;
-#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp17_ = objects;
-#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp17__length1 = objects_length1;
-#line 5712 "PhotoTable.c"
+#line 5751 "PhotoTable.c"
 		{
 			gchar** object_collection = NULL;
 			gint object_collection_length1 = 0;
 			gint _object_collection_size_ = 0;
 			gint object_it = 0;
-#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			object_collection = _tmp17_;
-#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			object_collection_length1 = _tmp17__length1;
-#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			for (object_it = 0; object_it < _tmp17__length1; object_it = object_it + 1) {
-#line 5724 "PhotoTable.c"
+#line 5763 "PhotoTable.c"
 				gchar* _tmp18_ = NULL;
 				gchar* object = NULL;
-#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp18_ = g_strdup (object_collection[object_it]);
-#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				object = _tmp18_;
-#line 5731 "PhotoTable.c"
+#line 5770 "PhotoTable.c"
 				{
 					gchar** keys = NULL;
 					GKeyFile* _tmp19_ = NULL;
@@ -5767,80 +5806,80 @@ GeeHashMap* photo_table_marshall_all_transformations (const gchar* trans) {
 					GeeHashMap* _tmp43_ = NULL;
 					const gchar* _tmp44_ = NULL;
 					KeyValueMap* _tmp45_ = NULL;
-#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 799 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp19_ = keyfile;
-#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 799 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp20_ = object;
-#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 799 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp22_ = g_key_file_get_keys (_tmp19_, _tmp20_, &_tmp21_, &_inner_error_);
-#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 799 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					keys = _tmp22_;
-#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 799 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					keys_length1 = _tmp21_;
-#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 799 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_keys_size_ = keys_length1;
-#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 799 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 799 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						_g_free0 (object);
-#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 799 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						objects = (_vala_array_free (objects, objects_length1, (GDestroyNotify) g_free), NULL);
-#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 799 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						_g_object_unref0 (map);
-#line 792 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 799 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						_g_key_file_unref0 (keyfile);
-#line 5771 "PhotoTable.c"
+#line 5810 "PhotoTable.c"
 						goto __catch15_g_error;
 					}
-#line 793 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp24_ = keys;
-#line 793 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp24__length1 = keys_length1;
-#line 793 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					if (_tmp24_ == NULL) {
-#line 793 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						_tmp23_ = TRUE;
-#line 5782 "PhotoTable.c"
+#line 5821 "PhotoTable.c"
 					} else {
 						gchar** _tmp25_ = NULL;
 						gint _tmp25__length1 = 0;
-#line 793 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						_tmp25_ = keys;
-#line 793 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						_tmp25__length1 = keys_length1;
-#line 793 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						_tmp23_ = _tmp25__length1 == 0;
-#line 5792 "PhotoTable.c"
+#line 5831 "PhotoTable.c"
 					}
-#line 793 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					if (_tmp23_) {
-#line 794 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 801 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						keys = (_vala_array_free (keys, keys_length1, (GDestroyNotify) g_free), NULL);
-#line 794 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 801 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						_g_free0 (object);
-#line 794 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 801 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						continue;
-#line 5802 "PhotoTable.c"
+#line 5841 "PhotoTable.c"
 					}
-#line 796 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 803 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp26_ = object;
-#line 796 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 803 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp27_ = key_value_map_new (_tmp26_);
-#line 796 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 803 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					key_map = _tmp27_;
-#line 5810 "PhotoTable.c"
+#line 5849 "PhotoTable.c"
 					{
 						gint ctr = 0;
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						ctr = 0;
-#line 5815 "PhotoTable.c"
+#line 5854 "PhotoTable.c"
 						{
 							gboolean _tmp28_ = FALSE;
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 							_tmp28_ = TRUE;
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 							while (TRUE) {
-#line 5822 "PhotoTable.c"
+#line 5861 "PhotoTable.c"
 								gint _tmp30_ = 0;
 								gchar** _tmp31_ = NULL;
 								gint _tmp31__length1 = 0;
@@ -5857,134 +5896,134 @@ GeeHashMap* photo_table_marshall_all_transformations (const gchar* trans) {
 								gint _tmp40__length1 = 0;
 								gint _tmp41_ = 0;
 								const gchar* _tmp42_ = NULL;
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								if (!_tmp28_) {
-#line 5841 "PhotoTable.c"
+#line 5880 "PhotoTable.c"
 									gint _tmp29_ = 0;
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 									_tmp29_ = ctr;
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 									ctr = _tmp29_ + 1;
-#line 5847 "PhotoTable.c"
+#line 5886 "PhotoTable.c"
 								}
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp28_ = FALSE;
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp30_ = ctr;
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp31_ = keys;
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp31__length1 = keys_length1;
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								if (!(_tmp30_ < _tmp31__length1)) {
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 									break;
-#line 5861 "PhotoTable.c"
+#line 5900 "PhotoTable.c"
 								}
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp33_ = keyfile;
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp34_ = object;
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp35_ = keys;
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp35__length1 = keys_length1;
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp36_ = ctr;
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp37_ = _tmp35_[_tmp36_];
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp38_ = g_key_file_get_string (_tmp33_, _tmp34_, _tmp37_, &_inner_error_);
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp32_ = _tmp38_;
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 									_key_value_map_unref0 (key_map);
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 									keys = (_vala_array_free (keys, keys_length1, (GDestroyNotify) g_free), NULL);
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 									_g_free0 (object);
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 									objects = (_vala_array_free (objects, objects_length1, (GDestroyNotify) g_free), NULL);
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 									_g_object_unref0 (map);
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 									_g_key_file_unref0 (keyfile);
-#line 5893 "PhotoTable.c"
+#line 5932 "PhotoTable.c"
 									goto __catch15_g_error;
 								}
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp39_ = key_map;
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp40_ = keys;
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp40__length1 = keys_length1;
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp41_ = ctr;
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_tmp42_ = _tmp40_[_tmp41_];
-#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								key_value_map_set_string (_tmp39_, _tmp42_, _tmp32_);
-#line 797 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 804 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 								_g_free0 (_tmp32_);
-#line 5910 "PhotoTable.c"
+#line 5949 "PhotoTable.c"
 							}
 						}
 					}
-#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 807 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp43_ = map;
-#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 807 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp44_ = object;
-#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 807 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp45_ = key_map;
-#line 800 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 807 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp44_, _tmp45_);
-#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_key_value_map_unref0 (key_map);
-#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					keys = (_vala_array_free (keys, keys_length1, (GDestroyNotify) g_free), NULL);
-#line 791 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 798 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_g_free0 (object);
-#line 5928 "PhotoTable.c"
+#line 5967 "PhotoTable.c"
 				}
 			}
 		}
-#line 803 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = map;
-#line 803 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		objects = (_vala_array_free (objects, objects_length1, (GDestroyNotify) g_free), NULL);
-#line 803 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_key_file_unref0 (keyfile);
-#line 803 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 5940 "PhotoTable.c"
+#line 5979 "PhotoTable.c"
 	}
 	goto __finally15;
 	__catch15_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp46_ = NULL;
-#line 783 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 790 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		err = _inner_error_;
-#line 783 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 790 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_inner_error_ = NULL;
-#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 812 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp46_ = err->message;
-#line 805 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-		g_error ("PhotoTable.vala:805: %s", _tmp46_);
-#line 783 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 812 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+		g_error ("PhotoTable.vala:812: %s", _tmp46_);
+#line 790 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_error_free0 (err);
-#line 5957 "PhotoTable.c"
+#line 5996 "PhotoTable.c"
 	}
 	__finally15:
-#line 783 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 790 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 783 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 790 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_clear_error (&_inner_error_);
-#line 783 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 790 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return NULL;
-#line 5966 "PhotoTable.c"
+#line 6005 "PhotoTable.c"
 }
 
 
@@ -6003,15 +6042,15 @@ gchar* photo_table_unmarshall_all_transformations (GeeHashMap* transformations) 
 	const gchar* _tmp43_ = NULL;
 	gint _tmp44_ = 0;
 	gint _tmp45_ = 0;
-#line 809 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 816 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail ((transformations == NULL) || GEE_IS_HASH_MAP (transformations), NULL);
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = transformations;
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp1_ == NULL) {
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = TRUE;
-#line 5993 "PhotoTable.c"
+#line 6032 "PhotoTable.c"
 	} else {
 		GeeHashMap* _tmp2_ = NULL;
 		GeeSet* _tmp3_ = NULL;
@@ -6019,37 +6058,37 @@ gchar* photo_table_unmarshall_all_transformations (GeeHashMap* transformations) 
 		GeeSet* _tmp5_ = NULL;
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp2_ = transformations;
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp3_ = gee_abstract_map_get_keys (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GEE_TYPE_MAP, GeeMap));
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp4_ = _tmp3_;
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp5_ = _tmp4_;
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp6_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp7_ = _tmp6_;
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = _tmp7_ == 0;
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_object_unref0 (_tmp5_);
-#line 6017 "PhotoTable.c"
+#line 6056 "PhotoTable.c"
 	}
-#line 810 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 817 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp0_) {
-#line 811 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = NULL;
-#line 811 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 6025 "PhotoTable.c"
+#line 6064 "PhotoTable.c"
 	}
-#line 813 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 820 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = g_key_file_new ();
-#line 813 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 820 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	keyfile = _tmp8_;
-#line 6031 "PhotoTable.c"
+#line 6070 "PhotoTable.c"
 	{
 		GeeIterator* _object_it = NULL;
 		GeeHashMap* _tmp9_ = NULL;
@@ -6058,25 +6097,25 @@ gchar* photo_table_unmarshall_all_transformations (GeeHashMap* transformations) 
 		GeeSet* _tmp12_ = NULL;
 		GeeIterator* _tmp13_ = NULL;
 		GeeIterator* _tmp14_ = NULL;
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp9_ = transformations;
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp10_ = gee_abstract_map_get_keys (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GEE_TYPE_MAP, GeeMap));
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp11_ = _tmp10_;
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp12_ = _tmp11_;
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp13_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp14_ = _tmp13_;
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_object_unref0 (_tmp12_);
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_object_it = _tmp14_;
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		while (TRUE) {
-#line 6058 "PhotoTable.c"
+#line 6097 "PhotoTable.c"
 			GeeIterator* _tmp15_ = NULL;
 			gboolean _tmp16_ = FALSE;
 			gchar* object = NULL;
@@ -6086,31 +6125,31 @@ gchar* photo_table_unmarshall_all_transformations (GeeHashMap* transformations) 
 			GeeHashMap* _tmp19_ = NULL;
 			const gchar* _tmp20_ = NULL;
 			gpointer _tmp21_ = NULL;
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp15_ = _object_it;
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp16_ = gee_iterator_next (_tmp15_);
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (!_tmp16_) {
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				break;
-#line 6076 "PhotoTable.c"
+#line 6115 "PhotoTable.c"
 			}
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp17_ = _object_it;
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp18_ = gee_iterator_get (_tmp17_);
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			object = (gchar*) _tmp18_;
-#line 816 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 823 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp19_ = transformations;
-#line 816 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 823 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp20_ = object;
-#line 816 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 823 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp21_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp20_);
-#line 816 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 823 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			map = (KeyValueMap*) _tmp21_;
-#line 6092 "PhotoTable.c"
+#line 6131 "PhotoTable.c"
 			{
 				GeeIterator* _key_it = NULL;
 				KeyValueMap* _tmp22_ = NULL;
@@ -6118,23 +6157,23 @@ gchar* photo_table_unmarshall_all_transformations (GeeHashMap* transformations) 
 				GeeSet* _tmp24_ = NULL;
 				GeeIterator* _tmp25_ = NULL;
 				GeeIterator* _tmp26_ = NULL;
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp22_ = map;
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp23_ = key_value_map_get_keys (_tmp22_);
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp24_ = _tmp23_;
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp25_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp26_ = _tmp25_;
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_object_unref0 (_tmp24_);
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_key_it = _tmp26_;
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				while (TRUE) {
-#line 6116 "PhotoTable.c"
+#line 6155 "PhotoTable.c"
 					GeeIterator* _tmp27_ = NULL;
 					gboolean _tmp28_ = FALSE;
 					gchar* key = NULL;
@@ -6149,91 +6188,91 @@ gchar* photo_table_unmarshall_all_transformations (GeeHashMap* transformations) 
 					const gchar* _tmp36_ = NULL;
 					const gchar* _tmp37_ = NULL;
 					const gchar* _tmp38_ = NULL;
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp27_ = _key_it;
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp28_ = gee_iterator_next (_tmp27_);
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					if (!_tmp28_) {
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 						break;
-#line 6139 "PhotoTable.c"
+#line 6178 "PhotoTable.c"
 					}
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp29_ = _key_it;
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp30_ = gee_iterator_get (_tmp29_);
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					key = (gchar*) _tmp30_;
-#line 819 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 826 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp31_ = map;
-#line 819 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 826 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp32_ = key;
-#line 819 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 826 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp33_ = key_value_map_get_string (_tmp31_, _tmp32_, NULL);
-#line 819 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 826 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					value = _tmp33_;
-#line 820 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 827 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp34_ = value;
-#line 820 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 827 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_vala_assert (_tmp34_ != NULL, "value != null");
-#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 829 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp35_ = keyfile;
-#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 829 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp36_ = object;
-#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 829 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp37_ = key;
-#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 829 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_tmp38_ = value;
-#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 829 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					g_key_file_set_string (_tmp35_, _tmp36_, _tmp37_, _tmp38_);
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_g_free0 (value);
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_g_free0 (key);
-#line 6173 "PhotoTable.c"
+#line 6212 "PhotoTable.c"
 				}
-#line 818 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 825 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_object_unref0 (_key_it);
-#line 6177 "PhotoTable.c"
+#line 6216 "PhotoTable.c"
 			}
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_key_value_map_unref0 (map);
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (object);
-#line 6183 "PhotoTable.c"
+#line 6222 "PhotoTable.c"
 		}
-#line 815 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 822 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_object_unref0 (_object_it);
-#line 6187 "PhotoTable.c"
+#line 6226 "PhotoTable.c"
 	}
-#line 827 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 834 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp39_ = keyfile;
-#line 827 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 834 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp41_ = g_key_file_to_data (_tmp39_, &_tmp40_, NULL);
-#line 827 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 834 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	length = _tmp40_;
-#line 827 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 834 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	unmarshalled = _tmp41_;
-#line 828 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 835 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp42_ = unmarshalled;
-#line 828 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 835 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp42_ != NULL, "unmarshalled != null");
-#line 829 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 836 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp43_ = unmarshalled;
-#line 829 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 836 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp44_ = strlen (_tmp43_);
-#line 829 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 836 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp45_ = _tmp44_;
-#line 829 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 836 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp45_ > 0, "unmarshalled.length > 0");
-#line 831 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 838 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = unmarshalled;
-#line 831 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 838 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_key_file_unref0 (keyfile);
-#line 831 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 838 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 6215 "PhotoTable.c"
+#line 6254 "PhotoTable.c"
 }
 
 
@@ -6246,19 +6285,19 @@ gboolean photo_table_set_transformation (PhotoTable* self, PhotoID* photo_id, Ke
 	const gchar* _tmp38_ = NULL;
 	gboolean _tmp39_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 834 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 841 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 834 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 841 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 834 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 841 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_KEY_VALUE_MAP (map), FALSE);
-#line 835 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 842 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 835 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 842 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = photo_table_get_raw_transformations (self, &_tmp0_);
-#line 835 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 842 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	trans = _tmp1_;
-#line 6240 "PhotoTable.c"
+#line 6279 "PhotoTable.c"
 	{
 		GKeyFile* keyfile = NULL;
 		GKeyFile* _tmp2_ = NULL;
@@ -6274,15 +6313,15 @@ gboolean photo_table_set_transformation (PhotoTable* self, PhotoID* photo_id, Ke
 		const gchar* _tmp33_ = NULL;
 		gint _tmp34_ = 0;
 		gint _tmp35_ = 0;
-#line 838 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp2_ = g_key_file_new ();
-#line 838 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		keyfile = _tmp2_;
-#line 839 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 846 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp3_ = trans;
-#line 839 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 846 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp3_ != NULL) {
-#line 6264 "PhotoTable.c"
+#line 6303 "PhotoTable.c"
 			gboolean _tmp4_ = FALSE;
 			GKeyFile* _tmp5_ = NULL;
 			const gchar* _tmp6_ = NULL;
@@ -6290,60 +6329,60 @@ gboolean photo_table_set_transformation (PhotoTable* self, PhotoID* photo_id, Ke
 			gint _tmp8_ = 0;
 			gint _tmp9_ = 0;
 			gboolean _tmp10_ = FALSE;
-#line 840 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp5_ = keyfile;
-#line 840 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp6_ = trans;
-#line 840 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp7_ = trans;
-#line 840 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp8_ = strlen (_tmp7_);
-#line 840 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp9_ = _tmp8_;
-#line 840 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp10_ = g_key_file_load_from_data (_tmp5_, _tmp6_, (gsize) _tmp9_, G_KEY_FILE_NONE, &_inner_error_);
-#line 840 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp4_ = _tmp10_;
-#line 840 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 840 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_key_file_unref0 (keyfile);
-#line 6290 "PhotoTable.c"
+#line 6329 "PhotoTable.c"
 				goto __catch16_g_error;
 			}
-#line 840 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (!_tmp4_) {
-#line 841 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 848 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				result = FALSE;
-#line 841 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 848 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_key_file_unref0 (keyfile);
-#line 841 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 848 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_free0 (trans);
-#line 841 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 848 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				return result;
-#line 6303 "PhotoTable.c"
+#line 6342 "PhotoTable.c"
 			}
 		}
-#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 851 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp11_ = map;
-#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 851 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp12_ = key_value_map_get_keys (_tmp11_);
-#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 851 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		keys = _tmp12_;
-#line 6312 "PhotoTable.c"
+#line 6351 "PhotoTable.c"
 		{
 			GeeIterator* _key_it = NULL;
 			GeeSet* _tmp13_ = NULL;
 			GeeIterator* _tmp14_ = NULL;
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp13_ = keys;
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp14_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_key_it = _tmp14_;
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			while (TRUE) {
-#line 6325 "PhotoTable.c"
+#line 6364 "PhotoTable.c"
 				GeeIterator* _tmp15_ = NULL;
 				gboolean _tmp16_ = FALSE;
 				gchar* key = NULL;
@@ -6360,131 +6399,131 @@ gboolean photo_table_set_transformation (PhotoTable* self, PhotoID* photo_id, Ke
 				gchar* _tmp26_ = NULL;
 				const gchar* _tmp27_ = NULL;
 				const gchar* _tmp28_ = NULL;
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp15_ = _key_it;
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp16_ = gee_iterator_next (_tmp15_);
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				if (!_tmp16_) {
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					break;
-#line 6350 "PhotoTable.c"
+#line 6389 "PhotoTable.c"
 				}
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp17_ = _key_it;
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp18_ = gee_iterator_get (_tmp17_);
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				key = (gchar*) _tmp18_;
-#line 846 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 853 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp19_ = map;
-#line 846 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 853 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp20_ = key;
-#line 846 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 853 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp21_ = key_value_map_get_string (_tmp19_, _tmp20_, NULL);
-#line 846 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 853 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				value = _tmp21_;
-#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 854 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp22_ = value;
-#line 847 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 854 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_vala_assert (_tmp22_ != NULL, "value != null");
-#line 849 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 856 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp23_ = keyfile;
-#line 849 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 856 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp24_ = map;
-#line 849 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 856 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp25_ = key_value_map_get_group (_tmp24_);
-#line 849 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 856 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp26_ = _tmp25_;
-#line 849 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 856 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp27_ = key;
-#line 849 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 856 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp28_ = value;
-#line 849 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 856 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_key_file_set_string (_tmp23_, _tmp26_, _tmp27_, _tmp28_);
-#line 849 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 856 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_free0 (_tmp26_);
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_free0 (value);
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_free0 (key);
-#line 6390 "PhotoTable.c"
+#line 6429 "PhotoTable.c"
 			}
-#line 845 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 852 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_object_unref0 (_key_it);
-#line 6394 "PhotoTable.c"
+#line 6433 "PhotoTable.c"
 		}
-#line 853 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 860 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp29_ = keyfile;
-#line 853 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 860 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp31_ = g_key_file_to_data (_tmp29_, &_tmp30_, NULL);
-#line 853 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 860 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		length = _tmp30_;
-#line 853 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 860 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (trans);
-#line 853 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 860 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		trans = _tmp31_;
-#line 854 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 861 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp32_ = trans;
-#line 854 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 861 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_vala_assert (_tmp32_ != NULL, "trans != null");
-#line 855 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 862 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp33_ = trans;
-#line 855 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 862 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp34_ = strlen (_tmp33_);
-#line 855 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 862 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp35_ = _tmp34_;
-#line 855 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 862 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_vala_assert (_tmp35_ > 0, "trans.length > 0");
-#line 837 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_object_unref0 (keys);
-#line 837 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_key_file_unref0 (keyfile);
-#line 6422 "PhotoTable.c"
+#line 6461 "PhotoTable.c"
 	}
 	goto __finally16;
 	__catch16_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp36_ = NULL;
-#line 837 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		err = _inner_error_;
-#line 837 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_inner_error_ = NULL;
-#line 857 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 864 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp36_ = err->message;
-#line 857 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-		g_error ("PhotoTable.vala:857: %s", _tmp36_);
-#line 837 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 864 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+		g_error ("PhotoTable.vala:864: %s", _tmp36_);
+#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_error_free0 (err);
-#line 6439 "PhotoTable.c"
+#line 6478 "PhotoTable.c"
 	}
 	__finally16:
-#line 837 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 837 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (trans);
-#line 837 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 837 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		g_clear_error (&_inner_error_);
-#line 837 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 844 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return FALSE;
-#line 6452 "PhotoTable.c"
+#line 6491 "PhotoTable.c"
 	}
-#line 860 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 867 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp37_ = *photo_id;
-#line 860 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 867 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp38_ = trans;
-#line 860 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 867 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp39_ = photo_table_set_raw_transformations (self, &_tmp37_, _tmp38_);
-#line 860 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 867 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp39_;
-#line 860 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 867 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (trans);
-#line 860 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 867 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 6466 "PhotoTable.c"
+#line 6505 "PhotoTable.c"
 }
 
 
@@ -6498,29 +6537,29 @@ gboolean photo_table_remove_transformation (PhotoTable* self, PhotoID* photo_id,
 	const gchar* _tmp22_ = NULL;
 	gboolean _tmp23_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 863 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 863 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 863 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (object != NULL, FALSE);
-#line 864 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 871 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 864 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 871 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = photo_table_get_raw_transformations (self, &_tmp0_);
-#line 864 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 871 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	trans = _tmp1_;
-#line 865 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 872 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = trans;
-#line 865 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 872 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp2_ == NULL) {
-#line 866 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 873 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = TRUE;
-#line 866 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 873 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (trans);
-#line 866 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 873 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 6502 "PhotoTable.c"
+#line 6541 "PhotoTable.c"
 	}
 	{
 		GKeyFile* keyfile = NULL;
@@ -6542,135 +6581,135 @@ gboolean photo_table_remove_transformation (PhotoTable* self, PhotoID* photo_id,
 		gsize _tmp17_ = 0UL;
 		gchar* _tmp18_ = NULL;
 		const gchar* _tmp19_ = NULL;
-#line 869 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 876 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp3_ = g_key_file_new ();
-#line 869 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 876 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		keyfile = _tmp3_;
-#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 877 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp5_ = keyfile;
-#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 877 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp6_ = trans;
-#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 877 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp7_ = trans;
-#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 877 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp8_ = strlen (_tmp7_);
-#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 877 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp9_ = _tmp8_;
-#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 877 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp10_ = g_key_file_load_from_data (_tmp5_, _tmp6_, (gsize) _tmp9_, G_KEY_FILE_NONE, &_inner_error_);
-#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 877 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp4_ = _tmp10_;
-#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 877 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 877 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_key_file_unref0 (keyfile);
-#line 6546 "PhotoTable.c"
+#line 6585 "PhotoTable.c"
 			goto __catch17_g_error;
 		}
-#line 870 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 877 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (!_tmp4_) {
-#line 871 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 878 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			result = FALSE;
-#line 871 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 878 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_key_file_unref0 (keyfile);
-#line 871 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 878 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (trans);
-#line 871 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 878 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return result;
-#line 6559 "PhotoTable.c"
+#line 6598 "PhotoTable.c"
 		}
-#line 873 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 880 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp11_ = keyfile;
-#line 873 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 880 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp12_ = object;
-#line 873 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 880 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp13_ = g_key_file_has_group (_tmp11_, _tmp12_);
-#line 873 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 880 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (!_tmp13_) {
-#line 874 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 881 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			result = TRUE;
-#line 874 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 881 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_key_file_unref0 (keyfile);
-#line 874 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 881 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (trans);
-#line 874 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 881 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return result;
-#line 6577 "PhotoTable.c"
+#line 6616 "PhotoTable.c"
 		}
-#line 876 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 883 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp14_ = keyfile;
-#line 876 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 883 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp15_ = object;
-#line 876 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 883 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		g_key_file_remove_group (_tmp14_, _tmp15_, &_inner_error_);
-#line 876 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 883 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 876 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 883 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_key_file_unref0 (keyfile);
-#line 6589 "PhotoTable.c"
+#line 6628 "PhotoTable.c"
 			goto __catch17_g_error;
 		}
-#line 879 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 886 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp16_ = keyfile;
-#line 879 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 886 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp18_ = g_key_file_to_data (_tmp16_, &_tmp17_, NULL);
-#line 879 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 886 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		length = _tmp17_;
-#line 879 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 886 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (trans);
-#line 879 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 886 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		trans = _tmp18_;
-#line 880 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 887 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp19_ = trans;
-#line 880 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 887 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_vala_assert (_tmp19_ != NULL, "trans != null");
-#line 868 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 875 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_key_file_unref0 (keyfile);
-#line 6608 "PhotoTable.c"
+#line 6647 "PhotoTable.c"
 	}
 	goto __finally17;
 	__catch17_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp20_ = NULL;
-#line 868 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 875 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		err = _inner_error_;
-#line 868 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 875 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_inner_error_ = NULL;
-#line 882 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 889 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp20_ = err->message;
-#line 882 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-		g_error ("PhotoTable.vala:882: %s", _tmp20_);
-#line 868 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 889 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+		g_error ("PhotoTable.vala:889: %s", _tmp20_);
+#line 875 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_error_free0 (err);
-#line 6625 "PhotoTable.c"
+#line 6664 "PhotoTable.c"
 	}
 	__finally17:
-#line 868 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 875 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 868 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 875 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (trans);
-#line 868 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 875 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 868 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 875 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		g_clear_error (&_inner_error_);
-#line 868 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 875 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return FALSE;
-#line 6638 "PhotoTable.c"
+#line 6677 "PhotoTable.c"
 	}
-#line 885 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 892 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp21_ = *photo_id;
-#line 885 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 892 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp22_ = trans;
-#line 885 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 892 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp23_ = photo_table_set_raw_transformations (self, &_tmp21_, _tmp22_);
-#line 885 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 892 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp23_;
-#line 885 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 892 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (trans);
-#line 885 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 892 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 6652 "PhotoTable.c"
+#line 6691 "PhotoTable.c"
 }
 
 
@@ -6683,39 +6722,39 @@ gboolean photo_table_remove_all_transformations (PhotoTable* self, PhotoID* phot
 	PhotoID _tmp4_ = {0};
 	gint64 _tmp5_ = 0LL;
 	gboolean _tmp6_ = FALSE;
-#line 888 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 895 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 888 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 895 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (photo_id != NULL, FALSE);
-#line 889 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 896 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *photo_id;
-#line 889 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 896 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = photo_table_get_raw_transformations (self, &_tmp0_);
-#line 889 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 896 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = _tmp1_;
-#line 889 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 896 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = _tmp2_ == NULL;
-#line 889 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 896 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp2_);
-#line 889 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 896 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp3_) {
-#line 890 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 897 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = FALSE;
-#line 890 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 897 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 6685 "PhotoTable.c"
+#line 6724 "PhotoTable.c"
 	}
-#line 892 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = *photo_id;
-#line 892 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = _tmp4_.id;
-#line 892 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = database_table_update_text_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp5_, "transformations", "");
-#line 892 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp6_;
-#line 892 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 6697 "PhotoTable.c"
+#line 6736 "PhotoTable.c"
 }
 
 
@@ -6744,83 +6783,83 @@ static sqlite3_stmt* photo_table_get_duplicate_stmt (PhotoTable* self, GFile* fi
 	gboolean _tmp62_ = FALSE;
 	gboolean _tmp63_ = FALSE;
 	const gchar* _tmp64_ = NULL;
-#line 897 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 904 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), NULL);
-#line 897 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 904 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail ((file == NULL) || G_IS_FILE (file), NULL);
-#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 906 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = file;
-#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 906 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp2_ != NULL) {
-#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 906 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp1_ = TRUE;
-#line 6736 "PhotoTable.c"
+#line 6775 "PhotoTable.c"
 	} else {
 		const gchar* _tmp3_ = NULL;
-#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 906 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp3_ = thumbnail_md5;
-#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 906 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp1_ = _tmp3_ != NULL;
-#line 6743 "PhotoTable.c"
+#line 6782 "PhotoTable.c"
 	}
-#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 906 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp1_) {
-#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 906 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = TRUE;
-#line 6749 "PhotoTable.c"
+#line 6788 "PhotoTable.c"
 	} else {
 		const gchar* _tmp4_ = NULL;
-#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 906 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp4_ = md5;
-#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 906 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = _tmp4_ != NULL;
-#line 6756 "PhotoTable.c"
+#line 6795 "PhotoTable.c"
 	}
-#line 899 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 906 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp0_, "file != null || thumbnail_md5 != null || md5 != null");
-#line 901 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 908 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = g_strdup ("SELECT id FROM PhotoTable WHERE");
-#line 901 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 908 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	sql = _tmp5_;
-#line 902 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 909 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	first = TRUE;
-#line 904 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 911 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = file;
-#line 904 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 911 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp6_ != NULL) {
-#line 6770 "PhotoTable.c"
+#line 6809 "PhotoTable.c"
 		const gchar* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
-#line 905 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 912 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp7_ = sql;
-#line 905 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 912 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp8_ = g_strconcat (_tmp7_, " filename=?", NULL);
-#line 905 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 912 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (sql);
-#line 905 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 912 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		sql = _tmp8_;
-#line 906 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 913 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		first = FALSE;
-#line 6783 "PhotoTable.c"
+#line 6822 "PhotoTable.c"
 	}
-#line 909 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 916 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = thumbnail_md5;
-#line 909 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 916 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp10_ != NULL) {
-#line 909 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 916 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp9_ = TRUE;
-#line 6791 "PhotoTable.c"
+#line 6830 "PhotoTable.c"
 	} else {
 		const gchar* _tmp11_ = NULL;
-#line 909 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 916 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp11_ = md5;
-#line 909 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 916 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp9_ = _tmp11_ != NULL;
-#line 6798 "PhotoTable.c"
+#line 6837 "PhotoTable.c"
 	}
-#line 909 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 916 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp9_) {
-#line 6802 "PhotoTable.c"
+#line 6841 "PhotoTable.c"
 		gboolean _tmp12_ = FALSE;
 		const gchar* _tmp17_ = NULL;
 		const gchar* _tmp20_ = NULL;
@@ -6829,148 +6868,148 @@ static sqlite3_stmt* photo_table_get_duplicate_stmt (PhotoTable* self, GFile* fi
 		PhotoFileFormat _tmp28_ = 0;
 		const gchar* _tmp31_ = NULL;
 		gchar* _tmp32_ = NULL;
-#line 910 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 917 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp12_ = first;
-#line 910 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 917 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp12_) {
-#line 6815 "PhotoTable.c"
+#line 6854 "PhotoTable.c"
 			const gchar* _tmp13_ = NULL;
 			gchar* _tmp14_ = NULL;
-#line 911 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 918 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp13_ = sql;
-#line 911 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 918 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp14_ = g_strconcat (_tmp13_, " ((", NULL);
-#line 911 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 918 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (sql);
-#line 911 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 918 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			sql = _tmp14_;
-#line 6826 "PhotoTable.c"
+#line 6865 "PhotoTable.c"
 		} else {
 			const gchar* _tmp15_ = NULL;
 			gchar* _tmp16_ = NULL;
-#line 913 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 920 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp15_ = sql;
-#line 913 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 920 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp16_ = g_strconcat (_tmp15_, " OR ((", NULL);
-#line 913 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 920 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (sql);
-#line 913 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 920 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			sql = _tmp16_;
-#line 6838 "PhotoTable.c"
+#line 6877 "PhotoTable.c"
 		}
-#line 914 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 921 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		first = FALSE;
-#line 916 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 923 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp17_ = thumbnail_md5;
-#line 916 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 923 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp17_ != NULL) {
-#line 6846 "PhotoTable.c"
+#line 6885 "PhotoTable.c"
 			const gchar* _tmp18_ = NULL;
 			gchar* _tmp19_ = NULL;
-#line 917 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 924 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp18_ = sql;
-#line 917 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 924 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp19_ = g_strconcat (_tmp18_, " thumbnail_md5=?", NULL);
-#line 917 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 924 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (sql);
-#line 917 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 924 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			sql = _tmp19_;
-#line 6857 "PhotoTable.c"
+#line 6896 "PhotoTable.c"
 		}
-#line 919 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 926 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp20_ = md5;
-#line 919 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 926 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp20_ != NULL) {
-#line 6863 "PhotoTable.c"
+#line 6902 "PhotoTable.c"
 			const gchar* _tmp21_ = NULL;
-#line 920 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 927 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp21_ = thumbnail_md5;
-#line 920 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 927 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (_tmp21_ == NULL) {
-#line 6869 "PhotoTable.c"
+#line 6908 "PhotoTable.c"
 				const gchar* _tmp22_ = NULL;
 				gchar* _tmp23_ = NULL;
-#line 921 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 928 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp22_ = sql;
-#line 921 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 928 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp23_ = g_strconcat (_tmp22_, " md5=?", NULL);
-#line 921 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 928 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_free0 (sql);
-#line 921 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 928 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				sql = _tmp23_;
-#line 6880 "PhotoTable.c"
+#line 6919 "PhotoTable.c"
 			} else {
 				const gchar* _tmp24_ = NULL;
 				gchar* _tmp25_ = NULL;
-#line 923 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 930 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp24_ = sql;
-#line 923 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 930 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_tmp25_ = g_strconcat (_tmp24_, " OR md5=?", NULL);
-#line 923 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 930 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_free0 (sql);
-#line 923 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 930 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				sql = _tmp25_;
-#line 6892 "PhotoTable.c"
+#line 6931 "PhotoTable.c"
 			}
 		}
-#line 926 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 933 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp26_ = sql;
-#line 926 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 933 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp27_ = g_strconcat (_tmp26_, ")", NULL);
-#line 926 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 933 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (sql);
-#line 926 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 933 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		sql = _tmp27_;
-#line 928 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 935 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp28_ = file_format;
-#line 928 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 935 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp28_ != PHOTO_FILE_FORMAT_UNKNOWN) {
-#line 6907 "PhotoTable.c"
+#line 6946 "PhotoTable.c"
 			const gchar* _tmp29_ = NULL;
 			gchar* _tmp30_ = NULL;
-#line 929 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 936 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp29_ = sql;
-#line 929 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 936 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp30_ = g_strconcat (_tmp29_, " AND file_format=?", NULL);
-#line 929 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 936 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (sql);
-#line 929 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 936 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			sql = _tmp30_;
-#line 6918 "PhotoTable.c"
+#line 6957 "PhotoTable.c"
 		}
-#line 931 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-		_tmp31_ = sql;
-#line 931 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-		_tmp32_ = g_strconcat (_tmp31_, ")", NULL);
-#line 931 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-		_g_free0 (sql);
-#line 931 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-		sql = _tmp32_;
-#line 6928 "PhotoTable.c"
-	}
-#line 935 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp33_ = database_table_db;
-#line 935 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp34_ = sql;
-#line 935 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp36_ = sqlite3_prepare_v2 (_tmp33_, _tmp34_, -1, &_tmp35_, NULL);
-#line 935 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_sqlite3_finalize0 (stmt);
-#line 935 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	stmt = _tmp35_;
-#line 935 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	res = _tmp36_;
-#line 936 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp37_ = res;
-#line 936 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_vala_assert (_tmp37_ == SQLITE_OK, "res == Sqlite.OK");
 #line 938 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+		_tmp31_ = sql;
+#line 938 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+		_tmp32_ = g_strconcat (_tmp31_, ")", NULL);
+#line 938 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+		_g_free0 (sql);
+#line 938 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+		sql = _tmp32_;
+#line 6967 "PhotoTable.c"
+	}
+#line 942 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp33_ = database_table_db;
+#line 942 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp34_ = sql;
+#line 942 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp36_ = sqlite3_prepare_v2 (_tmp33_, _tmp34_, -1, &_tmp35_, NULL);
+#line 942 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_sqlite3_finalize0 (stmt);
+#line 942 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	stmt = _tmp35_;
+#line 942 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	res = _tmp36_;
+#line 943 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp37_ = res;
+#line 943 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_vala_assert (_tmp37_ == SQLITE_OK, "res == Sqlite.OK");
+#line 945 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	col = 1;
-#line 940 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 947 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp38_ = file;
-#line 940 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 947 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp38_ != NULL) {
-#line 6952 "PhotoTable.c"
+#line 6991 "PhotoTable.c"
 		sqlite3_stmt* _tmp39_ = NULL;
 		gint _tmp40_ = 0;
 		GFile* _tmp41_ = NULL;
@@ -6978,33 +7017,33 @@ static sqlite3_stmt* photo_table_get_duplicate_stmt (PhotoTable* self, GFile* fi
 		GDestroyNotify _tmp43_ = NULL;
 		gint _tmp44_ = 0;
 		gint _tmp45_ = 0;
-#line 941 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 948 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp39_ = stmt;
-#line 941 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 948 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp40_ = col;
-#line 941 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 948 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		col = _tmp40_ + 1;
-#line 941 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 948 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp41_ = file;
-#line 941 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 948 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp42_ = g_file_get_path (_tmp41_);
-#line 941 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 948 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp43_ = g_free;
-#line 941 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 948 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp44_ = sqlite3_bind_text (_tmp39_, _tmp40_, _tmp42_, -1, _tmp43_);
-#line 941 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 948 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		res = _tmp44_;
-#line 942 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 949 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp45_ = res;
-#line 942 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 949 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_vala_assert (_tmp45_ == SQLITE_OK, "res == Sqlite.OK");
-#line 6980 "PhotoTable.c"
+#line 7019 "PhotoTable.c"
 	}
-#line 945 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 952 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp46_ = thumbnail_md5;
-#line 945 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 952 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp46_ != NULL) {
-#line 6986 "PhotoTable.c"
+#line 7025 "PhotoTable.c"
 		sqlite3_stmt* _tmp47_ = NULL;
 		gint _tmp48_ = 0;
 		const gchar* _tmp49_ = NULL;
@@ -7012,33 +7051,33 @@ static sqlite3_stmt* photo_table_get_duplicate_stmt (PhotoTable* self, GFile* fi
 		GDestroyNotify _tmp51_ = NULL;
 		gint _tmp52_ = 0;
 		gint _tmp53_ = 0;
-#line 946 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 953 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp47_ = stmt;
-#line 946 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 953 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp48_ = col;
-#line 946 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 953 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		col = _tmp48_ + 1;
-#line 946 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 953 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp49_ = thumbnail_md5;
-#line 946 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 953 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp50_ = g_strdup (_tmp49_);
-#line 946 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 953 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp51_ = g_free;
-#line 946 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 953 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp52_ = sqlite3_bind_text (_tmp47_, _tmp48_, _tmp50_, -1, _tmp51_);
-#line 946 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 953 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		res = _tmp52_;
-#line 947 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 954 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp53_ = res;
-#line 947 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 954 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_vala_assert (_tmp53_ == SQLITE_OK, "res == Sqlite.OK");
-#line 7014 "PhotoTable.c"
+#line 7053 "PhotoTable.c"
 	}
-#line 950 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 957 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp54_ = md5;
-#line 950 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 957 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp54_ != NULL) {
-#line 7020 "PhotoTable.c"
+#line 7059 "PhotoTable.c"
 		sqlite3_stmt* _tmp55_ = NULL;
 		gint _tmp56_ = 0;
 		const gchar* _tmp57_ = NULL;
@@ -7046,93 +7085,93 @@ static sqlite3_stmt* photo_table_get_duplicate_stmt (PhotoTable* self, GFile* fi
 		GDestroyNotify _tmp59_ = NULL;
 		gint _tmp60_ = 0;
 		gint _tmp61_ = 0;
-#line 951 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 958 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp55_ = stmt;
-#line 951 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 958 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp56_ = col;
-#line 951 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 958 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		col = _tmp56_ + 1;
-#line 951 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 958 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp57_ = md5;
-#line 951 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 958 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp58_ = g_strdup (_tmp57_);
-#line 951 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 958 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp59_ = g_free;
-#line 951 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 958 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp60_ = sqlite3_bind_text (_tmp55_, _tmp56_, _tmp58_, -1, _tmp59_);
-#line 951 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 958 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		res = _tmp60_;
-#line 952 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 959 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp61_ = res;
-#line 952 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 959 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_vala_assert (_tmp61_ == SQLITE_OK, "res == Sqlite.OK");
-#line 7048 "PhotoTable.c"
+#line 7087 "PhotoTable.c"
 	}
-#line 955 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 962 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp64_ = thumbnail_md5;
-#line 955 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 962 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp64_ != NULL) {
-#line 955 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 962 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp63_ = TRUE;
-#line 7056 "PhotoTable.c"
+#line 7095 "PhotoTable.c"
 	} else {
 		const gchar* _tmp65_ = NULL;
-#line 955 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 962 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp65_ = md5;
-#line 955 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 962 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp63_ = _tmp65_ != NULL;
-#line 7063 "PhotoTable.c"
+#line 7102 "PhotoTable.c"
 	}
-#line 955 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 962 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp63_) {
-#line 7067 "PhotoTable.c"
+#line 7106 "PhotoTable.c"
 		PhotoFileFormat _tmp66_ = 0;
-#line 955 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 962 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp66_ = file_format;
-#line 955 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 962 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp62_ = _tmp66_ != PHOTO_FILE_FORMAT_UNKNOWN;
-#line 7073 "PhotoTable.c"
+#line 7112 "PhotoTable.c"
 	} else {
-#line 955 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 962 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp62_ = FALSE;
-#line 7077 "PhotoTable.c"
+#line 7116 "PhotoTable.c"
 	}
-#line 955 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 962 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp62_) {
-#line 7081 "PhotoTable.c"
+#line 7120 "PhotoTable.c"
 		sqlite3_stmt* _tmp67_ = NULL;
 		gint _tmp68_ = 0;
 		PhotoFileFormat _tmp69_ = 0;
 		gint _tmp70_ = 0;
 		gint _tmp71_ = 0;
 		gint _tmp72_ = 0;
-#line 956 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 963 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp67_ = stmt;
-#line 956 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 963 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp68_ = col;
-#line 956 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 963 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		col = _tmp68_ + 1;
-#line 956 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 963 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp69_ = file_format;
-#line 956 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 963 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp70_ = photo_file_format_serialize (_tmp69_);
-#line 956 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 963 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp71_ = sqlite3_bind_int (_tmp67_, _tmp68_, _tmp70_);
-#line 956 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 963 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		res = _tmp71_;
-#line 957 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 964 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp72_ = res;
-#line 957 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 964 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_vala_assert (_tmp72_ == SQLITE_OK, "res == Sqlite.OK");
-#line 7106 "PhotoTable.c"
+#line 7145 "PhotoTable.c"
 	}
-#line 960 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 967 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = stmt;
-#line 960 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 967 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (sql);
-#line 960 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 967 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 7114 "PhotoTable.c"
+#line 7153 "PhotoTable.c"
 }
 
 
@@ -7148,85 +7187,85 @@ gboolean photo_table_has_duplicate (PhotoTable* self, GFile* file, const gchar* 
 	sqlite3_stmt* _tmp5_ = NULL;
 	gint _tmp6_ = 0;
 	gint _tmp7_ = 0;
-#line 963 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 970 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_PHOTO_TABLE (self), FALSE);
-#line 963 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 970 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail ((file == NULL) || G_IS_FILE (file), FALSE);
-#line 964 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 971 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = file;
-#line 964 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 971 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = thumbnail_md5;
-#line 964 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 971 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = md5;
-#line 964 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 971 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = file_format;
-#line 964 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 971 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = photo_table_get_duplicate_stmt (self, _tmp0_, _tmp1_, _tmp2_, _tmp3_);
-#line 964 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 971 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp4_;
-#line 965 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 972 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = stmt;
-#line 965 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 972 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = sqlite3_step (_tmp5_);
-#line 965 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 972 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp6_;
-#line 967 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 974 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = res;
-#line 967 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 974 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp7_ == SQLITE_DONE) {
-#line 969 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 976 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = FALSE;
-#line 969 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 976 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 969 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 976 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 7162 "PhotoTable.c"
+#line 7201 "PhotoTable.c"
 	} else {
 		gint _tmp8_ = 0;
-#line 970 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 977 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp8_ = res;
-#line 970 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 977 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp8_ == SQLITE_ROW) {
-#line 972 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 979 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			result = TRUE;
-#line 972 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 979 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_sqlite3_finalize0 (stmt);
-#line 972 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 979 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return result;
-#line 7175 "PhotoTable.c"
+#line 7214 "PhotoTable.c"
 		} else {
 			gint _tmp9_ = 0;
-#line 974 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 981 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp9_ = res;
-#line 974 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 981 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			database_table_fatal ("has_duplicate", _tmp9_);
-#line 976 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 983 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			result = FALSE;
-#line 976 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 983 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_sqlite3_finalize0 (stmt);
-#line 976 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 983 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return result;
-#line 7188 "PhotoTable.c"
+#line 7227 "PhotoTable.c"
 		}
 	}
-#line 963 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 970 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 7193 "PhotoTable.c"
+#line 7232 "PhotoTable.c"
 }
 
 
 static void _vala_array_add2 (PhotoID** array, int* length, int* size, const PhotoID* value) {
-#line 988 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if ((*length) == (*size)) {
-#line 988 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 988 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		*array = g_renew (PhotoID, *array, *size);
-#line 7204 "PhotoTable.c"
+#line 7243 "PhotoTable.c"
 	}
-#line 988 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	(*array)[(*length)++] = *value;
-#line 7208 "PhotoTable.c"
+#line 7247 "PhotoTable.c"
 }
 
 
@@ -7247,39 +7286,39 @@ PhotoID* photo_table_get_duplicate_ids (PhotoTable* self, GFile* file, const gch
 	gint _tmp7_ = 0;
 	PhotoID* _tmp15_ = NULL;
 	gint _tmp15__length1 = 0;
-#line 980 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	g_return_val_if_fail (IS_PHOTO_TABLE (self), NULL);
-#line 980 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	g_return_val_if_fail ((file == NULL) || G_IS_FILE (file), NULL);
-#line 982 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp0_ = file;
-#line 982 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp1_ = thumbnail_md5;
-#line 982 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp2_ = md5;
-#line 982 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp3_ = file_format;
-#line 982 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp4_ = photo_table_get_duplicate_stmt (self, _tmp0_, _tmp1_, _tmp2_, _tmp3_);
-#line 982 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	stmt = _tmp4_;
-#line 984 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp5_ = g_new0 (PhotoID, 0);
-#line 984 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	ids = _tmp5_;
-#line 984 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	ids_length1 = 0;
-#line 984 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_ids_size_ = ids_length1;
-#line 986 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp6_ = stmt;
-#line 986 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	_tmp7_ = sqlite3_step (_tmp6_);
-#line 986 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
-	res = _tmp7_;
 #line 987 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	g_return_val_if_fail (IS_PHOTO_TABLE (self), NULL);
+#line 987 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	g_return_val_if_fail ((file == NULL) || G_IS_FILE (file), NULL);
+#line 989 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp0_ = file;
+#line 989 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp1_ = thumbnail_md5;
+#line 989 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp2_ = md5;
+#line 989 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp3_ = file_format;
+#line 989 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp4_ = photo_table_get_duplicate_stmt (self, _tmp0_, _tmp1_, _tmp2_, _tmp3_);
+#line 989 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	stmt = _tmp4_;
+#line 991 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp5_ = g_new0 (PhotoID, 0);
+#line 991 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	ids = _tmp5_;
+#line 991 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	ids_length1 = 0;
+#line 991 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_ids_size_ = ids_length1;
+#line 993 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp6_ = stmt;
+#line 993 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	_tmp7_ = sqlite3_step (_tmp6_);
+#line 993 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+	res = _tmp7_;
+#line 994 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	while (TRUE) {
-#line 7261 "PhotoTable.c"
+#line 7300 "PhotoTable.c"
 		gint _tmp8_ = 0;
 		PhotoID* _tmp9_ = NULL;
 		gint _tmp9__length1 = 0;
@@ -7288,51 +7327,51 @@ PhotoID* photo_table_get_duplicate_ids (PhotoTable* self, GFile* file, const gch
 		PhotoID _tmp12_ = {0};
 		sqlite3_stmt* _tmp13_ = NULL;
 		gint _tmp14_ = 0;
-#line 987 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 994 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp8_ = res;
-#line 987 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 994 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (!(_tmp8_ == SQLITE_ROW)) {
-#line 987 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 994 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			break;
-#line 7276 "PhotoTable.c"
+#line 7315 "PhotoTable.c"
 		}
-#line 988 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp9_ = ids;
-#line 988 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp9__length1 = ids_length1;
-#line 988 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp10_ = stmt;
-#line 988 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp11_ = sqlite3_column_int64 (_tmp10_, 0);
-#line 988 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		photo_id_init (&_tmp12_, _tmp11_);
-#line 988 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_vala_array_add2 (&ids, &ids_length1, &_ids_size_, &_tmp12_);
-#line 989 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp13_ = stmt;
-#line 989 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp14_ = sqlite3_step (_tmp13_);
-#line 989 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		res = _tmp14_;
-#line 7296 "PhotoTable.c"
+#line 7335 "PhotoTable.c"
 	}
-#line 992 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 999 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = ids;
-#line 992 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 999 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15__length1 = ids_length1;
-#line 992 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 999 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (result_length1) {
-#line 992 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 999 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		*result_length1 = _tmp15__length1;
-#line 7306 "PhotoTable.c"
+#line 7345 "PhotoTable.c"
 	}
-#line 992 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 999 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp15_;
-#line 992 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 999 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 992 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 999 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 7314 "PhotoTable.c"
+#line 7353 "PhotoTable.c"
 }
 
 
@@ -7342,49 +7381,49 @@ void photo_table_update_backlinks (PhotoTable* self, PhotoID* photo_id, const gc
 	PhotoID _tmp3_ = {0};
 	gint64 _tmp4_ = 0LL;
 	GError * _inner_error_ = NULL;
-#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1002 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 995 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1002 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (photo_id != NULL);
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = backlinks;
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp1_ != NULL) {
-#line 7332 "PhotoTable.c"
+#line 7371 "PhotoTable.c"
 		const gchar* _tmp2_ = NULL;
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp2_ = backlinks;
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = _tmp2_;
-#line 7338 "PhotoTable.c"
+#line 7377 "PhotoTable.c"
 	} else {
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = "";
-#line 7342 "PhotoTable.c"
+#line 7381 "PhotoTable.c"
 	}
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = *photo_id;
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = _tmp3_.id;
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_update_text_by_id_2 (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp4_, "backlinks", _tmp0_, &_inner_error_);
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7358 "PhotoTable.c"
+#line 7397 "PhotoTable.c"
 		} else {
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 996 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1003 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7366 "PhotoTable.c"
+#line 7405 "PhotoTable.c"
 		}
 	}
 }
@@ -7399,50 +7438,50 @@ void photo_table_attach_editable (PhotoTable* self, PhotoRow* row, BackingPhotoI
 	PhotoRow* _tmp5_ = NULL;
 	BackingPhotoID _tmp6_ = {0};
 	GError * _inner_error_ = NULL;
-#line 999 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 999 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_ROW (row));
-#line 999 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (editable_id != NULL);
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = row;
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_->photo_id;
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = _tmp1_.id;
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = *editable_id;
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = _tmp3_.id;
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_update_int64_by_id_2 (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp2_, "editable_id", _tmp4_, &_inner_error_);
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7407 "PhotoTable.c"
+#line 7446 "PhotoTable.c"
 		} else {
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 1000 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1007 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7415 "PhotoTable.c"
+#line 7454 "PhotoTable.c"
 		}
 	}
-#line 1002 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1009 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = row;
-#line 1002 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1009 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = *editable_id;
-#line 1002 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1009 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_->editable_id = _tmp6_;
-#line 7424 "PhotoTable.c"
+#line 7463 "PhotoTable.c"
 }
 
 
@@ -7452,42 +7491,42 @@ void photo_table_detach_editable (PhotoTable* self, PhotoRow* row, GError** erro
 	gint64 _tmp2_ = 0LL;
 	PhotoRow* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1005 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 1005 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_ROW (row));
-#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1013 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = row;
-#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1013 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_->photo_id;
-#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1013 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = _tmp1_.id;
-#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1013 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_update_int64_by_id_2 (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp2_, "editable_id", BACKING_PHOTO_ID_INVALID, &_inner_error_);
-#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1013 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1013 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1013 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1013 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7454 "PhotoTable.c"
+#line 7493 "PhotoTable.c"
 		} else {
-#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1013 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1013 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 1006 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1013 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7462 "PhotoTable.c"
+#line 7501 "PhotoTable.c"
 		}
 	}
-#line 1008 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1015 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = row;
-#line 1008 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1015 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	backing_photo_id_init (&_tmp3_->editable_id, BACKING_PHOTO_ID_INVALID);
-#line 7469 "PhotoTable.c"
+#line 7508 "PhotoTable.c"
 }
 
 
@@ -7497,45 +7536,45 @@ void photo_table_set_metadata_dirty (PhotoTable* self, PhotoID* photo_id, gboole
 	PhotoID _tmp2_ = {0};
 	gint64 _tmp3_ = 0LL;
 	GError * _inner_error_ = NULL;
-#line 1011 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1018 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 1011 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1018 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (photo_id != NULL);
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = dirty;
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp1_) {
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = 1;
-#line 7489 "PhotoTable.c"
+#line 7528 "PhotoTable.c"
 	} else {
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp0_ = 0;
-#line 7493 "PhotoTable.c"
+#line 7532 "PhotoTable.c"
 	}
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = *photo_id;
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = _tmp2_.id;
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_update_int_by_id_2 (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp3_, "metadata_dirty", _tmp0_, &_inner_error_);
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7509 "PhotoTable.c"
+#line 7548 "PhotoTable.c"
 		} else {
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 1012 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7517 "PhotoTable.c"
+#line 7556 "PhotoTable.c"
 		}
 	}
 }
@@ -7559,175 +7598,175 @@ void photo_table_update_raw_development (PhotoTable* self, PhotoRow* row, RawDev
 	BackingPhotoID _tmp15_ = {0};
 	gint64 _tmp16_ = 0LL;
 	GError * _inner_error_ = NULL;
-#line 1015 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1022 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 1015 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1022 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_ROW (row));
-#line 1015 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1022 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (backing_photo_id != NULL);
-#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1026 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = rd;
-#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1026 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	switch (_tmp0_) {
-#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1026 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		case RAW_DEVELOPER_SHOTWELL:
-#line 7553 "PhotoTable.c"
+#line 7592 "PhotoTable.c"
 		{
 			gchar* _tmp1_ = NULL;
-#line 1021 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1028 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp1_ = g_strdup ("develop_shotwell_id");
-#line 1021 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1028 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (col);
-#line 1021 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1028 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			col = _tmp1_;
-#line 1022 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1029 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			break;
-#line 7564 "PhotoTable.c"
+#line 7603 "PhotoTable.c"
 		}
-#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1026 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		case RAW_DEVELOPER_CAMERA:
-#line 7568 "PhotoTable.c"
+#line 7607 "PhotoTable.c"
 		{
 			gchar* _tmp2_ = NULL;
-#line 1025 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1032 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp2_ = g_strdup ("develop_camera_id");
-#line 1025 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1032 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (col);
-#line 1025 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1032 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			col = _tmp2_;
-#line 1026 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1033 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			break;
-#line 7579 "PhotoTable.c"
+#line 7618 "PhotoTable.c"
 		}
-#line 1019 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1026 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		case RAW_DEVELOPER_EMBEDDED:
-#line 7583 "PhotoTable.c"
+#line 7622 "PhotoTable.c"
 		{
 			gchar* _tmp3_ = NULL;
-#line 1029 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1036 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp3_ = g_strdup ("develop_embedded_id");
-#line 1029 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1036 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (col);
-#line 1029 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1036 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			col = _tmp3_;
-#line 1030 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			break;
-#line 7594 "PhotoTable.c"
+#line 7633 "PhotoTable.c"
 		}
 		default:
 		{
-#line 1033 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_assert_not_reached ();
-#line 7600 "PhotoTable.c"
+#line 7639 "PhotoTable.c"
 		}
 	}
-#line 1036 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1043 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = row;
-#line 1036 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1043 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = _tmp4_->development_ids;
-#line 1036 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1043 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5__length1 = _tmp4_->development_ids_length1;
-#line 1036 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1043 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = rd;
-#line 1036 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1043 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = *backing_photo_id;
-#line 1036 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1043 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_[_tmp6_] = _tmp7_;
-#line 1036 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1043 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = _tmp5_[_tmp6_];
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = row;
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = _tmp9_->photo_id;
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = _tmp10_.id;
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = col;
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = *backing_photo_id;
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = _tmp13_.id;
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_update_int64_by_id_2 (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp11_, _tmp12_, _tmp14_, &_inner_error_);
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (col);
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7641 "PhotoTable.c"
+#line 7680 "PhotoTable.c"
 		} else {
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_g_free0 (col);
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 1037 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7651 "PhotoTable.c"
+#line 7690 "PhotoTable.c"
 		}
 	}
-#line 1039 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1046 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = *backing_photo_id;
-#line 1039 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1046 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = _tmp15_.id;
-#line 1039 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1046 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp16_ != BACKING_PHOTO_ID_INVALID) {
-#line 7660 "PhotoTable.c"
+#line 7699 "PhotoTable.c"
 		PhotoRow* _tmp17_ = NULL;
 		PhotoID _tmp18_ = {0};
 		gint64 _tmp19_ = 0LL;
 		RawDeveloper _tmp20_ = 0;
 		gchar* _tmp21_ = NULL;
 		gchar* _tmp22_ = NULL;
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp17_ = row;
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp18_ = _tmp17_->photo_id;
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp19_ = _tmp18_.id;
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp20_ = rd;
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp21_ = raw_developer_to_string (_tmp20_);
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp22_ = _tmp21_;
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_update_text_by_id_2 (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp19_, "developer", _tmp22_, &_inner_error_);
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_g_free0 (_tmp22_);
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_propagate_error (error, _inner_error_);
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_free0 (col);
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				return;
-#line 7693 "PhotoTable.c"
+#line 7732 "PhotoTable.c"
 			} else {
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_g_free0 (col);
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_clear_error (&_inner_error_);
-#line 1040 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1047 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				return;
-#line 7703 "PhotoTable.c"
+#line 7742 "PhotoTable.c"
 			}
 		}
 	}
-#line 1015 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1022 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (col);
-#line 7709 "PhotoTable.c"
+#line 7748 "PhotoTable.c"
 }
 
 
@@ -7736,35 +7775,35 @@ void photo_table_remove_development (PhotoTable* self, PhotoRow* row, RawDevelop
 	RawDeveloper _tmp1_ = 0;
 	BackingPhotoID _tmp2_ = {0};
 	GError * _inner_error_ = NULL;
-#line 1043 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1050 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_TABLE (self));
-#line 1043 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1050 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_PHOTO_ROW (row));
-#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1051 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = row;
-#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1051 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = rd;
-#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1051 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	backing_photo_id_init (&_tmp2_, BACKING_PHOTO_ID_INVALID);
-#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1051 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	photo_table_update_raw_development (self, _tmp0_, _tmp1_, &_tmp2_, &_inner_error_);
-#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1051 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1051 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1051 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1051 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7738 "PhotoTable.c"
+#line 7777 "PhotoTable.c"
 		} else {
-#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1051 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1051 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 1044 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1051 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 7746 "PhotoTable.c"
+#line 7785 "PhotoTable.c"
 		}
 	}
 }
@@ -7775,7 +7814,7 @@ static void photo_table_class_init (PhotoTableClass * klass) {
 	photo_table_parent_class = g_type_class_peek_parent (klass);
 #line 109 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	((DatabaseTableClass *) klass)->finalize = photo_table_finalize;
-#line 7757 "PhotoTable.c"
+#line 7796 "PhotoTable.c"
 }
 
 
@@ -7789,7 +7828,7 @@ static void photo_table_finalize (DatabaseTable* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PHOTO_TABLE, PhotoTable);
 #line 109 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	DATABASE_TABLE_CLASS (photo_table_parent_class)->finalize (obj);
-#line 7771 "PhotoTable.c"
+#line 7810 "PhotoTable.c"
 }
 
 
@@ -7807,58 +7846,58 @@ GType photo_table_get_type (void) {
 
 void backing_photo_id_init (BackingPhotoID *self, gint64 id) {
 	gint64 _tmp0_ = 0LL;
-#line 1064 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1071 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	memset (self, 0, sizeof (BackingPhotoID));
-#line 1065 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1072 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = id;
-#line 1065 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1072 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	(*self).id = _tmp0_;
-#line 7795 "PhotoTable.c"
+#line 7834 "PhotoTable.c"
 }
 
 
 gboolean backing_photo_id_is_invalid (BackingPhotoID *self) {
 	gboolean result = FALSE;
 	gint64 _tmp0_ = 0LL;
-#line 1069 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1076 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = (*self).id;
-#line 1069 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1076 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp0_ == BACKING_PHOTO_ID_INVALID;
-#line 1069 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1076 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 7808 "PhotoTable.c"
+#line 7847 "PhotoTable.c"
 }
 
 
 gboolean backing_photo_id_is_valid (BackingPhotoID *self) {
 	gboolean result = FALSE;
 	gint64 _tmp0_ = 0LL;
-#line 1073 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1080 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = (*self).id;
-#line 1073 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1080 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp0_ != BACKING_PHOTO_ID_INVALID;
-#line 1073 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1080 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 7821 "PhotoTable.c"
+#line 7860 "PhotoTable.c"
 }
 
 
 BackingPhotoID* backing_photo_id_dup (const BackingPhotoID* self) {
 	BackingPhotoID* dup;
-#line 1059 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1066 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	dup = g_new0 (BackingPhotoID, 1);
-#line 1059 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1066 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	memcpy (dup, self, sizeof (BackingPhotoID));
-#line 1059 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1066 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return dup;
-#line 7833 "PhotoTable.c"
+#line 7872 "PhotoTable.c"
 }
 
 
 void backing_photo_id_free (BackingPhotoID* self) {
-#line 1059 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1066 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_free (self);
-#line 7840 "PhotoTable.c"
+#line 7879 "PhotoTable.c"
 }
 
 
@@ -7882,37 +7921,37 @@ gboolean backing_photo_row_matches_file_info (BackingPhotoRow* self, GFileInfo* 
 	GFileInfo* _tmp4_ = NULL;
 	GTimeVal _tmp5_ = {0};
 	glong _tmp6_ = 0L;
-#line 1087 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1094 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_BACKING_PHOTO_ROW (self), FALSE);
-#line 1087 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1094 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (G_IS_FILE_INFO (info), FALSE);
-#line 1088 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1095 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = self->filesize;
-#line 1088 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1095 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = info;
-#line 1088 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1095 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = g_file_info_get_size (_tmp1_);
-#line 1088 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1095 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp0_ != _tmp2_) {
-#line 1089 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1096 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = FALSE;
-#line 1089 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1096 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 7880 "PhotoTable.c"
+#line 7919 "PhotoTable.c"
 	}
-#line 1091 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = self->timestamp;
-#line 1091 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = info;
-#line 1091 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_file_info_get_modification_time (_tmp4_, &_tmp5_);
-#line 1091 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = _tmp5_.tv_sec;
-#line 1091 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp3_ == ((time_t) _tmp6_);
-#line 1091 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 7894 "PhotoTable.c"
+#line 7933 "PhotoTable.c"
 }
 
 
@@ -7925,37 +7964,37 @@ gboolean backing_photo_row_is_touched (BackingPhotoRow* self, GFileInfo* info) {
 	GFileInfo* _tmp4_ = NULL;
 	GTimeVal _tmp5_ = {0};
 	glong _tmp6_ = 0L;
-#line 1094 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1101 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_BACKING_PHOTO_ROW (self), FALSE);
-#line 1094 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1101 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (G_IS_FILE_INFO (info), FALSE);
-#line 1095 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1102 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = self->filesize;
-#line 1095 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1102 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = info;
-#line 1095 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1102 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = g_file_info_get_size (_tmp1_);
-#line 1095 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1102 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp0_ != _tmp2_) {
-#line 1096 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1103 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = FALSE;
-#line 1096 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1103 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 7923 "PhotoTable.c"
+#line 7962 "PhotoTable.c"
 	}
-#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1105 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = self->timestamp;
-#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1105 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = info;
-#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1105 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_file_info_get_modification_time (_tmp4_, &_tmp5_);
-#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1105 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = _tmp5_.tv_sec;
-#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1105 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp3_ != ((time_t) _tmp6_);
-#line 1098 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1105 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 7937 "PhotoTable.c"
+#line 7976 "PhotoTable.c"
 }
 
 
@@ -7977,290 +8016,290 @@ void backing_photo_row_copy_from (BackingPhotoRow* self, BackingPhotoRow* from) 
 	Dimensions _tmp14_ = {0};
 	BackingPhotoRow* _tmp15_ = NULL;
 	Orientation _tmp16_ = 0;
-#line 1102 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1109 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_BACKING_PHOTO_ROW (self));
-#line 1102 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1109 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_BACKING_PHOTO_ROW (from));
-#line 1103 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1110 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = from;
-#line 1103 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1110 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_->id;
-#line 1103 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1110 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self->id = _tmp1_;
-#line 1104 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1111 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = from;
-#line 1104 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1111 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = _tmp2_->time_created;
-#line 1104 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1111 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self->time_created = _tmp3_;
-#line 1105 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1112 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = from;
-#line 1105 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1112 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = _tmp4_->filepath;
-#line 1105 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1112 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = g_strdup (_tmp5_);
-#line 1105 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1112 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (self->filepath);
-#line 1105 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1112 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self->filepath = _tmp6_;
-#line 1106 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1113 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = from;
-#line 1106 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1113 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = _tmp7_->filesize;
-#line 1106 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1113 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self->filesize = _tmp8_;
-#line 1107 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1114 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = from;
-#line 1107 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1114 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = _tmp9_->timestamp;
-#line 1107 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1114 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self->timestamp = _tmp10_;
-#line 1108 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1115 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = from;
-#line 1108 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1115 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = _tmp11_->file_format;
-#line 1108 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1115 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self->file_format = _tmp12_;
-#line 1109 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1116 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = from;
-#line 1109 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1116 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = _tmp13_->dim;
-#line 1109 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1116 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self->dim = _tmp14_;
-#line 1110 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1117 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = from;
-#line 1110 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1117 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = _tmp15_->original_orientation;
-#line 1110 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1117 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self->original_orientation = _tmp16_;
-#line 8015 "PhotoTable.c"
+#line 8054 "PhotoTable.c"
 }
 
 
 BackingPhotoRow* backing_photo_row_construct (GType object_type) {
 	BackingPhotoRow* self = NULL;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self = (BackingPhotoRow*) g_type_create_instance (object_type);
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return self;
-#line 8025 "PhotoTable.c"
+#line 8064 "PhotoTable.c"
 }
 
 
 BackingPhotoRow* backing_photo_row_new (void) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return backing_photo_row_construct (TYPE_BACKING_PHOTO_ROW);
-#line 8032 "PhotoTable.c"
+#line 8071 "PhotoTable.c"
 }
 
 
 static void value_backing_photo_row_init (GValue* value) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	value->data[0].v_pointer = NULL;
-#line 8039 "PhotoTable.c"
+#line 8078 "PhotoTable.c"
 }
 
 
 static void value_backing_photo_row_free_value (GValue* value) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (value->data[0].v_pointer) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		backing_photo_row_unref (value->data[0].v_pointer);
-#line 8048 "PhotoTable.c"
+#line 8087 "PhotoTable.c"
 	}
 }
 
 
 static void value_backing_photo_row_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (src_value->data[0].v_pointer) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		dest_value->data[0].v_pointer = backing_photo_row_ref (src_value->data[0].v_pointer);
-#line 8058 "PhotoTable.c"
+#line 8097 "PhotoTable.c"
 	} else {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 8062 "PhotoTable.c"
+#line 8101 "PhotoTable.c"
 	}
 }
 
 
 static gpointer value_backing_photo_row_peek_pointer (const GValue* value) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return value->data[0].v_pointer;
-#line 8070 "PhotoTable.c"
+#line 8109 "PhotoTable.c"
 }
 
 
 static gchar* value_backing_photo_row_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (collect_values[0].v_pointer) {
-#line 8077 "PhotoTable.c"
+#line 8116 "PhotoTable.c"
 		BackingPhotoRow* object;
 		object = collect_values[0].v_pointer;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 8084 "PhotoTable.c"
+#line 8123 "PhotoTable.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 8088 "PhotoTable.c"
+#line 8127 "PhotoTable.c"
 		}
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		value->data[0].v_pointer = backing_photo_row_ref (object);
-#line 8092 "PhotoTable.c"
+#line 8131 "PhotoTable.c"
 	} else {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		value->data[0].v_pointer = NULL;
-#line 8096 "PhotoTable.c"
+#line 8135 "PhotoTable.c"
 	}
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return NULL;
-#line 8100 "PhotoTable.c"
+#line 8139 "PhotoTable.c"
 }
 
 
 static gchar* value_backing_photo_row_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	BackingPhotoRow** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (!object_p) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 8111 "PhotoTable.c"
+#line 8150 "PhotoTable.c"
 	}
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (!value->data[0].v_pointer) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		*object_p = NULL;
-#line 8117 "PhotoTable.c"
+#line 8156 "PhotoTable.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		*object_p = value->data[0].v_pointer;
-#line 8121 "PhotoTable.c"
+#line 8160 "PhotoTable.c"
 	} else {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		*object_p = backing_photo_row_ref (value->data[0].v_pointer);
-#line 8125 "PhotoTable.c"
+#line 8164 "PhotoTable.c"
 	}
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return NULL;
-#line 8129 "PhotoTable.c"
+#line 8168 "PhotoTable.c"
 }
 
 
 GParamSpec* param_spec_backing_photo_row (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecBackingPhotoRow* spec;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_BACKING_PHOTO_ROW), NULL);
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return G_PARAM_SPEC (spec);
-#line 8143 "PhotoTable.c"
+#line 8182 "PhotoTable.c"
 }
 
 
 gpointer value_get_backing_photo_row (const GValue* value) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_BACKING_PHOTO_ROW), NULL);
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return value->data[0].v_pointer;
-#line 8152 "PhotoTable.c"
+#line 8191 "PhotoTable.c"
 }
 
 
 void value_set_backing_photo_row (GValue* value, gpointer v_object) {
 	BackingPhotoRow* old;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_BACKING_PHOTO_ROW));
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	old = value->data[0].v_pointer;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (v_object) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_BACKING_PHOTO_ROW));
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		value->data[0].v_pointer = v_object;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		backing_photo_row_ref (value->data[0].v_pointer);
-#line 8172 "PhotoTable.c"
+#line 8211 "PhotoTable.c"
 	} else {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		value->data[0].v_pointer = NULL;
-#line 8176 "PhotoTable.c"
+#line 8215 "PhotoTable.c"
 	}
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (old) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		backing_photo_row_unref (old);
-#line 8182 "PhotoTable.c"
+#line 8221 "PhotoTable.c"
 	}
 }
 
 
 void value_take_backing_photo_row (GValue* value, gpointer v_object) {
 	BackingPhotoRow* old;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_BACKING_PHOTO_ROW));
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	old = value->data[0].v_pointer;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (v_object) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_BACKING_PHOTO_ROW));
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		value->data[0].v_pointer = v_object;
-#line 8201 "PhotoTable.c"
+#line 8240 "PhotoTable.c"
 	} else {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		value->data[0].v_pointer = NULL;
-#line 8205 "PhotoTable.c"
+#line 8244 "PhotoTable.c"
 	}
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (old) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		backing_photo_row_unref (old);
-#line 8211 "PhotoTable.c"
+#line 8250 "PhotoTable.c"
 	}
 }
 
 
 static void backing_photo_row_class_init (BackingPhotoRowClass * klass) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	backing_photo_row_parent_class = g_type_class_peek_parent (klass);
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	((BackingPhotoRowClass *) klass)->finalize = backing_photo_row_finalize;
-#line 8221 "PhotoTable.c"
+#line 8260 "PhotoTable.c"
 }
 
 
 static void backing_photo_row_instance_init (BackingPhotoRow * self) {
-#line 1080 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1087 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self->filepath = NULL;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self->ref_count = 1;
-#line 8230 "PhotoTable.c"
+#line 8269 "PhotoTable.c"
 }
 
 
 static void backing_photo_row_finalize (BackingPhotoRow* obj) {
 	BackingPhotoRow * self;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BACKING_PHOTO_ROW, BackingPhotoRow);
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_signal_handlers_destroy (self);
-#line 1080 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1087 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (self->filepath);
-#line 8242 "PhotoTable.c"
+#line 8281 "PhotoTable.c"
 }
 
 
@@ -8281,24 +8320,24 @@ GType backing_photo_row_get_type (void) {
 gpointer backing_photo_row_ref (gpointer instance) {
 	BackingPhotoRow* self;
 	self = instance;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return instance;
-#line 8267 "PhotoTable.c"
+#line 8306 "PhotoTable.c"
 }
 
 
 void backing_photo_row_unref (gpointer instance) {
 	BackingPhotoRow* self;
 	self = instance;
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		BACKING_PHOTO_ROW_GET_CLASS (self)->finalize (self);
-#line 1077 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1084 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 8280 "PhotoTable.c"
+#line 8319 "PhotoTable.c"
 	}
 }
 
@@ -8314,54 +8353,54 @@ static BackingPhotoTable* backing_photo_table_construct (GType object_type) {
 	sqlite3_stmt* _tmp4_ = NULL;
 	gint _tmp5_ = 0;
 	gint _tmp6_ = 0;
-#line 1117 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1124 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self = (BackingPhotoTable*) database_table_construct (object_type);
-#line 1118 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1125 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_set_table_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), "BackingPhotoTable");
-#line 1121 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1128 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 1121 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1128 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "CREATE TABLE IF NOT EXISTS " "BackingPhotoTable " "(" "id INTEGER PRIMARY KEY, " "filepath TEXT UNIQUE NOT NULL, " "timestamp INTEGER, " "filesize INTEGER, " "width INTEGER, " "height INTEGER, " "original_orientation INTEGER, " "file_format INTEGER, " "time_created INTEGER " ")", -1, &_tmp1_, NULL);
-#line 1121 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1128 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 1121 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1128 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 1121 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1128 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 1134 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1141 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 1134 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1141 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1136 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1143 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 1136 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1143 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = sqlite3_step (_tmp4_);
-#line 1136 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1143 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp5_;
-#line 1137 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1144 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = res;
-#line 1137 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1144 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp6_ != SQLITE_DONE) {
-#line 8324 "PhotoTable.c"
+#line 8363 "PhotoTable.c"
 		gint _tmp7_ = 0;
-#line 1138 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1145 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp7_ = res;
-#line 1138 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1145 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_fatal ("create PhotoBackingTable", _tmp7_);
-#line 8330 "PhotoTable.c"
+#line 8369 "PhotoTable.c"
 	}
-#line 1117 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1124 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 1117 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1124 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return self;
-#line 8336 "PhotoTable.c"
+#line 8375 "PhotoTable.c"
 }
 
 
 static BackingPhotoTable* backing_photo_table_new (void) {
-#line 1117 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1124 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return backing_photo_table_construct (TYPE_BACKING_PHOTO_TABLE);
-#line 8343 "PhotoTable.c"
+#line 8382 "PhotoTable.c"
 }
 
 
@@ -8370,29 +8409,29 @@ BackingPhotoTable* backing_photo_table_get_instance (void) {
 	BackingPhotoTable* _tmp0_ = NULL;
 	BackingPhotoTable* _tmp2_ = NULL;
 	BackingPhotoTable* _tmp3_ = NULL;
-#line 1142 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1149 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = backing_photo_table_instance;
-#line 1142 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1149 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp0_ == NULL) {
-#line 8356 "PhotoTable.c"
+#line 8395 "PhotoTable.c"
 		BackingPhotoTable* _tmp1_ = NULL;
-#line 1143 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1150 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp1_ = backing_photo_table_new ();
-#line 1143 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1150 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_database_table_unref0 (backing_photo_table_instance);
-#line 1143 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1150 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		backing_photo_table_instance = _tmp1_;
-#line 8364 "PhotoTable.c"
+#line 8403 "PhotoTable.c"
 	}
-#line 1145 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1152 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = backing_photo_table_instance;
-#line 1145 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1152 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = _database_table_ref0 (_tmp2_);
-#line 1145 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1152 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = _tmp3_;
-#line 1145 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1152 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 8374 "PhotoTable.c"
+#line 8413 "PhotoTable.c"
 }
 
 
@@ -8458,205 +8497,205 @@ void backing_photo_table_add (BackingPhotoTable* self, BackingPhotoRow* state, G
 	BackingPhotoRow* _tmp56_ = NULL;
 	time_t _tmp57_ = 0;
 	GError * _inner_error_ = NULL;
-#line 1148 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1155 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_BACKING_PHOTO_TABLE (self));
-#line 1148 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1155 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_BACKING_PHOTO_ROW (state));
-#line 1150 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1157 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 1150 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1157 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "INSERT INTO BackingPhotoTable " "(filepath, timestamp, filesize, width, height, original_orientation, " "file_format, time_created) " "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", -1, &_tmp1_, NULL);
-#line 1150 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1157 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 1150 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1157 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 1150 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1157 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 1155 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1162 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 1155 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1162 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1157 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1164 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = now_sec ();
-#line 1157 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1164 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	time_created = (time_t) _tmp4_;
-#line 1159 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1166 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = stmt;
-#line 1159 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1166 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = state;
-#line 1159 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1166 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = _tmp6_->filepath;
-#line 1159 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1166 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = g_strdup (_tmp7_);
-#line 1159 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1166 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = g_free;
-#line 1159 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1166 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = sqlite3_bind_text (_tmp5_, 1, _tmp8_, -1, _tmp9_);
-#line 1159 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1166 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp10_;
-#line 1160 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1167 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = res;
-#line 1160 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1167 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp11_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1161 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1168 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = stmt;
-#line 1161 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1168 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = state;
-#line 1161 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1168 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = _tmp13_->timestamp;
-#line 1161 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1168 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = sqlite3_bind_int64 (_tmp12_, 2, (gint64) _tmp14_);
-#line 1161 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1168 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp15_;
-#line 1162 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1169 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = res;
-#line 1162 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1169 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp16_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1163 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1170 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp17_ = stmt;
-#line 1163 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1170 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp18_ = state;
-#line 1163 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1170 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp19_ = _tmp18_->filesize;
-#line 1163 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1170 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp20_ = sqlite3_bind_int64 (_tmp17_, 3, _tmp19_);
-#line 1163 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1170 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp20_;
-#line 1164 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1171 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp21_ = res;
-#line 1164 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1171 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp21_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1165 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp22_ = stmt;
-#line 1165 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp23_ = state;
-#line 1165 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp24_ = _tmp23_->dim;
-#line 1165 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp25_ = _tmp24_.width;
-#line 1165 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp26_ = sqlite3_bind_int (_tmp22_, 4, _tmp25_);
-#line 1165 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp26_;
-#line 1166 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp27_ = res;
-#line 1166 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp27_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1167 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp28_ = stmt;
-#line 1167 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp29_ = state;
-#line 1167 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp30_ = _tmp29_->dim;
-#line 1167 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp31_ = _tmp30_.height;
-#line 1167 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp32_ = sqlite3_bind_int (_tmp28_, 5, _tmp31_);
-#line 1167 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp32_;
-#line 1168 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1175 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp33_ = res;
-#line 1168 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1175 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp33_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1169 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp34_ = stmt;
-#line 1169 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp35_ = state;
-#line 1169 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp36_ = _tmp35_->original_orientation;
-#line 1169 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp37_ = sqlite3_bind_int (_tmp34_, 6, (gint) _tmp36_);
-#line 1169 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp37_;
-#line 1170 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1177 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp38_ = res;
-#line 1170 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1177 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp38_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1171 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp39_ = stmt;
-#line 1171 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp40_ = state;
-#line 1171 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp41_ = _tmp40_->file_format;
-#line 1171 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp42_ = photo_file_format_serialize (_tmp41_);
-#line 1171 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp43_ = sqlite3_bind_int (_tmp39_, 7, _tmp42_);
-#line 1171 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp43_;
-#line 1172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1179 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp44_ = res;
-#line 1172 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1179 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp44_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp45_ = stmt;
-#line 1173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp46_ = time_created;
-#line 1173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp47_ = sqlite3_bind_int64 (_tmp45_, 8, (gint64) _tmp46_);
-#line 1173 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp47_;
-#line 1174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp48_ = res;
-#line 1174 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp48_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1183 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp49_ = stmt;
-#line 1176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1183 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp50_ = sqlite3_step (_tmp49_);
-#line 1176 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1183 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp50_;
-#line 1177 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1184 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp51_ = res;
-#line 1177 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1184 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp51_ != SQLITE_DONE) {
-#line 8592 "PhotoTable.c"
+#line 8631 "PhotoTable.c"
 		gint _tmp52_ = 0;
-#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp52_ = res;
-#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_throw_error ("PhotoBackingTable.add", _tmp52_, &_inner_error_);
-#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_propagate_error (error, _inner_error_);
-#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_sqlite3_finalize0 (stmt);
-#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				return;
-#line 8608 "PhotoTable.c"
+#line 8647 "PhotoTable.c"
 			} else {
-#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_sqlite3_finalize0 (stmt);
-#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_clear_error (&_inner_error_);
-#line 1178 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1185 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				return;
-#line 8618 "PhotoTable.c"
+#line 8657 "PhotoTable.c"
 			}
 		}
 	}
-#line 1180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1187 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp53_ = state;
-#line 1180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1187 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp54_ = database_table_db;
-#line 1180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1187 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp55_ = sqlite3_last_insert_rowid (_tmp54_);
-#line 1180 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1187 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	backing_photo_id_init (&_tmp53_->id, _tmp55_);
-#line 1181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1188 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp56_ = state;
-#line 1181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1188 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp57_ = time_created;
-#line 1181 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1188 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp56_->time_created = _tmp57_;
-#line 1148 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1155 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 8638 "PhotoTable.c"
+#line 8677 "PhotoTable.c"
 }
 
 
@@ -8706,176 +8745,176 @@ BackingPhotoRow* backing_photo_table_fetch (BackingPhotoTable* self, BackingPhot
 	sqlite3_stmt* _tmp40_ = NULL;
 	gint64 _tmp41_ = 0LL;
 	GError * _inner_error_ = NULL;
-#line 1184 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1191 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (IS_BACKING_PHOTO_TABLE (self), NULL);
-#line 1184 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1191 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_val_if_fail (id != NULL, NULL);
-#line 1186 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1193 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 1186 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1193 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "SELECT filepath, timestamp, filesize, width, height, " "original_orientation, file_format, time_created FROM BackingPhotoTable" \
 " WHERE id=?", -1, &_tmp1_, NULL);
-#line 1186 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1193 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 1186 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1193 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 1186 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1193 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 1189 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1196 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 1189 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1196 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1191 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 1191 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = *id;
-#line 1191 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = _tmp5_.id;
-#line 1191 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = sqlite3_bind_int64 (_tmp4_, 1, _tmp6_);
-#line 1191 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp7_;
-#line 1192 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1199 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = res;
-#line 1192 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1199 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp8_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1194 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1201 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = stmt;
-#line 1194 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1201 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = sqlite3_step (_tmp9_);
-#line 1194 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1201 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp10_;
-#line 1195 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = res;
-#line 1195 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp11_ == SQLITE_DONE) {
-#line 1196 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1203 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		result = NULL;
-#line 1196 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1203 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_sqlite3_finalize0 (stmt);
-#line 1196 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1203 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		return result;
-#line 8736 "PhotoTable.c"
+#line 8775 "PhotoTable.c"
 	} else {
 		gint _tmp12_ = 0;
-#line 1197 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1204 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp12_ = res;
-#line 1197 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1204 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_tmp12_ != SQLITE_ROW) {
-#line 8743 "PhotoTable.c"
+#line 8782 "PhotoTable.c"
 			gint _tmp13_ = 0;
-#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			_tmp13_ = res;
-#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			database_table_throw_error ("BackingPhotoTable.fetch_for_photo", _tmp13_, &_inner_error_);
-#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					g_propagate_error (error, _inner_error_);
-#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_sqlite3_finalize0 (stmt);
-#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					return NULL;
-#line 8759 "PhotoTable.c"
+#line 8798 "PhotoTable.c"
 				} else {
-#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					_sqlite3_finalize0 (stmt);
-#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					g_clear_error (&_inner_error_);
-#line 1198 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 					return NULL;
-#line 8769 "PhotoTable.c"
+#line 8808 "PhotoTable.c"
 				}
 			}
 		}
 	}
-#line 1200 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1207 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = backing_photo_row_new ();
-#line 1200 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1207 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	row = _tmp14_;
-#line 1201 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1208 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = row;
-#line 1201 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1208 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = *id;
-#line 1201 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1208 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_->id = _tmp16_;
-#line 1202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1209 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp17_ = row;
-#line 1202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1209 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp18_ = stmt;
-#line 1202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1209 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp19_ = sqlite3_column_text (_tmp18_, 0);
-#line 1202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1209 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp20_ = g_strdup (_tmp19_);
-#line 1202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1209 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_g_free0 (_tmp17_->filepath);
-#line 1202 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1209 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp17_->filepath = _tmp20_;
-#line 1203 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1210 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp21_ = row;
-#line 1203 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1210 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp22_ = stmt;
-#line 1203 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1210 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp23_ = sqlite3_column_int64 (_tmp22_, 1);
-#line 1203 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1210 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp21_->timestamp = (time_t) _tmp23_;
-#line 1204 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1211 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp24_ = row;
-#line 1204 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1211 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp25_ = stmt;
-#line 1204 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1211 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp26_ = sqlite3_column_int64 (_tmp25_, 2);
-#line 1204 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1211 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp24_->filesize = _tmp26_;
-#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp27_ = row;
-#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp28_ = stmt;
-#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp29_ = sqlite3_column_int (_tmp28_, 3);
-#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp30_ = stmt;
-#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp31_ = sqlite3_column_int (_tmp30_, 4);
-#line 1205 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1212 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	dimensions_init (&_tmp27_->dim, _tmp29_, _tmp31_);
-#line 1206 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1213 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp32_ = row;
-#line 1206 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1213 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp33_ = stmt;
-#line 1206 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1213 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp34_ = sqlite3_column_int (_tmp33_, 5);
-#line 1206 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1213 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp32_->original_orientation = (Orientation) _tmp34_;
-#line 1207 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp35_ = row;
-#line 1207 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp36_ = stmt;
-#line 1207 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp37_ = sqlite3_column_int (_tmp36_, 6);
-#line 1207 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp38_ = photo_file_format_unserialize (_tmp37_);
-#line 1207 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp35_->file_format = _tmp38_;
-#line 1208 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1215 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp39_ = row;
-#line 1208 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1215 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp40_ = stmt;
-#line 1208 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1215 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp41_ = sqlite3_column_int64 (_tmp40_, 7);
-#line 1208 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1215 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp39_->time_created = (time_t) _tmp41_;
-#line 1210 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1217 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	result = row;
-#line 1210 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1217 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 1210 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1217 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	return result;
-#line 8856 "PhotoTable.c"
+#line 8895 "PhotoTable.c"
 }
 
 
@@ -8929,173 +8968,173 @@ void backing_photo_table_update (BackingPhotoTable* self, BackingPhotoRow* row, 
 	gint _tmp44_ = 0;
 	gint _tmp45_ = 0;
 	GError * _inner_error_ = NULL;
-#line 1214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_BACKING_PHOTO_TABLE (self));
-#line 1214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_BACKING_PHOTO_ROW (row));
-#line 1216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 1216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "UPDATE BackingPhotoTable SET timestamp=?, filesize=?, " "width=?, height=?, original_orientation=?, file_format=? " "WHERE id=?", -1, &_tmp1_, NULL);
-#line 1216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 1216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 1216 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 1220 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 1220 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 1222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = row;
-#line 1222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = _tmp5_->timestamp;
-#line 1222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = sqlite3_bind_int64 (_tmp4_, 1, (gint64) _tmp6_);
-#line 1222 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp7_;
-#line 1223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = res;
-#line 1223 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp8_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = stmt;
-#line 1224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = row;
-#line 1224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = _tmp10_->filesize;
-#line 1224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = sqlite3_bind_int64 (_tmp9_, 2, _tmp11_);
-#line 1224 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp12_;
-#line 1225 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = res;
-#line 1225 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp13_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = stmt;
-#line 1226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = row;
-#line 1226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = _tmp15_->dim;
-#line 1226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp17_ = _tmp16_.width;
-#line 1226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp18_ = sqlite3_bind_int (_tmp14_, 3, _tmp17_);
-#line 1226 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp18_;
-#line 1227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp19_ = res;
-#line 1227 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp19_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp20_ = stmt;
-#line 1228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp21_ = row;
-#line 1228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp22_ = _tmp21_->dim;
-#line 1228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp23_ = _tmp22_.height;
-#line 1228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp24_ = sqlite3_bind_int (_tmp20_, 4, _tmp23_);
-#line 1228 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp24_;
-#line 1229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1236 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp25_ = res;
-#line 1229 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1236 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp25_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp26_ = stmt;
-#line 1230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp27_ = row;
-#line 1230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp28_ = _tmp27_->original_orientation;
-#line 1230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp29_ = sqlite3_bind_int (_tmp26_, 5, (gint) _tmp28_);
-#line 1230 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp29_;
-#line 1231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1238 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp30_ = res;
-#line 1231 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1238 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp30_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp31_ = stmt;
-#line 1232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp32_ = row;
-#line 1232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp33_ = _tmp32_->file_format;
-#line 1232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp34_ = photo_file_format_serialize (_tmp33_);
-#line 1232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp35_ = sqlite3_bind_int (_tmp31_, 6, _tmp34_);
-#line 1232 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp35_;
-#line 1233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1240 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp36_ = res;
-#line 1233 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1240 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp36_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp37_ = stmt;
-#line 1234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp38_ = row;
-#line 1234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp39_ = _tmp38_->id;
-#line 1234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp40_ = _tmp39_.id;
-#line 1234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp41_ = sqlite3_bind_int64 (_tmp37_, 7, _tmp40_);
-#line 1234 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1241 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp41_;
-#line 1235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp42_ = res;
-#line 1235 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp42_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp43_ = stmt;
-#line 1237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp44_ = sqlite3_step (_tmp43_);
-#line 1237 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp44_;
-#line 1238 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1245 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp45_ = res;
-#line 1238 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1245 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp45_ != SQLITE_DONE) {
-#line 9044 "PhotoTable.c"
+#line 9083 "PhotoTable.c"
 		gint _tmp46_ = 0;
-#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp46_ = res;
-#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_throw_error ("BackingPhotoTable.update", _tmp46_, &_inner_error_);
-#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_propagate_error (error, _inner_error_);
-#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_sqlite3_finalize0 (stmt);
-#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				return;
-#line 9060 "PhotoTable.c"
+#line 9099 "PhotoTable.c"
 			} else {
-#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_sqlite3_finalize0 (stmt);
-#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_clear_error (&_inner_error_);
-#line 1239 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				return;
-#line 9070 "PhotoTable.c"
+#line 9109 "PhotoTable.c"
 			}
 		}
 	}
-#line 1214 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1221 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 9076 "PhotoTable.c"
+#line 9115 "PhotoTable.c"
 }
 
 
@@ -9123,105 +9162,105 @@ void backing_photo_table_update_attributes (BackingPhotoTable* self, BackingPhot
 	gint _tmp18_ = 0;
 	gint _tmp19_ = 0;
 	GError * _inner_error_ = NULL;
-#line 1242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_BACKING_PHOTO_TABLE (self));
-#line 1242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (id != NULL);
-#line 1244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = database_table_db;
-#line 1244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = sqlite3_prepare_v2 (_tmp0_, "UPDATE BackingPhotoTable SET timestamp=?, filesize=? WHERE id=?", -1, &_tmp1_, NULL);
-#line 1244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 1244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	stmt = _tmp1_;
-#line 1244 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp2_;
-#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1253 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp3_ = res;
-#line 1246 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1253 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp3_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp4_ = stmt;
-#line 1248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp5_ = timestamp;
-#line 1248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp6_ = sqlite3_bind_int64 (_tmp4_, 1, (gint64) _tmp5_);
-#line 1248 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp6_;
-#line 1249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1256 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp7_ = res;
-#line 1249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1256 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp7_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp8_ = stmt;
-#line 1250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp9_ = filesize;
-#line 1250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp10_ = sqlite3_bind_int64 (_tmp8_, 2, _tmp9_);
-#line 1250 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp10_;
-#line 1251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1258 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp11_ = res;
-#line 1251 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1258 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp11_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1252 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1259 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp12_ = stmt;
-#line 1252 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1259 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp13_ = *id;
-#line 1252 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1259 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp14_ = _tmp13_.id;
-#line 1252 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1259 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp15_ = sqlite3_bind_int64 (_tmp12_, 3, _tmp14_);
-#line 1252 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1259 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp15_;
-#line 1253 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1260 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp16_ = res;
-#line 1253 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1260 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_vala_assert (_tmp16_ == SQLITE_OK, "res == Sqlite.OK");
-#line 1255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1262 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp17_ = stmt;
-#line 1255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1262 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp18_ = sqlite3_step (_tmp17_);
-#line 1255 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1262 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	res = _tmp18_;
-#line 1256 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1263 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp19_ = res;
-#line 1256 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1263 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (_tmp19_ != SQLITE_DONE) {
-#line 9170 "PhotoTable.c"
+#line 9209 "PhotoTable.c"
 		gint _tmp20_ = 0;
-#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		_tmp20_ = res;
-#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		database_table_throw_error ("BackingPhotoTable.update_attributes", _tmp20_, &_inner_error_);
-#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_propagate_error (error, _inner_error_);
-#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_sqlite3_finalize0 (stmt);
-#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				return;
-#line 9186 "PhotoTable.c"
+#line 9225 "PhotoTable.c"
 			} else {
-#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				_sqlite3_finalize0 (stmt);
-#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				g_clear_error (&_inner_error_);
-#line 1257 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 				return;
-#line 9196 "PhotoTable.c"
+#line 9235 "PhotoTable.c"
 			}
 		}
 	}
-#line 1242 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1249 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_sqlite3_finalize0 (stmt);
-#line 9202 "PhotoTable.c"
+#line 9241 "PhotoTable.c"
 }
 
 
@@ -9229,33 +9268,33 @@ void backing_photo_table_remove (BackingPhotoTable* self, BackingPhotoID* backin
 	BackingPhotoID _tmp0_ = {0};
 	gint64 _tmp1_ = 0LL;
 	GError * _inner_error_ = NULL;
-#line 1260 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1267 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_BACKING_PHOTO_TABLE (self));
-#line 1260 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1267 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (backing_id != NULL);
-#line 1261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *backing_id;
-#line 1261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 1261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_delete_by_id (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, &_inner_error_);
-#line 1261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 1261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 9228 "PhotoTable.c"
+#line 9267 "PhotoTable.c"
 		} else {
-#line 1261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 1261 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 9236 "PhotoTable.c"
+#line 9275 "PhotoTable.c"
 		}
 	}
 }
@@ -9266,37 +9305,37 @@ void backing_photo_table_set_filepath (BackingPhotoTable* self, BackingPhotoID* 
 	gint64 _tmp1_ = 0LL;
 	const gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1271 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_BACKING_PHOTO_TABLE (self));
-#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1271 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (id != NULL);
-#line 1264 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1271 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (filepath != NULL);
-#line 1265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *id;
-#line 1265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 1265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = filepath;
-#line 1265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_update_text_by_id_2 (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "filepath", _tmp2_, &_inner_error_);
-#line 1265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 1265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 9269 "PhotoTable.c"
+#line 9308 "PhotoTable.c"
 		} else {
-#line 1265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 1265 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1272 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 9277 "PhotoTable.c"
+#line 9316 "PhotoTable.c"
 		}
 	}
 }
@@ -9307,46 +9346,46 @@ void backing_photo_table_update_timestamp (BackingPhotoTable* self, BackingPhoto
 	gint64 _tmp1_ = 0LL;
 	time_t _tmp2_ = 0;
 	GError * _inner_error_ = NULL;
-#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1275 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (IS_BACKING_PHOTO_TABLE (self));
-#line 1268 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1275 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	g_return_if_fail (id != NULL);
-#line 1269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp0_ = *id;
-#line 1269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp1_ = _tmp0_.id;
-#line 1269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	_tmp2_ = timestamp;
-#line 1269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	database_table_update_int64_by_id_2 (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_DATABASE_TABLE, DatabaseTable), _tmp1_, "timestamp", (gint64) _tmp2_, &_inner_error_);
-#line 1269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 		if (_inner_error_->domain == DATABASE_ERROR) {
-#line 1269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_propagate_error (error, _inner_error_);
-#line 1269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 9308 "PhotoTable.c"
+#line 9347 "PhotoTable.c"
 		} else {
-#line 1269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			g_clear_error (&_inner_error_);
-#line 1269 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1276 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 			return;
-#line 9316 "PhotoTable.c"
+#line 9355 "PhotoTable.c"
 		}
 	}
 }
 
 
 static void backing_photo_table_class_init (BackingPhotoTableClass * klass) {
-#line 1114 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1121 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	backing_photo_table_parent_class = g_type_class_peek_parent (klass);
-#line 1114 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1121 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	((DatabaseTableClass *) klass)->finalize = backing_photo_table_finalize;
-#line 9327 "PhotoTable.c"
+#line 9366 "PhotoTable.c"
 }
 
 
@@ -9356,11 +9395,11 @@ static void backing_photo_table_instance_init (BackingPhotoTable * self) {
 
 static void backing_photo_table_finalize (DatabaseTable* obj) {
 	BackingPhotoTable * self;
-#line 1114 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1121 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_BACKING_PHOTO_TABLE, BackingPhotoTable);
-#line 1114 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
+#line 1121 "/home/jens/Source/shotwell/src/db/PhotoTable.vala"
 	DATABASE_TABLE_CLASS (backing_photo_table_parent_class)->finalize (obj);
-#line 9341 "PhotoTable.c"
+#line 9380 "PhotoTable.c"
 }
 
 

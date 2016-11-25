@@ -140,7 +140,7 @@ GeeCollection* hierarchical_tag_index_get_all_tags (HierarchicalTagIndex* self);
 gboolean hierarchical_tag_index_is_path_known (HierarchicalTagIndex* self, const gchar* path);
 gchar* hierarchical_tag_index_get_path_for_name (HierarchicalTagIndex* self, const gchar* name);
 gchar** hierarchical_tag_index_get_paths_for_names_array (HierarchicalTagIndex* self, gchar** names, int names_length1, int* result_length1);
-static void _vala_array_add140 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add65 (gchar*** array, int* length, int* size, gchar* value);
 static void hierarchical_tag_index_finalize (HierarchicalTagIndex* obj);
 static void _vala_array_destroy (gpointer array, gint array_length, GDestroyNotify destroy_func);
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
@@ -665,7 +665,7 @@ gchar* hierarchical_tag_index_get_path_for_name (HierarchicalTagIndex* self, con
 }
 
 
-static void _vala_array_add140 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add65 (gchar*** array, int* length, int* size, gchar* value) {
 #line 84 "/home/jens/Source/shotwell/src/tags/HierarchicalTagIndex.vala"
 	if ((*length) == (*size)) {
 #line 84 "/home/jens/Source/shotwell/src/tags/HierarchicalTagIndex.vala"
@@ -740,7 +740,7 @@ gchar** hierarchical_tag_index_get_paths_for_names_array (HierarchicalTagIndex* 
 #line 84 "/home/jens/Source/shotwell/src/tags/HierarchicalTagIndex.vala"
 				_tmp5_ = hierarchical_tag_index_get_path_for_name (self, _tmp4_);
 #line 84 "/home/jens/Source/shotwell/src/tags/HierarchicalTagIndex.vala"
-				_vala_array_add140 (&_result_, &_result__length1, &__result__size_, _tmp5_);
+				_vala_array_add65 (&_result_, &_result__length1, &__result__size_, _tmp5_);
 #line 83 "/home/jens/Source/shotwell/src/tags/HierarchicalTagIndex.vala"
 				_g_free0 (name);
 #line 747 "HierarchicalTagIndex.c"

@@ -8,6 +8,12 @@
         <link type="next" xref="edit-redeye"/>
     
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Marina Prado</mal:name>
+      <mal:email>mapraro93@hotmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
       <mal:years>2014 - 2016</mal:years>
@@ -30,12 +36,7 @@
         editors from drop-down menus of installed applications.
     </p>
 
-    <p>
-        Once your editors have been set, select a photo and choose <guiseq><gui>Photos</gui>
-        <gui>Open With External Editor</gui></guiseq> to open the photo with the external editor.
-        Likewise, if the original photo is a RAW file, select <guiseq><gui>Photos</gui><gui>Open 
-        With RAW Editor</gui></guiseq> to edit the RAW file directly with the set RAW editor.
-    </p>
+    <p>Una vez que los editores se han establecido, seleccione una foto y elija <guiseq><gui>Fotos</gui> <gui>Abrir con un editor externo</gui></guiseq> para abrir la foto con un editor externo. De la misma manera, si la foto original es un archivo RAW, seleccione <guiseq><gui>Fotos</gui><gui>Abrir con un editor RAW</gui></guiseq> para editar el archivo RAW directamente con un editor RAW establecido.</p>
 
     <p>
         When you complete your edits and save the file, Shotwell will detect the changes and 

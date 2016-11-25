@@ -16,8 +16,6 @@
 #include <string.h>
 #include <glib/gi18n-lib.h>
 #include <gdk/gdk.h>
-#include <float.h>
-#include <math.h>
 #include <gobject/gvaluecollector.h>
 
 
@@ -345,7 +343,6 @@ typedef enum  {
 struct _SavedSearchDialogSearchRowContainerPrivate {
 	GtkComboBoxText* type_combo;
 	GtkBox* box;
-	GtkAlignment* align;
 	GtkButton* remove_button;
 	SearchConditionSearchType* search_types;
 	gint search_types_length1;
@@ -824,9 +821,9 @@ static void saved_search_dialog_finalize (SavedSearchDialog* obj);
 
 
 static void _saved_search_dialog_on_title_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self) {
-#line 690 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 684 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_on_title_changed ((SavedSearchDialog*) self);
-#line 830 "SavedSearchDialog.c"
+#line 827 "SavedSearchDialog.c"
 }
 
 
@@ -842,65 +839,65 @@ SavedSearchDialog* saved_search_dialog_construct (GType object_type) {
 	gpointer _tmp7_ = NULL;
 	SavedSearchDialogSearchRowContainer* _tmp8_ = NULL;
 	GtkDialog* _tmp9_ = NULL;
-#line 654 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 648 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = (SavedSearchDialog*) g_type_create_instance (object_type);
-#line 655 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 649 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_setup_dialog (self);
-#line 658 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 652 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->search_title;
-#line 658 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 652 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = saved_search_table_get_instance ();
-#line 658 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 652 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = _tmp1_;
-#line 658 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 652 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = saved_search_table_generate_unique_name (_tmp2_);
-#line 658 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 652 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _tmp3_;
-#line 658 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 652 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_entry_set_text (_tmp0_, _tmp4_);
-#line 658 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 652 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_free0 (_tmp4_);
-#line 658 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 652 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_table_unref0 (_tmp2_);
-#line 659 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 653 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = self->priv->search_title;
-#line 659 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 653 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_editable_select_region (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GTK_TYPE_EDITABLE, GtkEditable), 0, -1);
-#line 662 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 656 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_add_text_search (self);
-#line 663 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 657 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = self->priv->row_list;
-#line 663 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 657 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), 0);
-#line 663 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 657 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = (SavedSearchDialogSearchRowContainer*) _tmp7_;
-#line 663 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 657 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_container_allow_removal (_tmp8_, FALSE);
-#line 663 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 657 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (_tmp8_);
-#line 665 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 659 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp9_ = self->priv->dialog;
-#line 665 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 659 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget));
-#line 666 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 660 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_set_valid (self, FALSE);
-#line 654 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 648 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self;
-#line 890 "SavedSearchDialog.c"
+#line 887 "SavedSearchDialog.c"
 }
 
 
 SavedSearchDialog* saved_search_dialog_new (void) {
-#line 654 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 648 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return saved_search_dialog_construct (TYPE_SAVED_SEARCH_DIALOG);
-#line 897 "SavedSearchDialog.c"
+#line 894 "SavedSearchDialog.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 670 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 664 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 904 "SavedSearchDialog.c"
+#line 901 "SavedSearchDialog.c"
 }
 
 
@@ -919,47 +916,47 @@ SavedSearchDialog* saved_search_dialog_construct_edit_existing (GType object_typ
 	GeeArrayList* _tmp24_ = NULL;
 	gint _tmp25_ = 0;
 	gint _tmp26_ = 0;
-#line 669 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 663 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (IS_SAVED_SEARCH (saved_search), NULL);
-#line 669 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 663 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = (SavedSearchDialog*) g_type_create_instance (object_type);
-#line 670 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 664 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = saved_search;
-#line 670 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 664 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 670 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 664 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->previous_search);
-#line 670 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 664 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->previous_search = _tmp1_;
-#line 671 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 665 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->edit_mode = TRUE;
-#line 672 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 666 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_setup_dialog (self);
-#line 674 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 668 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->dialog;
-#line 674 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 668 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
-#line 677 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 671 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = self->priv->operator;
-#line 677 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 671 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = saved_search;
-#line 677 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 671 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = saved_search_get_operator (_tmp4_);
-#line 677 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 671 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_combo_box_get_type (), GtkComboBox), (gint) ((SearchOperator) _tmp5_));
-#line 678 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 672 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = self->priv->search_title;
-#line 678 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 672 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = saved_search;
-#line 678 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 672 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_DATA_OBJECT, DataObject));
-#line 678 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 672 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp9_ = _tmp8_;
-#line 678 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 672 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_entry_set_text (_tmp6_, _tmp9_);
-#line 678 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 672 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_free0 (_tmp9_);
-#line 963 "SavedSearchDialog.c"
+#line 960 "SavedSearchDialog.c"
 	{
 		GeeList* _sc_list = NULL;
 		SavedSearch* _tmp10_ = NULL;
@@ -969,25 +966,25 @@ SavedSearchDialog* saved_search_dialog_construct_edit_existing (GType object_typ
 		gint _tmp13_ = 0;
 		gint _tmp14_ = 0;
 		gint _sc_index = 0;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp10_ = saved_search;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp11_ = saved_search_get_conditions (_tmp10_);
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_sc_list = _tmp11_;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp12_ = _sc_list;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp13_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp14_ = _tmp13_;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_sc_size = _tmp14_;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_sc_index = -1;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		while (TRUE) {
-#line 991 "SavedSearchDialog.c"
+#line 988 "SavedSearchDialog.c"
 			gint _tmp15_ = 0;
 			gint _tmp16_ = 0;
 			gint _tmp17_ = 0;
@@ -998,98 +995,98 @@ SavedSearchDialog* saved_search_dialog_construct_edit_existing (GType object_typ
 			SearchCondition* _tmp21_ = NULL;
 			SavedSearchDialogSearchRowContainer* _tmp22_ = NULL;
 			SavedSearchDialogSearchRowContainer* _tmp23_ = NULL;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp15_ = _sc_index;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_sc_index = _tmp15_ + 1;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp16_ = _sc_index;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp17_ = _sc_size;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			if (!(_tmp16_ < _tmp17_)) {
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				break;
-#line 1014 "SavedSearchDialog.c"
+#line 1011 "SavedSearchDialog.c"
 			}
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp18_ = _sc_list;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp19_ = _sc_index;
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp20_ = gee_list_get (_tmp18_, _tmp19_);
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			sc = (SearchCondition*) _tmp20_;
-#line 680 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 674 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp21_ = sc;
-#line 680 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 674 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp22_ = saved_search_dialog_search_row_container_new_edit_existing (_tmp21_);
-#line 680 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 674 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp23_ = _tmp22_;
-#line 680 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 674 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			saved_search_dialog_add_row (self, _tmp23_);
-#line 680 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 674 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_saved_search_dialog_search_row_container_unref0 (_tmp23_);
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_search_condition_unref0 (sc);
-#line 1036 "SavedSearchDialog.c"
+#line 1033 "SavedSearchDialog.c"
 		}
-#line 679 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 673 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_g_object_unref0 (_sc_list);
-#line 1040 "SavedSearchDialog.c"
+#line 1037 "SavedSearchDialog.c"
 	}
-#line 683 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 677 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp24_ = self->priv->row_list;
-#line 683 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 677 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp25_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 683 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 677 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp26_ = _tmp25_;
-#line 683 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 677 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp26_ == 1) {
-#line 1050 "SavedSearchDialog.c"
+#line 1047 "SavedSearchDialog.c"
 		GeeArrayList* _tmp27_ = NULL;
 		gpointer _tmp28_ = NULL;
 		SavedSearchDialogSearchRowContainer* _tmp29_ = NULL;
-#line 684 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 678 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp27_ = self->priv->row_list;
-#line 684 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 678 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp28_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), 0);
-#line 684 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 678 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp29_ = (SavedSearchDialogSearchRowContainer*) _tmp28_;
-#line 684 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 678 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_search_row_container_allow_removal (_tmp29_, FALSE);
-#line 684 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 678 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_saved_search_dialog_search_row_container_unref0 (_tmp29_);
-#line 1064 "SavedSearchDialog.c"
+#line 1061 "SavedSearchDialog.c"
 	}
-#line 686 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 680 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_set_valid (self, TRUE);
-#line 669 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 663 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self;
-#line 1070 "SavedSearchDialog.c"
+#line 1067 "SavedSearchDialog.c"
 }
 
 
 SavedSearchDialog* saved_search_dialog_new_edit_existing (SavedSearch* saved_search) {
-#line 669 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 663 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return saved_search_dialog_construct_edit_existing (TYPE_SAVED_SEARCH_DIALOG, saved_search);
-#line 1077 "SavedSearchDialog.c"
+#line 1074 "SavedSearchDialog.c"
 }
 
 
 static void _saved_search_dialog_on_response_gtk_dialog_response (GtkDialog* _sender, gint response_id, gpointer self) {
-#line 708 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 702 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_on_response ((SavedSearchDialog*) self, response_id);
-#line 1084 "SavedSearchDialog.c"
+#line 1081 "SavedSearchDialog.c"
 }
 
 
 static gboolean _saved_search_dialog_on_add_criteria_gtk_widget_button_press_event (GtkWidget* _sender, GdkEventButton* event, gpointer self) {
 	gboolean result;
 	result = saved_search_dialog_on_add_criteria ((SavedSearchDialog*) self, event);
-#line 712 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 707 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 1093 "SavedSearchDialog.c"
+#line 1090 "SavedSearchDialog.c"
 }
 
 
@@ -1112,229 +1109,234 @@ static void saved_search_dialog_setup_dialog (SavedSearchDialog* self) {
 	GtkBox* _tmp15_ = NULL;
 	GtkBuilder* _tmp16_ = NULL;
 	GObject* _tmp17_ = NULL;
-	GtkBuilder* _tmp18_ = NULL;
-	GObject* _tmp19_ = NULL;
-	GtkButton* _tmp20_ = NULL;
+	GtkDialog* _tmp18_ = NULL;
+	GtkBuilder* _tmp19_ = NULL;
+	GObject* _tmp20_ = NULL;
 	GtkButton* _tmp21_ = NULL;
-	GtkBuilder* _tmp22_ = NULL;
-	GObject* _tmp23_ = NULL;
-	GtkEntry* _tmp24_ = NULL;
+	GtkButton* _tmp22_ = NULL;
+	GtkBuilder* _tmp23_ = NULL;
+	GObject* _tmp24_ = NULL;
 	GtkEntry* _tmp25_ = NULL;
 	GtkEntry* _tmp26_ = NULL;
-	GtkBuilder* _tmp27_ = NULL;
-	GObject* _tmp28_ = NULL;
-	GtkBox* _tmp29_ = NULL;
-	GtkBuilder* _tmp30_ = NULL;
-	GObject* _tmp31_ = NULL;
-	GtkComboBoxText* _tmp32_ = NULL;
+	GtkEntry* _tmp27_ = NULL;
+	GtkBuilder* _tmp28_ = NULL;
+	GObject* _tmp29_ = NULL;
+	GtkBox* _tmp30_ = NULL;
+	GtkBuilder* _tmp31_ = NULL;
+	GObject* _tmp32_ = NULL;
 	GtkComboBoxText* _tmp33_ = NULL;
-	const gchar* _tmp34_ = NULL;
-	GtkComboBoxText* _tmp35_ = NULL;
-	const gchar* _tmp36_ = NULL;
-	GtkComboBoxText* _tmp37_ = NULL;
-	const gchar* _tmp38_ = NULL;
-	GtkComboBoxText* _tmp39_ = NULL;
-#line 694 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	GtkComboBoxText* _tmp34_ = NULL;
+	const gchar* _tmp35_ = NULL;
+	GtkComboBoxText* _tmp36_ = NULL;
+	const gchar* _tmp37_ = NULL;
+	GtkComboBoxText* _tmp38_ = NULL;
+	const gchar* _tmp39_ = NULL;
+	GtkComboBoxText* _tmp40_ = NULL;
+#line 688 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_DIALOG (self));
-#line 695 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 689 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = app_window_create_builder ("shotwell.ui", NULL);
-#line 695 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 689 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->builder);
-#line 695 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 689 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->builder = _tmp0_;
-#line 697 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 691 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _ ("Search");
-#line 697 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 691 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = app_window_get_instance ();
-#line 697 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 691 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = _tmp2_;
-#line 697 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 691 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = gtk_widget_get_parent_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget));
-#line 697 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 691 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = _ ("Cancel");
-#line 697 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 691 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = _ ("OK");
-#line 697 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 691 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = (GtkDialog*) gtk_dialog_new_with_buttons (_tmp1_, G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_window_get_type (), GtkWindow), (GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT) | GTK_DIALOG_USE_HEADER_BAR, _tmp5_, GTK_RESPONSE_CANCEL, _tmp6_, GTK_RESPONSE_OK, NULL, NULL);
-#line 697 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 691 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp7_);
-#line 697 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 691 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->dialog);
-#line 697 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 691 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->dialog = _tmp7_;
-#line 697 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 691 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (_tmp3_);
-#line 705 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 699 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = self->priv->dialog;
-#line 705 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 699 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_window_get_type (), GtkWindow), FALSE);
-#line 706 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 700 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp9_ = self->priv->dialog;
-#line 706 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 700 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp10_ = app_window_get_instance ();
-#line 706 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 700 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp11_ = _tmp10_;
-#line 706 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 700 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_window_set_transient_for (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_window_get_type (), GtkWindow), G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_window_get_type (), GtkWindow));
-#line 706 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 700 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (_tmp11_);
-#line 707 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 701 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp12_ = self->priv->dialog;
-#line 707 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 701 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_dialog_set_default_response (_tmp12_, (gint) GTK_RESPONSE_OK);
-#line 708 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 702 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp13_ = self->priv->dialog;
-#line 708 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 702 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_connect (_tmp13_, "response", (GCallback) _saved_search_dialog_on_response_gtk_dialog_response, self);
-#line 709 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 703 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp14_ = self->priv->dialog;
-#line 709 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 703 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp15_ = (GtkBox*) gtk_dialog_get_content_area (_tmp14_);
-#line 709 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 703 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp16_ = self->priv->builder;
-#line 709 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 703 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp17_ = gtk_builder_get_object (_tmp16_, "criteria");
-#line 709 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 703 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_TYPE (_tmp17_, gtk_widget_get_type ()) ? ((GtkWidget*) _tmp17_) : NULL);
-#line 711 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp18_ = self->priv->builder;
-#line 711 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp19_ = gtk_builder_get_object (_tmp18_, "Add search button");
-#line 711 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp20_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp19_, gtk_button_get_type ()) ? ((GtkButton*) _tmp19_) : NULL);
-#line 711 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 704 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp18_ = self->priv->dialog;
+#line 704 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_dialog_set_default_response (_tmp18_, (gint) GTK_RESPONSE_OK);
+#line 706 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp19_ = self->priv->builder;
+#line 706 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp20_ = gtk_builder_get_object (_tmp19_, "Add search button");
+#line 706 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp21_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp20_, gtk_button_get_type ()) ? ((GtkButton*) _tmp20_) : NULL);
+#line 706 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->add_criteria);
-#line 711 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->add_criteria = _tmp20_;
-#line 712 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp21_ = self->priv->add_criteria;
-#line 712 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _saved_search_dialog_on_add_criteria_gtk_widget_button_press_event, self);
-#line 714 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp22_ = self->priv->builder;
-#line 714 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp23_ = gtk_builder_get_object (_tmp22_, "Search title");
-#line 714 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp24_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp23_, gtk_entry_get_type ()) ? ((GtkEntry*) _tmp23_) : NULL);
-#line 714 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 706 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->add_criteria = _tmp21_;
+#line 707 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp22_ = self->priv->add_criteria;
+#line 707 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _saved_search_dialog_on_add_criteria_gtk_widget_button_press_event, self);
+#line 709 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp23_ = self->priv->builder;
+#line 709 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp24_ = gtk_builder_get_object (_tmp23_, "Search title");
+#line 709 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp25_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp24_, gtk_entry_get_type ()) ? ((GtkEntry*) _tmp24_) : NULL);
+#line 709 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->search_title);
-#line 714 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->search_title = _tmp24_;
-#line 715 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp25_ = self->priv->search_title;
-#line 715 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_entry_set_activates_default (_tmp25_, TRUE);
-#line 716 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 709 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->search_title = _tmp25_;
+#line 710 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp26_ = self->priv->search_title;
-#line 716 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, GTK_TYPE_EDITABLE, GtkEditable), "changed", (GCallback) _saved_search_dialog_on_title_changed_gtk_editable_changed, self);
-#line 718 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp27_ = self->priv->builder;
-#line 718 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp28_ = gtk_builder_get_object (_tmp27_, "row_box");
-#line 718 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp29_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp28_, gtk_box_get_type ()) ? ((GtkBox*) _tmp28_) : NULL);
-#line 718 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 710 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_entry_set_activates_default (_tmp26_, TRUE);
+#line 711 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp27_ = self->priv->search_title;
+#line 711 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, GTK_TYPE_EDITABLE, GtkEditable), "changed", (GCallback) _saved_search_dialog_on_title_changed_gtk_editable_changed, self);
+#line 713 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp28_ = self->priv->builder;
+#line 713 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp29_ = gtk_builder_get_object (_tmp28_, "row_box");
+#line 713 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp30_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp29_, gtk_box_get_type ()) ? ((GtkBox*) _tmp29_) : NULL);
+#line 713 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->row_box);
-#line 718 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->row_box = _tmp29_;
-#line 720 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp30_ = self->priv->builder;
-#line 720 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp31_ = gtk_builder_get_object (_tmp30_, "Type of search criteria");
-#line 720 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp32_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp31_, gtk_combo_box_text_get_type ()) ? ((GtkComboBoxText*) _tmp31_) : NULL);
-#line 720 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 713 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->row_box = _tmp30_;
+#line 715 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp31_ = self->priv->builder;
+#line 715 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp32_ = gtk_builder_get_object (_tmp31_, "Type of search criteria");
+#line 715 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp33_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp32_, gtk_combo_box_text_get_type ()) ? ((GtkComboBoxText*) _tmp32_) : NULL);
+#line 715 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->operator);
-#line 720 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->operator = _tmp32_;
-#line 721 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp33_ = self->priv->operator;
-#line 721 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp34_ = _ ("any");
-#line 721 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp33_, _tmp34_);
-#line 722 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp35_ = self->priv->operator;
-#line 722 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp36_ = _ ("all");
-#line 722 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp35_, _tmp36_);
-#line 723 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp37_ = self->priv->operator;
-#line 723 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp38_ = _ ("none");
-#line 723 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp37_, _tmp38_);
-#line 724 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp39_ = self->priv->operator;
-#line 724 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 1274 "SavedSearchDialog.c"
+#line 715 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->operator = _tmp33_;
+#line 716 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp34_ = self->priv->operator;
+#line 716 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp35_ = _ ("any");
+#line 716 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp34_, _tmp35_);
+#line 717 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp36_ = self->priv->operator;
+#line 717 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp37_ = _ ("all");
+#line 717 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp36_, _tmp37_);
+#line 718 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp38_ = self->priv->operator;
+#line 718 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp39_ = _ ("none");
+#line 718 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp38_, _tmp39_);
+#line 719 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp40_ = self->priv->operator;
+#line 719 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, gtk_combo_box_get_type (), GtkComboBox), 0);
+#line 1276 "SavedSearchDialog.c"
 }
 
 
 void saved_search_dialog_show (SavedSearchDialog* self) {
 	GtkDialog* _tmp0_ = NULL;
 	GtkDialog* _tmp1_ = NULL;
-#line 728 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 723 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_DIALOG (self));
-#line 729 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 724 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->dialog;
-#line 729 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 724 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_dialog_run (_tmp0_);
-#line 730 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 725 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = self->priv->dialog;
-#line 730 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 725 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget));
-#line 1291 "SavedSearchDialog.c"
+#line 1293 "SavedSearchDialog.c"
 }
 
 
 static gboolean saved_search_dialog_on_add_criteria (SavedSearchDialog* self, GdkEventButton* event) {
 	gboolean result = FALSE;
-#line 734 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 729 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (IS_SAVED_SEARCH_DIALOG (self), FALSE);
-#line 734 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 729 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 735 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 730 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_add_text_search (self);
-#line 736 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 731 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = FALSE;
-#line 736 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 731 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 1307 "SavedSearchDialog.c"
+#line 1309 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_add_text_search (SavedSearchDialog* self) {
 	SavedSearchDialogSearchRowContainer* text = NULL;
 	SavedSearchDialogSearchRowContainer* _tmp0_ = NULL;
-#line 739 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 734 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_DIALOG (self));
-#line 740 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 735 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = saved_search_dialog_search_row_container_new ();
-#line 740 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 735 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	text = _tmp0_;
-#line 741 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 736 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_add_row (self, text);
-#line 739 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 734 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (text);
-#line 1324 "SavedSearchDialog.c"
+#line 1326 "SavedSearchDialog.c"
 }
 
 
 static void _saved_search_dialog_on_remove_row_saved_search_dialog_search_row_container_remove (SavedSearchDialogSearchRowContainer* _sender, SavedSearchDialogSearchRowContainer* this_row, gpointer self) {
-#line 750 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 745 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_on_remove_row ((SavedSearchDialog*) self, this_row);
-#line 1331 "SavedSearchDialog.c"
+#line 1333 "SavedSearchDialog.c"
 }
 
 
 static void _saved_search_dialog_on_row_changed_saved_search_dialog_search_row_container_changed (SavedSearchDialogSearchRowContainer* _sender, SavedSearchDialogSearchRowContainer* this_row, gpointer self) {
-#line 751 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 746 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_on_row_changed ((SavedSearchDialog*) self, this_row);
-#line 1338 "SavedSearchDialog.c"
+#line 1340 "SavedSearchDialog.c"
 }
 
 
@@ -1352,67 +1354,67 @@ static void saved_search_dialog_add_row (SavedSearchDialog* self, SavedSearchDia
 	SavedSearchDialogSearchRowContainer* _tmp13_ = NULL;
 	SavedSearchDialogSearchRowContainer* _tmp14_ = NULL;
 	gboolean _tmp15_ = FALSE;
-#line 745 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 740 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_DIALOG (self));
-#line 745 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 740 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (row));
-#line 746 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 741 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->row_list;
-#line 746 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 741 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 746 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 741 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = _tmp1_;
-#line 746 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 741 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp2_ == 1) {
-#line 1368 "SavedSearchDialog.c"
+#line 1370 "SavedSearchDialog.c"
 		GeeArrayList* _tmp3_ = NULL;
 		gpointer _tmp4_ = NULL;
 		SavedSearchDialogSearchRowContainer* _tmp5_ = NULL;
-#line 747 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 742 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp3_ = self->priv->row_list;
-#line 747 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 742 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp4_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), 0);
-#line 747 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 742 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp5_ = (SavedSearchDialogSearchRowContainer*) _tmp4_;
-#line 747 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 742 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_search_row_container_allow_removal (_tmp5_, TRUE);
-#line 747 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 742 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_saved_search_dialog_search_row_container_unref0 (_tmp5_);
-#line 1382 "SavedSearchDialog.c"
+#line 1384 "SavedSearchDialog.c"
 	}
-#line 748 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 743 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = self->priv->row_box;
-#line 748 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 743 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = row;
-#line 748 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 743 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = saved_search_dialog_search_row_container_get_widget (_tmp7_);
-#line 748 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 743 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp9_ = _tmp8_;
-#line 748 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 743 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_container_get_type (), GtkContainer), _tmp9_);
-#line 748 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 743 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (_tmp9_);
-#line 749 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 744 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp10_ = self->priv->row_list;
-#line 749 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 744 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp11_ = row;
-#line 749 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 744 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp11_);
-#line 750 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 745 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp12_ = row;
-#line 750 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 745 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_connect (_tmp12_, "remove", (GCallback) _saved_search_dialog_on_remove_row_saved_search_dialog_search_row_container_remove, self);
-#line 751 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 746 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp13_ = row;
-#line 751 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 746 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_connect (_tmp13_, "changed", (GCallback) _saved_search_dialog_on_row_changed_saved_search_dialog_search_row_container_changed, self);
-#line 752 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 747 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp14_ = row;
-#line 752 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 747 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp15_ = saved_search_dialog_search_row_container_is_complete (_tmp14_);
-#line 752 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 747 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_set_valid (self, _tmp15_);
-#line 1416 "SavedSearchDialog.c"
+#line 1418 "SavedSearchDialog.c"
 }
 
 
@@ -1430,79 +1432,79 @@ static void saved_search_dialog_on_remove_row (SavedSearchDialog* self, SavedSea
 	GeeArrayList* _tmp10_ = NULL;
 	gint _tmp11_ = 0;
 	gint _tmp12_ = 0;
-#line 756 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 751 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_DIALOG (self));
-#line 756 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 751 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (row));
-#line 757 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 752 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = row;
-#line 757 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 752 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("remove", SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_CONTAINER, &_tmp1_, NULL, FALSE);
-#line 757 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 752 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _saved_search_dialog_on_remove_row_saved_search_dialog_search_row_container_remove, self);
-#line 758 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 753 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = row;
-#line 758 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 753 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_CONTAINER, &_tmp3_, NULL, FALSE);
-#line 758 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 753 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _saved_search_dialog_on_row_changed_saved_search_dialog_search_row_container_changed, self);
-#line 759 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 754 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = self->priv->row_box;
-#line 759 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 754 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = row;
-#line 759 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 754 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = saved_search_dialog_search_row_container_get_widget (_tmp5_);
-#line 759 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 754 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = _tmp6_;
-#line 759 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 754 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_container_remove (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_container_get_type (), GtkContainer), _tmp7_);
-#line 759 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 754 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (_tmp7_);
-#line 760 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 755 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = self->priv->row_list;
-#line 760 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 755 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp9_ = row;
-#line 760 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 755 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gee_abstract_collection_remove (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp9_);
-#line 761 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 756 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp10_ = self->priv->row_list;
-#line 761 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 756 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp11_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 761 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 756 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp12_ = _tmp11_;
-#line 761 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 756 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp12_ == 1) {
-#line 1476 "SavedSearchDialog.c"
+#line 1478 "SavedSearchDialog.c"
 		GeeArrayList* _tmp13_ = NULL;
 		gpointer _tmp14_ = NULL;
 		SavedSearchDialogSearchRowContainer* _tmp15_ = NULL;
-#line 762 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 757 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp13_ = self->priv->row_list;
-#line 762 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 757 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp14_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), 0);
-#line 762 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 757 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp15_ = (SavedSearchDialogSearchRowContainer*) _tmp14_;
-#line 762 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 757 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_search_row_container_allow_removal (_tmp15_, FALSE);
-#line 762 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 757 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_saved_search_dialog_search_row_container_unref0 (_tmp15_);
-#line 1490 "SavedSearchDialog.c"
+#line 1492 "SavedSearchDialog.c"
 	}
-#line 763 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 758 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_set_valid (self, TRUE);
-#line 1494 "SavedSearchDialog.c"
+#line 1496 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_on_response (SavedSearchDialog* self, gint response_id) {
 	gint _tmp0_ = 0;
-#line 766 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 761 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_DIALOG (self));
-#line 767 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 762 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = response_id;
-#line 767 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 762 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp0_ == ((gint) GTK_RESPONSE_OK)) {
-#line 1506 "SavedSearchDialog.c"
+#line 1508 "SavedSearchDialog.c"
 		gboolean _tmp1_ = FALSE;
 		SavedSearchTable* _tmp2_ = NULL;
 		SavedSearchTable* _tmp3_ = NULL;
@@ -1524,111 +1526,111 @@ static void saved_search_dialog_on_response (SavedSearchDialog* self, gint respo
 		GeeArrayList* _tmp46_ = NULL;
 		SavedSearch* _tmp47_ = NULL;
 		SavedSearch* _tmp48_ = NULL;
-#line 768 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 763 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp2_ = saved_search_table_get_instance ();
-#line 768 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 763 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp3_ = _tmp2_;
-#line 768 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 763 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp4_ = self->priv->search_title;
-#line 768 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 763 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp5_ = gtk_entry_get_text (_tmp4_);
-#line 768 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 763 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp6_ = saved_search_table_exists (_tmp3_, _tmp5_);
-#line 768 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 763 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp7_ = _tmp6_;
-#line 768 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 763 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_saved_search_table_unref0 (_tmp3_);
-#line 768 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 763 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		if (_tmp7_) {
-#line 1544 "SavedSearchDialog.c"
+#line 1546 "SavedSearchDialog.c"
 			gboolean _tmp8_ = FALSE;
 			gboolean _tmp9_ = FALSE;
-#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 764 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp9_ = self->priv->edit_mode;
-#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 764 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			if (_tmp9_) {
-#line 1551 "SavedSearchDialog.c"
+#line 1553 "SavedSearchDialog.c"
 				SavedSearch* _tmp10_ = NULL;
 				gchar* _tmp11_ = NULL;
 				gchar* _tmp12_ = NULL;
 				GtkEntry* _tmp13_ = NULL;
 				const gchar* _tmp14_ = NULL;
-#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 764 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp10_ = self->priv->previous_search;
-#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 764 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp11_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, TYPE_DATA_OBJECT, DataObject));
-#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 764 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp12_ = _tmp11_;
-#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 764 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp13_ = self->priv->search_title;
-#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 764 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp14_ = gtk_entry_get_text (_tmp13_);
-#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 764 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp8_ = g_strcmp0 (_tmp12_, _tmp14_) == 0;
-#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 764 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_g_free0 (_tmp12_);
-#line 1571 "SavedSearchDialog.c"
+#line 1573 "SavedSearchDialog.c"
 			} else {
-#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 764 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp8_ = FALSE;
-#line 1575 "SavedSearchDialog.c"
+#line 1577 "SavedSearchDialog.c"
 			}
-#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 764 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp1_ = !_tmp8_;
-#line 1579 "SavedSearchDialog.c"
+#line 1581 "SavedSearchDialog.c"
 		} else {
-#line 768 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 763 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp1_ = FALSE;
-#line 1583 "SavedSearchDialog.c"
+#line 1585 "SavedSearchDialog.c"
 		}
-#line 768 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 763 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		if (_tmp1_) {
-#line 1587 "SavedSearchDialog.c"
+#line 1589 "SavedSearchDialog.c"
 			GtkEntry* _tmp15_ = NULL;
 			const gchar* _tmp16_ = NULL;
 			gchar* _tmp17_ = NULL;
 			gchar* _tmp18_ = NULL;
-#line 770 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 765 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp15_ = self->priv->search_title;
-#line 770 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 765 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp16_ = gtk_entry_get_text (_tmp15_);
-#line 770 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 765 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp17_ = resources_rename_search_exists_message (_tmp16_);
-#line 770 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 765 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp18_ = _tmp17_;
-#line 770 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 765 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			app_window_error_message (_tmp18_, NULL);
-#line 770 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 765 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_g_free0 (_tmp18_);
-#line 771 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 766 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			return;
-#line 1606 "SavedSearchDialog.c"
+#line 1608 "SavedSearchDialog.c"
 		}
-#line 774 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp19_ = self->priv->edit_mode;
-#line 774 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 769 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		if (_tmp19_) {
-#line 1612 "SavedSearchDialog.c"
+#line 1614 "SavedSearchDialog.c"
 			SavedSearchTable* _tmp20_ = NULL;
 			SavedSearchTable* _tmp21_ = NULL;
 			SavedSearch* _tmp22_ = NULL;
-#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 771 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp20_ = saved_search_table_get_instance ();
-#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 771 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp21_ = _tmp20_;
-#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 771 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp22_ = self->priv->previous_search;
-#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 771 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			saved_search_table_remove (_tmp21_, _tmp22_);
-#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 771 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_saved_search_table_unref0 (_tmp21_);
-#line 1626 "SavedSearchDialog.c"
+#line 1628 "SavedSearchDialog.c"
 		}
-#line 780 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 775 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp23_ = gee_array_list_new (TYPE_SEARCH_CONDITION, (GBoxedCopyFunc) search_condition_ref, search_condition_unref, NULL, NULL, NULL);
-#line 780 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 775 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		conditions = _tmp23_;
-#line 1632 "SavedSearchDialog.c"
+#line 1634 "SavedSearchDialog.c"
 		{
 			GeeArrayList* _c_list = NULL;
 			GeeArrayList* _tmp24_ = NULL;
@@ -1638,25 +1640,25 @@ static void saved_search_dialog_on_response (SavedSearchDialog* self, gint respo
 			gint _tmp27_ = 0;
 			gint _tmp28_ = 0;
 			gint _c_index = 0;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp24_ = self->priv->row_list;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp25_ = _g_object_ref0 (_tmp24_);
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_c_list = _tmp25_;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp26_ = _c_list;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp27_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp28_ = _tmp27_;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_c_size = _tmp28_;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_c_index = -1;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			while (TRUE) {
-#line 1660 "SavedSearchDialog.c"
+#line 1662 "SavedSearchDialog.c"
 				gint _tmp29_ = 0;
 				gint _tmp30_ = 0;
 				gint _tmp31_ = 0;
@@ -1668,77 +1670,77 @@ static void saved_search_dialog_on_response (SavedSearchDialog* self, gint respo
 				SavedSearchDialogSearchRowContainer* _tmp36_ = NULL;
 				SearchCondition* _tmp37_ = NULL;
 				SearchCondition* _tmp38_ = NULL;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp29_ = _c_index;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_c_index = _tmp29_ + 1;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp30_ = _c_index;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp31_ = _c_size;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				if (!(_tmp30_ < _tmp31_)) {
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					break;
-#line 1684 "SavedSearchDialog.c"
+#line 1686 "SavedSearchDialog.c"
 				}
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp32_ = _c_list;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp33_ = _c_index;
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp34_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp33_);
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				c = (SavedSearchDialogSearchRowContainer*) _tmp34_;
-#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 777 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp35_ = conditions;
-#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 777 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp36_ = c;
-#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 777 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp37_ = saved_search_dialog_search_row_container_get_search_condition (_tmp36_);
-#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 777 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp38_ = _tmp37_;
-#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 777 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp38_);
-#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 777 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_search_condition_unref0 (_tmp38_);
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_saved_search_dialog_search_row_container_unref0 (c);
-#line 1708 "SavedSearchDialog.c"
+#line 1710 "SavedSearchDialog.c"
 			}
-#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 776 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_g_object_unref0 (_c_list);
-#line 1712 "SavedSearchDialog.c"
+#line 1714 "SavedSearchDialog.c"
 		}
-#line 786 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp39_ = self->priv->operator;
-#line 786 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp40_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, gtk_combo_box_get_type (), GtkComboBox));
-#line 786 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 781 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		search_operator = (SearchOperator) _tmp40_;
-#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp41_ = saved_search_table_get_instance ();
-#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp42_ = _tmp41_;
-#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp43_ = self->priv->search_title;
-#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp44_ = gtk_entry_get_text (_tmp43_);
-#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp45_ = search_operator;
-#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp46_ = conditions;
-#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp47_ = saved_search_table_create (_tmp42_, _tmp44_, _tmp45_, _tmp46_);
-#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp48_ = _tmp47_;
-#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_g_object_unref0 (_tmp48_);
-#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 782 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_saved_search_table_unref0 (_tmp42_);
-#line 767 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 762 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_g_object_unref0 (conditions);
-#line 1742 "SavedSearchDialog.c"
+#line 1744 "SavedSearchDialog.c"
 	}
 }
 
@@ -1746,29 +1748,29 @@ static void saved_search_dialog_on_response (SavedSearchDialog* self, gint respo
 static void saved_search_dialog_on_row_changed (SavedSearchDialog* self, SavedSearchDialogSearchRowContainer* row) {
 	SavedSearchDialogSearchRowContainer* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 791 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 786 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_DIALOG (self));
-#line 791 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 786 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (row));
-#line 792 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = row;
-#line 792 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = saved_search_dialog_search_row_container_is_complete (_tmp0_);
-#line 792 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 787 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_set_valid (self, _tmp1_);
-#line 1760 "SavedSearchDialog.c"
+#line 1762 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_on_title_changed (SavedSearchDialog* self) {
 	gboolean _tmp0_ = FALSE;
-#line 795 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 790 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_DIALOG (self));
-#line 796 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 791 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = saved_search_dialog_is_title_valid (self);
-#line 796 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 791 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_set_valid (self, _tmp0_);
-#line 1772 "SavedSearchDialog.c"
+#line 1774 "SavedSearchDialog.c"
 }
 
 
@@ -1791,7 +1793,7 @@ static gchar* string_chomp (const gchar* self) {
 	result = _result_;
 #line 1194 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 1795 "SavedSearchDialog.c"
+#line 1797 "SavedSearchDialog.c"
 }
 
 
@@ -1811,107 +1813,107 @@ static gboolean saved_search_dialog_is_title_valid (SavedSearchDialog* self) {
 	const gchar* _tmp17_ = NULL;
 	gboolean _tmp18_ = FALSE;
 	gboolean _tmp19_ = FALSE;
-#line 799 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 794 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (IS_SAVED_SEARCH_DIALOG (self), FALSE);
-#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 795 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->edit_mode;
-#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 795 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp2_) {
-#line 1821 "SavedSearchDialog.c"
+#line 1823 "SavedSearchDialog.c"
 		SavedSearch* _tmp3_ = NULL;
-#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 795 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp3_ = self->priv->previous_search;
-#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 795 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp1_ = _tmp3_ != NULL;
-#line 1827 "SavedSearchDialog.c"
+#line 1829 "SavedSearchDialog.c"
 	} else {
-#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 795 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp1_ = FALSE;
-#line 1831 "SavedSearchDialog.c"
+#line 1833 "SavedSearchDialog.c"
 	}
-#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 795 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp1_) {
-#line 1835 "SavedSearchDialog.c"
+#line 1837 "SavedSearchDialog.c"
 		SavedSearch* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
 		GtkEntry* _tmp7_ = NULL;
 		const gchar* _tmp8_ = NULL;
-#line 801 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 796 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp4_ = self->priv->previous_search;
-#line 801 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 796 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp5_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_DATA_OBJECT, DataObject));
-#line 801 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 796 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp6_ = _tmp5_;
-#line 801 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 796 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp7_ = self->priv->search_title;
-#line 801 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 796 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp8_ = gtk_entry_get_text (_tmp7_);
-#line 801 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 796 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp0_ = g_strcmp0 (_tmp6_, _tmp8_) == 0;
-#line 801 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 796 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_g_free0 (_tmp6_);
-#line 1855 "SavedSearchDialog.c"
+#line 1857 "SavedSearchDialog.c"
 	} else {
-#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 795 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp0_ = FALSE;
-#line 1859 "SavedSearchDialog.c"
+#line 1861 "SavedSearchDialog.c"
+	}
+#line 795 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	if (_tmp0_) {
+#line 797 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+		result = TRUE;
+#line 797 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+		return result;
+#line 1869 "SavedSearchDialog.c"
+	}
+#line 798 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp9_ = self->priv->search_title;
+#line 798 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp10_ = gtk_entry_get_text (_tmp9_);
+#line 798 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp11_ = string_chomp (_tmp10_);
+#line 798 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp12_ = _tmp11_;
+#line 798 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp13_ = g_strcmp0 (_tmp12_, "") == 0;
+#line 798 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_free0 (_tmp12_);
+#line 798 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	if (_tmp13_) {
+#line 799 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+		result = FALSE;
+#line 799 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+		return result;
+#line 1889 "SavedSearchDialog.c"
 	}
 #line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	if (_tmp0_) {
-#line 802 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		result = TRUE;
-#line 802 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		return result;
-#line 1867 "SavedSearchDialog.c"
-	}
-#line 803 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp9_ = self->priv->search_title;
-#line 803 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp10_ = gtk_entry_get_text (_tmp9_);
-#line 803 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp11_ = string_chomp (_tmp10_);
-#line 803 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp12_ = _tmp11_;
-#line 803 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp13_ = g_strcmp0 (_tmp12_, "") == 0;
-#line 803 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_free0 (_tmp12_);
-#line 803 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	if (_tmp13_) {
-#line 804 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		result = FALSE;
-#line 804 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		return result;
-#line 1887 "SavedSearchDialog.c"
-	}
-#line 805 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp14_ = saved_search_table_get_instance ();
-#line 805 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp15_ = _tmp14_;
-#line 805 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp16_ = self->priv->search_title;
-#line 805 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp17_ = gtk_entry_get_text (_tmp16_);
-#line 805 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp18_ = saved_search_table_exists (_tmp15_, _tmp17_);
-#line 805 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp19_ = _tmp18_;
-#line 805 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_table_unref0 (_tmp15_);
-#line 805 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 800 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp19_) {
-#line 806 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 801 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		result = FALSE;
-#line 806 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 801 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		return result;
-#line 1909 "SavedSearchDialog.c"
+#line 1911 "SavedSearchDialog.c"
 	}
-#line 807 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 802 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = TRUE;
-#line 807 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 802 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 1915 "SavedSearchDialog.c"
+#line 1917 "SavedSearchDialog.c"
 }
 
 
@@ -1919,39 +1921,39 @@ static void saved_search_dialog_set_valid (SavedSearchDialog* self, gboolean v) 
 	gboolean _tmp0_ = FALSE;
 	GtkDialog* _tmp22_ = NULL;
 	gboolean _tmp23_ = FALSE;
-#line 811 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 806 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_DIALOG (self));
-#line 812 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 807 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = v;
-#line 812 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 807 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (!_tmp0_) {
-#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 808 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		self->priv->valid = FALSE;
-#line 1931 "SavedSearchDialog.c"
+#line 1933 "SavedSearchDialog.c"
 	} else {
 		gboolean _tmp1_ = FALSE;
 		gboolean _tmp2_ = FALSE;
-#line 814 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 809 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp1_ = v;
-#line 814 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 809 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp2_ = self->priv->valid;
-#line 814 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 809 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		if (_tmp1_ != _tmp2_) {
-#line 1941 "SavedSearchDialog.c"
+#line 1943 "SavedSearchDialog.c"
 			gboolean _tmp3_ = FALSE;
-#line 815 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 810 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp3_ = saved_search_dialog_is_title_valid (self);
-#line 815 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 810 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			if (_tmp3_) {
-#line 1947 "SavedSearchDialog.c"
+#line 1949 "SavedSearchDialog.c"
 				gint valid_rows = 0;
 				gint _tmp18_ = 0;
 				GeeArrayList* _tmp19_ = NULL;
 				gint _tmp20_ = 0;
 				gint _tmp21_ = 0;
-#line 817 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 812 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				valid_rows = 0;
-#line 1955 "SavedSearchDialog.c"
+#line 1957 "SavedSearchDialog.c"
 				{
 					GeeArrayList* _c_list = NULL;
 					GeeArrayList* _tmp4_ = NULL;
@@ -1961,25 +1963,25 @@ static void saved_search_dialog_set_valid (SavedSearchDialog* self, gboolean v) 
 					gint _tmp7_ = 0;
 					gint _tmp8_ = 0;
 					gint _c_index = 0;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					_tmp4_ = self->priv->row_list;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					_tmp5_ = _g_object_ref0 (_tmp4_);
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					_c_list = _tmp5_;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					_tmp6_ = _c_list;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					_tmp7_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					_tmp8_ = _tmp7_;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					_c_size = _tmp8_;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					_c_index = -1;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					while (TRUE) {
-#line 1983 "SavedSearchDialog.c"
+#line 1985 "SavedSearchDialog.c"
 						gint _tmp9_ = 0;
 						gint _tmp10_ = 0;
 						gint _tmp11_ = 0;
@@ -1989,96 +1991,96 @@ static void saved_search_dialog_set_valid (SavedSearchDialog* self, gboolean v) 
 						gpointer _tmp14_ = NULL;
 						SavedSearchDialogSearchRowContainer* _tmp15_ = NULL;
 						gboolean _tmp16_ = FALSE;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						_tmp9_ = _c_index;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						_c_index = _tmp9_ + 1;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						_tmp10_ = _c_index;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						_tmp11_ = _c_size;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						if (!(_tmp10_ < _tmp11_)) {
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 							break;
-#line 2005 "SavedSearchDialog.c"
+#line 2007 "SavedSearchDialog.c"
 						}
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						_tmp12_ = _c_list;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						_tmp13_ = _c_index;
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						_tmp14_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp13_);
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						c = (SavedSearchDialogSearchRowContainer*) _tmp14_;
-#line 819 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 814 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						_tmp15_ = c;
-#line 819 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 814 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						_tmp16_ = saved_search_dialog_search_row_container_is_complete (_tmp15_);
-#line 819 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 814 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						if (_tmp16_) {
-#line 2021 "SavedSearchDialog.c"
+#line 2023 "SavedSearchDialog.c"
 							gint _tmp17_ = 0;
-#line 820 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 815 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 							_tmp17_ = valid_rows;
-#line 820 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 815 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 							valid_rows = _tmp17_ + 1;
-#line 2027 "SavedSearchDialog.c"
+#line 2029 "SavedSearchDialog.c"
 						}
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 						_saved_search_dialog_search_row_container_unref0 (c);
-#line 2031 "SavedSearchDialog.c"
+#line 2033 "SavedSearchDialog.c"
 					}
-#line 818 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 813 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					_g_object_unref0 (_c_list);
-#line 2035 "SavedSearchDialog.c"
+#line 2037 "SavedSearchDialog.c"
 				}
-#line 822 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 817 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp18_ = valid_rows;
-#line 822 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 817 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp19_ = self->priv->row_list;
-#line 822 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 817 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp20_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 822 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 817 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp21_ = _tmp20_;
-#line 822 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 817 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				self->priv->valid = _tmp18_ == _tmp21_;
-#line 2047 "SavedSearchDialog.c"
+#line 2049 "SavedSearchDialog.c"
 			} else {
-#line 824 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 819 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				self->priv->valid = FALSE;
-#line 2051 "SavedSearchDialog.c"
+#line 2053 "SavedSearchDialog.c"
 			}
 		}
 	}
-#line 828 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 823 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp22_ = self->priv->dialog;
-#line 828 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 823 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp23_ = self->priv->valid;
-#line 828 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 823 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_dialog_set_response_sensitive (_tmp22_, (gint) GTK_RESPONSE_OK, _tmp23_);
-#line 2061 "SavedSearchDialog.c"
+#line 2063 "SavedSearchDialog.c"
 }
 
 
 static SavedSearchDialogSearchRowContainer* saved_search_dialog_search_row_container_construct (GType object_type) {
 	SavedSearchDialogSearchRowContainer* self = NULL;
-#line 24 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 23 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = (SavedSearchDialogSearchRowContainer*) g_type_create_instance (object_type);
-#line 25 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	saved_search_dialog_search_row_container_setup_gui (self);
-#line 26 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	saved_search_dialog_search_row_container_set_type (self, SEARCH_CONDITION_SEARCH_TYPE_ANY_TEXT);
 #line 24 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	saved_search_dialog_search_row_container_setup_gui (self);
+#line 25 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	saved_search_dialog_search_row_container_set_type (self, SEARCH_CONDITION_SEARCH_TYPE_ANY_TEXT);
+#line 23 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self;
-#line 2075 "SavedSearchDialog.c"
+#line 2077 "SavedSearchDialog.c"
 }
 
 
 static SavedSearchDialogSearchRowContainer* saved_search_dialog_search_row_container_new (void) {
-#line 24 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 23 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return saved_search_dialog_search_row_container_construct (SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_CONTAINER);
-#line 2082 "SavedSearchDialog.c"
+#line 2084 "SavedSearchDialog.c"
 }
 
 
@@ -2092,60 +2094,60 @@ static SavedSearchDialogSearchRowContainer* saved_search_dialog_search_row_conta
 	SearchConditionSearchType _tmp5_ = 0;
 	SavedSearchDialogSearchRow* _tmp6_ = NULL;
 	SearchCondition* _tmp7_ = NULL;
-#line 29 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 28 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (IS_SEARCH_CONDITION (sc), NULL);
-#line 29 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 28 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = (SavedSearchDialogSearchRowContainer*) g_type_create_instance (object_type);
-#line 30 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	saved_search_dialog_search_row_container_setup_gui (self);
-#line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp0_ = sc;
-#line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp1_ = search_condition_get_search_type (_tmp0_);
-#line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp2_ = _tmp1_;
-#line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	saved_search_dialog_search_row_container_set_type (self, _tmp2_);
-#line 32 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp3_ = sc;
-#line 32 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp4_ = search_condition_get_search_type (_tmp3_);
-#line 32 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp5_ = _tmp4_;
-#line 32 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	saved_search_dialog_search_row_container_set_type_combo_box (self, _tmp5_);
-#line 33 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp6_ = self->priv->my_row;
-#line 33 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp7_ = sc;
-#line 33 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	saved_search_dialog_search_row_populate (_tmp6_, _tmp7_);
 #line 29 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	saved_search_dialog_search_row_container_setup_gui (self);
+#line 30 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp0_ = sc;
+#line 30 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp1_ = search_condition_get_search_type (_tmp0_);
+#line 30 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp2_ = _tmp1_;
+#line 30 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	saved_search_dialog_search_row_container_set_type (self, _tmp2_);
+#line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp3_ = sc;
+#line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp4_ = search_condition_get_search_type (_tmp3_);
+#line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp5_ = _tmp4_;
+#line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	saved_search_dialog_search_row_container_set_type_combo_box (self, _tmp5_);
+#line 32 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp6_ = self->priv->my_row;
+#line 32 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp7_ = sc;
+#line 32 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	saved_search_dialog_search_row_populate (_tmp6_, _tmp7_);
+#line 28 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self;
-#line 2126 "SavedSearchDialog.c"
+#line 2128 "SavedSearchDialog.c"
 }
 
 
 static SavedSearchDialogSearchRowContainer* saved_search_dialog_search_row_container_new_edit_existing (SearchCondition* sc) {
-#line 29 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 28 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return saved_search_dialog_search_row_container_construct_edit_existing (SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_CONTAINER, sc);
-#line 2133 "SavedSearchDialog.c"
+#line 2135 "SavedSearchDialog.c"
 }
 
 
 static void _saved_search_dialog_search_row_container_on_type_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 49 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 48 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_container_on_type_changed ((SavedSearchDialogSearchRowContainer*) self);
-#line 2140 "SavedSearchDialog.c"
+#line 2142 "SavedSearchDialog.c"
 }
 
 
 static gboolean _saved_search_dialog_search_row_container_on_removed_gtk_widget_button_press_event (GtkWidget* _sender, GdkEventButton* event, gpointer self) {
 	gboolean result;
 	result = saved_search_dialog_search_row_container_on_removed ((SavedSearchDialogSearchRowContainer*) self, event);
-#line 52 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 51 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 2149 "SavedSearchDialog.c"
+#line 2151 "SavedSearchDialog.c"
 }
 
 
@@ -2157,59 +2159,53 @@ static void saved_search_dialog_search_row_container_setup_gui (SavedSearchDialo
 	GtkComboBoxText* _tmp18_ = NULL;
 	GtkButton* _tmp19_ = NULL;
 	GtkButton* _tmp20_ = NULL;
-	GtkAlignment* _tmp21_ = NULL;
+	GtkBox* _tmp21_ = NULL;
 	GtkBox* _tmp22_ = NULL;
-	GtkBox* _tmp23_ = NULL;
-	GtkComboBoxText* _tmp24_ = NULL;
-	GtkBox* _tmp25_ = NULL;
-	GtkAlignment* _tmp26_ = NULL;
-	GtkBox* _tmp27_ = NULL;
-	GtkAlignment* _tmp28_ = NULL;
-	GtkAlignment* _tmp29_ = NULL;
-	GtkBox* _tmp30_ = NULL;
-	GtkButton* _tmp31_ = NULL;
-	GtkBox* _tmp32_ = NULL;
-#line 37 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	GtkComboBoxText* _tmp23_ = NULL;
+	GtkBox* _tmp24_ = NULL;
+	GtkButton* _tmp25_ = NULL;
+	GtkBox* _tmp26_ = NULL;
+#line 36 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (self));
-#line 38 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 37 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = search_condition_search_type_as_array (&_tmp0_);
-#line 38 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 37 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->search_types = (g_free (self->priv->search_types), NULL);
-#line 38 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 37 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->search_types = _tmp1_;
-#line 38 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 37 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->search_types_length1 = _tmp0_;
-#line 38 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 37 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->_search_types_size_ = self->priv->search_types_length1;
-#line 39 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 38 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = gee_hash_map_new (SEARCH_CONDITION_TYPE_SEARCH_TYPE, NULL, NULL, G_TYPE_INT, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 39 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 38 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->search_types_index);
-#line 39 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 38 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->search_types_index = _tmp2_;
-#line 40 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 39 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	search_condition_search_type_sort_array (&self->priv->search_types, &self->priv->search_types_length1);
-#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 41 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 41 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp3_);
-#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 41 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->type_combo);
-#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 41 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->type_combo = _tmp3_;
-#line 2201 "SavedSearchDialog.c"
+#line 2197 "SavedSearchDialog.c"
 	{
 		gint i = 0;
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		i = 0;
-#line 2206 "SavedSearchDialog.c"
+#line 2202 "SavedSearchDialog.c"
 		{
 			gboolean _tmp4_ = FALSE;
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp4_ = TRUE;
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			while (TRUE) {
-#line 2213 "SavedSearchDialog.c"
+#line 2209 "SavedSearchDialog.c"
 				gint _tmp6_ = 0;
 				SearchConditionSearchType* _tmp7_ = NULL;
 				gint _tmp7__length1 = 0;
@@ -2225,147 +2221,121 @@ static void saved_search_dialog_search_row_container_setup_gui (SavedSearchDialo
 				SearchConditionSearchType _tmp15_ = 0;
 				gchar* _tmp16_ = NULL;
 				gchar* _tmp17_ = NULL;
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				if (!_tmp4_) {
-#line 2231 "SavedSearchDialog.c"
+#line 2227 "SavedSearchDialog.c"
 					gint _tmp5_ = 0;
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					_tmp5_ = i;
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					i = _tmp5_ + 1;
-#line 2237 "SavedSearchDialog.c"
+#line 2233 "SavedSearchDialog.c"
 				}
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp4_ = FALSE;
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp6_ = i;
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp7_ = self->priv->search_types;
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp7__length1 = self->priv->search_types_length1;
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				if (!(_tmp6_ < _tmp7__length1)) {
-#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 					break;
-#line 2251 "SavedSearchDialog.c"
+#line 2247 "SavedSearchDialog.c"
 				}
-#line 44 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp8_ = self->priv->search_types;
-#line 44 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp8__length1 = self->priv->search_types_length1;
-#line 44 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp9_ = i;
-#line 44 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp10_ = _tmp8_[_tmp9_];
-#line 44 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 43 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				st = _tmp10_;
-#line 45 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 44 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp11_ = self->priv->search_types_index;
-#line 45 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 44 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp12_ = st;
-#line 45 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 44 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp13_ = i;
-#line 45 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 44 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) _tmp12_), (gpointer) ((gintptr) _tmp13_));
-#line 46 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 45 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp14_ = self->priv->type_combo;
-#line 46 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 45 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp15_ = st;
-#line 46 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 45 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp16_ = search_condition_search_type_display_text (_tmp15_);
-#line 46 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 45 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_tmp17_ = _tmp16_;
-#line 46 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 45 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				gtk_combo_box_text_append_text (_tmp14_, _tmp17_);
-#line 46 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 45 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 				_g_free0 (_tmp17_);
-#line 2283 "SavedSearchDialog.c"
+#line 2279 "SavedSearchDialog.c"
 			}
 		}
 	}
-#line 48 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 47 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_container_set_type_combo_box (self, SEARCH_CONDITION_SEARCH_TYPE_ANY_TEXT);
-#line 49 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 48 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp18_ = self->priv->type_combo;
-#line 49 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 48 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_container_on_type_changed_gtk_combo_box_changed, self);
-#line 51 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 50 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp19_ = (GtkButton*) gtk_button_new_from_icon_name ("list-remove-symbolic", GTK_ICON_SIZE_BUTTON);
-#line 51 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 50 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp19_);
-#line 51 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 50 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->remove_button);
-#line 51 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 50 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->remove_button = _tmp19_;
-#line 52 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 51 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp20_ = self->priv->remove_button;
-#line 52 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 51 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _saved_search_dialog_search_row_container_on_removed_gtk_widget_button_press_event, self);
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp21_ = (GtkAlignment*) gtk_alignment_new ((gfloat) 0, (gfloat) 0, (gfloat) 0, (gfloat) 0);
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp21_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp21_);
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->align);
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->align = _tmp21_;
-#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp22_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp22_);
-#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->box);
+#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->box = _tmp21_;
+#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp22_ = self->priv->box;
+#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp23_ = self->priv->type_combo;
+#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp22_, G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 55 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp24_ = self->priv->box;
+#line 55 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp25_ = self->priv->remove_button;
+#line 55 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_end (_tmp24_, G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
 #line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->box = _tmp22_;
-#line 57 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp23_ = self->priv->box;
-#line 57 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp24_ = self->priv->type_combo;
-#line 57 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp23_, G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 58 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp25_ = self->priv->box;
-#line 58 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp26_ = self->priv->align;
-#line 58 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp25_, G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp27_ = self->priv->box;
-#line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp28_ = (GtkAlignment*) gtk_alignment_new ((gfloat) 0, (gfloat) 0, (gfloat) 0, (gfloat) 0);
-#line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp28_);
-#line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp29_ = _tmp28_;
-#line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp27_, G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
-#line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (_tmp29_);
-#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp30_ = self->priv->box;
-#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp31_ = self->priv->remove_button;
-#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp30_, G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 61 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp32_ = self->priv->box;
-#line 61 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_widget_get_type (), GtkWidget));
-#line 2355 "SavedSearchDialog.c"
+	_tmp26_ = self->priv->box;
+#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_widget_get_type (), GtkWidget));
+#line 2325 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_container_on_type_changed (SavedSearchDialogSearchRowContainer* self) {
 	SearchConditionSearchType _tmp0_ = 0;
-#line 64 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (self));
-#line 65 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = saved_search_dialog_search_row_container_get_search_type (self);
-#line 65 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_container_set_type (self, _tmp0_);
-#line 66 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 61 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_emit_by_name (self, "changed", self);
-#line 2369 "SavedSearchDialog.c"
+#line 2339 "SavedSearchDialog.c"
 }
 
 
@@ -2374,180 +2344,178 @@ static void saved_search_dialog_search_row_container_set_type_combo_box (SavedSe
 	GeeHashMap* _tmp1_ = NULL;
 	SearchConditionSearchType _tmp2_ = 0;
 	gpointer _tmp3_ = NULL;
-#line 69 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 64 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (self));
-#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 65 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->type_combo;
-#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 65 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = self->priv->search_types_index;
-#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 65 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = st;
-#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 65 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) _tmp2_));
-#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 65 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_combo_box_get_type (), GtkComboBox), (gint) ((gintptr) _tmp3_));
-#line 2390 "SavedSearchDialog.c"
+#line 2360 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_container_set_type (SavedSearchDialogSearchRowContainer* self, SearchConditionSearchType type) {
 	SavedSearchDialogSearchRow* _tmp0_ = NULL;
 	SearchConditionSearchType _tmp5_ = 0;
-	GtkAlignment* _tmp12_ = NULL;
+	GtkBox* _tmp12_ = NULL;
 	SavedSearchDialogSearchRow* _tmp13_ = NULL;
 	GtkWidget* _tmp14_ = NULL;
 	GtkWidget* _tmp15_ = NULL;
-#line 73 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 68 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (self));
-#line 74 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 69 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->my_row;
-#line 74 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 69 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp0_ != NULL) {
-#line 2407 "SavedSearchDialog.c"
-		GtkAlignment* _tmp1_ = NULL;
+#line 2377 "SavedSearchDialog.c"
+		GtkBox* _tmp1_ = NULL;
 		SavedSearchDialogSearchRow* _tmp2_ = NULL;
 		GtkWidget* _tmp3_ = NULL;
 		GtkWidget* _tmp4_ = NULL;
-#line 75 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		_tmp1_ = self->priv->align;
-#line 75 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+		_tmp1_ = self->priv->box;
+#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp2_ = self->priv->my_row;
-#line 75 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp3_ = saved_search_dialog_search_row_get_widget (_tmp2_);
-#line 75 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp4_ = _tmp3_;
-#line 75 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		gtk_container_remove (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_container_get_type (), GtkContainer), _tmp4_);
-#line 75 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_g_object_unref0 (_tmp4_);
-#line 2424 "SavedSearchDialog.c"
+#line 2394 "SavedSearchDialog.c"
 	}
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = type;
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	switch (_tmp5_) {
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		case SEARCH_CONDITION_SEARCH_TYPE_ANY_TEXT:
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		case SEARCH_CONDITION_SEARCH_TYPE_EVENT_NAME:
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		case SEARCH_CONDITION_SEARCH_TYPE_FILE_NAME:
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		case SEARCH_CONDITION_SEARCH_TYPE_TAG:
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		case SEARCH_CONDITION_SEARCH_TYPE_COMMENT:
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		case SEARCH_CONDITION_SEARCH_TYPE_TITLE:
-#line 2442 "SavedSearchDialog.c"
+#line 2412 "SavedSearchDialog.c"
 		{
 			SavedSearchDialogSearchRowText* _tmp6_ = NULL;
-#line 84 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 79 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp6_ = saved_search_dialog_search_row_text_new (self);
-#line 84 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 79 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_saved_search_dialog_search_row_unref0 (self->priv->my_row);
-#line 84 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 79 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			self->priv->my_row = G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
-#line 85 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 80 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			break;
+#line 2423 "SavedSearchDialog.c"
+		}
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+		case SEARCH_CONDITION_SEARCH_TYPE_MEDIA_TYPE:
+#line 2427 "SavedSearchDialog.c"
+		{
+			SavedSearchDialogSearchRowMediaType* _tmp7_ = NULL;
+#line 83 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			_tmp7_ = saved_search_dialog_search_row_media_type_new (self);
+#line 83 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			_saved_search_dialog_search_row_unref0 (self->priv->my_row);
+#line 83 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			self->priv->my_row = G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
+#line 84 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			break;
+#line 2438 "SavedSearchDialog.c"
+		}
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+		case SEARCH_CONDITION_SEARCH_TYPE_FLAG_STATE:
+#line 2442 "SavedSearchDialog.c"
+		{
+			SavedSearchDialogSearchRowFlagged* _tmp8_ = NULL;
+#line 87 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			_tmp8_ = saved_search_dialog_search_row_flagged_new (self);
+#line 87 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			_saved_search_dialog_search_row_unref0 (self->priv->my_row);
+#line 87 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			self->priv->my_row = G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
+#line 88 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			break;
 #line 2453 "SavedSearchDialog.c"
 		}
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		case SEARCH_CONDITION_SEARCH_TYPE_MEDIA_TYPE:
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+		case SEARCH_CONDITION_SEARCH_TYPE_MODIFIED_STATE:
 #line 2457 "SavedSearchDialog.c"
 		{
-			SavedSearchDialogSearchRowMediaType* _tmp7_ = NULL;
-#line 88 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			_tmp7_ = saved_search_dialog_search_row_media_type_new (self);
-#line 88 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			SavedSearchDialogSearchRowModified* _tmp9_ = NULL;
+#line 91 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			_tmp9_ = saved_search_dialog_search_row_modified_new (self);
+#line 91 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_saved_search_dialog_search_row_unref0 (self->priv->my_row);
-#line 88 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			self->priv->my_row = G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
-#line 89 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			self->priv->my_row = G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
+#line 92 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			break;
 #line 2468 "SavedSearchDialog.c"
 		}
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		case SEARCH_CONDITION_SEARCH_TYPE_FLAG_STATE:
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+		case SEARCH_CONDITION_SEARCH_TYPE_RATING:
 #line 2472 "SavedSearchDialog.c"
 		{
-			SavedSearchDialogSearchRowFlagged* _tmp8_ = NULL;
-#line 92 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			_tmp8_ = saved_search_dialog_search_row_flagged_new (self);
-#line 92 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			SavedSearchDialogSearchRowRating* _tmp10_ = NULL;
+#line 95 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			_tmp10_ = saved_search_dialog_search_row_rating_new (self);
+#line 95 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_saved_search_dialog_search_row_unref0 (self->priv->my_row);
-#line 92 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			self->priv->my_row = G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
-#line 93 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 95 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			self->priv->my_row = G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
+#line 96 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			break;
 #line 2483 "SavedSearchDialog.c"
 		}
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		case SEARCH_CONDITION_SEARCH_TYPE_MODIFIED_STATE:
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+		case SEARCH_CONDITION_SEARCH_TYPE_DATE:
 #line 2487 "SavedSearchDialog.c"
 		{
-			SavedSearchDialogSearchRowModified* _tmp9_ = NULL;
-#line 96 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			_tmp9_ = saved_search_dialog_search_row_modified_new (self);
-#line 96 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			SavedSearchDialogSearchRowDate* _tmp11_ = NULL;
+#line 99 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			_tmp11_ = saved_search_dialog_search_row_date_new (self);
+#line 99 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_saved_search_dialog_search_row_unref0 (self->priv->my_row);
-#line 96 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			self->priv->my_row = G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
-#line 97 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 99 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			self->priv->my_row = G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
+#line 100 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			break;
 #line 2498 "SavedSearchDialog.c"
 		}
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		case SEARCH_CONDITION_SEARCH_TYPE_RATING:
-#line 2502 "SavedSearchDialog.c"
-		{
-			SavedSearchDialogSearchRowRating* _tmp10_ = NULL;
-#line 100 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			_tmp10_ = saved_search_dialog_search_row_rating_new (self);
-#line 100 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			_saved_search_dialog_search_row_unref0 (self->priv->my_row);
-#line 100 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			self->priv->my_row = G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
-#line 101 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			break;
-#line 2513 "SavedSearchDialog.c"
-		}
-#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		case SEARCH_CONDITION_SEARCH_TYPE_DATE:
-#line 2517 "SavedSearchDialog.c"
-		{
-			SavedSearchDialogSearchRowDate* _tmp11_ = NULL;
-#line 104 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			_tmp11_ = saved_search_dialog_search_row_date_new (self);
-#line 104 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			_saved_search_dialog_search_row_unref0 (self->priv->my_row);
-#line 104 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			self->priv->my_row = G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
-#line 105 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			break;
-#line 2528 "SavedSearchDialog.c"
-		}
 		default:
 		{
-#line 108 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			_vala_assert (FALSE, "false");
-#line 109 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-			break;
-#line 2536 "SavedSearchDialog.c"
+#line 103 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+			g_assert_not_reached ();
+#line 2504 "SavedSearchDialog.c"
 		}
 	}
-#line 112 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp12_ = self->priv->align;
-#line 112 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 106 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp12_ = self->priv->box;
+#line 106 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp13_ = self->priv->my_row;
-#line 112 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 106 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp14_ = saved_search_dialog_search_row_get_widget (_tmp13_);
-#line 112 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 106 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp15_ = _tmp14_;
-#line 112 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_container_get_type (), GtkContainer), _tmp15_);
-#line 112 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 106 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp12_, _tmp15_, TRUE, TRUE, (guint) 0);
+#line 106 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (_tmp15_);
-#line 2551 "SavedSearchDialog.c"
+#line 2519 "SavedSearchDialog.c"
 }
 
 
@@ -2558,54 +2526,54 @@ static SearchConditionSearchType saved_search_dialog_search_row_container_get_se
 	GtkComboBoxText* _tmp1_ = NULL;
 	gint _tmp2_ = 0;
 	SearchConditionSearchType _tmp3_ = 0;
-#line 115 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 109 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (self), 0);
-#line 116 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 110 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->search_types;
-#line 116 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 110 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0__length1 = self->priv->search_types_length1;
-#line 116 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 110 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = self->priv->type_combo;
-#line 116 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 110 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_combo_box_get_type (), GtkComboBox));
-#line 116 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 110 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = _tmp0_[_tmp2_];
-#line 116 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 110 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp3_;
-#line 116 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 110 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 2578 "SavedSearchDialog.c"
+#line 2546 "SavedSearchDialog.c"
 }
 
 
 static gboolean saved_search_dialog_search_row_container_on_removed (SavedSearchDialogSearchRowContainer* self, GdkEventButton* event) {
 	gboolean result = FALSE;
-#line 119 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 113 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (self), FALSE);
-#line 119 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 113 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 120 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 114 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_emit_by_name (self, "remove", self);
-#line 121 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 115 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = FALSE;
-#line 121 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 115 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 2594 "SavedSearchDialog.c"
+#line 2562 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_container_allow_removal (SavedSearchDialogSearchRowContainer* self, gboolean allow) {
 	GtkButton* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 124 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 118 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (self));
-#line 125 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 119 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->remove_button;
-#line 125 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 119 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = allow;
-#line 125 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 119 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), _tmp1_);
-#line 2609 "SavedSearchDialog.c"
+#line 2577 "SavedSearchDialog.c"
 }
 
 
@@ -2613,17 +2581,17 @@ static GtkWidget* saved_search_dialog_search_row_container_get_widget (SavedSear
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 128 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 122 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (self), NULL);
-#line 129 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 123 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->box;
-#line 129 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 123 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 129 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 123 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp1_;
-#line 129 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 123 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 2627 "SavedSearchDialog.c"
+#line 2595 "SavedSearchDialog.c"
 }
 
 
@@ -2631,17 +2599,17 @@ static SearchCondition* saved_search_dialog_search_row_container_get_search_cond
 	SearchCondition* result = NULL;
 	SavedSearchDialogSearchRow* _tmp0_ = NULL;
 	SearchCondition* _tmp1_ = NULL;
-#line 132 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 126 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (self), NULL);
-#line 133 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 127 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->my_row;
-#line 133 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 127 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = saved_search_dialog_search_row_get_search_condition (_tmp0_);
-#line 133 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 127 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp1_;
-#line 133 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 127 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 2645 "SavedSearchDialog.c"
+#line 2613 "SavedSearchDialog.c"
 }
 
 
@@ -2649,17 +2617,17 @@ static gboolean saved_search_dialog_search_row_container_is_complete (SavedSearc
 	gboolean result = FALSE;
 	SavedSearchDialogSearchRow* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 130 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (self), FALSE);
-#line 137 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 131 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->my_row;
-#line 137 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 131 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = saved_search_dialog_search_row_is_complete (_tmp0_);
-#line 137 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 131 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp1_;
-#line 137 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 131 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 2663 "SavedSearchDialog.c"
+#line 2631 "SavedSearchDialog.c"
 }
 
 
@@ -2678,26 +2646,26 @@ static void g_cclosure_user_marshal_VOID__SAVED_SEARCH_DIALOG_SEARCH_ROW_CONTAIN
 		data1 = closure->data;
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 2682 "SavedSearchDialog.c"
+#line 2650 "SavedSearchDialog.c"
 	} else {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		data2 = closure->data;
-#line 2688 "SavedSearchDialog.c"
+#line 2656 "SavedSearchDialog.c"
 	}
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	callback = (GMarshalFunc_VOID__SAVED_SEARCH_DIALOG_SEARCH_ROW_CONTAINER) (marshal_data ? marshal_data : cc->callback);
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	callback (data1, saved_search_dialog_value_get_search_row_container (param_values + 1), data2);
-#line 2694 "SavedSearchDialog.c"
+#line 2662 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_value_search_row_container_init (GValue* value) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	value->data[0].v_pointer = NULL;
-#line 2701 "SavedSearchDialog.c"
+#line 2669 "SavedSearchDialog.c"
 }
 
 
@@ -2706,7 +2674,7 @@ static void saved_search_dialog_value_search_row_container_free_value (GValue* v
 	if (value->data[0].v_pointer) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_search_row_container_unref (value->data[0].v_pointer);
-#line 2710 "SavedSearchDialog.c"
+#line 2678 "SavedSearchDialog.c"
 	}
 }
 
@@ -2716,11 +2684,11 @@ static void saved_search_dialog_value_search_row_container_copy_value (const GVa
 	if (src_value->data[0].v_pointer) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		dest_value->data[0].v_pointer = saved_search_dialog_search_row_container_ref (src_value->data[0].v_pointer);
-#line 2720 "SavedSearchDialog.c"
+#line 2688 "SavedSearchDialog.c"
 	} else {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 2724 "SavedSearchDialog.c"
+#line 2692 "SavedSearchDialog.c"
 	}
 }
 
@@ -2728,37 +2696,37 @@ static void saved_search_dialog_value_search_row_container_copy_value (const GVa
 static gpointer saved_search_dialog_value_search_row_container_peek_pointer (const GValue* value) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return value->data[0].v_pointer;
-#line 2732 "SavedSearchDialog.c"
+#line 2700 "SavedSearchDialog.c"
 }
 
 
 static gchar* saved_search_dialog_value_search_row_container_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (collect_values[0].v_pointer) {
-#line 2739 "SavedSearchDialog.c"
+#line 2707 "SavedSearchDialog.c"
 		SavedSearchDialogSearchRowContainer* object;
 		object = collect_values[0].v_pointer;
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2746 "SavedSearchDialog.c"
+#line 2714 "SavedSearchDialog.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2750 "SavedSearchDialog.c"
+#line 2718 "SavedSearchDialog.c"
 		}
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = saved_search_dialog_search_row_container_ref (object);
-#line 2754 "SavedSearchDialog.c"
+#line 2722 "SavedSearchDialog.c"
 	} else {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = NULL;
-#line 2758 "SavedSearchDialog.c"
+#line 2726 "SavedSearchDialog.c"
 	}
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return NULL;
-#line 2762 "SavedSearchDialog.c"
+#line 2730 "SavedSearchDialog.c"
 }
 
 
@@ -2769,25 +2737,25 @@ static gchar* saved_search_dialog_value_search_row_container_lcopy_value (const 
 	if (!object_p) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 2773 "SavedSearchDialog.c"
+#line 2741 "SavedSearchDialog.c"
 	}
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (!value->data[0].v_pointer) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		*object_p = NULL;
-#line 2779 "SavedSearchDialog.c"
+#line 2747 "SavedSearchDialog.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		*object_p = value->data[0].v_pointer;
-#line 2783 "SavedSearchDialog.c"
+#line 2751 "SavedSearchDialog.c"
 	} else {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		*object_p = saved_search_dialog_search_row_container_ref (value->data[0].v_pointer);
-#line 2787 "SavedSearchDialog.c"
+#line 2755 "SavedSearchDialog.c"
 	}
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return NULL;
-#line 2791 "SavedSearchDialog.c"
+#line 2759 "SavedSearchDialog.c"
 }
 
 
@@ -2801,7 +2769,7 @@ static GParamSpec* saved_search_dialog_param_spec_search_row_container (const gc
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return G_PARAM_SPEC (spec);
-#line 2805 "SavedSearchDialog.c"
+#line 2773 "SavedSearchDialog.c"
 }
 
 
@@ -2810,7 +2778,7 @@ static gpointer saved_search_dialog_value_get_search_row_container (const GValue
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_CONTAINER), NULL);
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return value->data[0].v_pointer;
-#line 2814 "SavedSearchDialog.c"
+#line 2782 "SavedSearchDialog.c"
 }
 
 
@@ -2830,17 +2798,17 @@ static void saved_search_dialog_value_set_search_row_container (GValue* value, g
 		value->data[0].v_pointer = v_object;
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_search_row_container_ref (value->data[0].v_pointer);
-#line 2834 "SavedSearchDialog.c"
+#line 2802 "SavedSearchDialog.c"
 	} else {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = NULL;
-#line 2838 "SavedSearchDialog.c"
+#line 2806 "SavedSearchDialog.c"
 	}
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (old) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_search_row_container_unref (old);
-#line 2844 "SavedSearchDialog.c"
+#line 2812 "SavedSearchDialog.c"
 	}
 }
 
@@ -2859,17 +2827,17 @@ static void saved_search_dialog_value_take_search_row_container (GValue* value, 
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = v_object;
-#line 2863 "SavedSearchDialog.c"
+#line 2831 "SavedSearchDialog.c"
 	} else {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = NULL;
-#line 2867 "SavedSearchDialog.c"
+#line 2835 "SavedSearchDialog.c"
 	}
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (old) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_search_row_container_unref (old);
-#line 2873 "SavedSearchDialog.c"
+#line 2841 "SavedSearchDialog.c"
 	}
 }
 
@@ -2885,18 +2853,18 @@ static void saved_search_dialog_search_row_container_class_init (SavedSearchDial
 	g_signal_new ("remove", SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_CONTAINER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__SAVED_SEARCH_DIALOG_SEARCH_ROW_CONTAINER, G_TYPE_NONE, 1, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_CONTAINER);
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_new ("changed", SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_CONTAINER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__SAVED_SEARCH_DIALOG_SEARCH_ROW_CONTAINER, G_TYPE_NONE, 1, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_CONTAINER);
-#line 2889 "SavedSearchDialog.c"
+#line 2857 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_container_instance_init (SavedSearchDialogSearchRowContainer * self) {
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv = SAVED_SEARCH_DIALOG_SEARCH_ROW_CONTAINER_GET_PRIVATE (self);
-#line 22 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 21 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->my_row = NULL;
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->ref_count = 1;
-#line 2900 "SavedSearchDialog.c"
+#line 2868 "SavedSearchDialog.c"
 }
 
 
@@ -2911,16 +2879,14 @@ static void saved_search_dialog_search_row_container_finalize (SavedSearchDialog
 #line 16 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->box);
 #line 17 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->align);
-#line 18 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->remove_button);
-#line 19 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 18 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->search_types = (g_free (self->priv->search_types), NULL);
-#line 20 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 19 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->search_types_index);
-#line 22 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 21 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_unref0 (self->priv->my_row);
-#line 2924 "SavedSearchDialog.c"
+#line 2890 "SavedSearchDialog.c"
 }
 
 
@@ -2945,7 +2911,7 @@ static gpointer saved_search_dialog_search_row_container_ref (gpointer instance)
 	g_atomic_int_inc (&self->ref_count);
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return instance;
-#line 2949 "SavedSearchDialog.c"
+#line 2915 "SavedSearchDialog.c"
 }
 
 
@@ -2958,304 +2924,304 @@ static void saved_search_dialog_search_row_container_unref (gpointer instance) {
 		SAVED_SEARCH_DIALOG_SEARCH_ROW_CONTAINER_GET_CLASS (self)->finalize (self);
 #line 11 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 2962 "SavedSearchDialog.c"
+#line 2928 "SavedSearchDialog.c"
 	}
 }
 
 
 static GtkWidget* saved_search_dialog_search_row_real_get_widget (SavedSearchDialogSearchRow* self) {
-#line 144 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 138 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_critical ("Type `%s' does not implement abstract method `saved_search_dialog_search_row_get_widget'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 144 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 138 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return NULL;
-#line 2972 "SavedSearchDialog.c"
+#line 2938 "SavedSearchDialog.c"
 }
 
 
 GtkWidget* saved_search_dialog_search_row_get_widget (SavedSearchDialogSearchRow* self) {
-#line 144 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 138 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW (self), NULL);
-#line 144 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 138 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return SAVED_SEARCH_DIALOG_SEARCH_ROW_GET_CLASS (self)->get_widget (self);
-#line 2981 "SavedSearchDialog.c"
+#line 2947 "SavedSearchDialog.c"
 }
 
 
 static SearchCondition* saved_search_dialog_search_row_real_get_search_condition (SavedSearchDialogSearchRow* self) {
-#line 147 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 141 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_critical ("Type `%s' does not implement abstract method `saved_search_dialog_search_row_get_search_condition'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 147 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 141 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return NULL;
-#line 2990 "SavedSearchDialog.c"
+#line 2956 "SavedSearchDialog.c"
 }
 
 
 SearchCondition* saved_search_dialog_search_row_get_search_condition (SavedSearchDialogSearchRow* self) {
-#line 147 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 141 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW (self), NULL);
-#line 147 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 141 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return SAVED_SEARCH_DIALOG_SEARCH_ROW_GET_CLASS (self)->get_search_condition (self);
-#line 2999 "SavedSearchDialog.c"
+#line 2965 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_real_populate (SavedSearchDialogSearchRow* self, SearchCondition* sc) {
-#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 144 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_critical ("Type `%s' does not implement abstract method `saved_search_dialog_search_row_populate'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 144 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return;
-#line 3008 "SavedSearchDialog.c"
+#line 2974 "SavedSearchDialog.c"
 }
 
 
 void saved_search_dialog_search_row_populate (SavedSearchDialogSearchRow* self, SearchCondition* sc) {
-#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 144 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW (self));
-#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 144 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	SAVED_SEARCH_DIALOG_SEARCH_ROW_GET_CLASS (self)->populate (self, sc);
-#line 3017 "SavedSearchDialog.c"
+#line 2983 "SavedSearchDialog.c"
 }
 
 
 static gboolean saved_search_dialog_search_row_real_is_complete (SavedSearchDialogSearchRow* self) {
-#line 153 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 147 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_critical ("Type `%s' does not implement abstract method `saved_search_dialog_search_row_is_complete'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 153 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 147 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return FALSE;
-#line 3026 "SavedSearchDialog.c"
+#line 2992 "SavedSearchDialog.c"
 }
 
 
 gboolean saved_search_dialog_search_row_is_complete (SavedSearchDialogSearchRow* self) {
-#line 153 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 147 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW (self), FALSE);
-#line 153 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 147 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return SAVED_SEARCH_DIALOG_SEARCH_ROW_GET_CLASS (self)->is_complete (self);
-#line 3035 "SavedSearchDialog.c"
+#line 3001 "SavedSearchDialog.c"
 }
 
 
 static SavedSearchDialogSearchRow* saved_search_dialog_search_row_construct (GType object_type) {
 	SavedSearchDialogSearchRow* self = NULL;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = (SavedSearchDialogSearchRow*) g_type_create_instance (object_type);
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self;
-#line 3045 "SavedSearchDialog.c"
+#line 3011 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_value_search_row_init (GValue* value) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	value->data[0].v_pointer = NULL;
-#line 3052 "SavedSearchDialog.c"
+#line 3018 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_value_search_row_free_value (GValue* value) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (value->data[0].v_pointer) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_search_row_unref (value->data[0].v_pointer);
-#line 3061 "SavedSearchDialog.c"
+#line 3027 "SavedSearchDialog.c"
 	}
 }
 
 
 static void saved_search_dialog_value_search_row_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (src_value->data[0].v_pointer) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		dest_value->data[0].v_pointer = saved_search_dialog_search_row_ref (src_value->data[0].v_pointer);
-#line 3071 "SavedSearchDialog.c"
+#line 3037 "SavedSearchDialog.c"
 	} else {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 3075 "SavedSearchDialog.c"
+#line 3041 "SavedSearchDialog.c"
 	}
 }
 
 
 static gpointer saved_search_dialog_value_search_row_peek_pointer (const GValue* value) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return value->data[0].v_pointer;
-#line 3083 "SavedSearchDialog.c"
+#line 3049 "SavedSearchDialog.c"
 }
 
 
 static gchar* saved_search_dialog_value_search_row_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (collect_values[0].v_pointer) {
-#line 3090 "SavedSearchDialog.c"
+#line 3056 "SavedSearchDialog.c"
 		SavedSearchDialogSearchRow* object;
 		object = collect_values[0].v_pointer;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3097 "SavedSearchDialog.c"
+#line 3063 "SavedSearchDialog.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3101 "SavedSearchDialog.c"
+#line 3067 "SavedSearchDialog.c"
 		}
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = saved_search_dialog_search_row_ref (object);
-#line 3105 "SavedSearchDialog.c"
+#line 3071 "SavedSearchDialog.c"
 	} else {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = NULL;
-#line 3109 "SavedSearchDialog.c"
+#line 3075 "SavedSearchDialog.c"
 	}
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return NULL;
-#line 3113 "SavedSearchDialog.c"
+#line 3079 "SavedSearchDialog.c"
 }
 
 
 static gchar* saved_search_dialog_value_search_row_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	SavedSearchDialogSearchRow** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (!object_p) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 3124 "SavedSearchDialog.c"
+#line 3090 "SavedSearchDialog.c"
 	}
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (!value->data[0].v_pointer) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		*object_p = NULL;
-#line 3130 "SavedSearchDialog.c"
+#line 3096 "SavedSearchDialog.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		*object_p = value->data[0].v_pointer;
-#line 3134 "SavedSearchDialog.c"
+#line 3100 "SavedSearchDialog.c"
 	} else {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		*object_p = saved_search_dialog_search_row_ref (value->data[0].v_pointer);
-#line 3138 "SavedSearchDialog.c"
+#line 3104 "SavedSearchDialog.c"
 	}
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return NULL;
-#line 3142 "SavedSearchDialog.c"
+#line 3108 "SavedSearchDialog.c"
 }
 
 
 static GParamSpec* saved_search_dialog_param_spec_search_row (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	SavedSearchDialogParamSpecSearchRow* spec;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW), NULL);
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return G_PARAM_SPEC (spec);
-#line 3156 "SavedSearchDialog.c"
+#line 3122 "SavedSearchDialog.c"
 }
 
 
 static gpointer saved_search_dialog_value_get_search_row (const GValue* value) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW), NULL);
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return value->data[0].v_pointer;
-#line 3165 "SavedSearchDialog.c"
+#line 3131 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_value_set_search_row (GValue* value, gpointer v_object) {
 	SavedSearchDialogSearchRow* old;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW));
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	old = value->data[0].v_pointer;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (v_object) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW));
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = v_object;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_search_row_ref (value->data[0].v_pointer);
-#line 3185 "SavedSearchDialog.c"
+#line 3151 "SavedSearchDialog.c"
 	} else {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = NULL;
-#line 3189 "SavedSearchDialog.c"
+#line 3155 "SavedSearchDialog.c"
 	}
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (old) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_search_row_unref (old);
-#line 3195 "SavedSearchDialog.c"
+#line 3161 "SavedSearchDialog.c"
 	}
 }
 
 
 static void saved_search_dialog_value_take_search_row (GValue* value, gpointer v_object) {
 	SavedSearchDialogSearchRow* old;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW));
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	old = value->data[0].v_pointer;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (v_object) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW));
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = v_object;
-#line 3214 "SavedSearchDialog.c"
+#line 3180 "SavedSearchDialog.c"
 	} else {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = NULL;
-#line 3218 "SavedSearchDialog.c"
+#line 3184 "SavedSearchDialog.c"
 	}
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (old) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_search_row_unref (old);
-#line 3224 "SavedSearchDialog.c"
+#line 3190 "SavedSearchDialog.c"
 	}
 }
 
 
 static void saved_search_dialog_search_row_class_init (SavedSearchDialogSearchRowClass * klass) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_parent_class = g_type_class_peek_parent (klass);
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->finalize = saved_search_dialog_search_row_finalize;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_widget = saved_search_dialog_search_row_real_get_widget;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_search_condition = saved_search_dialog_search_row_real_get_search_condition;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->populate = saved_search_dialog_search_row_real_populate;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->is_complete = saved_search_dialog_search_row_real_is_complete;
-#line 3242 "SavedSearchDialog.c"
+#line 3208 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_instance_init (SavedSearchDialogSearchRow * self) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->ref_count = 1;
-#line 3249 "SavedSearchDialog.c"
+#line 3215 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_finalize (SavedSearchDialogSearchRow* obj) {
 	SavedSearchDialogSearchRow * self;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW, SavedSearchDialogSearchRow);
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_destroy (self);
-#line 3259 "SavedSearchDialog.c"
+#line 3225 "SavedSearchDialog.c"
 }
 
 
@@ -3276,46 +3242,46 @@ static GType saved_search_dialog_search_row_get_type (void) {
 static gpointer saved_search_dialog_search_row_ref (gpointer instance) {
 	SavedSearchDialogSearchRow* self;
 	self = instance;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return instance;
-#line 3284 "SavedSearchDialog.c"
+#line 3250 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_unref (gpointer instance) {
 	SavedSearchDialogSearchRow* self;
 	self = instance;
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		SAVED_SEARCH_DIALOG_SEARCH_ROW_GET_CLASS (self)->finalize (self);
-#line 142 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 3297 "SavedSearchDialog.c"
+#line 3263 "SavedSearchDialog.c"
 	}
 }
 
 
 static void _saved_search_dialog_search_row_text_on_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 190 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 184 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_text_on_changed ((SavedSearchDialogSearchRowText*) self);
-#line 3305 "SavedSearchDialog.c"
+#line 3271 "SavedSearchDialog.c"
 }
 
 
 static void _saved_search_dialog_search_row_text_on_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self) {
-#line 191 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 185 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_text_on_changed ((SavedSearchDialogSearchRowText*) self);
-#line 3312 "SavedSearchDialog.c"
+#line 3278 "SavedSearchDialog.c"
 }
 
 
 static gpointer _saved_search_dialog_search_row_container_ref0 (gpointer self) {
-#line 164 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 158 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self ? saved_search_dialog_search_row_container_ref (self) : NULL;
-#line 3319 "SavedSearchDialog.c"
+#line 3285 "SavedSearchDialog.c"
 }
 
 
@@ -3350,130 +3316,130 @@ static SavedSearchDialogSearchRowText* saved_search_dialog_search_row_text_const
 	GtkBox* _tmp26_ = NULL;
 	GtkEntry* _tmp27_ = NULL;
 	GtkBox* _tmp28_ = NULL;
-#line 163 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 157 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (parent), NULL);
-#line 163 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 157 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = (SavedSearchDialogSearchRowText*) saved_search_dialog_search_row_construct (object_type);
-#line 164 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 158 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = parent;
-#line 164 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 158 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _saved_search_dialog_search_row_container_ref0 (_tmp0_);
-#line 164 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 158 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
-#line 164 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 158 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->parent = _tmp1_;
-#line 167 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 161 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 167 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 161 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp2_);
-#line 167 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 161 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->text_context);
-#line 167 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 161 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->text_context = _tmp2_;
-#line 168 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 162 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = self->priv->text_context;
-#line 168 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 162 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _ ("contains");
-#line 168 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 162 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_text_append_text (_tmp3_, _tmp4_);
-#line 169 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp5_ = self->priv->text_context;
-#line 169 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp6_ = _ ("is exactly");
-#line 169 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp5_, _tmp6_);
-#line 170 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp7_ = self->priv->text_context;
-#line 170 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp8_ = _ ("starts with");
-#line 170 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp7_, _tmp8_);
-#line 171 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp9_ = self->priv->text_context;
-#line 171 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp10_ = _ ("ends with");
-#line 171 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp9_, _tmp10_);
-#line 172 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp11_ = self->priv->text_context;
-#line 172 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp12_ = _ ("does not contain");
-#line 172 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp11_, _tmp12_);
-#line 173 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp13_ = self->priv->text_context;
-#line 173 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp14_ = _ ("is not set");
-#line 173 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp13_, _tmp14_);
-#line 174 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp15_ = self->priv->text_context;
-#line 174 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp16_ = _ ("is set");
-#line 174 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp15_, _tmp16_);
-#line 175 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp17_ = self->priv->text_context;
-#line 175 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 176 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp18_ = self->priv->text_context;
-#line 176 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_text_on_changed_gtk_combo_box_changed, self);
-#line 178 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp19_ = (GtkEntry*) gtk_entry_new ();
-#line 178 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp19_);
-#line 178 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->entry);
-#line 178 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->entry = _tmp19_;
-#line 179 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp20_ = self->priv->entry;
-#line 179 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_entry_set_width_chars (_tmp20_, 25);
-#line 180 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp21_ = self->priv->entry;
-#line 180 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_entry_set_activates_default (_tmp21_, TRUE);
-#line 181 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp22_ = self->priv->entry;
-#line 181 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, GTK_TYPE_EDITABLE, GtkEditable), "changed", (GCallback) _saved_search_dialog_search_row_text_on_changed_gtk_editable_changed, self);
-#line 183 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp23_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-#line 183 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp23_);
-#line 183 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->box);
-#line 183 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->box = _tmp23_;
-#line 184 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp24_ = self->priv->box;
-#line 184 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp25_ = self->priv->text_context;
-#line 184 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp24_, G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 185 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp26_ = self->priv->box;
-#line 185 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp27_ = self->priv->entry;
-#line 185 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp26_, G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 186 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp28_ = self->priv->box;
-#line 186 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, gtk_widget_get_type (), GtkWidget));
 #line 163 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp5_ = self->priv->text_context;
+#line 163 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp6_ = _ ("is exactly");
+#line 163 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp5_, _tmp6_);
+#line 164 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp7_ = self->priv->text_context;
+#line 164 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp8_ = _ ("starts with");
+#line 164 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp7_, _tmp8_);
+#line 165 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp9_ = self->priv->text_context;
+#line 165 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp10_ = _ ("ends with");
+#line 165 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp9_, _tmp10_);
+#line 166 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp11_ = self->priv->text_context;
+#line 166 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp12_ = _ ("does not contain");
+#line 166 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp11_, _tmp12_);
+#line 167 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp13_ = self->priv->text_context;
+#line 167 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp14_ = _ ("is not set");
+#line 167 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp13_, _tmp14_);
+#line 168 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp15_ = self->priv->text_context;
+#line 168 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp16_ = _ ("is set");
+#line 168 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp15_, _tmp16_);
+#line 169 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp17_ = self->priv->text_context;
+#line 169 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_combo_box_get_type (), GtkComboBox), 0);
+#line 170 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp18_ = self->priv->text_context;
+#line 170 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_text_on_changed_gtk_combo_box_changed, self);
+#line 172 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp19_ = (GtkEntry*) gtk_entry_new ();
+#line 172 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp19_);
+#line 172 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->entry);
+#line 172 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->entry = _tmp19_;
+#line 173 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp20_ = self->priv->entry;
+#line 173 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_entry_set_width_chars (_tmp20_, 25);
+#line 174 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp21_ = self->priv->entry;
+#line 174 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_entry_set_activates_default (_tmp21_, TRUE);
+#line 175 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp22_ = self->priv->entry;
+#line 175 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, GTK_TYPE_EDITABLE, GtkEditable), "changed", (GCallback) _saved_search_dialog_search_row_text_on_changed_gtk_editable_changed, self);
+#line 177 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp23_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+#line 177 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp23_);
+#line 177 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->box);
+#line 177 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->box = _tmp23_;
+#line 178 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp24_ = self->priv->box;
+#line 178 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp25_ = self->priv->text_context;
+#line 178 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp24_, G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 179 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp26_ = self->priv->box;
+#line 179 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp27_ = self->priv->entry;
+#line 179 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp26_, G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 180 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp28_ = self->priv->box;
+#line 180 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, gtk_widget_get_type (), GtkWidget));
+#line 157 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self;
-#line 3470 "SavedSearchDialog.c"
+#line 3436 "SavedSearchDialog.c"
 }
 
 
 static SavedSearchDialogSearchRowText* saved_search_dialog_search_row_text_new (SavedSearchDialogSearchRowContainer* parent) {
-#line 163 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 157 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return saved_search_dialog_search_row_text_construct (SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_TEXT, parent);
-#line 3477 "SavedSearchDialog.c"
+#line 3443 "SavedSearchDialog.c"
 }
 
 
@@ -3482,17 +3448,17 @@ static GtkWidget* saved_search_dialog_search_row_text_real_get_widget (SavedSear
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 194 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 188 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_TEXT, SavedSearchDialogSearchRowText);
-#line 195 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 189 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->box;
-#line 195 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 189 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 195 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 189 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp1_;
-#line 195 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 189 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 3496 "SavedSearchDialog.c"
+#line 3462 "SavedSearchDialog.c"
 }
 
 
@@ -3510,44 +3476,44 @@ static SearchCondition* saved_search_dialog_search_row_text_real_get_search_cond
 	SearchConditionTextContext _tmp5_ = 0;
 	SearchConditionText* c = NULL;
 	SearchConditionText* _tmp6_ = NULL;
-#line 198 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 192 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_TEXT, SavedSearchDialogSearchRowText);
-#line 199 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 193 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->parent;
-#line 199 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 193 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = saved_search_dialog_search_row_container_get_search_type (_tmp0_);
-#line 199 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 193 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	type = _tmp1_;
-#line 200 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 194 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->entry;
-#line 200 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 194 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = gtk_entry_get_text (_tmp2_);
-#line 200 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 194 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = g_strdup (_tmp3_);
-#line 200 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 194 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	text = _tmp4_;
-#line 201 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 195 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = saved_search_dialog_search_row_text_get_text_context (self);
-#line 201 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 195 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	context = _tmp5_;
-#line 202 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 196 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = search_condition_text_new (type, text, context);
-#line 202 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 196 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	c = _tmp6_;
-#line 203 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 197 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (c, TYPE_SEARCH_CONDITION, SearchCondition);
-#line 203 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 197 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_free0 (text);
-#line 203 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 197 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 3544 "SavedSearchDialog.c"
+#line 3510 "SavedSearchDialog.c"
 }
 
 
 static gpointer _search_condition_ref0 (gpointer self) {
-#line 207 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 201 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self ? search_condition_ref (self) : NULL;
-#line 3551 "SavedSearchDialog.c"
+#line 3517 "SavedSearchDialog.c"
 }
 
 
@@ -3562,39 +3528,39 @@ static void saved_search_dialog_search_row_text_real_populate (SavedSearchDialog
 	GtkEntry* _tmp5_ = NULL;
 	const gchar* _tmp6_ = NULL;
 	const gchar* _tmp7_ = NULL;
-#line 206 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 200 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_TEXT, SavedSearchDialogSearchRowText);
-#line 206 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 200 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SEARCH_CONDITION (sc));
-#line 207 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 201 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = sc;
-#line 207 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 201 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _search_condition_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_SEARCH_CONDITION_TEXT) ? ((SearchConditionText*) _tmp0_) : NULL);
-#line 207 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 201 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	text = _tmp1_;
-#line 208 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 202 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_vala_assert (text != NULL, "text != null");
-#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 203 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->text_context;
-#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 203 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = search_condition_text_get_context (text);
-#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 203 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _tmp3_;
-#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 203 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox), (gint) _tmp4_);
-#line 210 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 204 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = self->priv->entry;
-#line 210 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 204 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = search_condition_text_get_text (text);
-#line 210 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 204 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = _tmp6_;
-#line 210 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 204 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_entry_set_text (_tmp5_, _tmp7_);
-#line 211 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 205 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_text_on_changed (self);
-#line 206 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 200 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_search_condition_unref0 (text);
-#line 3598 "SavedSearchDialog.c"
+#line 3564 "SavedSearchDialog.c"
 }
 
 
@@ -3609,53 +3575,53 @@ static gboolean saved_search_dialog_search_row_text_real_is_complete (SavedSearc
 	gchar* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
 	gboolean _tmp7_ = FALSE;
-#line 214 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 208 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_TEXT, SavedSearchDialogSearchRowText);
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->entry;
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = gtk_entry_get_text (_tmp2_);
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _tmp3_;
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = string_chomp (_tmp4_);
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = _tmp5_;
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = g_strcmp0 (_tmp6_, "") != 0;
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_free0 (_tmp6_);
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp7_) {
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp1_ = TRUE;
-#line 3633 "SavedSearchDialog.c"
+#line 3599 "SavedSearchDialog.c"
 	} else {
 		SearchConditionTextContext _tmp8_ = 0;
-#line 216 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 210 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp8_ = saved_search_dialog_search_row_text_get_text_context (self);
-#line 216 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 210 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp1_ = _tmp8_ == SEARCH_CONDITION_TEXT_CONTEXT_IS_NOT_SET;
-#line 3640 "SavedSearchDialog.c"
+#line 3606 "SavedSearchDialog.c"
 	}
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp1_) {
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp0_ = TRUE;
-#line 3646 "SavedSearchDialog.c"
+#line 3612 "SavedSearchDialog.c"
 	} else {
 		SearchConditionTextContext _tmp9_ = 0;
-#line 217 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 211 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp9_ = saved_search_dialog_search_row_text_get_text_context (self);
-#line 217 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 211 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp0_ = _tmp9_ == SEARCH_CONDITION_TEXT_CONTEXT_IS_SET;
-#line 3653 "SavedSearchDialog.c"
+#line 3619 "SavedSearchDialog.c"
 	}
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp0_;
-#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 209 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 3659 "SavedSearchDialog.c"
+#line 3625 "SavedSearchDialog.c"
 }
 
 
@@ -3663,17 +3629,17 @@ static SearchConditionTextContext saved_search_dialog_search_row_text_get_text_c
 	SearchConditionTextContext result = 0;
 	GtkComboBoxText* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 220 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 214 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_TEXT (self), 0);
-#line 221 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->text_context;
-#line 221 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_combo_box_get_type (), GtkComboBox));
-#line 221 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = (SearchConditionTextContext) _tmp1_;
-#line 221 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 215 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 3677 "SavedSearchDialog.c"
+#line 3643 "SavedSearchDialog.c"
 }
 
 
@@ -3682,73 +3648,73 @@ static void saved_search_dialog_search_row_text_on_changed (SavedSearchDialogSea
 	SearchConditionTextContext _tmp1_ = 0;
 	SavedSearchDialogSearchRowContainer* _tmp5_ = NULL;
 	SavedSearchDialogSearchRowContainer* _tmp6_ = NULL;
-#line 224 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 218 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_TEXT (self));
-#line 225 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 219 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = saved_search_dialog_search_row_text_get_text_context (self);
-#line 225 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 219 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp1_ == SEARCH_CONDITION_TEXT_CONTEXT_IS_NOT_SET) {
-#line 225 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 219 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp0_ = TRUE;
-#line 3694 "SavedSearchDialog.c"
+#line 3660 "SavedSearchDialog.c"
 	} else {
 		SearchConditionTextContext _tmp2_ = 0;
-#line 226 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 220 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp2_ = saved_search_dialog_search_row_text_get_text_context (self);
-#line 226 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 220 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp0_ = _tmp2_ == SEARCH_CONDITION_TEXT_CONTEXT_IS_SET;
-#line 3701 "SavedSearchDialog.c"
+#line 3667 "SavedSearchDialog.c"
 	}
-#line 225 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 219 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp0_) {
-#line 3705 "SavedSearchDialog.c"
+#line 3671 "SavedSearchDialog.c"
 		GtkEntry* _tmp3_ = NULL;
-#line 227 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 221 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp3_ = self->priv->entry;
-#line 227 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 221 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget));
-#line 3711 "SavedSearchDialog.c"
+#line 3677 "SavedSearchDialog.c"
 	} else {
 		GtkEntry* _tmp4_ = NULL;
-#line 229 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 223 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp4_ = self->priv->entry;
-#line 229 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 223 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		gtk_widget_show (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget));
-#line 3718 "SavedSearchDialog.c"
+#line 3684 "SavedSearchDialog.c"
 	}
-#line 232 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 226 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = self->priv->parent;
-#line 232 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 226 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = self->priv->parent;
-#line 232 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 226 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_emit_by_name (_tmp5_, "changed", _tmp6_);
-#line 3726 "SavedSearchDialog.c"
+#line 3692 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_text_class_init (SavedSearchDialogSearchRowTextClass * klass) {
-#line 156 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_text_parent_class = g_type_class_peek_parent (klass);
-#line 156 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->finalize = saved_search_dialog_search_row_text_finalize;
-#line 156 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_type_class_add_private (klass, sizeof (SavedSearchDialogSearchRowTextPrivate));
-#line 156 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_widget = saved_search_dialog_search_row_text_real_get_widget;
-#line 156 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_search_condition = saved_search_dialog_search_row_text_real_get_search_condition;
-#line 156 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->populate = saved_search_dialog_search_row_text_real_populate;
-#line 156 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->is_complete = saved_search_dialog_search_row_text_real_is_complete;
-#line 3745 "SavedSearchDialog.c"
+#line 3711 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_text_instance_init (SavedSearchDialogSearchRowText * self) {
-#line 156 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv = SAVED_SEARCH_DIALOG_SEARCH_ROW_TEXT_GET_PRIVATE (self);
-#line 3752 "SavedSearchDialog.c"
+#line 3718 "SavedSearchDialog.c"
 }
 
 
@@ -3758,31 +3724,31 @@ static void saved_search_dialog_search_row_text_finalize (SavedSearchDialogSearc
 	guint _tmp1_ = 0U;
 	GtkEntry* _tmp2_ = NULL;
 	guint _tmp3_ = 0U;
-#line 156 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_TEXT, SavedSearchDialogSearchRowText);
-#line 190 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 184 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->text_context;
-#line 190 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 184 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", gtk_combo_box_get_type (), &_tmp1_, NULL, FALSE);
-#line 190 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 184 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_combo_box_get_type (), GtkComboBox), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _saved_search_dialog_search_row_text_on_changed_gtk_combo_box_changed, self);
-#line 191 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 185 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->entry;
-#line 191 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 185 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", GTK_TYPE_EDITABLE, &_tmp3_, NULL, FALSE);
-#line 191 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 185 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GTK_TYPE_EDITABLE, GtkEditable), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _saved_search_dialog_search_row_text_on_changed_gtk_editable_changed, self);
-#line 157 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 151 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->box);
-#line 158 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 152 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->text_context);
-#line 159 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 153 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->entry);
-#line 161 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 155 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
-#line 156 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 150 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	SAVED_SEARCH_DIALOG_SEARCH_ROW_CLASS (saved_search_dialog_search_row_text_parent_class)->finalize (obj);
-#line 3786 "SavedSearchDialog.c"
+#line 3752 "SavedSearchDialog.c"
 }
 
 
@@ -3799,9 +3765,9 @@ static GType saved_search_dialog_search_row_text_get_type (void) {
 
 
 static void _saved_search_dialog_search_row_media_type_on_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 268 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 262 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_media_type_on_changed ((SavedSearchDialogSearchRowMediaType*) self);
-#line 3805 "SavedSearchDialog.c"
+#line 3771 "SavedSearchDialog.c"
 }
 
 
@@ -3831,114 +3797,114 @@ static SavedSearchDialogSearchRowMediaType* saved_search_dialog_search_row_media
 	GtkBox* _tmp21_ = NULL;
 	GtkComboBoxText* _tmp22_ = NULL;
 	GtkBox* _tmp23_ = NULL;
-#line 243 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 237 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (parent), NULL);
-#line 243 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 237 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = (SavedSearchDialogSearchRowMediaType*) saved_search_dialog_search_row_construct (object_type);
-#line 244 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 238 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = parent;
-#line 244 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 238 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _saved_search_dialog_search_row_container_ref0 (_tmp0_);
-#line 244 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 238 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
-#line 244 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 238 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->parent = _tmp1_;
-#line 247 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 241 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 247 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 241 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp2_);
-#line 247 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 241 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->media_context);
-#line 247 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 241 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->media_context = _tmp2_;
-#line 248 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 242 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = self->priv->media_context;
-#line 248 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 242 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _ ("is");
-#line 248 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 242 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_text_append_text (_tmp3_, _tmp4_);
-#line 249 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp5_ = self->priv->media_context;
-#line 249 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp6_ = _ ("is not");
-#line 249 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp5_, _tmp6_);
-#line 250 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp7_ = self->priv->media_context;
-#line 250 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 251 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp8_ = self->priv->media_context;
-#line 251 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_media_type_on_changed_gtk_combo_box_changed, self);
-#line 254 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp9_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 254 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp9_);
-#line 254 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->media_type);
-#line 254 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->media_type = _tmp9_;
-#line 255 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp10_ = self->priv->media_type;
-#line 255 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp11_ = _ ("any photo");
-#line 255 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp10_, _tmp11_);
-#line 256 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp12_ = self->priv->media_type;
-#line 256 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp13_ = _ ("a raw photo");
-#line 256 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp12_, _tmp13_);
-#line 257 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp14_ = self->priv->media_type;
-#line 257 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp15_ = _ ("a video");
-#line 257 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp14_, _tmp15_);
-#line 258 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp16_ = self->priv->media_type;
-#line 258 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 259 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp17_ = self->priv->media_type;
-#line 259 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_media_type_on_changed_gtk_combo_box_changed, self);
-#line 261 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp18_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-#line 261 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp18_);
-#line 261 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->box);
-#line 261 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->box = _tmp18_;
-#line 262 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp19_ = self->priv->box;
-#line 262 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp20_ = self->priv->media_context;
-#line 262 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp19_, G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 263 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp21_ = self->priv->box;
-#line 263 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp22_ = self->priv->media_type;
-#line 263 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp21_, G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 264 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp23_ = self->priv->box;
-#line 264 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_widget_get_type (), GtkWidget));
 #line 243 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp5_ = self->priv->media_context;
+#line 243 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp6_ = _ ("is not");
+#line 243 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp5_, _tmp6_);
+#line 244 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp7_ = self->priv->media_context;
+#line 244 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_combo_box_get_type (), GtkComboBox), 0);
+#line 245 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp8_ = self->priv->media_context;
+#line 245 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_media_type_on_changed_gtk_combo_box_changed, self);
+#line 248 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp9_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
+#line 248 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp9_);
+#line 248 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->media_type);
+#line 248 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->media_type = _tmp9_;
+#line 249 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp10_ = self->priv->media_type;
+#line 249 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp11_ = _ ("any photo");
+#line 249 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp10_, _tmp11_);
+#line 250 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp12_ = self->priv->media_type;
+#line 250 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp13_ = _ ("a raw photo");
+#line 250 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp12_, _tmp13_);
+#line 251 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp14_ = self->priv->media_type;
+#line 251 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp15_ = _ ("a video");
+#line 251 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp14_, _tmp15_);
+#line 252 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp16_ = self->priv->media_type;
+#line 252 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_combo_box_get_type (), GtkComboBox), 0);
+#line 253 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp17_ = self->priv->media_type;
+#line 253 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_media_type_on_changed_gtk_combo_box_changed, self);
+#line 255 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp18_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+#line 255 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp18_);
+#line 255 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->box);
+#line 255 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->box = _tmp18_;
+#line 256 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp19_ = self->priv->box;
+#line 256 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp20_ = self->priv->media_context;
+#line 256 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp19_, G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 257 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp21_ = self->priv->box;
+#line 257 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp22_ = self->priv->media_type;
+#line 257 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp21_, G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 258 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp23_ = self->priv->box;
+#line 258 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_widget_get_type (), GtkWidget));
+#line 237 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self;
-#line 3935 "SavedSearchDialog.c"
+#line 3901 "SavedSearchDialog.c"
 }
 
 
 static SavedSearchDialogSearchRowMediaType* saved_search_dialog_search_row_media_type_new (SavedSearchDialogSearchRowContainer* parent) {
-#line 243 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 237 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return saved_search_dialog_search_row_media_type_construct (SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MEDIA_TYPE, parent);
-#line 3942 "SavedSearchDialog.c"
+#line 3908 "SavedSearchDialog.c"
 }
 
 
@@ -3947,17 +3913,17 @@ static GtkWidget* saved_search_dialog_search_row_media_type_real_get_widget (Sav
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 272 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 266 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MEDIA_TYPE, SavedSearchDialogSearchRowMediaType);
-#line 273 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 267 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->box;
-#line 273 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 267 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 273 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 267 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp1_;
-#line 273 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 267 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 3961 "SavedSearchDialog.c"
+#line 3927 "SavedSearchDialog.c"
 }
 
 
@@ -3975,35 +3941,35 @@ static SearchCondition* saved_search_dialog_search_row_media_type_real_get_searc
 	gint _tmp5_ = 0;
 	SearchConditionMediaType* c = NULL;
 	SearchConditionMediaType* _tmp6_ = NULL;
-#line 276 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 270 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MEDIA_TYPE, SavedSearchDialogSearchRowMediaType);
-#line 277 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 271 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->parent;
-#line 277 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 271 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = saved_search_dialog_search_row_container_get_search_type (_tmp0_);
-#line 277 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 271 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	search_type = _tmp1_;
-#line 278 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 272 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->media_context;
-#line 278 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 272 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox));
-#line 278 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 272 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	context = (SearchConditionMediaTypeContext) _tmp3_;
-#line 279 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 273 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = self->priv->media_type;
-#line 279 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 273 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_combo_box_get_type (), GtkComboBox));
-#line 279 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 273 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	type = (SearchConditionMediaTypeMediaType) _tmp5_;
-#line 280 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 274 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = search_condition_media_type_new (search_type, context, type);
-#line 280 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 274 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	c = _tmp6_;
-#line 281 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 275 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (c, TYPE_SEARCH_CONDITION, SearchCondition);
-#line 281 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 275 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 4007 "SavedSearchDialog.c"
+#line 3973 "SavedSearchDialog.c"
 }
 
 
@@ -4018,91 +3984,91 @@ static void saved_search_dialog_search_row_media_type_real_populate (SavedSearch
 	GtkComboBoxText* _tmp5_ = NULL;
 	SearchConditionMediaTypeMediaType _tmp6_ = 0;
 	SearchConditionMediaTypeMediaType _tmp7_ = 0;
-#line 284 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 278 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MEDIA_TYPE, SavedSearchDialogSearchRowMediaType);
-#line 284 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 278 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SEARCH_CONDITION (sc));
-#line 285 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 279 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = sc;
-#line 285 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 279 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _search_condition_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_SEARCH_CONDITION_MEDIA_TYPE) ? ((SearchConditionMediaType*) _tmp0_) : NULL);
-#line 285 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 279 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	media = _tmp1_;
-#line 286 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 280 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_vala_assert (media != NULL, "media != null");
-#line 287 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 281 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->media_context;
-#line 287 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 281 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = search_condition_media_type_get_context (media);
-#line 287 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 281 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _tmp3_;
-#line 287 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 281 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox), (gint) _tmp4_);
-#line 288 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 282 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = self->priv->media_type;
-#line 288 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 282 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = search_condition_media_type_get_media_type (media);
-#line 288 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 282 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = _tmp6_;
-#line 288 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 282 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_combo_box_get_type (), GtkComboBox), (gint) _tmp7_);
-#line 284 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 278 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_search_condition_unref0 (media);
-#line 4052 "SavedSearchDialog.c"
+#line 4018 "SavedSearchDialog.c"
 }
 
 
 static gboolean saved_search_dialog_search_row_media_type_real_is_complete (SavedSearchDialogSearchRow* base) {
 	SavedSearchDialogSearchRowMediaType * self;
 	gboolean result = FALSE;
-#line 291 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 285 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MEDIA_TYPE, SavedSearchDialogSearchRowMediaType);
-#line 292 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 286 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = TRUE;
-#line 292 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 286 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 4065 "SavedSearchDialog.c"
+#line 4031 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_media_type_on_changed (SavedSearchDialogSearchRowMediaType* self) {
 	SavedSearchDialogSearchRowContainer* _tmp0_ = NULL;
 	SavedSearchDialogSearchRowContainer* _tmp1_ = NULL;
-#line 295 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 289 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_MEDIA_TYPE (self));
-#line 296 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 290 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->parent;
-#line 296 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 290 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = self->priv->parent;
-#line 296 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 290 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_emit_by_name (_tmp0_, "changed", _tmp1_);
-#line 4080 "SavedSearchDialog.c"
+#line 4046 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_media_type_class_init (SavedSearchDialogSearchRowMediaTypeClass * klass) {
-#line 236 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 230 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_media_type_parent_class = g_type_class_peek_parent (klass);
-#line 236 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 230 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->finalize = saved_search_dialog_search_row_media_type_finalize;
-#line 236 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 230 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_type_class_add_private (klass, sizeof (SavedSearchDialogSearchRowMediaTypePrivate));
-#line 236 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 230 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_widget = saved_search_dialog_search_row_media_type_real_get_widget;
-#line 236 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 230 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_search_condition = saved_search_dialog_search_row_media_type_real_get_search_condition;
-#line 236 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 230 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->populate = saved_search_dialog_search_row_media_type_real_populate;
-#line 236 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 230 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->is_complete = saved_search_dialog_search_row_media_type_real_is_complete;
-#line 4099 "SavedSearchDialog.c"
+#line 4065 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_media_type_instance_init (SavedSearchDialogSearchRowMediaType * self) {
-#line 236 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 230 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv = SAVED_SEARCH_DIALOG_SEARCH_ROW_MEDIA_TYPE_GET_PRIVATE (self);
-#line 4106 "SavedSearchDialog.c"
+#line 4072 "SavedSearchDialog.c"
 }
 
 
@@ -4112,31 +4078,31 @@ static void saved_search_dialog_search_row_media_type_finalize (SavedSearchDialo
 	guint _tmp1_ = 0U;
 	GtkComboBoxText* _tmp2_ = NULL;
 	guint _tmp3_ = 0U;
-#line 236 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 230 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MEDIA_TYPE, SavedSearchDialogSearchRowMediaType);
-#line 268 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 262 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->media_context;
-#line 268 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 262 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", gtk_combo_box_get_type (), &_tmp1_, NULL, FALSE);
-#line 268 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 262 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_combo_box_get_type (), GtkComboBox), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _saved_search_dialog_search_row_media_type_on_changed_gtk_combo_box_changed, self);
-#line 269 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 263 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->media_type;
-#line 269 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 263 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", gtk_combo_box_get_type (), &_tmp3_, NULL, FALSE);
-#line 269 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 263 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _saved_search_dialog_search_row_media_type_on_changed_gtk_combo_box_changed, self);
-#line 237 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 231 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->box);
-#line 238 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 232 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->media_context);
-#line 239 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 233 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->media_type);
-#line 241 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 235 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
-#line 236 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 230 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	SAVED_SEARCH_DIALOG_SEARCH_ROW_CLASS (saved_search_dialog_search_row_media_type_parent_class)->finalize (obj);
-#line 4140 "SavedSearchDialog.c"
+#line 4106 "SavedSearchDialog.c"
 }
 
 
@@ -4153,9 +4119,9 @@ static GType saved_search_dialog_search_row_media_type_get_type (void) {
 
 
 static void _saved_search_dialog_search_row_modified_on_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 330 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 324 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_modified_on_changed ((SavedSearchDialogSearchRowModified*) self);
-#line 4159 "SavedSearchDialog.c"
+#line 4125 "SavedSearchDialog.c"
 }
 
 
@@ -4185,114 +4151,114 @@ static SavedSearchDialogSearchRowModified* saved_search_dialog_search_row_modifi
 	GtkBox* _tmp21_ = NULL;
 	GtkComboBoxText* _tmp22_ = NULL;
 	GtkBox* _tmp23_ = NULL;
-#line 307 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 301 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (parent), NULL);
-#line 307 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 301 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = (SavedSearchDialogSearchRowModified*) saved_search_dialog_search_row_construct (object_type);
-#line 308 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 302 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = parent;
-#line 308 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 302 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _saved_search_dialog_search_row_container_ref0 (_tmp0_);
-#line 308 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 302 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
-#line 308 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 302 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->parent = _tmp1_;
-#line 310 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 304 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 310 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 304 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp2_);
-#line 310 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 304 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->modified_context);
-#line 310 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 304 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->modified_context = _tmp2_;
-#line 311 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 305 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = self->priv->modified_context;
-#line 311 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 305 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _ ("has");
-#line 311 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 305 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_text_append_text (_tmp3_, _tmp4_);
-#line 312 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 306 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = self->priv->modified_context;
-#line 312 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 306 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = _ ("has no");
-#line 312 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 306 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_text_append_text (_tmp5_, _tmp6_);
-#line 313 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp7_ = self->priv->modified_context;
-#line 313 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 314 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp8_ = self->priv->modified_context;
-#line 314 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_modified_on_changed_gtk_combo_box_changed, self);
-#line 316 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp9_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 316 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp9_);
-#line 316 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->modified_state);
-#line 316 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->modified_state = _tmp9_;
-#line 317 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp10_ = self->priv->modified_state;
-#line 317 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp11_ = _ ("modifications");
-#line 317 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp10_, _tmp11_);
-#line 318 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp12_ = self->priv->modified_state;
-#line 318 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp13_ = _ ("internal modifications");
-#line 318 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp12_, _tmp13_);
-#line 319 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp14_ = self->priv->modified_state;
-#line 319 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp15_ = _ ("external modifications");
-#line 319 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp14_, _tmp15_);
-#line 320 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp16_ = self->priv->modified_state;
-#line 320 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 321 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp17_ = self->priv->modified_state;
-#line 321 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_modified_on_changed_gtk_combo_box_changed, self);
-#line 323 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp18_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-#line 323 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp18_);
-#line 323 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->box);
-#line 323 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->box = _tmp18_;
-#line 324 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp19_ = self->priv->box;
-#line 324 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp20_ = self->priv->modified_context;
-#line 324 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp19_, G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 325 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp21_ = self->priv->box;
-#line 325 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp22_ = self->priv->modified_state;
-#line 325 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp21_, G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 326 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp23_ = self->priv->box;
-#line 326 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_widget_get_type (), GtkWidget));
 #line 307 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp7_ = self->priv->modified_context;
+#line 307 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_combo_box_get_type (), GtkComboBox), 0);
+#line 308 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp8_ = self->priv->modified_context;
+#line 308 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_modified_on_changed_gtk_combo_box_changed, self);
+#line 310 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp9_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
+#line 310 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp9_);
+#line 310 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->modified_state);
+#line 310 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->modified_state = _tmp9_;
+#line 311 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp10_ = self->priv->modified_state;
+#line 311 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp11_ = _ ("modifications");
+#line 311 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp10_, _tmp11_);
+#line 312 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp12_ = self->priv->modified_state;
+#line 312 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp13_ = _ ("internal modifications");
+#line 312 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp12_, _tmp13_);
+#line 313 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp14_ = self->priv->modified_state;
+#line 313 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp15_ = _ ("external modifications");
+#line 313 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp14_, _tmp15_);
+#line 314 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp16_ = self->priv->modified_state;
+#line 314 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_combo_box_get_type (), GtkComboBox), 0);
+#line 315 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp17_ = self->priv->modified_state;
+#line 315 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_modified_on_changed_gtk_combo_box_changed, self);
+#line 317 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp18_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+#line 317 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp18_);
+#line 317 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->box);
+#line 317 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->box = _tmp18_;
+#line 318 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp19_ = self->priv->box;
+#line 318 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp20_ = self->priv->modified_context;
+#line 318 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp19_, G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 319 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp21_ = self->priv->box;
+#line 319 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp22_ = self->priv->modified_state;
+#line 319 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp21_, G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 320 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp23_ = self->priv->box;
+#line 320 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_widget_get_type (), GtkWidget));
+#line 301 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self;
-#line 4289 "SavedSearchDialog.c"
+#line 4255 "SavedSearchDialog.c"
 }
 
 
 static SavedSearchDialogSearchRowModified* saved_search_dialog_search_row_modified_new (SavedSearchDialogSearchRowContainer* parent) {
-#line 307 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 301 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return saved_search_dialog_search_row_modified_construct (SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MODIFIED, parent);
-#line 4296 "SavedSearchDialog.c"
+#line 4262 "SavedSearchDialog.c"
 }
 
 
@@ -4301,17 +4267,17 @@ static GtkWidget* saved_search_dialog_search_row_modified_real_get_widget (Saved
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 334 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 328 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MODIFIED, SavedSearchDialogSearchRowModified);
-#line 335 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 329 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->box;
-#line 335 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 329 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 335 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 329 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp1_;
-#line 335 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 329 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 4315 "SavedSearchDialog.c"
+#line 4281 "SavedSearchDialog.c"
 }
 
 
@@ -4329,35 +4295,35 @@ static SearchCondition* saved_search_dialog_search_row_modified_real_get_search_
 	gint _tmp5_ = 0;
 	SearchConditionModified* c = NULL;
 	SearchConditionModified* _tmp6_ = NULL;
-#line 338 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 332 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MODIFIED, SavedSearchDialogSearchRowModified);
-#line 339 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 333 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->parent;
-#line 339 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 333 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = saved_search_dialog_search_row_container_get_search_type (_tmp0_);
-#line 339 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 333 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	search_type = _tmp1_;
-#line 340 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 334 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->modified_context;
-#line 340 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 334 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox));
-#line 340 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 334 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	context = (SearchConditionModifiedContext) _tmp3_;
-#line 341 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 335 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = self->priv->modified_state;
-#line 341 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 335 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_combo_box_get_type (), GtkComboBox));
-#line 341 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 335 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	state = (SearchConditionModifiedState) _tmp5_;
-#line 342 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 336 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = search_condition_modified_new (search_type, context, state);
-#line 342 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 336 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	c = _tmp6_;
-#line 343 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 337 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (c, TYPE_SEARCH_CONDITION, SearchCondition);
-#line 343 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 337 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 4361 "SavedSearchDialog.c"
+#line 4327 "SavedSearchDialog.c"
 }
 
 
@@ -4372,91 +4338,91 @@ static void saved_search_dialog_search_row_modified_real_populate (SavedSearchDi
 	GtkComboBoxText* _tmp5_ = NULL;
 	SearchConditionModifiedContext _tmp6_ = 0;
 	SearchConditionModifiedContext _tmp7_ = 0;
-#line 346 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 340 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MODIFIED, SavedSearchDialogSearchRowModified);
-#line 346 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 340 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SEARCH_CONDITION (sc));
-#line 347 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 341 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = sc;
-#line 347 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 341 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _search_condition_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_SEARCH_CONDITION_MODIFIED) ? ((SearchConditionModified*) _tmp0_) : NULL);
-#line 347 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 341 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	scm = _tmp1_;
-#line 348 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 342 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_vala_assert (scm != NULL, "scm != null");
-#line 349 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 343 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->modified_state;
-#line 349 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 343 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = search_condition_modified_get_state (scm);
-#line 349 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 343 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _tmp3_;
-#line 349 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 343 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox), (gint) _tmp4_);
-#line 350 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 344 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = self->priv->modified_context;
-#line 350 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 344 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = search_condition_modified_get_context (scm);
-#line 350 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 344 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = _tmp6_;
-#line 350 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 344 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_combo_box_get_type (), GtkComboBox), (gint) _tmp7_);
-#line 346 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 340 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_search_condition_unref0 (scm);
-#line 4406 "SavedSearchDialog.c"
+#line 4372 "SavedSearchDialog.c"
 }
 
 
 static gboolean saved_search_dialog_search_row_modified_real_is_complete (SavedSearchDialogSearchRow* base) {
 	SavedSearchDialogSearchRowModified * self;
 	gboolean result = FALSE;
-#line 353 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 347 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MODIFIED, SavedSearchDialogSearchRowModified);
-#line 354 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 348 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = TRUE;
-#line 354 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 348 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 4419 "SavedSearchDialog.c"
+#line 4385 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_modified_on_changed (SavedSearchDialogSearchRowModified* self) {
 	SavedSearchDialogSearchRowContainer* _tmp0_ = NULL;
 	SavedSearchDialogSearchRowContainer* _tmp1_ = NULL;
-#line 357 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 351 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_MODIFIED (self));
-#line 358 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 352 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->parent;
-#line 358 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 352 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = self->priv->parent;
-#line 358 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 352 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_emit_by_name (_tmp0_, "changed", _tmp1_);
-#line 4434 "SavedSearchDialog.c"
+#line 4400 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_modified_class_init (SavedSearchDialogSearchRowModifiedClass * klass) {
-#line 300 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 294 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_modified_parent_class = g_type_class_peek_parent (klass);
-#line 300 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 294 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->finalize = saved_search_dialog_search_row_modified_finalize;
-#line 300 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 294 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_type_class_add_private (klass, sizeof (SavedSearchDialogSearchRowModifiedPrivate));
-#line 300 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 294 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_widget = saved_search_dialog_search_row_modified_real_get_widget;
-#line 300 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 294 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_search_condition = saved_search_dialog_search_row_modified_real_get_search_condition;
-#line 300 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 294 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->populate = saved_search_dialog_search_row_modified_real_populate;
-#line 300 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 294 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->is_complete = saved_search_dialog_search_row_modified_real_is_complete;
-#line 4453 "SavedSearchDialog.c"
+#line 4419 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_modified_instance_init (SavedSearchDialogSearchRowModified * self) {
-#line 300 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 294 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv = SAVED_SEARCH_DIALOG_SEARCH_ROW_MODIFIED_GET_PRIVATE (self);
-#line 4460 "SavedSearchDialog.c"
+#line 4426 "SavedSearchDialog.c"
 }
 
 
@@ -4466,31 +4432,31 @@ static void saved_search_dialog_search_row_modified_finalize (SavedSearchDialogS
 	guint _tmp1_ = 0U;
 	GtkComboBoxText* _tmp2_ = NULL;
 	guint _tmp3_ = 0U;
-#line 300 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 294 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_MODIFIED, SavedSearchDialogSearchRowModified);
-#line 330 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 324 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->modified_state;
-#line 330 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 324 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", gtk_combo_box_get_type (), &_tmp1_, NULL, FALSE);
-#line 330 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 324 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_combo_box_get_type (), GtkComboBox), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _saved_search_dialog_search_row_modified_on_changed_gtk_combo_box_changed, self);
-#line 331 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 325 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->modified_context;
-#line 331 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 325 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", gtk_combo_box_get_type (), &_tmp3_, NULL, FALSE);
-#line 331 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 325 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _saved_search_dialog_search_row_modified_on_changed_gtk_combo_box_changed, self);
-#line 301 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 295 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->box);
-#line 302 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 296 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->modified_context);
-#line 303 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 297 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->modified_state);
-#line 305 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 299 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
-#line 300 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 294 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	SAVED_SEARCH_DIALOG_SEARCH_ROW_CLASS (saved_search_dialog_search_row_modified_parent_class)->finalize (obj);
-#line 4494 "SavedSearchDialog.c"
+#line 4460 "SavedSearchDialog.c"
 }
 
 
@@ -4507,9 +4473,9 @@ static GType saved_search_dialog_search_row_modified_get_type (void) {
 
 
 static void _saved_search_dialog_search_row_flagged_on_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 385 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 379 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_flagged_on_changed ((SavedSearchDialogSearchRowFlagged*) self);
-#line 4513 "SavedSearchDialog.c"
+#line 4479 "SavedSearchDialog.c"
 }
 
 
@@ -4532,88 +4498,88 @@ static SavedSearchDialogSearchRowFlagged* saved_search_dialog_search_row_flagged
 	GtkBox* _tmp14_ = NULL;
 	GtkComboBoxText* _tmp15_ = NULL;
 	GtkBox* _tmp16_ = NULL;
-#line 368 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (parent), NULL);
-#line 368 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = (SavedSearchDialogSearchRowFlagged*) saved_search_dialog_search_row_construct (object_type);
-#line 369 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 363 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = parent;
-#line 369 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 363 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _saved_search_dialog_search_row_container_ref0 (_tmp0_);
-#line 369 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 363 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
-#line 369 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 363 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->parent = _tmp1_;
-#line 372 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 366 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 372 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 366 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp2_);
-#line 372 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 366 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->flagged_state);
-#line 372 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 366 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->flagged_state = _tmp2_;
-#line 373 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 367 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = self->priv->flagged_state;
-#line 373 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 367 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _ ("flagged");
-#line 373 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 367 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_text_append_text (_tmp3_, _tmp4_);
-#line 374 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp5_ = self->priv->flagged_state;
-#line 374 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp6_ = _ ("not flagged");
-#line 374 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp5_, _tmp6_);
-#line 375 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp7_ = self->priv->flagged_state;
-#line 375 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 376 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp8_ = self->priv->flagged_state;
-#line 376 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_flagged_on_changed_gtk_combo_box_changed, self);
-#line 378 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp9_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-#line 378 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp9_);
-#line 378 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->box);
-#line 378 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->box = _tmp9_;
-#line 379 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp10_ = self->priv->box;
-#line 379 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp11_ = _ ("is");
-#line 379 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp12_ = (GtkLabel*) gtk_label_new (_tmp11_);
-#line 379 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp12_);
-#line 379 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp13_ = _tmp12_;
-#line 379 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp10_, G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 379 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (_tmp13_);
-#line 380 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp14_ = self->priv->box;
-#line 380 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp15_ = self->priv->flagged_state;
-#line 380 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp14_, G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 381 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp16_ = self->priv->box;
-#line 381 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_widget_get_type (), GtkWidget));
 #line 368 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp5_ = self->priv->flagged_state;
+#line 368 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp6_ = _ ("not flagged");
+#line 368 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp5_, _tmp6_);
+#line 369 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp7_ = self->priv->flagged_state;
+#line 369 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_combo_box_get_type (), GtkComboBox), 0);
+#line 370 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp8_ = self->priv->flagged_state;
+#line 370 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_flagged_on_changed_gtk_combo_box_changed, self);
+#line 372 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp9_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+#line 372 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp9_);
+#line 372 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->box);
+#line 372 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->box = _tmp9_;
+#line 373 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp10_ = self->priv->box;
+#line 373 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp11_ = _ ("is");
+#line 373 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp12_ = (GtkLabel*) gtk_label_new (_tmp11_);
+#line 373 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp12_);
+#line 373 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp13_ = _tmp12_;
+#line 373 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp10_, G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 373 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (_tmp13_);
+#line 374 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp14_ = self->priv->box;
+#line 374 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp15_ = self->priv->flagged_state;
+#line 374 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp14_, G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 375 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp16_ = self->priv->box;
+#line 375 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_widget_get_type (), GtkWidget));
+#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self;
-#line 4610 "SavedSearchDialog.c"
+#line 4576 "SavedSearchDialog.c"
 }
 
 
 static SavedSearchDialogSearchRowFlagged* saved_search_dialog_search_row_flagged_new (SavedSearchDialogSearchRowContainer* parent) {
-#line 368 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return saved_search_dialog_search_row_flagged_construct (SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_FLAGGED, parent);
-#line 4617 "SavedSearchDialog.c"
+#line 4583 "SavedSearchDialog.c"
 }
 
 
@@ -4622,17 +4588,17 @@ static GtkWidget* saved_search_dialog_search_row_flagged_real_get_widget (SavedS
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 388 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 382 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_FLAGGED, SavedSearchDialogSearchRowFlagged);
-#line 389 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 383 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->box;
-#line 389 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 383 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 389 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 383 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp1_;
-#line 389 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 383 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 4636 "SavedSearchDialog.c"
+#line 4602 "SavedSearchDialog.c"
 }
 
 
@@ -4647,29 +4613,29 @@ static SearchCondition* saved_search_dialog_search_row_flagged_real_get_search_c
 	gint _tmp3_ = 0;
 	SearchConditionFlagged* c = NULL;
 	SearchConditionFlagged* _tmp4_ = NULL;
-#line 392 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 386 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_FLAGGED, SavedSearchDialogSearchRowFlagged);
-#line 393 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 387 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->parent;
-#line 393 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 387 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = saved_search_dialog_search_row_container_get_search_type (_tmp0_);
-#line 393 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 387 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	search_type = _tmp1_;
-#line 394 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 388 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->flagged_state;
-#line 394 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 388 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox));
-#line 394 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 388 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	state = (SearchConditionFlaggedState) _tmp3_;
-#line 395 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 389 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = search_condition_flagged_new (search_type, state);
-#line 395 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 389 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	c = _tmp4_;
-#line 396 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 390 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (c, TYPE_SEARCH_CONDITION, SearchCondition);
-#line 396 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 390 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 4673 "SavedSearchDialog.c"
+#line 4639 "SavedSearchDialog.c"
 }
 
 
@@ -4681,83 +4647,83 @@ static void saved_search_dialog_search_row_flagged_real_populate (SavedSearchDia
 	GtkComboBoxText* _tmp2_ = NULL;
 	SearchConditionFlaggedState _tmp3_ = 0;
 	SearchConditionFlaggedState _tmp4_ = 0;
-#line 399 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 393 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_FLAGGED, SavedSearchDialogSearchRowFlagged);
-#line 399 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 393 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SEARCH_CONDITION (sc));
-#line 400 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 394 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = sc;
-#line 400 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 394 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _search_condition_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_SEARCH_CONDITION_FLAGGED) ? ((SearchConditionFlagged*) _tmp0_) : NULL);
-#line 400 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 394 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	f = _tmp1_;
-#line 401 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 395 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_vala_assert (f != NULL, "f != null");
-#line 402 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 396 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->flagged_state;
-#line 402 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 396 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = search_condition_flagged_get_state (f);
-#line 402 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 396 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _tmp3_;
-#line 402 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 396 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox), (gint) _tmp4_);
-#line 399 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 393 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_search_condition_unref0 (f);
-#line 4707 "SavedSearchDialog.c"
+#line 4673 "SavedSearchDialog.c"
 }
 
 
 static gboolean saved_search_dialog_search_row_flagged_real_is_complete (SavedSearchDialogSearchRow* base) {
 	SavedSearchDialogSearchRowFlagged * self;
 	gboolean result = FALSE;
-#line 405 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 399 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_FLAGGED, SavedSearchDialogSearchRowFlagged);
-#line 406 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 400 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = TRUE;
-#line 406 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 400 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 4720 "SavedSearchDialog.c"
+#line 4686 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_flagged_on_changed (SavedSearchDialogSearchRowFlagged* self) {
 	SavedSearchDialogSearchRowContainer* _tmp0_ = NULL;
 	SavedSearchDialogSearchRowContainer* _tmp1_ = NULL;
-#line 409 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 403 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_FLAGGED (self));
-#line 410 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 404 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->parent;
-#line 410 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 404 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = self->priv->parent;
-#line 410 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 404 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_emit_by_name (_tmp0_, "changed", _tmp1_);
-#line 4735 "SavedSearchDialog.c"
+#line 4701 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_flagged_class_init (SavedSearchDialogSearchRowFlaggedClass * klass) {
-#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 356 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_flagged_parent_class = g_type_class_peek_parent (klass);
-#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 356 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->finalize = saved_search_dialog_search_row_flagged_finalize;
-#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 356 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_type_class_add_private (klass, sizeof (SavedSearchDialogSearchRowFlaggedPrivate));
-#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 356 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_widget = saved_search_dialog_search_row_flagged_real_get_widget;
-#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 356 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_search_condition = saved_search_dialog_search_row_flagged_real_get_search_condition;
-#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 356 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->populate = saved_search_dialog_search_row_flagged_real_populate;
-#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 356 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->is_complete = saved_search_dialog_search_row_flagged_real_is_complete;
-#line 4754 "SavedSearchDialog.c"
+#line 4720 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_flagged_instance_init (SavedSearchDialogSearchRowFlagged * self) {
-#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 356 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv = SAVED_SEARCH_DIALOG_SEARCH_ROW_FLAGGED_GET_PRIVATE (self);
-#line 4761 "SavedSearchDialog.c"
+#line 4727 "SavedSearchDialog.c"
 }
 
 
@@ -4765,23 +4731,23 @@ static void saved_search_dialog_search_row_flagged_finalize (SavedSearchDialogSe
 	SavedSearchDialogSearchRowFlagged * self;
 	GtkComboBoxText* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
-#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 356 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_FLAGGED, SavedSearchDialogSearchRowFlagged);
-#line 385 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 379 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->flagged_state;
-#line 385 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 379 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", gtk_combo_box_get_type (), &_tmp1_, NULL, FALSE);
-#line 385 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 379 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_combo_box_get_type (), GtkComboBox), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _saved_search_dialog_search_row_flagged_on_changed_gtk_combo_box_changed, self);
-#line 363 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 357 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->box);
-#line 364 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 358 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->flagged_state);
-#line 366 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 360 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
-#line 362 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 356 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	SAVED_SEARCH_DIALOG_SEARCH_ROW_CLASS (saved_search_dialog_search_row_flagged_parent_class)->finalize (obj);
-#line 4785 "SavedSearchDialog.c"
+#line 4751 "SavedSearchDialog.c"
 }
 
 
@@ -4798,9 +4764,9 @@ static GType saved_search_dialog_search_row_flagged_get_type (void) {
 
 
 static void _saved_search_dialog_search_row_rating_on_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 451 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 445 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_rating_on_changed ((SavedSearchDialogSearchRowRating*) self);
-#line 4804 "SavedSearchDialog.c"
+#line 4770 "SavedSearchDialog.c"
 }
 
 
@@ -4844,158 +4810,158 @@ static SavedSearchDialogSearchRowRating* saved_search_dialog_search_row_rating_c
 	GtkBox* _tmp35_ = NULL;
 	GtkComboBoxText* _tmp36_ = NULL;
 	GtkBox* _tmp37_ = NULL;
-#line 421 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 415 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (parent), NULL);
-#line 421 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 415 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = (SavedSearchDialogSearchRowRating*) saved_search_dialog_search_row_construct (object_type);
-#line 422 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 416 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = parent;
-#line 422 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 416 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _saved_search_dialog_search_row_container_ref0 (_tmp0_);
-#line 422 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 416 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
-#line 422 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 416 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->parent = _tmp1_;
-#line 425 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 419 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 425 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 419 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp2_);
-#line 425 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 419 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->rating);
-#line 425 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 419 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->rating = _tmp2_;
-#line 426 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 420 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = self->priv->rating;
-#line 426 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 420 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = resources_rating_combo_box (RATING_REJECTED);
-#line 426 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 420 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_text_append_text (_tmp3_, _tmp4_);
-#line 427 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp5_ = self->priv->rating;
-#line 427 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp6_ = resources_rating_combo_box (RATING_UNRATED);
-#line 427 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp5_, _tmp6_);
-#line 428 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp7_ = self->priv->rating;
-#line 428 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp8_ = resources_rating_combo_box (RATING_ONE);
-#line 428 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp7_, _tmp8_);
-#line 429 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp9_ = self->priv->rating;
-#line 429 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp10_ = resources_rating_combo_box (RATING_TWO);
-#line 429 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp9_, _tmp10_);
-#line 430 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp11_ = self->priv->rating;
-#line 430 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp12_ = resources_rating_combo_box (RATING_THREE);
-#line 430 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp11_, _tmp12_);
-#line 431 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp13_ = self->priv->rating;
-#line 431 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp14_ = resources_rating_combo_box (RATING_FOUR);
-#line 431 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp13_, _tmp14_);
-#line 432 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp15_ = self->priv->rating;
-#line 432 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp16_ = resources_rating_combo_box (RATING_FIVE);
-#line 432 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp15_, _tmp16_);
-#line 433 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp17_ = self->priv->rating;
-#line 433 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 434 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp18_ = self->priv->rating;
-#line 434 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_rating_on_changed_gtk_combo_box_changed, self);
-#line 436 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp19_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 436 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp19_);
-#line 436 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->context);
-#line 436 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->context = _tmp19_;
-#line 437 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp20_ = self->priv->context;
-#line 437 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp21_ = _ ("and higher");
-#line 437 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp20_, _tmp21_);
-#line 438 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp22_ = self->priv->context;
-#line 438 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp23_ = _ ("only");
-#line 438 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp22_, _tmp23_);
-#line 439 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp24_ = self->priv->context;
-#line 439 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp25_ = _ ("and lower");
-#line 439 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp24_, _tmp25_);
-#line 440 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp26_ = self->priv->context;
-#line 440 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 441 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp27_ = self->priv->context;
-#line 441 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_rating_on_changed_gtk_combo_box_changed, self);
-#line 443 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp28_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-#line 443 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp28_);
-#line 443 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->box);
-#line 443 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->box = _tmp28_;
-#line 444 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp29_ = self->priv->box;
-#line 444 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp30_ = _ ("is");
-#line 444 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp31_ = (GtkLabel*) gtk_label_new (_tmp30_);
-#line 444 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp31_);
-#line 444 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp32_ = _tmp31_;
-#line 444 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp29_, G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 444 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (_tmp32_);
-#line 445 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp33_ = self->priv->box;
-#line 445 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp34_ = self->priv->rating;
-#line 445 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp33_, G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 446 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp35_ = self->priv->box;
-#line 446 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp36_ = self->priv->context;
-#line 446 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp35_, G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 447 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp37_ = self->priv->box;
-#line 447 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, gtk_widget_get_type (), GtkWidget));
 #line 421 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp5_ = self->priv->rating;
+#line 421 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp6_ = resources_rating_combo_box (RATING_UNRATED);
+#line 421 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp5_, _tmp6_);
+#line 422 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp7_ = self->priv->rating;
+#line 422 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp8_ = resources_rating_combo_box (RATING_ONE);
+#line 422 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp7_, _tmp8_);
+#line 423 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp9_ = self->priv->rating;
+#line 423 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp10_ = resources_rating_combo_box (RATING_TWO);
+#line 423 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp9_, _tmp10_);
+#line 424 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp11_ = self->priv->rating;
+#line 424 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp12_ = resources_rating_combo_box (RATING_THREE);
+#line 424 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp11_, _tmp12_);
+#line 425 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp13_ = self->priv->rating;
+#line 425 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp14_ = resources_rating_combo_box (RATING_FOUR);
+#line 425 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp13_, _tmp14_);
+#line 426 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp15_ = self->priv->rating;
+#line 426 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp16_ = resources_rating_combo_box (RATING_FIVE);
+#line 426 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp15_, _tmp16_);
+#line 427 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp17_ = self->priv->rating;
+#line 427 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_combo_box_get_type (), GtkComboBox), 0);
+#line 428 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp18_ = self->priv->rating;
+#line 428 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_rating_on_changed_gtk_combo_box_changed, self);
+#line 430 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp19_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
+#line 430 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp19_);
+#line 430 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->context);
+#line 430 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->context = _tmp19_;
+#line 431 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp20_ = self->priv->context;
+#line 431 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp21_ = _ ("and higher");
+#line 431 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp20_, _tmp21_);
+#line 432 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp22_ = self->priv->context;
+#line 432 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp23_ = _ ("only");
+#line 432 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp22_, _tmp23_);
+#line 433 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp24_ = self->priv->context;
+#line 433 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp25_ = _ ("and lower");
+#line 433 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp24_, _tmp25_);
+#line 434 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp26_ = self->priv->context;
+#line 434 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_combo_box_get_type (), GtkComboBox), 0);
+#line 435 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp27_ = self->priv->context;
+#line 435 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_rating_on_changed_gtk_combo_box_changed, self);
+#line 437 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp28_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+#line 437 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp28_);
+#line 437 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->box);
+#line 437 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->box = _tmp28_;
+#line 438 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp29_ = self->priv->box;
+#line 438 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp30_ = _ ("is");
+#line 438 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp31_ = (GtkLabel*) gtk_label_new (_tmp30_);
+#line 438 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp31_);
+#line 438 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp32_ = _tmp31_;
+#line 438 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp29_, G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 438 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (_tmp32_);
+#line 439 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp33_ = self->priv->box;
+#line 439 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp34_ = self->priv->rating;
+#line 439 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp33_, G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 440 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp35_ = self->priv->box;
+#line 440 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp36_ = self->priv->context;
+#line 440 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp35_, G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 441 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp37_ = self->priv->box;
+#line 441 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, gtk_widget_get_type (), GtkWidget));
+#line 415 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self;
-#line 4992 "SavedSearchDialog.c"
+#line 4958 "SavedSearchDialog.c"
 }
 
 
 static SavedSearchDialogSearchRowRating* saved_search_dialog_search_row_rating_new (SavedSearchDialogSearchRowContainer* parent) {
-#line 421 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 415 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return saved_search_dialog_search_row_rating_construct (SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_RATING, parent);
-#line 4999 "SavedSearchDialog.c"
+#line 4965 "SavedSearchDialog.c"
 }
 
 
@@ -5004,17 +4970,17 @@ static GtkWidget* saved_search_dialog_search_row_rating_real_get_widget (SavedSe
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 455 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 449 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_RATING, SavedSearchDialogSearchRowRating);
-#line 456 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 450 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->box;
-#line 456 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 450 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 456 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 450 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp1_;
-#line 456 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 450 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 5018 "SavedSearchDialog.c"
+#line 4984 "SavedSearchDialog.c"
 }
 
 
@@ -5032,35 +4998,35 @@ static SearchCondition* saved_search_dialog_search_row_rating_real_get_search_co
 	gint _tmp5_ = 0;
 	SearchConditionRating* c = NULL;
 	SearchConditionRating* _tmp6_ = NULL;
-#line 459 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 453 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_RATING, SavedSearchDialogSearchRowRating);
-#line 460 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 454 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->parent;
-#line 460 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 454 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = saved_search_dialog_search_row_container_get_search_type (_tmp0_);
-#line 460 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 454 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	search_type = _tmp1_;
-#line 461 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 455 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->rating;
-#line 461 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 455 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox));
-#line 461 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 455 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	search_rating = ((Rating) _tmp3_) + RATING_REJECTED;
-#line 462 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 456 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = self->priv->context;
-#line 462 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 456 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_combo_box_get_type (), GtkComboBox));
-#line 462 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 456 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	search_context = (SearchConditionRatingContext) _tmp5_;
-#line 463 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 457 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = search_condition_rating_new (search_type, search_rating, search_context);
-#line 463 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 457 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	c = _tmp6_;
-#line 464 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 458 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (c, TYPE_SEARCH_CONDITION, SearchCondition);
-#line 464 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 458 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 5064 "SavedSearchDialog.c"
+#line 5030 "SavedSearchDialog.c"
 }
 
 
@@ -5075,91 +5041,91 @@ static void saved_search_dialog_search_row_rating_real_populate (SavedSearchDial
 	GtkComboBoxText* _tmp5_ = NULL;
 	Rating _tmp6_ = 0;
 	Rating _tmp7_ = 0;
-#line 467 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 461 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_RATING, SavedSearchDialogSearchRowRating);
-#line 467 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 461 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SEARCH_CONDITION (sc));
-#line 468 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 462 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = sc;
-#line 468 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 462 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _search_condition_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_SEARCH_CONDITION_RATING) ? ((SearchConditionRating*) _tmp0_) : NULL);
-#line 468 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 462 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	r = _tmp1_;
-#line 469 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 463 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_vala_assert (r != NULL, "r != null");
-#line 470 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 464 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->context;
-#line 470 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 464 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = search_condition_rating_get_context (r);
-#line 470 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 464 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _tmp3_;
-#line 470 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 464 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox), (gint) _tmp4_);
-#line 471 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 465 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = self->priv->rating;
-#line 471 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 465 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = search_condition_rating_get_rating (r);
-#line 471 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 465 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = _tmp6_;
-#line 471 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 465 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_combo_box_get_type (), GtkComboBox), (gint) (_tmp7_ - RATING_REJECTED));
-#line 467 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 461 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_search_condition_unref0 (r);
-#line 5109 "SavedSearchDialog.c"
+#line 5075 "SavedSearchDialog.c"
 }
 
 
 static gboolean saved_search_dialog_search_row_rating_real_is_complete (SavedSearchDialogSearchRow* base) {
 	SavedSearchDialogSearchRowRating * self;
 	gboolean result = FALSE;
-#line 474 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 468 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_RATING, SavedSearchDialogSearchRowRating);
-#line 475 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 469 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = TRUE;
-#line 475 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 469 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 5122 "SavedSearchDialog.c"
+#line 5088 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_rating_on_changed (SavedSearchDialogSearchRowRating* self) {
 	SavedSearchDialogSearchRowContainer* _tmp0_ = NULL;
 	SavedSearchDialogSearchRowContainer* _tmp1_ = NULL;
-#line 478 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 472 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_RATING (self));
-#line 479 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 473 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->parent;
-#line 479 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 473 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = self->priv->parent;
-#line 479 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 473 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_emit_by_name (_tmp0_, "changed", _tmp1_);
-#line 5137 "SavedSearchDialog.c"
+#line 5103 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_rating_class_init (SavedSearchDialogSearchRowRatingClass * klass) {
-#line 414 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 408 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_rating_parent_class = g_type_class_peek_parent (klass);
-#line 414 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 408 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->finalize = saved_search_dialog_search_row_rating_finalize;
-#line 414 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 408 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_type_class_add_private (klass, sizeof (SavedSearchDialogSearchRowRatingPrivate));
-#line 414 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 408 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_widget = saved_search_dialog_search_row_rating_real_get_widget;
-#line 414 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 408 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_search_condition = saved_search_dialog_search_row_rating_real_get_search_condition;
-#line 414 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 408 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->populate = saved_search_dialog_search_row_rating_real_populate;
-#line 414 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 408 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->is_complete = saved_search_dialog_search_row_rating_real_is_complete;
-#line 5156 "SavedSearchDialog.c"
+#line 5122 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_rating_instance_init (SavedSearchDialogSearchRowRating * self) {
-#line 414 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 408 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv = SAVED_SEARCH_DIALOG_SEARCH_ROW_RATING_GET_PRIVATE (self);
-#line 5163 "SavedSearchDialog.c"
+#line 5129 "SavedSearchDialog.c"
 }
 
 
@@ -5169,31 +5135,31 @@ static void saved_search_dialog_search_row_rating_finalize (SavedSearchDialogSea
 	guint _tmp1_ = 0U;
 	GtkComboBoxText* _tmp2_ = NULL;
 	guint _tmp3_ = 0U;
-#line 414 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 408 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_RATING, SavedSearchDialogSearchRowRating);
-#line 451 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 445 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->rating;
-#line 451 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 445 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", gtk_combo_box_get_type (), &_tmp1_, NULL, FALSE);
-#line 451 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 445 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_combo_box_get_type (), GtkComboBox), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _saved_search_dialog_search_row_rating_on_changed_gtk_combo_box_changed, self);
-#line 452 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 446 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->context;
-#line 452 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 446 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", gtk_combo_box_get_type (), &_tmp3_, NULL, FALSE);
-#line 452 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 446 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _saved_search_dialog_search_row_rating_on_changed_gtk_combo_box_changed, self);
-#line 415 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 409 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->box);
-#line 416 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 410 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->rating);
-#line 417 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 411 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->context);
-#line 419 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 413 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
-#line 414 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 408 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	SAVED_SEARCH_DIALOG_SEARCH_ROW_CLASS (saved_search_dialog_search_row_rating_parent_class)->finalize (obj);
-#line 5197 "SavedSearchDialog.c"
+#line 5163 "SavedSearchDialog.c"
 }
 
 
@@ -5210,23 +5176,23 @@ static GType saved_search_dialog_search_row_rating_get_type (void) {
 
 
 static void _saved_search_dialog_search_row_date_on_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 529 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 523 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_on_changed ((SavedSearchDialogSearchRowDate*) self);
-#line 5216 "SavedSearchDialog.c"
+#line 5182 "SavedSearchDialog.c"
 }
 
 
 static void _saved_search_dialog_search_row_date_on_one_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 512 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 506 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_on_one_clicked ((SavedSearchDialogSearchRowDate*) self);
-#line 5223 "SavedSearchDialog.c"
+#line 5189 "SavedSearchDialog.c"
 }
 
 
 static void _saved_search_dialog_search_row_date_on_two_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 514 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 508 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_on_two_clicked ((SavedSearchDialogSearchRowDate*) self);
-#line 5230 "SavedSearchDialog.c"
+#line 5196 "SavedSearchDialog.c"
 }
 
 
@@ -5265,162 +5231,162 @@ static SavedSearchDialogSearchRowDate* saved_search_dialog_search_row_date_const
 	GtkBox* _tmp30_ = NULL;
 	GtkButton* _tmp31_ = NULL;
 	GtkBox* _tmp32_ = NULL;
-#line 495 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 489 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_CONTAINER (parent), NULL);
-#line 495 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 489 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = (SavedSearchDialogSearchRowDate*) saved_search_dialog_search_row_construct (object_type);
-#line 496 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 490 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = parent;
-#line 496 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 490 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _saved_search_dialog_search_row_container_ref0 (_tmp0_);
-#line 496 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 490 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
-#line 496 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 490 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->parent = _tmp1_;
-#line 499 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 493 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 499 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 493 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp2_);
-#line 499 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 493 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->context);
-#line 499 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 493 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->context = _tmp2_;
-#line 500 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 494 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = self->priv->context;
-#line 500 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 494 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _ ("is exactly");
-#line 500 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 494 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_text_append_text (_tmp3_, _tmp4_);
-#line 501 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp5_ = self->priv->context;
-#line 501 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp6_ = _ ("is after");
-#line 501 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp5_, _tmp6_);
-#line 502 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp7_ = self->priv->context;
-#line 502 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp8_ = _ ("is before");
-#line 502 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp7_, _tmp8_);
-#line 503 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp9_ = self->priv->context;
-#line 503 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp10_ = _ ("is between");
-#line 503 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp9_, _tmp10_);
-#line 504 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp11_ = self->priv->context;
-#line 504 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp12_ = _ ("is not set");
-#line 504 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_text_append_text (_tmp11_, _tmp12_);
-#line 505 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp13_ = self->priv->context;
-#line 505 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 506 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp14_ = self->priv->context;
-#line 506 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_date_on_changed_gtk_combo_box_changed, self);
-#line 508 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp15_ = (GtkCalendar*) gtk_calendar_new ();
-#line 508 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp15_);
-#line 508 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->cal_one);
-#line 508 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->cal_one = _tmp15_;
-#line 509 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp16_ = (GtkCalendar*) gtk_calendar_new ();
-#line 509 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp16_);
-#line 509 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->cal_two);
-#line 509 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->cal_two = _tmp16_;
-#line 511 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp17_ = (GtkButton*) gtk_button_new ();
-#line 511 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp17_);
-#line 511 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->label_one);
-#line 511 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->label_one = _tmp17_;
-#line 512 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp18_ = self->priv->label_one;
-#line 512 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (_tmp18_, "clicked", (GCallback) _saved_search_dialog_search_row_date_on_one_clicked_gtk_button_clicked, self);
-#line 513 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp19_ = (GtkButton*) gtk_button_new ();
-#line 513 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp19_);
-#line 513 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->label_two);
-#line 513 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->label_two = _tmp19_;
-#line 514 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp20_ = self->priv->label_two;
-#line 514 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_signal_connect (_tmp20_, "clicked", (GCallback) _saved_search_dialog_search_row_date_on_two_clicked_gtk_button_clicked, self);
-#line 516 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp21_ = _ ("and");
-#line 516 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp22_ = (GtkLabel*) gtk_label_new (_tmp21_);
-#line 516 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp22_);
-#line 516 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->and);
-#line 516 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->and = _tmp22_;
-#line 518 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp23_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-#line 518 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_object_ref_sink (_tmp23_);
-#line 518 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->box);
-#line 518 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self->priv->box = _tmp23_;
-#line 519 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp24_ = self->priv->box;
-#line 519 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp25_ = self->priv->context;
-#line 519 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp24_, G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 520 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp26_ = self->priv->box;
-#line 520 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp27_ = self->priv->label_one;
-#line 520 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp26_, G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 521 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp28_ = self->priv->box;
-#line 521 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp29_ = self->priv->and;
-#line 521 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp28_, G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 522 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp30_ = self->priv->box;
-#line 522 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp31_ = self->priv->label_two;
-#line 522 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_box_pack_start (_tmp30_, G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 524 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp32_ = self->priv->box;
-#line 524 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_widget_get_type (), GtkWidget));
-#line 525 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	saved_search_dialog_search_row_date_update_date_labels (self);
 #line 495 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp5_ = self->priv->context;
+#line 495 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp6_ = _ ("is after");
+#line 495 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp5_, _tmp6_);
+#line 496 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp7_ = self->priv->context;
+#line 496 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp8_ = _ ("is before");
+#line 496 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp7_, _tmp8_);
+#line 497 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp9_ = self->priv->context;
+#line 497 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp10_ = _ ("is between");
+#line 497 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp9_, _tmp10_);
+#line 498 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp11_ = self->priv->context;
+#line 498 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp12_ = _ ("is not set");
+#line 498 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_text_append_text (_tmp11_, _tmp12_);
+#line 499 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp13_ = self->priv->context;
+#line 499 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_combo_box_get_type (), GtkComboBox), 0);
+#line 500 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp14_ = self->priv->context;
+#line 500 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _saved_search_dialog_search_row_date_on_changed_gtk_combo_box_changed, self);
+#line 502 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp15_ = (GtkCalendar*) gtk_calendar_new ();
+#line 502 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp15_);
+#line 502 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->cal_one);
+#line 502 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->cal_one = _tmp15_;
+#line 503 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp16_ = (GtkCalendar*) gtk_calendar_new ();
+#line 503 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp16_);
+#line 503 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->cal_two);
+#line 503 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->cal_two = _tmp16_;
+#line 505 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp17_ = (GtkButton*) gtk_button_new ();
+#line 505 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp17_);
+#line 505 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->label_one);
+#line 505 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->label_one = _tmp17_;
+#line 506 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp18_ = self->priv->label_one;
+#line 506 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (_tmp18_, "clicked", (GCallback) _saved_search_dialog_search_row_date_on_one_clicked_gtk_button_clicked, self);
+#line 507 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp19_ = (GtkButton*) gtk_button_new ();
+#line 507 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp19_);
+#line 507 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->label_two);
+#line 507 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->label_two = _tmp19_;
+#line 508 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp20_ = self->priv->label_two;
+#line 508 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_signal_connect (_tmp20_, "clicked", (GCallback) _saved_search_dialog_search_row_date_on_two_clicked_gtk_button_clicked, self);
+#line 510 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp21_ = _ ("and");
+#line 510 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp22_ = (GtkLabel*) gtk_label_new (_tmp21_);
+#line 510 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp22_);
+#line 510 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->and);
+#line 510 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->and = _tmp22_;
+#line 512 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp23_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+#line 512 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	g_object_ref_sink (_tmp23_);
+#line 512 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->box);
+#line 512 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	self->priv->box = _tmp23_;
+#line 513 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp24_ = self->priv->box;
+#line 513 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp25_ = self->priv->context;
+#line 513 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp24_, G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 514 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp26_ = self->priv->box;
+#line 514 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp27_ = self->priv->label_one;
+#line 514 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp26_, G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 515 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp28_ = self->priv->box;
+#line 515 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp29_ = self->priv->and;
+#line 515 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp28_, G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 516 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp30_ = self->priv->box;
+#line 516 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp31_ = self->priv->label_two;
+#line 516 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_box_pack_start (_tmp30_, G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 518 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_tmp32_ = self->priv->box;
+#line 518 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_widget_get_type (), GtkWidget));
+#line 519 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	saved_search_dialog_search_row_date_update_date_labels (self);
+#line 489 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return self;
-#line 5417 "SavedSearchDialog.c"
+#line 5383 "SavedSearchDialog.c"
 }
 
 
 static SavedSearchDialogSearchRowDate* saved_search_dialog_search_row_date_new (SavedSearchDialogSearchRowContainer* parent) {
-#line 495 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 489 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return saved_search_dialog_search_row_date_construct (SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_DATE, parent);
-#line 5424 "SavedSearchDialog.c"
+#line 5390 "SavedSearchDialog.c"
 }
 
 
@@ -5439,110 +5405,110 @@ static void saved_search_dialog_search_row_date_update_date_labels (SavedSearchD
 	GDateTime* _tmp20_ = NULL;
 	gchar* _tmp21_ = NULL;
 	gchar* _tmp22_ = NULL;
-#line 532 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 526 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_DATE (self));
-#line 533 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 527 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->context;
-#line 533 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 527 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_combo_box_get_type (), GtkComboBox));
-#line 533 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 527 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	c = (SearchConditionDateContext) _tmp1_;
-#line 536 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 530 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = c;
-#line 536 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 530 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp2_ == SEARCH_CONDITION_DATE_CONTEXT_BETWEEN) {
-#line 5455 "SavedSearchDialog.c"
+#line 5421 "SavedSearchDialog.c"
 		GtkButton* _tmp3_ = NULL;
 		GtkLabel* _tmp4_ = NULL;
 		GtkButton* _tmp5_ = NULL;
-#line 537 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 531 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp3_ = self->priv->label_one;
-#line 537 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 531 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		gtk_widget_show (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget));
-#line 538 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 532 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp4_ = self->priv->and;
-#line 538 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 532 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		gtk_widget_show (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget));
-#line 539 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 533 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp5_ = self->priv->label_two;
-#line 539 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 533 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		gtk_widget_show (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget));
-#line 5471 "SavedSearchDialog.c"
+#line 5437 "SavedSearchDialog.c"
 	} else {
 		SearchConditionDateContext _tmp6_ = 0;
-#line 540 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 534 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp6_ = c;
-#line 540 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 534 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		if (_tmp6_ == SEARCH_CONDITION_DATE_CONTEXT_IS_NOT_SET) {
-#line 5478 "SavedSearchDialog.c"
+#line 5444 "SavedSearchDialog.c"
 			GtkButton* _tmp7_ = NULL;
 			GtkLabel* _tmp8_ = NULL;
 			GtkButton* _tmp9_ = NULL;
-#line 541 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 535 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp7_ = self->priv->label_one;
-#line 541 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 535 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget));
-#line 542 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 536 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp8_ = self->priv->and;
-#line 542 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 536 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_widget_get_type (), GtkWidget));
-#line 543 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 537 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp9_ = self->priv->label_two;
-#line 543 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 537 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget));
-#line 5494 "SavedSearchDialog.c"
+#line 5460 "SavedSearchDialog.c"
 		} else {
 			GtkButton* _tmp10_ = NULL;
 			GtkLabel* _tmp11_ = NULL;
 			GtkButton* _tmp12_ = NULL;
-#line 545 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 539 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp10_ = self->priv->label_one;
-#line 545 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 539 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			gtk_widget_show (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget));
-#line 546 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 540 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp11_ = self->priv->and;
-#line 546 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 540 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget));
-#line 547 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 541 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			_tmp12_ = self->priv->label_two;
-#line 547 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 541 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget));
-#line 5511 "SavedSearchDialog.c"
+#line 5477 "SavedSearchDialog.c"
 		}
 	}
-#line 551 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 545 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp13_ = self->priv->label_one;
-#line 551 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 545 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp14_ = saved_search_dialog_search_row_date_get_date_one (self);
-#line 551 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 545 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp15_ = _tmp14_;
-#line 551 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 545 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp16_ = g_date_time_format (_tmp15_, SAVED_SEARCH_DIALOG_SEARCH_ROW_DATE_DATE_FORMAT);
-#line 551 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 545 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp17_ = _tmp16_;
-#line 551 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 545 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_button_set_label (_tmp13_, _tmp17_);
-#line 551 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 545 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_free0 (_tmp17_);
-#line 551 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 545 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_date_time_unref0 (_tmp15_);
-#line 552 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 546 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp18_ = self->priv->label_two;
-#line 552 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 546 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp19_ = saved_search_dialog_search_row_date_get_date_two (self);
-#line 552 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 546 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp20_ = _tmp19_;
-#line 552 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 546 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp21_ = g_date_time_format (_tmp20_, SAVED_SEARCH_DIALOG_SEARCH_ROW_DATE_DATE_FORMAT);
-#line 552 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 546 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp22_ = _tmp21_;
-#line 552 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 546 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_button_set_label (_tmp18_, _tmp22_);
-#line 552 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 546 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_free0 (_tmp22_);
-#line 552 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 546 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_date_time_unref0 (_tmp20_);
-#line 5546 "SavedSearchDialog.c"
+#line 5512 "SavedSearchDialog.c"
 }
 
 
@@ -5551,17 +5517,17 @@ static GtkWidget* saved_search_dialog_search_row_date_real_get_widget (SavedSear
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 555 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 549 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_DATE, SavedSearchDialogSearchRowDate);
-#line 556 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 550 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->box;
-#line 556 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 550 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 556 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 550 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp1_;
-#line 556 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 550 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 5565 "SavedSearchDialog.c"
+#line 5531 "SavedSearchDialog.c"
 }
 
 
@@ -5577,33 +5543,33 @@ static GDateTime* saved_search_dialog_search_row_date_get_date_one (SavedSearchD
 	gint _tmp7_ = 0;
 	gint _tmp8_ = 0;
 	GDateTime* _tmp9_ = NULL;
-#line 559 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 553 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_DATE (self), NULL);
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->cal_one;
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_get (_tmp0_, "year", &_tmp1_, NULL);
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = _tmp1_;
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = self->priv->cal_one;
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_get (_tmp3_, "month", &_tmp4_, NULL);
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = _tmp4_;
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = self->priv->cal_one;
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_get (_tmp6_, "day", &_tmp7_, NULL);
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = _tmp7_;
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp9_ = g_date_time_new_local (_tmp2_, _tmp5_ + 1, _tmp8_, 0, 0, 0.0);
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp9_;
-#line 560 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 554 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 5607 "SavedSearchDialog.c"
+#line 5573 "SavedSearchDialog.c"
 }
 
 
@@ -5619,33 +5585,33 @@ static GDateTime* saved_search_dialog_search_row_date_get_date_two (SavedSearchD
 	gint _tmp7_ = 0;
 	gint _tmp8_ = 0;
 	GDateTime* _tmp9_ = NULL;
-#line 563 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 557 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_val_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_DATE (self), NULL);
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->cal_two;
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_get (_tmp0_, "year", &_tmp1_, NULL);
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = _tmp1_;
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = self->priv->cal_two;
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_get (_tmp3_, "month", &_tmp4_, NULL);
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = _tmp4_;
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = self->priv->cal_two;
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_get (_tmp6_, "day", &_tmp7_, NULL);
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = _tmp7_;
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp9_ = g_date_time_new_local (_tmp2_, _tmp5_ + 1, _tmp8_, 0, 0, 0.0);
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = _tmp9_;
-#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 558 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 5649 "SavedSearchDialog.c"
+#line 5615 "SavedSearchDialog.c"
 }
 
 
@@ -5659,35 +5625,35 @@ static void saved_search_dialog_search_row_date_set_date_one (SavedSearchDialogS
 	GtkCalendar* _tmp6_ = NULL;
 	GDateTime* _tmp7_ = NULL;
 	gint _tmp8_ = 0;
-#line 567 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 561 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_DATE (self));
-#line 567 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 561 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (date != NULL);
-#line 568 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 562 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->cal_one;
-#line 568 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 562 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = date;
-#line 568 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 562 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = g_date_time_get_day_of_month (_tmp1_);
-#line 568 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 562 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_set (_tmp0_, "day", _tmp2_, NULL);
-#line 569 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 563 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = self->priv->cal_one;
-#line 569 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 563 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = date;
-#line 569 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 563 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = g_date_time_get_month (_tmp4_);
-#line 569 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 563 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_set (_tmp3_, "month", _tmp5_ - 1, NULL);
-#line 570 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = self->priv->cal_one;
-#line 570 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = date;
-#line 570 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = g_date_time_get_year (_tmp7_);
-#line 570 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 564 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_set (_tmp6_, "year", _tmp8_, NULL);
-#line 5691 "SavedSearchDialog.c"
+#line 5657 "SavedSearchDialog.c"
 }
 
 
@@ -5701,35 +5667,35 @@ static void saved_search_dialog_search_row_date_set_date_two (SavedSearchDialogS
 	GtkCalendar* _tmp6_ = NULL;
 	GDateTime* _tmp7_ = NULL;
 	gint _tmp8_ = 0;
-#line 573 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 567 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_DATE (self));
-#line 573 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 567 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (date != NULL);
-#line 574 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 568 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->cal_two;
-#line 574 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 568 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = date;
-#line 574 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 568 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = g_date_time_get_day_of_month (_tmp1_);
-#line 574 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 568 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_set (_tmp0_, "day", _tmp2_, NULL);
-#line 575 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 569 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = self->priv->cal_two;
-#line 575 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 569 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = date;
-#line 575 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 569 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = g_date_time_get_month (_tmp4_);
-#line 575 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 569 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_set (_tmp3_, "month", _tmp5_ - 1, NULL);
-#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 570 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = self->priv->cal_two;
-#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 570 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = date;
-#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 570 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = g_date_time_get_year (_tmp7_);
-#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 570 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_set (_tmp6_, "year", _tmp8_, NULL);
-#line 5733 "SavedSearchDialog.c"
+#line 5699 "SavedSearchDialog.c"
 }
 
 
@@ -5749,43 +5715,43 @@ static SearchCondition* saved_search_dialog_search_row_date_real_get_search_cond
 	GDateTime* _tmp7_ = NULL;
 	SearchConditionDate* _tmp8_ = NULL;
 	SearchConditionDate* _tmp9_ = NULL;
-#line 579 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 573 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_DATE, SavedSearchDialogSearchRowDate);
-#line 580 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 574 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->parent;
-#line 580 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 574 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = saved_search_dialog_search_row_container_get_search_type (_tmp0_);
-#line 580 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 574 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	search_type = _tmp1_;
-#line 581 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 575 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->context;
-#line 581 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 575 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox));
-#line 581 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 575 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	search_context = (SearchConditionDateContext) _tmp3_;
-#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = saved_search_dialog_search_row_date_get_date_one (self);
-#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = _tmp4_;
-#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = saved_search_dialog_search_row_date_get_date_two (self);
-#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = _tmp6_;
-#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = search_condition_date_new (search_type, search_context, _tmp5_, _tmp7_);
-#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp9_ = _tmp8_;
-#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_date_time_unref0 (_tmp7_);
-#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_date_time_unref0 (_tmp5_);
-#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 576 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	c = _tmp9_;
-#line 584 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 578 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (c, TYPE_SEARCH_CONDITION, SearchCondition);
-#line 584 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 578 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 5789 "SavedSearchDialog.c"
+#line 5755 "SavedSearchDialog.c"
 }
 
 
@@ -5801,136 +5767,136 @@ static void saved_search_dialog_search_row_date_real_populate (SavedSearchDialog
 	GDateTime* _tmp6_ = NULL;
 	GDateTime* _tmp7_ = NULL;
 	GDateTime* _tmp8_ = NULL;
-#line 587 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 581 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_DATE, SavedSearchDialogSearchRowDate);
-#line 587 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 581 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (IS_SEARCH_CONDITION (sc));
-#line 588 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = sc;
-#line 588 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = _search_condition_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_SEARCH_CONDITION_DATE) ? ((SearchConditionDate*) _tmp0_) : NULL);
-#line 588 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 582 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	cond = _tmp1_;
-#line 589 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 583 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_vala_assert (cond != NULL, "cond != null");
-#line 590 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 584 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = self->priv->context;
-#line 590 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 584 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = search_condition_date_get_context (cond);
-#line 590 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 584 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp4_ = _tmp3_;
-#line 590 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 584 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox), (gint) _tmp4_);
-#line 591 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 585 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = search_condition_date_get_date_one (cond);
-#line 591 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 585 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = _tmp5_;
-#line 591 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 585 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_set_date_one (self, _tmp6_);
-#line 592 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 586 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp7_ = search_condition_date_get_date_two (cond);
-#line 592 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 586 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = _tmp7_;
-#line 592 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 586 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_set_date_two (self, _tmp8_);
-#line 593 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	saved_search_dialog_search_row_date_update_date_labels (self);
 #line 587 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	saved_search_dialog_search_row_date_update_date_labels (self);
+#line 581 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_search_condition_unref0 (cond);
-#line 5841 "SavedSearchDialog.c"
+#line 5807 "SavedSearchDialog.c"
 }
 
 
 static gboolean saved_search_dialog_search_row_date_real_is_complete (SavedSearchDialogSearchRow* base) {
 	SavedSearchDialogSearchRowDate * self;
 	gboolean result = FALSE;
-#line 596 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 590 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_DATE, SavedSearchDialogSearchRowDate);
-#line 597 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 591 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	result = TRUE;
-#line 597 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 591 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return result;
-#line 5854 "SavedSearchDialog.c"
+#line 5820 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_date_on_changed (SavedSearchDialogSearchRowDate* self) {
 	SavedSearchDialogSearchRowContainer* _tmp0_ = NULL;
 	SavedSearchDialogSearchRowContainer* _tmp1_ = NULL;
-#line 600 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 594 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_DATE (self));
-#line 601 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 595 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->parent;
-#line 601 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 595 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp1_ = self->priv->parent;
-#line 601 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 595 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_emit_by_name (_tmp0_, "changed", _tmp1_);
-#line 602 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 596 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_update_date_labels (self);
-#line 5871 "SavedSearchDialog.c"
+#line 5837 "SavedSearchDialog.c"
 }
 
 
 static Block9Data* block9_data_ref (Block9Data* _data9_) {
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_atomic_int_inc (&_data9_->_ref_count_);
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return _data9_;
-#line 5880 "SavedSearchDialog.c"
+#line 5846 "SavedSearchDialog.c"
 }
 
 
 static void block9_data_unref (void * _userdata_) {
 	Block9Data* _data9_;
 	_data9_ = (Block9Data*) _userdata_;
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (g_atomic_int_dec_and_test (&_data9_->_ref_count_)) {
-#line 5889 "SavedSearchDialog.c"
+#line 5855 "SavedSearchDialog.c"
 		SavedSearchDialogSearchRowDate* self;
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		self = _data9_->self;
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_g_object_unref0 (_data9_->d);
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_saved_search_dialog_search_row_unref0 (self);
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		g_slice_free (Block9Data, _data9_);
-#line 5899 "SavedSearchDialog.c"
+#line 5865 "SavedSearchDialog.c"
 	}
 }
 
 
 static void __lambda12_ (SavedSearchDialogSearchRowDate* self) {
-#line 616 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 610 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_update_date_labels (self);
-#line 5907 "SavedSearchDialog.c"
+#line 5873 "SavedSearchDialog.c"
 }
 
 
 static void ___lambda12__gtk_calendar_day_selected (GtkCalendar* _sender, gpointer self) {
-#line 616 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 610 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	__lambda12_ ((SavedSearchDialogSearchRowDate*) self);
-#line 5914 "SavedSearchDialog.c"
+#line 5880 "SavedSearchDialog.c"
 }
 
 
 static void __lambda13_ (Block9Data* _data9_) {
 	SavedSearchDialogSearchRowDate* self;
 	GtkDialog* _tmp0_ = NULL;
-#line 617 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 611 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = _data9_->self;
-#line 618 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 612 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = _data9_->d;
-#line 618 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 612 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_dialog_response (_tmp0_, (gint) GTK_RESPONSE_ACCEPT);
-#line 5927 "SavedSearchDialog.c"
+#line 5893 "SavedSearchDialog.c"
 }
 
 
 static void ___lambda13__gtk_calendar_day_selected_double_click (GtkCalendar* _sender, gpointer self) {
-#line 617 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 611 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	__lambda13_ (self);
-#line 5934 "SavedSearchDialog.c"
+#line 5900 "SavedSearchDialog.c"
 }
 
 
@@ -5971,192 +5937,192 @@ static void saved_search_dialog_search_row_date_popup_calendar (SavedSearchDialo
 	GtkCalendar* _tmp32_ = NULL;
 	gulong _tmp33_ = 0UL;
 	GtkDialog* _tmp34_ = NULL;
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_DATE (self));
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (GTK_IS_CALENDAR (cal));
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_data9_ = g_slice_new0 (Block9Data);
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_data9_->_ref_count_ = 1;
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_data9_->self = saved_search_dialog_search_row_ref (self);
-#line 606 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 600 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = cal;
-#line 606 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 600 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_get (_tmp0_, "day", &_tmp1_, NULL);
-#line 606 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 600 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp2_ = _tmp1_;
-#line 606 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 600 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	orig_day = _tmp2_;
-#line 607 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 601 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp3_ = cal;
-#line 607 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 601 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_get (_tmp3_, "month", &_tmp4_, NULL);
-#line 607 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 601 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp5_ = _tmp4_;
-#line 607 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 601 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	orig_month = _tmp5_;
-#line 608 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 602 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp6_ = cal;
-#line 608 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 602 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_get (_tmp6_, "year", &_tmp7_, NULL);
-#line 608 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 602 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp8_ = _tmp7_;
-#line 608 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 602 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	orig_year = _tmp8_;
-#line 609 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 603 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp9_ = (GtkDialog*) gtk_dialog_new_with_buttons (NULL, NULL, GTK_DIALOG_MODAL, RESOURCES_CANCEL_LABEL, GTK_RESPONSE_REJECT, RESOURCES_OK_LABEL, GTK_RESPONSE_ACCEPT, NULL);
-#line 609 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 603 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp9_);
-#line 609 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 603 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_data9_->d = _tmp9_;
-#line 612 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 606 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp10_ = _data9_->d;
-#line 612 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 606 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_window_set_modal (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_window_get_type (), GtkWindow), TRUE);
-#line 613 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 607 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp11_ = _data9_->d;
-#line 613 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 607 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_window_get_type (), GtkWindow), FALSE);
-#line 614 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 608 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp12_ = _data9_->d;
-#line 614 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 608 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_window_set_decorated (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_window_get_type (), GtkWindow), FALSE);
-#line 615 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 609 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp13_ = _data9_->d;
-#line 615 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 609 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp14_ = (GtkBox*) gtk_dialog_get_content_area (_tmp13_);
-#line 615 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 609 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp15_ = cal;
-#line 615 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 609 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_box_get_type (), GtkBox), gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget));
-#line 616 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 610 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp16_ = cal;
-#line 616 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 610 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp17_ = g_signal_connect (_tmp16_, "day-selected", (GCallback) ___lambda12__gtk_calendar_day_selected, self);
-#line 616 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 610 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	id_1 = _tmp17_;
-#line 617 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 611 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp18_ = cal;
-#line 617 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 611 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp19_ = g_signal_connect_data (_tmp18_, "day-selected-double-click", (GCallback) ___lambda13__gtk_calendar_day_selected_double_click, block9_data_ref (_data9_), (GClosureNotify) block9_data_unref, 0);
-#line 617 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 611 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	id_2 = _tmp19_;
-#line 620 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 614 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp20_ = _data9_->d;
-#line 620 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 614 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_widget_get_type (), GtkWidget));
-#line 621 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 615 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp21_ = _data9_->d;
-#line 621 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 615 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp22_ = gtk_dialog_run (_tmp21_);
-#line 621 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 615 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	res = _tmp22_;
-#line 622 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 616 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp23_ = res;
-#line 622 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 616 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (_tmp23_ != ((gint) GTK_RESPONSE_ACCEPT)) {
-#line 6061 "SavedSearchDialog.c"
+#line 6027 "SavedSearchDialog.c"
 		GtkCalendar* _tmp24_ = NULL;
 		gint _tmp25_ = 0;
 		GtkCalendar* _tmp26_ = NULL;
 		gint _tmp27_ = 0;
 		GtkCalendar* _tmp28_ = NULL;
 		gint _tmp29_ = 0;
-#line 624 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 618 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp24_ = cal;
-#line 624 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 618 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp25_ = orig_day;
-#line 624 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 618 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		g_object_set (_tmp24_, "day", _tmp25_, NULL);
-#line 625 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 619 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp26_ = cal;
-#line 625 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 619 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp27_ = orig_month;
-#line 625 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 619 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		g_object_set (_tmp26_, "month", _tmp27_, NULL);
-#line 626 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 620 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp28_ = cal;
-#line 626 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 620 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_tmp29_ = orig_year;
-#line 626 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 620 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		g_object_set (_tmp28_, "year", _tmp29_, NULL);
-#line 6086 "SavedSearchDialog.c"
+#line 6052 "SavedSearchDialog.c"
 	}
-#line 628 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 622 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp30_ = cal;
-#line 628 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 622 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp31_ = id_1;
-#line 628 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 622 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handler_disconnect (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, G_TYPE_OBJECT, GObject), _tmp31_);
-#line 629 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 623 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp32_ = cal;
-#line 629 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 623 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp33_ = id_2;
-#line 629 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 623 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handler_disconnect (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, G_TYPE_OBJECT, GObject), _tmp33_);
-#line 630 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 624 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp34_ = _data9_->d;
-#line 630 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 624 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, gtk_widget_get_type (), GtkWidget));
-#line 631 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 625 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_update_date_labels (self);
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	block9_data_unref (_data9_);
-#line 605 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_data9_ = NULL;
-#line 6110 "SavedSearchDialog.c"
+#line 6076 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_date_on_one_clicked (SavedSearchDialogSearchRowDate* self) {
 	GtkCalendar* _tmp0_ = NULL;
-#line 634 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 628 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_DATE (self));
-#line 635 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 629 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->cal_one;
-#line 635 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 629 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_popup_calendar (self, _tmp0_);
-#line 6122 "SavedSearchDialog.c"
+#line 6088 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_date_on_two_clicked (SavedSearchDialogSearchRowDate* self) {
 	GtkCalendar* _tmp0_ = NULL;
-#line 638 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 632 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (SAVED_SEARCH_DIALOG_IS_SEARCH_ROW_DATE (self));
-#line 639 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 633 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->cal_two;
-#line 639 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 633 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_popup_calendar (self, _tmp0_);
-#line 6134 "SavedSearchDialog.c"
+#line 6100 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_date_class_init (SavedSearchDialogSearchRowDateClass * klass) {
-#line 483 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 477 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_parent_class = g_type_class_peek_parent (klass);
-#line 483 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 477 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->finalize = saved_search_dialog_search_row_date_finalize;
-#line 483 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 477 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_type_class_add_private (klass, sizeof (SavedSearchDialogSearchRowDatePrivate));
-#line 483 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 477 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_widget = saved_search_dialog_search_row_date_real_get_widget;
-#line 483 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 477 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->get_search_condition = saved_search_dialog_search_row_date_real_get_search_condition;
-#line 483 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 477 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->populate = saved_search_dialog_search_row_date_real_populate;
-#line 483 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 477 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	((SavedSearchDialogSearchRowClass *) klass)->is_complete = saved_search_dialog_search_row_date_real_is_complete;
-#line 6153 "SavedSearchDialog.c"
+#line 6119 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_date_instance_init (SavedSearchDialogSearchRowDate * self) {
-#line 483 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 477 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv = SAVED_SEARCH_DIALOG_SEARCH_ROW_DATE_GET_PRIVATE (self);
-#line 6160 "SavedSearchDialog.c"
+#line 6126 "SavedSearchDialog.c"
 }
 
 
@@ -6164,33 +6130,33 @@ static void saved_search_dialog_search_row_date_finalize (SavedSearchDialogSearc
 	SavedSearchDialogSearchRowDate * self;
 	GtkComboBoxText* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
-#line 483 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 477 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_DATE, SavedSearchDialogSearchRowDate);
-#line 529 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 523 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->context;
-#line 529 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 523 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", gtk_combo_box_get_type (), &_tmp1_, NULL, FALSE);
-#line 529 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 523 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_combo_box_get_type (), GtkComboBox), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _saved_search_dialog_search_row_date_on_changed_gtk_combo_box_changed, self);
-#line 485 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 479 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->box);
-#line 486 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 480 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->context);
-#line 487 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 481 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->label_one);
-#line 488 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 482 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->label_two);
-#line 489 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->cal_one);
-#line 490 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->cal_two);
-#line 491 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_g_object_unref0 (self->priv->and);
-#line 493 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
 #line 483 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->cal_one);
+#line 484 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->cal_two);
+#line 485 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_g_object_unref0 (self->priv->and);
+#line 487 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+	_saved_search_dialog_search_row_container_unref0 (self->priv->parent);
+#line 477 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	SAVED_SEARCH_DIALOG_SEARCH_ROW_CLASS (saved_search_dialog_search_row_date_parent_class)->finalize (obj);
-#line 6194 "SavedSearchDialog.c"
+#line 6160 "SavedSearchDialog.c"
 }
 
 
@@ -6209,7 +6175,7 @@ static GType saved_search_dialog_search_row_date_get_type (void) {
 static void value_saved_search_dialog_init (GValue* value) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	value->data[0].v_pointer = NULL;
-#line 6213 "SavedSearchDialog.c"
+#line 6179 "SavedSearchDialog.c"
 }
 
 
@@ -6218,7 +6184,7 @@ static void value_saved_search_dialog_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_unref (value->data[0].v_pointer);
-#line 6222 "SavedSearchDialog.c"
+#line 6188 "SavedSearchDialog.c"
 	}
 }
 
@@ -6228,11 +6194,11 @@ static void value_saved_search_dialog_copy_value (const GValue* src_value, GValu
 	if (src_value->data[0].v_pointer) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		dest_value->data[0].v_pointer = saved_search_dialog_ref (src_value->data[0].v_pointer);
-#line 6232 "SavedSearchDialog.c"
+#line 6198 "SavedSearchDialog.c"
 	} else {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 6236 "SavedSearchDialog.c"
+#line 6202 "SavedSearchDialog.c"
 	}
 }
 
@@ -6240,37 +6206,37 @@ static void value_saved_search_dialog_copy_value (const GValue* src_value, GValu
 static gpointer value_saved_search_dialog_peek_pointer (const GValue* value) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return value->data[0].v_pointer;
-#line 6244 "SavedSearchDialog.c"
+#line 6210 "SavedSearchDialog.c"
 }
 
 
 static gchar* value_saved_search_dialog_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (collect_values[0].v_pointer) {
-#line 6251 "SavedSearchDialog.c"
+#line 6217 "SavedSearchDialog.c"
 		SavedSearchDialog* object;
 		object = collect_values[0].v_pointer;
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 6258 "SavedSearchDialog.c"
+#line 6224 "SavedSearchDialog.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 6262 "SavedSearchDialog.c"
+#line 6228 "SavedSearchDialog.c"
 		}
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = saved_search_dialog_ref (object);
-#line 6266 "SavedSearchDialog.c"
+#line 6232 "SavedSearchDialog.c"
 	} else {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = NULL;
-#line 6270 "SavedSearchDialog.c"
+#line 6236 "SavedSearchDialog.c"
 	}
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return NULL;
-#line 6274 "SavedSearchDialog.c"
+#line 6240 "SavedSearchDialog.c"
 }
 
 
@@ -6281,25 +6247,25 @@ static gchar* value_saved_search_dialog_lcopy_value (const GValue* value, guint 
 	if (!object_p) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 6285 "SavedSearchDialog.c"
+#line 6251 "SavedSearchDialog.c"
 	}
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (!value->data[0].v_pointer) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		*object_p = NULL;
-#line 6291 "SavedSearchDialog.c"
+#line 6257 "SavedSearchDialog.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		*object_p = value->data[0].v_pointer;
-#line 6295 "SavedSearchDialog.c"
+#line 6261 "SavedSearchDialog.c"
 	} else {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		*object_p = saved_search_dialog_ref (value->data[0].v_pointer);
-#line 6299 "SavedSearchDialog.c"
+#line 6265 "SavedSearchDialog.c"
 	}
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return NULL;
-#line 6303 "SavedSearchDialog.c"
+#line 6269 "SavedSearchDialog.c"
 }
 
 
@@ -6313,7 +6279,7 @@ GParamSpec* param_spec_saved_search_dialog (const gchar* name, const gchar* nick
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return G_PARAM_SPEC (spec);
-#line 6317 "SavedSearchDialog.c"
+#line 6283 "SavedSearchDialog.c"
 }
 
 
@@ -6322,7 +6288,7 @@ gpointer value_get_saved_search_dialog (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_SAVED_SEARCH_DIALOG), NULL);
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return value->data[0].v_pointer;
-#line 6326 "SavedSearchDialog.c"
+#line 6292 "SavedSearchDialog.c"
 }
 
 
@@ -6342,17 +6308,17 @@ void value_set_saved_search_dialog (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_ref (value->data[0].v_pointer);
-#line 6346 "SavedSearchDialog.c"
+#line 6312 "SavedSearchDialog.c"
 	} else {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = NULL;
-#line 6350 "SavedSearchDialog.c"
+#line 6316 "SavedSearchDialog.c"
 	}
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (old) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_unref (old);
-#line 6356 "SavedSearchDialog.c"
+#line 6322 "SavedSearchDialog.c"
 	}
 }
 
@@ -6371,17 +6337,17 @@ void value_take_saved_search_dialog (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = v_object;
-#line 6375 "SavedSearchDialog.c"
+#line 6341 "SavedSearchDialog.c"
 	} else {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		value->data[0].v_pointer = NULL;
-#line 6379 "SavedSearchDialog.c"
+#line 6345 "SavedSearchDialog.c"
 	}
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	if (old) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		saved_search_dialog_unref (old);
-#line 6385 "SavedSearchDialog.c"
+#line 6351 "SavedSearchDialog.c"
 	}
 }
 
@@ -6393,7 +6359,7 @@ static void saved_search_dialog_class_init (SavedSearchDialogClass * klass) {
 	((SavedSearchDialogClass *) klass)->finalize = saved_search_dialog_finalize;
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_type_class_add_private (klass, sizeof (SavedSearchDialogPrivate));
-#line 6397 "SavedSearchDialog.c"
+#line 6363 "SavedSearchDialog.c"
 }
 
 
@@ -6401,19 +6367,19 @@ static void saved_search_dialog_instance_init (SavedSearchDialog * self) {
 	GeeArrayList* _tmp0_ = NULL;
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv = SAVED_SEARCH_DIALOG_GET_PRIVATE (self);
-#line 649 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 643 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = gee_array_list_new (SAVED_SEARCH_DIALOG_TYPE_SEARCH_ROW_CONTAINER, (GBoxedCopyFunc) saved_search_dialog_search_row_container_ref, saved_search_dialog_search_row_container_unref, NULL, NULL, NULL);
-#line 649 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 643 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->row_list = _tmp0_;
-#line 650 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 644 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->edit_mode = FALSE;
-#line 651 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 645 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->previous_search = NULL;
-#line 652 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 646 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->priv->valid = FALSE;
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	self->ref_count = 1;
-#line 6417 "SavedSearchDialog.c"
+#line 6383 "SavedSearchDialog.c"
 }
 
 
@@ -6425,29 +6391,29 @@ static void saved_search_dialog_finalize (SavedSearchDialog* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_SAVED_SEARCH_DIALOG, SavedSearchDialog);
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_destroy (self);
-#line 690 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 684 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = self->priv->search_title;
-#line 690 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 684 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_parse_name ("changed", GTK_TYPE_EDITABLE, &_tmp1_, NULL, FALSE);
-#line 690 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 684 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GTK_TYPE_EDITABLE, GtkEditable), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _saved_search_dialog_on_title_changed_gtk_editable_changed, self);
-#line 643 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 637 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->builder);
-#line 644 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 638 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->dialog);
-#line 645 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 639 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->add_criteria);
-#line 646 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 640 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->operator);
-#line 647 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 641 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->row_box);
-#line 648 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 642 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->search_title);
-#line 649 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 643 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->row_list);
-#line 651 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
+#line 645 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_g_object_unref0 (self->priv->previous_search);
-#line 6451 "SavedSearchDialog.c"
+#line 6417 "SavedSearchDialog.c"
 }
 
 
@@ -6472,7 +6438,7 @@ gpointer saved_search_dialog_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	return instance;
-#line 6476 "SavedSearchDialog.c"
+#line 6442 "SavedSearchDialog.c"
 }
 
 
@@ -6485,7 +6451,7 @@ void saved_search_dialog_unref (gpointer instance) {
 		SAVED_SEARCH_DIALOG_GET_CLASS (self)->finalize (self);
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 6489 "SavedSearchDialog.c"
+#line 6455 "SavedSearchDialog.c"
 	}
 }
 

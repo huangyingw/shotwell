@@ -304,6 +304,16 @@ typedef struct _ViewCollectionClass ViewCollectionClass;
 #define _data_collection_unref0(var) ((var == NULL) ? NULL : (var = (data_collection_unref (var), NULL)))
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 
+#define TYPE_APP_WINDOW (app_window_get_type ())
+#define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
+#define APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APP_WINDOW, AppWindowClass))
+#define IS_APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APP_WINDOW))
+#define IS_APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APP_WINDOW))
+#define APP_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APP_WINDOW, AppWindowClass))
+
+typedef struct _AppWindow AppWindow;
+typedef struct _AppWindowClass AppWindowClass;
+
 #define TYPE_MEDIA_SOURCE_ITEM (media_source_item_get_type ())
 #define MEDIA_SOURCE_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_MEDIA_SOURCE_ITEM, MediaSourceItem))
 #define MEDIA_SOURCE_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_MEDIA_SOURCE_ITEM, MediaSourceItemClass))
@@ -341,16 +351,6 @@ typedef struct _OfflinePageOfflineViewClass OfflinePageOfflineViewClass;
 
 typedef struct _Marker Marker;
 typedef struct _MarkerIface MarkerIface;
-
-#define TYPE_APP_WINDOW (app_window_get_type ())
-#define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
-#define APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APP_WINDOW, AppWindowClass))
-#define IS_APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APP_WINDOW))
-#define IS_APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APP_WINDOW))
-#define APP_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APP_WINDOW, AppWindowClass))
-
-typedef struct _AppWindow AppWindow;
-typedef struct _AppWindowClass AppWindowClass;
 
 #define TYPE_PROGRESS_DIALOG (progress_dialog_get_type ())
 #define PROGRESS_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_PROGRESS_DIALOG, ProgressDialog))
@@ -445,7 +445,7 @@ typedef struct _OfflinePageOfflineSearchViewFilterPrivate OfflinePageOfflineSear
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -455,8 +455,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -464,10 +462,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -784,6 +780,8 @@ GType video_source_collection_get_type (void) G_GNUC_CONST;
 static OfflinePageOfflineSearchViewFilter* offline_page_offline_search_view_filter_new (void);
 static OfflinePageOfflineSearchViewFilter* offline_page_offline_search_view_filter_construct (GType object_type);
 #define OFFLINE_PAGE_NAME _ ("Missing Files")
+static void offline_page_on_remove_from_library (OfflinePage* self);
+static void _offline_page_on_remove_from_library_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
 OfflinePage* offline_page_new (void);
 OfflinePage* offline_page_construct (GType object_type);
 CheckerboardPage* checkerboard_page_construct (GType object_type, const gchar* page_name);
@@ -796,19 +794,13 @@ MediaViewTracker* media_view_tracker_construct (GType object_type, ViewCollectio
 GeeCollection* media_source_collection_get_offline_bin_contents (MediaSourceCollection* self);
 static void offline_page_real_init_collect_ui_filenames (Page* base, GeeList* ui_filenames);
 void page_init_collect_ui_filenames (Page* self, GeeList* ui_filenames);
-static GtkActionEntry* offline_page_real_init_collect_action_entries (Page* base, int* result_length1);
-GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length1);
-#define RESOURCES_REMOVE_LABEL _ ("_Remove")
-#define TRANSLATABLE "translatable"
-static void offline_page_on_remove_from_library (OfflinePage* self);
-static void _offline_page_on_remove_from_library_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_REMOVE_FROM_LIBRARY_MENU _ ("R_emove From Library")
-#define RESOURCES_DELETE_FROM_LIBRARY_TOOLTIP _ ("Remove the selected photos from the library")
-static void _vala_array_add88 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
+static void offline_page_real_add_actions (Page* base);
+void page_add_actions (Page* self);
+GType app_window_get_type (void) G_GNUC_CONST;
+AppWindow* app_window_get_instance (void);
 static CoreViewTracker* offline_page_real_get_view_tracker (CheckerboardPage* base);
 static void offline_page_real_update_actions (Page* base, gint selected_count, gint count);
 void page_set_action_sensitive (Page* self, const gchar* name, gboolean sensitive);
-void page_set_action_important (Page* self, const gchar* name, gboolean important);
 void page_update_actions (Page* self, gint selected_count, gint count);
 gboolean data_collection_add (DataCollection* self, DataObject* object);
 static OfflinePageOfflineView* offline_page_offline_view_new (MediaSource* source);
@@ -823,8 +815,6 @@ DataView* view_collection_get_view_for_source (ViewCollection* self, DataSource*
 void data_collection_remove_marked (DataCollection* self, Marker* m);
 GeeList* view_collection_get_selected_sources (ViewCollection* self);
 gboolean remove_offline_dialog (GtkWindow* owner, gint count);
-GType app_window_get_type (void) G_GNUC_CONST;
-AppWindow* app_window_get_instance (void);
 void page_window_set_busy_cursor (PageWindow* self);
 GType progress_dialog_get_type (void) G_GNUC_CONST;
 ProgressDialog* progress_dialog_new (GtkWindow* owner, const gchar* text, GCancellable* cancellable);
@@ -866,11 +856,19 @@ GType search_filter_criteria_get_type (void) G_GNUC_CONST;
 DefaultSearchViewFilter* default_search_view_filter_construct (GType object_type);
 static void offline_page_finalize (GObject* obj);
 
+static const GActionEntry OFFLINE_PAGE_entries[1] = {{"RemoveFromLibrary", _offline_page_on_remove_from_library_gsimple_action_activate_callback}};
 
 static void _offline_page_on_offline_contents_altered_media_source_collection_offline_contents_altered (MediaSourceCollection* _sender, GeeCollection* added, GeeCollection* removed, gpointer self) {
 #line 45 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	offline_page_on_offline_contents_altered ((OfflinePage*) self, added, removed);
-#line 874 "OfflinePage.c"
+#line 865 "OfflinePage.c"
+}
+
+
+static void _offline_page_on_remove_from_library_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 55 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+	offline_page_on_remove_from_library ((OfflinePage*) self);
+#line 872 "OfflinePage.c"
 }
 
 
@@ -890,9 +888,9 @@ OfflinePage* offline_page_construct (GType object_type) {
 #line 29 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	self = (OfflinePage*) checkerboard_page_construct (object_type, OFFLINE_PAGE_NAME);
 #line 31 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	checkerboard_page_init_item_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), "/OfflineContextMenu");
+	checkerboard_page_init_item_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), "OfflineContextMenu");
 #line 32 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	page_init_toolbar (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "/OfflineToolbar");
+	page_init_toolbar (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "OfflineToolbar");
 #line 34 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
 #line 34 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
@@ -935,14 +933,14 @@ OfflinePage* offline_page_construct (GType object_type) {
 	_g_object_unref0 (_tmp10_);
 #line 28 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return self;
-#line 939 "OfflinePage.c"
+#line 937 "OfflinePage.c"
 }
 
 
 OfflinePage* offline_page_new (void) {
 #line 28 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return offline_page_construct (TYPE_OFFLINE_PAGE);
-#line 946 "OfflinePage.c"
+#line 944 "OfflinePage.c"
 }
 
 
@@ -962,105 +960,34 @@ static void offline_page_real_init_collect_ui_filenames (Page* base, GeeList* ui
 	_tmp1_ = ui_filenames;
 #line 52 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_COLLECTION, GeeCollection), "offline.ui");
-#line 966 "OfflinePage.c"
+#line 964 "OfflinePage.c"
 }
 
 
-static void _offline_page_on_remove_from_library_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 58 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	offline_page_on_remove_from_library ((OfflinePage*) self);
-#line 973 "OfflinePage.c"
-}
-
-
-static void _vala_array_add88 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 62 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	if ((*length) == (*size)) {
-#line 62 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 62 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 984 "OfflinePage.c"
-	}
-#line 62 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	(*array)[(*length)++] = *value;
-#line 988 "OfflinePage.c"
-}
-
-
-static GtkActionEntry* offline_page_real_init_collect_action_entries (Page* base, int* result_length1) {
+static void offline_page_real_add_actions (Page* base) {
 	OfflinePage * self;
-	GtkActionEntry* result = NULL;
-	GtkActionEntry* actions = NULL;
-	gint _tmp0_ = 0;
-	GtkActionEntry* _tmp1_ = NULL;
-	gint actions_length1 = 0;
-	gint _actions_size_ = 0;
-	GtkActionEntry remove = {0};
-	GtkActionEntry _tmp2_ = {0};
-	GtkActionEntry* _tmp3_ = NULL;
-	gint _tmp3__length1 = 0;
-	GtkActionEntry _tmp4_ = {0};
-	GtkActionEntry* _tmp5_ = NULL;
-	gint _tmp5__length1 = 0;
-#line 55 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+	AppWindow* _tmp0_ = NULL;
+	AppWindow* _tmp1_ = NULL;
+#line 59 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_OFFLINE_PAGE, OfflinePage);
-#line 56 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp1_ = PAGE_CLASS (offline_page_parent_class)->init_collect_action_entries (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), &_tmp0_);
-#line 56 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	actions = _tmp1_;
-#line 56 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	actions_length1 = _tmp0_;
-#line 56 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_actions_size_ = actions_length1;
-#line 58 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp2_.name = "RemoveFromLibrary";
-#line 58 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp2_.stock_id = RESOURCES_REMOVE_LABEL;
-#line 58 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp2_.label = TRANSLATABLE;
-#line 58 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp2_.accelerator = "Delete";
-#line 58 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp2_.tooltip = TRANSLATABLE;
-#line 58 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp2_.callback = (GCallback) _offline_page_on_remove_from_library_gtk_action_callback;
-#line 58 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	remove = _tmp2_;
 #line 60 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	remove.label = RESOURCES_REMOVE_FROM_LIBRARY_MENU;
-#line 61 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	remove.tooltip = RESOURCES_DELETE_FROM_LIBRARY_TOOLTIP;
+	PAGE_CLASS (offline_page_parent_class)->add_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page));
 #line 62 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp3_ = actions;
+	_tmp0_ = app_window_get_instance ();
 #line 62 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp3__length1 = actions_length1;
+	_tmp1_ = _tmp0_;
 #line 62 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp4_ = remove;
+	g_action_map_add_action_entries (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, g_action_map_get_type (), GActionMap), OFFLINE_PAGE_entries, G_N_ELEMENTS (OFFLINE_PAGE_entries), self);
 #line 62 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_vala_array_add88 (&actions, &actions_length1, &_actions_size_, &_tmp4_);
-#line 64 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp5_ = actions;
-#line 64 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	_tmp5__length1 = actions_length1;
-#line 64 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	if (result_length1) {
-#line 64 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-		*result_length1 = _tmp5__length1;
-#line 1051 "OfflinePage.c"
-	}
-#line 64 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	result = _tmp5_;
-#line 64 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	return result;
-#line 1057 "OfflinePage.c"
+	_g_object_unref0 (_tmp1_);
+#line 984 "OfflinePage.c"
 }
 
 
 static gpointer _core_tracker_ref0 (gpointer self) {
-#line 68 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 66 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return self ? core_tracker_ref (self) : NULL;
-#line 1064 "OfflinePage.c"
+#line 991 "OfflinePage.c"
 }
 
 
@@ -1069,17 +996,17 @@ static CoreViewTracker* offline_page_real_get_view_tracker (CheckerboardPage* ba
 	CoreViewTracker* result = NULL;
 	MediaViewTracker* _tmp0_ = NULL;
 	CoreViewTracker* _tmp1_ = NULL;
-#line 67 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 65 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_OFFLINE_PAGE, OfflinePage);
-#line 68 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 66 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp0_ = self->priv->tracker;
-#line 68 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 66 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp1_ = _core_tracker_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, CORE_TYPE_VIEW_TRACKER, CoreViewTracker));
-#line 68 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 66 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	result = _tmp1_;
-#line 68 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 66 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return result;
-#line 1083 "OfflinePage.c"
+#line 1010 "OfflinePage.c"
 }
 
 
@@ -1088,51 +1015,49 @@ static void offline_page_real_update_actions (Page* base, gint selected_count, g
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
 	gint _tmp2_ = 0;
-#line 71 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 69 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_OFFLINE_PAGE, OfflinePage);
-#line 72 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 70 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp0_ = selected_count;
-#line 72 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 70 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RemoveFromLibrary", _tmp0_ > 0);
-#line 73 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	page_set_action_important (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RemoveFromLibrary", TRUE);
-#line 75 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 72 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp1_ = selected_count;
-#line 75 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 72 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp2_ = count;
-#line 75 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 72 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	PAGE_CLASS (offline_page_parent_class)->update_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), _tmp1_, _tmp2_);
-#line 1106 "OfflinePage.c"
+#line 1031 "OfflinePage.c"
 }
 
 
 static void offline_page_on_offline_contents_altered (OfflinePage* self, GeeCollection* added, GeeCollection* removed) {
 	GeeCollection* _tmp0_ = NULL;
 	GeeCollection* _tmp12_ = NULL;
-#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 75 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	g_return_if_fail (IS_OFFLINE_PAGE (self));
-#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 75 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	g_return_if_fail ((added == NULL) || GEE_IS_COLLECTION (added));
-#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 75 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	g_return_if_fail ((removed == NULL) || GEE_IS_COLLECTION (removed));
-#line 80 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 77 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp0_ = added;
-#line 80 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 77 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	if (_tmp0_ != NULL) {
-#line 1123 "OfflinePage.c"
+#line 1048 "OfflinePage.c"
 		{
 			GeeIterator* _source_it = NULL;
 			GeeCollection* _tmp1_ = NULL;
 			GeeIterator* _tmp2_ = NULL;
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 			_tmp1_ = added;
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 			_tmp2_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 			_source_it = _tmp2_;
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 			while (TRUE) {
-#line 1136 "OfflinePage.c"
+#line 1061 "OfflinePage.c"
 				GeeIterator* _tmp3_ = NULL;
 				gboolean _tmp4_ = FALSE;
 				MediaSource* source = NULL;
@@ -1143,52 +1068,52 @@ static void offline_page_on_offline_contents_altered (OfflinePage* self, GeeColl
 				MediaSource* _tmp9_ = NULL;
 				OfflinePageOfflineView* _tmp10_ = NULL;
 				OfflinePageOfflineView* _tmp11_ = NULL;
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp3_ = _source_it;
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp4_ = gee_iterator_next (_tmp3_);
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				if (!_tmp4_) {
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 					break;
-#line 1155 "OfflinePage.c"
+#line 1080 "OfflinePage.c"
 				}
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp5_ = _source_it;
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp6_ = gee_iterator_get (_tmp5_);
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				source = (MediaSource*) _tmp6_;
-#line 82 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 79 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp7_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 82 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 79 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp8_ = _tmp7_;
-#line 82 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 79 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp9_ = source;
-#line 82 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 79 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp10_ = offline_page_offline_view_new (_tmp9_);
-#line 82 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 79 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp11_ = _tmp10_;
-#line 82 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 79 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				data_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_DATA_OBJECT, DataObject));
-#line 82 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 79 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_g_object_unref0 (_tmp11_);
-#line 82 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 79 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_data_collection_unref0 (_tmp8_);
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_g_object_unref0 (source);
-#line 1181 "OfflinePage.c"
+#line 1106 "OfflinePage.c"
 			}
-#line 81 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 78 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 			_g_object_unref0 (_source_it);
-#line 1185 "OfflinePage.c"
+#line 1110 "OfflinePage.c"
 		}
 	}
-#line 85 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 82 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp12_ = removed;
-#line 85 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 82 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	if (_tmp12_ != NULL) {
-#line 1192 "OfflinePage.c"
+#line 1117 "OfflinePage.c"
 		Marker* marker = NULL;
 		ViewCollection* _tmp13_ = NULL;
 		ViewCollection* _tmp14_ = NULL;
@@ -1197,32 +1122,32 @@ static void offline_page_on_offline_contents_altered (OfflinePage* self, GeeColl
 		ViewCollection* _tmp29_ = NULL;
 		ViewCollection* _tmp30_ = NULL;
 		Marker* _tmp31_ = NULL;
-#line 86 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 83 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp13_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 86 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 83 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp14_ = _tmp13_;
-#line 86 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 83 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp15_ = data_collection_start_marking (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_DATA_COLLECTION, DataCollection));
-#line 86 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 83 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp16_ = _tmp15_;
-#line 86 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 83 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_data_collection_unref0 (_tmp14_);
-#line 86 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 83 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		marker = _tmp16_;
-#line 1213 "OfflinePage.c"
+#line 1138 "OfflinePage.c"
 		{
 			GeeIterator* _source_it = NULL;
 			GeeCollection* _tmp17_ = NULL;
 			GeeIterator* _tmp18_ = NULL;
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 			_tmp17_ = removed;
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 			_tmp18_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 			_source_it = _tmp18_;
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 			while (TRUE) {
-#line 1226 "OfflinePage.c"
+#line 1151 "OfflinePage.c"
 				GeeIterator* _tmp19_ = NULL;
 				gboolean _tmp20_ = FALSE;
 				MediaSource* source = NULL;
@@ -1234,61 +1159,61 @@ static void offline_page_on_offline_contents_altered (OfflinePage* self, GeeColl
 				MediaSource* _tmp26_ = NULL;
 				DataView* _tmp27_ = NULL;
 				DataView* _tmp28_ = NULL;
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp19_ = _source_it;
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp20_ = gee_iterator_next (_tmp19_);
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				if (!_tmp20_) {
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 					break;
-#line 1246 "OfflinePage.c"
+#line 1171 "OfflinePage.c"
 				}
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp21_ = _source_it;
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				_tmp22_ = gee_iterator_get (_tmp21_);
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 				source = (MediaSource*) _tmp22_;
-#line 88 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-				_tmp23_ = marker;
-#line 88 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-				_tmp24_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 88 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-				_tmp25_ = _tmp24_;
-#line 88 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-				_tmp26_ = source;
-#line 88 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-				_tmp27_ = view_collection_get_view_for_source (_tmp25_, G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, TYPE_DATA_SOURCE, DataSource));
-#line 88 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-				_tmp28_ = _tmp27_;
-#line 88 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-				marker_mark (_tmp23_, G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, TYPE_DATA_OBJECT, DataObject));
-#line 88 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-				_g_object_unref0 (_tmp28_);
-#line 88 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-				_data_collection_unref0 (_tmp25_);
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-				_g_object_unref0 (source);
-#line 1274 "OfflinePage.c"
-			}
-#line 87 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-			_g_object_unref0 (_source_it);
-#line 1278 "OfflinePage.c"
-		}
-#line 89 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-		_tmp29_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 89 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-		_tmp30_ = _tmp29_;
-#line 89 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-		_tmp31_ = marker;
-#line 89 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-		data_collection_remove_marked (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, TYPE_DATA_COLLECTION, DataCollection), _tmp31_);
-#line 89 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-		_data_collection_unref0 (_tmp30_);
 #line 85 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+				_tmp23_ = marker;
+#line 85 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+				_tmp24_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
+#line 85 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+				_tmp25_ = _tmp24_;
+#line 85 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+				_tmp26_ = source;
+#line 85 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+				_tmp27_ = view_collection_get_view_for_source (_tmp25_, G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, TYPE_DATA_SOURCE, DataSource));
+#line 85 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+				_tmp28_ = _tmp27_;
+#line 85 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+				marker_mark (_tmp23_, G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, TYPE_DATA_OBJECT, DataObject));
+#line 85 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+				_g_object_unref0 (_tmp28_);
+#line 85 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+				_data_collection_unref0 (_tmp25_);
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+				_g_object_unref0 (source);
+#line 1199 "OfflinePage.c"
+			}
+#line 84 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+			_g_object_unref0 (_source_it);
+#line 1203 "OfflinePage.c"
+		}
+#line 86 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+		_tmp29_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
+#line 86 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+		_tmp30_ = _tmp29_;
+#line 86 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+		_tmp31_ = marker;
+#line 86 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+		data_collection_remove_marked (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, TYPE_DATA_COLLECTION, DataCollection), _tmp31_);
+#line 86 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+		_data_collection_unref0 (_tmp30_);
+#line 82 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_g_object_unref0 (marker);
-#line 1292 "OfflinePage.c"
+#line 1217 "OfflinePage.c"
 	}
 }
 
@@ -1296,9 +1221,9 @@ static void offline_page_on_offline_contents_altered (OfflinePage* self, GeeColl
 static gboolean _progress_dialog_monitor_progress_monitor (guint64 current, guint64 total, gboolean do_event_loop, gpointer self) {
 	gboolean result;
 	result = progress_dialog_monitor ((ProgressDialog*) self, current, total, do_event_loop);
-#line 113 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 110 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return result;
-#line 1302 "OfflinePage.c"
+#line 1227 "OfflinePage.c"
 }
 
 
@@ -1335,198 +1260,198 @@ static void offline_page_on_remove_from_library (OfflinePage* self) {
 	ProgressDialog* _tmp39_ = NULL;
 	AppWindow* _tmp41_ = NULL;
 	AppWindow* _tmp42_ = NULL;
-#line 93 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 90 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	g_return_if_fail (IS_OFFLINE_PAGE (self));
-#line 94 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 91 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 94 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 91 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp1_ = _tmp0_;
-#line 94 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 91 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp2_ = view_collection_get_selected_sources (_tmp1_);
-#line 94 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 91 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp3_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 94 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 91 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 94 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 91 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	sources = _tmp3_;
-#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 93 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp4_ = sources;
-#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 93 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp5_ = gee_collection_get_size (_tmp4_);
-#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 93 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp6_ = _tmp5_;
-#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 93 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	if (_tmp6_ == 0) {
-#line 97 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 94 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_g_object_unref0 (sources);
-#line 97 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 94 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		return;
-#line 1365 "OfflinePage.c"
+#line 1290 "OfflinePage.c"
 	}
-#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp7_ = app_window_get_instance ();
-#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp8_ = _tmp7_;
-#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp9_ = sources;
-#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp10_ = gee_collection_get_size (_tmp9_);
-#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp11_ = _tmp10_;
-#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp12_ = remove_offline_dialog (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_window_get_type (), GtkWindow), _tmp11_);
-#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp13_ = !_tmp12_;
-#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_g_object_unref0 (_tmp8_);
-#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	if (_tmp13_) {
-#line 100 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 97 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_g_object_unref0 (sources);
-#line 100 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 97 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		return;
-#line 1389 "OfflinePage.c"
+#line 1314 "OfflinePage.c"
 	}
-#line 102 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp14_ = app_window_get_instance ();
-#line 102 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp15_ = _tmp14_;
-#line 102 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	page_window_set_busy_cursor (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, TYPE_PAGE_WINDOW, PageWindow));
-#line 102 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 99 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_g_object_unref0 (_tmp15_);
-#line 104 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 101 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	progress = NULL;
-#line 105 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 102 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp16_ = sources;
-#line 105 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 102 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp17_ = gee_collection_get_size (_tmp16_);
-#line 105 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 102 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp18_ = _tmp17_;
-#line 105 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 102 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	if (_tmp18_ >= 20) {
-#line 1409 "OfflinePage.c"
+#line 1334 "OfflinePage.c"
 		AppWindow* _tmp19_ = NULL;
 		AppWindow* _tmp20_ = NULL;
 		const gchar* _tmp21_ = NULL;
 		ProgressDialog* _tmp22_ = NULL;
-#line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 103 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp19_ = app_window_get_instance ();
-#line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 103 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp20_ = _tmp19_;
-#line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 103 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp21_ = _ ("Deleting…");
-#line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 103 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp22_ = progress_dialog_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_window_get_type (), GtkWindow), _tmp21_, NULL);
-#line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 103 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		g_object_ref_sink (_tmp22_);
-#line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 103 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_g_object_unref0 (progress);
-#line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 103 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		progress = _tmp22_;
-#line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 103 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_g_object_unref0 (_tmp20_);
-#line 1430 "OfflinePage.c"
+#line 1355 "OfflinePage.c"
 	}
-#line 108 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 105 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp23_ = gee_array_list_new (TYPE_LIBRARY_PHOTO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 108 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 105 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	photos = _tmp23_;
-#line 109 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp24_ = gee_array_list_new (TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 109 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 106 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	videos = _tmp24_;
-#line 110 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 107 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp25_ = sources;
-#line 110 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 107 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp26_ = photos;
-#line 110 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 107 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp27_ = videos;
-#line 110 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 107 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	media_source_collection_filter_media (_tmp25_, G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, GEE_TYPE_COLLECTION, GeeCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 112 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 109 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp28_ = progress;
-#line 112 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 109 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	if (_tmp28_ != NULL) {
-#line 1452 "OfflinePage.c"
+#line 1377 "OfflinePage.c"
 		LibraryPhotoSourceCollection* _tmp29_ = NULL;
 		GeeArrayList* _tmp30_ = NULL;
 		ProgressDialog* _tmp31_ = NULL;
 		VideoSourceCollection* _tmp32_ = NULL;
 		GeeArrayList* _tmp33_ = NULL;
 		ProgressDialog* _tmp34_ = NULL;
-#line 113 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 110 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp29_ = library_photo_global;
-#line 113 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 110 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp30_ = photos;
-#line 113 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 110 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp31_ = progress;
-#line 113 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 110 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		media_source_collection_remove_from_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, GEE_TYPE_COLLECTION, GeeCollection), FALSE, _progress_dialog_monitor_progress_monitor, _tmp31_, NULL);
-#line 114 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 111 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp32_ = video_global;
-#line 114 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 111 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp33_ = videos;
-#line 114 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 111 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp34_ = progress;
-#line 114 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 111 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		media_source_collection_remove_from_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, GEE_TYPE_COLLECTION, GeeCollection), FALSE, _progress_dialog_monitor_progress_monitor, _tmp34_, NULL);
-#line 1475 "OfflinePage.c"
+#line 1400 "OfflinePage.c"
 	} else {
 		LibraryPhotoSourceCollection* _tmp35_ = NULL;
 		GeeArrayList* _tmp36_ = NULL;
 		VideoSourceCollection* _tmp37_ = NULL;
 		GeeArrayList* _tmp38_ = NULL;
-#line 116 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 113 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp35_ = library_photo_global;
-#line 116 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 113 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp36_ = photos;
-#line 116 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 113 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		media_source_collection_remove_from_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, GEE_TYPE_COLLECTION, GeeCollection), FALSE, NULL, NULL, NULL);
-#line 117 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 114 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp37_ = video_global;
-#line 117 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 114 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp38_ = videos;
-#line 117 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 114 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		media_source_collection_remove_from_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, GEE_TYPE_COLLECTION, GeeCollection), FALSE, NULL, NULL, NULL);
-#line 1493 "OfflinePage.c"
+#line 1418 "OfflinePage.c"
 	}
-#line 120 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 117 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp39_ = progress;
-#line 120 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 117 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	if (_tmp39_ != NULL) {
-#line 1499 "OfflinePage.c"
+#line 1424 "OfflinePage.c"
 		ProgressDialog* _tmp40_ = NULL;
-#line 121 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 118 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		_tmp40_ = progress;
-#line 121 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 118 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 		progress_dialog_close (_tmp40_);
-#line 1505 "OfflinePage.c"
+#line 1430 "OfflinePage.c"
 	}
-#line 123 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 120 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp41_ = app_window_get_instance ();
-#line 123 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 120 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp42_ = _tmp41_;
-#line 123 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 120 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	page_window_set_normal_cursor (G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, TYPE_PAGE_WINDOW, PageWindow));
-#line 123 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 120 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_g_object_unref0 (_tmp42_);
-#line 93 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 90 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_g_object_unref0 (videos);
-#line 93 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 90 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_g_object_unref0 (photos);
-#line 93 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 90 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_g_object_unref0 (progress);
-#line 93 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 90 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_g_object_unref0 (sources);
-#line 1523 "OfflinePage.c"
+#line 1448 "OfflinePage.c"
 }
 
 
 static gpointer _view_filter_ref0 (gpointer self) {
-#line 127 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 124 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return self ? view_filter_ref (self) : NULL;
-#line 1530 "OfflinePage.c"
+#line 1455 "OfflinePage.c"
 }
 
 
@@ -1535,17 +1460,17 @@ static SearchViewFilter* offline_page_real_get_search_view_filter (CheckerboardP
 	SearchViewFilter* result = NULL;
 	OfflinePageOfflineSearchViewFilter* _tmp0_ = NULL;
 	SearchViewFilter* _tmp1_ = NULL;
-#line 126 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 123 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_OFFLINE_PAGE, OfflinePage);
-#line 127 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 124 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp0_ = self->priv->search_filter;
-#line 127 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 124 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	_tmp1_ = _view_filter_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
-#line 127 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 124 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	result = _tmp1_;
-#line 127 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
+#line 124 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return result;
-#line 1549 "OfflinePage.c"
+#line 1474 "OfflinePage.c"
 }
 
 
@@ -1574,21 +1499,21 @@ static OfflinePageOfflineView* offline_page_offline_view_construct (GType object
 	_vala_assert (_tmp4_, "source.is_offline()");
 #line 11 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return self;
-#line 1578 "OfflinePage.c"
+#line 1503 "OfflinePage.c"
 }
 
 
 static OfflinePageOfflineView* offline_page_offline_view_new (MediaSource* source) {
 #line 11 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return offline_page_offline_view_construct (OFFLINE_PAGE_TYPE_OFFLINE_VIEW, source);
-#line 1585 "OfflinePage.c"
+#line 1510 "OfflinePage.c"
 }
 
 
 static void offline_page_offline_view_class_init (OfflinePageOfflineViewClass * klass) {
 #line 10 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	offline_page_offline_view_parent_class = g_type_class_peek_parent (klass);
-#line 1592 "OfflinePage.c"
+#line 1517 "OfflinePage.c"
 }
 
 
@@ -1617,7 +1542,7 @@ static guint offline_page_offline_search_view_filter_real_get_criteria (SearchVi
 	result = (guint) ((((SEARCH_FILTER_CRITERIA_TEXT | SEARCH_FILTER_CRITERIA_FLAG) | SEARCH_FILTER_CRITERIA_MEDIA) | SEARCH_FILTER_CRITERIA_RATING) | SEARCH_FILTER_CRITERIA_SAVEDSEARCH);
 #line 20 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return result;
-#line 1621 "OfflinePage.c"
+#line 1546 "OfflinePage.c"
 }
 
 
@@ -1627,14 +1552,14 @@ static OfflinePageOfflineSearchViewFilter* offline_page_offline_search_view_filt
 	self = (OfflinePageOfflineSearchViewFilter*) default_search_view_filter_construct (object_type);
 #line 18 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return self;
-#line 1631 "OfflinePage.c"
+#line 1556 "OfflinePage.c"
 }
 
 
 static OfflinePageOfflineSearchViewFilter* offline_page_offline_search_view_filter_new (void) {
 #line 18 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	return offline_page_offline_search_view_filter_construct (OFFLINE_PAGE_TYPE_OFFLINE_SEARCH_VIEW_FILTER);
-#line 1638 "OfflinePage.c"
+#line 1563 "OfflinePage.c"
 }
 
 
@@ -1643,7 +1568,7 @@ static void offline_page_offline_search_view_filter_class_init (OfflinePageOffli
 	offline_page_offline_search_view_filter_parent_class = g_type_class_peek_parent (klass);
 #line 18 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	((SearchViewFilterClass *) klass)->get_criteria = offline_page_offline_search_view_filter_real_get_criteria;
-#line 1647 "OfflinePage.c"
+#line 1572 "OfflinePage.c"
 }
 
 
@@ -1671,7 +1596,7 @@ static void offline_page_class_init (OfflinePageClass * klass) {
 #line 7 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	((PageClass *) klass)->init_collect_ui_filenames = offline_page_real_init_collect_ui_filenames;
 #line 7 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
-	((PageClass *) klass)->init_collect_action_entries = offline_page_real_init_collect_action_entries;
+	((PageClass *) klass)->add_actions = offline_page_real_add_actions;
 #line 7 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	((CheckerboardPageClass *) klass)->get_view_tracker = offline_page_real_get_view_tracker;
 #line 7 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
@@ -1680,7 +1605,7 @@ static void offline_page_class_init (OfflinePageClass * klass) {
 	((CheckerboardPageClass *) klass)->get_search_view_filter = offline_page_real_get_search_view_filter;
 #line 7 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	G_OBJECT_CLASS (klass)->finalize = offline_page_finalize;
-#line 1684 "OfflinePage.c"
+#line 1609 "OfflinePage.c"
 }
 
 
@@ -1692,7 +1617,7 @@ static void offline_page_instance_init (OfflinePage * self) {
 	_tmp0_ = offline_page_offline_search_view_filter_new ();
 #line 25 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	self->priv->search_filter = _tmp0_;
-#line 1696 "OfflinePage.c"
+#line 1621 "OfflinePage.c"
 }
 
 
@@ -1722,7 +1647,7 @@ static void offline_page_finalize (GObject* obj) {
 	_core_tracker_unref0 (self->priv->tracker);
 #line 7 "/home/jens/Source/shotwell/src/library/OfflinePage.vala"
 	G_OBJECT_CLASS (offline_page_parent_class)->finalize (obj);
-#line 1726 "OfflinePage.c"
+#line 1651 "OfflinePage.c"
 }
 
 

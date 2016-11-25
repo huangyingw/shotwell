@@ -3,15 +3,18 @@
 # This file is distributed under the same license as the shotwell package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Dámaris Letelier <dam.letelier@gmail.com>, 2014.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2014, 2016.
+#
+#
+#
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2014, 2016., 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: shotwell master\n"
-"POT-Creation-Date: 2016-07-04 07:20+0000\n"
-"PO-Revision-Date: 2016-07-04 14:35+0200\n"
+"POT-Creation-Date: 2016-11-19 01:52+0000\n"
+"PO-Revision-Date: 2016-11-21 \n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
-"Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
+"Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,6 +26,7 @@ msgstr ""
 msgctxt "_"
 msgid "translator-credits"
 msgstr ""
+"Marina Prado <mapraro93@hotmail.com>, 2016\n"
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2014 - 2016\n"
 "Dámaris Letelier <dam.letelier@gmail.com>, 2014"
 
@@ -45,6 +49,11 @@ msgid ""
 "intensity thresholds of the photograph, expanding the contrast of the middle "
 "range."
 msgstr ""
+"El botón <gui>Ajustes</gui> abre una ventana flotante con un histograma y el "
+"control deslizante para ajustar la exposición, la saturación, el matiz, la "
+"calidez y las sombras de una fotografía. El histograma también tiene control "
+"deslizante para reducir los umbrales de intensidad superior e inferior de la "
+"fotografía, ampliando el contraste de la gama media."
 
 #. (itstool) path: page/p
 #: C/edit-adjustments.page:16
@@ -52,6 +61,8 @@ msgid ""
 "The <gui>Enhance</gui> button adjusts the histogram and shadows sliders to "
 "improve the quality of a photo."
 msgstr ""
+"El botón <gui>Mejorar</gui> ajusta el histograma y el control deslizante de "
+"las sombras para mejorar la calidad de una foto."
 
 #. (itstool) path: page/p
 #: C/edit-adjustments.page:18
@@ -60,6 +71,10 @@ msgid ""
 "to save the changes. <gui>Reset</gui> will return the image to its original "
 "state. <gui>Cancel</gui> discards all changes you've made."
 msgstr ""
+"Si los colores y el contraste de la foto son adecuados, pulse <gui>Aceptar</"
+"gui> para guardar los cambios. El botón <gui>Restablecer</gui> devolverá la "
+"imagen a su estado original. El botón <gui>Cancelar</gui> deshace todos los "
+"cambios realizados."
 
 #. (itstool) path: section/title
 #: C/edit-adjustments.page:21
@@ -77,6 +92,9 @@ msgid ""
 "Changes the brightness to make it look like the photo was exposed for a "
 "longer or shorter time. Use this to correct under- or over-exposed photos."
 msgstr ""
+"Cambia el brillo para que parezca que la foto se ha expuesto por un tiempo "
+"más o menos largo. Utilice esta opción para corregir las fotografías "
+"sobreexpuestas o excesivamente subexpuestas."
 
 #. (itstool) path: item/title
 #: C/edit-adjustments.page:28
@@ -89,6 +107,9 @@ msgid ""
 "Changes how vivid colors look. If your photo looks gray and washed out, try "
 "increasing the saturation. If colors look too bold, try decreasing it."
 msgstr ""
+"Cambia la intensidad de los colores. Si su foto parece gris y pálida, pruebe "
+"a aumentar la saturación. Si los colores se ven demasiado intensos, intente "
+"disminuirlos."
 
 #. (itstool) path: item/title
 #: C/edit-adjustments.page:32
@@ -103,6 +124,11 @@ msgid ""
 "color cast. For example, photos taken outdoors with the white balance set to "
 "\"Tungsten\" may have a blue cast."
 msgstr ""
+"Esto matiza la foto con un color. Es útil para corregir fotos que se han "
+"tomado con el ajuste del balance de blancos erróneo, que normalmente tiene "
+"unas tonalidades de color poco naturales. Por ejemplo, las fotos tomadas en "
+"el exterior con el ajuste del balance de blancos en «Tungsten» pueden tener "
+"una tonalidad azulada."
 
 #. (itstool) path: item/title
 #: C/edit-adjustments.page:36
@@ -115,6 +141,8 @@ msgid ""
 "Changes how \"warm\" or \"cool\" the picture looks. Use this to make cold, "
 "depressing scenes look more lively, for example."
 msgstr ""
+"Cambia el aspecto «cálido» o «frío» de la imagen. Utilice esto, por ejemplo, "
+"para hacer que las escenas frías y tristes parezcan más alegres."
 
 #. (itstool) path: item/title
 #: C/edit-adjustments.page:40
@@ -127,6 +155,8 @@ msgid ""
 "This makes shadowy areas appear lighter. Use this to make detail more "
 "visible if it's obscured by the darkness of a shadow."
 msgstr ""
+"Esto hace que las áreas oscuras aparezcan más claras. Si los detalles se han "
+"oscurecido por las sombras, utilice esto para hacerlos más visibles."
 
 #. (itstool) path: item/title
 #: C/edit-adjustments.page:44
@@ -140,6 +170,9 @@ msgid ""
 "darkest black is. Use them to change the contrast of the photo. Photos which "
 "look washed out should particularly benefit from changing these settings."
 msgstr ""
+"Estos controles deslizantes cambian cómo de claro es el blanco más brillante "
+"y cómo de oscuro es el negro más oscuro. Utilícelos para cambiar el "
+"contraste de la foto, sobre todo en las fotos que son pálidas."
 
 #. (itstool) path: media
 #. This is a reference to an external file such as an image or video. When
@@ -156,7 +189,7 @@ msgstr ""
 #. (itstool) path: info/desc
 #: C/edit-crop.page:7
 msgid "Improve the composition of a photo by cutting out parts of it."
-msgstr ""
+msgstr "Mejore la composición de una foto cortando partes de la misma."
 
 #. (itstool) path: page/title
 #: C/edit-crop.page:12
@@ -170,6 +203,9 @@ msgid ""
 "smaller portion of it, use the Crop tool. The crop tool is only available in "
 "full-window or fullscreen mode."
 msgstr ""
+"Para reducir el área de una foto y concentrar la atención del espectador en "
+"una parte más pequeña de ella, utilice la herramienta Recortar. La "
+"herramienta Recortar sólo está disponible en el modo a pantalla completa."
 
 #. (itstool) path: item/p
 #: C/edit-crop.page:19
@@ -177,6 +213,8 @@ msgid ""
 "Double-click on a photo to enter full-window mode, then press the <gui>Crop</"
 "gui> button on the toolbar."
 msgstr ""
+"Para entrar en el modo a pantalla completa, pulse dos veces en la foto y "
+"luego pulse el botón <gui>Recortar</gui> en la barra de herramientas."
 
 #. (itstool) path: item/p
 #: C/edit-crop.page:22
@@ -185,6 +223,9 @@ msgid ""
 "portion of the photo within the crop rectangle represents what the photo "
 "will look like when you crop it."
 msgstr ""
+"Unas líneas blancas, que representan el rectángulo de recorte, aparecerán "
+"sobre la foto. La parte más clara de la foto dentro del rectángulo de "
+"recorte representa cómo se verá la foto cuando la recorte."
 
 #. (itstool) path: item/p
 #: C/edit-crop.page:25
@@ -194,6 +235,11 @@ msgid ""
 "move and adjust the crop box, you'll see four lines appear inside it, like a "
 "tic-tac-toe grid. These are <em>rule of thirds</em> lines."
 msgstr ""
+"Si coloca el cursor en el centro del recuadro, podrá moverlo. Si arrastra "
+"los bordes del recuadro, puede ajustar su tamaño. Al mover y ajustar la caja "
+"de recorte, verá aparecer cuatro líneas en su interior, como las cuadrículas "
+"para el tres en raya. Estas son las líneas de la <em>regla de los tercios</"
+"em>."
 
 #. (itstool) path: item/p
 #: C/edit-crop.page:26
@@ -203,6 +249,10 @@ msgid ""
 "button next to it, the orientation of the constraint will switch (from "
 "landscape to portrait)."
 msgstr ""
+"También puede limitar el recuadro a uno de los tamaños más comunes. Elija un "
+"tamaño de la lista desplegable que se adapte a sus necesidades. Si pulsa el "
+"botón voltear situado junto a esta, la orientación de la restricción "
+"cambiará (de horizontal a vertical)."
 
 #. (itstool) path: item/p
 #: C/edit-crop.page:29
@@ -210,6 +260,8 @@ msgid ""
 "When you're happy with your crop outline, apply it by pressing the "
 "<gui>Crop</gui> button. Shotwell will display the cropped photo."
 msgstr ""
+"Cuando esté satisfecho con su recorte, aplíquelo pulsando el botón "
+"<gui>Recortar<gui>. Shotwell mostrará la foto recortada."
 
 #. (itstool) path: item/p
 #: C/edit-crop.page:32
@@ -217,6 +269,8 @@ msgid ""
 "If you change your mind, press the <gui>Crop</gui> button again and fine-"
 "tune the crop."
 msgstr ""
+"Si cambia de opinión, pulse el botón <gui>Recortar</gui> de nuevo y ajuste "
+"el recorte."
 
 #. (itstool) path: item/p
 #: C/edit-crop.page:33
@@ -224,6 +278,8 @@ msgid ""
 "If you press <gui>Cancel</gui> rather than <gui>Apply</gui>, Shotwell will "
 "return to the photo's previous crop dimensions."
 msgstr ""
+"Si pulsa el botón <gui>Cancelar</gui> en vez del botón <gui>Aplicar</gui>, "
+"Shotwell devolverá a la foto las dimensiones anteriores del recorte."
 
 #. (itstool) path: section/title
 #: C/edit-crop.page:38
@@ -236,6 +292,8 @@ msgid ""
 "The <em>rule of thirds</em> helps you to choose a pleasing composition for a "
 "photo."
 msgstr ""
+"La <em>regla de los tercios </em> le ayuda a elegir una composición "
+"satisfactoria para una foto."
 
 #. (itstool) path: section/p
 #: C/edit-crop.page:40
@@ -247,6 +305,13 @@ msgid ""
 "Paying attention to the way features flow from one part of the grid to "
 "another can also help."
 msgstr ""
+"Imagine que la escena se divide en una cuadrícula de 3x3 por dos líneas "
+"verticales espaciadas y por dos líneas horizontales igualmente espaciadas. "
+"De acuerdo con la regla, es más probable que obtenga una composición "
+"satisfactoria si alinea las características principales (como el horizonte o "
+"una persona) con una de estas líneas. Prestar atención a la forma en que las "
+"características van de una parte de la cuadrícula a la otra también puede "
+"ser de ayuda."
 
 #. (itstool) path: section/p
 #: C/edit-crop.page:41
@@ -254,6 +319,8 @@ msgid ""
 "Cropping a photo so that it conforms to the rule of thirds often results in "
 "a more visually appealing image."
 msgstr ""
+"Recortar una foto siguiendo la regla de los tercios suele dar como resultado "
+"una imagen visualmente más satisfactoria."
 
 #. (itstool) path: media/p
 #: C/edit-crop.page:43
@@ -261,12 +328,16 @@ msgid ""
 "Cropping a photo, using the \"rule of thirds\" lines to improve the "
 "composition."
 msgstr ""
+"Recorte una foto siguiendo las líneas de la «regla de los tercios» para "
+"mejorar la composición."
 
 #. (itstool) path: info/desc
 #: C/edit-enhance.page:7
 msgid ""
 "Let Shotwell improve the brightness and contrast of a photo automatically."
 msgstr ""
+"Permita que Shotwell mejore el brillo y el contraste de una foto "
+"automáticamente."
 
 #. (itstool) path: page/title
 #: C/edit-enhance.page:14
@@ -281,6 +352,11 @@ msgid ""
 "photo that is correctly exposed. You can also use it as a starting point and "
 "then improve the adjustments by clicking on the <gui>Adjust</gui> button."
 msgstr ""
+"Pulsar en el botón <gui>Mejorar</gui> es una forma rápida de ajustar "
+"automáticamente el brillo y el contraste de la foto. Normalmente le ofrecerá "
+"una foto que esté correctamente expuesta. También puede utilizarlo como "
+"punto de partida y luego mejorar los ajustes pulsando en el botón "
+"<gui>Ajustar</gui>."
 
 #. (itstool) path: info/desc
 #: C/edit-external.page:7
@@ -302,6 +378,12 @@ msgid ""
 "gui><gui>Preferences</gui></guiseq> and selecting editors from drop-down "
 "menus of installed applications."
 msgstr ""
+"Quizás quiera utilizar un editor externo para trabajar adicionalmente en una "
+"foto. Si están instalados, GIMP y UFRaw son los editores externos "
+"predeterminados para editar una foto o RAW, respectivamente. Si estos "
+"programas no están instalados, tiene que seleccionar sus editores preferidos "
+"eligiendo <guiseq><gui>Editar<gui><gui>Preferencias</gui></guiseq> y "
+"seleccionar los editores del menú desplegable de las aplicaciones instaladas."
 
 #. (itstool) path: page/p
 #: C/edit-external.page:24
@@ -312,6 +394,12 @@ msgid ""
 "a RAW file, select <guiseq><gui>Photos</gui><gui>Open With RAW Editor</gui></"
 "guiseq> to edit the RAW file directly with the set RAW editor."
 msgstr ""
+"Una vez que los editores se han establecido, seleccione una foto y elija "
+"<guiseq><gui>Fotos</gui> <gui>Abrir con un editor externo</gui></guiseq> "
+"para abrir la foto con un editor externo. De la misma manera, si la foto "
+"original es un archivo RAW, seleccione <guiseq><gui>Fotos</gui><gui>Abrir "
+"con un editor RAW</gui></guiseq> para editar el archivo RAW directamente con "
+"un editor RAW establecido."
 
 #. (itstool) path: page/p
 #: C/edit-external.page:31
@@ -1547,8 +1635,8 @@ msgid ""
 "comma separated list. To remove a tag from one or more photos, first select "
 "that tag in the sidebar, then select the photos you would like to remove, "
 "and choose <guiseq><gui>Tags</gui><gui>Remove Tag \"[name]\" from Photos</"
-"gui></guiseq> or right-click on the photos an select <gui>Remove Tag "
-"\"[name]\" from Photos</gui>."
+"gui></guiseq> or right-click on the photos an select <gui>Remove Tag \"[name]"
+"\" from Photos</gui>."
 msgstr ""
 
 #. (itstool) path: page/p

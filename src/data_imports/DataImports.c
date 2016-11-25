@@ -26,7 +26,7 @@
 
 
 void data_imports_init (GError** error);
-static void _vala_array_add150 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add68 (gchar*** array, int* length, int* size, gchar* value);
 void plugins_register_extension_point (GType type, const gchar* name, const gchar* icon_name, gchar** core_ids, int core_ids_length1);
 #define RESOURCES_IMPORT "shotwell-import"
 void data_imports_terminate (void);
@@ -34,7 +34,7 @@ static void _vala_array_destroy (gpointer array, gint array_length, GDestroyNoti
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
 
 
-static void _vala_array_add150 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add68 (gchar*** array, int* length, int* size, gchar* value) {
 #line 20 "/home/jens/Source/shotwell/src/data_imports/DataImports.vala"
 	if ((*length) == (*size)) {
 #line 20 "/home/jens/Source/shotwell/src/data_imports/DataImports.vala"
@@ -77,7 +77,7 @@ void data_imports_init (GError** error) {
 #line 20 "/home/jens/Source/shotwell/src/data_imports/DataImports.vala"
 	_tmp2_ = g_strdup ("org.yorba.shotwell.dataimports.fspot");
 #line 20 "/home/jens/Source/shotwell/src/data_imports/DataImports.vala"
-	_vala_array_add150 (&core_ids, &core_ids_length1, &_core_ids_size_, _tmp2_);
+	_vala_array_add68 (&core_ids, &core_ids_length1, &_core_ids_size_, _tmp2_);
 #line 22 "/home/jens/Source/shotwell/src/data_imports/DataImports.vala"
 	_tmp3_ = _ ("Data Imports");
 #line 22 "/home/jens/Source/shotwell/src/data_imports/DataImports.vala"

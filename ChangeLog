@@ -1,6 +1,903 @@
+commit 9984f365ab9407791f58792a71b71d15d974b64e
+Author: Jens Georg <mail@jensge.org>
+Date:   Mon Nov 21 20:30:37 2016 +0100
+
+    Prepare 0.25.1
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+M	configure.ac
+M	debian/changelog
+
+commit 25ee2b5cdabc7632e5bd4c41dc04e8f06f533275
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Mon Nov 21 17:41:14 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit 1eec412e97c255c9ca235e039dcdc59ee4c3c140
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Nov 20 23:54:09 2016 +0100
+
+    Fix crash when clicking on tool window in wayland
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/editing_tools/EditingTools.vala
+
+commit a409642472f9609e470ed9216b944c0c87f47637
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Nov 20 23:48:22 2016 +0100
+
+    Fix resource dependency generation
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	publish.am
+M	shotwell.am
+
+commit 916804df42f54092365d74378f6fca3266453721
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Nov 20 23:48:12 2016 +0100
+
+    Dist resource file
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	shotwell.am
+
+commit f0de94576ba0463f829acf05423fac6d95c83bb3
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Nov 20 23:18:31 2016 +0100
+
+    Remove another useless context menu title
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	ui/savedsearch.ui
+
+commit a2a4e194f831e1533676878300a41fcdac9c4ca6
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Nov 20 23:13:08 2016 +0100
+
+    Work-around issue with photo context menu
+
+    Since we are not using separate action groups anymore, so leaving
+    collection page is disabling the actions we just enabled in PhotoPage.
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/CollectionPage.vala
+
+commit 9ae5339a193c8a14cc81d77867e9bd02dde038b0
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Nov 20 21:11:29 2016 +0100
+
+    Do not show menubar on fullscreen
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/AppWindow.vala
+
+commit d557aa766770eee4f11635e3a017b1d053f0574f
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Nov 20 20:35:30 2016 +0100
+
+    Remove unnecessary context menu label
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	ui/direct_context.ui
+
+commit 3760e9eb404ef14e8e8bdc30e614ecb9f7c94be2
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Nov 20 19:55:33 2016 +0100
+
+    Remove deprecations from shotwell.ui
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=767181
+
+M	src/Dialogs.vala
+M	ui/shotwell.ui
+
+commit dbd298480651d80be3651e594b2efc1b20580cf5
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Nov 20 16:06:14 2016 +0100
+
+    Replace from_stock in EventsDirectoryPage
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/events/EventsDirectoryPage.vala
+
+commit 1e39fb34441615555cb25da2786ae2d85412aeb0
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Nov 20 15:44:32 2016 +0100
+
+    Remove deprecated calls from properties
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Properties.vala
+
+commit e3ed5ceb07be8581000272b6fe8fd250a4975f9d
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Nov 20 18:31:29 2016 +0100
+
+    Update Polish translation
+
+M	po/pl.po
+
+commit ab05955e1b0c8dbe3c86b0c829af49c18813d1a2
+Author: Rafael Fontenelle <rafaelff@gnome.org>
+Date:	Sat Nov 19 01:52:24 2016 +0000
+
+    Update Brazilian Portuguese translation
+
+M	po/pt_BR.po
+
+commit cae15e6ea12990a477c62c8fc06849618f102ffb
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Fri Nov 18 12:35:18 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit 482249a12230612aab927458c892432b45d8e1c9
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Fri Nov 18 08:18:03 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit 94e107e021a24df2a99f0eb6b84449111908f744
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 17 22:59:53 2016 +0100
+
+    More ngettext for plurals
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Dialogs.vala
+
+commit 3a67c97a5aa7779c106401c62914c53c800967d9
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 17 22:59:44 2016 +0100
+
+    Remove deprecated code from Dialogs
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Dialogs.vala
+M	ui/shotwell.ui
+
+commit bb5a1ac6776e6e8348266a77f6798e31c6160ea6
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 17 22:26:54 2016 +0100
+
+    Remove deprecated calls from PhotoPage
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/PhotoPage.vala
+
+commit 96b325abdfec494294f3bc6233d999a4968de8ab
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 17 21:51:13 2016 +0100
+
+    Remove deprecations from AppWindow
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/AppWindow.vala
+
+commit 875b0f8fa30ddb30eb3ba81ff4db7307c9c7603e
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 17 21:43:21 2016 +0100
+
+    Fix warning about pointer cast
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/PixbufCache.vala
+M	src/threads/BackgroundJob.vala
+
+commit 7135d7a4687dbbc61d1d9babe29060f23da1fbbc
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 17 18:15:45 2016 +0100
+
+    Publishing: Use ngettext for plurals
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/publishing/PublishingUI.vala
+
+commit fa430d09a1b407dae551dcfd0302486b0cdfdd1f
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 17 18:15:28 2016 +0100
+
+    Fix deprecations in Imports UI
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/data_imports/DataImportsUI.vala
+
+commit eb9f7826392aa96306dfd102f0ee7d5e2dd40d02
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 17 18:00:51 2016 +0100
+
+    publishing: Fix criticals when switching to Facebook
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/publishing/PublishingUI.vala
+
+commit 8bdbd6bdbe729915fcb3bb3c8e7acdac7c172924
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 17 16:53:39 2016 +0100
+
+    Remove deprecated function from Tree
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/sidebar/Tree.vala
+
+commit 2d3bcae244075abedb5853b380bac539dde87da1
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 17 16:52:29 2016 +0100
+
+    Remove dead code
+
+    Not used anymore after putting stars as unicode
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/SearchFilter.vala
+
+commit 30abef1ac4778f0cd7a08fd23171e76011c84d9a
+Author: Marek Černocký <marek@manet.cz>
+Date:	Thu Nov 17 11:21:56 2016 +0100
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit 80fd4d15591e6cca50072e530e4fd9cd6ff9c6af
+Author: Daniel Mustieles <daniel.mustieles@gmail.com>
+Date:	Thu Nov 17 08:17:13 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit db76214268f16829125bc3b89e8381c8230ecb49
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 16 23:09:32 2016 +0100
+
+    SearchBar: Remove star icons
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=771788
+
+M	src/SearchFilter.vala
+
+commit 5901f0282e6ce6b0b3a27248552c5cf8d492706a
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 16 22:21:10 2016 +0100
+
+    Make Find toolbar button a toggle button
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	ui/collection.ui
+
+commit 9be90a6bd45ca410f273b722b2726e0868640498
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 16 22:11:34 2016 +0100
+
+    Gdk.Seat exists only since 3.20
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Page.vala
+M	src/library/LibraryWindow.vala
+
+commit aef3f23f92c4df33f932ee5d1af3a4e9a33d266d
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 16 21:52:57 2016 +0100
+
+    Use change_state instead of set_state
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/library/LibraryWindow.vala
+
+commit 6ae8259658aa63e03bc1cfdd73403f2e9ef75cf4
+Author: Marek Cernocky <marek_cernocky@conel.cz>
+Date:	Wed Nov 16 11:41:07 2016 +0100
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit ef8d4068d58d09b81af688f98f4a855fe444b930
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 16 00:52:17 2016 +0100
+
+    Remove deprecated calls from LibraryWindow
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/library/LibraryWindow.vala
+
+commit 0410d948509def958eda90a91d8bfc28b03a7670
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 16 00:40:15 2016 +0100
+
+    Remove deprecations from PublishingUI
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/publishing/PublishingUI.vala
+
+commit b6acc7475fe707f75fab55eaa160881118f46b9d
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Nov 15 23:55:09 2016 +0100
+
+    Remove deprecated calls from ManifestWidget
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/plugins/ManifestWidget.vala
+
+commit ebfb5620ef054276b84eb0a5aaf87bc2c26dd9fd
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Nov 15 23:47:55 2016 +0100
+
+    Dedeprecate Adjust Tool
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/editing_tools/EditingTools.vala
+
+commit bbccb6eded1d1e65d0c1ef65b22cfc4f06fc8b4a
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Nov 15 23:47:02 2016 +0100
+
+    Dedeprecate RedEye Tool
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/editing_tools/EditingTools.vala
+
+commit 21559b2ba0696a0db9c050a5872ca7c7c8b98f1d
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Nov 15 23:46:43 2016 +0100
+
+    Dedeprecate EditingTools base class
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/editing_tools/EditingTools.vala
+
+commit 36410aa0942d029e0cb2e199ed70bffaf3e15d52
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Tue Nov 15 12:30:24 2016 +0100
+
+    i18n: Remove files with no translations from POTFILES.in and
+    POTFILES.skip
+
+M	po/POTFILES.in
+M	po/POTFILES.skip
+
+commit 3d4319a28d800e9e1f3ffb032f78d7b531ff1178
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Tue Nov 15 12:20:14 2016 +0100
+
+    i18n: Add intermediate C files to POTFILES.skip
+
+M	po/POTFILES.skip
+
+commit 46ceedff9eb3fa29a4b76b6c93b185c08ccc09b1
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Tue Nov 15 12:17:59 2016 +0100
+
+    i18n: Add missing files to POTFILES.in
+
+M	po/POTFILES.in
+
+commit aadd627f44499cc0a830249f31b306ef30ba2596
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Nov 14 23:59:01 2016 +0100
+
+    Dedeprecate Page
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Page.vala
+
+commit f8f42e7a7dee8cedbb115309671468a7fd1e81e0
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Nov 14 23:27:25 2016 +0100
+
+    Use GtkApplication menubar, get accels for free
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/AppWindow.vala
+M	src/Application.vala
+M	src/Page.vala
+M	src/direct/DirectWindow.vala
+M	src/library/LibraryWindow.vala
+
+commit 17c8587e485cc8fad18abdecc2d6fa603416c973
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Oct 19 21:56:15 2016 +0200
+
+    Remove GtkUIManager and Gtk*Action*
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=768271
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	shotwell.am
+M	src/AppWindow.vala
+M	src/Application.vala
+M	src/CollectionPage.vala
+M	src/MediaPage.vala
+M	src/Page.vala
+M	src/PhotoPage.vala
+M	src/Resources.vala
+M	src/SearchFilter.vala
+M	src/camera/ImportPage.vala
+M	src/direct/DirectPhotoPage.vala
+M	src/events/EventPage.vala
+M	src/events/EventsDirectoryPage.vala
+M	src/library/ImportQueuePage.vala
+M	src/library/LibraryWindow.vala
+M	src/library/OfflinePage.vala
+M	src/library/TrashPage.vala
+M	src/org.gnome.Shotwell.gresource.xml
+M	src/searches/Branch.vala
+M	src/searches/SavedSearchPage.vala
+M	src/sidebar/Tree.vala
+M	src/tags/Branch.vala
+M	src/tags/TagPage.vala
+M	src/util/ui.vala
+M	ui/collection.ui
+M	ui/direct.ui
+M	ui/direct_context.ui
+M	ui/event.ui
+M	ui/events_directory.ui
+M	ui/import.ui
+M	ui/import_queue.ui
+M	ui/media.ui
+M	ui/offline.ui
+M	ui/photo.ui
+M	ui/photo_context.ui
+M	ui/savedsearch.ui
+M	ui/search_bar.ui
+M	ui/search_sidebar_context.ui
+M	ui/set_background_dialog.ui
+M	ui/sidebar_default_context.ui
+M	ui/tag_sidebar_context.ui
+M	ui/tags.ui
+M	ui/top.ui
+M	ui/trash.ui
+
+commit 1206252faec829f23857ceb1e6e5150459e289a8
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 29 09:53:13 2016 +0200
+
+    piwigo: Port Option pane to BuilderPane
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+
+commit e8755595eee86d8fc417815f176ebc79da06e523
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 29 03:16:27 2016 +0200
+
+    common,piwigo: Add "default" widget to BuilderPane
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/common/BuilderPane.vala
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+
+commit 816b12dcd20cdba94f98d317bed67f5738fd6a3b
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 29 03:11:24 2016 +0200
+
+    piwigo: Port SSL pane to BuilderPane
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+
+commit 941eeecc49cb0131abecce9a163513a3d3d1b135
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 29 02:47:30 2016 +0200
+
+    piwigo: Simplify category name parsing a bit
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+
+commit a9a507bf91f5244bef8fb00cc13793723bec5c47
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 29 02:28:49 2016 +0200
+
+    piwigo: Port authentication dialog to builder pane
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+
+commit beb3005c4cc8085856ed7f06178434ab45a8784a
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 29 02:28:30 2016 +0200
+
+    common: Add BuilderPane
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	Makefile.am
+A	plugins/common/BuilderPane.vala
+
+commit bb8acd09cb6107ab3b97ac05dadefb00d83bcb92
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Oct 21 17:49:10 2016 +0200
+
+    Remove GtkMisc from SeachFilter
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/SearchFilter.vala
+
+commit ed928a0f498dd1004105094245b8170107fd7e2c
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Oct 21 17:43:39 2016 +0200
+
+    De-deprecate SavedSearchDialog
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/searches/SavedSearchDialog.vala
+
+commit 2dd03b3ea8a50fc031c91f79df65b9d2a4d25b13
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Oct 21 17:39:09 2016 +0200
+
+    build: Disable misleading warnings caused by valac
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	common.am
+
+commit 8a93cf67b561815fa1f5cec88fcc65f392a4496c
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Oct 19 21:55:14 2016 +0200
+
+    De-deprecate crop tool
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+M	shotwell.am
+M	src/editing_tools/EditingTools.vala
+A	src/org.gnome.Shotwell.gresource.xml
+
+commit 2c91f2cf6017cd841c621fd10b6a5976623843b9
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 1 17:27:34 2016 +0200
+
+    De-deprecate StraightenTool
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/editing_tools/StraightenTool.vala
+
+commit e1c1bafe21b84457b1c7242ee29c59071e4faad2
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 1 17:18:44 2016 +0200
+
+    publishin-extra: Remove deprecations from Yandex
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing-extras/YandexPublishing.vala
+M	plugins/shotwell-publishing-extras/yandex_publish_model.ui
+
+commit 7cd7dc282e5f4affac450257a779bdf90b47623d
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 1 17:11:31 2016 +0200
+
+    publishing-extra: Remove deprecations from Tumblr
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing-extras/TumblrPublishing.vala
+M	plugins/shotwell-publishing-extras/tumblr_authentication_pane.ui
+
+commit 2b13b39e6ed1e7da5e5eb19d4c28917c8bdca7b7
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 1 17:07:17 2016 +0200
+
+    publishing-extra: Remove deprecations from Rajce
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing-extras/RajcePublishing.vala
+M	plugins/shotwell-publishing-extras/rajce_authentication_pane.ui
+
+commit ef0f0e77056ddf95cb2b239b1a5c1a6189b72a91
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 1 16:49:23 2016 +0200
+
+    pubishing: Revamp Piwigo dialogs
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+M	plugins/shotwell-publishing/piwigo_authentication_pane.ui
+M	plugins/shotwell-publishing/piwigo_publishing_options_pane.ui
+
+commit c3352e8dbee06d582c2b22f40fd629e0ff22f1c0
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Mon Nov 14 08:48:57 2016 +0000
+
+    Update Spanish translation
+
+M	po/es.po
+
+commit 7e1415a56094159709643685d7bb2e47108c9145
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Nov 13 14:33:10 2016 +0100
+
+    Update Polish translation
+
+M	po/pl.po
+
+commit f01c6a9ca870fd4c1f5150e1c53cb47c817503e1
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Fri Nov 11 12:44:40 2016 +0000
+
+    Update Spanish translation
+
+M	po/es.po
+
+commit c8cacef72095daef28bc71945b7bd42ab40662ce
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Nov 11 00:32:04 2016 +0100
+
+    Prevent dropping the index on evey start
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/db/PhotoTable.vala
+
+commit e969f1839544e7555f8f52d68f3279bffec33be7
+Author: Marek Cernocky <marek_cernocky@conel.cz>
+Date:	Thu Nov 10 12:50:12 2016 +0100
+
+    Updated Czeach translation
+
+M	po/cs.po
+
+commit b836f7f8f90c4a8ebf0365464306742f17f614ad
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Thu Nov 10 10:16:00 2016 +0000
+
+    Update Spanish translation
+
+M	po/es.po
+
+commit e09cc440be5545515814e244fba1fa6aa5555cde
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 9 22:21:57 2016 +0100
+
+    Use ngettext for some plural forms
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Resources.vala
+
+commit 55a29cabf8e46a0db6a66672a062e666d981a9be
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 9 21:48:26 2016 +0100
+
+    Remove uniqueness of PhotoTableMD5Format index
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=772223
+
+M	src/db/PhotoTable.vala
+
+commit a35867695dff4478a3c60087611cb90e5b7d8692
+Author: Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Date:	Wed Nov 9 09:20:17 2016 +0000
+
+    Update Kazakh translation
+
+M	po/kk.po
+
+commit 098e84788934f41d216c49d58740af5c212b5697
+Author: Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Date:	Tue Nov 8 23:33:53 2016 +0200
+
+    Update Latvian translation
+
+M	help/lv/lv.po
+
+commit ea3d4296160051b1c980cc5df131da6f6c80b1e1
+Author: Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Date:	Tue Nov 8 23:30:18 2016 +0200
+
+    Update Latvian translation
+
+M	help/lv/lv.po
+M	po/lv.po
+
+commit 7a4d6d810dd54fce9cee905a10b60615494a922c
+Author: Marek Černocký <marek@manet.cz>
+Date:	Tue Nov 8 08:15:11 2016 +0100
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit d135612c2cc079253021b5c757ca386d7c706d31
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Nov 7 23:59:11 2016 +0100
+
+    Dist misc.vapi
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	Makefile.am
+
+commit d5c9ffb6e430ce641c657e390107311e105671f5
+Author: Damian Pietras <bug1@daper.net>
+Date:	Mon Nov 7 13:29:00 2016 +0000
+
+    thumbnailer: fix double close()
+
+    A file descriptor used to communicate with the video thumbnailer
+    process is
+    closed twice. In case another thread allocates the same descriptor
+    number in
+    the meantime, the second close() actually closes a descriptor not
+    owned by the
+    thread. This causes crashes in most cases or unexpected behaviour.
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=774057
+
+M	src/VideoSupport.vala
+
+commit 22908394f043723c78f90a9143b04338108fca09
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Mon Nov 7 10:29:36 2016 +0000
+
+    Update Spanish translation
+
+M	po/es.po
+
+commit 4a325a09618a6f4f02067207a525fd54d3e04b99
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Fri Nov 4 11:59:02 2016 +0000
+
+    Update Spanish translation
+
+M	po/es.po
+
+commit bcdc5e49bc065e2e60449d6b4d50c15a04b85b57
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Fri Nov 4 07:53:51 2016 +0000
+
+    Update Spanish translation
+
+M	po/es.po
+
+commit c852ecce570cf5c261808539f8825cd0f72f27e4
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Thu Nov 3 09:08:39 2016 +0000
+
+    Update Spanish translation
+
+M	po/es.po
+
+commit bca67bfe286a1d67e19f82391f1bf4650a43e2bf
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Nov 1 21:11:55 2016 +0100
+
+    Fix missing parameters in Tumblr publisher
+
+    Fix by Jürg Billeter
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing-extras/TumblrPublishing.vala
+
+commit 2f4504d78d29ccb80145b596a25e6fefe5f9c656
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 29 12:23:17 2016 +0200
+
+    common: Remove extra box around webview
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/common/WebAuthenticationPane.vala
+
+commit c941492caa504aae3c8a695f45d49c9a8c502b46
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 29 02:09:36 2016 +0200
+
+    publishing: Fix resource dependencies
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	publish.am
+
+commit 8999db51f67aeab1507d182742adc689dfbd9bb1
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Oct 29 01:01:54 2016 +0200
+
+    Remove deprecated Soup API
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/common/RESTSupport.vala
+M	plugins/shotwell-publishing-extras/YandexPublishing.vala
+M	plugins/shotwell-publishing/FacebookPublishing.vala
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+
+commit 6efc613556a6128c2e2a91bc5f528d183ad8710c
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Oct 26 13:23:06 2016 +0200
+
+    Update debian
+
+    - Add dependency to gcr3
+    - Fix typo in rules file
+    - Bump gexiv2 requirements
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	debian/control
+M	debian/rules
+
+commit 65628886da590e2c290869d39b678fd6abe81673
+Author: Rūdolfs Mazurs <rudolfsm@src.gnome.org>
+Date:	Sun Oct 30 23:21:11 2016 +0200
+
+    Update Latvian translation
+
+M	help/Makefile.am
+A	help/lv/figures/trash_process.png
+A	help/lv/lv.po
+
+commit a82f9cfc23aad68f953a5e3414349a3e12a124e2
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Sun Oct 30 18:10:17 2016 +0000
+
+    Update German translation
+
+M	po/de.po
+
 commit 8cc28654affe568f156bc74a20fb4959160ac872
 Author: Jens Georg <mail@jensge.org>
-Date:   Mon Oct 24 20:09:08 2016 +0200
+Date:	Mon Oct 24 20:09:08 2016 +0200
 
     Prepare 0.25.0 release
 

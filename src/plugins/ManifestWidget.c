@@ -212,7 +212,7 @@ PluginsManifestWidgetMediator* plugins_manifest_widget_mediator_construct (GType
 #line 32 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp2_ = self->priv->list;
 #line 32 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
-	gtk_scrolled_window_add_with_viewport (_tmp1_, G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
 #line 34 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp3_ = plugins_manifest_widget_mediator_get_about_button (self);
 #line 34 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
@@ -1130,7 +1130,7 @@ static GType plugins_manifest_list_view_column_get_type (void) {
 static gint _plugins_compare_extension_point_names_gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self) {
 	gint result;
 	result = plugins_compare_extension_point_names (a, b);
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	return result;
 #line 1136 "ManifestWidget.c"
 }
@@ -1139,7 +1139,7 @@ static gint _plugins_compare_extension_point_names_gcompare_data_func (gconstpoi
 static gint _plugins_compare_pluggable_names_gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self) {
 	gint result;
 	result = plugins_compare_pluggable_names (a, b);
-#line 190 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 189 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	return result;
 #line 1145 "ManifestWidget.c"
 }
@@ -1286,45 +1286,43 @@ PluginsManifestListView* plugins_manifest_list_view_construct (GType object_type
 #line 158 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	gtk_tree_view_set_enable_search (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), FALSE);
 #line 159 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
-	gtk_tree_view_set_rules_hint (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), TRUE);
-#line 160 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	gtk_tree_view_set_show_expanders (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), TRUE);
-#line 161 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 160 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	gtk_tree_view_set_reorderable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), FALSE);
-#line 162 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 161 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	gtk_tree_view_set_enable_tree_lines (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), FALSE);
-#line 163 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 162 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	gtk_tree_view_set_grid_lines (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), GTK_TREE_VIEW_GRID_LINES_NONE);
-#line 164 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 163 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp26_ = gtk_tree_view_get_selection (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView));
-#line 164 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 163 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	gtk_tree_selection_set_mode (_tmp26_, GTK_SELECTION_BROWSE);
-#line 166 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 165 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp27_ = resources_get_icon_theme_engine ();
-#line 166 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 165 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	icon_theme = _tmp27_;
-#line 1307 "ManifestWidget.c"
+#line 1305 "ManifestWidget.c"
 	{
 		GeeIterator* _extension_point_it = NULL;
 		GeeCollection* _tmp28_ = NULL;
 		GeeCollection* _tmp29_ = NULL;
 		GeeIterator* _tmp30_ = NULL;
 		GeeIterator* _tmp31_ = NULL;
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp28_ = plugins_get_extension_points (_plugins_compare_extension_point_names_gcompare_data_func, NULL, NULL);
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp29_ = _tmp28_;
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp30_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp31_ = _tmp30_;
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_g_object_unref0 (_tmp29_);
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_extension_point_it = _tmp31_;
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		while (TRUE) {
-#line 1328 "ManifestWidget.c"
+#line 1326 "ManifestWidget.c"
 			GeeIterator* _tmp32_ = NULL;
 			gboolean _tmp33_ = FALSE;
 			PluginsExtensionPoint* extension_point = NULL;
@@ -1348,39 +1346,39 @@ PluginsManifestListView* plugins_manifest_list_view_construct (GType object_type
 			GType _tmp66_ = 0UL;
 			GType _tmp67_ = 0UL;
 			GeeCollection* _tmp68_ = NULL;
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp32_ = _extension_point_it;
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp33_ = gee_iterator_next (_tmp32_);
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			if (!_tmp33_) {
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				break;
-#line 1360 "ManifestWidget.c"
+#line 1358 "ManifestWidget.c"
 			}
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp34_ = _extension_point_it;
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp35_ = gee_iterator_get (_tmp34_);
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			extension_point = (PluginsExtensionPoint*) _tmp35_;
-#line 172 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 171 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp36_ = self->priv->store;
-#line 172 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 171 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			gtk_tree_store_append (_tmp36_, &_tmp37_, NULL);
-#line 172 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 171 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			category_iter = _tmp37_;
-#line 174 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 173 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			icon = NULL;
-#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 174 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp38_ = extension_point;
-#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 174 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp39_ = plugins_extension_point_get_icon_name (_tmp38_);
-#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 174 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp40_ = _tmp39_;
-#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 174 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			if (_tmp40_ != NULL) {
-#line 1384 "ManifestWidget.c"
+#line 1382 "ManifestWidget.c"
 				GtkIconInfo* icon_info = NULL;
 				GtkIconTheme* _tmp41_ = NULL;
 				PluginsExtensionPoint* _tmp42_ = NULL;
@@ -1391,58 +1389,58 @@ PluginsManifestListView* plugins_manifest_list_view_construct (GType object_type
 				GtkIconInfo* _tmp47_ = NULL;
 				GtkIconInfo* _tmp48_ = NULL;
 				GtkIconInfo* _tmp49_ = NULL;
-#line 176 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp41_ = icon_theme;
-#line 176 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp42_ = extension_point;
-#line 176 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp43_ = plugins_extension_point_get_icon_name (_tmp42_);
-#line 176 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp44_ = _tmp43_;
-#line 176 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp45_ = (GThemedIcon*) g_themed_icon_new (_tmp44_);
-#line 176 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp46_ = _tmp45_;
-#line 176 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp47_ = gtk_icon_theme_lookup_by_gicon (_tmp41_, G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, g_icon_get_type (), GIcon), PLUGINS_MANIFEST_LIST_VIEW_ICON_SIZE, 0);
-#line 176 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp48_ = _tmp47_;
-#line 176 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_g_object_unref0 (_tmp46_);
-#line 176 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				icon_info = _tmp48_;
-#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 177 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp49_ = icon_info;
-#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 177 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				if (_tmp49_ != NULL) {
-#line 1419 "ManifestWidget.c"
+#line 1417 "ManifestWidget.c"
 					{
 						GdkPixbuf* _tmp50_ = NULL;
 						GtkIconInfo* _tmp51_ = NULL;
 						GdkPixbuf* _tmp52_ = NULL;
 						GdkPixbuf* _tmp53_ = NULL;
-#line 180 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp51_ = icon_info;
-#line 180 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp52_ = gtk_icon_info_load_icon (_tmp51_, &_inner_error_);
-#line 180 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp50_ = _tmp52_;
-#line 180 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1433 "ManifestWidget.c"
+#line 1431 "ManifestWidget.c"
 							goto __catch34_g_error;
 						}
-#line 180 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
-						_tmp53_ = _tmp50_;
-#line 180 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
-						_tmp50_ = NULL;
-#line 180 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
-						_g_object_unref0 (icon);
-#line 180 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
-						icon = _tmp53_;
 #line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+						_tmp53_ = _tmp50_;
+#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+						_tmp50_ = NULL;
+#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+						_g_object_unref0 (icon);
+#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+						icon = _tmp53_;
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_object_unref0 (_tmp50_);
-#line 1446 "ManifestWidget.c"
+#line 1444 "ManifestWidget.c"
 					}
 					goto __finally34;
 					__catch34_g_error:
@@ -1453,98 +1451,98 @@ PluginsManifestListView* plugins_manifest_list_view_construct (GType object_type
 						const gchar* _tmp56_ = NULL;
 						GError* _tmp57_ = NULL;
 						const gchar* _tmp58_ = NULL;
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						err = _inner_error_;
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_inner_error_ = NULL;
-#line 182 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 181 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp54_ = extension_point;
-#line 182 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 181 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp55_ = plugins_extension_point_get_icon_name (_tmp54_);
-#line 182 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 181 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp56_ = _tmp55_;
-#line 182 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 181 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp57_ = err;
-#line 182 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 181 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp58_ = _tmp57_->message;
-#line 182 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
-						g_warning ("ManifestWidget.vala:182: Unable to load icon %s: %s", _tmp56_, _tmp58_);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 181 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+						g_warning ("ManifestWidget.vala:181: Unable to load icon %s: %s", _tmp56_, _tmp58_);
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_error_free0 (err);
-#line 1475 "ManifestWidget.c"
+#line 1473 "ManifestWidget.c"
 					}
 					__finally34:
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_gtk_icon_info_free0 (icon_info);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_object_unref0 (icon);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_plugins_extension_point_unref0 (extension_point);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_object_unref0 (_extension_point_it);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_object_unref0 (icon_theme);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_object_unref0 (column);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_object_unref0 (text_renderer);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_object_unref0 (icon_renderer);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_object_unref0 (checkbox_renderer);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						g_clear_error (&_inner_error_);
-#line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						return NULL;
-#line 1504 "ManifestWidget.c"
+#line 1502 "ManifestWidget.c"
 					}
 				}
-#line 175 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 174 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_gtk_icon_info_free0 (icon_info);
-#line 1509 "ManifestWidget.c"
+#line 1507 "ManifestWidget.c"
 			}
-#line 187 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 186 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp59_ = self->priv->store;
-#line 187 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 186 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp60_ = category_iter;
-#line 187 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 186 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp61_ = extension_point;
-#line 187 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 186 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp62_ = plugins_extension_point_get_name (_tmp61_);
-#line 187 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 186 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp63_ = _tmp62_;
-#line 187 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 186 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp64_ = icon;
-#line 187 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 186 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			gtk_tree_store_set (_tmp59_, &_tmp60_, PLUGINS_MANIFEST_LIST_VIEW_COLUMN_NAME, _tmp63_, PLUGINS_MANIFEST_LIST_VIEW_COLUMN_CAN_ENABLE, FALSE, PLUGINS_MANIFEST_LIST_VIEW_COLUMN_ICON, _tmp64_, -1);
-#line 190 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 189 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp65_ = extension_point;
-#line 190 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 189 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp66_ = plugins_extension_point_get_pluggable_type (_tmp65_);
-#line 190 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 189 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp67_ = _tmp66_;
-#line 190 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 189 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp68_ = plugins_get_pluggables_for_type (_tmp67_, _plugins_compare_pluggable_names_gcompare_data_func, NULL, NULL, TRUE);
-#line 190 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 189 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			pluggables = _tmp68_;
-#line 1535 "ManifestWidget.c"
+#line 1533 "ManifestWidget.c"
 			{
 				GeeIterator* _pluggable_it = NULL;
 				GeeCollection* _tmp69_ = NULL;
 				GeeIterator* _tmp70_ = NULL;
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp69_ = pluggables;
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp70_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp69_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_pluggable_it = _tmp70_;
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				while (TRUE) {
-#line 1548 "ManifestWidget.c"
+#line 1546 "ManifestWidget.c"
 					GeeIterator* _tmp71_ = NULL;
 					gboolean _tmp72_ = FALSE;
 					SpitPluggable* pluggable = NULL;
@@ -1575,160 +1573,160 @@ PluginsManifestListView* plugins_manifest_list_view_construct (GType object_type
 					SpitPluggable* _tmp100_ = NULL;
 					const gchar* _tmp101_ = NULL;
 					GdkPixbuf* _tmp102_ = NULL;
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp71_ = _pluggable_it;
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp72_ = gee_iterator_next (_tmp71_);
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					if (!_tmp72_) {
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						break;
-#line 1587 "ManifestWidget.c"
+#line 1585 "ManifestWidget.c"
 					}
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp73_ = _pluggable_it;
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp74_ = gee_iterator_get (_tmp73_);
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					pluggable = (SpitPluggable*) _tmp74_;
-#line 194 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 193 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp75_ = pluggable;
-#line 194 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 193 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp76_ = spit_pluggable_get_id (_tmp75_);
-#line 194 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 193 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp78_ = plugins_get_pluggable_enabled (_tmp76_, &_tmp77_);
-#line 194 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 193 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					enabled = _tmp77_;
-#line 194 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 193 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					if (!_tmp78_) {
-#line 195 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 194 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_object_unref0 (pluggable);
-#line 195 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 194 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						continue;
-#line 1609 "ManifestWidget.c"
+#line 1607 "ManifestWidget.c"
 					}
-#line 197 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 196 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					memset (&info, 0, sizeof (SpitPluggableInfo));
-#line 198 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 197 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp79_ = pluggable;
-#line 198 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 197 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					spit_pluggable_get_info (_tmp79_, &info);
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp82_ = info;
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp83_ = _tmp82_.icons;
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp83__length1 = _tmp82_.icons_length1;
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					if (_tmp83_ != NULL) {
-#line 1625 "ManifestWidget.c"
+#line 1623 "ManifestWidget.c"
 						SpitPluggableInfo _tmp84_ = {0};
 						GdkPixbuf** _tmp85_ = NULL;
 						gint _tmp85__length1 = 0;
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp84_ = info;
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp85_ = _tmp84_.icons;
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp85__length1 = _tmp84_.icons_length1;
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp81_ = _tmp85__length1 > 0;
-#line 1637 "ManifestWidget.c"
+#line 1635 "ManifestWidget.c"
 					} else {
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp81_ = FALSE;
-#line 1641 "ManifestWidget.c"
+#line 1639 "ManifestWidget.c"
 					}
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					if (_tmp81_) {
-#line 1645 "ManifestWidget.c"
+#line 1643 "ManifestWidget.c"
 						SpitPluggableInfo _tmp86_ = {0};
 						GdkPixbuf** _tmp87_ = NULL;
 						gint _tmp87__length1 = 0;
 						GdkPixbuf* _tmp88_ = NULL;
 						GdkPixbuf* _tmp89_ = NULL;
-#line 201 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp86_ = info;
-#line 201 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp87_ = _tmp86_.icons;
-#line 201 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp87__length1 = _tmp86_.icons_length1;
-#line 201 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp88_ = _tmp87_[0];
-#line 201 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp89_ = _g_object_ref0 (_tmp88_);
-#line 201 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_object_unref0 (_tmp80_);
-#line 201 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp80_ = _tmp89_;
-#line 1665 "ManifestWidget.c"
+#line 1663 "ManifestWidget.c"
 					} else {
 						GdkPixbuf* _tmp90_ = NULL;
-#line 202 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 201 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp90_ = resources_get_icon (RESOURCES_ICON_GENERIC_PLUGIN, PLUGINS_MANIFEST_LIST_VIEW_ICON_SIZE);
-#line 202 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 201 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_g_object_unref0 (_tmp80_);
-#line 202 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 201 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp80_ = _tmp90_;
-#line 1674 "ManifestWidget.c"
+#line 1672 "ManifestWidget.c"
 					}
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp91_ = _g_object_ref0 (_tmp80_);
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_g_object_unref0 (icon);
-#line 200 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 199 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					icon = _tmp91_;
-#line 205 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 204 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp92_ = self->priv->store;
-#line 205 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 204 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp93_ = category_iter;
-#line 205 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 204 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					gtk_tree_store_append (_tmp92_, &_tmp94_, &_tmp93_);
-#line 205 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 204 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					plugin_iter = _tmp94_;
-#line 207 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 206 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp95_ = self->priv->store;
-#line 207 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 206 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp96_ = plugin_iter;
-#line 207 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 206 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp97_ = enabled;
-#line 207 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 206 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp98_ = pluggable;
-#line 207 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 206 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp99_ = spit_pluggable_get_pluggable_name (_tmp98_);
-#line 207 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 206 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp100_ = pluggable;
-#line 207 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 206 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp101_ = spit_pluggable_get_id (_tmp100_);
-#line 207 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 206 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp102_ = icon;
-#line 207 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 206 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					gtk_tree_store_set (_tmp95_, &_tmp96_, PLUGINS_MANIFEST_LIST_VIEW_COLUMN_ENABLED, _tmp97_, PLUGINS_MANIFEST_LIST_VIEW_COLUMN_NAME, _tmp99_, PLUGINS_MANIFEST_LIST_VIEW_COLUMN_ID, _tmp101_, PLUGINS_MANIFEST_LIST_VIEW_COLUMN_CAN_ENABLE, TRUE, PLUGINS_MANIFEST_LIST_VIEW_COLUMN_ICON, _tmp102_, -1);
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_g_object_unref0 (_tmp80_);
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					spit_pluggable_info_destroy (&info);
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_g_object_unref0 (pluggable);
-#line 1714 "ManifestWidget.c"
+#line 1712 "ManifestWidget.c"
 				}
-#line 192 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 191 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_g_object_unref0 (_pluggable_it);
-#line 1718 "ManifestWidget.c"
+#line 1716 "ManifestWidget.c"
 			}
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_g_object_unref0 (pluggables);
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_g_object_unref0 (icon);
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_plugins_extension_point_unref0 (extension_point);
-#line 1726 "ManifestWidget.c"
+#line 1724 "ManifestWidget.c"
 		}
-#line 170 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 169 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_g_object_unref0 (_extension_point_it);
-#line 1730 "ManifestWidget.c"
+#line 1728 "ManifestWidget.c"
 	}
-#line 212 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 211 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	gtk_tree_view_expand_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView));
 #line 130 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_g_object_unref0 (icon_theme);
@@ -1742,54 +1740,54 @@ PluginsManifestListView* plugins_manifest_list_view_construct (GType object_type
 	_g_object_unref0 (checkbox_renderer);
 #line 130 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	return self;
-#line 1746 "ManifestWidget.c"
+#line 1744 "ManifestWidget.c"
 }
 
 
 PluginsManifestListView* plugins_manifest_list_view_new (void) {
 #line 130 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	return plugins_manifest_list_view_construct (PLUGINS_TYPE_MANIFEST_LIST_VIEW);
-#line 1753 "ManifestWidget.c"
+#line 1751 "ManifestWidget.c"
 }
 
 
 static gpointer _gtk_tree_path_copy0 (gpointer self) {
-#line 219 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 218 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	return self ? gtk_tree_path_copy (self) : NULL;
-#line 1760 "ManifestWidget.c"
+#line 1758 "ManifestWidget.c"
 }
 
 
 static void _vala_array_add50 (gchar*** array, int* length, int* size, gchar* value) {
-#line 223 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	if ((*length) == (*size)) {
-#line 223 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 223 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 1771 "ManifestWidget.c"
+#line 1769 "ManifestWidget.c"
 	}
-#line 223 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	(*array)[(*length)++] = value;
-#line 223 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	(*array)[*length] = NULL;
-#line 1777 "ManifestWidget.c"
+#line 1775 "ManifestWidget.c"
 }
 
 
 static void _gtk_tree_path_free0_ (gpointer var) {
-#line 226 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 225 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	(var == NULL) ? NULL : (var = (gtk_tree_path_free (var), NULL));
-#line 1784 "ManifestWidget.c"
+#line 1782 "ManifestWidget.c"
 }
 
 
 static void _g_list_free__gtk_tree_path_free0_ (GList* self) {
-#line 226 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 225 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	g_list_foreach (self, (GFunc) _gtk_tree_path_free0_, NULL);
-#line 226 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 225 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	g_list_free (self);
-#line 1793 "ManifestWidget.c"
+#line 1791 "ManifestWidget.c"
 }
 
 
@@ -1805,40 +1803,40 @@ gchar** plugins_manifest_list_view_get_selected_ids (PluginsManifestListView* se
 	GList* _tmp3_ = NULL;
 	gchar** _tmp12_ = NULL;
 	gint _tmp12__length1 = 0;
-#line 215 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 214 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	g_return_val_if_fail (PLUGINS_IS_MANIFEST_LIST_VIEW (self), NULL);
-#line 216 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 215 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp0_ = g_new0 (gchar*, 0 + 1);
-#line 216 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 215 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	ids = _tmp0_;
-#line 216 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 215 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	ids_length1 = 0;
-#line 216 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 215 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_ids_size_ = ids_length1;
-#line 218 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 217 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp1_ = gtk_tree_view_get_selection (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView));
-#line 218 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 217 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp2_ = gtk_tree_selection_get_selected_rows (_tmp1_, NULL);
-#line 218 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 217 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	selected = _tmp2_;
-#line 219 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 218 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp3_ = selected;
-#line 1827 "ManifestWidget.c"
+#line 1825 "ManifestWidget.c"
 	{
 		GList* path_collection = NULL;
 		GList* path_it = NULL;
-#line 219 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 218 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		path_collection = _tmp3_;
-#line 219 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 218 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		for (path_it = path_collection; path_it != NULL; path_it = path_it->next) {
-#line 1835 "ManifestWidget.c"
+#line 1833 "ManifestWidget.c"
 			GtkTreePath* _tmp4_ = NULL;
 			GtkTreePath* path = NULL;
-#line 219 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 218 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			_tmp4_ = _gtk_tree_path_copy0 ((GtkTreePath*) path_it->data);
-#line 219 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 218 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			path = _tmp4_;
-#line 1842 "ManifestWidget.c"
+#line 1840 "ManifestWidget.c"
 			{
 				GtkTreeIter iter = {0};
 				gchar* id = NULL;
@@ -1846,60 +1844,60 @@ gchar** plugins_manifest_list_view_get_selected_ids (PluginsManifestListView* se
 				GtkTreeIter _tmp6_ = {0};
 				gchar* _tmp7_ = NULL;
 				const gchar* _tmp8_ = NULL;
-#line 221 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 220 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp5_ = path;
-#line 221 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 220 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp7_ = plugins_manifest_list_view_get_id_at_path (self, _tmp5_, &_tmp6_);
-#line 221 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 220 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				iter = _tmp6_;
-#line 221 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 220 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				id = _tmp7_;
-#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 221 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_tmp8_ = id;
-#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 221 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				if (_tmp8_ != NULL) {
-#line 1862 "ManifestWidget.c"
+#line 1860 "ManifestWidget.c"
 					gchar** _tmp9_ = NULL;
 					gint _tmp9__length1 = 0;
 					const gchar* _tmp10_ = NULL;
 					gchar* _tmp11_ = NULL;
-#line 223 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp9_ = ids;
-#line 223 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp9__length1 = ids_length1;
-#line 223 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp10_ = id;
-#line 223 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_tmp11_ = g_strdup (_tmp10_);
-#line 223 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 222 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					_vala_array_add50 (&ids, &ids_length1, &_ids_size_, _tmp11_);
-#line 1877 "ManifestWidget.c"
+#line 1875 "ManifestWidget.c"
 				}
-#line 219 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 218 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_g_free0 (id);
-#line 219 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 218 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 				_gtk_tree_path_free0 (path);
-#line 1883 "ManifestWidget.c"
+#line 1881 "ManifestWidget.c"
 			}
 		}
 	}
-#line 226 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 225 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp12_ = ids;
-#line 226 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 225 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp12__length1 = ids_length1;
-#line 226 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 225 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	if (result_length1) {
-#line 226 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 225 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		*result_length1 = _tmp12__length1;
-#line 1895 "ManifestWidget.c"
+#line 1893 "ManifestWidget.c"
 	}
-#line 226 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 225 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	result = _tmp12_;
-#line 226 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 225 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	__g_list_free__gtk_tree_path_free0_0 (selected);
-#line 226 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 225 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	return result;
-#line 1903 "ManifestWidget.c"
+#line 1901 "ManifestWidget.c"
 }
 
 
@@ -1915,53 +1913,53 @@ static gchar* plugins_manifest_list_view_get_id_at_path (PluginsManifestListView
 	GtkTreeIter _tmp5_ = {0};
 	const gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
-#line 229 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 228 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	g_return_val_if_fail (PLUGINS_IS_MANIFEST_LIST_VIEW (self), NULL);
-#line 229 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 228 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	g_return_val_if_fail (path != NULL, NULL);
-#line 230 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 229 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp0_ = self->priv->store;
-#line 230 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 229 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp1_ = path;
-#line 230 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 229 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp3_ = gtk_tree_model_get_iter (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GTK_TYPE_TREE_MODEL, GtkTreeModel), &_tmp2_, _tmp1_);
-#line 230 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 229 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_vala_iter = _tmp2_;
-#line 230 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 229 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	if (!_tmp3_) {
-#line 231 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 230 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		result = NULL;
-#line 231 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 230 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		if (iter) {
-#line 231 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 230 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 			*iter = _vala_iter;
-#line 1939 "ManifestWidget.c"
+#line 1937 "ManifestWidget.c"
 		}
-#line 231 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 230 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		return result;
-#line 1943 "ManifestWidget.c"
+#line 1941 "ManifestWidget.c"
 	}
-#line 234 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 233 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp4_ = self->priv->store;
-#line 234 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 233 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp5_ = _vala_iter;
-#line 234 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 233 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	gtk_tree_model_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, GTK_TYPE_TREE_MODEL, GtkTreeModel), &_tmp5_, PLUGINS_MANIFEST_LIST_VIEW_COLUMN_ID, &id, -1);
-#line 236 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 235 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp6_ = id;
-#line 236 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 235 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp7_ = g_strdup (_tmp6_);
-#line 236 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 235 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	result = _tmp7_;
-#line 236 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 235 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	if (iter) {
-#line 236 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 235 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		*iter = _vala_iter;
-#line 1961 "ManifestWidget.c"
+#line 1959 "ManifestWidget.c"
 	}
-#line 236 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 235 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	return result;
-#line 1965 "ManifestWidget.c"
+#line 1963 "ManifestWidget.c"
 }
 
 
@@ -2000,174 +1998,174 @@ static gboolean plugins_manifest_list_view_real_button_press_event (GtkWidget* b
 	GtkTreeStore* _tmp31_ = NULL;
 	GtkTreeIter _tmp32_ = {0};
 	gboolean _tmp33_ = FALSE;
-#line 247 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 246 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PLUGINS_TYPE_MANIFEST_LIST_VIEW, PluginsManifestListView);
-#line 247 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 246 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp0_ = event;
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp1_ = _tmp0_->x;
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp2_ = event;
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp3_ = _tmp2_->y;
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp8_ = gtk_tree_view_get_path_at_pos (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), (gint) _tmp1_, (gint) _tmp3_, &_tmp4_, &_tmp5_, &_tmp6_, &_tmp7_);
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_gtk_tree_path_free0 (path);
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	path = _tmp4_;
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_g_object_unref0 (col);
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp9_ = _g_object_ref0 (_tmp5_);
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	col = _tmp9_;
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	cellx = _tmp6_;
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	celly = _tmp7_;
-#line 252 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 251 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	if (!_tmp8_) {
-#line 2034 "ManifestWidget.c"
+#line 2032 "ManifestWidget.c"
 		GdkEventButton* _tmp10_ = NULL;
 		gboolean _tmp11_ = FALSE;
-#line 254 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 253 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp10_ = event;
-#line 254 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 253 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp11_ = GTK_WIDGET_CLASS (plugins_manifest_list_view_parent_class)->button_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), gtk_widget_get_type (), GtkWidget), _tmp10_);
-#line 254 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 253 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		result = _tmp11_;
-#line 254 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 253 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_g_object_unref0 (col);
-#line 254 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 253 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_gtk_tree_path_free0 (path);
-#line 254 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 253 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		return result;
-#line 2049 "ManifestWidget.c"
+#line 2047 "ManifestWidget.c"
 	}
-#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 258 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp13_ = cellx;
-#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 258 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	if (_tmp13_ < (PLUGINS_MANIFEST_LIST_VIEW_ICON_SIZE + PLUGINS_MANIFEST_LIST_VIEW_ICON_X_PADDING)) {
-#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 258 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp12_ = TRUE;
-#line 2057 "ManifestWidget.c"
+#line 2055 "ManifestWidget.c"
 	} else {
 		gint _tmp14_ = 0;
-#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 258 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp14_ = cellx;
-#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 258 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp12_ = _tmp14_ > (2 * (PLUGINS_MANIFEST_LIST_VIEW_ICON_X_PADDING + PLUGINS_MANIFEST_LIST_VIEW_ICON_SIZE));
-#line 2064 "ManifestWidget.c"
+#line 2062 "ManifestWidget.c"
 	}
-#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 258 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	if (_tmp12_) {
-#line 2068 "ManifestWidget.c"
+#line 2066 "ManifestWidget.c"
 		GdkEventButton* _tmp15_ = NULL;
 		gboolean _tmp16_ = FALSE;
-#line 260 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp15_ = event;
-#line 260 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp16_ = GTK_WIDGET_CLASS (plugins_manifest_list_view_parent_class)->button_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), gtk_widget_get_type (), GtkWidget), _tmp15_);
-#line 260 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		result = _tmp16_;
-#line 260 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_g_object_unref0 (col);
-#line 260 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_gtk_tree_path_free0 (path);
-#line 260 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 259 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		return result;
-#line 2083 "ManifestWidget.c"
+#line 2081 "ManifestWidget.c"
 	}
-#line 263 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 262 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp17_ = path;
-#line 263 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 262 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp19_ = plugins_manifest_list_view_get_id_at_path (self, _tmp17_, &_tmp18_);
-#line 263 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 262 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	iter = _tmp18_;
-#line 263 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 262 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	id = _tmp19_;
-#line 264 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 263 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp20_ = id;
-#line 264 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 263 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	if (_tmp20_ == NULL) {
-#line 2097 "ManifestWidget.c"
+#line 2095 "ManifestWidget.c"
 		GdkEventButton* _tmp21_ = NULL;
 		gboolean _tmp22_ = FALSE;
-#line 265 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 264 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp21_ = event;
-#line 265 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 264 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp22_ = GTK_WIDGET_CLASS (plugins_manifest_list_view_parent_class)->button_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), gtk_widget_get_type (), GtkWidget), _tmp21_);
-#line 265 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 264 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		result = _tmp22_;
-#line 265 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 264 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_g_free0 (id);
-#line 265 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 264 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_g_object_unref0 (col);
-#line 265 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 264 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_gtk_tree_path_free0 (path);
-#line 265 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 264 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		return result;
-#line 2114 "ManifestWidget.c"
+#line 2112 "ManifestWidget.c"
 	}
-#line 268 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 267 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp23_ = id;
-#line 268 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 267 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp25_ = plugins_get_pluggable_enabled (_tmp23_, &_tmp24_);
-#line 268 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 267 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	enabled = _tmp24_;
-#line 268 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 267 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	if (!_tmp25_) {
-#line 2124 "ManifestWidget.c"
+#line 2122 "ManifestWidget.c"
 		GdkEventButton* _tmp26_ = NULL;
 		gboolean _tmp27_ = FALSE;
-#line 269 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 268 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp26_ = event;
-#line 269 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 268 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_tmp27_ = GTK_WIDGET_CLASS (plugins_manifest_list_view_parent_class)->button_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tree_view_get_type (), GtkTreeView), gtk_widget_get_type (), GtkWidget), _tmp26_);
-#line 269 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 268 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		result = _tmp27_;
-#line 269 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 268 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_g_free0 (id);
-#line 269 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 268 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_g_object_unref0 (col);
-#line 269 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 268 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		_gtk_tree_path_free0 (path);
-#line 269 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 268 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 		return result;
-#line 2141 "ManifestWidget.c"
+#line 2139 "ManifestWidget.c"
 	}
-#line 272 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 271 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp28_ = enabled;
-#line 272 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 271 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	enabled = !_tmp28_;
-#line 273 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 272 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp29_ = id;
-#line 273 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 272 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp30_ = enabled;
-#line 273 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 272 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	plugins_set_pluggable_enabled (_tmp29_, _tmp30_);
-#line 275 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 274 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp31_ = self->priv->store;
-#line 275 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 274 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp32_ = iter;
-#line 275 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 274 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_tmp33_ = enabled;
-#line 275 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 274 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	gtk_tree_store_set (_tmp31_, &_tmp32_, PLUGINS_MANIFEST_LIST_VIEW_COLUMN_ENABLED, _tmp33_, -1);
-#line 277 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 276 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	result = TRUE;
-#line 277 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 276 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_g_free0 (id);
-#line 277 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 276 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_g_object_unref0 (col);
-#line 277 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 276 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	_gtk_tree_path_free0 (path);
-#line 277 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
+#line 276 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	return result;
-#line 2171 "ManifestWidget.c"
+#line 2169 "ManifestWidget.c"
 }
 
 
@@ -2180,7 +2178,7 @@ static void plugins_manifest_list_view_class_init (PluginsManifestListViewClass 
 	((GtkWidgetClass *) klass)->button_press_event = plugins_manifest_list_view_real_button_press_event;
 #line 108 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	G_OBJECT_CLASS (klass)->finalize = plugins_manifest_list_view_finalize;
-#line 2184 "ManifestWidget.c"
+#line 2182 "ManifestWidget.c"
 }
 
 
@@ -2192,7 +2190,7 @@ static void plugins_manifest_list_view_instance_init (PluginsManifestListView * 
 	_tmp0_ = gtk_tree_store_new ((gint) PLUGINS_MANIFEST_LIST_VIEW_COLUMN_N_COLUMNS, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, gdk_pixbuf_get_type (), G_TYPE_STRING, G_TYPE_STRING);
 #line 122 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	self->priv->store = _tmp0_;
-#line 2196 "ManifestWidget.c"
+#line 2194 "ManifestWidget.c"
 }
 
 
@@ -2204,7 +2202,7 @@ static void plugins_manifest_list_view_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->store);
 #line 108 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 	G_OBJECT_CLASS (plugins_manifest_list_view_parent_class)->finalize (obj);
-#line 2208 "ManifestWidget.c"
+#line 2206 "ManifestWidget.c"
 }
 
 

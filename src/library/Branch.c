@@ -15,6 +15,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <gee.h>
+#include <gio/gio.h>
 
 
 #define SIDEBAR_TYPE_BRANCH (sidebar_branch_get_type ())
@@ -606,7 +607,7 @@ struct _LibraryHideablePageEntryPrivate {
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -616,8 +617,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -625,10 +624,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -740,13 +737,13 @@ struct _MediaPageClass {
 	void (*on_move_to_trash) (MediaPage* self);
 	void (*on_edit_title) (MediaPage* self);
 	void (*on_edit_comment) (MediaPage* self);
-	void (*on_display_titles) (MediaPage* self, GtkAction* action);
-	void (*on_display_comments) (MediaPage* self, GtkAction* action);
-	void (*on_display_ratings) (MediaPage* self, GtkAction* action);
-	void (*on_display_tags) (MediaPage* self, GtkAction* action);
+	void (*on_display_titles) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_comments) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_ratings) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_tags) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*get_config_photos_sort) (MediaPage* self, gboolean* sort_order, gint* sort_by);
 	void (*set_config_photos_sort) (MediaPage* self, gboolean sort_order, gint sort_by);
-	void (*on_sort_changed) (MediaPage* self);
+	void (*on_sort_changed) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*developer_changed) (MediaPage* self, RawDeveloper rd);
 	DataView* (*create_thumbnail) (MediaPage* self, DataSource* source);
 };
@@ -993,35 +990,35 @@ static gint _library_branch_comparator_gcompare_func (gconstpointer a, gconstpoi
 	result = library_branch_comparator ((SidebarEntry*) a, (SidebarEntry*) b);
 #line 30 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 997 "Branch.c"
+#line 994 "Branch.c"
 }
 
 
 static void _library_branch_on_flagged_visibility_changed_library_hideable_page_entry_visibility_changed (LibraryHideablePageEntry* _sender, gboolean visible, gpointer self) {
 #line 43 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	library_branch_on_flagged_visibility_changed ((LibraryBranch*) self);
-#line 1004 "Branch.c"
+#line 1001 "Branch.c"
 }
 
 
 static void _library_branch_on_last_imported_visibility_changed_library_hideable_page_entry_visibility_changed (LibraryHideablePageEntry* _sender, gboolean visible, gpointer self) {
 #line 46 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	library_branch_on_last_imported_visibility_changed ((LibraryBranch*) self);
-#line 1011 "Branch.c"
+#line 1008 "Branch.c"
 }
 
 
 static void _library_branch_on_import_queue_visibility_changed_library_hideable_page_entry_visibility_changed (LibraryHideablePageEntry* _sender, gboolean visible, gpointer self) {
 #line 49 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	library_branch_on_import_queue_visibility_changed ((LibraryBranch*) self);
-#line 1018 "Branch.c"
+#line 1015 "Branch.c"
 }
 
 
 static void _library_branch_on_offline_visibility_changed_library_hideable_page_entry_visibility_changed (LibraryHideablePageEntry* _sender, gboolean visible, gpointer self) {
 #line 52 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	library_branch_on_offline_visibility_changed ((LibraryBranch*) self);
-#line 1025 "Branch.c"
+#line 1022 "Branch.c"
 }
 
 
@@ -1140,14 +1137,14 @@ LibraryBranch* library_branch_construct (GType object_type) {
 	library_branch_on_offline_visibility_changed (self);
 #line 29 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return self;
-#line 1144 "Branch.c"
+#line 1141 "Branch.c"
 }
 
 
 LibraryBranch* library_branch_new (void) {
 #line 29 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return library_branch_construct (LIBRARY_TYPE_BRANCH);
-#line 1151 "Branch.c"
+#line 1148 "Branch.c"
 }
 
 
@@ -1177,7 +1174,7 @@ static void library_branch_insert (LibraryBranch* self, SidebarEntry* entry, gin
 	sidebar_branch_graft (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), _tmp3_, _tmp4_, NULL);
 #line 58 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	_g_object_unref0 (_tmp3_);
-#line 1181 "Branch.c"
+#line 1178 "Branch.c"
 }
 
 
@@ -1189,7 +1186,7 @@ static void library_branch_on_flagged_visibility_changed (LibraryBranch* self) {
 	_tmp0_ = self->priv->_flagged_entry;
 #line 62 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	library_branch_update_entry_visibility (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, LIBRARY_TYPE_HIDEABLE_PAGE_ENTRY, LibraryHideablePageEntry), (gint) LIBRARY_BRANCH_ENTRY_POSITION_FLAGGED);
-#line 1193 "Branch.c"
+#line 1190 "Branch.c"
 }
 
 
@@ -1201,7 +1198,7 @@ static void library_branch_on_last_imported_visibility_changed (LibraryBranch* s
 	_tmp0_ = self->priv->_last_imported_entry;
 #line 66 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	library_branch_update_entry_visibility (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, LIBRARY_TYPE_HIDEABLE_PAGE_ENTRY, LibraryHideablePageEntry), (gint) LIBRARY_BRANCH_ENTRY_POSITION_LAST_IMPORTED);
-#line 1205 "Branch.c"
+#line 1202 "Branch.c"
 }
 
 
@@ -1213,7 +1210,7 @@ static void library_branch_on_import_queue_visibility_changed (LibraryBranch* se
 	_tmp0_ = self->priv->_import_queue_entry;
 #line 70 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	library_branch_update_entry_visibility (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, LIBRARY_TYPE_HIDEABLE_PAGE_ENTRY, LibraryHideablePageEntry), (gint) LIBRARY_BRANCH_ENTRY_POSITION_IMPORT_QUEUE);
-#line 1217 "Branch.c"
+#line 1214 "Branch.c"
 }
 
 
@@ -1225,7 +1222,7 @@ static void library_branch_on_offline_visibility_changed (LibraryBranch* self) {
 	_tmp0_ = self->priv->_offline_entry;
 #line 74 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	library_branch_update_entry_visibility (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, LIBRARY_TYPE_HIDEABLE_PAGE_ENTRY, LibraryHideablePageEntry), (gint) LIBRARY_BRANCH_ENTRY_POSITION_OFFLINE);
-#line 1229 "Branch.c"
+#line 1226 "Branch.c"
 }
 
 
@@ -1245,7 +1242,7 @@ static void library_branch_update_entry_visibility (LibraryBranch* self, Library
 	_tmp2_ = _tmp1_;
 #line 78 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	if (_tmp2_) {
-#line 1249 "Branch.c"
+#line 1246 "Branch.c"
 		LibraryHideablePageEntry* _tmp3_ = NULL;
 		gboolean _tmp4_ = FALSE;
 #line 79 "/home/jens/Source/shotwell/src/library/Branch.vala"
@@ -1254,7 +1251,7 @@ static void library_branch_update_entry_visibility (LibraryBranch* self, Library
 		_tmp4_ = sidebar_branch_has_entry (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, SIDEBAR_TYPE_ENTRY, SidebarEntry));
 #line 79 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		if (!_tmp4_) {
-#line 1258 "Branch.c"
+#line 1255 "Branch.c"
 			LibraryHideablePageEntry* _tmp5_ = NULL;
 			gint _tmp6_ = 0;
 #line 80 "/home/jens/Source/shotwell/src/library/Branch.vala"
@@ -1263,7 +1260,7 @@ static void library_branch_update_entry_visibility (LibraryBranch* self, Library
 			_tmp6_ = position;
 #line 80 "/home/jens/Source/shotwell/src/library/Branch.vala"
 			library_branch_insert (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, SIDEBAR_TYPE_ENTRY, SidebarEntry), _tmp6_);
-#line 1267 "Branch.c"
+#line 1264 "Branch.c"
 		}
 	} else {
 		LibraryHideablePageEntry* _tmp7_ = NULL;
@@ -1274,13 +1271,13 @@ static void library_branch_update_entry_visibility (LibraryBranch* self, Library
 		_tmp8_ = sidebar_branch_has_entry (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, SIDEBAR_TYPE_ENTRY, SidebarEntry));
 #line 81 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		if (_tmp8_) {
-#line 1278 "Branch.c"
+#line 1275 "Branch.c"
 			LibraryHideablePageEntry* _tmp9_ = NULL;
 #line 82 "/home/jens/Source/shotwell/src/library/Branch.vala"
 			_tmp9_ = entry;
 #line 82 "/home/jens/Source/shotwell/src/library/Branch.vala"
 			sidebar_branch_prune (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, SIDEBAR_TYPE_ENTRY, SidebarEntry));
-#line 1284 "Branch.c"
+#line 1281 "Branch.c"
 		}
 	}
 }
@@ -1308,7 +1305,7 @@ static gint library_branch_comparator (SidebarEntry* a, SidebarEntry* b) {
 	result = ((gint) ((gintptr) _tmp1_)) - ((gint) ((gintptr) _tmp3_));
 #line 87 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 1312 "Branch.c"
+#line 1309 "Branch.c"
 }
 
 
@@ -1323,14 +1320,14 @@ LibraryPhotosEntry* library_branch_get_photos_entry (LibraryBranch* self) {
 	result = _tmp0_;
 #line 10 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 1327 "Branch.c"
+#line 1324 "Branch.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 10 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 1334 "Branch.c"
+#line 1331 "Branch.c"
 }
 
 
@@ -1349,7 +1346,7 @@ static void library_branch_set_photos_entry (LibraryBranch* self, LibraryPhotosE
 	self->priv->_photos_entry = _tmp1_;
 #line 10 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	g_object_notify ((GObject *) self, "photos-entry");
-#line 1353 "Branch.c"
+#line 1350 "Branch.c"
 }
 
 
@@ -1364,7 +1361,7 @@ LibraryFlaggedSidebarEntry* library_branch_get_flagged_entry (LibraryBranch* sel
 	result = _tmp0_;
 #line 11 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 1368 "Branch.c"
+#line 1365 "Branch.c"
 }
 
 
@@ -1383,7 +1380,7 @@ static void library_branch_set_flagged_entry (LibraryBranch* self, LibraryFlagge
 	self->priv->_flagged_entry = _tmp1_;
 #line 11 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	g_object_notify ((GObject *) self, "flagged-entry");
-#line 1387 "Branch.c"
+#line 1384 "Branch.c"
 }
 
 
@@ -1398,7 +1395,7 @@ LibraryLastImportSidebarEntry* library_branch_get_last_imported_entry (LibraryBr
 	result = _tmp0_;
 #line 12 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 1402 "Branch.c"
+#line 1399 "Branch.c"
 }
 
 
@@ -1417,7 +1414,7 @@ static void library_branch_set_last_imported_entry (LibraryBranch* self, Library
 	self->priv->_last_imported_entry = _tmp1_;
 #line 12 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	g_object_notify ((GObject *) self, "last-imported-entry");
-#line 1421 "Branch.c"
+#line 1418 "Branch.c"
 }
 
 
@@ -1432,7 +1429,7 @@ LibraryImportQueueSidebarEntry* library_branch_get_import_queue_entry (LibraryBr
 	result = _tmp0_;
 #line 13 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 1436 "Branch.c"
+#line 1433 "Branch.c"
 }
 
 
@@ -1451,7 +1448,7 @@ static void library_branch_set_import_queue_entry (LibraryBranch* self, LibraryI
 	self->priv->_import_queue_entry = _tmp1_;
 #line 13 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	g_object_notify ((GObject *) self, "import-queue-entry");
-#line 1455 "Branch.c"
+#line 1452 "Branch.c"
 }
 
 
@@ -1466,7 +1463,7 @@ LibraryOfflineSidebarEntry* library_branch_get_offline_entry (LibraryBranch* sel
 	result = _tmp0_;
 #line 14 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 1470 "Branch.c"
+#line 1467 "Branch.c"
 }
 
 
@@ -1485,7 +1482,7 @@ static void library_branch_set_offline_entry (LibraryBranch* self, LibraryOfflin
 	self->priv->_offline_entry = _tmp1_;
 #line 14 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	g_object_notify ((GObject *) self, "offline-entry");
-#line 1489 "Branch.c"
+#line 1486 "Branch.c"
 }
 
 
@@ -1500,7 +1497,7 @@ LibraryTrashSidebarEntry* library_branch_get_trash_entry (LibraryBranch* self) {
 	result = _tmp0_;
 #line 15 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 1504 "Branch.c"
+#line 1501 "Branch.c"
 }
 
 
@@ -1519,7 +1516,7 @@ static void library_branch_set_trash_entry (LibraryBranch* self, LibraryTrashSid
 	self->priv->_trash_entry = _tmp1_;
 #line 15 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	g_object_notify ((GObject *) self, "trash-entry");
-#line 1523 "Branch.c"
+#line 1520 "Branch.c"
 }
 
 
@@ -1546,14 +1543,14 @@ static void library_branch_class_init (LibraryBranchClass * klass) {
 	g_object_class_install_property (G_OBJECT_CLASS (klass), LIBRARY_BRANCH_OFFLINE_ENTRY, g_param_spec_object ("offline-entry", "offline-entry", "offline-entry", LIBRARY_TYPE_OFFLINE_SIDEBAR_ENTRY, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 #line 7 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	g_object_class_install_property (G_OBJECT_CLASS (klass), LIBRARY_BRANCH_TRASH_ENTRY, g_param_spec_object ("trash-entry", "trash-entry", "trash-entry", LIBRARY_TYPE_TRASH_SIDEBAR_ENTRY, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-#line 1550 "Branch.c"
+#line 1547 "Branch.c"
 }
 
 
 static void library_branch_instance_init (LibraryBranch * self) {
 #line 7 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	self->priv = LIBRARY_BRANCH_GET_PRIVATE (self);
-#line 1557 "Branch.c"
+#line 1554 "Branch.c"
 }
 
 
@@ -1575,7 +1572,7 @@ static void library_branch_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->_trash_entry);
 #line 7 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	G_OBJECT_CLASS (library_branch_parent_class)->finalize (obj);
-#line 1579 "Branch.c"
+#line 1576 "Branch.c"
 }
 
 
@@ -1632,13 +1629,13 @@ static void _vala_library_branch_get_property (GObject * object, guint property_
 		g_value_set_object (value, library_branch_get_trash_entry (self));
 #line 7 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		break;
-#line 1636 "Branch.c"
+#line 1633 "Branch.c"
 		default:
 #line 7 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 7 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		break;
-#line 1642 "Branch.c"
+#line 1639 "Branch.c"
 	}
 }
 
@@ -1684,13 +1681,13 @@ static void _vala_library_branch_set_property (GObject * object, guint property_
 		library_branch_set_trash_entry (self, g_value_get_object (value));
 #line 7 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		break;
-#line 1688 "Branch.c"
+#line 1685 "Branch.c"
 		default:
 #line 7 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 7 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		break;
-#line 1694 "Branch.c"
+#line 1691 "Branch.c"
 	}
 }
 
@@ -1701,14 +1698,14 @@ LibraryPhotosEntry* library_photos_entry_construct (GType object_type) {
 	self = (LibraryPhotosEntry*) sidebar_simple_page_entry_construct (object_type);
 #line 93 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return self;
-#line 1705 "Branch.c"
+#line 1702 "Branch.c"
 }
 
 
 LibraryPhotosEntry* library_photos_entry_new (void) {
 #line 93 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return library_photos_entry_construct (LIBRARY_TYPE_PHOTOS_ENTRY);
-#line 1712 "Branch.c"
+#line 1709 "Branch.c"
 }
 
 
@@ -1727,7 +1724,7 @@ static gchar* library_photos_entry_real_get_sidebar_name (SidebarSimplePageEntry
 	result = _tmp1_;
 #line 97 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 1731 "Branch.c"
+#line 1728 "Branch.c"
 }
 
 
@@ -1743,7 +1740,7 @@ static gchar* library_photos_entry_real_get_sidebar_icon (SidebarSimplePageEntry
 	result = _tmp0_;
 #line 101 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 1747 "Branch.c"
+#line 1744 "Branch.c"
 }
 
 
@@ -1761,7 +1758,7 @@ static Page* library_photos_entry_real_create_page (SidebarSimplePageEntry* base
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_PAGE, Page);
 #line 105 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 1765 "Branch.c"
+#line 1762 "Branch.c"
 }
 
 
@@ -1774,7 +1771,7 @@ static void library_photos_entry_class_init (LibraryPhotosEntryClass * klass) {
 	((SidebarSimplePageEntryClass *) klass)->get_sidebar_icon = library_photos_entry_real_get_sidebar_icon;
 #line 91 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	((SidebarSimplePageEntryClass *) klass)->create_page = library_photos_entry_real_create_page;
-#line 1778 "Branch.c"
+#line 1775 "Branch.c"
 }
 
 
@@ -1800,7 +1797,7 @@ LibraryHideablePageEntry* library_hideable_page_entry_construct (GType object_ty
 	self = (LibraryHideablePageEntry*) sidebar_simple_page_entry_construct (object_type);
 #line 125 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return self;
-#line 1804 "Branch.c"
+#line 1801 "Branch.c"
 }
 
 
@@ -1815,7 +1812,7 @@ gboolean library_hideable_page_entry_get_visible (LibraryHideablePageEntry* self
 	result = _tmp0_;
 #line 115 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return result;
-#line 1819 "Branch.c"
+#line 1816 "Branch.c"
 }
 
 
@@ -1834,7 +1831,7 @@ void library_hideable_page_entry_set_visible (LibraryHideablePageEntry* self, gb
 	if (_tmp0_ == _tmp1_) {
 #line 118 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		return;
-#line 1838 "Branch.c"
+#line 1835 "Branch.c"
 	}
 #line 120 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	_tmp2_ = value;
@@ -1846,7 +1843,7 @@ void library_hideable_page_entry_set_visible (LibraryHideablePageEntry* self, gb
 	g_signal_emit_by_name (self, "visibility-changed", _tmp3_);
 #line 116 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	g_object_notify ((GObject *) self, "visible");
-#line 1850 "Branch.c"
+#line 1847 "Branch.c"
 }
 
 
@@ -1865,7 +1862,7 @@ static void library_hideable_page_entry_class_init (LibraryHideablePageEntryClas
 	g_object_class_install_property (G_OBJECT_CLASS (klass), LIBRARY_HIDEABLE_PAGE_ENTRY_VISIBLE, g_param_spec_boolean ("visible", "visible", "visible", FALSE, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE));
 #line 109 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	g_signal_new ("visibility_changed", LIBRARY_TYPE_HIDEABLE_PAGE_ENTRY, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN, G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-#line 1869 "Branch.c"
+#line 1866 "Branch.c"
 }
 
 
@@ -1874,7 +1871,7 @@ static void library_hideable_page_entry_instance_init (LibraryHideablePageEntry 
 	self->priv = LIBRARY_HIDEABLE_PAGE_ENTRY_GET_PRIVATE (self);
 #line 113 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	self->priv->show_entry = FALSE;
-#line 1878 "Branch.c"
+#line 1875 "Branch.c"
 }
 
 
@@ -1884,7 +1881,7 @@ static void library_hideable_page_entry_finalize (GObject* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, LIBRARY_TYPE_HIDEABLE_PAGE_ENTRY, LibraryHideablePageEntry);
 #line 109 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	G_OBJECT_CLASS (library_hideable_page_entry_parent_class)->finalize (obj);
-#line 1888 "Branch.c"
+#line 1885 "Branch.c"
 }
 
 
@@ -1911,13 +1908,13 @@ static void _vala_library_hideable_page_entry_get_property (GObject * object, gu
 		g_value_set_boolean (value, library_hideable_page_entry_get_visible (self));
 #line 109 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		break;
-#line 1915 "Branch.c"
+#line 1912 "Branch.c"
 		default:
 #line 109 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 109 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		break;
-#line 1921 "Branch.c"
+#line 1918 "Branch.c"
 	}
 }
 
@@ -1933,13 +1930,13 @@ static void _vala_library_hideable_page_entry_set_property (GObject * object, gu
 		library_hideable_page_entry_set_visible (self, g_value_get_boolean (value));
 #line 109 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		break;
-#line 1937 "Branch.c"
+#line 1934 "Branch.c"
 		default:
 #line 109 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 109 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		break;
-#line 1943 "Branch.c"
+#line 1940 "Branch.c"
 	}
 }
 
@@ -1948,7 +1945,7 @@ LibraryMainPage* library_main_page_construct (GType object_type, ProgressMonitor
 	LibraryMainPage * self = NULL;
 #line 133 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	self = (LibraryMainPage*) collection_page_construct (object_type, LIBRARY_MAIN_PAGE_NAME);
-#line 1952 "Branch.c"
+#line 1949 "Branch.c"
 	{
 		GeeIterator* _sources_it = NULL;
 		MediaCollectionRegistry* _tmp0_ = NULL;
@@ -1977,7 +1974,7 @@ LibraryMainPage* library_main_page_construct (GType object_type, ProgressMonitor
 		_sources_it = _tmp5_;
 #line 135 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		while (TRUE) {
-#line 1981 "Branch.c"
+#line 1978 "Branch.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			MediaSourceCollection* sources = NULL;
@@ -2000,7 +1997,7 @@ LibraryMainPage* library_main_page_construct (GType object_type, ProgressMonitor
 			if (!_tmp7_) {
 #line 135 "/home/jens/Source/shotwell/src/library/Branch.vala"
 				break;
-#line 2004 "Branch.c"
+#line 2001 "Branch.c"
 			}
 #line 135 "/home/jens/Source/shotwell/src/library/Branch.vala"
 			_tmp8_ = _sources_it;
@@ -2034,22 +2031,22 @@ LibraryMainPage* library_main_page_construct (GType object_type, ProgressMonitor
 			_data_collection_unref0 (_tmp11_);
 #line 135 "/home/jens/Source/shotwell/src/library/Branch.vala"
 			_data_collection_unref0 (sources);
-#line 2038 "Branch.c"
+#line 2035 "Branch.c"
 		}
 #line 135 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		_g_object_unref0 (_sources_it);
-#line 2042 "Branch.c"
+#line 2039 "Branch.c"
 	}
 #line 132 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return self;
-#line 2046 "Branch.c"
+#line 2043 "Branch.c"
 }
 
 
 LibraryMainPage* library_main_page_new (ProgressMonitor monitor, void* monitor_target) {
 #line 132 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	return library_main_page_construct (LIBRARY_TYPE_MAIN_PAGE, monitor, monitor_target);
-#line 2053 "Branch.c"
+#line 2050 "Branch.c"
 }
 
 
@@ -2079,13 +2076,13 @@ static void library_main_page_real_get_config_photos_sort (MediaPage* base, gboo
 	if (sort_order) {
 #line 139 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		*sort_order = _vala_sort_order;
-#line 2083 "Branch.c"
+#line 2080 "Branch.c"
 	}
 #line 139 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	if (sort_by) {
 #line 139 "/home/jens/Source/shotwell/src/library/Branch.vala"
 		*sort_by = _vala_sort_by;
-#line 2089 "Branch.c"
+#line 2086 "Branch.c"
 	}
 }
 
@@ -2110,7 +2107,7 @@ static void library_main_page_real_set_config_photos_sort (MediaPage* base, gboo
 	configuration_facade_set_library_photos_sort (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp2_, _tmp3_);
 #line 144 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	_g_object_unref0 (_tmp1_);
-#line 2114 "Branch.c"
+#line 2111 "Branch.c"
 }
 
 
@@ -2121,7 +2118,7 @@ static void library_main_page_class_init (LibraryMainPageClass * klass) {
 	((MediaPageClass *) klass)->get_config_photos_sort = library_main_page_real_get_config_photos_sort;
 #line 129 "/home/jens/Source/shotwell/src/library/Branch.vala"
 	((MediaPageClass *) klass)->set_config_photos_sort = library_main_page_real_set_config_photos_sort;
-#line 2125 "Branch.c"
+#line 2122 "Branch.c"
 }
 
 

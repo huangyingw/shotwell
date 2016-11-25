@@ -15,7 +15,7 @@
 #include <string.h>
 #include <gee.h>
 #include <gdk/gdk.h>
-#include <glib/gi18n-lib.h>
+#include <gio/gio.h>
 
 
 #define TYPE_VIEW_MANAGER (view_manager_get_type ())
@@ -371,6 +371,16 @@ typedef struct _ConfigurationFacadeClass ConfigurationFacadeClass;
 typedef struct _ConfigFacade ConfigFacade;
 typedef struct _ConfigFacadeClass ConfigFacadeClass;
 
+#define TYPE_APP_WINDOW (app_window_get_type ())
+#define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
+#define APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APP_WINDOW, AppWindowClass))
+#define IS_APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APP_WINDOW))
+#define IS_APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APP_WINDOW))
+#define APP_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APP_WINDOW, AppWindowClass))
+
+typedef struct _AppWindow AppWindow;
+typedef struct _AppWindowClass AppWindowClass;
+
 #define TYPE_COMMAND_MANAGER (command_manager_get_type ())
 #define COMMAND_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_COMMAND_MANAGER, CommandManager))
 #define COMMAND_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_COMMAND_MANAGER, CommandManagerClass))
@@ -421,16 +431,6 @@ typedef struct _SingleDataSourceCommandClass SingleDataSourceCommandClass;
 typedef struct _DeleteSavedSearchCommand DeleteSavedSearchCommand;
 typedef struct _DeleteSavedSearchCommandClass DeleteSavedSearchCommandClass;
 #define _command_manager_unref0(var) ((var == NULL) ? NULL : (var = (command_manager_unref (var), NULL)))
-
-#define TYPE_APP_WINDOW (app_window_get_type ())
-#define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
-#define APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APP_WINDOW, AppWindowClass))
-#define IS_APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APP_WINDOW))
-#define IS_APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APP_WINDOW))
-#define APP_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APP_WINDOW, AppWindowClass))
-
-typedef struct _AppWindow AppWindow;
-typedef struct _AppWindowClass AppWindowClass;
 
 #define TYPE_LIBRARY_WINDOW (library_window_get_type ())
 #define LIBRARY_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_LIBRARY_WINDOW, LibraryWindow))
@@ -491,7 +491,7 @@ struct _SavedSearchManagerPrivate {
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -501,8 +501,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -510,10 +508,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -625,13 +621,13 @@ struct _MediaPageClass {
 	void (*on_move_to_trash) (MediaPage* self);
 	void (*on_edit_title) (MediaPage* self);
 	void (*on_edit_comment) (MediaPage* self);
-	void (*on_display_titles) (MediaPage* self, GtkAction* action);
-	void (*on_display_comments) (MediaPage* self, GtkAction* action);
-	void (*on_display_ratings) (MediaPage* self, GtkAction* action);
-	void (*on_display_tags) (MediaPage* self, GtkAction* action);
+	void (*on_display_titles) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_comments) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_ratings) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_tags) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*get_config_photos_sort) (MediaPage* self, gboolean* sort_order, gint* sort_by);
 	void (*set_config_photos_sort) (MediaPage* self, gboolean sort_order, gint sort_by);
-	void (*on_sort_changed) (MediaPage* self);
+	void (*on_sort_changed) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*developer_changed) (MediaPage* self, RawDeveloper rd);
 	DataView* (*create_thumbnail) (MediaPage* self, DataSource* source);
 };
@@ -731,6 +727,12 @@ GType raw_developer_get_type (void) G_GNUC_CONST;
 enum  {
 	SAVED_SEARCH_PAGE_DUMMY_PROPERTY
 };
+static void saved_search_page_on_rename_search (SavedSearchPage* self);
+static void _saved_search_page_on_rename_search_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void saved_search_page_on_edit_search (SavedSearchPage* self);
+static void _saved_search_page_on_edit_search_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void saved_search_page_on_delete_search (SavedSearchPage* self);
+static void _saved_search_page_on_delete_search_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
 SavedSearchPage* saved_search_page_new (SavedSearch* search);
 SavedSearchPage* saved_search_page_construct (GType object_type, SavedSearch* search);
 gchar* data_object_get_name (DataObject* self);
@@ -781,18 +783,10 @@ static void saved_search_page_real_set_config_photos_sort (MediaPage* base, gboo
 void configuration_facade_set_library_photos_sort (ConfigurationFacade* self, gboolean sort_order, gint sort_by);
 static void saved_search_page_real_init_collect_ui_filenames (Page* base, GeeList* ui_filenames);
 void page_init_collect_ui_filenames (Page* self, GeeList* ui_filenames);
-static GtkActionEntry* saved_search_page_real_init_collect_action_entries (Page* base, int* result_length1);
-GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length1);
-#define TRANSLATABLE "translatable"
-static void saved_search_page_on_rename_search (SavedSearchPage* self);
-static void _saved_search_page_on_rename_search_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add147 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-static void saved_search_page_on_edit_search (SavedSearchPage* self);
-static void _saved_search_page_on_edit_search_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add148 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-static void saved_search_page_on_delete_search (SavedSearchPage* self);
-static void _saved_search_page_on_delete_search_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add149 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
+static void saved_search_page_real_add_actions (Page* base);
+void page_add_actions (Page* self);
+GType app_window_get_type (void) G_GNUC_CONST;
+AppWindow* app_window_get_instance (void);
 gboolean dialogs_confirm_delete_saved_search (SavedSearch* search);
 gpointer command_manager_ref (gpointer instance);
 void command_manager_unref (gpointer instance);
@@ -809,7 +803,6 @@ DeleteSavedSearchCommand* delete_saved_search_command_construct (GType object_ty
 GType page_command_get_type (void) G_GNUC_CONST;
 GType single_data_source_command_get_type (void) G_GNUC_CONST;
 GType delete_saved_search_command_get_type (void) G_GNUC_CONST;
-GType app_window_get_type (void) G_GNUC_CONST;
 GType library_window_get_type (void) G_GNUC_CONST;
 LibraryWindow* library_window_get_app (void);
 void library_window_rename_search_in_sidebar (LibraryWindow* self, SavedSearch* search);
@@ -824,18 +817,16 @@ SavedSearchDialog* saved_search_dialog_new_edit_existing (SavedSearch* saved_sea
 SavedSearchDialog* saved_search_dialog_construct_edit_existing (GType object_type, SavedSearch* saved_search);
 void saved_search_dialog_show (SavedSearchDialog* self);
 static void saved_search_page_real_update_actions (Page* base, gint selected_count, gint count);
-void page_set_action_details (Page* self, const gchar* name, const gchar* label, const gchar* tooltip, gboolean sensitive);
-#define RESOURCES_RENAME_SEARCH_MENU _ ("Re_name…")
-#define RESOURCES_EDIT_SEARCH_MENU _ ("_Edit…")
-#define RESOURCES_DELETE_SEARCH_MENU _ ("_Delete")
+void page_set_action_sensitive (Page* self, const gchar* name, gboolean sensitive);
 void page_update_actions (Page* self, gint selected_count, gint count);
 static void saved_search_page_finalize (GObject* obj);
 
+static const GActionEntry SAVED_SEARCH_PAGE_entries[3] = {{"RenameSearch", _saved_search_page_on_rename_search_gsimple_action_activate_callback}, {"EditSearch", _saved_search_page_on_edit_search_gsimple_action_activate_callback}, {"DeleteSearch", _saved_search_page_on_delete_search_gsimple_action_activate_callback}};
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 12 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 839 "SavedSearchPage.c"
+#line 830 "SavedSearchPage.c"
 }
 
 
@@ -862,14 +853,14 @@ SavedSearchManager* saved_search_manager_construct (GType object_type, SavedSear
 	self->priv->search = _tmp2_;
 #line 10 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	return self;
-#line 866 "SavedSearchPage.c"
+#line 857 "SavedSearchPage.c"
 }
 
 
 SavedSearchManager* saved_search_manager_new (SavedSearchPage* owner, SavedSearch* search) {
 #line 10 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	return saved_search_manager_construct (TYPE_SAVED_SEARCH_MANAGER, owner, search);
-#line 873 "SavedSearchPage.c"
+#line 864 "SavedSearchPage.c"
 }
 
 
@@ -893,7 +884,7 @@ static gboolean saved_search_manager_real_include_in_view (ViewManager* base, Da
 	result = _tmp2_;
 #line 16 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	return result;
-#line 897 "SavedSearchPage.c"
+#line 888 "SavedSearchPage.c"
 }
 
 
@@ -906,14 +897,14 @@ static void saved_search_manager_class_init (SavedSearchManagerClass * klass) {
 	g_type_class_add_private (klass, sizeof (SavedSearchManagerPrivate));
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	((ViewManagerClass *) klass)->include_in_view = saved_search_manager_real_include_in_view;
-#line 910 "SavedSearchPage.c"
+#line 901 "SavedSearchPage.c"
 }
 
 
 static void saved_search_manager_instance_init (SavedSearchManager * self) {
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	self->priv = SAVED_SEARCH_MANAGER_GET_PRIVATE (self);
-#line 917 "SavedSearchPage.c"
+#line 908 "SavedSearchPage.c"
 }
 
 
@@ -925,7 +916,7 @@ static void saved_search_manager_finalize (ViewManager* obj) {
 	_g_object_unref0 (self->priv->search);
 #line 8 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	VIEW_MANAGER_CLASS (saved_search_manager_parent_class)->finalize (obj);
-#line 929 "SavedSearchPage.c"
+#line 920 "SavedSearchPage.c"
 }
 
 
@@ -938,6 +929,27 @@ GType saved_search_manager_get_type (void) {
 		g_once_init_leave (&saved_search_manager_type_id__volatile, saved_search_manager_type_id);
 	}
 	return saved_search_manager_type_id__volatile;
+}
+
+
+static void _saved_search_page_on_rename_search_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 50 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+	saved_search_page_on_rename_search ((SavedSearchPage*) self);
+#line 939 "SavedSearchPage.c"
+}
+
+
+static void _saved_search_page_on_edit_search_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 50 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+	saved_search_page_on_edit_search ((SavedSearchPage*) self);
+#line 946 "SavedSearchPage.c"
+}
+
+
+static void _saved_search_page_on_delete_search_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 50 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+	saved_search_page_on_delete_search ((SavedSearchPage*) self);
+#line 953 "SavedSearchPage.c"
 }
 
 
@@ -968,7 +980,7 @@ SavedSearchPage* saved_search_page_construct (GType object_type, SavedSearch* se
 	_g_object_unref0 (self->priv->search);
 #line 28 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	self->priv->search = _tmp4_;
-#line 972 "SavedSearchPage.c"
+#line 984 "SavedSearchPage.c"
 	{
 		GeeIterator* _sources_it = NULL;
 		MediaCollectionRegistry* _tmp5_ = NULL;
@@ -997,7 +1009,7 @@ SavedSearchPage* saved_search_page_construct (GType object_type, SavedSearch* se
 		_sources_it = _tmp10_;
 #line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		while (TRUE) {
-#line 1001 "SavedSearchPage.c"
+#line 1013 "SavedSearchPage.c"
 			GeeIterator* _tmp11_ = NULL;
 			gboolean _tmp12_ = FALSE;
 			MediaSourceCollection* sources = NULL;
@@ -1019,7 +1031,7 @@ SavedSearchPage* saved_search_page_construct (GType object_type, SavedSearch* se
 			if (!_tmp12_) {
 #line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 				break;
-#line 1023 "SavedSearchPage.c"
+#line 1035 "SavedSearchPage.c"
 			}
 #line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 			_tmp13_ = _sources_it;
@@ -1051,24 +1063,24 @@ SavedSearchPage* saved_search_page_construct (GType object_type, SavedSearch* se
 			_data_collection_unref0 (_tmp16_);
 #line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 			_data_collection_unref0 (sources);
-#line 1055 "SavedSearchPage.c"
+#line 1067 "SavedSearchPage.c"
 		}
 #line 31 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		_g_object_unref0 (_sources_it);
-#line 1059 "SavedSearchPage.c"
+#line 1071 "SavedSearchPage.c"
 	}
 #line 34 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	checkerboard_page_init_page_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), "/SearchContextMenu");
+	checkerboard_page_init_page_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), "SearchContextMenu");
 #line 26 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	return self;
-#line 1065 "SavedSearchPage.c"
+#line 1077 "SavedSearchPage.c"
 }
 
 
 SavedSearchPage* saved_search_page_new (SavedSearch* search) {
 #line 26 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	return saved_search_page_construct (TYPE_SAVED_SEARCH_PAGE, search);
-#line 1072 "SavedSearchPage.c"
+#line 1084 "SavedSearchPage.c"
 }
 
 
@@ -1098,13 +1110,13 @@ static void saved_search_page_real_get_config_photos_sort (MediaPage* base, gboo
 	if (sort_order) {
 #line 37 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		*sort_order = _vala_sort_order;
-#line 1102 "SavedSearchPage.c"
+#line 1114 "SavedSearchPage.c"
 	}
 #line 37 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	if (sort_by) {
 #line 37 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		*sort_by = _vala_sort_by;
-#line 1108 "SavedSearchPage.c"
+#line 1120 "SavedSearchPage.c"
 	}
 }
 
@@ -1129,7 +1141,7 @@ static void saved_search_page_real_set_config_photos_sort (MediaPage* base, gboo
 	configuration_facade_set_library_photos_sort (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp2_, _tmp3_);
 #line 42 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1133 "SavedSearchPage.c"
+#line 1145 "SavedSearchPage.c"
 }
 
 
@@ -1149,229 +1161,64 @@ static void saved_search_page_real_init_collect_ui_filenames (Page* base, GeeLis
 	_tmp1_ = ui_filenames;
 #line 47 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_COLLECTION, GeeCollection), "savedsearch.ui");
-#line 1153 "SavedSearchPage.c"
+#line 1165 "SavedSearchPage.c"
 }
 
 
-static void _saved_search_page_on_rename_search_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	saved_search_page_on_rename_search ((SavedSearchPage*) self);
-#line 1160 "SavedSearchPage.c"
-}
-
-
-static void _vala_array_add147 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	if ((*length) == (*size)) {
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1171 "SavedSearchPage.c"
-	}
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	(*array)[(*length)++] = *value;
-#line 1175 "SavedSearchPage.c"
-}
-
-
-static void _saved_search_page_on_edit_search_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	saved_search_page_on_edit_search ((SavedSearchPage*) self);
-#line 1182 "SavedSearchPage.c"
-}
-
-
-static void _vala_array_add148 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 57 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	if ((*length) == (*size)) {
-#line 57 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 57 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1193 "SavedSearchPage.c"
-	}
-#line 57 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	(*array)[(*length)++] = *value;
-#line 1197 "SavedSearchPage.c"
-}
-
-
-static void _saved_search_page_on_delete_search_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	saved_search_page_on_delete_search ((SavedSearchPage*) self);
-#line 1204 "SavedSearchPage.c"
-}
-
-
-static void _vala_array_add149 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	if ((*length) == (*size)) {
-#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1215 "SavedSearchPage.c"
-	}
-#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	(*array)[(*length)++] = *value;
-#line 1219 "SavedSearchPage.c"
-}
-
-
-static GtkActionEntry* saved_search_page_real_init_collect_action_entries (Page* base, int* result_length1) {
+static void saved_search_page_real_add_actions (Page* base) {
 	SavedSearchPage * self;
-	GtkActionEntry* result = NULL;
-	GtkActionEntry* actions = NULL;
-	gint _tmp0_ = 0;
-	GtkActionEntry* _tmp1_ = NULL;
-	gint actions_length1 = 0;
-	gint _actions_size_ = 0;
-	GtkActionEntry rename_search = {0};
-	GtkActionEntry _tmp2_ = {0};
-	GtkActionEntry* _tmp3_ = NULL;
-	gint _tmp3__length1 = 0;
-	GtkActionEntry _tmp4_ = {0};
-	GtkActionEntry edit_search = {0};
-	GtkActionEntry _tmp5_ = {0};
-	GtkActionEntry* _tmp6_ = NULL;
-	gint _tmp6__length1 = 0;
-	GtkActionEntry _tmp7_ = {0};
-	GtkActionEntry delete_search = {0};
-	GtkActionEntry _tmp8_ = {0};
-	GtkActionEntry* _tmp9_ = NULL;
-	gint _tmp9__length1 = 0;
-	GtkActionEntry _tmp10_ = {0};
-	GtkActionEntry* _tmp11_ = NULL;
-	gint _tmp11__length1 = 0;
-#line 50 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+	AppWindow* _tmp0_ = NULL;
+	AppWindow* _tmp1_ = NULL;
+#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SAVED_SEARCH_PAGE, SavedSearchPage);
-#line 51 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp1_ = PAGE_CLASS (saved_search_page_parent_class)->init_collect_action_entries (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_COLLECTION_PAGE, CollectionPage), TYPE_PAGE, Page), &_tmp0_);
-#line 51 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	actions = _tmp1_;
-#line 51 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	actions_length1 = _tmp0_;
-#line 51 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_actions_size_ = actions_length1;
-#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp2_.name = "RenameSearch";
-#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp2_.stock_id = NULL;
-#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp2_.label = TRANSLATABLE;
-#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp2_.accelerator = NULL;
-#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp2_.tooltip = NULL;
-#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp2_.callback = (GCallback) _saved_search_page_on_rename_search_gtk_action_callback;
-#line 53 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	rename_search = _tmp2_;
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp3_ = actions;
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp3__length1 = actions_length1;
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp4_ = rename_search;
-#line 54 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_vala_array_add147 (&actions, &actions_length1, &_actions_size_, &_tmp4_);
-#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp5_.name = "EditSearch";
-#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp5_.stock_id = NULL;
-#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp5_.label = TRANSLATABLE;
-#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp5_.accelerator = NULL;
-#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp5_.tooltip = NULL;
-#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp5_.callback = (GCallback) _saved_search_page_on_edit_search_gtk_action_callback;
-#line 56 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	edit_search = _tmp5_;
 #line 57 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp6_ = actions;
-#line 57 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp6__length1 = actions_length1;
-#line 57 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp7_ = edit_search;
-#line 57 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_vala_array_add148 (&actions, &actions_length1, &_actions_size_, &_tmp7_);
+	PAGE_CLASS (saved_search_page_parent_class)->add_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_COLLECTION_PAGE, CollectionPage), TYPE_PAGE, Page));
 #line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp8_.name = "DeleteSearch";
+	_tmp0_ = app_window_get_instance ();
 #line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp8_.stock_id = NULL;
+	_tmp1_ = _tmp0_;
 #line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp8_.label = TRANSLATABLE;
+	g_action_map_add_action_entries (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, g_action_map_get_type (), GActionMap), SAVED_SEARCH_PAGE_entries, G_N_ELEMENTS (SAVED_SEARCH_PAGE_entries), self);
 #line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp8_.accelerator = NULL;
-#line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp8_.tooltip = NULL;
-#line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp8_.callback = (GCallback) _saved_search_page_on_delete_search_gtk_action_callback;
-#line 59 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	delete_search = _tmp8_;
-#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp9_ = actions;
-#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp9__length1 = actions_length1;
-#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp10_ = delete_search;
-#line 60 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_vala_array_add149 (&actions, &actions_length1, &_actions_size_, &_tmp10_);
-#line 62 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp11_ = actions;
-#line 62 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	_tmp11__length1 = actions_length1;
-#line 62 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	if (result_length1) {
-#line 62 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-		*result_length1 = _tmp11__length1;
-#line 1332 "SavedSearchPage.c"
-	}
-#line 62 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	result = _tmp11_;
-#line 62 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	return result;
-#line 1338 "SavedSearchPage.c"
+	_g_object_unref0 (_tmp1_);
+#line 1185 "SavedSearchPage.c"
 }
 
 
 static void saved_search_page_on_delete_search (SavedSearchPage* self) {
 	SavedSearch* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 65 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 62 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_PAGE (self));
-#line 66 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 63 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_tmp0_ = self->priv->search;
-#line 66 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 63 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_tmp1_ = dialogs_confirm_delete_saved_search (_tmp0_);
-#line 66 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 63 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	if (_tmp1_) {
-#line 1353 "SavedSearchPage.c"
+#line 1200 "SavedSearchPage.c"
 		CommandManager* _tmp2_ = NULL;
 		CommandManager* _tmp3_ = NULL;
 		SavedSearch* _tmp4_ = NULL;
 		DeleteSavedSearchCommand* _tmp5_ = NULL;
 		DeleteSavedSearchCommand* _tmp6_ = NULL;
-#line 67 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 64 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		_tmp2_ = app_window_get_command_manager ();
-#line 67 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 64 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		_tmp3_ = _tmp2_;
-#line 67 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 64 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		_tmp4_ = self->priv->search;
-#line 67 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 64 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		_tmp5_ = delete_saved_search_command_new (_tmp4_);
-#line 67 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 64 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		_tmp6_ = _tmp5_;
-#line 67 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 64 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		command_manager_execute (_tmp3_, G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_COMMAND, Command));
-#line 67 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 64 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		_g_object_unref0 (_tmp6_);
-#line 67 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 64 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 		_command_manager_unref0 (_tmp3_);
-#line 1375 "SavedSearchPage.c"
+#line 1222 "SavedSearchPage.c"
 	}
 }
 
@@ -1380,19 +1227,19 @@ static void saved_search_page_on_rename_search (SavedSearchPage* self) {
 	LibraryWindow* _tmp0_ = NULL;
 	LibraryWindow* _tmp1_ = NULL;
 	SavedSearch* _tmp2_ = NULL;
-#line 70 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 67 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_PAGE (self));
-#line 71 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 68 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_tmp0_ = library_window_get_app ();
-#line 71 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 68 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_tmp1_ = _tmp0_;
-#line 71 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 68 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_tmp2_ = self->priv->search;
-#line 71 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 68 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	library_window_rename_search_in_sidebar (_tmp1_, _tmp2_);
-#line 71 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 68 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1396 "SavedSearchPage.c"
+#line 1243 "SavedSearchPage.c"
 }
 
 
@@ -1400,19 +1247,19 @@ static void saved_search_page_on_edit_search (SavedSearchPage* self) {
 	SavedSearchDialog* ssd = NULL;
 	SavedSearch* _tmp0_ = NULL;
 	SavedSearchDialog* _tmp1_ = NULL;
-#line 74 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 71 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	g_return_if_fail (IS_SAVED_SEARCH_PAGE (self));
-#line 75 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_tmp0_ = self->priv->search;
-#line 75 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_tmp1_ = saved_search_dialog_new_edit_existing (_tmp0_);
-#line 75 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 72 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	ssd = _tmp1_;
-#line 76 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 73 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	saved_search_dialog_show (ssd);
-#line 74 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 71 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_saved_search_dialog_unref0 (ssd);
-#line 1416 "SavedSearchPage.c"
+#line 1263 "SavedSearchPage.c"
 }
 
 
@@ -1420,21 +1267,21 @@ static void saved_search_page_real_update_actions (Page* base, gint selected_cou
 	SavedSearchPage * self;
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
-#line 79 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 76 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SAVED_SEARCH_PAGE, SavedSearchPage);
-#line 80 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	page_set_action_details (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RenameSearch", RESOURCES_RENAME_SEARCH_MENU, NULL, TRUE);
-#line 83 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	page_set_action_details (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "EditSearch", RESOURCES_EDIT_SEARCH_MENU, NULL, TRUE);
-#line 86 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	page_set_action_details (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "DeleteSearch", RESOURCES_DELETE_SEARCH_MENU, NULL, TRUE);
-#line 89 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 77 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RenameSearch", TRUE);
+#line 78 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "EditSearch", TRUE);
+#line 79 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "DeleteSearch", TRUE);
+#line 81 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_tmp0_ = selected_count;
-#line 89 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	_tmp1_ = count;
-#line 89 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	PAGE_CLASS (saved_search_page_parent_class)->update_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_COLLECTION_PAGE, CollectionPage), TYPE_PAGE, Page), _tmp0_, _tmp1_);
-#line 1438 "SavedSearchPage.c"
+#line 1285 "SavedSearchPage.c"
 }
 
 
@@ -1450,19 +1297,19 @@ static void saved_search_page_class_init (SavedSearchPageClass * klass) {
 #line 21 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	((PageClass *) klass)->init_collect_ui_filenames = saved_search_page_real_init_collect_ui_filenames;
 #line 21 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
-	((PageClass *) klass)->init_collect_action_entries = saved_search_page_real_init_collect_action_entries;
+	((PageClass *) klass)->add_actions = saved_search_page_real_add_actions;
 #line 21 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	((PageClass *) klass)->update_actions = saved_search_page_real_update_actions;
 #line 21 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = saved_search_page_finalize;
-#line 1459 "SavedSearchPage.c"
+#line 1306 "SavedSearchPage.c"
 }
 
 
 static void saved_search_page_instance_init (SavedSearchPage * self) {
 #line 21 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	self->priv = SAVED_SEARCH_PAGE_GET_PRIVATE (self);
-#line 1466 "SavedSearchPage.c"
+#line 1313 "SavedSearchPage.c"
 }
 
 
@@ -1474,7 +1321,7 @@ static void saved_search_page_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->search);
 #line 21 "/home/jens/Source/shotwell/src/searches/SavedSearchPage.vala"
 	G_OBJECT_CLASS (saved_search_page_parent_class)->finalize (obj);
-#line 1478 "SavedSearchPage.c"
+#line 1325 "SavedSearchPage.c"
 }
 
 

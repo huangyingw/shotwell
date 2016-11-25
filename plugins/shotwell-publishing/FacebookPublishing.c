@@ -10203,7 +10203,7 @@ static PublishingFacebookGraphSessionGraphUploadMessage* publishing_facebook_gra
 #line 1350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp34__length1 = payload_length1;
 #line 1350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp35_ = soup_buffer_new (SOUP_MEMORY_TEMPORARY, _tmp34_, _tmp34__length1);
+	_tmp35_ = soup_buffer_new_with_owner (_tmp34_, _tmp34__length1, self, NULL);
 #line 1350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	image_data = _tmp35_;
 #line 1352 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"

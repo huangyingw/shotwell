@@ -2124,9 +2124,9 @@ enum  {
 };
 static void work_sniffer_real_execute (BackgroundJob* base);
 static void work_sniffer_sniff_job (WorkSniffer* self, BatchImportJob* job, GError** error);
-static gint __lambda11_ (WorkSniffer* self, FileToPrepare* a, FileToPrepare* b);
+static gint __lambda10_ (WorkSniffer* self, FileToPrepare* a, FileToPrepare* b);
 gint utf8_cs_compare (void* a, void* b);
-static gint ___lambda11__gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self);
+static gint ___lambda10__gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self);
 void disassemble_filename (const gchar* basename, gchar** name, gchar** ext);
 gboolean is_string_empty (const gchar* s);
 gpointer photo_file_format_properties_ref (gpointer instance);
@@ -5770,14 +5770,14 @@ static gboolean batch_import_report_failure (BatchImport* self, BatchImportResul
 #line 557 "/home/jens/Source/shotwell/src/BatchImport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5773 "BatchImport.c"
-					goto __catch410_g_error;
+					goto __catch407_g_error;
 				}
 #line 557 "/home/jens/Source/shotwell/src/BatchImport.vala"
 				filesize = _tmp11_;
 #line 5778 "BatchImport.c"
 			}
-			goto __finally410;
-			__catch410_g_error:
+			goto __finally407;
+			__catch407_g_error:
 			{
 				GError* err = NULL;
 				BatchImportResult* _tmp15_ = NULL;
@@ -5810,7 +5810,7 @@ static gboolean batch_import_report_failure (BatchImport* self, BatchImportResul
 				_g_error_free0 (err);
 #line 5812 "BatchImport.c"
 			}
-			__finally410:
+			__finally407:
 #line 555 "/home/jens/Source/shotwell/src/BatchImport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 555 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -8899,11 +8899,11 @@ static void batch_import_on_import_files_completed (BatchImport* self, Backgroun
 #line 1043 "/home/jens/Source/shotwell/src/BatchImport.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8898 "BatchImport.c"
-						goto __catch411_g_error;
+						goto __catch408_g_error;
 					}
 				}
-				goto __finally411;
-				__catch411_g_error:
+				goto __finally408;
+				__catch408_g_error:
 				{
 					GError* e = NULL;
 					BackingPhotoRow* _tmp68_ = NULL;
@@ -8929,7 +8929,7 @@ static void batch_import_on_import_files_completed (BatchImport* self, Backgroun
 					_g_error_free0 (e);
 #line 8926 "BatchImport.c"
 				}
-				__finally411:
+				__finally408:
 #line 1042 "/home/jens/Source/shotwell/src/BatchImport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1042 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -9894,11 +9894,11 @@ static void batch_import_flush_ready_sources (BatchImport* self) {
 #line 1196 "/home/jens/Source/shotwell/src/BatchImport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 9891 "BatchImport.c"
-					goto __catch412_g_error;
+					goto __catch409_g_error;
 				}
 			}
-			goto __finally412;
-			__catch412_g_error:
+			goto __finally409;
+			__catch409_g_error:
 			{
 				GError* err = NULL;
 				MediaSource* _tmp65_ = NULL;
@@ -9929,7 +9929,7 @@ static void batch_import_flush_ready_sources (BatchImport* self) {
 				_g_error_free0 (err);
 #line 9924 "BatchImport.c"
 			}
-			__finally412:
+			__finally409:
 #line 1195 "/home/jens/Source/shotwell/src/BatchImport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1195 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -11766,7 +11766,7 @@ WorkSniffer* work_sniffer_new (BatchImport* owner, GeeIterable* jobs, Completion
 }
 
 
-static gint __lambda11_ (WorkSniffer* self, FileToPrepare* a, FileToPrepare* b) {
+static gint __lambda10_ (WorkSniffer* self, FileToPrepare* a, FileToPrepare* b) {
 	gint result = 0;
 	FileToPrepare* file_a = NULL;
 	FileToPrepare* _tmp0_ = NULL;
@@ -11821,9 +11821,9 @@ static gint __lambda11_ (WorkSniffer* self, FileToPrepare* a, FileToPrepare* b) 
 }
 
 
-static gint ___lambda11__gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self) {
+static gint ___lambda10__gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self) {
 	gint result;
-	result = __lambda11_ ((WorkSniffer*) self, (FileToPrepare*) a, (FileToPrepare*) b);
+	result = __lambda10_ ((WorkSniffer*) self, (FileToPrepare*) a, (FileToPrepare*) b);
 #line 1483 "/home/jens/Source/shotwell/src/BatchImport.vala"
 	return result;
 #line 11823 "BatchImport.c"
@@ -11931,11 +11931,11 @@ static void work_sniffer_real_execute (BackgroundJob* base) {
 #line 1465 "/home/jens/Source/shotwell/src/BatchImport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 11927 "BatchImport.c"
-					goto __catch413_g_error;
+					goto __catch410_g_error;
 				}
 			}
-			goto __finally413;
-			__catch413_g_error:
+			goto __finally410;
+			__catch410_g_error:
 			{
 				GError* err = NULL;
 				BatchImportJob* _tmp17_ = NULL;
@@ -11976,7 +11976,7 @@ static void work_sniffer_real_execute (BackgroundJob* base) {
 				_g_error_free0 (err);
 #line 11971 "BatchImport.c"
 			}
-			__finally413:
+			__finally410:
 #line 1464 "/home/jens/Source/shotwell/src/BatchImport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1464 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -12101,7 +12101,7 @@ static void work_sniffer_real_execute (BackgroundJob* base) {
 #line 1483 "/home/jens/Source/shotwell/src/BatchImport.vala"
 	_tmp42_ = sorted;
 #line 1483 "/home/jens/Source/shotwell/src/BatchImport.vala"
-	gee_list_sort (_tmp42_, ___lambda11__gcompare_data_func, background_job_ref (self), background_job_unref);
+	gee_list_sort (_tmp42_, ___lambda10__gcompare_data_func, background_job_ref (self), background_job_unref);
 #line 12099 "BatchImport.c"
 	{
 		gint i = 0;
@@ -12676,11 +12676,11 @@ static void work_sniffer_sniff_job (WorkSniffer* self, BatchImportJob* job, GErr
 #line 1556 "/home/jens/Source/shotwell/src/BatchImport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 12672 "BatchImport.c"
-				goto __catch414_g_error;
+				goto __catch411_g_error;
 			}
 		}
-		goto __finally414;
-		__catch414_g_error:
+		goto __finally411;
+		__catch411_g_error:
 		{
 			GError* err = NULL;
 			BatchImportJob* _tmp26_ = NULL;
@@ -12724,7 +12724,7 @@ static void work_sniffer_sniff_job (WorkSniffer* self, BatchImportJob* job, GErr
 			_g_error_free0 (err);
 #line 12719 "BatchImport.c"
 		}
-		__finally414:
+		__finally411:
 #line 1555 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1555 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -13013,11 +13013,11 @@ void work_sniffer_search_dir (WorkSniffer* self, BatchImportJob* job, GFile* dir
 #line 1593 "/home/jens/Source/shotwell/src/BatchImport.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 13009 "BatchImport.c"
-					goto __catch415_g_error;
+					goto __catch412_g_error;
 				}
 			}
-			goto __finally415;
-			__catch415_g_error:
+			goto __finally412;
+			__catch412_g_error:
 			{
 				GError* err = NULL;
 				BatchImportJob* _tmp24_ = NULL;
@@ -13061,7 +13061,7 @@ void work_sniffer_search_dir (WorkSniffer* self, BatchImportJob* job, GFile* dir
 				_g_error_free0 (err);
 #line 13056 "BatchImport.c"
 			}
-			__finally415:
+			__finally412:
 #line 1592 "/home/jens/Source/shotwell/src/BatchImport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1592 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -14580,7 +14580,7 @@ static gboolean prepare_files_job_create_file (PrepareFilesJob* self, BatchImpor
 #line 1762 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 14576 "BatchImport.c"
-			goto __catch416_g_error;
+			goto __catch413_g_error;
 		}
 #line 1762 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		if (!_tmp0_) {
@@ -14635,8 +14635,8 @@ static gboolean prepare_files_job_create_file (PrepareFilesJob* self, BatchImpor
 #line 14629 "BatchImport.c"
 		}
 	}
-	goto __finally416;
-	__catch416_g_error:
+	goto __finally413;
+	__catch413_g_error:
 	{
 		GError* err = NULL;
 		BatchImportJob* _tmp12_ = NULL;
@@ -14697,7 +14697,7 @@ static gboolean prepare_files_job_create_file (PrepareFilesJob* self, BatchImpor
 		return result;
 #line 14692 "BatchImport.c"
 	}
-	__finally416:
+	__finally413:
 #line 1761 "/home/jens/Source/shotwell/src/BatchImport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1761 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -14953,7 +14953,7 @@ static ImportResult prepare_files_job_prepare_file (PrepareFilesJob* self, Batch
 #line 1808 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 14949 "BatchImport.c"
-			goto __catch417_g_error;
+			goto __catch414_g_error;
 		}
 #line 1808 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		_tmp20_ = _tmp17_;
@@ -14967,8 +14967,8 @@ static ImportResult prepare_files_job_prepare_file (PrepareFilesJob* self, Batch
 		_g_free0 (_tmp17_);
 #line 14962 "BatchImport.c"
 	}
-	goto __finally417;
-	__catch417_g_error:
+	goto __finally414;
+	__catch414_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp21_ = NULL;
@@ -15024,7 +15024,7 @@ static ImportResult prepare_files_job_prepare_file (PrepareFilesJob* self, Batch
 		return result;
 #line 15019 "BatchImport.c"
 	}
-	__finally417:
+	__finally414:
 #line 1807 "/home/jens/Source/shotwell/src/BatchImport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1807 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -15135,7 +15135,7 @@ static ImportResult prepare_files_job_prepare_file (PrepareFilesJob* self, Batch
 #line 1831 "/home/jens/Source/shotwell/src/BatchImport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 15131 "BatchImport.c"
-				goto __catch418_g_error;
+				goto __catch415_g_error;
 			}
 #line 1831 "/home/jens/Source/shotwell/src/BatchImport.vala"
 			_tmp44_ = _tmp41_;
@@ -15149,8 +15149,8 @@ static ImportResult prepare_files_job_prepare_file (PrepareFilesJob* self, Batch
 			_media_metadata_unref0 (_tmp41_);
 #line 15144 "BatchImport.c"
 		}
-		goto __finally418;
-		__catch418_g_error:
+		goto __finally415;
+		__catch415_g_error:
 		{
 			GError* err = NULL;
 			GFile* _tmp45_ = NULL;
@@ -15181,7 +15181,7 @@ static ImportResult prepare_files_job_prepare_file (PrepareFilesJob* self, Batch
 			_g_error_free0 (err);
 #line 15175 "BatchImport.c"
 		}
-		__finally418:
+		__finally415:
 #line 1830 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1830 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -15374,14 +15374,14 @@ static ImportResult prepare_files_job_prepare_file (PrepareFilesJob* self, Batch
 #line 1850 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 15369 "BatchImport.c"
-			goto __catch419_g_error;
+			goto __catch416_g_error;
 		}
 #line 1850 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		filesize = _tmp69_;
 #line 15374 "BatchImport.c"
 	}
-	goto __finally419;
-	__catch419_g_error:
+	goto __finally416;
+	__catch416_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp75_ = NULL;
@@ -15437,7 +15437,7 @@ static ImportResult prepare_files_job_prepare_file (PrepareFilesJob* self, Batch
 		return result;
 #line 15431 "BatchImport.c"
 	}
-	__finally419:
+	__finally416:
 #line 1849 "/home/jens/Source/shotwell/src/BatchImport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1849 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -15832,11 +15832,11 @@ BatchImportResult* ready_for_import_abort (ReadyForImport* self) {
 #line 1898 "/home/jens/Source/shotwell/src/BatchImport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 15827 "BatchImport.c"
-				goto __catch420_g_error;
+				goto __catch417_g_error;
 			}
 		}
-		goto __finally420;
-		__catch420_g_error:
+		goto __finally417;
+		__catch417_g_error:
 		{
 			GError* err = NULL;
 			GFile* _tmp9_ = NULL;
@@ -15867,7 +15867,7 @@ BatchImportResult* ready_for_import_abort (ReadyForImport* self) {
 			_g_error_free0 (err);
 #line 15860 "BatchImport.c"
 		}
-		__finally420:
+		__finally417:
 #line 1897 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1897 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -16384,7 +16384,7 @@ static void prepared_file_import_job_real_execute (BackgroundJob* base) {
 #line 1945 "/home/jens/Source/shotwell/src/BatchImport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 16378 "BatchImport.c"
-				goto __catch421_g_error;
+				goto __catch418_g_error;
 			}
 #line 1945 "/home/jens/Source/shotwell/src/BatchImport.vala"
 			_tmp14_ = _tmp10_;
@@ -16481,7 +16481,7 @@ static void prepared_file_import_job_real_execute (BackgroundJob* base) {
 #line 1956 "/home/jens/Source/shotwell/src/BatchImport.vala"
 					_g_object_unref0 (_tmp10_);
 #line 16475 "BatchImport.c"
-					goto __catch421_g_error;
+					goto __catch418_g_error;
 				}
 #line 1956 "/home/jens/Source/shotwell/src/BatchImport.vala"
 				_tmp34_ = _tmp30_;
@@ -16499,8 +16499,8 @@ static void prepared_file_import_job_real_execute (BackgroundJob* base) {
 			_g_object_unref0 (_tmp10_);
 #line 16492 "BatchImport.c"
 		}
-		goto __finally421;
-		__catch421_g_error:
+		goto __finally418;
+		__catch418_g_error:
 		{
 			GError* err = NULL;
 			gchar* _tmp35_ = NULL;
@@ -16591,7 +16591,7 @@ static void prepared_file_import_job_real_execute (BackgroundJob* base) {
 			return;
 #line 16584 "BatchImport.c"
 		}
-		__finally421:
+		__finally418:
 #line 1943 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1943 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -16778,11 +16778,11 @@ static void prepared_file_import_job_real_execute (BackgroundJob* base) {
 #line 1989 "/home/jens/Source/shotwell/src/BatchImport.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 16772 "BatchImport.c"
-				goto __catch422_g_error;
+				goto __catch419_g_error;
 			}
 		}
-		goto __finally422;
-		__catch422_g_error:
+		goto __finally419;
+		__catch419_g_error:
 		{
 			GError* err = NULL;
 			GFile* _tmp91_ = NULL;
@@ -16812,7 +16812,7 @@ static void prepared_file_import_job_real_execute (BackgroundJob* base) {
 			_g_error_free0 (err);
 #line 16805 "BatchImport.c"
 		}
-		__finally422:
+		__finally419:
 #line 1988 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1988 "/home/jens/Source/shotwell/src/BatchImport.vala"
@@ -17393,7 +17393,7 @@ static void thumbnail_writer_job_real_execute (BackgroundJob* base) {
 #line 2039 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 17387 "BatchImport.c"
-			goto __catch423_g_error;
+			goto __catch420_g_error;
 		}
 #line 2041 "/home/jens/Source/shotwell/src/BatchImport.vala"
 		_tmp4_ = self->completed_import_source;
@@ -17403,8 +17403,8 @@ static void thumbnail_writer_job_real_execute (BackgroundJob* base) {
 		_tmp5_->result = IMPORT_RESULT_SUCCESS;
 #line 17396 "BatchImport.c"
 	}
-	goto __finally423;
-	__catch423_g_error:
+	goto __finally420;
+	__catch420_g_error:
 	{
 		GError* err = NULL;
 		CompletedImportObject* _tmp6_ = NULL;
@@ -17429,7 +17429,7 @@ static void thumbnail_writer_job_real_execute (BackgroundJob* base) {
 		_g_error_free0 (err);
 #line 17422 "BatchImport.c"
 	}
-	__finally423:
+	__finally420:
 #line 2038 "/home/jens/Source/shotwell/src/BatchImport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2038 "/home/jens/Source/shotwell/src/BatchImport.vala"

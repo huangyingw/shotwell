@@ -440,8 +440,7 @@ enum  {
 };
 PixbufCachePixbufCacheBatch* pixbuf_cache_pixbuf_cache_batch_new (void);
 PixbufCachePixbufCacheBatch* pixbuf_cache_pixbuf_cache_batch_construct (GType object_type);
-gint background_job_job_priority_compare_func (void* a, void* b);
-static gint _background_job_job_priority_compare_func_gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self);
+gint background_job_job_priority_compare_func (BackgroundJobJobPriority a, BackgroundJobJobPriority b);
 enum  {
 	PIXBUF_CACHE_FETCH_JOB_DUMMY_PROPERTY
 };
@@ -474,14 +473,14 @@ static void pixbuf_cache_finalize (GObject* obj);
 static void _pixbuf_cache_on_sources_altered_data_collection_items_altered (DataCollection* _sender, GeeMap* items, gpointer self) {
 #line 111 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	pixbuf_cache_on_sources_altered ((PixbufCache*) self, items);
-#line 478 "PixbufCache.c"
+#line 477 "PixbufCache.c"
 }
 
 
 static void _pixbuf_cache_on_sources_removed_data_collection_items_removed (DataCollection* _sender, GeeIterable* removed, gpointer self) {
 #line 112 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	pixbuf_cache_on_sources_removed ((PixbufCache*) self, removed);
-#line 485 "PixbufCache.c"
+#line 484 "PixbufCache.c"
 }
 
 
@@ -500,7 +499,7 @@ GType pixbuf_cache_photo_type_get_type (void) {
 static gpointer _data_collection_ref0 (gpointer self) {
 #line 87 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return self ? data_collection_ref (self) : NULL;
-#line 504 "PixbufCache.c"
+#line 503 "PixbufCache.c"
 }
 
 
@@ -559,7 +558,7 @@ PixbufCache* pixbuf_cache_construct (GType object_type, SourceCollection* source
 	_tmp7_ = pixbuf_cache_background_workers;
 #line 95 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp7_ == NULL) {
-#line 563 "PixbufCache.c"
+#line 562 "PixbufCache.c"
 		guint _tmp8_ = 0U;
 		Workers* _tmp9_ = NULL;
 #line 96 "/home/jens/Source/shotwell/src/PixbufCache.vala"
@@ -570,19 +569,19 @@ PixbufCache* pixbuf_cache_construct (GType object_type, SourceCollection* source
 		_workers_unref0 (pixbuf_cache_background_workers);
 #line 96 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		pixbuf_cache_background_workers = _tmp9_;
-#line 574 "PixbufCache.c"
+#line 573 "PixbufCache.c"
 	}
 #line 100 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp10_ = type;
 #line 100 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp10_ != PIXBUF_CACHE_PHOTO_TYPE_MASTER) {
-#line 580 "PixbufCache.c"
+#line 579 "PixbufCache.c"
 		SourceCollection* _tmp11_ = NULL;
 #line 101 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp11_ = sources;
 #line 101 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_DATA_COLLECTION, DataCollection), "items-altered", (GCallback) _pixbuf_cache_on_sources_altered_data_collection_items_altered, self, 0);
-#line 586 "PixbufCache.c"
+#line 585 "PixbufCache.c"
 	}
 #line 102 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp12_ = sources;
@@ -590,14 +589,14 @@ PixbufCache* pixbuf_cache_construct (GType object_type, SourceCollection* source
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_DATA_COLLECTION, DataCollection), "items-removed", (GCallback) _pixbuf_cache_on_sources_removed_data_collection_items_removed, self, 0);
 #line 85 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return self;
-#line 594 "PixbufCache.c"
+#line 593 "PixbufCache.c"
 }
 
 
 PixbufCache* pixbuf_cache_new (SourceCollection* sources, PixbufCachePhotoType type, Scaling* scaling, gint max_count, PixbufCacheCacheFilter filter, void* filter_target) {
 #line 85 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return pixbuf_cache_construct (TYPE_PIXBUF_CACHE, sources, type, scaling, max_count, filter, filter_target);
-#line 601 "PixbufCache.c"
+#line 600 "PixbufCache.c"
 }
 
 
@@ -611,7 +610,7 @@ void pixbuf_cache_get_scaling (PixbufCache* self, Scaling* result) {
 	*result = _tmp0_;
 #line 119 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return;
-#line 615 "PixbufCache.c"
+#line 614 "PixbufCache.c"
 }
 
 
@@ -631,21 +630,21 @@ GdkPixbuf* pixbuf_cache_get_ready_pixbuf (PixbufCache* self, Photo* photo) {
 	result = _tmp1_;
 #line 124 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return result;
-#line 635 "PixbufCache.c"
+#line 634 "PixbufCache.c"
 }
 
 
 static gpointer _g_error_copy0 (gpointer self) {
 #line 146 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return self ? g_error_copy (self) : NULL;
-#line 642 "PixbufCache.c"
+#line 641 "PixbufCache.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 148 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 649 "PixbufCache.c"
+#line 648 "PixbufCache.c"
 }
 
 
@@ -691,13 +690,13 @@ GdkPixbuf* pixbuf_cache_fetch (PixbufCache* self, Photo* photo, GError** error) 
 	_g_object_unref0 (_tmp2_);
 #line 130 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp4_) {
-#line 695 "PixbufCache.c"
+#line 694 "PixbufCache.c"
 		Photo* _tmp5_ = NULL;
 #line 131 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp5_ = photo;
 #line 131 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		pixbuf_cache_decache (self, _tmp5_);
-#line 701 "PixbufCache.c"
+#line 700 "PixbufCache.c"
 	}
 #line 133 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp6_ = photo;
@@ -713,7 +712,7 @@ GdkPixbuf* pixbuf_cache_fetch (PixbufCache* self, Photo* photo, GError** error) 
 		result = pixbuf;
 #line 139 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		return result;
-#line 717 "PixbufCache.c"
+#line 716 "PixbufCache.c"
 	}
 #line 142 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp9_ = self->priv->in_progress;
@@ -727,7 +726,7 @@ GdkPixbuf* pixbuf_cache_fetch (PixbufCache* self, Photo* photo, GError** error) 
 	_tmp12_ = job;
 #line 143 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp12_ != NULL) {
-#line 731 "PixbufCache.c"
+#line 730 "PixbufCache.c"
 		PixbufCacheFetchJob* _tmp13_ = NULL;
 		PixbufCacheFetchJob* _tmp14_ = NULL;
 		GError* _tmp15_ = NULL;
@@ -744,7 +743,7 @@ GdkPixbuf* pixbuf_cache_fetch (PixbufCache* self, Photo* photo, GError** error) 
 		_tmp15_ = _tmp14_->err;
 #line 145 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		if (_tmp15_ != NULL) {
-#line 748 "PixbufCache.c"
+#line 747 "PixbufCache.c"
 			PixbufCacheFetchJob* _tmp16_ = NULL;
 			GError* _tmp17_ = NULL;
 			GError* _tmp18_ = NULL;
@@ -764,7 +763,7 @@ GdkPixbuf* pixbuf_cache_fetch (PixbufCache* self, Photo* photo, GError** error) 
 			_g_object_unref0 (pixbuf);
 #line 146 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			return NULL;
-#line 768 "PixbufCache.c"
+#line 767 "PixbufCache.c"
 		}
 #line 148 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp19_ = job;
@@ -780,7 +779,7 @@ GdkPixbuf* pixbuf_cache_fetch (PixbufCache* self, Photo* photo, GError** error) 
 		_g_object_unref0 (pixbuf);
 #line 148 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		return result;
-#line 784 "PixbufCache.c"
+#line 783 "PixbufCache.c"
 	}
 #line 155 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp23_ = photo;
@@ -800,7 +799,7 @@ GdkPixbuf* pixbuf_cache_fetch (PixbufCache* self, Photo* photo, GError** error) 
 		_g_object_unref0 (pixbuf);
 #line 155 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		return NULL;
-#line 804 "PixbufCache.c"
+#line 803 "PixbufCache.c"
 	}
 #line 155 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp26_ = _tmp22_;
@@ -824,7 +823,7 @@ GdkPixbuf* pixbuf_cache_fetch (PixbufCache* self, Photo* photo, GError** error) 
 	_background_job_unref0 (job);
 #line 159 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return result;
-#line 828 "PixbufCache.c"
+#line 827 "PixbufCache.c"
 }
 
 
@@ -843,14 +842,14 @@ void pixbuf_cache_drop (PixbufCache* self, Photo* photo) {
 	_tmp1_ = photo;
 #line 167 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	pixbuf_cache_decache (self, _tmp1_);
-#line 847 "PixbufCache.c"
+#line 846 "PixbufCache.c"
 }
 
 
 static void _pixbuf_cache_on_fetched_completion_callback (BackgroundJob* job, gpointer self) {
 #line 192 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	pixbuf_cache_on_fetched ((PixbufCache*) self, job);
-#line 854 "PixbufCache.c"
+#line 853 "PixbufCache.c"
 }
 
 
@@ -893,19 +892,19 @@ void pixbuf_cache_prefetch (PixbufCache* self, Photo* photo, BackgroundJobJobPri
 	_g_object_unref0 (_tmp2_);
 #line 174 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp4_) {
-#line 897 "PixbufCache.c"
+#line 896 "PixbufCache.c"
 		Photo* _tmp5_ = NULL;
 #line 175 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp5_ = photo;
 #line 175 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		pixbuf_cache_decache (self, _tmp5_);
-#line 903 "PixbufCache.c"
+#line 902 "PixbufCache.c"
 	}
 #line 177 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp7_ = force;
 #line 177 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (!_tmp7_) {
-#line 909 "PixbufCache.c"
+#line 908 "PixbufCache.c"
 		GeeHashMap* _tmp8_ = NULL;
 		Photo* _tmp9_ = NULL;
 		gboolean _tmp10_ = FALSE;
@@ -917,15 +916,15 @@ void pixbuf_cache_prefetch (PixbufCache* self, Photo* photo, BackgroundJobJobPri
 		_tmp10_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp9_);
 #line 177 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp6_ = _tmp10_;
-#line 921 "PixbufCache.c"
+#line 920 "PixbufCache.c"
 	} else {
 #line 177 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp6_ = FALSE;
-#line 925 "PixbufCache.c"
+#line 924 "PixbufCache.c"
 	}
 #line 177 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp6_) {
-#line 929 "PixbufCache.c"
+#line 928 "PixbufCache.c"
 		Photo* _tmp11_ = NULL;
 #line 178 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp11_ = photo;
@@ -933,7 +932,7 @@ void pixbuf_cache_prefetch (PixbufCache* self, Photo* photo, BackgroundJobJobPri
 		pixbuf_cache_prioritize (self, _tmp11_);
 #line 180 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		return;
-#line 937 "PixbufCache.c"
+#line 936 "PixbufCache.c"
 	}
 #line 183 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp12_ = self->priv->in_progress;
@@ -945,7 +944,7 @@ void pixbuf_cache_prefetch (PixbufCache* self, Photo* photo, BackgroundJobJobPri
 	if (_tmp14_) {
 #line 184 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		return;
-#line 949 "PixbufCache.c"
+#line 948 "PixbufCache.c"
 	}
 #line 186 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp16_ = self->priv->filter;
@@ -953,7 +952,7 @@ void pixbuf_cache_prefetch (PixbufCache* self, Photo* photo, BackgroundJobJobPri
 	_tmp16__target = self->priv->filter_target;
 #line 186 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp16_ != NULL) {
-#line 957 "PixbufCache.c"
+#line 956 "PixbufCache.c"
 		PixbufCacheCacheFilter _tmp17_ = NULL;
 		void* _tmp17__target = NULL;
 		Photo* _tmp18_ = NULL;
@@ -968,17 +967,17 @@ void pixbuf_cache_prefetch (PixbufCache* self, Photo* photo, BackgroundJobJobPri
 		_tmp19_ = _tmp17_ (_tmp18_, _tmp17__target);
 #line 186 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp15_ = !_tmp19_;
-#line 972 "PixbufCache.c"
+#line 971 "PixbufCache.c"
 	} else {
 #line 186 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp15_ = FALSE;
-#line 976 "PixbufCache.c"
+#line 975 "PixbufCache.c"
 	}
 #line 186 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp15_) {
 #line 187 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		return;
-#line 982 "PixbufCache.c"
+#line 981 "PixbufCache.c"
 	}
 #line 189 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	job = NULL;
@@ -988,7 +987,7 @@ void pixbuf_cache_prefetch (PixbufCache* self, Photo* photo, BackgroundJobJobPri
 	switch (_tmp20_) {
 #line 190 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		case PIXBUF_CACHE_PHOTO_TYPE_BASELINE:
-#line 992 "PixbufCache.c"
+#line 991 "PixbufCache.c"
 		{
 			BackgroundJobJobPriority _tmp21_ = 0;
 			Photo* _tmp22_ = NULL;
@@ -1008,11 +1007,11 @@ void pixbuf_cache_prefetch (PixbufCache* self, Photo* photo, BackgroundJobJobPri
 			job = G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, PIXBUF_CACHE_TYPE_FETCH_JOB, PixbufCacheFetchJob);
 #line 193 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			break;
-#line 1012 "PixbufCache.c"
+#line 1011 "PixbufCache.c"
 		}
 #line 190 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		case PIXBUF_CACHE_PHOTO_TYPE_MASTER:
-#line 1016 "PixbufCache.c"
+#line 1015 "PixbufCache.c"
 		{
 			BackgroundJobJobPriority _tmp25_ = 0;
 			Photo* _tmp26_ = NULL;
@@ -1032,7 +1031,7 @@ void pixbuf_cache_prefetch (PixbufCache* self, Photo* photo, BackgroundJobJobPri
 			job = G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, PIXBUF_CACHE_TYPE_FETCH_JOB, PixbufCacheFetchJob);
 #line 197 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			break;
-#line 1036 "PixbufCache.c"
+#line 1035 "PixbufCache.c"
 		}
 		default:
 		{
@@ -1041,7 +1040,7 @@ void pixbuf_cache_prefetch (PixbufCache* self, Photo* photo, BackgroundJobJobPri
 			_tmp29_ = self->priv->type;
 #line 200 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			g_error ("PixbufCache.vala:200: Unknown photo type: %d", (gint) _tmp29_);
-#line 1045 "PixbufCache.c"
+#line 1044 "PixbufCache.c"
 		}
 	}
 #line 203 "/home/jens/Source/shotwell/src/PixbufCache.vala"
@@ -1060,7 +1059,7 @@ void pixbuf_cache_prefetch (PixbufCache* self, Photo* photo, BackgroundJobJobPri
 	workers_enqueue (_tmp33_, G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, TYPE_BACKGROUND_JOB, BackgroundJob));
 #line 172 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_background_job_unref0 (job);
-#line 1064 "PixbufCache.c"
+#line 1063 "PixbufCache.c"
 }
 
 
@@ -1069,7 +1068,7 @@ void pixbuf_cache_prefetch_many (PixbufCache* self, GeeCollection* photos, Backg
 	g_return_if_fail (IS_PIXBUF_CACHE (self));
 #line 210 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	g_return_if_fail (GEE_IS_COLLECTION (photos));
-#line 1073 "PixbufCache.c"
+#line 1072 "PixbufCache.c"
 	{
 		GeeIterator* _photo_it = NULL;
 		GeeCollection* _tmp0_ = NULL;
@@ -1082,7 +1081,7 @@ void pixbuf_cache_prefetch_many (PixbufCache* self, GeeCollection* photos, Backg
 		_photo_it = _tmp1_;
 #line 212 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		while (TRUE) {
-#line 1086 "PixbufCache.c"
+#line 1085 "PixbufCache.c"
 			GeeIterator* _tmp2_ = NULL;
 			gboolean _tmp3_ = FALSE;
 			Photo* photo = NULL;
@@ -1099,7 +1098,7 @@ void pixbuf_cache_prefetch_many (PixbufCache* self, GeeCollection* photos, Backg
 			if (!_tmp3_) {
 #line 212 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 				break;
-#line 1103 "PixbufCache.c"
+#line 1102 "PixbufCache.c"
 			}
 #line 212 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_tmp4_ = _photo_it;
@@ -1117,11 +1116,11 @@ void pixbuf_cache_prefetch_many (PixbufCache* self, GeeCollection* photos, Backg
 			pixbuf_cache_prefetch (self, _tmp6_, _tmp7_, _tmp8_);
 #line 212 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_g_object_unref0 (photo);
-#line 1121 "PixbufCache.c"
+#line 1120 "PixbufCache.c"
 		}
 #line 212 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_g_object_unref0 (_photo_it);
-#line 1125 "PixbufCache.c"
+#line 1124 "PixbufCache.c"
 	}
 }
 
@@ -1131,7 +1130,7 @@ void pixbuf_cache_prefetch_batch (PixbufCache* self, PixbufCachePixbufCacheBatch
 	g_return_if_fail (IS_PIXBUF_CACHE (self));
 #line 217 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	g_return_if_fail (PIXBUF_CACHE_IS_PIXBUF_CACHE_BATCH (batch));
-#line 1135 "PixbufCache.c"
+#line 1134 "PixbufCache.c"
 	{
 		GeeIterator* _priority_it = NULL;
 		PixbufCachePixbufCacheBatch* _tmp0_ = NULL;
@@ -1155,7 +1154,7 @@ void pixbuf_cache_prefetch_batch (PixbufCache* self, PixbufCachePixbufCacheBatch
 		_priority_it = _tmp4_;
 #line 218 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		while (TRUE) {
-#line 1159 "PixbufCache.c"
+#line 1158 "PixbufCache.c"
 			GeeIterator* _tmp5_ = NULL;
 			gboolean _tmp6_ = FALSE;
 			BackgroundJobJobPriority priority = 0;
@@ -1169,7 +1168,7 @@ void pixbuf_cache_prefetch_batch (PixbufCache* self, PixbufCachePixbufCacheBatch
 			if (!_tmp6_) {
 #line 218 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 				break;
-#line 1173 "PixbufCache.c"
+#line 1172 "PixbufCache.c"
 			}
 #line 218 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_tmp7_ = _priority_it;
@@ -1177,7 +1176,7 @@ void pixbuf_cache_prefetch_batch (PixbufCache* self, PixbufCachePixbufCacheBatch
 			_tmp8_ = gee_iterator_get (_tmp7_);
 #line 218 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			priority = (BackgroundJobJobPriority) ((gintptr) _tmp8_);
-#line 1181 "PixbufCache.c"
+#line 1180 "PixbufCache.c"
 			{
 				GeeIterator* _photo_it = NULL;
 				PixbufCachePixbufCacheBatch* _tmp9_ = NULL;
@@ -1204,7 +1203,7 @@ void pixbuf_cache_prefetch_batch (PixbufCache* self, PixbufCachePixbufCacheBatch
 				_photo_it = _tmp14_;
 #line 219 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 				while (TRUE) {
-#line 1208 "PixbufCache.c"
+#line 1207 "PixbufCache.c"
 					GeeIterator* _tmp15_ = NULL;
 					gboolean _tmp16_ = FALSE;
 					Photo* photo = NULL;
@@ -1221,7 +1220,7 @@ void pixbuf_cache_prefetch_batch (PixbufCache* self, PixbufCachePixbufCacheBatch
 					if (!_tmp16_) {
 #line 219 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 						break;
-#line 1225 "PixbufCache.c"
+#line 1224 "PixbufCache.c"
 					}
 #line 219 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 					_tmp17_ = _photo_it;
@@ -1239,16 +1238,16 @@ void pixbuf_cache_prefetch_batch (PixbufCache* self, PixbufCachePixbufCacheBatch
 					pixbuf_cache_prefetch (self, _tmp19_, _tmp20_, _tmp21_);
 #line 219 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 					_g_object_unref0 (photo);
-#line 1243 "PixbufCache.c"
+#line 1242 "PixbufCache.c"
 				}
 #line 219 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 				_g_object_unref0 (_photo_it);
-#line 1247 "PixbufCache.c"
+#line 1246 "PixbufCache.c"
 			}
 		}
 #line 218 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_g_object_unref0 (_priority_it);
-#line 1252 "PixbufCache.c"
+#line 1251 "PixbufCache.c"
 	}
 }
 
@@ -1288,7 +1287,7 @@ gboolean pixbuf_cache_cancel_prefetch (PixbufCache* self, Photo* photo) {
 		_background_job_unref0 (job);
 #line 227 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		return result;
-#line 1292 "PixbufCache.c"
+#line 1291 "PixbufCache.c"
 	}
 #line 230 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp4_ = self->priv->in_progress;
@@ -1312,7 +1311,7 @@ gboolean pixbuf_cache_cancel_prefetch (PixbufCache* self, Photo* photo) {
 	_background_job_unref0 (job);
 #line 239 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return result;
-#line 1316 "PixbufCache.c"
+#line 1315 "PixbufCache.c"
 }
 
 
@@ -1320,7 +1319,7 @@ void pixbuf_cache_cancel_all (PixbufCache* self) {
 	GeeHashMap* _tmp11_ = NULL;
 #line 242 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	g_return_if_fail (IS_PIXBUF_CACHE (self));
-#line 1324 "PixbufCache.c"
+#line 1323 "PixbufCache.c"
 	{
 		GeeIterator* _job_it = NULL;
 		GeeHashMap* _tmp0_ = NULL;
@@ -1347,7 +1346,7 @@ void pixbuf_cache_cancel_all (PixbufCache* self) {
 		_job_it = _tmp5_;
 #line 246 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		while (TRUE) {
-#line 1351 "PixbufCache.c"
+#line 1350 "PixbufCache.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			PixbufCacheFetchJob* job = NULL;
@@ -1362,7 +1361,7 @@ void pixbuf_cache_cancel_all (PixbufCache* self) {
 			if (!_tmp7_) {
 #line 246 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 				break;
-#line 1366 "PixbufCache.c"
+#line 1365 "PixbufCache.c"
 			}
 #line 246 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_tmp8_ = _job_it;
@@ -1376,24 +1375,24 @@ void pixbuf_cache_cancel_all (PixbufCache* self) {
 			background_job_cancel (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, TYPE_BACKGROUND_JOB, BackgroundJob));
 #line 246 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_background_job_unref0 (job);
-#line 1380 "PixbufCache.c"
+#line 1379 "PixbufCache.c"
 		}
 #line 246 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_g_object_unref0 (_job_it);
-#line 1384 "PixbufCache.c"
+#line 1383 "PixbufCache.c"
 	}
 #line 249 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp11_ = self->priv->in_progress;
 #line 249 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	gee_abstract_map_clear (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
-#line 1390 "PixbufCache.c"
+#line 1389 "PixbufCache.c"
 }
 
 
 static gpointer _background_job_ref0 (gpointer self) {
 #line 253 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return self ? background_job_ref (self) : NULL;
-#line 1397 "PixbufCache.c"
+#line 1396 "PixbufCache.c"
 }
 
 
@@ -1438,7 +1437,7 @@ static void pixbuf_cache_on_fetched (PixbufCache* self, BackgroundJob* j) {
 	_tmp6_ = _tmp5_->err;
 #line 259 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp6_ != NULL) {
-#line 1442 "PixbufCache.c"
+#line 1441 "PixbufCache.c"
 		PixbufCacheFetchJob* _tmp7_ = NULL;
 		GdkPixbuf* _tmp8_ = NULL;
 		PixbufCacheFetchJob* _tmp9_ = NULL;
@@ -1490,7 +1489,7 @@ static void pixbuf_cache_on_fetched (PixbufCache* self, BackgroundJob* j) {
 		_background_job_unref0 (job);
 #line 265 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		return;
-#line 1494 "PixbufCache.c"
+#line 1493 "PixbufCache.c"
 	}
 #line 272 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp20_ = job;
@@ -1514,7 +1513,7 @@ static void pixbuf_cache_on_fetched (PixbufCache* self, BackgroundJob* j) {
 	g_signal_emit_by_name (self, "fetched", _tmp25_, _tmp27_, NULL);
 #line 252 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_background_job_unref0 (job);
-#line 1518 "PixbufCache.c"
+#line 1517 "PixbufCache.c"
 }
 
 
@@ -1523,7 +1522,7 @@ static void pixbuf_cache_on_sources_altered (PixbufCache* self, GeeMap* map) {
 	g_return_if_fail (IS_PIXBUF_CACHE (self));
 #line 278 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	g_return_if_fail (GEE_IS_MAP (map));
-#line 1527 "PixbufCache.c"
+#line 1526 "PixbufCache.c"
 	{
 		GeeIterator* _object_it = NULL;
 		GeeMap* _tmp0_ = NULL;
@@ -1550,7 +1549,7 @@ static void pixbuf_cache_on_sources_altered (PixbufCache* self, GeeMap* map) {
 		_object_it = _tmp5_;
 #line 279 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		while (TRUE) {
-#line 1554 "PixbufCache.c"
+#line 1553 "PixbufCache.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			DataObject* object = NULL;
@@ -1578,7 +1577,7 @@ static void pixbuf_cache_on_sources_altered (PixbufCache* self, GeeMap* map) {
 			if (!_tmp7_) {
 #line 279 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 				break;
-#line 1582 "PixbufCache.c"
+#line 1581 "PixbufCache.c"
 			}
 #line 279 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_tmp8_ = _object_it;
@@ -1606,7 +1605,7 @@ static void pixbuf_cache_on_sources_altered (PixbufCache* self, GeeMap* map) {
 				_g_object_unref0 (object);
 #line 281 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 				continue;
-#line 1610 "PixbufCache.c"
+#line 1609 "PixbufCache.c"
 			}
 #line 283 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_tmp16_ = object;
@@ -1622,7 +1621,7 @@ static void pixbuf_cache_on_sources_altered (PixbufCache* self, GeeMap* map) {
 			_tmp20_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp19_);
 #line 285 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			if (_tmp20_) {
-#line 1626 "PixbufCache.c"
+#line 1625 "PixbufCache.c"
 				GeeHashMap* _tmp21_ = NULL;
 				Photo* _tmp22_ = NULL;
 				gpointer _tmp23_ = NULL;
@@ -1647,7 +1646,7 @@ static void pixbuf_cache_on_sources_altered (PixbufCache* self, GeeMap* map) {
 				_tmp26_ = photo;
 #line 289 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 				gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp26_, NULL);
-#line 1651 "PixbufCache.c"
+#line 1650 "PixbufCache.c"
 			} else {
 				GeeHashMap* _tmp27_ = NULL;
 				Photo* _tmp28_ = NULL;
@@ -1666,7 +1665,7 @@ static void pixbuf_cache_on_sources_altered (PixbufCache* self, GeeMap* map) {
 					_g_object_unref0 (object);
 #line 291 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 					continue;
-#line 1670 "PixbufCache.c"
+#line 1669 "PixbufCache.c"
 				}
 			}
 #line 294 "/home/jens/Source/shotwell/src/PixbufCache.vala"
@@ -1681,11 +1680,11 @@ static void pixbuf_cache_on_sources_altered (PixbufCache* self, GeeMap* map) {
 			_g_object_unref0 (photo);
 #line 279 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_g_object_unref0 (object);
-#line 1685 "PixbufCache.c"
+#line 1684 "PixbufCache.c"
 		}
 #line 279 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_g_object_unref0 (_object_it);
-#line 1689 "PixbufCache.c"
+#line 1688 "PixbufCache.c"
 	}
 }
 
@@ -1695,7 +1694,7 @@ static void pixbuf_cache_on_sources_removed (PixbufCache* self, GeeIterable* rem
 	g_return_if_fail (IS_PIXBUF_CACHE (self));
 #line 305 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	g_return_if_fail (GEE_IS_ITERABLE (removed));
-#line 1699 "PixbufCache.c"
+#line 1698 "PixbufCache.c"
 	{
 		GeeIterator* _object_it = NULL;
 		GeeIterable* _tmp0_ = NULL;
@@ -1708,7 +1707,7 @@ static void pixbuf_cache_on_sources_removed (PixbufCache* self, GeeIterable* rem
 		_object_it = _tmp1_;
 #line 306 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		while (TRUE) {
-#line 1712 "PixbufCache.c"
+#line 1711 "PixbufCache.c"
 			GeeIterator* _tmp2_ = NULL;
 			gboolean _tmp3_ = FALSE;
 			DataObject* object = NULL;
@@ -1727,7 +1726,7 @@ static void pixbuf_cache_on_sources_removed (PixbufCache* self, GeeIterable* rem
 			if (!_tmp3_) {
 #line 306 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 				break;
-#line 1731 "PixbufCache.c"
+#line 1730 "PixbufCache.c"
 			}
 #line 306 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_tmp4_ = _object_it;
@@ -1753,11 +1752,11 @@ static void pixbuf_cache_on_sources_removed (PixbufCache* self, GeeIterable* rem
 			_g_object_unref0 (photo);
 #line 306 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_g_object_unref0 (object);
-#line 1757 "PixbufCache.c"
+#line 1756 "PixbufCache.c"
 		}
 #line 306 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_g_object_unref0 (_object_it);
-#line 1761 "PixbufCache.c"
+#line 1760 "PixbufCache.c"
 	}
 }
 
@@ -1785,19 +1784,19 @@ static GdkPixbuf* pixbuf_cache_get_cached (PixbufCache* self, Photo* photo) {
 	_tmp3_ = pixbuf;
 #line 316 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp3_ != NULL) {
-#line 1789 "PixbufCache.c"
+#line 1788 "PixbufCache.c"
 		Photo* _tmp4_ = NULL;
 #line 317 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp4_ = photo;
 #line 317 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		pixbuf_cache_prioritize (self, _tmp4_);
-#line 1795 "PixbufCache.c"
+#line 1794 "PixbufCache.c"
 	}
 #line 319 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	result = pixbuf;
 #line 319 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return result;
-#line 1801 "PixbufCache.c"
+#line 1800 "PixbufCache.c"
 }
 
 
@@ -1828,7 +1827,7 @@ static void pixbuf_cache_prioritize (PixbufCache* self, Photo* photo) {
 	_tmp4_ = index;
 #line 327 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp4_ > 0) {
-#line 1832 "PixbufCache.c"
+#line 1831 "PixbufCache.c"
 		GeeArrayList* _tmp5_ = NULL;
 		gint _tmp6_ = 0;
 		gpointer _tmp7_ = NULL;
@@ -1851,7 +1850,7 @@ static void pixbuf_cache_prioritize (PixbufCache* self, Photo* photo) {
 		_tmp10_ = photo;
 #line 329 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		gee_abstract_list_insert (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), 0, _tmp10_);
-#line 1855 "PixbufCache.c"
+#line 1854 "PixbufCache.c"
 	}
 }
 
@@ -1895,7 +1894,7 @@ static void pixbuf_cache_encache (PixbufCache* self, Photo* photo, GdkPixbuf* pi
 	gee_abstract_list_insert (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), 0, _tmp5_);
 #line 340 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	while (TRUE) {
-#line 1899 "PixbufCache.c"
+#line 1898 "PixbufCache.c"
 		GeeArrayList* _tmp6_ = NULL;
 		gint _tmp7_ = 0;
 		gint _tmp8_ = 0;
@@ -1924,7 +1923,7 @@ static void pixbuf_cache_encache (PixbufCache* self, Photo* photo, GdkPixbuf* pi
 		if (!(_tmp8_ > _tmp9_)) {
 #line 340 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			break;
-#line 1928 "PixbufCache.c"
+#line 1927 "PixbufCache.c"
 		}
 #line 341 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp10_ = self->priv->lru;
@@ -1956,7 +1955,7 @@ static void pixbuf_cache_encache (PixbufCache* self, Photo* photo, GdkPixbuf* pi
 		_vala_assert (_tmp19_, "removed");
 #line 340 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_g_object_unref0 (cached_photo);
-#line 1960 "PixbufCache.c"
+#line 1959 "PixbufCache.c"
 	}
 #line 348 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp20_ = self->priv->lru;
@@ -1972,7 +1971,7 @@ static void pixbuf_cache_encache (PixbufCache* self, Photo* photo, GdkPixbuf* pi
 	_tmp25_ = _tmp24_;
 #line 348 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_vala_assert (_tmp22_ == _tmp25_, "lru.size == cache.size");
-#line 1976 "PixbufCache.c"
+#line 1975 "PixbufCache.c"
 }
 
 
@@ -1997,7 +1996,7 @@ static void pixbuf_cache_decache (PixbufCache* self, Photo* photo) {
 	_tmp2_ = gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp1_, NULL);
 #line 352 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (!_tmp2_) {
-#line 2001 "PixbufCache.c"
+#line 2000 "PixbufCache.c"
 		GeeArrayList* _tmp3_ = NULL;
 		Photo* _tmp4_ = NULL;
 		gboolean _tmp5_ = FALSE;
@@ -2011,7 +2010,7 @@ static void pixbuf_cache_decache (PixbufCache* self, Photo* photo) {
 		_vala_assert (!_tmp5_, "!lru.contains(photo)");
 #line 355 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		return;
-#line 2015 "PixbufCache.c"
+#line 2014 "PixbufCache.c"
 	}
 #line 358 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp6_ = self->priv->lru;
@@ -2025,7 +2024,7 @@ static void pixbuf_cache_decache (PixbufCache* self, Photo* photo) {
 	_tmp9_ = removed;
 #line 359 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_vala_assert (_tmp9_, "removed");
-#line 2029 "PixbufCache.c"
+#line 2028 "PixbufCache.c"
 }
 
 
@@ -2044,52 +2043,43 @@ static void g_cclosure_user_marshal_VOID__OBJECT_OBJECT_POINTER (GClosure * clos
 		data1 = closure->data;
 #line 7 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 2048 "PixbufCache.c"
+#line 2047 "PixbufCache.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 7 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		data2 = closure->data;
-#line 2054 "PixbufCache.c"
+#line 2053 "PixbufCache.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	callback = (GMarshalFunc_VOID__OBJECT_OBJECT_POINTER) (marshal_data ? marshal_data : cc->callback);
 #line 7 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	callback (data1, g_value_get_object (param_values + 1), g_value_get_object (param_values + 2), g_value_get_pointer (param_values + 3), data2);
-#line 2060 "PixbufCache.c"
-}
-
-
-static gint _background_job_job_priority_compare_func_gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self) {
-	gint result;
-	result = background_job_job_priority_compare_func (a, b);
-#line 17 "/home/jens/Source/shotwell/src/PixbufCache.vala"
-	return result;
-#line 2069 "PixbufCache.c"
+#line 2059 "PixbufCache.c"
 }
 
 
 PixbufCachePixbufCacheBatch* pixbuf_cache_pixbuf_cache_batch_construct (GType object_type) {
 	PixbufCachePixbufCacheBatch * self = NULL;
 #line 17 "/home/jens/Source/shotwell/src/PixbufCache.vala"
-	self = (PixbufCachePixbufCacheBatch*) gee_tree_multi_map_construct (object_type, BACKGROUND_JOB_TYPE_JOB_PRIORITY, NULL, NULL, TYPE_PHOTO, (GBoxedCopyFunc) g_object_ref, g_object_unref, _background_job_job_priority_compare_func_gcompare_data_func, NULL, NULL, NULL, NULL, NULL);
+	self = (PixbufCachePixbufCacheBatch*) gee_tree_multi_map_construct (object_type, BACKGROUND_JOB_TYPE_JOB_PRIORITY, NULL, NULL, TYPE_PHOTO, (GBoxedCopyFunc) g_object_ref, g_object_unref, (GCompareDataFunc) background_job_job_priority_compare_func, NULL, NULL, NULL, NULL, NULL);
 #line 16 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return self;
-#line 2079 "PixbufCache.c"
+#line 2069 "PixbufCache.c"
 }
 
 
 PixbufCachePixbufCacheBatch* pixbuf_cache_pixbuf_cache_batch_new (void) {
 #line 16 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return pixbuf_cache_pixbuf_cache_batch_construct (PIXBUF_CACHE_TYPE_PIXBUF_CACHE_BATCH);
-#line 2086 "PixbufCache.c"
+#line 2076 "PixbufCache.c"
 }
 
 
 static void pixbuf_cache_pixbuf_cache_batch_class_init (PixbufCachePixbufCacheBatchClass * klass) {
 #line 15 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	pixbuf_cache_pixbuf_cache_batch_parent_class = g_type_class_peek_parent (klass);
-#line 2093 "PixbufCache.c"
+#line 2083 "PixbufCache.c"
 }
 
 
@@ -2166,7 +2156,7 @@ static PixbufCacheFetchJob* pixbuf_cache_fetch_job_construct (GType object_type,
 	self->scaling = _tmp9_;
 #line 28 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return self;
-#line 2170 "PixbufCache.c"
+#line 2160 "PixbufCache.c"
 }
 
 
@@ -2182,7 +2172,7 @@ static BackgroundJobJobPriority pixbuf_cache_fetch_job_real_get_priority (Backgr
 	result = _tmp0_;
 #line 38 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return result;
-#line 2186 "PixbufCache.c"
+#line 2176 "PixbufCache.c"
 }
 
 
@@ -2193,7 +2183,7 @@ static void pixbuf_cache_fetch_job_class_init (PixbufCacheFetchJobClass * klass)
 	((BackgroundJobClass *) klass)->finalize = pixbuf_cache_fetch_job_finalize;
 #line 21 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	((BackgroundJobClass *) klass)->get_priority = pixbuf_cache_fetch_job_real_get_priority;
-#line 2197 "PixbufCache.c"
+#line 2187 "PixbufCache.c"
 }
 
 
@@ -2202,7 +2192,7 @@ static void pixbuf_cache_fetch_job_instance_init (PixbufCacheFetchJob * self) {
 	self->pixbuf = NULL;
 #line 26 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	self->err = NULL;
-#line 2206 "PixbufCache.c"
+#line 2196 "PixbufCache.c"
 }
 
 
@@ -2218,7 +2208,7 @@ static void pixbuf_cache_fetch_job_finalize (BackgroundJob* obj) {
 	_g_error_free0 (self->err);
 #line 21 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	BACKGROUND_JOB_CLASS (pixbuf_cache_fetch_job_parent_class)->finalize (obj);
-#line 2222 "PixbufCache.c"
+#line 2212 "PixbufCache.c"
 }
 
 
@@ -2264,14 +2254,14 @@ static PixbufCacheBaselineFetchJob* pixbuf_cache_baseline_fetch_job_construct (G
 	self = (PixbufCacheBaselineFetchJob*) pixbuf_cache_fetch_job_construct (object_type, _tmp0_, _tmp1_, _tmp2_, &_tmp3_, _tmp4_, _tmp4__target);
 #line 43 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return self;
-#line 2268 "PixbufCache.c"
+#line 2258 "PixbufCache.c"
 }
 
 
 static PixbufCacheBaselineFetchJob* pixbuf_cache_baseline_fetch_job_new (PixbufCache* owner, BackgroundJobJobPriority priority, Photo* photo, Scaling* scaling, CompletionCallback callback, void* callback_target) {
 #line 43 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return pixbuf_cache_baseline_fetch_job_construct (PIXBUF_CACHE_TYPE_BASELINE_FETCH_JOB, owner, priority, photo, scaling, callback, callback_target);
-#line 2275 "PixbufCache.c"
+#line 2265 "PixbufCache.c"
 }
 
 
@@ -2280,7 +2270,7 @@ static void pixbuf_cache_baseline_fetch_job_real_execute (BackgroundJob* base) {
 	GError * _inner_error_ = NULL;
 #line 48 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PIXBUF_CACHE_TYPE_BASELINE_FETCH_JOB, PixbufCacheBaselineFetchJob);
-#line 2284 "PixbufCache.c"
+#line 2274 "PixbufCache.c"
 	{
 		GdkPixbuf* _tmp0_ = NULL;
 		Photo* _tmp1_ = NULL;
@@ -2297,8 +2287,8 @@ static void pixbuf_cache_baseline_fetch_job_real_execute (BackgroundJob* base) {
 		_tmp0_ = _tmp3_;
 #line 50 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2301 "PixbufCache.c"
-			goto __catch455_g_error;
+#line 2291 "PixbufCache.c"
+			goto __catch452_g_error;
 		}
 #line 50 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp4_ = _tmp0_;
@@ -2310,10 +2300,10 @@ static void pixbuf_cache_baseline_fetch_job_real_execute (BackgroundJob* base) {
 		G_TYPE_CHECK_INSTANCE_CAST (self, PIXBUF_CACHE_TYPE_FETCH_JOB, PixbufCacheFetchJob)->pixbuf = _tmp4_;
 #line 49 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_g_object_unref0 (_tmp0_);
-#line 2314 "PixbufCache.c"
+#line 2304 "PixbufCache.c"
 	}
-	goto __finally455;
-	__catch455_g_error:
+	goto __finally452;
+	__catch452_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -2332,9 +2322,9 @@ static void pixbuf_cache_baseline_fetch_job_real_execute (BackgroundJob* base) {
 		G_TYPE_CHECK_INSTANCE_CAST (self, PIXBUF_CACHE_TYPE_FETCH_JOB, PixbufCacheFetchJob)->err = _tmp6_;
 #line 49 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_g_error_free0 (err);
-#line 2336 "PixbufCache.c"
+#line 2326 "PixbufCache.c"
 	}
-	__finally455:
+	__finally452:
 #line 49 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 49 "/home/jens/Source/shotwell/src/PixbufCache.vala"
@@ -2343,7 +2333,7 @@ static void pixbuf_cache_baseline_fetch_job_real_execute (BackgroundJob* base) {
 		g_clear_error (&_inner_error_);
 #line 49 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		return;
-#line 2347 "PixbufCache.c"
+#line 2337 "PixbufCache.c"
 	}
 }
 
@@ -2353,7 +2343,7 @@ static void pixbuf_cache_baseline_fetch_job_class_init (PixbufCacheBaselineFetch
 	pixbuf_cache_baseline_fetch_job_parent_class = g_type_class_peek_parent (klass);
 #line 42 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	((BackgroundJobClass *) klass)->execute = pixbuf_cache_baseline_fetch_job_real_execute;
-#line 2357 "PixbufCache.c"
+#line 2347 "PixbufCache.c"
 }
 
 
@@ -2403,14 +2393,14 @@ static PixbufCacheMasterFetchJob* pixbuf_cache_master_fetch_job_construct (GType
 	self = (PixbufCacheMasterFetchJob*) pixbuf_cache_fetch_job_construct (object_type, _tmp0_, _tmp1_, _tmp2_, &_tmp3_, _tmp4_, _tmp4__target);
 #line 58 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return self;
-#line 2407 "PixbufCache.c"
+#line 2397 "PixbufCache.c"
 }
 
 
 static PixbufCacheMasterFetchJob* pixbuf_cache_master_fetch_job_new (PixbufCache* owner, BackgroundJobJobPriority priority, Photo* photo, Scaling* scaling, CompletionCallback callback, void* callback_target) {
 #line 58 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	return pixbuf_cache_master_fetch_job_construct (PIXBUF_CACHE_TYPE_MASTER_FETCH_JOB, owner, priority, photo, scaling, callback, callback_target);
-#line 2414 "PixbufCache.c"
+#line 2404 "PixbufCache.c"
 }
 
 
@@ -2419,7 +2409,7 @@ static void pixbuf_cache_master_fetch_job_real_execute (BackgroundJob* base) {
 	GError * _inner_error_ = NULL;
 #line 63 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PIXBUF_CACHE_TYPE_MASTER_FETCH_JOB, PixbufCacheMasterFetchJob);
-#line 2423 "PixbufCache.c"
+#line 2413 "PixbufCache.c"
 	{
 		GdkPixbuf* _tmp0_ = NULL;
 		Photo* _tmp1_ = NULL;
@@ -2436,8 +2426,8 @@ static void pixbuf_cache_master_fetch_job_real_execute (BackgroundJob* base) {
 		_tmp0_ = _tmp3_;
 #line 65 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2440 "PixbufCache.c"
-			goto __catch456_g_error;
+#line 2430 "PixbufCache.c"
+			goto __catch453_g_error;
 		}
 #line 65 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp4_ = _tmp0_;
@@ -2449,10 +2439,10 @@ static void pixbuf_cache_master_fetch_job_real_execute (BackgroundJob* base) {
 		G_TYPE_CHECK_INSTANCE_CAST (self, PIXBUF_CACHE_TYPE_FETCH_JOB, PixbufCacheFetchJob)->pixbuf = _tmp4_;
 #line 64 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_g_object_unref0 (_tmp0_);
-#line 2453 "PixbufCache.c"
+#line 2443 "PixbufCache.c"
 	}
-	goto __finally456;
-	__catch456_g_error:
+	goto __finally453;
+	__catch453_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -2471,9 +2461,9 @@ static void pixbuf_cache_master_fetch_job_real_execute (BackgroundJob* base) {
 		G_TYPE_CHECK_INSTANCE_CAST (self, PIXBUF_CACHE_TYPE_FETCH_JOB, PixbufCacheFetchJob)->err = _tmp6_;
 #line 64 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_g_error_free0 (err);
-#line 2475 "PixbufCache.c"
+#line 2465 "PixbufCache.c"
 	}
-	__finally456:
+	__finally453:
 #line 64 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 64 "/home/jens/Source/shotwell/src/PixbufCache.vala"
@@ -2482,7 +2472,7 @@ static void pixbuf_cache_master_fetch_job_real_execute (BackgroundJob* base) {
 		g_clear_error (&_inner_error_);
 #line 64 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		return;
-#line 2486 "PixbufCache.c"
+#line 2476 "PixbufCache.c"
 	}
 }
 
@@ -2492,7 +2482,7 @@ static void pixbuf_cache_master_fetch_job_class_init (PixbufCacheMasterFetchJobC
 	pixbuf_cache_master_fetch_job_parent_class = g_type_class_peek_parent (klass);
 #line 57 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	((BackgroundJobClass *) klass)->execute = pixbuf_cache_master_fetch_job_real_execute;
-#line 2496 "PixbufCache.c"
+#line 2486 "PixbufCache.c"
 }
 
 
@@ -2521,7 +2511,7 @@ static void pixbuf_cache_class_init (PixbufCacheClass * klass) {
 	G_OBJECT_CLASS (klass)->finalize = pixbuf_cache_finalize;
 #line 7 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	g_signal_new ("fetched", TYPE_PIXBUF_CACHE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__OBJECT_OBJECT_POINTER, G_TYPE_NONE, 3, TYPE_PHOTO, gdk_pixbuf_get_type (), G_TYPE_POINTER);
-#line 2525 "PixbufCache.c"
+#line 2515 "PixbufCache.c"
 }
 
 
@@ -2543,7 +2533,7 @@ static void pixbuf_cache_instance_init (PixbufCache * self) {
 	_tmp2_ = gee_hash_map_new (TYPE_PHOTO, (GBoxedCopyFunc) g_object_ref, g_object_unref, PIXBUF_CACHE_TYPE_FETCH_JOB, (GBoxedCopyFunc) background_job_ref, background_job_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 #line 81 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	self->priv->in_progress = _tmp2_;
-#line 2547 "PixbufCache.c"
+#line 2537 "PixbufCache.c"
 }
 
 
@@ -2558,7 +2548,7 @@ static void pixbuf_cache_finalize (GObject* obj) {
 	_tmp0_ = self->priv->type;
 #line 110 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (_tmp0_ != PIXBUF_CACHE_PHOTO_TYPE_MASTER) {
-#line 2562 "PixbufCache.c"
+#line 2552 "PixbufCache.c"
 		SourceCollection* _tmp1_ = NULL;
 		guint _tmp2_ = 0U;
 #line 111 "/home/jens/Source/shotwell/src/PixbufCache.vala"
@@ -2567,7 +2557,7 @@ static void pixbuf_cache_finalize (GObject* obj) {
 		g_signal_parse_name ("items-altered", TYPE_DATA_COLLECTION, &_tmp2_, NULL, FALSE);
 #line 111 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_COLLECTION, DataCollection), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp2_, 0, NULL, (GCallback) _pixbuf_cache_on_sources_altered_data_collection_items_altered, self);
-#line 2571 "PixbufCache.c"
+#line 2561 "PixbufCache.c"
 	}
 #line 112 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_tmp3_ = self->priv->sources;
@@ -2575,7 +2565,7 @@ static void pixbuf_cache_finalize (GObject* obj) {
 	g_signal_parse_name ("items-removed", TYPE_DATA_COLLECTION, &_tmp4_, NULL, FALSE);
 #line 112 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_DATA_COLLECTION, DataCollection), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp4_, 0, NULL, (GCallback) _pixbuf_cache_on_sources_removed_data_collection_items_removed, self);
-#line 2579 "PixbufCache.c"
+#line 2569 "PixbufCache.c"
 	{
 		GeeIterator* _job_it = NULL;
 		GeeHashMap* _tmp5_ = NULL;
@@ -2602,7 +2592,7 @@ static void pixbuf_cache_finalize (GObject* obj) {
 		_job_it = _tmp10_;
 #line 114 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		while (TRUE) {
-#line 2606 "PixbufCache.c"
+#line 2596 "PixbufCache.c"
 			GeeIterator* _tmp11_ = NULL;
 			gboolean _tmp12_ = FALSE;
 			PixbufCacheFetchJob* job = NULL;
@@ -2617,7 +2607,7 @@ static void pixbuf_cache_finalize (GObject* obj) {
 			if (!_tmp12_) {
 #line 114 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 				break;
-#line 2621 "PixbufCache.c"
+#line 2611 "PixbufCache.c"
 			}
 #line 114 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_tmp13_ = _job_it;
@@ -2631,11 +2621,11 @@ static void pixbuf_cache_finalize (GObject* obj) {
 			background_job_cancel (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, TYPE_BACKGROUND_JOB, BackgroundJob));
 #line 114 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 			_background_job_unref0 (job);
-#line 2635 "PixbufCache.c"
+#line 2625 "PixbufCache.c"
 		}
 #line 114 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_g_object_unref0 (_job_it);
-#line 2639 "PixbufCache.c"
+#line 2629 "PixbufCache.c"
 	}
 #line 74 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	_data_collection_unref0 (self->priv->sources);
@@ -2647,7 +2637,7 @@ static void pixbuf_cache_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->in_progress);
 #line 7 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	G_OBJECT_CLASS (pixbuf_cache_parent_class)->finalize (obj);
-#line 2651 "PixbufCache.c"
+#line 2641 "PixbufCache.c"
 }
 
 

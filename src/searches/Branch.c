@@ -200,17 +200,6 @@ typedef struct _ApplicationClass ApplicationClass;
 #define _application_unref0(var) ((var == NULL) ? NULL : (var = (application_unref (var), NULL)))
 #define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
 
-#define TYPE_SAVED_SEARCH_DIALOG (saved_search_dialog_get_type ())
-#define SAVED_SEARCH_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_SAVED_SEARCH_DIALOG, SavedSearchDialog))
-#define SAVED_SEARCH_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_SAVED_SEARCH_DIALOG, SavedSearchDialogClass))
-#define IS_SAVED_SEARCH_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_SAVED_SEARCH_DIALOG))
-#define IS_SAVED_SEARCH_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_SAVED_SEARCH_DIALOG))
-#define SAVED_SEARCH_DIALOG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_SAVED_SEARCH_DIALOG, SavedSearchDialogClass))
-
-typedef struct _SavedSearchDialog SavedSearchDialog;
-typedef struct _SavedSearchDialogClass SavedSearchDialogClass;
-#define _saved_search_dialog_unref0(var) ((var == NULL) ? NULL : (var = (saved_search_dialog_unref (var), NULL)))
-
 #define SIDEBAR_TYPE_SELECTABLE_ENTRY (sidebar_selectable_entry_get_type ())
 #define SIDEBAR_SELECTABLE_ENTRY(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SIDEBAR_TYPE_SELECTABLE_ENTRY, SidebarSelectableEntry))
 #define SIDEBAR_IS_SELECTABLE_ENTRY(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SIDEBAR_TYPE_SELECTABLE_ENTRY))
@@ -441,7 +430,7 @@ struct _SearchesHeaderClass {
 };
 
 struct _SearchesHeaderPrivate {
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkMenu* context_menu;
 };
 
@@ -555,11 +544,6 @@ enum  {
 SidebarHeader* sidebar_header_new (const gchar* name, gboolean emphasized);
 SidebarHeader* sidebar_header_construct (GType object_type, const gchar* name, gboolean emphasized);
 static void searches_header_setup_context_menu (SearchesHeader* self);
-#define TRANSLATABLE "translatable"
-static void searches_header_on_new_search (SearchesHeader* self);
-static void _searches_header_on_new_search_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add146 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-GFile* resources_get_ui (const gchar* filename);
 void app_window_error_message (const gchar* message, GtkWindow* parent);
 gpointer application_ref (gpointer instance);
 void application_unref (gpointer instance);
@@ -571,16 +555,6 @@ GType application_get_type (void) G_GNUC_CONST;
 Application* application_get_instance (void);
 void application_panic (Application* self);
 static GtkMenu* searches_header_real_get_sidebar_context_menu (SidebarContextable* base, GdkEventButton* event);
-SavedSearchDialog* saved_search_dialog_new (void);
-SavedSearchDialog* saved_search_dialog_construct (GType object_type);
-gpointer saved_search_dialog_ref (gpointer instance);
-void saved_search_dialog_unref (gpointer instance);
-GParamSpec* param_spec_saved_search_dialog (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void value_set_saved_search_dialog (GValue* value, gpointer v_object);
-void value_take_saved_search_dialog (GValue* value, gpointer v_object);
-gpointer value_get_saved_search_dialog (const GValue* value);
-GType saved_search_dialog_get_type (void) G_GNUC_CONST;
-void saved_search_dialog_show (SavedSearchDialog* self);
 static void searches_header_finalize (GObject* obj);
 GType sidebar_selectable_entry_get_type (void) G_GNUC_CONST;
 GType page_get_type (void) G_GNUC_CONST;
@@ -633,14 +607,14 @@ static void searches_sidebar_entry_finalize (GObject* obj);
 static void _searches_branch_on_saved_search_added_saved_search_table_search_added (SavedSearchTable* _sender, SavedSearch* search, gpointer self) {
 #line 28 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	searches_branch_on_saved_search_added ((SearchesBranch*) self, search);
-#line 637 "Branch.c"
+#line 611 "Branch.c"
 }
 
 
 static void _searches_branch_on_saved_search_removed_saved_search_table_search_removed (SavedSearchTable* _sender, SavedSearch* search, gpointer self) {
 #line 29 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	searches_branch_on_saved_search_removed ((SearchesBranch*) self, search);
-#line 644 "Branch.c"
+#line 618 "Branch.c"
 }
 
 
@@ -649,7 +623,7 @@ static gint _searches_branch_comparator_gcompare_func (gconstpointer a, gconstpo
 	result = searches_branch_comparator ((SidebarEntry*) a, (SidebarEntry*) b);
 #line 12 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return result;
-#line 653 "Branch.c"
+#line 627 "Branch.c"
 }
 
 
@@ -669,7 +643,7 @@ SearchesBranch* searches_branch_construct (GType object_type) {
 	self = (SearchesBranch*) sidebar_branch_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, SIDEBAR_TYPE_ENTRY, SidebarEntry), (SIDEBAR_BRANCH_OPTIONS_HIDE_IF_EMPTY | SIDEBAR_BRANCH_OPTIONS_AUTO_OPEN_ON_NEW_CHILD) | SIDEBAR_BRANCH_OPTIONS_STARTUP_EXPAND_TO_FIRST_CHILD, _searches_branch_comparator_gcompare_func, NULL);
 #line 12 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_g_object_unref0 (_tmp1_);
-#line 673 "Branch.c"
+#line 647 "Branch.c"
 	{
 		GeeIterator* _search_it = NULL;
 		SavedSearchTable* _tmp2_ = NULL;
@@ -698,7 +672,7 @@ SearchesBranch* searches_branch_construct (GType object_type) {
 		_search_it = _tmp7_;
 #line 19 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		while (TRUE) {
-#line 702 "Branch.c"
+#line 676 "Branch.c"
 			GeeIterator* _tmp8_ = NULL;
 			gboolean _tmp9_ = FALSE;
 			SavedSearch* search = NULL;
@@ -713,7 +687,7 @@ SearchesBranch* searches_branch_construct (GType object_type) {
 			if (!_tmp9_) {
 #line 19 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 				break;
-#line 717 "Branch.c"
+#line 691 "Branch.c"
 			}
 #line 19 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 			_tmp10_ = _search_it;
@@ -727,11 +701,11 @@ SearchesBranch* searches_branch_construct (GType object_type) {
 			searches_branch_on_saved_search_added (self, _tmp12_);
 #line 19 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 			_g_object_unref0 (search);
-#line 731 "Branch.c"
+#line 705 "Branch.c"
 		}
 #line 19 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_g_object_unref0 (_search_it);
-#line 735 "Branch.c"
+#line 709 "Branch.c"
 	}
 #line 23 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp13_ = saved_search_table_get_instance ();
@@ -751,14 +725,14 @@ SearchesBranch* searches_branch_construct (GType object_type) {
 	_saved_search_table_unref0 (_tmp16_);
 #line 11 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return self;
-#line 755 "Branch.c"
+#line 729 "Branch.c"
 }
 
 
 SearchesBranch* searches_branch_new (void) {
 #line 11 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return searches_branch_construct (SEARCHES_TYPE_BRANCH);
-#line 762 "Branch.c"
+#line 736 "Branch.c"
 }
 
 
@@ -781,7 +755,7 @@ SearchesSidebarEntry* searches_branch_get_entry_for_saved_search (SearchesBranch
 	result = (SearchesSidebarEntry*) _tmp2_;
 #line 33 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return result;
-#line 785 "Branch.c"
+#line 759 "Branch.c"
 }
 
 
@@ -808,7 +782,7 @@ static gint searches_branch_comparator (SidebarEntry* a, SidebarEntry* b) {
 		result = 0;
 #line 38 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		return result;
-#line 812 "Branch.c"
+#line 786 "Branch.c"
 	}
 #line 40 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp2_ = a;
@@ -824,7 +798,7 @@ static gint searches_branch_comparator (SidebarEntry* a, SidebarEntry* b) {
 	result = _tmp6_;
 #line 40 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return result;
-#line 828 "Branch.c"
+#line 802 "Branch.c"
 }
 
 
@@ -864,7 +838,7 @@ static void searches_branch_on_saved_search_added (SearchesBranch* self, SavedSe
 	_g_object_unref0 (_tmp5_);
 #line 44 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_g_object_unref0 (entry);
-#line 868 "Branch.c"
+#line 842 "Branch.c"
 }
 
 
@@ -907,7 +881,7 @@ static void searches_branch_on_saved_search_removed (SearchesBranch* self, Saved
 	sidebar_branch_prune (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), G_TYPE_CHECK_INSTANCE_CAST (entry, SIDEBAR_TYPE_ENTRY, SidebarEntry));
 #line 51 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_g_object_unref0 (entry);
-#line 911 "Branch.c"
+#line 885 "Branch.c"
 }
 
 
@@ -918,7 +892,7 @@ static void searches_branch_class_init (SearchesBranchClass * klass) {
 	g_type_class_add_private (klass, sizeof (SearchesBranchPrivate));
 #line 7 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	G_OBJECT_CLASS (klass)->finalize = searches_branch_finalize;
-#line 922 "Branch.c"
+#line 896 "Branch.c"
 }
 
 
@@ -930,7 +904,7 @@ static void searches_branch_instance_init (SearchesBranch * self) {
 	_tmp0_ = gee_hash_map_new (TYPE_SAVED_SEARCH, (GBoxedCopyFunc) g_object_ref, g_object_unref, SEARCHES_TYPE_SIDEBAR_ENTRY, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 #line 8 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self->priv->entry_map = _tmp0_;
-#line 934 "Branch.c"
+#line 908 "Branch.c"
 }
 
 
@@ -968,7 +942,7 @@ static void searches_branch_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->entry_map);
 #line 7 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	G_OBJECT_CLASS (searches_branch_parent_class)->finalize (obj);
-#line 972 "Branch.c"
+#line 946 "Branch.c"
 }
 
 
@@ -995,228 +969,124 @@ SearchesHeader* searches_header_construct (GType object_type) {
 	searches_header_setup_context_menu (self);
 #line 67 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return self;
-#line 999 "Branch.c"
+#line 973 "Branch.c"
 }
 
 
 SearchesHeader* searches_header_new (void) {
 #line 67 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return searches_header_construct (SEARCHES_TYPE_HEADER);
-#line 1006 "Branch.c"
-}
-
-
-static void _searches_header_on_new_search_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 76 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	searches_header_on_new_search ((SearchesHeader*) self);
-#line 1013 "Branch.c"
-}
-
-
-static void _vala_array_add146 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	if ((*length) == (*size)) {
-#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1024 "Branch.c"
-	}
-#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	(*array)[(*length)++] = *value;
-#line 1028 "Branch.c"
+#line 980 "Branch.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 77 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 1035 "Branch.c"
+#line 987 "Branch.c"
 }
 
 
 static void searches_header_setup_context_menu (SearchesHeader* self) {
-	GtkActionGroup* group = NULL;
-	GtkActionGroup* _tmp0_ = NULL;
-	GtkActionEntry* actions = NULL;
-	GtkActionEntry* _tmp1_ = NULL;
-	gint actions_length1 = 0;
-	gint _actions_size_ = 0;
-	GtkActionEntry new_search = {0};
-	GtkActionEntry _tmp2_ = {0};
-	const gchar* _tmp3_ = NULL;
-	GtkActionEntry* _tmp4_ = NULL;
-	gint _tmp4__length1 = 0;
-	GtkActionEntry _tmp5_ = {0};
-	GtkActionEntry* _tmp6_ = NULL;
-	gint _tmp6__length1 = 0;
-	GtkUIManager* _tmp7_ = NULL;
-	GFile* ui_file = NULL;
-	GFile* _tmp8_ = NULL;
-	GtkUIManager* _tmp20_ = NULL;
-	GtkWidget* _tmp21_ = NULL;
-	GtkMenu* _tmp22_ = NULL;
-	GtkUIManager* _tmp23_ = NULL;
+	GtkBuilder* _tmp0_ = NULL;
 	GError * _inner_error_ = NULL;
 #line 72 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	g_return_if_fail (SEARCHES_IS_HEADER (self));
 #line 73 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp0_ = gtk_action_group_new ("SidebarDefault");
+	_tmp0_ = gtk_builder_new ();
 #line 73 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	group = _tmp0_;
-#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp1_ = g_new0 (GtkActionEntry, 0);
-#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	actions = _tmp1_;
-#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	actions_length1 = 0;
-#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_actions_size_ = actions_length1;
-#line 76 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp2_.name = "CommonNewSearch";
-#line 76 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp2_.stock_id = NULL;
-#line 76 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp2_.label = TRANSLATABLE;
-#line 76 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp2_.accelerator = NULL;
-#line 76 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp2_.tooltip = NULL;
-#line 76 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp2_.callback = (GCallback) _searches_header_on_new_search_gtk_action_callback;
-#line 76 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	new_search = _tmp2_;
-#line 77 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp3_ = _ ("Ne_w Saved Search…");
-#line 77 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	new_search.label = _tmp3_;
-#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp4_ = actions;
-#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp4__length1 = actions_length1;
-#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp5_ = new_search;
-#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_vala_array_add146 (&actions, &actions_length1, &_actions_size_, &_tmp5_);
-#line 80 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp6_ = actions;
-#line 80 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp6__length1 = actions_length1;
-#line 80 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	gtk_action_group_add_actions (group, _tmp6_, _tmp6__length1, self);
-#line 81 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp7_ = self->priv->ui;
-#line 81 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	gtk_ui_manager_insert_action_group (_tmp7_, group, 0);
-#line 83 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp8_ = resources_get_ui ("search_sidebar_context.ui");
-#line 83 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	ui_file = _tmp8_;
-#line 1116 "Branch.c"
+	_g_object_unref0 (self->priv->builder);
+#line 73 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+	self->priv->builder = _tmp0_;
+#line 1002 "Branch.c"
 	{
-		GtkUIManager* _tmp9_ = NULL;
-		gchar* _tmp10_ = NULL;
-		gchar* _tmp11_ = NULL;
-#line 85 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_tmp9_ = self->priv->ui;
-#line 85 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_tmp10_ = g_file_get_path (ui_file);
-#line 85 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_tmp11_ = _tmp10_;
-#line 85 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		gtk_ui_manager_add_ui_from_file (_tmp9_, _tmp11_, &_inner_error_);
-#line 85 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_g_free0 (_tmp11_);
-#line 85 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		GtkBuilder* _tmp1_ = NULL;
+		GMenuModel* model = NULL;
+		GtkBuilder* _tmp2_ = NULL;
+		GObject* _tmp3_ = NULL;
+		GMenuModel* _tmp4_ = NULL;
+		GMenuModel* _tmp5_ = NULL;
+		GtkMenu* _tmp6_ = NULL;
+#line 75 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp1_ = self->priv->builder;
+#line 75 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		gtk_builder_add_from_resource (_tmp1_, "/org/gnome/Shotwell/search_sidebar_context.ui", &_inner_error_);
+#line 75 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1133 "Branch.c"
-			goto __catch74_g_error;
+#line 1017 "Branch.c"
+			goto __catch73_g_error;
 		}
+#line 77 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp2_ = self->priv->builder;
+#line 77 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp3_ = gtk_builder_get_object (_tmp2_, "popup-menu");
+#line 77 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, g_menu_model_get_type ()) ? ((GMenuModel*) _tmp3_) : NULL);
+#line 77 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		model = _tmp4_;
+#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp5_ = model;
+#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp6_ = (GtkMenu*) gtk_menu_new_from_model (_tmp5_);
+#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		g_object_ref_sink (_tmp6_);
+#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_g_object_unref0 (self->priv->context_menu);
+#line 78 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		self->priv->context_menu = _tmp6_;
+#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_g_object_unref0 (model);
+#line 1040 "Branch.c"
 	}
-	goto __finally74;
-	__catch74_g_error:
+	goto __finally73;
+	__catch73_g_error:
 	{
-		GError* err = NULL;
-		gchar* _tmp12_ = NULL;
-		gchar* _tmp13_ = NULL;
-		GError* _tmp14_ = NULL;
-		const gchar* _tmp15_ = NULL;
-		gchar* _tmp16_ = NULL;
-		gchar* _tmp17_ = NULL;
-		Application* _tmp18_ = NULL;
-		Application* _tmp19_ = NULL;
-#line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		err = _inner_error_;
-#line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		GError* _error_ = NULL;
+		GError* _tmp7_ = NULL;
+		const gchar* _tmp8_ = NULL;
+		gchar* _tmp9_ = NULL;
+		gchar* _tmp10_ = NULL;
+		Application* _tmp11_ = NULL;
+		Application* _tmp12_ = NULL;
+#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_error_ = _inner_error_;
+#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_inner_error_ = NULL;
-#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_tmp12_ = g_file_get_path (ui_file);
-#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_tmp13_ = _tmp12_;
-#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_tmp14_ = err;
-#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_tmp15_ = _tmp14_->message;
-#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_tmp16_ = g_strdup_printf ("Error loading UI file %s: %s", _tmp13_, _tmp15_);
-#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_tmp17_ = _tmp16_;
-#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		app_window_error_message (_tmp17_, NULL);
-#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_g_free0 (_tmp17_);
-#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_g_free0 (_tmp13_);
-#line 89 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_tmp18_ = application_get_instance ();
-#line 89 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_tmp19_ = _tmp18_;
-#line 89 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		application_panic (_tmp19_);
-#line 89 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_application_unref0 (_tmp19_);
-#line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_g_error_free0 (err);
-#line 1181 "Branch.c"
+#line 80 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp7_ = _error_;
+#line 80 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp8_ = _tmp7_->message;
+#line 80 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp9_ = g_strdup_printf ("Error loading UI resource: %s", _tmp8_);
+#line 80 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp10_ = _tmp9_;
+#line 80 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		app_window_error_message (_tmp10_, NULL);
+#line 80 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_g_free0 (_tmp10_);
+#line 82 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp11_ = application_get_instance ();
+#line 82 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_tmp12_ = _tmp11_;
+#line 82 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		application_panic (_tmp12_);
+#line 82 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_application_unref0 (_tmp12_);
+#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+		_g_error_free0 (_error_);
+#line 1078 "Branch.c"
 	}
-	__finally74:
-#line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+	__finally73:
+#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_g_object_unref0 (ui_file);
-#line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		actions = (g_free (actions), NULL);
-#line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-		_g_object_unref0 (group);
-#line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		g_clear_error (&_inner_error_);
-#line 84 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 74 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		return;
-#line 1198 "Branch.c"
+#line 1089 "Branch.c"
 	}
-#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp20_ = self->priv->ui;
-#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp21_ = gtk_ui_manager_get_widget (_tmp20_, "/SidebarSearchContextMenu");
-#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp22_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_menu_get_type (), GtkMenu));
-#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_g_object_unref0 (self->priv->context_menu);
-#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	self->priv->context_menu = _tmp22_;
-#line 93 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp23_ = self->priv->ui;
-#line 93 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	gtk_ui_manager_ensure_update (_tmp23_);
-#line 72 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_g_object_unref0 (ui_file);
-#line 72 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	actions = (g_free (actions), NULL);
-#line 72 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_g_object_unref0 (group);
-#line 1220 "Branch.c"
 }
 
 
@@ -1225,34 +1095,17 @@ static GtkMenu* searches_header_real_get_sidebar_context_menu (SidebarContextabl
 	GtkMenu* result = NULL;
 	GtkMenu* _tmp0_ = NULL;
 	GtkMenu* _tmp1_ = NULL;
-#line 96 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 86 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SEARCHES_TYPE_HEADER, SearchesHeader);
-#line 97 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp0_ = self->priv->context_menu;
-#line 97 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 97 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	result = _tmp1_;
-#line 97 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 87 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return result;
-#line 1239 "Branch.c"
-}
-
-
-static void searches_header_on_new_search (SearchesHeader* self) {
-	SavedSearchDialog* _tmp0_ = NULL;
-	SavedSearchDialog* _tmp1_ = NULL;
-#line 100 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	g_return_if_fail (SEARCHES_IS_HEADER (self));
-#line 101 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp0_ = saved_search_dialog_new ();
-#line 101 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp1_ = _tmp0_;
-#line 101 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	saved_search_dialog_show (_tmp1_);
-#line 101 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_saved_search_dialog_unref0 (_tmp1_);
-#line 1256 "Branch.c"
+#line 1109 "Branch.c"
 }
 
 
@@ -1263,7 +1116,7 @@ static void searches_header_class_init (SearchesHeaderClass * klass) {
 	g_type_class_add_private (klass, sizeof (SearchesHeaderPrivate));
 #line 63 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	G_OBJECT_CLASS (klass)->finalize = searches_header_finalize;
-#line 1267 "Branch.c"
+#line 1120 "Branch.c"
 }
 
 
@@ -1272,21 +1125,16 @@ static void searches_header_sidebar_contextable_interface_init (SidebarContextab
 	searches_header_sidebar_contextable_parent_iface = g_type_interface_peek_parent (iface);
 #line 63 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	iface->get_sidebar_context_menu = (GtkMenu* (*)(SidebarContextable*, GdkEventButton*)) searches_header_real_get_sidebar_context_menu;
-#line 1276 "Branch.c"
+#line 1129 "Branch.c"
 }
 
 
 static void searches_header_instance_init (SearchesHeader * self) {
-	GtkUIManager* _tmp0_ = NULL;
 #line 63 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self->priv = SEARCHES_HEADER_GET_PRIVATE (self);
-#line 64 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp0_ = gtk_ui_manager_new ();
-#line 64 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	self->priv->ui = _tmp0_;
 #line 65 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self->priv->context_menu = NULL;
-#line 1290 "Branch.c"
+#line 1138 "Branch.c"
 }
 
 
@@ -1295,12 +1143,12 @@ static void searches_header_finalize (GObject* obj) {
 #line 63 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SEARCHES_TYPE_HEADER, SearchesHeader);
 #line 64 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_g_object_unref0 (self->priv->ui);
+	_g_object_unref0 (self->priv->builder);
 #line 65 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_g_object_unref0 (self->priv->context_menu);
 #line 63 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	G_OBJECT_CLASS (searches_header_parent_class)->finalize (obj);
-#line 1304 "Branch.c"
+#line 1152 "Branch.c"
 }
 
 
@@ -1322,28 +1170,28 @@ SearchesSidebarEntry* searches_sidebar_entry_construct (GType object_type, Saved
 	SearchesSidebarEntry * self = NULL;
 	SavedSearch* _tmp0_ = NULL;
 	SavedSearch* _tmp1_ = NULL;
-#line 111 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 97 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	g_return_val_if_fail (IS_SAVED_SEARCH (search), NULL);
-#line 111 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 97 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self = (SearchesSidebarEntry*) sidebar_simple_page_entry_construct (object_type);
-#line 112 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 98 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp0_ = search;
-#line 112 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 98 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 112 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 98 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_g_object_unref0 (self->priv->search);
-#line 112 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 98 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self->priv->search = _tmp1_;
-#line 111 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 97 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return self;
-#line 1340 "Branch.c"
+#line 1188 "Branch.c"
 }
 
 
 SearchesSidebarEntry* searches_sidebar_entry_new (SavedSearch* search) {
-#line 111 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 97 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return searches_sidebar_entry_construct (SEARCHES_TYPE_SIDEBAR_ENTRY, search);
-#line 1347 "Branch.c"
+#line 1195 "Branch.c"
 }
 
 
@@ -1359,17 +1207,17 @@ SavedSearch* searches_sidebar_entry_for_saved_search (SearchesSidebarEntry* self
 	SavedSearch* result = NULL;
 	SavedSearch* _tmp0_ = NULL;
 	SavedSearch* _tmp1_ = NULL;
-#line 121 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 107 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	g_return_val_if_fail (SEARCHES_IS_SIDEBAR_ENTRY (self), NULL);
-#line 122 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 108 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp0_ = self->priv->search;
-#line 122 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 108 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 122 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 108 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	result = _tmp1_;
-#line 122 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 108 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return result;
-#line 1373 "Branch.c"
+#line 1221 "Branch.c"
 }
 
 
@@ -1378,17 +1226,17 @@ static gchar* searches_sidebar_entry_real_get_sidebar_name (SidebarSimplePageEnt
 	gchar* result = NULL;
 	SavedSearch* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 125 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 111 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SEARCHES_TYPE_SIDEBAR_ENTRY, SearchesSidebarEntry);
-#line 126 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 112 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp0_ = self->priv->search;
-#line 126 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 112 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp1_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_DATA_OBJECT, DataObject));
-#line 126 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 112 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	result = _tmp1_;
-#line 126 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 112 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return result;
-#line 1392 "Branch.c"
+#line 1240 "Branch.c"
 }
 
 
@@ -1397,17 +1245,17 @@ static gchar* searches_sidebar_entry_real_get_sidebar_icon (SidebarSimplePageEnt
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 129 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 115 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SEARCHES_TYPE_SIDEBAR_ENTRY, SearchesSidebarEntry);
-#line 130 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 116 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp0_ = searches_sidebar_entry_single_search_icon;
-#line 130 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 116 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 130 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 116 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	result = _tmp1_;
-#line 130 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 116 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return result;
-#line 1411 "Branch.c"
+#line 1259 "Branch.c"
 }
 
 
@@ -1416,32 +1264,32 @@ static Page* searches_sidebar_entry_real_create_page (SidebarSimplePageEntry* ba
 	Page* result = NULL;
 	SavedSearch* _tmp0_ = NULL;
 	SavedSearchPage* _tmp1_ = NULL;
-#line 133 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 119 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SEARCHES_TYPE_SIDEBAR_ENTRY, SearchesSidebarEntry);
-#line 134 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp0_ = self->priv->search;
-#line 134 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp1_ = saved_search_page_new (_tmp0_);
-#line 134 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	g_object_ref_sink (_tmp1_);
-#line 134 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_PAGE, Page);
-#line 134 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 120 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return result;
-#line 1432 "Branch.c"
+#line 1280 "Branch.c"
 }
 
 
 static gboolean searches_sidebar_entry_real_is_user_renameable (SidebarRenameableEntry* base) {
 	SearchesSidebarEntry * self;
 	gboolean result = FALSE;
-#line 137 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 123 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SEARCHES_TYPE_SIDEBAR_ENTRY, SearchesSidebarEntry);
-#line 138 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 124 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	result = TRUE;
-#line 138 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 124 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	return result;
-#line 1445 "Branch.c"
+#line 1293 "Branch.c"
 }
 
 
@@ -1452,85 +1300,85 @@ static void searches_sidebar_entry_real_rename (SidebarRenameableEntry* base, co
 	const gchar* _tmp2_ = NULL;
 	gboolean _tmp3_ = FALSE;
 	gboolean _tmp4_ = FALSE;
-#line 141 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 127 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SEARCHES_TYPE_SIDEBAR_ENTRY, SearchesSidebarEntry);
-#line 141 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 127 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	g_return_if_fail (new_name != NULL);
-#line 142 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp0_ = saved_search_table_get_instance ();
-#line 142 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp1_ = _tmp0_;
-#line 142 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp2_ = new_name;
-#line 142 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp3_ = saved_search_table_exists (_tmp1_, _tmp2_);
-#line 142 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp4_ = !_tmp3_;
-#line 142 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_saved_search_table_unref0 (_tmp1_);
-#line 142 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 128 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	if (_tmp4_) {
-#line 1474 "Branch.c"
+#line 1322 "Branch.c"
 		CommandManager* _tmp5_ = NULL;
 		CommandManager* _tmp6_ = NULL;
 		SavedSearch* _tmp7_ = NULL;
 		const gchar* _tmp8_ = NULL;
 		RenameSavedSearchCommand* _tmp9_ = NULL;
 		RenameSavedSearchCommand* _tmp10_ = NULL;
-#line 143 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 129 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp5_ = app_window_get_command_manager ();
-#line 143 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 129 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp6_ = _tmp5_;
-#line 143 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 129 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp7_ = self->priv->search;
-#line 143 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 129 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp8_ = new_name;
-#line 143 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 129 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp9_ = rename_saved_search_command_new (_tmp7_, _tmp8_);
-#line 143 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 129 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp10_ = _tmp9_;
-#line 143 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 129 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		command_manager_execute (_tmp6_, G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, TYPE_COMMAND, Command));
-#line 143 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 129 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_g_object_unref0 (_tmp10_);
-#line 143 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 129 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_command_manager_unref0 (_tmp6_);
-#line 1499 "Branch.c"
+#line 1347 "Branch.c"
 	} else {
 		const gchar* _tmp11_ = NULL;
 		SavedSearch* _tmp12_ = NULL;
 		gchar* _tmp13_ = NULL;
 		gchar* _tmp14_ = NULL;
 		gboolean _tmp15_ = FALSE;
-#line 144 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 130 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp11_ = new_name;
-#line 144 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 130 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp12_ = self->priv->search;
-#line 144 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 130 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp13_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_DATA_OBJECT, DataObject));
-#line 144 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 130 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp14_ = _tmp13_;
-#line 144 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 130 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp15_ = g_strcmp0 (_tmp11_, _tmp14_) != 0;
-#line 144 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 130 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_g_free0 (_tmp14_);
-#line 144 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 130 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		if (_tmp15_) {
-#line 1520 "Branch.c"
+#line 1368 "Branch.c"
 			const gchar* _tmp16_ = NULL;
 			gchar* _tmp17_ = NULL;
 			gchar* _tmp18_ = NULL;
-#line 145 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 131 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 			_tmp16_ = new_name;
-#line 145 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 131 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 			_tmp17_ = resources_rename_search_exists_message (_tmp16_);
-#line 145 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 131 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 			_tmp18_ = _tmp17_;
-#line 145 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 131 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 			app_window_error_message (_tmp18_, NULL);
-#line 145 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 131 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 			_g_free0 (_tmp18_);
-#line 1534 "Branch.c"
+#line 1382 "Branch.c"
 		}
 	}
 }
@@ -1540,99 +1388,99 @@ static void searches_sidebar_entry_real_destroy_source (SidebarDestroyableEntry*
 	SearchesSidebarEntry * self;
 	SavedSearch* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 148 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 134 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SEARCHES_TYPE_SIDEBAR_ENTRY, SearchesSidebarEntry);
-#line 149 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 135 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp0_ = self->priv->search;
-#line 149 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 135 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp1_ = dialogs_confirm_delete_saved_search (_tmp0_);
-#line 149 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 135 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	if (_tmp1_) {
-#line 1552 "Branch.c"
+#line 1400 "Branch.c"
 		CommandManager* _tmp2_ = NULL;
 		CommandManager* _tmp3_ = NULL;
 		SavedSearch* _tmp4_ = NULL;
 		DeleteSavedSearchCommand* _tmp5_ = NULL;
 		DeleteSavedSearchCommand* _tmp6_ = NULL;
-#line 150 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp2_ = app_window_get_command_manager ();
-#line 150 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp3_ = _tmp2_;
-#line 150 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp4_ = self->priv->search;
-#line 150 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp5_ = delete_saved_search_command_new (_tmp4_);
-#line 150 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_tmp6_ = _tmp5_;
-#line 150 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		command_manager_execute (_tmp3_, G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_COMMAND, Command));
-#line 150 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_g_object_unref0 (_tmp6_);
-#line 150 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 136 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 		_command_manager_unref0 (_tmp3_);
-#line 1574 "Branch.c"
+#line 1422 "Branch.c"
 	}
 }
 
 
 static void searches_sidebar_entry_class_init (SearchesSidebarEntryClass * klass) {
 	gchar* _tmp0_ = NULL;
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	searches_sidebar_entry_parent_class = g_type_class_peek_parent (klass);
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	g_type_class_add_private (klass, sizeof (SearchesSidebarEntryPrivate));
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	((SidebarSimplePageEntryClass *) klass)->get_sidebar_name = searches_sidebar_entry_real_get_sidebar_name;
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	((SidebarSimplePageEntryClass *) klass)->get_sidebar_icon = searches_sidebar_entry_real_get_sidebar_icon;
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	((SidebarSimplePageEntryClass *) klass)->create_page = searches_sidebar_entry_real_create_page;
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	G_OBJECT_CLASS (klass)->finalize = searches_sidebar_entry_finalize;
-#line 107 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 93 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_tmp0_ = g_strdup ("find");
-#line 107 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 93 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	searches_sidebar_entry_single_search_icon = _tmp0_;
-#line 1597 "Branch.c"
+#line 1445 "Branch.c"
 }
 
 
 static void searches_sidebar_entry_sidebar_renameable_entry_interface_init (SidebarRenameableEntryIface * iface) {
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	searches_sidebar_entry_sidebar_renameable_entry_parent_iface = g_type_interface_peek_parent (iface);
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	iface->is_user_renameable = (gboolean (*)(SidebarRenameableEntry*)) searches_sidebar_entry_real_is_user_renameable;
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	iface->rename = (void (*)(SidebarRenameableEntry*, const gchar*)) searches_sidebar_entry_real_rename;
-#line 1608 "Branch.c"
+#line 1456 "Branch.c"
 }
 
 
 static void searches_sidebar_entry_sidebar_destroyable_entry_interface_init (SidebarDestroyableEntryIface * iface) {
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	searches_sidebar_entry_sidebar_destroyable_entry_parent_iface = g_type_interface_peek_parent (iface);
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	iface->destroy_source = (void (*)(SidebarDestroyableEntry*)) searches_sidebar_entry_real_destroy_source;
-#line 1617 "Branch.c"
+#line 1465 "Branch.c"
 }
 
 
 static void searches_sidebar_entry_instance_init (SearchesSidebarEntry * self) {
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self->priv = SEARCHES_SIDEBAR_ENTRY_GET_PRIVATE (self);
-#line 1624 "Branch.c"
+#line 1472 "Branch.c"
 }
 
 
 static void searches_sidebar_entry_finalize (GObject* obj) {
 	SearchesSidebarEntry * self;
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SEARCHES_TYPE_SIDEBAR_ENTRY, SearchesSidebarEntry);
-#line 109 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 95 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	_g_object_unref0 (self->priv->search);
-#line 105 "/home/jens/Source/shotwell/src/searches/Branch.vala"
+#line 91 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	G_OBJECT_CLASS (searches_sidebar_entry_parent_class)->finalize (obj);
-#line 1636 "Branch.c"
+#line 1484 "Branch.c"
 }
 
 

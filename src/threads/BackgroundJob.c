@@ -237,7 +237,7 @@ enum  {
 	BACKGROUND_JOB_DUMMY_PROPERTY
 };
 gint background_job_job_priority_compare (BackgroundJobJobPriority self, BackgroundJobJobPriority other);
-gint background_job_job_priority_compare_func (void* a, void* b);
+gint background_job_job_priority_compare_func (BackgroundJobJobPriority a, BackgroundJobJobPriority b);
 static gpointer background_job_notification_job_ref (gpointer instance);
 static void background_job_notification_job_unref (gpointer instance);
 static GParamSpec* background_job_param_spec_notification_job (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) G_GNUC_UNUSED;
@@ -622,10 +622,10 @@ gint background_job_job_priority_compare (BackgroundJobJobPriority self, Backgro
 }
 
 
-gint background_job_job_priority_compare_func (void* a, void* b) {
+gint background_job_job_priority_compare_func (BackgroundJobJobPriority a, BackgroundJobJobPriority b) {
 	gint result = 0;
-	void* _tmp0_ = NULL;
-	void* _tmp1_ = NULL;
+	BackgroundJobJobPriority _tmp0_ = 0;
+	BackgroundJobJobPriority _tmp1_ = 0;
 #line 79 "/home/jens/Source/shotwell/src/threads/BackgroundJob.vala"
 	_tmp0_ = b;
 #line 79 "/home/jens/Source/shotwell/src/threads/BackgroundJob.vala"

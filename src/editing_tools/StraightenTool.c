@@ -548,16 +548,16 @@ static const gdouble EDITING_TOOLS_STRAIGHTEN_TOOL_GUIDE_DASH[2] = {(gdouble) 10
 
 static EditingToolsStraightenTool* editing_tools_straighten_tool_construct (GType object_type) {
 	EditingToolsStraightenTool* self = NULL;
-#line 183 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 190 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self = (EditingToolsStraightenTool*) editing_tools_editing_tool_construct (object_type, "StraightenTool");
-#line 182 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 189 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return self;
 #line 556 "StraightenTool.c"
 }
 
 
 static EditingToolsStraightenTool* editing_tools_straighten_tool_new (void) {
-#line 182 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 189 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return editing_tools_straighten_tool_construct (EDITING_TOOLS_TYPE_STRAIGHTEN_TOOL);
 #line 563 "StraightenTool.c"
 }
@@ -566,11 +566,11 @@ static EditingToolsStraightenTool* editing_tools_straighten_tool_new (void) {
 EditingToolsStraightenTool* editing_tools_straighten_tool_factory (void) {
 	EditingToolsStraightenTool* result = NULL;
 	EditingToolsStraightenTool* _tmp0_ = NULL;
-#line 187 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 194 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = editing_tools_straighten_tool_new ();
-#line 187 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 194 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	result = _tmp0_;
-#line 187 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 194 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return result;
 #line 576 "StraightenTool.c"
 }
@@ -578,13 +578,13 @@ EditingToolsStraightenTool* editing_tools_straighten_tool_factory (void) {
 
 gboolean editing_tools_straighten_tool_is_available (Photo* photo, Scaling* scaling) {
 	gboolean result = FALSE;
-#line 190 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 197 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_val_if_fail (IS_PHOTO (photo), FALSE);
-#line 190 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 197 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_val_if_fail (scaling != NULL, FALSE);
-#line 191 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 198 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	result = TRUE;
-#line 191 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 198 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return result;
 #line 590 "StraightenTool.c"
 }
@@ -626,71 +626,71 @@ static void editing_tools_straighten_tool_on_ok_clicked (EditingToolsStraightenT
 	StraightenCommand* _tmp21_ = NULL;
 	StraightenCommand* _tmp22_ = NULL;
 	Dimensions _tmp23_ = {0};
-#line 202 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 209 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 203 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 210 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 203 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 210 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = editing_tools_photo_canvas_get_photo (_tmp0_);
-#line 203 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 210 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = _tmp1_;
-#line 203 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 210 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_vala_assert (_tmp2_ != NULL, "canvas.get_photo() != null");
-#line 203 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 210 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (_tmp2_);
-#line 207 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 214 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = self->priv->window;
-#line 207 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 214 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp4_ = _tmp3_->angle_slider;
-#line 207 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 214 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_range_get_type (), GtkRange));
-#line 207 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 214 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	slider_val = _tmp5_;
-#line 209 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 216 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp6_ = self->priv->rotated_center;
-#line 209 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 216 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp7_ = self->priv->image_dims;
-#line 209 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 216 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp8_ = _tmp7_.width;
-#line 209 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 216 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp9_ = self->priv->image_dims;
-#line 209 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 216 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp10_ = _tmp9_.height;
-#line 209 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 216 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	rotate_point_arb (&_tmp6_, _tmp8_, _tmp10_, slider_val, FALSE, &_tmp11_);
-#line 209 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 216 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	new_crop_center = _tmp11_;
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp12_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp13_ = editing_tools_photo_canvas_get_photo (_tmp12_);
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp14_ = _tmp13_;
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp15_ = new_crop_center;
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp16_ = self->priv->rotate_scale;
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp17_ = self->priv->crop_width;
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp18_ = self->priv->rotate_scale;
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp19_ = self->priv->crop_height;
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	box_from_center (&_tmp15_, (gint) (_tmp16_ * _tmp17_), (gint) (_tmp18_ * _tmp19_), &_tmp20_);
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp21_ = straighten_command_new (_tmp14_, slider_val, &_tmp20_, RESOURCES_STRAIGHTEN_LABEL, RESOURCES_STRAIGHTEN_TOOLTIP);
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp22_ = _tmp21_;
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (_tmp14_);
-#line 212 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 219 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	command = _tmp22_;
-#line 217 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 224 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp23_ = self->priv->image_dims;
-#line 217 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 224 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool), "applied", G_TYPE_CHECK_INSTANCE_CAST (command, TYPE_COMMAND, Command), NULL, &_tmp23_, TRUE);
-#line 202 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 209 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (command);
 #line 696 "StraightenTool.c"
 }
@@ -698,24 +698,24 @@ static void editing_tools_straighten_tool_on_ok_clicked (EditingToolsStraightenT
 
 static void editing_tools_straighten_tool_high_qual_repaint (EditingToolsStraightenTool* self) {
 	EditingToolsPhotoCanvas* _tmp0_ = NULL;
-#line 220 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 227 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 221 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 228 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->use_high_qual = TRUE;
-#line 222 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 229 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_update_rotated_surface (self);
-#line 223 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 230 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 223 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 230 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_repaint (_tmp0_);
 #line 712 "StraightenTool.c"
 }
 
 
 static void editing_tools_straighten_tool_on_slider_stopped_delayed (EditingToolsStraightenTool* self) {
-#line 226 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 233 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 227 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 234 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_high_qual_repaint (self);
 #line 721 "StraightenTool.c"
 }
@@ -727,17 +727,17 @@ static void editing_tools_straighten_tool_real_on_left_click (EditingToolsEditin
 	gint _tmp1_ = 0;
 	gint _tmp2_ = 0;
 	gdouble _tmp3_ = 0.0;
-#line 230 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 237 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_STRAIGHTEN_TOOL, EditingToolsStraightenTool);
-#line 231 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 238 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = self->priv->guide;
-#line 231 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 238 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = x;
-#line 231 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 238 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = y;
-#line 231 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 238 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = self->priv->photo_angle;
-#line 231 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 238 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_straighten_guide_reset (_tmp0_, _tmp1_, _tmp2_, _tmp3_);
 #line 743 "StraightenTool.c"
 }
@@ -753,47 +753,47 @@ static void editing_tools_straighten_tool_real_on_left_released (EditingToolsEdi
 	gdouble* _tmp4_ = NULL;
 	EditingToolsStraightenToolStraightenGuide* _tmp5_ = NULL;
 	gdouble* _tmp6_ = NULL;
-#line 234 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 241 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_STRAIGHTEN_TOOL, EditingToolsStraightenTool);
-#line 235 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 242 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = self->priv->guide;
-#line 235 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 242 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = x;
-#line 235 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 242 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = y;
-#line 235 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 242 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_straighten_guide_update (_tmp0_, _tmp1_, _tmp2_);
-#line 236 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 243 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = self->priv->guide;
-#line 236 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 243 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp4_ = editing_tools_straighten_tool_straighten_guide_get_angle (_tmp3_);
-#line 236 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 243 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	a = _tmp4_;
-#line 237 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 244 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = self->priv->guide;
-#line 237 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 244 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_straighten_guide_clear (_tmp5_);
-#line 238 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 245 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp6_ = a;
-#line 238 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 245 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_tmp6_ != NULL) {
 #line 781 "StraightenTool.c"
 		EditingToolsStraightenToolStraightenToolWindow* _tmp7_ = NULL;
 		GtkScale* _tmp8_ = NULL;
 		gdouble* _tmp9_ = NULL;
-#line 239 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 246 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp7_ = self->priv->window;
-#line 239 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 246 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp8_ = _tmp7_->angle_slider;
-#line 239 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 246 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp9_ = a;
-#line 239 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 246 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_range_get_type (), GtkRange), *_tmp9_);
-#line 240 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 247 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		editing_tools_straighten_tool_high_qual_repaint (self);
 #line 795 "StraightenTool.c"
 	}
-#line 234 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 241 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_free0 (a);
 #line 799 "StraightenTool.c"
 }
@@ -805,23 +805,23 @@ static void editing_tools_straighten_tool_real_on_motion (EditingToolsEditingToo
 	gint _tmp1_ = 0;
 	gint _tmp2_ = 0;
 	gboolean _tmp3_ = FALSE;
-#line 244 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 251 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_STRAIGHTEN_TOOL, EditingToolsStraightenTool);
-#line 245 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 252 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = self->priv->guide;
-#line 245 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 252 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = x;
-#line 245 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 252 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = y;
-#line 245 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 252 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = editing_tools_straighten_tool_straighten_guide_update (_tmp0_, _tmp1_, _tmp2_);
-#line 245 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 252 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_tmp3_) {
 #line 821 "StraightenTool.c"
 		EditingToolsPhotoCanvas* _tmp4_ = NULL;
-#line 246 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 253 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp4_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 246 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 253 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		editing_tools_photo_canvas_repaint (_tmp4_);
 #line 827 "StraightenTool.c"
 	}
@@ -841,124 +841,124 @@ static gboolean editing_tools_straighten_tool_real_on_keypress (EditingToolsEdit
 	const gchar* _tmp13_ = NULL;
 	GdkEventKey* _tmp14_ = NULL;
 	gboolean _tmp15_ = FALSE;
-#line 249 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 256 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_STRAIGHTEN_TOOL, EditingToolsStraightenTool);
-#line 249 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 256 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 250 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = event;
-#line 250 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = _tmp2_->keyval;
-#line 250 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp4_ = gdk_keyval_name (_tmp3_);
-#line 250 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (g_strcmp0 (_tmp4_, "KP_Enter") == 0) {
-#line 250 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp1_ = TRUE;
 #line 859 "StraightenTool.c"
 	} else {
 		GdkEventKey* _tmp5_ = NULL;
 		guint _tmp6_ = 0U;
 		const gchar* _tmp7_ = NULL;
-#line 251 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 258 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp5_ = event;
-#line 251 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 258 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp6_ = _tmp5_->keyval;
-#line 251 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 258 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp7_ = gdk_keyval_name (_tmp6_);
-#line 251 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 258 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp1_ = g_strcmp0 (_tmp7_, "Enter") == 0;
 #line 872 "StraightenTool.c"
 	}
-#line 250 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_tmp1_) {
-#line 250 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp0_ = TRUE;
 #line 878 "StraightenTool.c"
 	} else {
 		GdkEventKey* _tmp8_ = NULL;
 		guint _tmp9_ = 0U;
 		const gchar* _tmp10_ = NULL;
-#line 252 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 259 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp8_ = event;
-#line 252 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 259 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp9_ = _tmp8_->keyval;
-#line 252 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 259 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp10_ = gdk_keyval_name (_tmp9_);
-#line 252 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 259 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp0_ = g_strcmp0 (_tmp10_, "Return") == 0;
 #line 891 "StraightenTool.c"
 	}
-#line 250 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_tmp0_) {
-#line 253 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 260 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		editing_tools_straighten_tool_on_ok_clicked (self);
-#line 254 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 261 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		result = TRUE;
-#line 254 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 261 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return result;
 #line 901 "StraightenTool.c"
 	}
-#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 264 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp11_ = event;
-#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 264 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp12_ = _tmp11_->keyval;
-#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 264 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp13_ = gdk_keyval_name (_tmp12_);
-#line 257 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 264 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (g_strcmp0 (_tmp13_, "Escape") == 0) {
-#line 258 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 265 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		editing_tools_editing_tool_notify_cancel (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 259 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 266 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		result = TRUE;
-#line 259 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 266 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return result;
 #line 917 "StraightenTool.c"
 	}
-#line 262 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 269 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp14_ = event;
-#line 262 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 269 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp15_ = EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_straighten_tool_parent_class)->on_keypress (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool), _tmp14_);
-#line 262 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 269 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	result = _tmp15_;
-#line 262 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 269 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return result;
 #line 927 "StraightenTool.c"
 }
 
 
 static gboolean _dimensions_equal (const Dimensions* s1, const Dimensions* s2) {
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (s1 == s2) {
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return TRUE;
 #line 936 "StraightenTool.c"
 	}
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (s1 == NULL) {
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return FALSE;
 #line 942 "StraightenTool.c"
 	}
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (s2 == NULL) {
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return FALSE;
 #line 948 "StraightenTool.c"
 	}
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (s1->width != s2->width) {
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return FALSE;
 #line 954 "StraightenTool.c"
 	}
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (s1->height != s2->height) {
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return FALSE;
 #line 960 "StraightenTool.c"
 	}
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return TRUE;
 #line 964 "StraightenTool.c"
 }
@@ -1010,33 +1010,33 @@ static void editing_tools_straighten_tool_prepare_image (EditingToolsStraightenT
 	cairo_surface_t* _tmp53_ = NULL;
 	cairo_t* _tmp54_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 265 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 272 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 266 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 273 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 266 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 273 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_get_surface_dim (_tmp0_, &_tmp1_);
-#line 266 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 273 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	canvas_dims = _tmp1_;
-#line 267 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 274 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	dimensions_with_max (&canvas_dims, EDITING_TOOLS_STRAIGHTEN_TOOL_TEMP_PIXBUF_SIZE, EDITING_TOOLS_STRAIGHTEN_TOOL_TEMP_PIXBUF_SIZE, &_tmp2_);
-#line 267 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 274 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	viewport = _tmp2_;
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = viewport;
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp4_ = self->priv->last_viewport;
-#line 268 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_dimensions_equal (&_tmp3_, &_tmp4_) == TRUE) {
-#line 269 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 276 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return;
 #line 1034 "StraightenTool.c"
 	}
-#line 271 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 278 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = viewport;
-#line 271 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 278 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->last_viewport = _tmp5_;
-#line 273 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 280 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	low_res_tmp = NULL;
 #line 1042 "StraightenTool.c"
 	{
@@ -1049,38 +1049,38 @@ static void editing_tools_straighten_tool_prepare_image (EditingToolsStraightenT
 		GdkPixbuf* _tmp12_ = NULL;
 		GdkPixbuf* _tmp13_ = NULL;
 		GdkPixbuf* _tmp14_ = NULL;
-#line 276 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp7_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 276 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp8_ = editing_tools_photo_canvas_get_photo (_tmp7_);
-#line 276 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp9_ = _tmp8_;
-#line 276 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp10_ = viewport;
-#line 276 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		scaling_for_viewport (&_tmp10_, FALSE, &_tmp11_);
-#line 276 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp12_ = photo_get_pixbuf_with_options (_tmp9_, &_tmp11_, PHOTO_EXCEPTION_STRAIGHTEN | PHOTO_EXCEPTION_CROP, BACKING_FETCH_MODE_BASELINE, &_inner_error_);
-#line 276 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp13_ = _tmp12_;
-#line 276 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_g_object_unref0 (_tmp9_);
-#line 276 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp6_ = _tmp13_;
-#line 276 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1073 "StraightenTool.c"
 			goto __catch21_g_error;
 		}
-#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 282 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp14_ = _tmp6_;
-#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 282 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp6_ = NULL;
-#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 282 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_g_object_unref0 (low_res_tmp);
-#line 275 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 282 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		low_res_tmp = _tmp14_;
-#line 274 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 281 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_g_object_unref0 (_tmp6_);
 #line 1086 "StraightenTool.c"
 	}
@@ -1094,148 +1094,148 @@ static void editing_tools_straighten_tool_prepare_image (EditingToolsStraightenT
 		gchar* _tmp18_ = NULL;
 		gchar* _tmp19_ = NULL;
 		GdkPixbuf* _tmp20_ = NULL;
-#line 274 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 281 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		e = _inner_error_;
-#line 274 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 281 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_inner_error_ = NULL;
-#line 279 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp15_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 279 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp16_ = editing_tools_photo_canvas_get_photo (_tmp15_);
-#line 279 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp17_ = _tmp16_;
-#line 279 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp18_ = data_object_to_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, TYPE_DATA_OBJECT, DataObject));
-#line 279 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp19_ = _tmp18_;
-#line 279 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-		g_warning ("StraightenTool.vala:279: A pixbuf for %s couldn't be fetched.", _tmp19_);
-#line 279 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+		g_warning ("StraightenTool.vala:286: A pixbuf for %s couldn't be fetched.", _tmp19_);
+#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_g_free0 (_tmp19_);
-#line 279 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_g_object_unref0 (_tmp17_);
-#line 280 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 287 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp20_ = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 1, 1);
-#line 280 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 287 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_g_object_unref0 (low_res_tmp);
-#line 280 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 287 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		low_res_tmp = _tmp20_;
-#line 274 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 281 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_g_error_free0 (e);
 #line 1126 "StraightenTool.c"
 	}
 	__finally21:
-#line 274 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 281 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 274 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 281 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_g_object_unref0 (low_res_tmp);
-#line 274 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 281 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 274 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 281 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		g_clear_error (&_inner_error_);
-#line 274 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 281 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return;
 #line 1139 "StraightenTool.c"
 	}
-#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 290 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp21_ = low_res_tmp;
-#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 290 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp22_ = gdk_pixbuf_get_width (_tmp21_);
-#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 290 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp23_ = _tmp22_;
-#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 290 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp24_ = self->priv->image_dims;
-#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 290 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp25_ = _tmp24_.width;
-#line 283 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 290 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->preview_scale = _tmp23_ / ((gdouble) _tmp25_);
-#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 293 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp26_ = low_res_tmp;
-#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 293 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp27_ = gdk_pixbuf_get_width (_tmp26_);
-#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 293 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp28_ = _tmp27_;
-#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 293 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp29_ = low_res_tmp;
-#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 293 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp30_ = gdk_pixbuf_get_height (_tmp29_);
-#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 293 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp31_ = _tmp30_;
-#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 293 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp32_ = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, _tmp28_, _tmp31_);
-#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 293 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_surface_destroy0 (self->priv->photo_surf);
-#line 286 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 293 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->photo_surf = _tmp32_;
-#line 287 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 294 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp33_ = self->priv->photo_surf;
-#line 287 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 294 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp34_ = cairo_create (_tmp33_);
-#line 287 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 294 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	ctx = _tmp34_;
-#line 288 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 295 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp35_ = ctx;
-#line 288 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 295 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp36_ = low_res_tmp;
-#line 288 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 295 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	gdk_cairo_set_source_pixbuf (_tmp35_, _tmp36_, (gdouble) 0, (gdouble) 0);
-#line 289 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 296 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp37_ = ctx;
-#line 289 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 296 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp38_ = low_res_tmp;
-#line 289 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 296 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp39_ = gdk_pixbuf_get_width (_tmp38_);
-#line 289 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 296 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp40_ = _tmp39_;
-#line 289 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 296 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp41_ = low_res_tmp;
-#line 289 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 296 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp42_ = gdk_pixbuf_get_height (_tmp41_);
-#line 289 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 296 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp43_ = _tmp42_;
-#line 289 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 296 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_rectangle (_tmp37_, (gdouble) 0, (gdouble) 0, (gdouble) _tmp40_, (gdouble) _tmp43_);
-#line 290 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 297 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp44_ = ctx;
-#line 290 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 297 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_fill (_tmp44_);
-#line 291 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 298 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp45_ = ctx;
-#line 291 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 298 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_paint (_tmp45_);
-#line 295 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 302 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp46_ = self->priv->crop_width;
-#line 295 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 302 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp47_ = self->priv->preview_scale;
-#line 295 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 302 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->view_width = (gint) (_tmp46_ * _tmp47_);
-#line 296 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 303 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp48_ = self->priv->crop_height;
-#line 296 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 303 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp49_ = self->priv->preview_scale;
-#line 296 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 303 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->view_height = (gint) (_tmp48_ * _tmp49_);
-#line 297 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 304 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp50_ = self->priv->view_width;
-#line 297 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 304 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp51_ = self->priv->view_height;
-#line 297 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 304 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp52_ = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, _tmp50_, _tmp51_);
-#line 297 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 304 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_surface_destroy0 (self->priv->rotate_surf);
-#line 297 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 304 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->rotate_surf = _tmp52_;
-#line 298 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 305 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp53_ = self->priv->rotate_surf;
-#line 298 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 305 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp54_ = cairo_create (_tmp53_);
-#line 298 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 305 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (self->priv->rotate_ctx);
-#line 298 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 305 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->rotate_ctx = _tmp54_;
-#line 265 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 272 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (ctx);
-#line 265 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 272 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (low_res_tmp);
 #line 1241 "StraightenTool.c"
 }
@@ -1271,73 +1271,73 @@ static void editing_tools_straighten_tool_adjust_for_rotation (EditingToolsStrai
 	Dimensions _tmp22_ = {0};
 	gint _tmp23_ = 0;
 	gint _tmp24_ = 0;
-#line 302 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 309 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 304 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 311 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = self->priv->crop_width;
-#line 304 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 311 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = self->priv->crop_height;
-#line 304 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 311 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = self->priv->photo_angle;
-#line 304 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 311 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	compute_arb_rotated_size ((gdouble) _tmp0_, (gdouble) _tmp1_, _tmp2_, &_tmp3_, &_tmp4_);
-#line 304 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 311 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	width = _tmp3_;
-#line 304 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 311 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	height = _tmp4_;
-#line 307 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = self->priv->image_dims;
-#line 307 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp6_ = _tmp5_.width;
-#line 307 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp7_ = self->priv->image_dims;
-#line 307 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp8_ = _tmp7_.height;
-#line 307 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp9_ = MIN (_tmp6_ / width, _tmp8_ / height);
-#line 307 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->rotate_scale = _tmp9_;
-#line 308 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 315 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp10_ = self->priv->rotate_scale;
-#line 308 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 315 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp11_ = MIN (_tmp10_, 1.0);
-#line 308 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 315 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->rotate_scale = _tmp11_;
-#line 311 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 318 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp12_ = self->priv->crop_center;
-#line 311 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 318 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->rotated_center = _tmp12_;
-#line 312 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 319 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp13_ = self->priv->rotate_scale;
-#line 312 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 319 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	radius_x = (gint) ((_tmp13_ * width) / 2);
-#line 313 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 320 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp14_ = self->priv->rotate_scale;
-#line 313 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 320 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	radius_y = (gint) ((_tmp14_ * height) / 2);
-#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 321 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp15_ = self->priv->rotated_center;
-#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 321 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp16_ = _tmp15_.x;
-#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 321 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp17_ = self->priv->image_dims;
-#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 321 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp18_ = _tmp17_.width;
-#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 321 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp19_ = CLAMP (_tmp16_, radius_x, _tmp18_ - radius_x);
-#line 314 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 321 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->rotated_center.x = _tmp19_;
-#line 315 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 322 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp20_ = self->priv->rotated_center;
-#line 315 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 322 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp21_ = _tmp20_.y;
-#line 315 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 322 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp22_ = self->priv->image_dims;
-#line 315 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 322 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp23_ = _tmp22_.height;
-#line 315 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 322 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp24_ = CLAMP (_tmp21_, radius_y, _tmp23_ - radius_y);
-#line 315 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 322 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->rotated_center.y = _tmp24_;
 #line 1343 "StraightenTool.c"
 }
@@ -1351,9 +1351,16 @@ static void editing_tools_straighten_tool_adjust_for_rotation (EditingToolsStrai
      * @param canvas The PhotoCanvas the tool's output should be painted to.
      */
 static gpointer _editing_tools_photo_canvas_ref0 (gpointer self) {
-#line 327 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return self ? editing_tools_photo_canvas_ref (self) : NULL;
 #line 1357 "StraightenTool.c"
+}
+
+
+static gpointer _g_object_ref0 (gpointer self) {
+#line 366 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	return self ? g_object_ref (self) : NULL;
+#line 1364 "StraightenTool.c"
 }
 
 
@@ -1388,10 +1395,13 @@ static void editing_tools_straighten_tool_real_activate (EditingToolsEditingTool
 	GdkPoint _tmp28_ = {0};
 	gint _tmp29_ = 0;
 	gint _tmp30_ = 0;
+	GdkWindow* drawing_window = NULL;
 	EditingToolsPhotoCanvas* _tmp31_ = NULL;
 	GdkWindow* _tmp32_ = NULL;
-	GdkWindow* _tmp33_ = NULL;
-	GdkCursor* _tmp34_ = NULL;
+	GdkDisplay* display = NULL;
+	GdkDisplay* _tmp33_ = NULL;
+	GdkDisplay* _tmp34_ = NULL;
+	GdkCursor* cursor = NULL;
 	GdkCursor* _tmp35_ = NULL;
 	EditingToolsPhotoCanvas* _tmp36_ = NULL;
 	GtkWindow* _tmp37_ = NULL;
@@ -1407,186 +1417,194 @@ static void editing_tools_straighten_tool_real_activate (EditingToolsEditingTool
 	EditingToolsStraightenToolStraightenToolWindow* _tmp46_ = NULL;
 	GtkLabel* _tmp47_ = NULL;
 	EditingToolsStraightenToolStraightenToolWindow* _tmp48_ = NULL;
-#line 325 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 332 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_STRAIGHTEN_TOOL, EditingToolsStraightenTool);
-#line 325 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 332 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_PHOTO_CANVAS (canvas));
-#line 326 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 333 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = canvas;
-#line 326 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 333 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_straighten_tool_parent_class)->activate (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool), _tmp0_);
-#line 327 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = canvas;
-#line 327 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = _editing_tools_photo_canvas_ref0 (_tmp1_);
-#line 327 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_editing_tools_photo_canvas_unref0 (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas);
-#line 327 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas = _tmp2_;
-#line 328 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 335 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 328 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 335 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_bind_canvas_handlers (self, _tmp3_);
-#line 330 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 337 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp4_ = canvas;
-#line 330 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 337 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = editing_tools_photo_canvas_get_photo (_tmp4_);
-#line 330 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 337 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp6_ = _tmp5_;
-#line 330 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 337 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	media_source_get_dimensions (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_MEDIA_SOURCE, MediaSource), PHOTO_EXCEPTION_STRAIGHTEN | PHOTO_EXCEPTION_CROP, &_tmp7_);
-#line 330 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 337 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->image_dims = _tmp7_;
-#line 330 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 337 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (_tmp6_);
-#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 341 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp8_ = canvas;
-#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 341 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp9_ = editing_tools_photo_canvas_get_photo (_tmp8_);
-#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 341 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp10_ = _tmp9_;
-#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 341 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp12_ = photo_get_crop (_tmp10_, &_tmp11_, PHOTO_EXCEPTION_NONE);
-#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 341 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	crop_region = _tmp11_;
-#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 341 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp13_ = !_tmp12_;
-#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 341 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (_tmp10_);
-#line 334 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 341 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_tmp13_) {
-#line 1459 "StraightenTool.c"
+#line 1469 "StraightenTool.c"
 		Dimensions _tmp14_ = {0};
 		gint _tmp15_ = 0;
 		Dimensions _tmp16_ = {0};
 		gint _tmp17_ = 0;
-#line 335 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 342 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		crop_region.left = 0;
-#line 336 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 343 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp14_ = self->priv->image_dims;
-#line 336 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 343 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp15_ = _tmp14_.width;
-#line 336 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 343 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		crop_region.right = _tmp15_;
-#line 338 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 345 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		crop_region.top = 0;
-#line 339 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 346 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp16_ = self->priv->image_dims;
-#line 339 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 346 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp17_ = _tmp16_.height;
-#line 339 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 346 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		crop_region.bottom = _tmp17_;
-#line 1480 "StraightenTool.c"
+#line 1490 "StraightenTool.c"
 	}
-#line 344 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 351 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	incoming_angle = 0.0;
-#line 345 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 352 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp18_ = canvas;
-#line 345 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 352 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp19_ = editing_tools_photo_canvas_get_photo (_tmp18_);
-#line 345 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 352 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp20_ = _tmp19_;
-#line 345 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 352 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	photo_get_straighten (_tmp20_, &_tmp21_);
-#line 345 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 352 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	incoming_angle = _tmp21_;
-#line 345 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 352 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (_tmp20_);
-#line 348 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	box_get_center (&crop_region, &_tmp22_);
-#line 348 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp23_ = self->priv->image_dims;
-#line 348 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp24_ = _tmp23_.width;
-#line 348 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp25_ = self->priv->image_dims;
-#line 348 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp26_ = _tmp25_.height;
-#line 348 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp27_ = incoming_angle;
-#line 348 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	derotate_point_arb (&_tmp22_, _tmp24_, _tmp26_, _tmp27_, &_tmp28_);
-#line 348 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	self->priv->crop_center = _tmp28_;
-#line 350 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp29_ = box_get_width (&crop_region);
-#line 350 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	self->priv->crop_width = _tmp29_;
-#line 351 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp30_ = box_get_height (&crop_region);
-#line 351 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	self->priv->crop_height = _tmp30_;
-#line 353 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	editing_tools_straighten_tool_adjust_for_rotation (self);
 #line 355 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	box_get_center (&crop_region, &_tmp22_);
+#line 355 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp23_ = self->priv->image_dims;
+#line 355 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp24_ = _tmp23_.width;
+#line 355 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp25_ = self->priv->image_dims;
+#line 355 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp26_ = _tmp25_.height;
+#line 355 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp27_ = incoming_angle;
+#line 355 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	derotate_point_arb (&_tmp22_, _tmp24_, _tmp26_, _tmp27_, &_tmp28_);
+#line 355 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	self->priv->crop_center = _tmp28_;
+#line 357 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp29_ = box_get_width (&crop_region);
+#line 357 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	self->priv->crop_width = _tmp29_;
+#line 358 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp30_ = box_get_height (&crop_region);
+#line 358 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	self->priv->crop_height = _tmp30_;
+#line 360 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	editing_tools_straighten_tool_adjust_for_rotation (self);
+#line 362 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_prepare_image (self);
-#line 358 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 365 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp31_ = canvas;
-#line 358 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 365 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp32_ = editing_tools_photo_canvas_get_drawing_window (_tmp31_);
-#line 358 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp33_ = _tmp32_;
-#line 358 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp34_ = gdk_cursor_new (GDK_CROSSHAIR);
-#line 358 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp35_ = _tmp34_;
-#line 358 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gdk_window_set_cursor (_tmp33_, _tmp35_);
-#line 358 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_g_object_unref0 (_tmp35_);
-#line 358 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_g_object_unref0 (_tmp33_);
-#line 360 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 365 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	drawing_window = _tmp32_;
+#line 366 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp33_ = gdk_window_get_display (drawing_window);
+#line 366 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp34_ = _g_object_ref0 (_tmp33_);
+#line 366 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	display = _tmp34_;
+#line 367 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp35_ = gdk_cursor_new_for_display (display, GDK_CROSSHAIR);
+#line 367 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	cursor = _tmp35_;
+#line 369 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	gdk_window_set_cursor (drawing_window, cursor);
+#line 371 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp36_ = canvas;
-#line 360 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 371 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp37_ = editing_tools_photo_canvas_get_container (_tmp36_);
-#line 360 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 371 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp38_ = _tmp37_;
-#line 360 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 371 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp39_ = editing_tools_straighten_tool_straighten_tool_window_new (_tmp38_);
-#line 360 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 371 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_object_ref_sink (_tmp39_);
-#line 360 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 371 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (self->priv->window);
-#line 360 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 371 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->window = _tmp39_;
-#line 360 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 371 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (_tmp38_);
-#line 361 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 372 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_bind_window_handlers (self);
-#line 364 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 375 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp40_ = self->priv->window;
-#line 364 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 375 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp41_ = _tmp40_->angle_slider;
-#line 364 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 375 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp42_ = incoming_angle;
-#line 364 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 375 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, gtk_range_get_type (), GtkRange), _tmp42_);
-#line 365 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 376 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp43_ = incoming_angle;
-#line 365 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 376 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->photo_angle = _tmp43_;
-#line 367 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 378 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp44_ = incoming_angle;
-#line 367 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 378 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp45_ = g_strdup_printf ("%2.1f°", _tmp44_);
-#line 367 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 378 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	tmp = _tmp45_;
-#line 368 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 379 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp46_ = self->priv->window;
-#line 368 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 379 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp47_ = _tmp46_->angle_label;
-#line 368 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 379 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	gtk_label_set_text (_tmp47_, tmp);
-#line 370 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 381 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_high_qual_repaint (self);
-#line 371 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 382 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp48_ = self->priv->window;
-#line 371 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 382 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, gtk_widget_get_type (), GtkWidget));
-#line 325 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 332 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_free0 (tmp);
-#line 1590 "StraightenTool.c"
+#line 332 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_g_object_unref0 (cursor);
+#line 332 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_g_object_unref0 (display);
+#line 332 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_g_object_unref0 (drawing_window);
+#line 1608 "StraightenTool.c"
 }
 
 
@@ -1597,122 +1615,122 @@ static void editing_tools_straighten_tool_real_deactivate (EditingToolsEditingTo
 	EditingToolsStraightenTool * self;
 	EditingToolsStraightenToolStraightenToolWindow* _tmp0_ = NULL;
 	EditingToolsPhotoCanvas* _tmp2_ = NULL;
-#line 377 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 388 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_STRAIGHTEN_TOOL, EditingToolsStraightenTool);
-#line 378 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 389 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = self->priv->window;
-#line 378 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 389 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_tmp0_ != NULL) {
-#line 1607 "StraightenTool.c"
-		EditingToolsStraightenToolStraightenToolWindow* _tmp1_ = NULL;
-#line 380 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-		editing_tools_straighten_tool_unbind_window_handlers (self);
-#line 382 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-		_tmp1_ = self->priv->window;
-#line 382 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-		gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget));
-#line 383 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-		_g_object_unref0 (self->priv->window);
-#line 383 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-		self->priv->window = NULL;
-#line 1619 "StraightenTool.c"
-	}
-#line 386 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp2_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 386 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	if (_tmp2_ != NULL) {
 #line 1625 "StraightenTool.c"
+		EditingToolsStraightenToolStraightenToolWindow* _tmp1_ = NULL;
+#line 391 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+		editing_tools_straighten_tool_unbind_window_handlers (self);
+#line 393 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+		_tmp1_ = self->priv->window;
+#line 393 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+		gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget));
+#line 394 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+		_g_object_unref0 (self->priv->window);
+#line 394 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+		self->priv->window = NULL;
+#line 1637 "StraightenTool.c"
+	}
+#line 397 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp2_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
+#line 397 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	if (_tmp2_ != NULL) {
+#line 1643 "StraightenTool.c"
 		EditingToolsPhotoCanvas* _tmp3_ = NULL;
 		EditingToolsPhotoCanvas* _tmp4_ = NULL;
 		GdkWindow* _tmp5_ = NULL;
 		GdkWindow* _tmp6_ = NULL;
-#line 387 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 398 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp3_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 387 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 398 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		editing_tools_straighten_tool_unbind_canvas_handlers (self, _tmp3_);
-#line 388 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 399 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp4_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 388 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 399 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp5_ = editing_tools_photo_canvas_get_drawing_window (_tmp4_);
-#line 388 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 399 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp6_ = _tmp5_;
-#line 388 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 399 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		gdk_window_set_cursor (_tmp6_, NULL);
-#line 388 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 399 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_g_object_unref0 (_tmp6_);
-#line 1644 "StraightenTool.c"
+#line 1662 "StraightenTool.c"
 	}
-#line 391 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 402 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_straighten_tool_parent_class)->deactivate (G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 1648 "StraightenTool.c"
+#line 1666 "StraightenTool.c"
 }
 
 
 static void _editing_tools_straighten_tool_on_resized_pixbuf_editing_tools_photo_canvas_resized_scaled_pixbuf (EditingToolsPhotoCanvas* _sender, Dimensions* old_dim, GdkPixbuf* scaled, GdkRectangle* scaled_position, gpointer self) {
-#line 395 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 406 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_on_resized_pixbuf ((EditingToolsStraightenTool*) self, old_dim, scaled, scaled_position);
-#line 1655 "StraightenTool.c"
+#line 1673 "StraightenTool.c"
 }
 
 
 static void editing_tools_straighten_tool_bind_canvas_handlers (EditingToolsStraightenTool* self, EditingToolsPhotoCanvas* canvas) {
 	EditingToolsPhotoCanvas* _tmp0_ = NULL;
-#line 394 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 405 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 394 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 405 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_PHOTO_CANVAS (canvas));
-#line 395 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 406 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = canvas;
-#line 395 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 406 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_connect (_tmp0_, "resized-scaled-pixbuf", (GCallback) _editing_tools_straighten_tool_on_resized_pixbuf_editing_tools_photo_canvas_resized_scaled_pixbuf, self);
-#line 1669 "StraightenTool.c"
+#line 1687 "StraightenTool.c"
 }
 
 
 static void editing_tools_straighten_tool_unbind_canvas_handlers (EditingToolsStraightenTool* self, EditingToolsPhotoCanvas* canvas) {
 	EditingToolsPhotoCanvas* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
-#line 398 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 409 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 398 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 409 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_PHOTO_CANVAS (canvas));
-#line 399 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 410 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = canvas;
-#line 399 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 410 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_parse_name ("resized-scaled-pixbuf", EDITING_TOOLS_TYPE_PHOTO_CANVAS, &_tmp1_, NULL, FALSE);
-#line 399 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 410 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _editing_tools_straighten_tool_on_resized_pixbuf_editing_tools_photo_canvas_resized_scaled_pixbuf, self);
-#line 1686 "StraightenTool.c"
+#line 1704 "StraightenTool.c"
 }
 
 
 static gboolean _editing_tools_editing_tool_on_keypress_gtk_widget_key_press_event (GtkWidget* _sender, GdkEventKey* event, gpointer self) {
 	gboolean result;
 	result = editing_tools_editing_tool_on_keypress ((EditingToolsEditingTool*) self, event);
-#line 403 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 414 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return result;
-#line 1695 "StraightenTool.c"
+#line 1713 "StraightenTool.c"
 }
 
 
 static void _editing_tools_straighten_tool_on_ok_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 404 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 415 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_on_ok_clicked ((EditingToolsStraightenTool*) self);
-#line 1702 "StraightenTool.c"
+#line 1720 "StraightenTool.c"
 }
 
 
 static void _editing_tools_editing_tool_notify_cancel_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 405 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 416 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_editing_tool_notify_cancel ((EditingToolsEditingTool*) self);
-#line 1709 "StraightenTool.c"
+#line 1727 "StraightenTool.c"
 }
 
 
 static void _editing_tools_straighten_tool_on_angle_changed_gtk_range_value_changed (GtkRange* _sender, gpointer self) {
-#line 406 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 417 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_on_angle_changed ((EditingToolsStraightenTool*) self);
-#line 1716 "StraightenTool.c"
+#line 1734 "StraightenTool.c"
 }
 
 
@@ -1724,31 +1742,31 @@ static void editing_tools_straighten_tool_bind_window_handlers (EditingToolsStra
 	GtkButton* _tmp4_ = NULL;
 	EditingToolsStraightenToolStraightenToolWindow* _tmp5_ = NULL;
 	GtkScale* _tmp6_ = NULL;
-#line 402 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 413 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 403 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 414 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = self->priv->window;
-#line 403 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 414 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), "key-press-event", (GCallback) _editing_tools_editing_tool_on_keypress_gtk_widget_key_press_event, G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 404 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 415 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = self->priv->window;
-#line 404 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 415 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = _tmp1_->ok_button;
-#line 404 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 415 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_connect (_tmp2_, "clicked", (GCallback) _editing_tools_straighten_tool_on_ok_clicked_gtk_button_clicked, self);
-#line 405 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 416 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = self->priv->window;
-#line 405 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 416 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp4_ = _tmp3_->cancel_button;
-#line 405 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 416 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_connect (_tmp4_, "clicked", (GCallback) _editing_tools_editing_tool_notify_cancel_gtk_button_clicked, G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 406 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 417 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = self->priv->window;
-#line 406 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 417 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp6_ = _tmp5_->angle_slider;
-#line 406 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 417 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_range_get_type (), GtkRange), "value-changed", (GCallback) _editing_tools_straighten_tool_on_angle_changed_gtk_range_value_changed, self);
-#line 1752 "StraightenTool.c"
+#line 1770 "StraightenTool.c"
 }
 
 
@@ -1764,46 +1782,46 @@ static void editing_tools_straighten_tool_unbind_window_handlers (EditingToolsSt
 	EditingToolsStraightenToolStraightenToolWindow* _tmp8_ = NULL;
 	GtkScale* _tmp9_ = NULL;
 	guint _tmp10_ = 0U;
-#line 409 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 420 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 410 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 421 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = self->priv->window;
-#line 410 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 421 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_parse_name ("key-press-event", gtk_widget_get_type (), &_tmp1_, NULL, FALSE);
-#line 410 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 421 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _editing_tools_editing_tool_on_keypress_gtk_widget_key_press_event, G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 411 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 422 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = self->priv->window;
-#line 411 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 422 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = _tmp2_->ok_button;
-#line 411 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 422 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_parse_name ("clicked", gtk_button_get_type (), &_tmp4_, NULL, FALSE);
-#line 411 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 422 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_handlers_disconnect_matched (_tmp3_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp4_, 0, NULL, (GCallback) _editing_tools_straighten_tool_on_ok_clicked_gtk_button_clicked, self);
-#line 412 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 423 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = self->priv->window;
-#line 412 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 423 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp6_ = _tmp5_->cancel_button;
-#line 412 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 423 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_parse_name ("clicked", gtk_button_get_type (), &_tmp7_, NULL, FALSE);
-#line 412 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 423 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_handlers_disconnect_matched (_tmp6_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp7_, 0, NULL, (GCallback) _editing_tools_editing_tool_notify_cancel_gtk_button_clicked, G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool));
-#line 413 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 424 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp8_ = self->priv->window;
-#line 413 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 424 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp9_ = _tmp8_->angle_slider;
-#line 413 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 424 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_parse_name ("value-changed", gtk_range_get_type (), &_tmp10_, NULL, FALSE);
-#line 413 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 424 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_range_get_type (), GtkRange), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp10_, 0, NULL, (GCallback) _editing_tools_straighten_tool_on_angle_changed_gtk_range_value_changed, self);
-#line 1800 "StraightenTool.c"
+#line 1818 "StraightenTool.c"
 }
 
 
 static void _editing_tools_straighten_tool_on_slider_stopped_delayed_one_shot_callback (gpointer self) {
-#line 422 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 433 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_on_slider_stopped_delayed ((EditingToolsStraightenTool*) self);
-#line 1807 "StraightenTool.c"
+#line 1825 "StraightenTool.c"
 }
 
 
@@ -1822,65 +1840,65 @@ static void editing_tools_straighten_tool_on_angle_changed (EditingToolsStraight
 	OneShotScheduler* _tmp10_ = NULL;
 	OneShotScheduler* _tmp12_ = NULL;
 	EditingToolsPhotoCanvas* _tmp13_ = NULL;
-#line 416 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 417 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp0_ = self->priv->window;
-#line 417 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp1_ = _tmp0_->angle_slider;
-#line 417 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp2_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_range_get_type (), GtkRange));
-#line 417 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	self->priv->photo_angle = _tmp2_;
-#line 418 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp3_ = self->priv->window;
-#line 418 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp4_ = _tmp3_->angle_slider;
-#line 418 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp5_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_range_get_type (), GtkRange));
-#line 418 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp6_ = g_strdup_printf ("%2.1f°", _tmp5_);
-#line 418 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	tmp = _tmp6_;
-#line 419 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp7_ = self->priv->window;
-#line 419 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp8_ = _tmp7_->angle_label;
-#line 419 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp9_ = tmp;
-#line 419 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_label_set_text (_tmp8_, _tmp9_);
-#line 421 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp10_ = self->priv->slider_sched;
-#line 421 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	if (_tmp10_ == NULL) {
-#line 1858 "StraightenTool.c"
-		OneShotScheduler* _tmp11_ = NULL;
-#line 422 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-		_tmp11_ = one_shot_scheduler_new ("straighten", _editing_tools_straighten_tool_on_slider_stopped_delayed_one_shot_callback, self);
-#line 422 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-		_one_shot_scheduler_unref0 (self->priv->slider_sched);
-#line 422 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-		self->priv->slider_sched = _tmp11_;
-#line 1866 "StraightenTool.c"
-	}
-#line 423 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp12_ = self->priv->slider_sched;
-#line 423 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	one_shot_scheduler_after_timeout (_tmp12_, (guint) EDITING_TOOLS_STRAIGHTEN_TOOL_REPAINT_ON_STOP_DELAY_MSEC, TRUE);
-#line 425 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	self->priv->use_high_qual = FALSE;
 #line 427 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	editing_tools_straighten_tool_adjust_for_rotation (self);
+	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
 #line 428 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	editing_tools_straighten_tool_update_rotated_surface (self);
+	_tmp0_ = self->priv->window;
+#line 428 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp1_ = _tmp0_->angle_slider;
+#line 428 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp2_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_range_get_type (), GtkRange));
+#line 428 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	self->priv->photo_angle = _tmp2_;
 #line 429 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp13_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
+	_tmp3_ = self->priv->window;
 #line 429 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	editing_tools_photo_canvas_repaint (_tmp13_);
-#line 416 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_g_free0 (tmp);
+	_tmp4_ = _tmp3_->angle_slider;
+#line 429 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp5_ = gtk_range_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_range_get_type (), GtkRange));
+#line 429 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp6_ = g_strdup_printf ("%2.1f°", _tmp5_);
+#line 429 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	tmp = _tmp6_;
+#line 430 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp7_ = self->priv->window;
+#line 430 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp8_ = _tmp7_->angle_label;
+#line 430 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp9_ = tmp;
+#line 430 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	gtk_label_set_text (_tmp8_, _tmp9_);
+#line 432 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp10_ = self->priv->slider_sched;
+#line 432 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	if (_tmp10_ == NULL) {
+#line 1876 "StraightenTool.c"
+		OneShotScheduler* _tmp11_ = NULL;
+#line 433 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+		_tmp11_ = one_shot_scheduler_new ("straighten", _editing_tools_straighten_tool_on_slider_stopped_delayed_one_shot_callback, self);
+#line 433 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+		_one_shot_scheduler_unref0 (self->priv->slider_sched);
+#line 433 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+		self->priv->slider_sched = _tmp11_;
 #line 1884 "StraightenTool.c"
+	}
+#line 434 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp12_ = self->priv->slider_sched;
+#line 434 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	one_shot_scheduler_after_timeout (_tmp12_, (guint) EDITING_TOOLS_STRAIGHTEN_TOOL_REPAINT_ON_STOP_DELAY_MSEC, TRUE);
+#line 436 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	self->priv->use_high_qual = FALSE;
+#line 438 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	editing_tools_straighten_tool_adjust_for_rotation (self);
+#line 439 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	editing_tools_straighten_tool_update_rotated_surface (self);
+#line 440 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp13_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
+#line 440 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	editing_tools_photo_canvas_repaint (_tmp13_);
+#line 427 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_g_free0 (tmp);
+#line 1902 "StraightenTool.c"
 }
 
 
@@ -1888,17 +1906,17 @@ static void editing_tools_straighten_tool_on_angle_changed (EditingToolsStraight
      * @brief Called by the EditingHostPage when a resize event occurs.
      */
 static void editing_tools_straighten_tool_on_resized_pixbuf (EditingToolsStraightenTool* self, Dimensions* old_dim, GdkPixbuf* scaled, GdkRectangle* scaled_position) {
-#line 435 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 446 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 435 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 446 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (old_dim != NULL);
-#line 435 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 446 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (GDK_IS_PIXBUF (scaled));
-#line 435 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 446 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (scaled_position != NULL);
-#line 436 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 447 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_prepare_image (self);
-#line 1902 "StraightenTool.c"
+#line 1920 "StraightenTool.c"
 }
 
 
@@ -1906,29 +1924,22 @@ static void editing_tools_straighten_tool_on_resized_pixbuf (EditingToolsStraigh
      * Returns a reference to the current StraightenTool instance's tool window;
      * the PhotoPage uses this to control the tool window's positioning, etc.
      */
-static gpointer _g_object_ref0 (gpointer self) {
-#line 444 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	return self ? g_object_ref (self) : NULL;
-#line 1913 "StraightenTool.c"
-}
-
-
 static EditingToolsEditingToolWindow* editing_tools_straighten_tool_real_get_tool_window (EditingToolsEditingTool* base) {
 	EditingToolsStraightenTool * self;
 	EditingToolsEditingToolWindow* result = NULL;
 	EditingToolsStraightenToolStraightenToolWindow* _tmp0_ = NULL;
 	EditingToolsEditingToolWindow* _tmp1_ = NULL;
-#line 443 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 454 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_STRAIGHTEN_TOOL, EditingToolsStraightenTool);
-#line 444 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 455 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = self->priv->window;
-#line 444 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 455 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, EDITING_TOOLS_TYPE_EDITING_TOOL_WINDOW, EditingToolsEditingToolWindow));
-#line 444 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 455 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	result = _tmp1_;
-#line 444 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 455 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return result;
-#line 1932 "StraightenTool.c"
+#line 1943 "StraightenTool.c"
 }
 
 
@@ -1945,33 +1956,33 @@ static void editing_tools_straighten_tool_update_rotated_surface (EditingToolsSt
 	cairo_t* _tmp6_ = NULL;
 	gint _tmp7_ = 0;
 	gint _tmp8_ = 0;
-#line 450 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 461 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 451 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 462 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = self->priv->photo_surf;
-#line 451 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 462 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = self->priv->rotate_ctx;
-#line 451 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 462 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = self->priv->view_width;
-#line 451 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 462 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = self->priv->view_height;
-#line 451 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 462 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp4_ = self->priv->photo_angle;
-#line 451 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 462 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_draw_rotated_source (self, _tmp0_, _tmp1_, _tmp2_, _tmp3_, _tmp4_);
-#line 452 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 463 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = self->priv->rotate_ctx;
-#line 452 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 463 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_set_line_width (_tmp5_, 1.0);
-#line 453 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 464 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp6_ = self->priv->rotate_ctx;
-#line 453 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 464 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp7_ = self->priv->view_width;
-#line 453 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 464 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp8_ = self->priv->view_height;
-#line 453 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 464 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_draw_superimposed_grid (self, _tmp6_, _tmp7_, _tmp8_);
-#line 1975 "StraightenTool.c"
+#line 1986 "StraightenTool.c"
 }
 
 
@@ -2035,161 +2046,161 @@ static void editing_tools_straighten_tool_real_paint (EditingToolsEditingTool* b
 	EditingToolsPhotoCanvas* _tmp46_ = NULL;
 	cairo_t* _tmp47_ = NULL;
 	cairo_t* _tmp48_ = NULL;
-#line 463 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 474 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, EDITING_TOOLS_TYPE_STRAIGHTEN_TOOL, EditingToolsStraightenTool);
-#line 463 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 474 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (ctx != NULL);
-#line 464 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 464 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = editing_tools_photo_canvas_get_drawing_window (_tmp0_);
-#line 464 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = _tmp1_;
-#line 464 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = gdk_window_get_width (_tmp2_);
-#line 464 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp4_ = _tmp3_;
-#line 464 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (_tmp2_);
-#line 464 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	w = _tmp4_;
-#line 465 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 465 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp6_ = editing_tools_photo_canvas_get_drawing_window (_tmp5_);
-#line 465 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp7_ = _tmp6_;
-#line 465 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp8_ = gdk_window_get_height (_tmp7_);
-#line 465 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp9_ = _tmp8_;
-#line 465 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (_tmp7_);
-#line 465 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	h = _tmp9_;
-#line 468 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 479 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp10_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 468 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 479 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp11_ = editing_tools_photo_canvas_get_default_ctx (_tmp10_);
-#line 468 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 479 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp12_ = _tmp11_;
-#line 468 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 479 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_identity_matrix (_tmp12_);
-#line 468 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 479 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (_tmp12_);
-#line 469 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 480 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp13_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 469 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 480 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp14_ = editing_tools_photo_canvas_get_default_ctx (_tmp13_);
-#line 469 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 480 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp15_ = _tmp14_;
-#line 469 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 480 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_set_source_rgba (_tmp15_, 0.0, 0.0, 0.0, 1.0);
-#line 469 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 480 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (_tmp15_);
-#line 470 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 481 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp16_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 470 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 481 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp17_ = editing_tools_photo_canvas_get_default_ctx (_tmp16_);
-#line 470 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 481 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp18_ = _tmp17_;
-#line 470 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 481 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_rectangle (_tmp18_, (gdouble) 0, (gdouble) 0, (gdouble) w, (gdouble) h);
-#line 470 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 481 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (_tmp18_);
-#line 471 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 482 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp19_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 471 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 482 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp20_ = editing_tools_photo_canvas_get_default_ctx (_tmp19_);
-#line 471 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 482 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp21_ = _tmp20_;
-#line 471 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 482 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_fill (_tmp21_);
-#line 471 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 482 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (_tmp21_);
-#line 474 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 485 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp22_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 474 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 485 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp23_ = editing_tools_photo_canvas_get_default_ctx (_tmp22_);
-#line 474 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 485 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp24_ = _tmp23_;
-#line 474 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 485 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp25_ = self->priv->view_width;
-#line 474 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 485 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp26_ = self->priv->view_height;
-#line 474 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 485 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_translate (_tmp24_, (w - _tmp25_) / 2.0, (h - _tmp26_) / 2.0);
-#line 474 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 485 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (_tmp24_);
-#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 486 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp27_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 486 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp28_ = editing_tools_photo_canvas_get_default_ctx (_tmp27_);
-#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 486 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp29_ = _tmp28_;
-#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 486 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp30_ = self->priv->rotate_surf;
-#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 486 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_set_source_surface (_tmp29_, _tmp30_, (gdouble) 0, (gdouble) 0);
-#line 475 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 486 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (_tmp29_);
-#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 487 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp31_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 487 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp32_ = editing_tools_photo_canvas_get_default_ctx (_tmp31_);
-#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 487 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp33_ = _tmp32_;
-#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 487 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp34_ = self->priv->view_width;
-#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 487 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp35_ = self->priv->view_height;
-#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 487 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_rectangle (_tmp33_, (gdouble) 0, (gdouble) 0, (gdouble) _tmp34_, (gdouble) _tmp35_);
-#line 476 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 487 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (_tmp33_);
-#line 477 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 488 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp36_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 477 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 488 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp37_ = editing_tools_photo_canvas_get_default_ctx (_tmp36_);
-#line 477 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 488 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp38_ = _tmp37_;
-#line 477 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 488 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_fill (_tmp38_);
-#line 477 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 488 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (_tmp38_);
-#line 478 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 489 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp39_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 478 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 489 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp40_ = editing_tools_photo_canvas_get_default_ctx (_tmp39_);
-#line 478 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 489 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp41_ = _tmp40_;
-#line 478 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 489 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_paint (_tmp41_);
-#line 478 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 489 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (_tmp41_);
-#line 482 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 493 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp42_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 482 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 493 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp43_ = editing_tools_photo_canvas_get_default_ctx (_tmp42_);
-#line 482 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 493 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp44_ = _tmp43_;
-#line 482 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 493 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_identity_matrix (_tmp44_);
-#line 482 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 493 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (_tmp44_);
-#line 484 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 495 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp45_ = self->priv->guide;
-#line 484 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 495 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp46_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 484 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 495 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp47_ = editing_tools_photo_canvas_get_default_ctx (_tmp46_);
-#line 484 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 495 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp48_ = _tmp47_;
-#line 484 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 495 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_straighten_guide_draw (_tmp45_, _tmp48_);
-#line 484 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 495 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (_tmp48_);
-#line 2193 "StraightenTool.c"
+#line 2204 "StraightenTool.c"
 }
 
 
@@ -2240,121 +2251,121 @@ static void editing_tools_straighten_tool_draw_rotated_source (EditingToolsStrai
 	gint _tmp32_ = 0;
 	cairo_t* _tmp33_ = NULL;
 	cairo_t* _tmp34_ = NULL;
-#line 497 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 508 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 497 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 508 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (src_surf != NULL);
-#line 497 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 508 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (dest_ctx != NULL);
-#line 499 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 510 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = angle;
-#line 499 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 510 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = degrees_to_radians (_tmp0_);
-#line 499 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 510 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	angle_internal = _tmp1_;
-#line 503 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 514 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = dest_ctx;
-#line 503 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 514 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_identity_matrix (_tmp2_);
-#line 504 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 515 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = dest_ctx;
-#line 504 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 515 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_set_source_rgba (_tmp3_, 0.0, 0.0, 0.0, 1.0);
-#line 505 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp4_ = dest_ctx;
-#line 505 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = self->priv->view_width;
-#line 505 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp6_ = self->priv->view_height;
-#line 505 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_rectangle (_tmp4_, (gdouble) 0, (gdouble) 0, (gdouble) _tmp5_, (gdouble) _tmp6_);
-#line 506 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 517 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp7_ = dest_ctx;
-#line 506 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 517 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_fill (_tmp7_);
-#line 511 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 522 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp8_ = dest_ctx;
-#line 511 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 522 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_identity_matrix (_tmp8_);
-#line 513 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 524 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp9_ = dest_ctx;
-#line 513 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 524 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp10_ = self->priv->view_width;
-#line 513 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 524 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp11_ = self->priv->view_height;
-#line 513 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 524 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_translate (_tmp9_, (gdouble) (_tmp10_ / 2), (gdouble) (_tmp11_ / 2));
-#line 514 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 525 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp12_ = dest_ctx;
-#line 514 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 525 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp13_ = self->priv->rotate_scale;
-#line 514 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 525 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp14_ = self->priv->rotate_scale;
-#line 514 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 525 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_scale (_tmp12_, 1.0 / _tmp13_, 1.0 / _tmp14_);
-#line 515 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 526 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp15_ = dest_ctx;
-#line 515 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 526 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp16_ = angle_internal;
-#line 515 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 526 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_rotate (_tmp15_, _tmp16_);
-#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 527 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp17_ = dest_ctx;
-#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 527 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp18_ = self->priv->rotated_center;
-#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 527 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp19_ = _tmp18_.x;
-#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 527 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp20_ = self->priv->preview_scale;
-#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 527 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp21_ = self->priv->rotated_center;
-#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 527 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp22_ = _tmp21_.y;
-#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 527 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp23_ = self->priv->preview_scale;
-#line 516 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 527 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_translate (_tmp17_, (-_tmp19_) * _tmp20_, (-_tmp22_) * _tmp23_);
-#line 518 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 529 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp24_ = dest_ctx;
-#line 518 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 529 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp25_ = src_surf;
-#line 518 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 529 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_set_source_surface (_tmp24_, _tmp25_, (gdouble) 0, (gdouble) 0);
-#line 519 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 530 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp27_ = self->priv->use_high_qual;
-#line 519 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 530 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_tmp27_) {
-#line 519 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 530 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp26_ = CAIRO_FILTER_BEST;
-#line 2330 "StraightenTool.c"
+#line 2341 "StraightenTool.c"
 	} else {
-#line 519 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 530 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp26_ = CAIRO_FILTER_NEAREST;
-#line 2334 "StraightenTool.c"
+#line 2345 "StraightenTool.c"
 	}
-#line 519 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 530 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp28_ = dest_ctx;
-#line 519 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 530 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp29_ = cairo_get_source (_tmp28_);
-#line 519 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 530 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_pattern_set_filter (_tmp29_, _tmp26_);
-#line 520 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 531 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp30_ = dest_ctx;
-#line 520 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 531 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp31_ = src_width;
-#line 520 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 531 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp32_ = src_height;
-#line 520 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 531 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_rectangle (_tmp30_, (gdouble) 0, (gdouble) 0, (gdouble) _tmp31_, (gdouble) _tmp32_);
-#line 521 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 532 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp33_ = dest_ctx;
-#line 521 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 532 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_fill (_tmp33_);
-#line 522 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 533 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp34_ = dest_ctx;
-#line 522 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 533 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_paint (_tmp34_);
-#line 2358 "StraightenTool.c"
+#line 2369 "StraightenTool.c"
 }
 
 
@@ -2409,123 +2420,123 @@ static void editing_tools_straighten_tool_draw_superimposed_grid (EditingToolsSt
 	EditingToolsPhotoCanvas* _tmp36_ = NULL;
 	cairo_t* _tmp37_ = NULL;
 	gint _tmp38_ = 0;
-#line 532 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 543 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_IS_STRAIGHTEN_TOOL (self));
-#line 532 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 543 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (dest_ctx != NULL);
-#line 533 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 544 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = width;
-#line 533 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 544 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	half_width = _tmp0_ / 2;
-#line 534 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 545 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp1_ = width;
-#line 534 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 545 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	quarter_width = _tmp1_ / 4;
-#line 536 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 547 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = height;
-#line 536 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 547 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	half_height = _tmp2_ / 2;
-#line 537 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 548 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp3_ = height;
-#line 537 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 548 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	quarter_height = _tmp3_ / 4;
-#line 539 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 550 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp4_ = dest_ctx;
-#line 539 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 550 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_identity_matrix (_tmp4_);
-#line 540 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 551 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = dest_ctx;
-#line 540 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 551 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_set_source_rgba (_tmp5_, 1.0, 1.0, 1.0, 1.0);
-#line 542 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 553 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp6_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 542 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 553 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp7_ = dest_ctx;
-#line 542 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 553 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp8_ = width;
-#line 542 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 553 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_draw_horizontal_line (_tmp6_, _tmp7_, 0, 0, _tmp8_, FALSE);
-#line 543 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 554 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp9_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 543 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 554 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp10_ = dest_ctx;
-#line 543 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 554 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp11_ = width;
-#line 543 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 554 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_draw_horizontal_line (_tmp9_, _tmp10_, 0, half_height, _tmp11_, FALSE);
-#line 544 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 555 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp12_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 544 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 555 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp13_ = dest_ctx;
-#line 544 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 555 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp14_ = self->priv->view_height;
-#line 544 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 555 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp15_ = width;
-#line 544 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 555 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_draw_horizontal_line (_tmp12_, _tmp13_, 0, _tmp14_ - 1, _tmp15_, FALSE);
-#line 546 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 557 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp16_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 546 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 557 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp17_ = dest_ctx;
-#line 546 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 557 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp18_ = height;
-#line 546 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 557 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_draw_vertical_line (_tmp16_, _tmp17_, 0, 0, _tmp18_ + 1, FALSE);
-#line 547 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 558 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp19_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 547 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 558 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp20_ = dest_ctx;
-#line 547 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 558 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp21_ = height;
-#line 547 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 558 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_draw_vertical_line (_tmp19_, _tmp20_, half_width, 0, _tmp21_ + 1, FALSE);
-#line 548 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 559 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp22_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 548 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 559 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp23_ = dest_ctx;
-#line 548 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 559 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp24_ = width;
-#line 548 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 559 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp25_ = height;
-#line 548 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 559 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_draw_vertical_line (_tmp22_, _tmp23_, _tmp24_ - 1, 0, _tmp25_ + 1, FALSE);
-#line 550 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 561 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp26_ = dest_ctx;
-#line 550 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 561 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	cairo_set_source_rgba (_tmp26_, 1.0, 1.0, 1.0, 0.33);
-#line 552 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 563 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp27_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 552 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 563 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp28_ = dest_ctx;
-#line 552 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 563 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp29_ = width;
-#line 552 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 563 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_draw_horizontal_line (_tmp27_, _tmp28_, 0, quarter_height, _tmp29_, FALSE);
-#line 553 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 564 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp30_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 553 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 564 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp31_ = dest_ctx;
-#line 553 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 564 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp32_ = width;
-#line 553 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 564 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_draw_horizontal_line (_tmp30_, _tmp31_, 0, half_height + quarter_height, _tmp32_, FALSE);
-#line 554 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 565 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp33_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 554 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 565 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp34_ = dest_ctx;
-#line 554 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 565 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp35_ = height;
-#line 554 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 565 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_draw_vertical_line (_tmp33_, _tmp34_, quarter_width, 0, _tmp35_, FALSE);
-#line 555 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 566 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp36_ = G_TYPE_CHECK_INSTANCE_CAST (self, EDITING_TOOLS_TYPE_EDITING_TOOL, EditingToolsEditingTool)->canvas;
-#line 555 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 566 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp37_ = dest_ctx;
-#line 555 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 566 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp38_ = height;
-#line 555 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 566 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_photo_canvas_draw_vertical_line (_tmp36_, _tmp37_, half_width + quarter_width, 0, _tmp38_, FALSE);
-#line 2529 "StraightenTool.c"
+#line 2540 "StraightenTool.c"
 }
 
 
@@ -2565,7 +2576,7 @@ static void editing_tools_straighten_tool_straighten_guide_reset (EditingToolsSt
 	_tmp6_ = angle;
 #line 35 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->angle0 = _tmp6_;
-#line 2569 "StraightenTool.c"
+#line 2580 "StraightenTool.c"
 }
 
 
@@ -2578,7 +2589,7 @@ static gboolean editing_tools_straighten_tool_straighten_guide_update (EditingTo
 	_tmp0_ = self->priv->is_active;
 #line 39 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_tmp0_) {
-#line 2582 "StraightenTool.c"
+#line 2593 "StraightenTool.c"
 		gint _tmp1_ = 0;
 		gint _tmp2_ = 0;
 		gint _tmp3_ = 0;
@@ -2599,13 +2610,13 @@ static gboolean editing_tools_straighten_tool_straighten_guide_update (EditingTo
 		result = TRUE;
 #line 42 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return result;
-#line 2603 "StraightenTool.c"
+#line 2614 "StraightenTool.c"
 	}
 #line 45 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	result = FALSE;
 #line 45 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return result;
-#line 2609 "StraightenTool.c"
+#line 2620 "StraightenTool.c"
 }
 
 
@@ -2614,7 +2625,7 @@ static void editing_tools_straighten_tool_straighten_guide_clear (EditingToolsSt
 	g_return_if_fail (EDITING_TOOLS_STRAIGHTEN_TOOL_IS_STRAIGHTEN_GUIDE (self));
 #line 49 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->is_active = FALSE;
-#line 2618 "StraightenTool.c"
+#line 2629 "StraightenTool.c"
 }
 
 
@@ -2626,14 +2637,14 @@ static gdouble* _double_dup (gdouble* self) {
 	memcpy (dup, self, sizeof (gdouble));
 #line 62 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return dup;
-#line 2630 "StraightenTool.c"
+#line 2641 "StraightenTool.c"
 }
 
 
 static gpointer __double_dup0 (gpointer self) {
 #line 62 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return self ? _double_dup (self) : NULL;
-#line 2637 "StraightenTool.c"
+#line 2648 "StraightenTool.c"
 }
 
 
@@ -2681,7 +2692,7 @@ static gdouble* editing_tools_straighten_tool_straighten_guide_get_angle (Editin
 		result = NULL;
 #line 58 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return result;
-#line 2685 "StraightenTool.c"
+#line 2696 "StraightenTool.c"
 	}
 #line 61 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp8_ = dy;
@@ -2693,7 +2704,7 @@ static gdouble* editing_tools_straighten_tool_straighten_guide_get_angle (Editin
 	_tmp11_ = fabs (_tmp10_);
 #line 61 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_tmp9_ > _tmp11_) {
-#line 2697 "StraightenTool.c"
+#line 2708 "StraightenTool.c"
 		gdouble _tmp12_ = 0.0;
 		gdouble _tmp13_ = 0.0;
 		gdouble _tmp14_ = 0.0;
@@ -2716,7 +2727,7 @@ static gdouble* editing_tools_straighten_tool_straighten_guide_get_angle (Editin
 		result = _tmp17_;
 #line 62 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return result;
-#line 2720 "StraightenTool.c"
+#line 2731 "StraightenTool.c"
 	} else {
 		gdouble _tmp18_ = 0.0;
 		gdouble _tmp19_ = 0.0;
@@ -2740,7 +2751,7 @@ static gdouble* editing_tools_straighten_tool_straighten_guide_get_angle (Editin
 		result = _tmp23_;
 #line 64 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return result;
-#line 2744 "StraightenTool.c"
+#line 2755 "StraightenTool.c"
 	}
 }
 
@@ -2789,7 +2800,7 @@ static void editing_tools_straighten_tool_straighten_guide_draw (EditingToolsStr
 	if (!_tmp0_) {
 #line 69 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return;
-#line 2793 "StraightenTool.c"
+#line 2804 "StraightenTool.c"
 	}
 #line 71 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp2_ = editing_tools_straighten_tool_straighten_guide_get_angle (self);
@@ -2797,7 +2808,7 @@ static void editing_tools_straighten_tool_straighten_guide_draw (EditingToolsStr
 	_tmp1_ = _tmp2_;
 #line 71 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_tmp1_ == NULL) {
-#line 2801 "StraightenTool.c"
+#line 2812 "StraightenTool.c"
 		gdouble _tmp3_ = 0.0;
 		gdouble* _tmp4_ = NULL;
 #line 71 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
@@ -2808,7 +2819,7 @@ static void editing_tools_straighten_tool_straighten_guide_draw (EditingToolsStr
 		_g_free0 (_tmp1_);
 #line 71 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp1_ = _tmp4_;
-#line 2812 "StraightenTool.c"
+#line 2823 "StraightenTool.c"
 	}
 #line 71 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = _tmp1_;
@@ -2830,7 +2841,7 @@ static void editing_tools_straighten_tool_straighten_guide_draw (EditingToolsStr
 		_g_free0 (_tmp1_);
 #line 73 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return;
-#line 2834 "StraightenTool.c"
+#line 2845 "StraightenTool.c"
 	}
 #line 75 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	alpha = 1.0;
@@ -2840,20 +2851,20 @@ static void editing_tools_straighten_tool_straighten_guide_draw (EditingToolsStr
 	if (_tmp10_ < EDITING_TOOLS_STRAIGHTEN_TOOL_MIN_ANGLE) {
 #line 76 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp9_ = TRUE;
-#line 2844 "StraightenTool.c"
+#line 2855 "StraightenTool.c"
 	} else {
 		gdouble _tmp11_ = 0.0;
 #line 76 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp11_ = angle;
 #line 76 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		_tmp9_ = _tmp11_ > EDITING_TOOLS_STRAIGHTEN_TOOL_MAX_ANGLE;
-#line 2851 "StraightenTool.c"
+#line 2862 "StraightenTool.c"
 	}
 #line 76 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (_tmp9_) {
 #line 77 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		alpha = 0.35;
-#line 2857 "StraightenTool.c"
+#line 2868 "StraightenTool.c"
 	}
 #line 81 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp12_ = ctx;
@@ -2921,7 +2932,7 @@ static void editing_tools_straighten_tool_straighten_guide_draw (EditingToolsStr
 	cairo_stroke (_tmp33_);
 #line 67 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_free0 (_tmp1_);
-#line 2925 "StraightenTool.c"
+#line 2936 "StraightenTool.c"
 }
 
 
@@ -2931,21 +2942,21 @@ static EditingToolsStraightenToolStraightenGuide* editing_tools_straighten_tool_
 	self = (EditingToolsStraightenToolStraightenGuide*) g_type_create_instance (object_type);
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return self;
-#line 2935 "StraightenTool.c"
+#line 2946 "StraightenTool.c"
 }
 
 
 static EditingToolsStraightenToolStraightenGuide* editing_tools_straighten_tool_straighten_guide_new (void) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return editing_tools_straighten_tool_straighten_guide_construct (EDITING_TOOLS_STRAIGHTEN_TOOL_TYPE_STRAIGHTEN_GUIDE);
-#line 2942 "StraightenTool.c"
+#line 2953 "StraightenTool.c"
 }
 
 
 static void editing_tools_straighten_tool_value_straighten_guide_init (GValue* value) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	value->data[0].v_pointer = NULL;
-#line 2949 "StraightenTool.c"
+#line 2960 "StraightenTool.c"
 }
 
 
@@ -2954,7 +2965,7 @@ static void editing_tools_straighten_tool_value_straighten_guide_free_value (GVa
 	if (value->data[0].v_pointer) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		editing_tools_straighten_tool_straighten_guide_unref (value->data[0].v_pointer);
-#line 2958 "StraightenTool.c"
+#line 2969 "StraightenTool.c"
 	}
 }
 
@@ -2964,11 +2975,11 @@ static void editing_tools_straighten_tool_value_straighten_guide_copy_value (con
 	if (src_value->data[0].v_pointer) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		dest_value->data[0].v_pointer = editing_tools_straighten_tool_straighten_guide_ref (src_value->data[0].v_pointer);
-#line 2968 "StraightenTool.c"
+#line 2979 "StraightenTool.c"
 	} else {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 2972 "StraightenTool.c"
+#line 2983 "StraightenTool.c"
 	}
 }
 
@@ -2976,37 +2987,37 @@ static void editing_tools_straighten_tool_value_straighten_guide_copy_value (con
 static gpointer editing_tools_straighten_tool_value_straighten_guide_peek_pointer (const GValue* value) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return value->data[0].v_pointer;
-#line 2980 "StraightenTool.c"
+#line 2991 "StraightenTool.c"
 }
 
 
 static gchar* editing_tools_straighten_tool_value_straighten_guide_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (collect_values[0].v_pointer) {
-#line 2987 "StraightenTool.c"
+#line 2998 "StraightenTool.c"
 		EditingToolsStraightenToolStraightenGuide* object;
 		object = collect_values[0].v_pointer;
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2994 "StraightenTool.c"
+#line 3005 "StraightenTool.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2998 "StraightenTool.c"
+#line 3009 "StraightenTool.c"
 		}
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		value->data[0].v_pointer = editing_tools_straighten_tool_straighten_guide_ref (object);
-#line 3002 "StraightenTool.c"
+#line 3013 "StraightenTool.c"
 	} else {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		value->data[0].v_pointer = NULL;
-#line 3006 "StraightenTool.c"
+#line 3017 "StraightenTool.c"
 	}
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return NULL;
-#line 3010 "StraightenTool.c"
+#line 3021 "StraightenTool.c"
 }
 
 
@@ -3017,25 +3028,25 @@ static gchar* editing_tools_straighten_tool_value_straighten_guide_lcopy_value (
 	if (!object_p) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 3021 "StraightenTool.c"
+#line 3032 "StraightenTool.c"
 	}
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (!value->data[0].v_pointer) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		*object_p = NULL;
-#line 3027 "StraightenTool.c"
+#line 3038 "StraightenTool.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		*object_p = value->data[0].v_pointer;
-#line 3031 "StraightenTool.c"
+#line 3042 "StraightenTool.c"
 	} else {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		*object_p = editing_tools_straighten_tool_straighten_guide_ref (value->data[0].v_pointer);
-#line 3035 "StraightenTool.c"
+#line 3046 "StraightenTool.c"
 	}
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return NULL;
-#line 3039 "StraightenTool.c"
+#line 3050 "StraightenTool.c"
 }
 
 
@@ -3049,7 +3060,7 @@ static GParamSpec* editing_tools_straighten_tool_param_spec_straighten_guide (co
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return G_PARAM_SPEC (spec);
-#line 3053 "StraightenTool.c"
+#line 3064 "StraightenTool.c"
 }
 
 
@@ -3058,7 +3069,7 @@ static gpointer editing_tools_straighten_tool_value_get_straighten_guide (const 
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, EDITING_TOOLS_STRAIGHTEN_TOOL_TYPE_STRAIGHTEN_GUIDE), NULL);
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return value->data[0].v_pointer;
-#line 3062 "StraightenTool.c"
+#line 3073 "StraightenTool.c"
 }
 
 
@@ -3078,17 +3089,17 @@ static void editing_tools_straighten_tool_value_set_straighten_guide (GValue* va
 		value->data[0].v_pointer = v_object;
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		editing_tools_straighten_tool_straighten_guide_ref (value->data[0].v_pointer);
-#line 3082 "StraightenTool.c"
+#line 3093 "StraightenTool.c"
 	} else {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		value->data[0].v_pointer = NULL;
-#line 3086 "StraightenTool.c"
+#line 3097 "StraightenTool.c"
 	}
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (old) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		editing_tools_straighten_tool_straighten_guide_unref (old);
-#line 3092 "StraightenTool.c"
+#line 3103 "StraightenTool.c"
 	}
 }
 
@@ -3107,17 +3118,17 @@ static void editing_tools_straighten_tool_value_take_straighten_guide (GValue* v
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		value->data[0].v_pointer = v_object;
-#line 3111 "StraightenTool.c"
+#line 3122 "StraightenTool.c"
 	} else {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		value->data[0].v_pointer = NULL;
-#line 3115 "StraightenTool.c"
+#line 3126 "StraightenTool.c"
 	}
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	if (old) {
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		editing_tools_straighten_tool_straighten_guide_unref (old);
-#line 3121 "StraightenTool.c"
+#line 3132 "StraightenTool.c"
 	}
 }
 
@@ -3129,7 +3140,7 @@ static void editing_tools_straighten_tool_straighten_guide_class_init (EditingTo
 	((EditingToolsStraightenToolStraightenGuideClass *) klass)->finalize = editing_tools_straighten_tool_straighten_guide_finalize;
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_type_class_add_private (klass, sizeof (EditingToolsStraightenToolStraightenGuidePrivate));
-#line 3133 "StraightenTool.c"
+#line 3144 "StraightenTool.c"
 }
 
 
@@ -3140,7 +3151,7 @@ static void editing_tools_straighten_tool_straighten_guide_instance_init (Editin
 	self->priv->is_active = FALSE;
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->ref_count = 1;
-#line 3144 "StraightenTool.c"
+#line 3155 "StraightenTool.c"
 }
 
 
@@ -3150,7 +3161,7 @@ static void editing_tools_straighten_tool_straighten_guide_finalize (EditingTool
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, EDITING_TOOLS_STRAIGHTEN_TOOL_TYPE_STRAIGHTEN_GUIDE, EditingToolsStraightenToolStraightenGuide);
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_signal_handlers_destroy (self);
-#line 3154 "StraightenTool.c"
+#line 3165 "StraightenTool.c"
 }
 
 
@@ -3175,7 +3186,7 @@ static gpointer editing_tools_straighten_tool_straighten_guide_ref (gpointer ins
 	g_atomic_int_inc (&self->ref_count);
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return instance;
-#line 3179 "StraightenTool.c"
+#line 3190 "StraightenTool.c"
 }
 
 
@@ -3188,7 +3199,7 @@ static void editing_tools_straighten_tool_straighten_guide_unref (gpointer insta
 		EDITING_TOOLS_STRAIGHTEN_TOOL_STRAIGHTEN_GUIDE_GET_CLASS (self)->finalize (self);
 #line 25 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 3192 "StraightenTool.c"
+#line 3203 "StraightenTool.c"
 	}
 }
 
@@ -3199,9 +3210,9 @@ static void editing_tools_straighten_tool_straighten_guide_unref (gpointer insta
          * @param container The application's main window.
          */
 static void _editing_tools_straighten_tool_straighten_tool_window_on_reset_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 140 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 147 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	editing_tools_straighten_tool_straighten_tool_window_on_reset_clicked ((EditingToolsStraightenToolStraightenToolWindow*) self);
-#line 3205 "StraightenTool.c"
+#line 3216 "StraightenTool.c"
 }
 
 
@@ -3215,22 +3226,28 @@ static EditingToolsStraightenToolStraightenToolWindow* editing_tools_straighten_
 	GtkLabel* _tmp5_ = NULL;
 	GtkLabel* _tmp6_ = NULL;
 	GtkLabel* _tmp7_ = NULL;
+	GtkLabel* _tmp8_ = NULL;
+	GtkLabel* _tmp9_ = NULL;
+	GtkLabel* _tmp10_ = NULL;
+	GtkLabel* _tmp11_ = NULL;
+	GtkLabel* _tmp12_ = NULL;
+	GtkLabel* _tmp13_ = NULL;
 	GtkBox* slider_layout = NULL;
-	GtkBox* _tmp8_ = NULL;
-	GtkScale* _tmp9_ = NULL;
+	GtkBox* _tmp14_ = NULL;
+	GtkScale* _tmp15_ = NULL;
 	GtkBox* button_layout = NULL;
-	GtkBox* _tmp10_ = NULL;
-	GtkButton* _tmp11_ = NULL;
-	GtkButton* _tmp12_ = NULL;
-	GtkButton* _tmp13_ = NULL;
-	GtkButton* _tmp14_ = NULL;
-	GtkButton* _tmp15_ = NULL;
-	GtkButton* _tmp16_ = NULL;
-	GtkBox* main_layout = NULL;
-	GtkBox* _tmp17_ = NULL;
-	GtkLabel* _tmp18_ = NULL;
-	GtkLabel* _tmp19_ = NULL;
+	GtkBox* _tmp16_ = NULL;
+	GtkButton* _tmp17_ = NULL;
+	GtkButton* _tmp18_ = NULL;
+	GtkButton* _tmp19_ = NULL;
 	GtkButton* _tmp20_ = NULL;
+	GtkButton* _tmp21_ = NULL;
+	GtkButton* _tmp22_ = NULL;
+	GtkBox* main_layout = NULL;
+	GtkBox* _tmp23_ = NULL;
+	GtkLabel* _tmp24_ = NULL;
+	GtkLabel* _tmp25_ = NULL;
+	GtkButton* _tmp26_ = NULL;
 #line 109 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_val_if_fail (GTK_IS_WINDOW (container), NULL);
 #line 110 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
@@ -3256,80 +3273,104 @@ static EditingToolsStraightenToolStraightenToolWindow* editing_tools_straighten_
 #line 117 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp5_ = self->description_label;
 #line 117 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_misc_set_padding (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_misc_get_type (), GtkMisc), EDITING_TOOLS_STRAIGHTEN_TOOL_STRAIGHTEN_TOOL_WINDOW_CONTROL_SPACING, 0);
+	gtk_widget_set_margin_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_STRAIGHTEN_TOOL_STRAIGHTEN_TOOL_WINDOW_CONTROL_SPACING);
 #line 118 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp6_ = self->angle_label;
+	_tmp6_ = self->description_label;
 #line 118 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_misc_set_padding (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_misc_get_type (), GtkMisc), 0, 0);
+	gtk_widget_set_margin_end (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_STRAIGHTEN_TOOL_STRAIGHTEN_TOOL_WINDOW_CONTROL_SPACING);
 #line 119 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp7_ = self->angle_label;
+	_tmp7_ = self->description_label;
 #line 119 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_STRAIGHTEN_TOOL_MIN_LABEL_SIZE, -1);
-#line 121 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp8_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, EDITING_TOOLS_STRAIGHTEN_TOOL_STRAIGHTEN_TOOL_WINDOW_CONTROL_SPACING);
-#line 121 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	g_object_ref_sink (_tmp8_);
-#line 121 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	slider_layout = _tmp8_;
+	gtk_widget_set_margin_top (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), 0);
+#line 120 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp8_ = self->description_label;
+#line 120 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	gtk_widget_set_margin_bottom (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_widget_get_type (), GtkWidget), 0);
 #line 122 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp9_ = self->angle_slider;
+	_tmp9_ = self->angle_label;
 #line 122 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_box_pack_start (slider_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+	gtk_widget_set_margin_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget), 0);
+#line 123 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp10_ = self->angle_label;
+#line 123 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	gtk_widget_set_margin_end (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget), 0);
 #line 124 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp10_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, EDITING_TOOLS_STRAIGHTEN_TOOL_STRAIGHTEN_TOOL_WINDOW_CONTROL_SPACING);
+	_tmp11_ = self->angle_label;
 #line 124 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	g_object_ref_sink (_tmp10_);
-#line 124 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	button_layout = _tmp10_;
+	gtk_widget_set_margin_top (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget), 0);
 #line 125 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp11_ = self->cancel_button;
+	_tmp12_ = self->angle_label;
 #line 125 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_STRAIGHTEN_TOOL_MIN_BUTTON_SIZE, -1);
+	gtk_widget_set_margin_bottom (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget), 0);
 #line 126 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp12_ = self->reset_button;
+	_tmp13_ = self->angle_label;
 #line 126 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_STRAIGHTEN_TOOL_MIN_BUTTON_SIZE, -1);
-#line 127 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp13_ = self->ok_button;
-#line 127 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_STRAIGHTEN_TOOL_MIN_BUTTON_SIZE, -1);
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_STRAIGHTEN_TOOL_MIN_LABEL_SIZE, -1);
 #line 128 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp14_ = self->cancel_button;
+	_tmp14_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, EDITING_TOOLS_STRAIGHTEN_TOOL_STRAIGHTEN_TOOL_WINDOW_CONTROL_SPACING);
 #line 128 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_box_pack_start (button_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+	g_object_ref_sink (_tmp14_);
+#line 128 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	slider_layout = _tmp14_;
 #line 129 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp15_ = self->reset_button;
+	_tmp15_ = self->angle_slider;
 #line 129 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_box_pack_start (button_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
-#line 130 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp16_ = self->ok_button;
-#line 130 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_box_pack_start (button_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+	gtk_box_pack_start (slider_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+#line 131 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp16_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, EDITING_TOOLS_STRAIGHTEN_TOOL_STRAIGHTEN_TOOL_WINDOW_CONTROL_SPACING);
+#line 131 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	g_object_ref_sink (_tmp16_);
+#line 131 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	button_layout = _tmp16_;
 #line 132 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp17_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+	_tmp17_ = self->cancel_button;
 #line 132 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	g_object_ref_sink (_tmp17_);
-#line 132 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	main_layout = _tmp17_;
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_STRAIGHTEN_TOOL_MIN_BUTTON_SIZE, -1);
 #line 133 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp18_ = self->description_label;
+	_tmp18_ = self->reset_button;
 #line 133 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_box_pack_start (main_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_STRAIGHTEN_TOOL_MIN_BUTTON_SIZE, -1);
 #line 134 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_box_pack_start (main_layout, G_TYPE_CHECK_INSTANCE_CAST (slider_layout, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+	_tmp19_ = self->ok_button;
+#line 134 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_widget_get_type (), GtkWidget), EDITING_TOOLS_STRAIGHTEN_TOOL_MIN_BUTTON_SIZE, -1);
 #line 135 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp19_ = self->angle_label;
+	_tmp20_ = self->cancel_button;
 #line 135 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_box_pack_start (main_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+	gtk_box_pack_start (button_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
 #line 136 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_box_pack_start (main_layout, G_TYPE_CHECK_INSTANCE_CAST (button_layout, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
-#line 138 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (main_layout, gtk_widget_get_type (), GtkWidget));
+	_tmp21_ = self->reset_button;
+#line 136 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	gtk_box_pack_start (button_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+#line 137 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp22_ = self->ok_button;
+#line 137 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	gtk_box_pack_start (button_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+#line 139 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp23_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#line 139 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	g_object_ref_sink (_tmp23_);
+#line 139 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	main_layout = _tmp23_;
 #line 140 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_tmp20_ = self->reset_button;
+	_tmp24_ = self->description_label;
 #line 140 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	g_signal_connect_object (_tmp20_, "clicked", (GCallback) _editing_tools_straighten_tool_straighten_tool_window_on_reset_clicked_gtk_button_clicked, self, 0);
+	gtk_box_pack_start (main_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+#line 141 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	gtk_box_pack_start (main_layout, G_TYPE_CHECK_INSTANCE_CAST (slider_layout, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
 #line 142 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp25_ = self->angle_label;
+#line 142 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	gtk_box_pack_start (main_layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+#line 143 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	gtk_box_pack_start (main_layout, G_TYPE_CHECK_INSTANCE_CAST (button_layout, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+#line 145 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (main_layout, gtk_widget_get_type (), GtkWidget));
+#line 147 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_tmp26_ = self->reset_button;
+#line 147 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	g_signal_connect_object (_tmp26_, "clicked", (GCallback) _editing_tools_straighten_tool_straighten_tool_window_on_reset_clicked_gtk_button_clicked, self, 0);
+#line 149 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	gtk_window_set_position (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), GTK_WIN_POS_CENTER_ON_PARENT);
 #line 109 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_g_object_unref0 (main_layout);
@@ -3339,26 +3380,26 @@ static EditingToolsStraightenToolStraightenToolWindow* editing_tools_straighten_
 	_g_object_unref0 (slider_layout);
 #line 109 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return self;
-#line 3343 "StraightenTool.c"
+#line 3384 "StraightenTool.c"
 }
 
 
 static EditingToolsStraightenToolStraightenToolWindow* editing_tools_straighten_tool_straighten_tool_window_new (GtkWindow* container) {
 #line 109 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	return editing_tools_straighten_tool_straighten_tool_window_construct (EDITING_TOOLS_STRAIGHTEN_TOOL_TYPE_STRAIGHTEN_TOOL_WINDOW, container);
-#line 3350 "StraightenTool.c"
+#line 3391 "StraightenTool.c"
 }
 
 
 static void editing_tools_straighten_tool_straighten_tool_window_on_reset_clicked (EditingToolsStraightenToolStraightenToolWindow* self) {
 	GtkScale* _tmp0_ = NULL;
-#line 145 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 152 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	g_return_if_fail (EDITING_TOOLS_STRAIGHTEN_TOOL_IS_STRAIGHTEN_TOOL_WINDOW (self));
-#line 146 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 153 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = self->angle_slider;
-#line 146 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 153 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_range_get_type (), GtkRange), 0.0);
-#line 3362 "StraightenTool.c"
+#line 3403 "StraightenTool.c"
 }
 
 
@@ -3367,7 +3408,7 @@ static void editing_tools_straighten_tool_straighten_tool_window_class_init (Edi
 	editing_tools_straighten_tool_straighten_tool_window_parent_class = g_type_class_peek_parent (klass);
 #line 94 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	G_OBJECT_CLASS (klass)->finalize = editing_tools_straighten_tool_straighten_tool_window_finalize;
-#line 3371 "StraightenTool.c"
+#line 3412 "StraightenTool.c"
 }
 
 
@@ -3423,7 +3464,7 @@ static void editing_tools_straighten_tool_straighten_tool_window_instance_init (
 	g_object_ref_sink (_tmp8_);
 #line 102 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->reset_button = _tmp8_;
-#line 3427 "StraightenTool.c"
+#line 3468 "StraightenTool.c"
 }
 
 
@@ -3445,7 +3486,7 @@ static void editing_tools_straighten_tool_straighten_tool_window_finalize (GObje
 	_g_object_unref0 (self->reset_button);
 #line 94 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	G_OBJECT_CLASS (editing_tools_straighten_tool_straighten_tool_window_parent_class)->finalize (obj);
-#line 3449 "StraightenTool.c"
+#line 3490 "StraightenTool.c"
 }
 
 
@@ -3484,7 +3525,7 @@ static void editing_tools_straighten_tool_class_init (EditingToolsStraightenTool
 	((EditingToolsEditingToolClass *) klass)->get_tool_window = editing_tools_straighten_tool_real_get_tool_window;
 #line 14 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	((EditingToolsEditingToolClass *) klass)->paint = editing_tools_straighten_tool_real_paint;
-#line 3488 "StraightenTool.c"
+#line 3529 "StraightenTool.c"
 }
 
 
@@ -3492,17 +3533,17 @@ static void editing_tools_straighten_tool_instance_init (EditingToolsStraightenT
 	EditingToolsStraightenToolStraightenGuide* _tmp0_ = NULL;
 #line 14 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv = EDITING_TOOLS_STRAIGHTEN_TOOL_GET_PRIVATE (self);
-#line 163 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 170 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->photo_angle = 0.0;
-#line 167 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 174 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->use_high_qual = TRUE;
-#line 168 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 175 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->slider_sched = NULL;
-#line 174 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 181 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_tmp0_ = editing_tools_straighten_tool_straighten_guide_new ();
-#line 174 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 181 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self->priv->guide = _tmp0_;
-#line 3506 "StraightenTool.c"
+#line 3547 "StraightenTool.c"
 }
 
 
@@ -3510,21 +3551,21 @@ static void editing_tools_straighten_tool_finalize (EditingToolsEditingTool* obj
 	EditingToolsStraightenTool * self;
 #line 14 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, EDITING_TOOLS_TYPE_STRAIGHTEN_TOOL, EditingToolsStraightenTool);
-#line 150 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_g_object_unref0 (self->priv->window);
-#line 153 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
-	_cairo_surface_destroy0 (self->priv->photo_surf);
 #line 157 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_g_object_unref0 (self->priv->window);
+#line 160 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+	_cairo_surface_destroy0 (self->priv->photo_surf);
+#line 164 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_surface_destroy0 (self->priv->rotate_surf);
-#line 158 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 165 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_cairo_destroy0 (self->priv->rotate_ctx);
-#line 168 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 175 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_one_shot_scheduler_unref0 (self->priv->slider_sched);
-#line 174 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
+#line 181 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	_editing_tools_straighten_tool_straighten_guide_unref0 (self->priv->guide);
 #line 14 "/home/jens/Source/shotwell/src/editing_tools/StraightenTool.vala"
 	EDITING_TOOLS_EDITING_TOOL_CLASS (editing_tools_straighten_tool_parent_class)->finalize (obj);
-#line 3528 "StraightenTool.c"
+#line 3569 "StraightenTool.c"
 }
 
 

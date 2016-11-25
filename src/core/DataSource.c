@@ -406,7 +406,7 @@ void data_view_notify_unsubscribed (DataView* self, DataSource* source);
 gboolean data_source_destroy_orphan (DataSource* self, gboolean delete_backing);
 void source_collection_notify_unlinked_destroyed (SourceCollection* self, DataSource* unlinked);
 void data_source_internal_subscribe (DataSource* self, DataView* view);
-static void _vala_array_add122 (DataView*** array, int* length, int* size, DataView* value);
+static void _vala_array_add63 (DataView*** array, int* length, int* size, DataView* value);
 void data_source_internal_unsubscribe (DataSource* self, DataView* view);
 void data_source_contact_subscribers (DataSource* self, DataSourceContactSubscriber contact_subscriber, void* contact_subscriber_target);
 static void data_source_real_unlinked (DataSource* self, SourceCollection* sources);
@@ -2387,7 +2387,7 @@ gboolean data_source_destroy_orphan (DataSource* self, gboolean delete_backing) 
 #line 370 "/home/jens/Source/shotwell/src/core/DataSource.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2389 "DataSource.c"
-				goto __catch48_g_error;
+				goto __catch47_g_error;
 			}
 #line 370 "/home/jens/Source/shotwell/src/core/DataSource.vala"
 			ret = _tmp1_;
@@ -2409,8 +2409,8 @@ gboolean data_source_destroy_orphan (DataSource* self, gboolean delete_backing) 
 #line 2409 "DataSource.c"
 			}
 		}
-		goto __finally48;
-		__catch48_g_error:
+		goto __finally47;
+		__catch47_g_error:
 		{
 			GError* err = NULL;
 			gchar* _tmp6_ = NULL;
@@ -2439,7 +2439,7 @@ gboolean data_source_destroy_orphan (DataSource* self, gboolean delete_backing) 
 			_g_error_free0 (err);
 #line 2440 "DataSource.c"
 		}
-		__finally48:
+		__finally47:
 #line 369 "/home/jens/Source/shotwell/src/core/DataSource.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 369 "/home/jens/Source/shotwell/src/core/DataSource.vala"
@@ -2475,7 +2475,7 @@ gboolean data_source_destroy_orphan (DataSource* self, gboolean delete_backing) 
 }
 
 
-static void _vala_array_add122 (DataView*** array, int* length, int* size, DataView* value) {
+static void _vala_array_add63 (DataView*** array, int* length, int* size, DataView* value) {
 #line 406 "/home/jens/Source/shotwell/src/core/DataSource.vala"
 	if ((*length) == (*size)) {
 #line 406 "/home/jens/Source/shotwell/src/core/DataSource.vala"
@@ -2599,7 +2599,7 @@ void data_source_internal_subscribe (DataSource* self, DataView* view) {
 #line 406 "/home/jens/Source/shotwell/src/core/DataSource.vala"
 	_tmp15_ = _g_object_ref0 (_tmp14_);
 #line 406 "/home/jens/Source/shotwell/src/core/DataSource.vala"
-	_vala_array_add122 (&self->priv->subscribers, &self->priv->subscribers_length1, &self->priv->_subscribers_size_, _tmp15_);
+	_vala_array_add63 (&self->priv->subscribers, &self->priv->subscribers_length1, &self->priv->_subscribers_size_, _tmp15_);
 #line 2603 "DataSource.c"
 }
 

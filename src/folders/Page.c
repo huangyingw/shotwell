@@ -363,7 +363,7 @@ typedef struct _MediaSourceClass MediaSourceClass;
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -373,8 +373,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -382,10 +380,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -497,13 +493,13 @@ struct _MediaPageClass {
 	void (*on_move_to_trash) (MediaPage* self);
 	void (*on_edit_title) (MediaPage* self);
 	void (*on_edit_comment) (MediaPage* self);
-	void (*on_display_titles) (MediaPage* self, GtkAction* action);
-	void (*on_display_comments) (MediaPage* self, GtkAction* action);
-	void (*on_display_ratings) (MediaPage* self, GtkAction* action);
-	void (*on_display_tags) (MediaPage* self, GtkAction* action);
+	void (*on_display_titles) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_comments) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_ratings) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_tags) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*get_config_photos_sort) (MediaPage* self, gboolean* sort_order, gint* sort_by);
 	void (*set_config_photos_sort) (MediaPage* self, gboolean sort_order, gint sort_by);
-	void (*on_sort_changed) (MediaPage* self);
+	void (*on_sort_changed) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*developer_changed) (MediaPage* self, RawDeveloper rd);
 	DataView* (*create_thumbnail) (MediaPage* self, DataSource* source);
 };
@@ -709,7 +705,7 @@ FoldersPage* folders_page_construct (GType object_type, GFile* dir) {
 	_view_manager_unref0 (self->priv->view_manager);
 #line 27 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	self->priv->view_manager = _tmp4_;
-#line 713 "Page.c"
+#line 709 "Page.c"
 	{
 		GeeIterator* _sources_it = NULL;
 		MediaCollectionRegistry* _tmp5_ = NULL;
@@ -738,7 +734,7 @@ FoldersPage* folders_page_construct (GType object_type, GFile* dir) {
 		_sources_it = _tmp10_;
 #line 29 "/home/jens/Source/shotwell/src/folders/Page.vala"
 		while (TRUE) {
-#line 742 "Page.c"
+#line 738 "Page.c"
 			GeeIterator* _tmp11_ = NULL;
 			gboolean _tmp12_ = FALSE;
 			MediaSourceCollection* sources = NULL;
@@ -758,7 +754,7 @@ FoldersPage* folders_page_construct (GType object_type, GFile* dir) {
 			if (!_tmp12_) {
 #line 29 "/home/jens/Source/shotwell/src/folders/Page.vala"
 				break;
-#line 762 "Page.c"
+#line 758 "Page.c"
 			}
 #line 29 "/home/jens/Source/shotwell/src/folders/Page.vala"
 			_tmp13_ = _sources_it;
@@ -784,22 +780,22 @@ FoldersPage* folders_page_construct (GType object_type, GFile* dir) {
 			_data_collection_unref0 (_tmp16_);
 #line 29 "/home/jens/Source/shotwell/src/folders/Page.vala"
 			_data_collection_unref0 (sources);
-#line 788 "Page.c"
+#line 784 "Page.c"
 		}
 #line 29 "/home/jens/Source/shotwell/src/folders/Page.vala"
 		_g_object_unref0 (_sources_it);
-#line 792 "Page.c"
+#line 788 "Page.c"
 	}
 #line 24 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	return self;
-#line 796 "Page.c"
+#line 792 "Page.c"
 }
 
 
 FoldersPage* folders_page_new (GFile* dir) {
 #line 24 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	return folders_page_construct (FOLDERS_TYPE_PAGE, dir);
-#line 803 "Page.c"
+#line 799 "Page.c"
 }
 
 
@@ -829,13 +825,13 @@ static void folders_page_real_get_config_photos_sort (MediaPage* base, gboolean*
 	if (sort_order) {
 #line 33 "/home/jens/Source/shotwell/src/folders/Page.vala"
 		*sort_order = _vala_sort_order;
-#line 833 "Page.c"
+#line 829 "Page.c"
 	}
 #line 33 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	if (sort_by) {
 #line 33 "/home/jens/Source/shotwell/src/folders/Page.vala"
 		*sort_by = _vala_sort_by;
-#line 839 "Page.c"
+#line 835 "Page.c"
 	}
 }
 
@@ -860,14 +856,14 @@ static void folders_page_real_set_config_photos_sort (MediaPage* base, gboolean 
 	configuration_facade_set_library_photos_sort (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp2_, _tmp3_);
 #line 38 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	_g_object_unref0 (_tmp1_);
-#line 864 "Page.c"
+#line 860 "Page.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 14 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 871 "Page.c"
+#line 867 "Page.c"
 }
 
 
@@ -894,14 +890,14 @@ static FoldersPageFolderViewManager* folders_page_folder_view_manager_construct 
 	self->dir = _tmp2_;
 #line 11 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	return self;
-#line 898 "Page.c"
+#line 894 "Page.c"
 }
 
 
 static FoldersPageFolderViewManager* folders_page_folder_view_manager_new (FoldersPage* owner, GFile* dir) {
 #line 11 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	return folders_page_folder_view_manager_construct (FOLDERS_PAGE_TYPE_FOLDER_VIEW_MANAGER, owner, dir);
-#line 905 "Page.c"
+#line 901 "Page.c"
 }
 
 
@@ -936,7 +932,7 @@ static gboolean folders_page_folder_view_manager_real_include_in_view (ViewManag
 	result = _tmp5_;
 #line 18 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	return result;
-#line 940 "Page.c"
+#line 936 "Page.c"
 }
 
 
@@ -947,7 +943,7 @@ static void folders_page_folder_view_manager_class_init (FoldersPageFolderViewMa
 	((ViewManagerClass *) klass)->finalize = folders_page_folder_view_manager_finalize;
 #line 8 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	((ViewManagerClass *) klass)->include_in_view = folders_page_folder_view_manager_real_include_in_view;
-#line 951 "Page.c"
+#line 947 "Page.c"
 }
 
 
@@ -963,7 +959,7 @@ static void folders_page_folder_view_manager_finalize (ViewManager* obj) {
 	_g_object_unref0 (self->dir);
 #line 8 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	VIEW_MANAGER_CLASS (folders_page_folder_view_manager_parent_class)->finalize (obj);
-#line 967 "Page.c"
+#line 963 "Page.c"
 }
 
 
@@ -990,14 +986,14 @@ static void folders_page_class_init (FoldersPageClass * klass) {
 	((MediaPageClass *) klass)->set_config_photos_sort = folders_page_real_set_config_photos_sort;
 #line 7 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	G_OBJECT_CLASS (klass)->finalize = folders_page_finalize;
-#line 994 "Page.c"
+#line 990 "Page.c"
 }
 
 
 static void folders_page_instance_init (FoldersPage * self) {
 #line 7 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	self->priv = FOLDERS_PAGE_GET_PRIVATE (self);
-#line 1001 "Page.c"
+#line 997 "Page.c"
 }
 
 
@@ -1009,7 +1005,7 @@ static void folders_page_finalize (GObject* obj) {
 	_view_manager_unref0 (self->priv->view_manager);
 #line 7 "/home/jens/Source/shotwell/src/folders/Page.vala"
 	G_OBJECT_CLASS (folders_page_parent_class)->finalize (obj);
-#line 1013 "Page.c"
+#line 1009 "Page.c"
 }
 
 

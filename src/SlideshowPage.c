@@ -297,7 +297,7 @@ typedef struct _SlideshowPageSettingsDialogPrivate SlideshowPageSettingsDialogPr
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -307,8 +307,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -316,10 +314,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -655,42 +651,42 @@ static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify 
 static gpointer _data_collection_ref0 (gpointer self) {
 #line 143 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return self ? data_collection_ref (self) : NULL;
-#line 659 "SlideshowPage.c"
+#line 655 "SlideshowPage.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 152 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 666 "SlideshowPage.c"
+#line 662 "SlideshowPage.c"
 }
 
 
 static void _single_photo_page_on_previous_photo_gtk_tool_button_clicked (GtkToolButton* _sender, gpointer self) {
 #line 163 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	single_photo_page_on_previous_photo ((SinglePhotoPage*) self);
-#line 673 "SlideshowPage.c"
+#line 669 "SlideshowPage.c"
 }
 
 
 static void _slideshow_page_on_play_pause_gtk_tool_button_clicked (GtkToolButton* _sender, gpointer self) {
 #line 170 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	slideshow_page_on_play_pause ((SlideshowPage*) self);
-#line 680 "SlideshowPage.c"
+#line 676 "SlideshowPage.c"
 }
 
 
 static void _single_photo_page_on_next_photo_gtk_tool_button_clicked (GtkToolButton* _sender, gpointer self) {
 #line 177 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	single_photo_page_on_next_photo ((SinglePhotoPage*) self);
-#line 687 "SlideshowPage.c"
+#line 683 "SlideshowPage.c"
 }
 
 
 static void _slideshow_page_on_change_settings_gtk_tool_button_clicked (GtkToolButton* _sender, gpointer self) {
 #line 185 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	slideshow_page_on_change_settings ((SlideshowPage*) self);
-#line 694 "SlideshowPage.c"
+#line 690 "SlideshowPage.c"
 }
 
 
@@ -929,14 +925,14 @@ SlideshowPage* slideshow_page_construct (GType object_type, SourceCollection* so
 	_g_object_unref0 (pluggables);
 #line 140 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return self;
-#line 933 "SlideshowPage.c"
+#line 929 "SlideshowPage.c"
 }
 
 
 SlideshowPage* slideshow_page_new (SourceCollection* sources, ViewCollection* controller, Photo* start) {
 #line 140 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return slideshow_page_construct (TYPE_SLIDESHOW_PAGE, sources, controller, start);
-#line 940 "SlideshowPage.c"
+#line 936 "SlideshowPage.c"
 }
 
 
@@ -945,7 +941,7 @@ static gboolean _slideshow_page_auto_advance_gsource_func (gpointer self) {
 	result = slideshow_page_auto_advance ((SlideshowPage*) self);
 #line 205 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return result;
-#line 949 "SlideshowPage.c"
+#line 945 "SlideshowPage.c"
 }
 
 
@@ -989,7 +985,7 @@ static void slideshow_page_real_switched_to (Page* base) {
 	pixbuf = _tmp5_;
 #line 201 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (_tmp6_) {
-#line 993 "SlideshowPage.c"
+#line 989 "SlideshowPage.c"
 		GdkPixbuf* _tmp7_ = NULL;
 		Photo* _tmp8_ = NULL;
 		Dimensions _tmp9_ = {0};
@@ -1004,7 +1000,7 @@ static void slideshow_page_real_switched_to (Page* base) {
 		_tmp10_ = DIRECTION_FORWARD;
 #line 202 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		single_photo_page_set_pixbuf (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage), _tmp7_, &_tmp9_, &_tmp10_);
-#line 1008 "SlideshowPage.c"
+#line 1004 "SlideshowPage.c"
 	}
 #line 205 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	g_timeout_add_full (G_PRIORITY_DEFAULT, (guint) SLIDESHOW_PAGE_CHECK_ADVANCE_MSEC, _slideshow_page_auto_advance_gsource_func, g_object_ref (self), g_object_unref);
@@ -1018,7 +1014,7 @@ static void slideshow_page_real_switched_to (Page* base) {
 	screensaver_inhibit (_tmp12_, "Playing slideshow");
 #line 193 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_g_object_unref0 (pixbuf);
-#line 1022 "SlideshowPage.c"
+#line 1018 "SlideshowPage.c"
 }
 
 
@@ -1035,7 +1031,7 @@ static void slideshow_page_real_switching_from (Page* base) {
 	screensaver_uninhibit (_tmp0_);
 #line 215 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	self->priv->exiting = TRUE;
-#line 1039 "SlideshowPage.c"
+#line 1035 "SlideshowPage.c"
 }
 
 
@@ -1058,14 +1054,14 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 	_g_object_unref0 (_vala_next);
 #line 220 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_vala_next = _tmp1_;
-#line 1062 "SlideshowPage.c"
+#line 1058 "SlideshowPage.c"
 	{
 		gboolean _tmp2_ = FALSE;
 #line 222 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp2_ = TRUE;
 #line 222 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		while (TRUE) {
-#line 1069 "SlideshowPage.c"
+#line 1065 "SlideshowPage.c"
 			DataSource* forward = NULL;
 			DataSource* back = NULL;
 			ViewCollection* _tmp40_ = NULL;
@@ -1088,11 +1084,11 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 			GeeSet* _tmp56_ = NULL;
 #line 222 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			if (!_tmp2_) {
-#line 1092 "SlideshowPage.c"
+#line 1088 "SlideshowPage.c"
 			}
 #line 222 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			_tmp2_ = FALSE;
-#line 1096 "SlideshowPage.c"
+#line 1092 "SlideshowPage.c"
 			{
 				GdkPixbuf* _tmp3_ = NULL;
 				PixbufCache* _tmp4_ = NULL;
@@ -1109,8 +1105,8 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 				_tmp3_ = _tmp6_;
 #line 225 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1113 "SlideshowPage.c"
-					goto __catch463_g_error;
+#line 1109 "SlideshowPage.c"
+					goto __catch460_g_error;
 				}
 #line 225 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				_tmp7_ = _tmp3_;
@@ -1122,10 +1118,10 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 				_vala_next_pixbuf = _tmp7_;
 #line 223 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				_g_object_unref0 (_tmp3_);
-#line 1126 "SlideshowPage.c"
+#line 1122 "SlideshowPage.c"
 			}
-			goto __finally463;
-			__catch463_g_error:
+			goto __finally460;
+			__catch460_g_error:
 			{
 				GError* err = NULL;
 				Photo* _tmp8_ = NULL;
@@ -1176,7 +1172,7 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 				_tmp17_ = direction;
 #line 231 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				if (_tmp17_ == DIRECTION_FORWARD) {
-#line 1180 "SlideshowPage.c"
+#line 1176 "SlideshowPage.c"
 					ViewCollection* _tmp18_ = NULL;
 					DataView* _tmp19_ = NULL;
 					DataView* _tmp20_ = NULL;
@@ -1190,7 +1186,7 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 					_g_object_unref0 (_tmp16_);
 #line 232 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 					_tmp16_ = _tmp20_;
-#line 1194 "SlideshowPage.c"
+#line 1190 "SlideshowPage.c"
 				} else {
 					ViewCollection* _tmp21_ = NULL;
 					DataView* _tmp22_ = NULL;
@@ -1205,7 +1201,7 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 					_g_object_unref0 (_tmp16_);
 #line 233 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 					_tmp16_ = _tmp23_;
-#line 1209 "SlideshowPage.c"
+#line 1205 "SlideshowPage.c"
 				}
 #line 231 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				_tmp24_ = _g_object_ref0 (_tmp16_);
@@ -1227,7 +1223,7 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 				_tmp30_ = start;
 #line 237 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				if (_tmp29_ == _tmp30_) {
-#line 1231 "SlideshowPage.c"
+#line 1227 "SlideshowPage.c"
 					Photo* _tmp31_ = NULL;
 					Photo* _tmp32_ = NULL;
 #line 237 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
@@ -1236,17 +1232,17 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 					_tmp32_ = self->priv->current;
 #line 237 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 					_tmp28_ = _tmp31_ != _tmp32_;
-#line 1240 "SlideshowPage.c"
+#line 1236 "SlideshowPage.c"
 				} else {
 #line 237 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 					_tmp28_ = FALSE;
-#line 1244 "SlideshowPage.c"
+#line 1240 "SlideshowPage.c"
 				}
 #line 237 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				if (_tmp28_) {
 #line 237 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 					_tmp27_ = TRUE;
-#line 1250 "SlideshowPage.c"
+#line 1246 "SlideshowPage.c"
 				} else {
 					Photo* _tmp33_ = NULL;
 					Photo* _tmp34_ = NULL;
@@ -1256,11 +1252,11 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 					_tmp34_ = self->priv->current;
 #line 237 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 					_tmp27_ = _tmp33_ == _tmp34_;
-#line 1260 "SlideshowPage.c"
+#line 1256 "SlideshowPage.c"
 				}
 #line 237 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				if (_tmp27_) {
-#line 1264 "SlideshowPage.c"
+#line 1260 "SlideshowPage.c"
 					const gchar* _tmp35_ = NULL;
 					GtkWindow* _tmp36_ = NULL;
 					GtkWindow* _tmp37_ = NULL;
@@ -1304,25 +1300,25 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 					if (next) {
 #line 244 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 						*next = _vala_next;
-#line 1308 "SlideshowPage.c"
+#line 1304 "SlideshowPage.c"
 					} else {
 #line 244 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 						_g_object_unref0 (_vala_next);
-#line 1312 "SlideshowPage.c"
+#line 1308 "SlideshowPage.c"
 					}
 #line 244 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 					if (next_pixbuf) {
 #line 244 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 						*next_pixbuf = _vala_next_pixbuf;
-#line 1318 "SlideshowPage.c"
+#line 1314 "SlideshowPage.c"
 					} else {
 #line 244 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 						_g_object_unref0 (_vala_next_pixbuf);
-#line 1322 "SlideshowPage.c"
+#line 1318 "SlideshowPage.c"
 					}
 #line 244 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 					return result;
-#line 1326 "SlideshowPage.c"
+#line 1322 "SlideshowPage.c"
 				}
 #line 247 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				_g_object_unref0 (_tmp16_);
@@ -1332,9 +1328,9 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 				_g_error_free0 (err);
 #line 247 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				continue;
-#line 1336 "SlideshowPage.c"
+#line 1332 "SlideshowPage.c"
 			}
-			__finally463:
+			__finally460:
 #line 223 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 223 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
@@ -1343,7 +1339,7 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 				g_clear_error (&_inner_error_);
 #line 223 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				return FALSE;
-#line 1347 "SlideshowPage.c"
+#line 1343 "SlideshowPage.c"
 			}
 #line 253 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			_tmp40_ = self->priv->controller;
@@ -1409,46 +1405,46 @@ static gboolean slideshow_page_get_next_photo (SlideshowPage* self, Photo* start
 			if (next) {
 #line 263 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				*next = _vala_next;
-#line 1413 "SlideshowPage.c"
+#line 1409 "SlideshowPage.c"
 			} else {
 #line 263 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				_g_object_unref0 (_vala_next);
-#line 1417 "SlideshowPage.c"
+#line 1413 "SlideshowPage.c"
 			}
 #line 263 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			if (next_pixbuf) {
 #line 263 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				*next_pixbuf = _vala_next_pixbuf;
-#line 1423 "SlideshowPage.c"
+#line 1419 "SlideshowPage.c"
 			} else {
 #line 263 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				_g_object_unref0 (_vala_next_pixbuf);
-#line 1427 "SlideshowPage.c"
+#line 1423 "SlideshowPage.c"
 			}
 #line 263 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			return result;
-#line 1431 "SlideshowPage.c"
+#line 1427 "SlideshowPage.c"
 		}
 	}
 #line 218 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (next) {
 #line 218 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		*next = _vala_next;
-#line 1438 "SlideshowPage.c"
+#line 1434 "SlideshowPage.c"
 	} else {
 #line 218 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_g_object_unref0 (_vala_next);
-#line 1442 "SlideshowPage.c"
+#line 1438 "SlideshowPage.c"
 	}
 #line 218 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (next_pixbuf) {
 #line 218 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		*next_pixbuf = _vala_next_pixbuf;
-#line 1448 "SlideshowPage.c"
+#line 1444 "SlideshowPage.c"
 	} else {
 #line 218 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_g_object_unref0 (_vala_next_pixbuf);
-#line 1452 "SlideshowPage.c"
+#line 1448 "SlideshowPage.c"
 	}
 }
 
@@ -1463,7 +1459,7 @@ static void slideshow_page_on_play_pause (SlideshowPage* self) {
 	_tmp0_ = self->priv->playing;
 #line 268 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (_tmp0_) {
-#line 1467 "SlideshowPage.c"
+#line 1463 "SlideshowPage.c"
 		GtkToolButton* _tmp1_ = NULL;
 		GtkToolButton* _tmp2_ = NULL;
 		const gchar* _tmp3_ = NULL;
@@ -1485,7 +1481,7 @@ static void slideshow_page_on_play_pause (SlideshowPage* self) {
 		_tmp5_ = _ ("Continue the slideshow");
 #line 271 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_tool_item_get_type (), GtkToolItem), _tmp5_);
-#line 1489 "SlideshowPage.c"
+#line 1485 "SlideshowPage.c"
 	} else {
 		GtkToolButton* _tmp6_ = NULL;
 		GtkToolButton* _tmp7_ = NULL;
@@ -1508,7 +1504,7 @@ static void slideshow_page_on_play_pause (SlideshowPage* self) {
 		_tmp10_ = _ ("Pause the slideshow");
 #line 275 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_tool_item_get_type (), GtkToolItem), _tmp10_);
-#line 1512 "SlideshowPage.c"
+#line 1508 "SlideshowPage.c"
 	}
 #line 278 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp11_ = self->priv->playing;
@@ -1518,7 +1514,7 @@ static void slideshow_page_on_play_pause (SlideshowPage* self) {
 	_tmp12_ = self->priv->timer;
 #line 281 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	g_timer_start (_tmp12_);
-#line 1522 "SlideshowPage.c"
+#line 1518 "SlideshowPage.c"
 }
 
 
@@ -1565,7 +1561,7 @@ static void slideshow_page_real_on_previous_photo (SinglePhotoPage* base) {
 	prev_view = _tmp7_;
 #line 291 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	while (TRUE) {
-#line 1569 "SlideshowPage.c"
+#line 1565 "SlideshowPage.c"
 		DataView* _tmp8_ = NULL;
 		DataView* _tmp9_ = NULL;
 		DataSource* _tmp10_ = NULL;
@@ -1582,7 +1578,7 @@ static void slideshow_page_real_on_previous_photo (SinglePhotoPage* base) {
 		if (!(_tmp8_ != NULL)) {
 #line 291 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			break;
-#line 1586 "SlideshowPage.c"
+#line 1582 "SlideshowPage.c"
 		}
 #line 292 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp9_ = prev_view;
@@ -1596,7 +1592,7 @@ static void slideshow_page_real_on_previous_photo (SinglePhotoPage* base) {
 		_g_object_unref0 (_tmp11_);
 #line 292 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		if (_tmp12_) {
-#line 1600 "SlideshowPage.c"
+#line 1596 "SlideshowPage.c"
 			DataView* _tmp13_ = NULL;
 			DataSource* _tmp14_ = NULL;
 #line 293 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
@@ -1609,7 +1605,7 @@ static void slideshow_page_real_on_previous_photo (SinglePhotoPage* base) {
 			prev_photo = G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_PHOTO, Photo);
 #line 294 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			break;
-#line 1613 "SlideshowPage.c"
+#line 1609 "SlideshowPage.c"
 		}
 #line 297 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp15_ = self->priv->controller;
@@ -1640,7 +1636,7 @@ static void slideshow_page_real_on_previous_photo (SinglePhotoPage* base) {
 			_g_object_unref0 (view);
 #line 301 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			return;
-#line 1643 "SlideshowPage.c"
+#line 1639 "SlideshowPage.c"
 		}
 	}
 #line 305 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
@@ -1655,7 +1651,7 @@ static void slideshow_page_real_on_previous_photo (SinglePhotoPage* base) {
 	_g_object_unref0 (prev_photo);
 #line 284 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_g_object_unref0 (view);
-#line 1658 "SlideshowPage.c"
+#line 1654 "SlideshowPage.c"
 }
 
 
@@ -1707,7 +1703,7 @@ static void slideshow_page_real_on_next_photo (SinglePhotoPage* base) {
 	next_view = _tmp7_;
 #line 315 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	while (TRUE) {
-#line 1710 "SlideshowPage.c"
+#line 1706 "SlideshowPage.c"
 		DataView* _tmp8_ = NULL;
 		DataView* _tmp9_ = NULL;
 		DataSource* _tmp10_ = NULL;
@@ -1724,7 +1720,7 @@ static void slideshow_page_real_on_next_photo (SinglePhotoPage* base) {
 		if (!(_tmp8_ != NULL)) {
 #line 315 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			break;
-#line 1727 "SlideshowPage.c"
+#line 1723 "SlideshowPage.c"
 		}
 #line 316 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp9_ = next_view;
@@ -1738,7 +1734,7 @@ static void slideshow_page_real_on_next_photo (SinglePhotoPage* base) {
 		_g_object_unref0 (_tmp11_);
 #line 316 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		if (_tmp12_) {
-#line 1741 "SlideshowPage.c"
+#line 1737 "SlideshowPage.c"
 			DataView* _tmp13_ = NULL;
 			DataSource* _tmp14_ = NULL;
 #line 317 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
@@ -1751,7 +1747,7 @@ static void slideshow_page_real_on_next_photo (SinglePhotoPage* base) {
 			next_photo = G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_PHOTO, Photo);
 #line 318 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			break;
-#line 1754 "SlideshowPage.c"
+#line 1750 "SlideshowPage.c"
 		}
 #line 321 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp15_ = self->priv->controller;
@@ -1782,7 +1778,7 @@ static void slideshow_page_real_on_next_photo (SinglePhotoPage* base) {
 			_g_object_unref0 (view);
 #line 325 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			return;
-#line 1784 "SlideshowPage.c"
+#line 1780 "SlideshowPage.c"
 		}
 	}
 #line 329 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
@@ -1803,7 +1799,7 @@ static void slideshow_page_real_on_next_photo (SinglePhotoPage* base) {
 	if (_tmp24_) {
 #line 331 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		slideshow_page_random_transition_effect (self);
-#line 1805 "SlideshowPage.c"
+#line 1801 "SlideshowPage.c"
 	}
 #line 334 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp25_ = next_photo;
@@ -1817,7 +1813,7 @@ static void slideshow_page_real_on_next_photo (SinglePhotoPage* base) {
 	_g_object_unref0 (next_photo);
 #line 308 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_g_object_unref0 (view);
-#line 1819 "SlideshowPage.c"
+#line 1815 "SlideshowPage.c"
 }
 
 
@@ -1859,7 +1855,7 @@ static void slideshow_page_advance (SlideshowPage* self, Photo* photo, Direction
 	next_pixbuf = _tmp5_;
 #line 342 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (_tmp6_) {
-#line 1861 "SlideshowPage.c"
+#line 1857 "SlideshowPage.c"
 		GdkPixbuf* _tmp7_ = NULL;
 		Photo* _tmp8_ = NULL;
 		Dimensions _tmp9_ = {0};
@@ -1874,7 +1870,7 @@ static void slideshow_page_advance (SlideshowPage* self, Photo* photo, Direction
 		_tmp10_ = direction;
 #line 343 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		single_photo_page_set_pixbuf (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage), _tmp7_, &_tmp9_, &_tmp10_);
-#line 1876 "SlideshowPage.c"
+#line 1872 "SlideshowPage.c"
 	}
 #line 346 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp11_ = self->priv->timer;
@@ -1882,7 +1878,7 @@ static void slideshow_page_advance (SlideshowPage* self, Photo* photo, Direction
 	g_timer_start (_tmp11_);
 #line 337 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_g_object_unref0 (next_pixbuf);
-#line 1884 "SlideshowPage.c"
+#line 1880 "SlideshowPage.c"
 }
 
 
@@ -1906,7 +1902,7 @@ static gboolean slideshow_page_auto_advance (SlideshowPage* self) {
 		result = FALSE;
 #line 351 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		return result;
-#line 1908 "SlideshowPage.c"
+#line 1904 "SlideshowPage.c"
 	}
 #line 353 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp1_ = self->priv->playing;
@@ -1916,7 +1912,7 @@ static gboolean slideshow_page_auto_advance (SlideshowPage* self) {
 		result = TRUE;
 #line 354 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		return result;
-#line 1918 "SlideshowPage.c"
+#line 1914 "SlideshowPage.c"
 	}
 #line 356 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp2_ = self->priv->timer;
@@ -1938,7 +1934,7 @@ static gboolean slideshow_page_auto_advance (SlideshowPage* self) {
 		result = TRUE;
 #line 357 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		return result;
-#line 1940 "SlideshowPage.c"
+#line 1936 "SlideshowPage.c"
 	}
 #line 359 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	single_photo_page_on_next_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage));
@@ -1946,7 +1942,7 @@ static gboolean slideshow_page_auto_advance (SlideshowPage* self) {
 	result = TRUE;
 #line 361 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return result;
-#line 1948 "SlideshowPage.c"
+#line 1944 "SlideshowPage.c"
 }
 
 
@@ -1961,7 +1957,7 @@ static gboolean slideshow_page_real_key_press_event (GtkWidget* base, GdkEventKe
 	GQuark _tmp5_ = 0U;
 #line 366 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	static GQuark _tmp4_label0 = 0;
-#line 1963 "SlideshowPage.c"
+#line 1959 "SlideshowPage.c"
 	gboolean _tmp6_ = FALSE;
 	gboolean _tmp7_ = FALSE;
 #line 364 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
@@ -1984,27 +1980,27 @@ static gboolean slideshow_page_real_key_press_event (GtkWidget* base, GdkEventKe
 	if (_tmp5_ == ((0 != _tmp4_label0) ? _tmp4_label0 : (_tmp4_label0 = g_quark_from_static_string ("space")))) {
 #line 366 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		switch (0) {
-#line 1986 "SlideshowPage.c"
+#line 1982 "SlideshowPage.c"
 			default:
 			{
 #line 368 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				slideshow_page_on_play_pause (self);
 #line 369 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				break;
-#line 1993 "SlideshowPage.c"
+#line 1989 "SlideshowPage.c"
 			}
 		}
 	} else {
 #line 366 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		switch (0) {
-#line 1999 "SlideshowPage.c"
+#line 1995 "SlideshowPage.c"
 			default:
 			{
 #line 372 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				handled = FALSE;
 #line 373 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				break;
-#line 2006 "SlideshowPage.c"
+#line 2002 "SlideshowPage.c"
 			}
 		}
 	}
@@ -2016,11 +2012,11 @@ static gboolean slideshow_page_real_key_press_event (GtkWidget* base, GdkEventKe
 		result = TRUE;
 #line 377 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		return result;
-#line 2018 "SlideshowPage.c"
+#line 2014 "SlideshowPage.c"
 	}
 #line 379 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (GTK_WIDGET_CLASS (slideshow_page_parent_class)->key_press_event != NULL) {
-#line 2022 "SlideshowPage.c"
+#line 2018 "SlideshowPage.c"
 		GdkEventKey* _tmp8_ = NULL;
 		gboolean _tmp9_ = FALSE;
 #line 379 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
@@ -2029,17 +2025,17 @@ static gboolean slideshow_page_real_key_press_event (GtkWidget* base, GdkEventKe
 		_tmp9_ = GTK_WIDGET_CLASS (slideshow_page_parent_class)->key_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage), gtk_widget_get_type (), GtkWidget), _tmp8_);
 #line 379 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp7_ = _tmp9_;
-#line 2031 "SlideshowPage.c"
+#line 2027 "SlideshowPage.c"
 	} else {
 #line 379 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp7_ = TRUE;
-#line 2035 "SlideshowPage.c"
+#line 2031 "SlideshowPage.c"
 	}
 #line 379 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	result = _tmp7_;
 #line 379 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return result;
-#line 2041 "SlideshowPage.c"
+#line 2037 "SlideshowPage.c"
 }
 
 
@@ -2080,7 +2076,7 @@ static void slideshow_page_on_change_settings (SlideshowPage* self) {
 	_tmp4_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_dialog_get_type (), GtkDialog));
 #line 390 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (_tmp4_ == ((gint) GTK_RESPONSE_OK)) {
-#line 2082 "SlideshowPage.c"
+#line 2078 "SlideshowPage.c"
 		ConfigFacade* _tmp5_ = NULL;
 		ConfigFacade* _tmp6_ = NULL;
 		SlideshowPageSettingsDialog* _tmp7_ = NULL;
@@ -2152,7 +2148,7 @@ static void slideshow_page_on_change_settings (SlideshowPage* self) {
 		_g_object_unref0 (_tmp19_);
 #line 398 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		slideshow_page_update_transition_effect (self);
-#line 2154 "SlideshowPage.c"
+#line 2150 "SlideshowPage.c"
 	}
 #line 401 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp22_ = settings_dialog;
@@ -2168,7 +2164,7 @@ static void slideshow_page_on_change_settings (SlideshowPage* self) {
 	g_timer_start (_tmp24_);
 #line 382 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_g_object_unref0 (settings_dialog);
-#line 2170 "SlideshowPage.c"
+#line 2166 "SlideshowPage.c"
 }
 
 
@@ -2213,7 +2209,7 @@ static void slideshow_page_update_transition_effect (SlideshowPage* self) {
 	single_photo_page_set_transition (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage), effect_id, (gint) (effect_delay * 1000.0));
 #line 406 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_g_free0 (effect_id);
-#line 2215 "SlideshowPage.c"
+#line 2211 "SlideshowPage.c"
 }
 
 
@@ -2253,7 +2249,7 @@ static void slideshow_page_random_transition_effect (SlideshowPage* self) {
 	_tmp5__length1 = self->priv->transitions_length1;
 #line 416 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (0 < _tmp5__length1) {
-#line 2255 "SlideshowPage.c"
+#line 2251 "SlideshowPage.c"
 		gint random = 0;
 		gchar** _tmp6_ = NULL;
 		gint _tmp6__length1 = 0;
@@ -2285,7 +2281,7 @@ static void slideshow_page_random_transition_effect (SlideshowPage* self) {
 		_g_free0 (effect_id);
 #line 418 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		effect_id = _tmp11_;
-#line 2287 "SlideshowPage.c"
+#line 2283 "SlideshowPage.c"
 	}
 #line 420 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp12_ = effect_id;
@@ -2295,7 +2291,7 @@ static void slideshow_page_random_transition_effect (SlideshowPage* self) {
 	single_photo_page_set_transition (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage), _tmp12_, (gint) (_tmp13_ * 1000.0));
 #line 413 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_g_free0 (effect_id);
-#line 2297 "SlideshowPage.c"
+#line 2293 "SlideshowPage.c"
 }
 
 
@@ -2368,14 +2364,14 @@ static void slideshow_page_paint_title (SlideshowPage* self, cairo_t* ctx, Dimen
 	if (_tmp3_ == NULL) {
 #line 428 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp2_ = TRUE;
-#line 2370 "SlideshowPage.c"
+#line 2366 "SlideshowPage.c"
 	} else {
 		const gchar* _tmp4_ = NULL;
 #line 428 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp4_ = title;
 #line 428 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp2_ = g_strcmp0 (_tmp4_, "") == 0;
-#line 2377 "SlideshowPage.c"
+#line 2373 "SlideshowPage.c"
 	}
 #line 428 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (_tmp2_) {
@@ -2383,7 +2379,7 @@ static void slideshow_page_paint_title (SlideshowPage* self, cairo_t* ctx, Dimen
 		_g_free0 (title);
 #line 429 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		return;
-#line 2385 "SlideshowPage.c"
+#line 2381 "SlideshowPage.c"
 	}
 #line 431 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp5_ = title;
@@ -2451,7 +2447,7 @@ static void slideshow_page_paint_title (SlideshowPage* self, cairo_t* ctx, Dimen
 	_tmp27_ = _tmp26_.height;
 #line 445 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if ((_tmp24_ + _tmp25_) >= (_tmp27_ * 0.95)) {
-#line 2453 "SlideshowPage.c"
+#line 2449 "SlideshowPage.c"
 		Dimensions _tmp28_ = {0};
 		gint _tmp29_ = 0;
 		gint _tmp30_ = 0;
@@ -2463,7 +2459,7 @@ static void slideshow_page_paint_title (SlideshowPage* self, cairo_t* ctx, Dimen
 		_tmp30_ = title_height;
 #line 446 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		y = (_tmp29_ * 0.95) - _tmp30_;
-#line 2465 "SlideshowPage.c"
+#line 2461 "SlideshowPage.c"
 	}
 #line 448 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp31_ = x;
@@ -2475,7 +2471,7 @@ static void slideshow_page_paint_title (SlideshowPage* self, cairo_t* ctx, Dimen
 	_tmp34_ = _tmp33_.width;
 #line 448 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if ((_tmp31_ + _tmp32_) >= (_tmp34_ * 0.95)) {
-#line 2477 "SlideshowPage.c"
+#line 2473 "SlideshowPage.c"
 		Dimensions _tmp35_ = {0};
 		gint _tmp36_ = 0;
 		gint _tmp37_ = 0;
@@ -2487,7 +2483,7 @@ static void slideshow_page_paint_title (SlideshowPage* self, cairo_t* ctx, Dimen
 		_tmp37_ = title_width;
 #line 449 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		x = (gdouble) ((_tmp36_ / 2) - (_tmp37_ / 2));
-#line 2489 "SlideshowPage.c"
+#line 2485 "SlideshowPage.c"
 	}
 #line 451 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp38_ = ctx;
@@ -2533,7 +2529,7 @@ static void slideshow_page_paint_title (SlideshowPage* self, cairo_t* ctx, Dimen
 	_g_object_unref0 (layout);
 #line 424 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_g_free0 (title);
-#line 2535 "SlideshowPage.c"
+#line 2531 "SlideshowPage.c"
 }
 
 
@@ -2570,21 +2566,21 @@ static void slideshow_page_real_paint (SinglePhotoPage* base, cairo_t* ctx, Dime
 	_g_object_unref0 (_tmp4_);
 #line 463 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (_tmp6_) {
-#line 2572 "SlideshowPage.c"
+#line 2568 "SlideshowPage.c"
 		gboolean _tmp7_ = FALSE;
 #line 463 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp7_ = single_photo_page_is_transition_in_progress (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage));
 #line 463 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp2_ = !_tmp7_;
-#line 2578 "SlideshowPage.c"
+#line 2574 "SlideshowPage.c"
 	} else {
 #line 463 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp2_ = FALSE;
-#line 2582 "SlideshowPage.c"
+#line 2578 "SlideshowPage.c"
 	}
 #line 463 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (_tmp2_) {
-#line 2586 "SlideshowPage.c"
+#line 2582 "SlideshowPage.c"
 		cairo_t* _tmp8_ = NULL;
 		Dimensions _tmp9_ = {0};
 #line 464 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
@@ -2593,7 +2589,7 @@ static void slideshow_page_real_paint (SinglePhotoPage* base, cairo_t* ctx, Dime
 		_tmp9_ = *ctx_dim;
 #line 464 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		slideshow_page_paint_title (self, _tmp8_, &_tmp9_);
-#line 2595 "SlideshowPage.c"
+#line 2591 "SlideshowPage.c"
 	}
 }
 
@@ -2603,14 +2599,14 @@ static gint _utf8_ci_compare_gcompare_data_func (gconstpointer a, gconstpointer 
 	result = utf8_ci_compare (a, b);
 #line 73 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return result;
-#line 2605 "SlideshowPage.c"
+#line 2601 "SlideshowPage.c"
 }
 
 
 static void _slideshow_page_settings_dialog_on_transition_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
 #line 84 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	slideshow_page_settings_dialog_on_transition_changed ((SlideshowPageSettingsDialog*) self);
-#line 2612 "SlideshowPage.c"
+#line 2608 "SlideshowPage.c"
 }
 
 
@@ -2845,7 +2841,7 @@ static SlideshowPageSettingsDialog* slideshow_page_settings_dialog_construct (GT
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, gtk_combo_box_get_type (), GtkComboBox), 0);
 #line 72 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	i = 1;
-#line 2847 "SlideshowPage.c"
+#line 2843 "SlideshowPage.c"
 	{
 		GeeIterator* _display_name_it = NULL;
 		TransitionEffectsManager* _tmp43_ = NULL;
@@ -2874,7 +2870,7 @@ static SlideshowPageSettingsDialog* slideshow_page_settings_dialog_construct (GT
 		_display_name_it = _tmp48_;
 #line 73 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		while (TRUE) {
-#line 2876 "SlideshowPage.c"
+#line 2872 "SlideshowPage.c"
 			GeeIterator* _tmp49_ = NULL;
 			gboolean _tmp50_ = FALSE;
 			gchar* display_name = NULL;
@@ -2900,7 +2896,7 @@ static SlideshowPageSettingsDialog* slideshow_page_settings_dialog_construct (GT
 			if (!_tmp50_) {
 #line 73 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				break;
-#line 2902 "SlideshowPage.c"
+#line 2898 "SlideshowPage.c"
 			}
 #line 73 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			_tmp51_ = _display_name_it;
@@ -2918,7 +2914,7 @@ static SlideshowPageSettingsDialog* slideshow_page_settings_dialog_construct (GT
 				_g_free0 (display_name);
 #line 76 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				continue;
-#line 2920 "SlideshowPage.c"
+#line 2916 "SlideshowPage.c"
 			}
 #line 78 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			_tmp55_ = self->priv->transition_effect_selector;
@@ -2946,7 +2942,7 @@ static SlideshowPageSettingsDialog* slideshow_page_settings_dialog_construct (GT
 			_transition_effects_manager_unref0 (_tmp59_);
 #line 79 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			if (_tmp63_) {
-#line 2948 "SlideshowPage.c"
+#line 2944 "SlideshowPage.c"
 				GtkComboBoxText* _tmp64_ = NULL;
 				gint _tmp65_ = 0;
 #line 80 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
@@ -2955,7 +2951,7 @@ static SlideshowPageSettingsDialog* slideshow_page_settings_dialog_construct (GT
 				_tmp65_ = i;
 #line 80 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 				gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp64_, gtk_combo_box_get_type (), GtkComboBox), _tmp65_);
-#line 2957 "SlideshowPage.c"
+#line 2953 "SlideshowPage.c"
 			}
 #line 82 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			_tmp66_ = i;
@@ -2963,11 +2959,11 @@ static SlideshowPageSettingsDialog* slideshow_page_settings_dialog_construct (GT
 			i = _tmp66_ + 1;
 #line 73 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 			_g_free0 (display_name);
-#line 2965 "SlideshowPage.c"
+#line 2961 "SlideshowPage.c"
 		}
 #line 73 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_g_object_unref0 (_display_name_it);
-#line 2969 "SlideshowPage.c"
+#line 2965 "SlideshowPage.c"
 	}
 #line 84 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp67_ = self->priv->transition_effect_selector;
@@ -3075,14 +3071,14 @@ static SlideshowPageSettingsDialog* slideshow_page_settings_dialog_construct (GT
 	_g_object_unref0 (adjustment);
 #line 37 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return self;
-#line 3077 "SlideshowPage.c"
+#line 3073 "SlideshowPage.c"
 }
 
 
 static SlideshowPageSettingsDialog* slideshow_page_settings_dialog_new (void) {
 #line 37 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return slideshow_page_settings_dialog_construct (SLIDESHOW_PAGE_TYPE_SETTINGS_DIALOG);
-#line 3084 "SlideshowPage.c"
+#line 3080 "SlideshowPage.c"
 }
 
 
@@ -3107,17 +3103,17 @@ static void slideshow_page_settings_dialog_on_transition_changed (SlideshowPageS
 	_tmp3_ = selected;
 #line 110 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (_tmp3_ != NULL) {
-#line 3109 "SlideshowPage.c"
+#line 3105 "SlideshowPage.c"
 		const gchar* _tmp4_ = NULL;
 #line 111 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp4_ = selected;
 #line 111 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp2_ = g_strcmp0 (_tmp4_, TRANSITION_EFFECTS_MANAGER_NULL_EFFECT_ID) != 0;
-#line 3115 "SlideshowPage.c"
+#line 3111 "SlideshowPage.c"
 	} else {
 #line 110 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp2_ = FALSE;
-#line 3119 "SlideshowPage.c"
+#line 3115 "SlideshowPage.c"
 	}
 #line 110 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	sensitive = _tmp2_;
@@ -3131,7 +3127,7 @@ static void slideshow_page_settings_dialog_on_transition_changed (SlideshowPageS
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget), sensitive);
 #line 108 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_g_free0 (selected);
-#line 3133 "SlideshowPage.c"
+#line 3129 "SlideshowPage.c"
 }
 
 
@@ -3149,7 +3145,7 @@ static gdouble slideshow_page_settings_dialog_get_delay (SlideshowPageSettingsDi
 	result = _tmp1_;
 #line 118 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return result;
-#line 3151 "SlideshowPage.c"
+#line 3147 "SlideshowPage.c"
 }
 
 
@@ -3167,7 +3163,7 @@ static gdouble slideshow_page_settings_dialog_get_transition_delay (SlideshowPag
 	result = _tmp1_;
 #line 122 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return result;
-#line 3169 "SlideshowPage.c"
+#line 3165 "SlideshowPage.c"
 }
 
 
@@ -3198,7 +3194,7 @@ static gchar* slideshow_page_settings_dialog_get_transition_effect_id (Slideshow
 	_tmp2_ = active;
 #line 127 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (_tmp2_ == NULL) {
-#line 3200 "SlideshowPage.c"
+#line 3196 "SlideshowPage.c"
 		gchar* _tmp3_ = NULL;
 #line 128 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp3_ = g_strdup (TRANSITION_EFFECTS_MANAGER_NULL_EFFECT_ID);
@@ -3208,7 +3204,7 @@ static gchar* slideshow_page_settings_dialog_get_transition_effect_id (Slideshow
 		_g_free0 (active);
 #line 128 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		return result;
-#line 3210 "SlideshowPage.c"
+#line 3206 "SlideshowPage.c"
 	}
 #line 130 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp4_ = transition_effects_manager_get_instance ();
@@ -3228,17 +3224,17 @@ static gchar* slideshow_page_settings_dialog_get_transition_effect_id (Slideshow
 	_tmp10_ = id;
 #line 132 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	if (_tmp10_ != NULL) {
-#line 3230 "SlideshowPage.c"
+#line 3226 "SlideshowPage.c"
 		const gchar* _tmp11_ = NULL;
 #line 132 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp11_ = id;
 #line 132 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp9_ = _tmp11_;
-#line 3236 "SlideshowPage.c"
+#line 3232 "SlideshowPage.c"
 	} else {
 #line 132 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 		_tmp9_ = TRANSITION_EFFECTS_MANAGER_NULL_EFFECT_ID;
-#line 3240 "SlideshowPage.c"
+#line 3236 "SlideshowPage.c"
 	}
 #line 132 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	_tmp12_ = g_strdup (_tmp9_);
@@ -3250,7 +3246,7 @@ static gchar* slideshow_page_settings_dialog_get_transition_effect_id (Slideshow
 	_g_free0 (active);
 #line 132 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return result;
-#line 3252 "SlideshowPage.c"
+#line 3248 "SlideshowPage.c"
 }
 
 
@@ -3271,7 +3267,7 @@ static gboolean slideshow_page_settings_dialog_get_show_title (SlideshowPageSett
 	result = _tmp2_;
 #line 136 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	return result;
-#line 3273 "SlideshowPage.c"
+#line 3269 "SlideshowPage.c"
 }
 
 
@@ -3282,7 +3278,7 @@ static void slideshow_page_settings_dialog_class_init (SlideshowPageSettingsDial
 	g_type_class_add_private (klass, sizeof (SlideshowPageSettingsDialogPrivate));
 #line 26 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = slideshow_page_settings_dialog_finalize;
-#line 3284 "SlideshowPage.c"
+#line 3280 "SlideshowPage.c"
 }
 
 
@@ -3291,7 +3287,7 @@ static void slideshow_page_settings_dialog_instance_init (SlideshowPageSettingsD
 	self->priv = SLIDESHOW_PAGE_SETTINGS_DIALOG_GET_PRIVATE (self);
 #line 27 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	self->priv->builder = NULL;
-#line 3293 "SlideshowPage.c"
+#line 3289 "SlideshowPage.c"
 }
 
 
@@ -3319,7 +3315,7 @@ static void slideshow_page_settings_dialog_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->pane);
 #line 26 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	G_OBJECT_CLASS (slideshow_page_settings_dialog_parent_class)->finalize (obj);
-#line 3321 "SlideshowPage.c"
+#line 3317 "SlideshowPage.c"
 }
 
 
@@ -3356,7 +3352,7 @@ static void slideshow_page_class_init (SlideshowPageClass * klass) {
 	G_OBJECT_CLASS (klass)->finalize = slideshow_page_finalize;
 #line 7 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	g_signal_new ("hide_toolbar", TYPE_SLIDESHOW_PAGE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 3358 "SlideshowPage.c"
+#line 3354 "SlideshowPage.c"
 }
 
 
@@ -3374,7 +3370,7 @@ static void slideshow_page_instance_init (SlideshowPage * self) {
 	self->priv->playing = TRUE;
 #line 19 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	self->priv->exiting = FALSE;
-#line 3376 "SlideshowPage.c"
+#line 3372 "SlideshowPage.c"
 }
 
 
@@ -3402,7 +3398,7 @@ static void slideshow_page_finalize (GObject* obj) {
 	_screensaver_unref0 (self->priv->screensaver);
 #line 7 "/home/jens/Source/shotwell/src/SlideshowPage.vala"
 	G_OBJECT_CLASS (slideshow_page_parent_class)->finalize (obj);
-#line 3404 "SlideshowPage.c"
+#line 3400 "SlideshowPage.c"
 }
 
 

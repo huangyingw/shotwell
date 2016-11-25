@@ -63,16 +63,16 @@ typedef enum  {
 
 typedef void (*ResourcesAddStockIconModify) (GdkPixbuf* pixbuf, void* user_data);
 
-extern gchar* resources_RATE_ONE_MENU;
-extern gchar* resources_RATE_TWO_MENU;
-extern gchar* resources_RATE_THREE_MENU;
-extern gchar* resources_RATE_FOUR_MENU;
-extern gchar* resources_RATE_FIVE_MENU;
 extern gchar* resources_RATE_ONE_LABEL;
 extern gchar* resources_RATE_TWO_LABEL;
 extern gchar* resources_RATE_THREE_LABEL;
 extern gchar* resources_RATE_FOUR_LABEL;
 extern gchar* resources_RATE_FIVE_LABEL;
+extern gchar* resources_RATE_ONE_MENU;
+extern gchar* resources_RATE_TWO_MENU;
+extern gchar* resources_RATE_THREE_MENU;
+extern gchar* resources_RATE_FOUR_MENU;
+extern gchar* resources_RATE_FIVE_MENU;
 extern gchar* resources_DISPLAY_ONE_OR_HIGHER_TOOLTIP;
 extern gchar* resources_DISPLAY_TWO_OR_HIGHER_TOOLTIP;
 extern gchar* resources_DISPLAY_THREE_OR_HIGHER_TOOLTIP;
@@ -431,7 +431,6 @@ gchar* resources_rename_search_exists_message (const gchar* name);
 gchar* resources_rename_search_label (const gchar* old_name, const gchar* new_name);
 gchar* resources_delete_search_label (const gchar* name);
 GType rating_get_type (void) G_GNUC_CONST;
-const gchar* resources_rating_menu (Rating rating);
 const gchar* resources_rating_label (Rating rating);
 const gchar* resources_rating_combo_box (Rating rating);
 GType rating_filter_get_type (void) G_GNUC_CONST;
@@ -515,7 +514,7 @@ gchar* resources_launch_editor_failed (GError* err) {
 	result = _tmp3_;
 #line 335 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 491 "Resources.c"
+#line 490 "Resources.c"
 }
 
 
@@ -529,7 +528,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 	_tmp0__length1 = names_length1;
 #line 339 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0__length1 == 1) {
-#line 505 "Resources.c"
+#line 504 "Resources.c"
 		const gchar* _tmp1_ = NULL;
 		gchar** _tmp2_ = NULL;
 		gint _tmp2__length1 = 0;
@@ -560,7 +559,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 		result = _tmp7_;
 #line 340 "/home/jens/Source/shotwell/src/Resources.vala"
 		return result;
-#line 536 "Resources.c"
+#line 535 "Resources.c"
 	} else {
 		gchar** _tmp8_ = NULL;
 		gint _tmp8__length1 = 0;
@@ -570,7 +569,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 		_tmp8__length1 = names_length1;
 #line 341 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (_tmp8__length1 == 2) {
-#line 546 "Resources.c"
+#line 545 "Resources.c"
 			const gchar* _tmp9_ = NULL;
 			gchar** _tmp10_ = NULL;
 			gint _tmp10__length1 = 0;
@@ -618,7 +617,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 			result = _tmp19_;
 #line 343 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 594 "Resources.c"
+#line 593 "Resources.c"
 		} else {
 			const gchar* _tmp20_ = NULL;
 			gchar* _tmp21_ = NULL;
@@ -630,7 +629,7 @@ gchar* resources_add_tags_label (gchar** names, int names_length1) {
 			result = _tmp21_;
 #line 348 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 606 "Resources.c"
+#line 605 "Resources.c"
 		}
 	}
 }
@@ -653,7 +652,7 @@ gchar* resources_delete_tag_menu (const gchar* name) {
 	result = _tmp2_;
 #line 353 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 629 "Resources.c"
+#line 628 "Resources.c"
 }
 
 
@@ -674,7 +673,7 @@ gchar* resources_delete_tag_label (const gchar* name) {
 	result = _tmp2_;
 #line 357 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 650 "Resources.c"
+#line 649 "Resources.c"
 }
 
 
@@ -695,7 +694,7 @@ gchar* resources_rename_tag_menu (const gchar* name) {
 	result = _tmp2_;
 #line 366 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 671 "Resources.c"
+#line 670 "Resources.c"
 }
 
 
@@ -721,163 +720,103 @@ gchar* resources_rename_tag_label (const gchar* old_name, const gchar* new_name)
 	result = _tmp3_;
 #line 370 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 697 "Resources.c"
+#line 696 "Resources.c"
 }
 
 
 gchar* resources_tag_photos_label (const gchar* name, gint count) {
 	gchar* result = NULL;
-	const gchar* _tmp0_ = NULL;
-	gint _tmp1_ = 0;
-	const gchar* _tmp4_ = NULL;
-	gchar* _tmp5_ = NULL;
+	gint _tmp0_ = 0;
+	const gchar* _tmp1_ = NULL;
+	const gchar* _tmp2_ = NULL;
+	gchar* _tmp3_ = NULL;
 #line 378 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp1_ = count;
+	_tmp0_ = count;
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
-	if (_tmp1_ == 1) {
-#line 713 "Resources.c"
-		const gchar* _tmp2_ = NULL;
+	_tmp1_ = ngettext ("Tag Photo as “%s”", "Tag Photos as “%s”", (gulong) _tmp0_);
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp2_ = _ ("Tag Photo as “%s”");
+	_tmp2_ = name;
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp0_ = _tmp2_;
-#line 719 "Resources.c"
-	} else {
-		const gchar* _tmp3_ = NULL;
+	_tmp3_ = g_strdup_printf (_tmp1_, _tmp2_);
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp3_ = _ ("Tag Photos as “%s”");
-#line 379 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp0_ = _tmp3_;
-#line 726 "Resources.c"
-	}
-#line 379 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp4_ = name;
-#line 379 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp5_ = g_strdup_printf (_tmp0_, _tmp4_);
-#line 379 "/home/jens/Source/shotwell/src/Resources.vala"
-	result = _tmp5_;
+	result = _tmp3_;
 #line 379 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 736 "Resources.c"
+#line 720 "Resources.c"
 }
 
 
 gchar* resources_tag_photos_tooltip (const gchar* name, gint count) {
 	gchar* result = NULL;
-	const gchar* _tmp0_ = NULL;
-	gint _tmp1_ = 0;
-	const gchar* _tmp4_ = NULL;
-	gchar* _tmp5_ = NULL;
-#line 382 "/home/jens/Source/shotwell/src/Resources.vala"
+	gint _tmp0_ = 0;
+	const gchar* _tmp1_ = NULL;
+	const gchar* _tmp2_ = NULL;
+	gchar* _tmp3_ = NULL;
+#line 384 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 383 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp1_ = count;
-#line 383 "/home/jens/Source/shotwell/src/Resources.vala"
-	if (_tmp1_ == 1) {
-#line 752 "Resources.c"
-		const gchar* _tmp2_ = NULL;
-#line 383 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp2_ = _ ("Tag the selected photo as “%s”");
-#line 383 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp0_ = _tmp2_;
-#line 758 "Resources.c"
-	} else {
-		const gchar* _tmp3_ = NULL;
-#line 384 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp3_ = _ ("Tag the selected photos as “%s”");
-#line 384 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp0_ = _tmp3_;
-#line 765 "Resources.c"
-	}
-#line 383 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp4_ = name;
-#line 383 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp5_ = g_strdup_printf (_tmp0_, _tmp4_);
-#line 383 "/home/jens/Source/shotwell/src/Resources.vala"
-	result = _tmp5_;
-#line 383 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 385 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp0_ = count;
+#line 385 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp1_ = ngettext ("Tag the selected photo as “%s”", "Tag the selected photos as “%s”", (gulong) _tmp0_);
+#line 385 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp2_ = name;
+#line 385 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp3_ = g_strdup_printf (_tmp1_, _tmp2_);
+#line 385 "/home/jens/Source/shotwell/src/Resources.vala"
+	result = _tmp3_;
+#line 385 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 775 "Resources.c"
+#line 744 "Resources.c"
 }
 
 
 gchar* resources_untag_photos_menu (const gchar* name, gint count) {
 	gchar* result = NULL;
-	const gchar* _tmp0_ = NULL;
-	gint _tmp1_ = 0;
-	const gchar* _tmp4_ = NULL;
-	gchar* _tmp5_ = NULL;
-#line 387 "/home/jens/Source/shotwell/src/Resources.vala"
+	gint _tmp0_ = 0;
+	const gchar* _tmp1_ = NULL;
+	const gchar* _tmp2_ = NULL;
+	gchar* _tmp3_ = NULL;
+#line 390 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 388 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp1_ = count;
-#line 388 "/home/jens/Source/shotwell/src/Resources.vala"
-	if (_tmp1_ == 1) {
-#line 791 "Resources.c"
-		const gchar* _tmp2_ = NULL;
-#line 388 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp2_ = _ ("Remove Tag “%s” From _Photo");
-#line 388 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp0_ = _tmp2_;
-#line 797 "Resources.c"
-	} else {
-		const gchar* _tmp3_ = NULL;
-#line 389 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp3_ = _ ("Remove Tag “%s” From _Photos");
-#line 389 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp0_ = _tmp3_;
-#line 804 "Resources.c"
-	}
-#line 388 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp4_ = name;
-#line 388 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp5_ = g_strdup_printf (_tmp0_, _tmp4_);
-#line 388 "/home/jens/Source/shotwell/src/Resources.vala"
-	result = _tmp5_;
-#line 388 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 391 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp0_ = count;
+#line 391 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp1_ = ngettext ("Remove Tag “%s” From _Photo", "Remove Tag “%s” From _Photos", (gulong) _tmp0_);
+#line 391 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp2_ = name;
+#line 391 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp3_ = g_strdup_printf (_tmp1_, _tmp2_);
+#line 391 "/home/jens/Source/shotwell/src/Resources.vala"
+	result = _tmp3_;
+#line 391 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 814 "Resources.c"
+#line 768 "Resources.c"
 }
 
 
 gchar* resources_untag_photos_label (const gchar* name, gint count) {
 	gchar* result = NULL;
-	const gchar* _tmp0_ = NULL;
-	gint _tmp1_ = 0;
-	const gchar* _tmp4_ = NULL;
-	gchar* _tmp5_ = NULL;
-#line 392 "/home/jens/Source/shotwell/src/Resources.vala"
+	gint _tmp0_ = 0;
+	const gchar* _tmp1_ = NULL;
+	const gchar* _tmp2_ = NULL;
+	gchar* _tmp3_ = NULL;
+#line 396 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 393 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp1_ = count;
-#line 393 "/home/jens/Source/shotwell/src/Resources.vala"
-	if (_tmp1_ == 1) {
-#line 830 "Resources.c"
-		const gchar* _tmp2_ = NULL;
-#line 393 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp2_ = _ ("Remove Tag “%s” From Photo");
-#line 393 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp0_ = _tmp2_;
-#line 836 "Resources.c"
-	} else {
-		const gchar* _tmp3_ = NULL;
-#line 394 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp3_ = _ ("Remove Tag “%s” From Photos");
-#line 394 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp0_ = _tmp3_;
-#line 843 "Resources.c"
-	}
-#line 393 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp4_ = name;
-#line 393 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp5_ = g_strdup_printf (_tmp0_, _tmp4_);
-#line 393 "/home/jens/Source/shotwell/src/Resources.vala"
-	result = _tmp5_;
-#line 393 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 397 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp0_ = count;
+#line 397 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp1_ = ngettext ("Remove Tag “%s” From Photo", "Remove Tag “%s” From Photos", (gulong) _tmp0_);
+#line 397 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp2_ = name;
+#line 397 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp3_ = g_strdup_printf (_tmp1_, _tmp2_);
+#line 397 "/home/jens/Source/shotwell/src/Resources.vala"
+	result = _tmp3_;
+#line 397 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 853 "Resources.c"
+#line 792 "Resources.c"
 }
 
 
@@ -886,19 +825,19 @@ gchar* resources_rename_tag_exists_message (const gchar* name) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 397 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 402 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 398 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 403 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = _ ("Unable to rename tag to “%s” because the tag already exists.");
-#line 398 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 403 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = name;
-#line 398 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 403 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_strdup_printf (_tmp0_, _tmp1_);
-#line 398 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 403 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp2_;
-#line 398 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 403 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 874 "Resources.c"
+#line 813 "Resources.c"
 }
 
 
@@ -907,19 +846,19 @@ gchar* resources_rename_search_exists_message (const gchar* name) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 401 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 406 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 402 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 407 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = _ ("Unable to rename search to “%s” because the search already exists.");
-#line 402 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 407 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = name;
-#line 402 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 407 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_strdup_printf (_tmp0_, _tmp1_);
-#line 402 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 407 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp2_;
-#line 402 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 407 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 895 "Resources.c"
+#line 834 "Resources.c"
 }
 
 
@@ -929,23 +868,23 @@ gchar* resources_rename_search_label (const gchar* old_name, const gchar* new_na
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 413 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 418 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (old_name != NULL, NULL);
-#line 413 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 418 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (new_name != NULL, NULL);
-#line 414 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 419 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = _ ("Rename Search “%s” to “%s”");
-#line 414 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 419 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = old_name;
-#line 414 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 419 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = new_name;
-#line 414 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 419 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = g_strdup_printf (_tmp0_, _tmp1_, _tmp2_);
-#line 414 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 419 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp3_;
-#line 414 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 419 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 921 "Resources.c"
+#line 860 "Resources.c"
 }
 
 
@@ -954,225 +893,121 @@ gchar* resources_delete_search_label (const gchar* name) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 417 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 422 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 418 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 423 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = _ ("Delete Search “%s”");
-#line 418 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 423 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = name;
-#line 418 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 423 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_strdup_printf (_tmp0_, _tmp1_);
-#line 418 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 423 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp2_;
-#line 418 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 423 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 942 "Resources.c"
-}
-
-
-const gchar* resources_rating_menu (Rating rating) {
-	const gchar* result = NULL;
-	Rating _tmp0_ = 0;
-#line 422 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp0_ = rating;
-#line 422 "/home/jens/Source/shotwell/src/Resources.vala"
-	switch (_tmp0_) {
-#line 422 "/home/jens/Source/shotwell/src/Resources.vala"
-		case RATING_REJECTED:
-#line 955 "Resources.c"
-		{
-#line 424 "/home/jens/Source/shotwell/src/Resources.vala"
-			result = RESOURCES_RATE_REJECTED_MENU;
-#line 424 "/home/jens/Source/shotwell/src/Resources.vala"
-			return result;
-#line 961 "Resources.c"
-		}
-#line 422 "/home/jens/Source/shotwell/src/Resources.vala"
-		case RATING_UNRATED:
-#line 965 "Resources.c"
-		{
-#line 426 "/home/jens/Source/shotwell/src/Resources.vala"
-			result = RESOURCES_RATE_UNRATED_MENU;
-#line 426 "/home/jens/Source/shotwell/src/Resources.vala"
-			return result;
-#line 971 "Resources.c"
-		}
-#line 422 "/home/jens/Source/shotwell/src/Resources.vala"
-		case RATING_ONE:
-#line 975 "Resources.c"
-		{
-			const gchar* _tmp1_ = NULL;
-#line 428 "/home/jens/Source/shotwell/src/Resources.vala"
-			_tmp1_ = resources_RATE_ONE_MENU;
-#line 428 "/home/jens/Source/shotwell/src/Resources.vala"
-			result = _tmp1_;
-#line 428 "/home/jens/Source/shotwell/src/Resources.vala"
-			return result;
-#line 984 "Resources.c"
-		}
-#line 422 "/home/jens/Source/shotwell/src/Resources.vala"
-		case RATING_TWO:
-#line 988 "Resources.c"
-		{
-			const gchar* _tmp2_ = NULL;
-#line 430 "/home/jens/Source/shotwell/src/Resources.vala"
-			_tmp2_ = resources_RATE_TWO_MENU;
-#line 430 "/home/jens/Source/shotwell/src/Resources.vala"
-			result = _tmp2_;
-#line 430 "/home/jens/Source/shotwell/src/Resources.vala"
-			return result;
-#line 997 "Resources.c"
-		}
-#line 422 "/home/jens/Source/shotwell/src/Resources.vala"
-		case RATING_THREE:
-#line 1001 "Resources.c"
-		{
-			const gchar* _tmp3_ = NULL;
-#line 432 "/home/jens/Source/shotwell/src/Resources.vala"
-			_tmp3_ = resources_RATE_THREE_MENU;
-#line 432 "/home/jens/Source/shotwell/src/Resources.vala"
-			result = _tmp3_;
-#line 432 "/home/jens/Source/shotwell/src/Resources.vala"
-			return result;
-#line 1010 "Resources.c"
-		}
-#line 422 "/home/jens/Source/shotwell/src/Resources.vala"
-		case RATING_FOUR:
-#line 1014 "Resources.c"
-		{
-			const gchar* _tmp4_ = NULL;
-#line 434 "/home/jens/Source/shotwell/src/Resources.vala"
-			_tmp4_ = resources_RATE_FOUR_MENU;
-#line 434 "/home/jens/Source/shotwell/src/Resources.vala"
-			result = _tmp4_;
-#line 434 "/home/jens/Source/shotwell/src/Resources.vala"
-			return result;
-#line 1023 "Resources.c"
-		}
-#line 422 "/home/jens/Source/shotwell/src/Resources.vala"
-		case RATING_FIVE:
-#line 1027 "Resources.c"
-		{
-			const gchar* _tmp5_ = NULL;
-#line 436 "/home/jens/Source/shotwell/src/Resources.vala"
-			_tmp5_ = resources_RATE_FIVE_MENU;
-#line 436 "/home/jens/Source/shotwell/src/Resources.vala"
-			result = _tmp5_;
-#line 436 "/home/jens/Source/shotwell/src/Resources.vala"
-			return result;
-#line 1036 "Resources.c"
-		}
-		default:
-		{
-#line 438 "/home/jens/Source/shotwell/src/Resources.vala"
-			result = RESOURCES_RATE_UNRATED_MENU;
-#line 438 "/home/jens/Source/shotwell/src/Resources.vala"
-			return result;
-#line 1044 "Resources.c"
-		}
-	}
+#line 881 "Resources.c"
 }
 
 
 const gchar* resources_rating_label (Rating rating) {
 	const gchar* result = NULL;
 	Rating _tmp0_ = 0;
-#line 443 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 427 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = rating;
-#line 443 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 427 "/home/jens/Source/shotwell/src/Resources.vala"
 	switch (_tmp0_) {
-#line 443 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 427 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_REJECTED:
-#line 1059 "Resources.c"
+#line 894 "Resources.c"
 		{
-#line 445 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 429 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_REJECTED_LABEL;
-#line 445 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 429 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1065 "Resources.c"
+#line 900 "Resources.c"
 		}
-#line 443 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 427 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_UNRATED:
-#line 1069 "Resources.c"
+#line 904 "Resources.c"
 		{
-#line 447 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 431 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_UNRATED_LABEL;
-#line 447 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 431 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1075 "Resources.c"
+#line 910 "Resources.c"
 		}
-#line 443 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 427 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_ONE:
-#line 1079 "Resources.c"
+#line 914 "Resources.c"
 		{
 			const gchar* _tmp1_ = NULL;
-#line 449 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 433 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp1_ = resources_RATE_ONE_LABEL;
-#line 449 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 433 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp1_;
-#line 449 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 433 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1088 "Resources.c"
+#line 923 "Resources.c"
 		}
-#line 443 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 427 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_TWO:
-#line 1092 "Resources.c"
+#line 927 "Resources.c"
 		{
 			const gchar* _tmp2_ = NULL;
-#line 451 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 435 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp2_ = resources_RATE_TWO_LABEL;
-#line 451 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 435 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp2_;
-#line 451 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 435 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1101 "Resources.c"
+#line 936 "Resources.c"
 		}
-#line 443 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 427 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_THREE:
-#line 1105 "Resources.c"
+#line 940 "Resources.c"
 		{
 			const gchar* _tmp3_ = NULL;
-#line 453 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 437 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp3_ = resources_RATE_THREE_LABEL;
-#line 453 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 437 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp3_;
-#line 453 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 437 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1114 "Resources.c"
+#line 949 "Resources.c"
 		}
-#line 443 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 427 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FOUR:
-#line 1118 "Resources.c"
+#line 953 "Resources.c"
 		{
 			const gchar* _tmp4_ = NULL;
-#line 455 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 439 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp4_ = resources_RATE_FOUR_LABEL;
-#line 455 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 439 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp4_;
-#line 455 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 439 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1127 "Resources.c"
+#line 962 "Resources.c"
 		}
-#line 443 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 427 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FIVE:
-#line 1131 "Resources.c"
+#line 966 "Resources.c"
 		{
 			const gchar* _tmp5_ = NULL;
-#line 457 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 441 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp5_ = resources_RATE_FIVE_LABEL;
-#line 457 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 441 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp5_;
-#line 457 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 441 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1140 "Resources.c"
+#line 975 "Resources.c"
 		}
 		default:
 		{
-#line 459 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 443 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_UNRATED_LABEL;
-#line 459 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 443 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1148 "Resources.c"
+#line 983 "Resources.c"
 		}
 	}
 }
@@ -1181,102 +1016,102 @@ const gchar* resources_rating_label (Rating rating) {
 const gchar* resources_rating_combo_box (Rating rating) {
 	const gchar* result = NULL;
 	Rating _tmp0_ = 0;
-#line 464 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 448 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = rating;
-#line 464 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 448 "/home/jens/Source/shotwell/src/Resources.vala"
 	switch (_tmp0_) {
-#line 464 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 448 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_REJECTED:
-#line 1163 "Resources.c"
+#line 998 "Resources.c"
 		{
-#line 466 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 450 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_REJECTED_COMBO_BOX;
-#line 466 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 450 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1169 "Resources.c"
+#line 1004 "Resources.c"
 		}
-#line 464 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 448 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_UNRATED:
-#line 1173 "Resources.c"
+#line 1008 "Resources.c"
 		{
-#line 468 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 452 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_UNRATED_COMBO_BOX;
-#line 468 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 452 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1179 "Resources.c"
+#line 1014 "Resources.c"
 		}
-#line 464 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 448 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_ONE:
-#line 1183 "Resources.c"
+#line 1018 "Resources.c"
 		{
 			const gchar* _tmp1_ = NULL;
-#line 470 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 454 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp1_ = resources_RATE_ONE_MENU;
-#line 470 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 454 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp1_;
-#line 470 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 454 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1192 "Resources.c"
+#line 1027 "Resources.c"
 		}
-#line 464 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 448 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_TWO:
-#line 1196 "Resources.c"
+#line 1031 "Resources.c"
 		{
 			const gchar* _tmp2_ = NULL;
-#line 472 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 456 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp2_ = resources_RATE_TWO_MENU;
-#line 472 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 456 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp2_;
-#line 472 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 456 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1205 "Resources.c"
+#line 1040 "Resources.c"
 		}
-#line 464 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 448 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_THREE:
-#line 1209 "Resources.c"
+#line 1044 "Resources.c"
 		{
 			const gchar* _tmp3_ = NULL;
-#line 474 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 458 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp3_ = resources_RATE_THREE_MENU;
-#line 474 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 458 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp3_;
-#line 474 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 458 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1218 "Resources.c"
+#line 1053 "Resources.c"
 		}
-#line 464 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 448 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FOUR:
-#line 1222 "Resources.c"
+#line 1057 "Resources.c"
 		{
 			const gchar* _tmp4_ = NULL;
-#line 476 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 460 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp4_ = resources_RATE_FOUR_MENU;
-#line 476 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 460 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp4_;
-#line 476 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 460 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1231 "Resources.c"
+#line 1066 "Resources.c"
 		}
-#line 464 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 448 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FIVE:
-#line 1235 "Resources.c"
+#line 1070 "Resources.c"
 		{
 			const gchar* _tmp5_ = NULL;
-#line 478 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 462 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp5_ = resources_RATE_FIVE_MENU;
-#line 478 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 462 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp5_;
-#line 478 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 462 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1244 "Resources.c"
+#line 1079 "Resources.c"
 		}
 		default:
 		{
-#line 480 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 464 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = RESOURCES_RATE_UNRATED_MENU;
-#line 480 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 464 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1252 "Resources.c"
+#line 1087 "Resources.c"
 		}
 	}
 }
@@ -1285,131 +1120,131 @@ const gchar* resources_rating_combo_box (Rating rating) {
 gchar* resources_get_rating_filter_tooltip (RatingFilter filter) {
 	gchar* result = NULL;
 	RatingFilter _tmp0_ = 0;
-#line 485 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 469 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = filter;
-#line 485 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 469 "/home/jens/Source/shotwell/src/Resources.vala"
 	switch (_tmp0_) {
-#line 485 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 469 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_REJECTED_OR_HIGHER:
-#line 1267 "Resources.c"
+#line 1102 "Resources.c"
 		{
 			gchar* _tmp1_ = NULL;
-#line 487 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 471 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp1_ = g_strdup (RESOURCES_DISPLAY_REJECTED_OR_HIGHER_TOOLTIP);
-#line 487 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 471 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp1_;
-#line 487 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 471 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1276 "Resources.c"
+#line 1111 "Resources.c"
 		}
-#line 485 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 469 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_ONE_OR_HIGHER:
-#line 1280 "Resources.c"
+#line 1115 "Resources.c"
 		{
 			const gchar* _tmp2_ = NULL;
 			gchar* _tmp3_ = NULL;
-#line 490 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 474 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp2_ = resources_DISPLAY_ONE_OR_HIGHER_TOOLTIP;
-#line 490 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 474 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp3_ = g_strdup (_tmp2_);
-#line 490 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 474 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp3_;
-#line 490 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 474 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1292 "Resources.c"
+#line 1127 "Resources.c"
 		}
-#line 485 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 469 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_TWO_OR_HIGHER:
-#line 1296 "Resources.c"
+#line 1131 "Resources.c"
 		{
 			const gchar* _tmp4_ = NULL;
 			gchar* _tmp5_ = NULL;
-#line 493 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 477 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp4_ = resources_DISPLAY_TWO_OR_HIGHER_TOOLTIP;
-#line 493 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 477 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp5_ = g_strdup (_tmp4_);
-#line 493 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 477 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp5_;
-#line 493 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 477 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1308 "Resources.c"
+#line 1143 "Resources.c"
 		}
-#line 485 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 469 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_THREE_OR_HIGHER:
-#line 1312 "Resources.c"
+#line 1147 "Resources.c"
 		{
 			const gchar* _tmp6_ = NULL;
 			gchar* _tmp7_ = NULL;
-#line 496 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 480 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp6_ = resources_DISPLAY_THREE_OR_HIGHER_TOOLTIP;
-#line 496 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 480 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp7_ = g_strdup (_tmp6_);
-#line 496 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 480 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp7_;
-#line 496 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 480 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1324 "Resources.c"
+#line 1159 "Resources.c"
 		}
-#line 485 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 469 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_FOUR_OR_HIGHER:
-#line 1328 "Resources.c"
+#line 1163 "Resources.c"
 		{
 			const gchar* _tmp8_ = NULL;
 			gchar* _tmp9_ = NULL;
-#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 483 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp8_ = resources_DISPLAY_FOUR_OR_HIGHER_TOOLTIP;
-#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 483 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp9_ = g_strdup (_tmp8_);
-#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 483 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp9_;
-#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 483 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1340 "Resources.c"
+#line 1175 "Resources.c"
 		}
-#line 485 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 469 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_FIVE_ONLY:
-#line 485 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 469 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_FIVE_OR_HIGHER:
-#line 1346 "Resources.c"
+#line 1181 "Resources.c"
 		{
 			const gchar* _tmp10_ = NULL;
 			gchar* _tmp11_ = NULL;
-#line 503 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 487 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp10_ = resources_DISPLAY_FIVE_OR_HIGHER_TOOLTIP;
-#line 503 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 487 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp11_ = g_strdup (_tmp10_);
-#line 503 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 487 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp11_;
-#line 503 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 487 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1358 "Resources.c"
+#line 1193 "Resources.c"
 		}
-#line 485 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 469 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_REJECTED_ONLY:
-#line 1362 "Resources.c"
+#line 1197 "Resources.c"
 		{
 			gchar* _tmp12_ = NULL;
-#line 506 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 490 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp12_ = g_strdup (RESOURCES_DISPLAY_REJECTED_ONLY_TOOLTIP);
-#line 506 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 490 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp12_;
-#line 506 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 490 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1371 "Resources.c"
+#line 1206 "Resources.c"
 		}
 		default:
-#line 485 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 469 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FILTER_UNRATED_OR_HIGHER:
-#line 1376 "Resources.c"
+#line 1211 "Resources.c"
 		{
 			gchar* _tmp13_ = NULL;
-#line 510 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 494 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp13_ = g_strdup (RESOURCES_DISPLAY_UNRATED_OR_HIGHER_TOOLTIP);
-#line 510 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 494 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp13_;
-#line 510 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 494 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1385 "Resources.c"
+#line 1220 "Resources.c"
 		}
 	}
 }
@@ -1418,126 +1253,126 @@ gchar* resources_get_rating_filter_tooltip (RatingFilter filter) {
 gchar* resources_rating_progress (Rating rating) {
 	gchar* result = NULL;
 	Rating _tmp0_ = 0;
-#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = rating;
-#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
 	switch (_tmp0_) {
-#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_REJECTED:
-#line 1400 "Resources.c"
+#line 1235 "Resources.c"
 		{
 			gchar* _tmp1_ = NULL;
-#line 517 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 501 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp1_ = g_strdup (RESOURCES_RATE_REJECTED_PROGRESS);
-#line 517 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 501 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp1_;
-#line 517 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 501 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1409 "Resources.c"
+#line 1244 "Resources.c"
 		}
-#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_UNRATED:
-#line 1413 "Resources.c"
+#line 1248 "Resources.c"
 		{
 			gchar* _tmp2_ = NULL;
-#line 519 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 503 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp2_ = g_strdup (RESOURCES_RATE_UNRATED_PROGRESS);
-#line 519 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 503 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp2_;
-#line 519 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 503 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1422 "Resources.c"
+#line 1257 "Resources.c"
 		}
-#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_ONE:
-#line 1426 "Resources.c"
+#line 1261 "Resources.c"
 		{
 			const gchar* _tmp3_ = NULL;
 			gchar* _tmp4_ = NULL;
-#line 521 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 505 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp3_ = resources_RATE_ONE_PROGRESS;
-#line 521 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 505 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp4_ = g_strdup (_tmp3_);
-#line 521 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 505 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp4_;
-#line 521 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 505 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1438 "Resources.c"
+#line 1273 "Resources.c"
 		}
-#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_TWO:
-#line 1442 "Resources.c"
+#line 1277 "Resources.c"
 		{
 			const gchar* _tmp5_ = NULL;
 			gchar* _tmp6_ = NULL;
-#line 523 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 507 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp5_ = resources_RATE_TWO_PROGRESS;
-#line 523 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 507 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp6_ = g_strdup (_tmp5_);
-#line 523 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 507 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp6_;
-#line 523 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 507 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1454 "Resources.c"
+#line 1289 "Resources.c"
 		}
-#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_THREE:
-#line 1458 "Resources.c"
+#line 1293 "Resources.c"
 		{
 			const gchar* _tmp7_ = NULL;
 			gchar* _tmp8_ = NULL;
-#line 525 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 509 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp7_ = resources_RATE_THREE_PROGRESS;
-#line 525 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 509 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp8_ = g_strdup (_tmp7_);
-#line 525 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 509 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp8_;
-#line 525 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 509 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1470 "Resources.c"
+#line 1305 "Resources.c"
 		}
-#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FOUR:
-#line 1474 "Resources.c"
+#line 1309 "Resources.c"
 		{
 			const gchar* _tmp9_ = NULL;
 			gchar* _tmp10_ = NULL;
-#line 527 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 511 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp9_ = resources_RATE_FOUR_PROGRESS;
-#line 527 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 511 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp10_ = g_strdup (_tmp9_);
-#line 527 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 511 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp10_;
-#line 527 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 511 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1486 "Resources.c"
+#line 1321 "Resources.c"
 		}
-#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 499 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FIVE:
-#line 1490 "Resources.c"
+#line 1325 "Resources.c"
 		{
 			const gchar* _tmp11_ = NULL;
 			gchar* _tmp12_ = NULL;
-#line 529 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 513 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp11_ = resources_RATE_FIVE_PROGRESS;
-#line 529 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 513 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp12_ = g_strdup (_tmp11_);
-#line 529 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 513 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp12_;
-#line 529 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 513 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1502 "Resources.c"
+#line 1337 "Resources.c"
 		}
 		default:
 		{
 			gchar* _tmp13_ = NULL;
-#line 531 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp13_ = g_strdup (RESOURCES_RATE_UNRATED_PROGRESS);
-#line 531 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp13_;
-#line 531 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 515 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1513 "Resources.c"
+#line 1348 "Resources.c"
 		}
 	}
 }
@@ -1546,85 +1381,85 @@ gchar* resources_rating_progress (Rating rating) {
 gchar* resources_get_stars (Rating rating) {
 	gchar* result = NULL;
 	Rating _tmp0_ = 0;
-#line 538 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 522 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = rating;
-#line 538 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 522 "/home/jens/Source/shotwell/src/Resources.vala"
 	switch (_tmp0_) {
-#line 538 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 522 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_ONE:
-#line 1528 "Resources.c"
+#line 1363 "Resources.c"
 		{
 			gchar* _tmp1_ = NULL;
-#line 540 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 524 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp1_ = g_strdup ("\xE2\x98\x85");
-#line 540 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 524 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp1_;
-#line 540 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 524 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1537 "Resources.c"
+#line 1372 "Resources.c"
 		}
-#line 538 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 522 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_TWO:
-#line 1541 "Resources.c"
+#line 1376 "Resources.c"
 		{
 			gchar* _tmp2_ = NULL;
-#line 542 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 526 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp2_ = g_strdup ("\xE2\x98\x85\xE2\x98\x85");
-#line 542 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 526 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp2_;
-#line 542 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 526 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1550 "Resources.c"
+#line 1385 "Resources.c"
 		}
-#line 538 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 522 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_THREE:
-#line 1554 "Resources.c"
+#line 1389 "Resources.c"
 		{
 			gchar* _tmp3_ = NULL;
-#line 544 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 528 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp3_ = g_strdup ("\xE2\x98\x85\xE2\x98\x85\xE2\x98\x85");
-#line 544 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 528 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp3_;
-#line 544 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 528 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1563 "Resources.c"
+#line 1398 "Resources.c"
 		}
-#line 538 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 522 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FOUR:
-#line 1567 "Resources.c"
+#line 1402 "Resources.c"
 		{
 			gchar* _tmp4_ = NULL;
-#line 546 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 530 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp4_ = g_strdup ("\xE2\x98\x85\xE2\x98\x85\xE2\x98\x85\xE2\x98\x85");
-#line 546 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 530 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp4_;
-#line 546 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 530 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1576 "Resources.c"
+#line 1411 "Resources.c"
 		}
-#line 538 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 522 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FIVE:
-#line 1580 "Resources.c"
+#line 1415 "Resources.c"
 		{
 			gchar* _tmp5_ = NULL;
-#line 548 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 532 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp5_ = g_strdup ("\xE2\x98\x85\xE2\x98\x85\xE2\x98\x85\xE2\x98\x85\xE2\x98\x85");
-#line 548 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 532 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp5_;
-#line 548 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 532 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1589 "Resources.c"
+#line 1424 "Resources.c"
 		}
 		default:
 		{
 			gchar* _tmp6_ = NULL;
-#line 550 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 534 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp6_ = g_strdup ("");
-#line 550 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 534 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp6_;
-#line 550 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 534 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1600 "Resources.c"
+#line 1435 "Resources.c"
 		}
 	}
 }
@@ -1633,113 +1468,113 @@ gchar* resources_get_stars (Rating rating) {
 GdkPixbuf* resources_get_rating_trinket (Rating rating, gint scale) {
 	GdkPixbuf* result = NULL;
 	Rating _tmp0_ = 0;
-#line 555 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 539 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = rating;
-#line 555 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 539 "/home/jens/Source/shotwell/src/Resources.vala"
 	switch (_tmp0_) {
-#line 555 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 539 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_REJECTED:
-#line 1615 "Resources.c"
+#line 1450 "Resources.c"
 		{
 			gint _tmp1_ = 0;
 			GdkPixbuf* _tmp2_ = NULL;
-#line 557 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 541 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp1_ = scale;
-#line 557 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 541 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp2_ = resources_get_icon (RESOURCES_ICON_RATING_REJECTED, _tmp1_);
-#line 557 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 541 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp2_;
-#line 557 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 541 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1627 "Resources.c"
+#line 1462 "Resources.c"
 		}
-#line 555 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 539 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_ONE:
-#line 1631 "Resources.c"
+#line 1466 "Resources.c"
 		{
 			gint _tmp3_ = 0;
 			GdkPixbuf* _tmp4_ = NULL;
-#line 560 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 544 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp3_ = scale;
-#line 560 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 544 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp4_ = resources_get_icon (RESOURCES_ICON_RATING_ONE, _tmp3_);
-#line 560 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 544 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp4_;
-#line 560 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 544 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1643 "Resources.c"
+#line 1478 "Resources.c"
 		}
-#line 555 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 539 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_TWO:
-#line 1647 "Resources.c"
+#line 1482 "Resources.c"
 		{
 			gint _tmp5_ = 0;
 			GdkPixbuf* _tmp6_ = NULL;
-#line 562 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 546 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp5_ = scale;
-#line 562 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 546 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp6_ = resources_get_icon (RESOURCES_ICON_RATING_TWO, _tmp5_ * 2);
-#line 562 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 546 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp6_;
-#line 562 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 546 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1659 "Resources.c"
+#line 1494 "Resources.c"
 		}
-#line 555 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 539 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_THREE:
-#line 1663 "Resources.c"
+#line 1498 "Resources.c"
 		{
 			gint _tmp7_ = 0;
 			GdkPixbuf* _tmp8_ = NULL;
-#line 564 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 548 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp7_ = scale;
-#line 564 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 548 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp8_ = resources_get_icon (RESOURCES_ICON_RATING_THREE, _tmp7_ * 3);
-#line 564 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 548 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp8_;
-#line 564 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 548 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1675 "Resources.c"
+#line 1510 "Resources.c"
 		}
-#line 555 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 539 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FOUR:
-#line 1679 "Resources.c"
+#line 1514 "Resources.c"
 		{
 			gint _tmp9_ = 0;
 			GdkPixbuf* _tmp10_ = NULL;
-#line 566 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 550 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp9_ = scale;
-#line 566 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 550 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp10_ = resources_get_icon (RESOURCES_ICON_RATING_FOUR, _tmp9_ * 4);
-#line 566 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 550 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp10_;
-#line 566 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 550 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1691 "Resources.c"
+#line 1526 "Resources.c"
 		}
-#line 555 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 539 "/home/jens/Source/shotwell/src/Resources.vala"
 		case RATING_FIVE:
-#line 1695 "Resources.c"
+#line 1530 "Resources.c"
 		{
 			gint _tmp11_ = 0;
 			GdkPixbuf* _tmp12_ = NULL;
-#line 568 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 552 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp11_ = scale;
-#line 568 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 552 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp12_ = resources_get_icon (RESOURCES_ICON_RATING_FIVE, _tmp11_ * 5);
-#line 568 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 552 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = _tmp12_;
-#line 568 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 552 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1707 "Resources.c"
+#line 1542 "Resources.c"
 		}
 		default:
 		{
-#line 570 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 554 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = NULL;
-#line 570 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 554 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 1715 "Resources.c"
+#line 1550 "Resources.c"
 		}
 	}
 }
@@ -1879,503 +1714,503 @@ void resources_generate_rating_strings (void) {
 	gchar* _tmp120_ = NULL;
 	gchar* _tmp121_ = NULL;
 	gchar* _tmp122_ = NULL;
-#line 575 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 559 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = g_strdup ("%s");
-#line 575 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 559 "/home/jens/Source/shotwell/src/Resources.vala"
 	menu_base = _tmp0_;
-#line 576 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 560 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = _ ("Rate %s");
-#line 576 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 560 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 576 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 560 "/home/jens/Source/shotwell/src/Resources.vala"
 	label_base = _tmp2_;
-#line 577 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 561 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = _ ("Set rating to %s");
-#line 577 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 561 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = g_strdup (_tmp3_);
-#line 577 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 561 "/home/jens/Source/shotwell/src/Resources.vala"
 	tooltip_base = _tmp4_;
-#line 578 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 562 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp5_ = _ ("Setting rating to %s");
-#line 578 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 562 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp6_ = g_strdup (_tmp5_);
-#line 578 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 562 "/home/jens/Source/shotwell/src/Resources.vala"
 	progress_base = _tmp6_;
-#line 579 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 563 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp7_ = g_strdup ("%s");
-#line 579 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 563 "/home/jens/Source/shotwell/src/Resources.vala"
 	display_rating_menu_base = _tmp7_;
-#line 580 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 564 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp8_ = _ ("Display %s");
-#line 580 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 564 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp9_ = g_strdup (_tmp8_);
-#line 580 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 564 "/home/jens/Source/shotwell/src/Resources.vala"
 	display_rating_label_base = _tmp9_;
-#line 581 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 565 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp10_ = _ ("Only show photos with a rating of %s");
-#line 581 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 565 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp11_ = g_strdup (_tmp10_);
-#line 581 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 565 "/home/jens/Source/shotwell/src/Resources.vala"
 	display_rating_tooltip_base = _tmp11_;
-#line 582 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 566 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp12_ = _ ("%s or Better");
-#line 582 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 566 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp13_ = g_strdup (_tmp12_);
-#line 582 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 566 "/home/jens/Source/shotwell/src/Resources.vala"
 	display_rating_or_higher_menu_base = _tmp13_;
-#line 583 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 567 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp14_ = _ ("Display %s or Better");
-#line 583 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 567 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp15_ = g_strdup (_tmp14_);
-#line 583 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 567 "/home/jens/Source/shotwell/src/Resources.vala"
 	display_rating_or_higher_label_base = _tmp15_;
-#line 584 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 568 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp16_ = _ ("Only show photos with a rating of %s or better");
-#line 584 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 568 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp17_ = g_strdup (_tmp16_);
-#line 584 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 568 "/home/jens/Source/shotwell/src/Resources.vala"
 	display_rating_or_higher_tooltip_base = _tmp17_;
-#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 570 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp18_ = resources_get_stars (RATING_ONE);
-#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 570 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp19_ = _tmp18_;
-#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 570 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp20_ = g_strdup_printf (menu_base, _tmp19_);
-#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 570 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_ONE_MENU);
-#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 570 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_ONE_MENU = _tmp20_;
-#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 570 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp19_);
-#line 587 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 571 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp21_ = resources_get_stars (RATING_TWO);
-#line 587 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 571 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp22_ = _tmp21_;
-#line 587 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 571 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp23_ = g_strdup_printf (menu_base, _tmp22_);
-#line 587 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 571 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_TWO_MENU);
-#line 587 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 571 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_TWO_MENU = _tmp23_;
-#line 587 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 571 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp22_);
-#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 572 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp24_ = resources_get_stars (RATING_THREE);
-#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 572 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp25_ = _tmp24_;
-#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 572 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp26_ = g_strdup_printf (menu_base, _tmp25_);
-#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 572 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_THREE_MENU);
-#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 572 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_THREE_MENU = _tmp26_;
-#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 572 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp25_);
-#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 573 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp27_ = resources_get_stars (RATING_FOUR);
-#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 573 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp28_ = _tmp27_;
-#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 573 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp29_ = g_strdup_printf (menu_base, _tmp28_);
-#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 573 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_FOUR_MENU);
-#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 573 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_FOUR_MENU = _tmp29_;
-#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 573 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp28_);
-#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp30_ = resources_get_stars (RATING_FIVE);
-#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp31_ = _tmp30_;
-#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp32_ = g_strdup_printf (menu_base, _tmp31_);
-#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_FIVE_MENU);
-#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_FIVE_MENU = _tmp32_;
-#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp31_);
-#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 576 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp33_ = resources_get_stars (RATING_ONE);
-#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 576 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp34_ = _tmp33_;
-#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 576 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp35_ = g_strdup_printf (label_base, _tmp34_);
-#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 576 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_ONE_LABEL);
-#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 576 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_ONE_LABEL = _tmp35_;
-#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 576 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp34_);
-#line 593 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 577 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp36_ = resources_get_stars (RATING_TWO);
-#line 593 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 577 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp37_ = _tmp36_;
-#line 593 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 577 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp38_ = g_strdup_printf (label_base, _tmp37_);
-#line 593 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 577 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_TWO_LABEL);
-#line 593 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 577 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_TWO_LABEL = _tmp38_;
-#line 593 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 577 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp37_);
-#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 578 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp39_ = resources_get_stars (RATING_THREE);
-#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 578 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp40_ = _tmp39_;
-#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 578 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp41_ = g_strdup_printf (label_base, _tmp40_);
-#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 578 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_THREE_LABEL);
-#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 578 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_THREE_LABEL = _tmp41_;
-#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 578 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp40_);
-#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 579 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp42_ = resources_get_stars (RATING_FOUR);
-#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 579 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp43_ = _tmp42_;
-#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 579 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp44_ = g_strdup_printf (label_base, _tmp43_);
-#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 579 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_FOUR_LABEL);
-#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 579 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_FOUR_LABEL = _tmp44_;
-#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 579 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp43_);
-#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 580 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp45_ = resources_get_stars (RATING_FIVE);
-#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 580 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp46_ = _tmp45_;
-#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 580 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp47_ = g_strdup_printf (label_base, _tmp46_);
-#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 580 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_FIVE_LABEL);
-#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 580 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_FIVE_LABEL = _tmp47_;
-#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 580 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp46_);
-#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 582 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp48_ = resources_get_stars (RATING_ONE);
-#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 582 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp49_ = _tmp48_;
-#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 582 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp50_ = g_strdup_printf (tooltip_base, _tmp49_);
-#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 582 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_ONE_TOOLTIP);
-#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 582 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_ONE_TOOLTIP = _tmp50_;
-#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 582 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp49_);
-#line 599 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 583 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp51_ = resources_get_stars (RATING_TWO);
-#line 599 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 583 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp52_ = _tmp51_;
-#line 599 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 583 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp53_ = g_strdup_printf (tooltip_base, _tmp52_);
-#line 599 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 583 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_TWO_TOOLTIP);
-#line 599 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 583 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_TWO_TOOLTIP = _tmp53_;
-#line 599 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 583 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp52_);
-#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 584 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp54_ = resources_get_stars (RATING_THREE);
-#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 584 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp55_ = _tmp54_;
-#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 584 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp56_ = g_strdup_printf (tooltip_base, _tmp55_);
-#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 584 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_THREE_TOOLTIP);
-#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 584 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_THREE_TOOLTIP = _tmp56_;
-#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 584 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp55_);
-#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 585 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp57_ = resources_get_stars (RATING_FOUR);
-#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 585 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp58_ = _tmp57_;
-#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 585 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp59_ = g_strdup_printf (tooltip_base, _tmp58_);
-#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 585 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_FOUR_TOOLTIP);
-#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 585 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_FOUR_TOOLTIP = _tmp59_;
-#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 585 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp58_);
-#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp60_ = resources_get_stars (RATING_FIVE);
-#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp61_ = _tmp60_;
-#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp62_ = g_strdup_printf (tooltip_base, _tmp61_);
-#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_FIVE_TOOLTIP);
-#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_FIVE_TOOLTIP = _tmp62_;
-#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 586 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp61_);
-#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp63_ = resources_get_stars (RATING_ONE);
-#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp64_ = _tmp63_;
-#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp65_ = g_strdup_printf (progress_base, _tmp64_);
-#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_ONE_PROGRESS);
-#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_ONE_PROGRESS = _tmp65_;
-#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 588 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp64_);
-#line 605 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp66_ = resources_get_stars (RATING_TWO);
-#line 605 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp67_ = _tmp66_;
-#line 605 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp68_ = g_strdup_printf (progress_base, _tmp67_);
-#line 605 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_TWO_PROGRESS);
-#line 605 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_TWO_PROGRESS = _tmp68_;
-#line 605 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 589 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp67_);
-#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp69_ = resources_get_stars (RATING_THREE);
-#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp70_ = _tmp69_;
-#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp71_ = g_strdup_printf (progress_base, _tmp70_);
-#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_THREE_PROGRESS);
-#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_THREE_PROGRESS = _tmp71_;
-#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 590 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp70_);
-#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 591 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp72_ = resources_get_stars (RATING_FOUR);
-#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 591 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp73_ = _tmp72_;
-#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 591 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp74_ = g_strdup_printf (progress_base, _tmp73_);
-#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 591 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_FOUR_PROGRESS);
-#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 591 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_FOUR_PROGRESS = _tmp74_;
-#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 591 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp73_);
-#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp75_ = resources_get_stars (RATING_FIVE);
-#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp76_ = _tmp75_;
-#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp77_ = g_strdup_printf (progress_base, _tmp76_);
-#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_RATE_FIVE_PROGRESS);
-#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_RATE_FIVE_PROGRESS = _tmp77_;
-#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 592 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp76_);
-#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp78_ = resources_get_stars (RATING_ONE);
-#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp79_ = _tmp78_;
-#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp80_ = g_strdup_printf (display_rating_or_higher_menu_base, _tmp79_);
-#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_ONE_OR_HIGHER_MENU);
-#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_ONE_OR_HIGHER_MENU = _tmp80_;
-#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 594 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp79_);
-#line 611 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp81_ = resources_get_stars (RATING_TWO);
-#line 611 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp82_ = _tmp81_;
-#line 611 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp83_ = g_strdup_printf (display_rating_or_higher_menu_base, _tmp82_);
-#line 611 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_TWO_OR_HIGHER_MENU);
-#line 611 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_TWO_OR_HIGHER_MENU = _tmp83_;
-#line 611 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 595 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp82_);
-#line 612 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp84_ = resources_get_stars (RATING_THREE);
-#line 612 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp85_ = _tmp84_;
-#line 612 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp86_ = g_strdup_printf (display_rating_or_higher_menu_base, _tmp85_);
-#line 612 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_THREE_OR_HIGHER_MENU);
-#line 612 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_THREE_OR_HIGHER_MENU = _tmp86_;
-#line 612 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 596 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp85_);
-#line 613 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 597 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp87_ = resources_get_stars (RATING_FOUR);
-#line 613 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 597 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp88_ = _tmp87_;
-#line 613 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 597 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp89_ = g_strdup_printf (display_rating_or_higher_menu_base, _tmp88_);
-#line 613 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 597 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_FOUR_OR_HIGHER_MENU);
-#line 613 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 597 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_FOUR_OR_HIGHER_MENU = _tmp89_;
-#line 613 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 597 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp88_);
-#line 614 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp90_ = resources_get_stars (RATING_FIVE);
-#line 614 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp91_ = _tmp90_;
-#line 614 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp92_ = g_strdup_printf (display_rating_menu_base, _tmp91_);
-#line 614 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_FIVE_OR_HIGHER_MENU);
-#line 614 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_FIVE_OR_HIGHER_MENU = _tmp92_;
-#line 614 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 598 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp91_);
-#line 616 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp93_ = resources_get_stars (RATING_ONE);
-#line 616 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp94_ = _tmp93_;
-#line 616 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp95_ = g_strdup_printf (display_rating_or_higher_label_base, _tmp94_);
-#line 616 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_ONE_OR_HIGHER_LABEL);
-#line 616 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_ONE_OR_HIGHER_LABEL = _tmp95_;
-#line 616 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 600 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp94_);
-#line 617 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp96_ = resources_get_stars (RATING_TWO);
-#line 617 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp97_ = _tmp96_;
-#line 617 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp98_ = g_strdup_printf (display_rating_or_higher_label_base, _tmp97_);
-#line 617 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_TWO_OR_HIGHER_LABEL);
-#line 617 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_TWO_OR_HIGHER_LABEL = _tmp98_;
-#line 617 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 601 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp97_);
-#line 618 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp99_ = resources_get_stars (RATING_THREE);
-#line 618 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp100_ = _tmp99_;
-#line 618 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp101_ = g_strdup_printf (display_rating_or_higher_label_base, _tmp100_);
-#line 618 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_THREE_OR_HIGHER_LABEL);
-#line 618 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_THREE_OR_HIGHER_LABEL = _tmp101_;
-#line 618 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 602 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp100_);
-#line 619 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 603 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp102_ = resources_get_stars (RATING_FOUR);
-#line 619 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 603 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp103_ = _tmp102_;
-#line 619 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 603 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp104_ = g_strdup_printf (display_rating_or_higher_label_base, _tmp103_);
-#line 619 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 603 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_FOUR_OR_HIGHER_LABEL);
-#line 619 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 603 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_FOUR_OR_HIGHER_LABEL = _tmp104_;
-#line 619 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 603 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp103_);
-#line 620 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp105_ = resources_get_stars (RATING_FIVE);
-#line 620 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp106_ = _tmp105_;
-#line 620 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp107_ = g_strdup_printf (display_rating_label_base, _tmp106_);
-#line 620 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_FIVE_OR_HIGHER_LABEL);
-#line 620 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_FIVE_OR_HIGHER_LABEL = _tmp107_;
-#line 620 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 604 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp106_);
-#line 622 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp108_ = resources_get_stars (RATING_ONE);
-#line 622 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp109_ = _tmp108_;
-#line 622 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp110_ = g_strdup_printf (display_rating_or_higher_tooltip_base, _tmp109_);
-#line 622 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_ONE_OR_HIGHER_TOOLTIP);
-#line 622 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_ONE_OR_HIGHER_TOOLTIP = _tmp110_;
-#line 622 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 606 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp109_);
-#line 623 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp111_ = resources_get_stars (RATING_TWO);
-#line 623 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp112_ = _tmp111_;
-#line 623 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp113_ = g_strdup_printf (display_rating_or_higher_tooltip_base, _tmp112_);
-#line 623 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_TWO_OR_HIGHER_TOOLTIP);
-#line 623 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_TWO_OR_HIGHER_TOOLTIP = _tmp113_;
-#line 623 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 607 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp112_);
-#line 624 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp114_ = resources_get_stars (RATING_THREE);
-#line 624 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp115_ = _tmp114_;
-#line 624 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp116_ = g_strdup_printf (display_rating_or_higher_tooltip_base, _tmp115_);
-#line 624 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_THREE_OR_HIGHER_TOOLTIP);
-#line 624 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_THREE_OR_HIGHER_TOOLTIP = _tmp116_;
-#line 624 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 608 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp115_);
-#line 625 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 609 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp117_ = resources_get_stars (RATING_FOUR);
-#line 625 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 609 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp118_ = _tmp117_;
-#line 625 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 609 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp119_ = g_strdup_printf (display_rating_or_higher_tooltip_base, _tmp118_);
-#line 625 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 609 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_FOUR_OR_HIGHER_TOOLTIP);
-#line 625 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 609 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_FOUR_OR_HIGHER_TOOLTIP = _tmp119_;
-#line 625 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 609 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp118_);
-#line 626 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp120_ = resources_get_stars (RATING_FIVE);
-#line 626 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp121_ = _tmp120_;
-#line 626 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp122_ = g_strdup_printf (display_rating_tooltip_base, _tmp121_);
-#line 626 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_DISPLAY_FIVE_OR_HIGHER_TOOLTIP);
-#line 626 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_DISPLAY_FIVE_OR_HIGHER_TOOLTIP = _tmp122_;
-#line 626 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 610 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp121_);
-#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 558 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (display_rating_or_higher_tooltip_base);
-#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 558 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (display_rating_or_higher_label_base);
-#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 558 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (display_rating_or_higher_menu_base);
-#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 558 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (display_rating_tooltip_base);
-#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 558 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (display_rating_label_base);
-#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 558 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (display_rating_menu_base);
-#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 558 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (progress_base);
-#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 558 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (tooltip_base);
-#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 558 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (label_base);
-#line 574 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 558 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (menu_base);
-#line 2351 "Resources.c"
+#line 2186 "Resources.c"
 }
 
 
@@ -2385,26 +2220,26 @@ gchar* resources_jump_to_file_failed (GError* err) {
 	GError* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 685 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 669 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = _ ("Unable to open in file manager: %s");
-#line 685 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 669 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = err;
-#line 685 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 669 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = _tmp1_->message;
-#line 685 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 669 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = g_strdup_printf (_tmp0_, _tmp2_);
-#line 685 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 669 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp3_;
-#line 685 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 669 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2373 "Resources.c"
+#line 2208 "Resources.c"
 }
 
 
 static void _dim_pixbuf_resources_add_stock_icon_modify (GdkPixbuf* pixbuf, gpointer self) {
-#line 726 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 710 "/home/jens/Source/shotwell/src/Resources.vala"
 	dim_pixbuf (pixbuf);
-#line 2380 "Resources.c"
+#line 2215 "Resources.c"
 }
 
 
@@ -2450,169 +2285,169 @@ void resources_init (void) {
 	GThemedIcon* _tmp37_ = NULL;
 	GThemedIcon* _tmp38_ = NULL;
 	GtkIconFactory* _tmp39_ = NULL;
-#line 709 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 693 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = gtk_icon_factory_new ();
-#line 709 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 693 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (resources_factory);
-#line 709 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 693 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_factory = _tmp0_;
-#line 711 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 695 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = app_dirs_get_resources_dir ();
-#line 711 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 695 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = _tmp1_;
-#line 711 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 695 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = g_file_get_child (_tmp2_, "icons");
-#line 711 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 695 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = _tmp3_;
-#line 711 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 695 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp2_);
-#line 711 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 695 "/home/jens/Source/shotwell/src/Resources.vala"
 	icons_dir = _tmp4_;
-#line 712 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 696 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp5_ = g_file_get_child (icons_dir, "crop.svg");
-#line 712 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 696 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp6_ = _tmp5_;
-#line 712 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 696 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_add_stock_icon (_tmp6_, RESOURCES_CROP);
-#line 712 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 696 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp6_);
-#line 713 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 697 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp7_ = g_file_get_child (icons_dir, "redeye.png");
-#line 713 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 697 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp8_ = _tmp7_;
-#line 713 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 697 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_add_stock_icon (_tmp8_, RESOURCES_REDEYE);
-#line 713 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 697 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp8_);
-#line 714 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 698 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp9_ = g_file_get_child (icons_dir, "make-primary.svg");
-#line 714 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 698 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp10_ = _tmp9_;
-#line 714 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 698 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_add_stock_icon (_tmp10_, RESOURCES_MAKE_PRIMARY);
-#line 714 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 698 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp10_);
-#line 715 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 699 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp11_ = g_file_get_child (icons_dir, "import.svg");
-#line 715 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 699 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp12_ = _tmp11_;
-#line 715 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 699 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_add_stock_icon (_tmp12_, RESOURCES_IMPORT);
-#line 715 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 699 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp12_);
-#line 716 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 700 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp13_ = g_file_get_child (icons_dir, "straighten.svg");
-#line 716 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 700 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp14_ = _tmp13_;
-#line 716 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 700 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_add_stock_icon (_tmp14_, RESOURCES_STRAIGHTEN);
-#line 716 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 700 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp14_);
-#line 717 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 701 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp15_ = g_file_get_child (icons_dir, "import-all.png");
-#line 717 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 701 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp16_ = _tmp15_;
-#line 717 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 701 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_add_stock_icon (_tmp16_, RESOURCES_IMPORT_ALL);
-#line 717 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 701 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp16_);
-#line 718 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 702 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp17_ = g_file_get_child (icons_dir, "shotwell-auto-enhance.png");
-#line 718 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 702 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp18_ = _tmp17_;
-#line 718 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 702 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_add_stock_icon (_tmp18_, RESOURCES_ENHANCE);
-#line 718 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 702 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp18_);
-#line 719 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 703 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp19_ = g_file_get_child (icons_dir, "crop-pivot-reticle.png");
-#line 719 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 703 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp20_ = _tmp19_;
-#line 719 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 703 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_add_stock_icon (_tmp20_, RESOURCES_CROP_PIVOT_RETICLE);
-#line 719 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 703 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp20_);
-#line 720 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 704 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp21_ = g_file_get_child (icons_dir, "merge.svg");
-#line 720 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 704 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp22_ = _tmp21_;
-#line 720 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 704 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_add_stock_icon (_tmp22_, RESOURCES_MERGE);
-#line 720 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 704 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp22_);
-#line 721 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 705 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp23_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_FLAGGED_PAGE);
-#line 721 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 705 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp24_ = _tmp23_;
-#line 721 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 705 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_add_stock_icon_from_themed_icon (_tmp24_, RESOURCES_ICON_FLAGGED_PAGE, NULL, NULL);
-#line 721 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 705 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp24_);
-#line 722 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 706 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp25_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_VIDEOS_PAGE);
-#line 722 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 706 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp26_ = _tmp25_;
-#line 722 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 706 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_add_stock_icon_from_themed_icon (_tmp26_, RESOURCES_ICON_VIDEOS_PAGE, NULL, NULL);
-#line 722 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 706 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp26_);
-#line 723 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp27_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_SINGLE_PHOTO);
-#line 723 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp28_ = _tmp27_;
-#line 723 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_add_stock_icon_from_themed_icon (_tmp28_, RESOURCES_ICON_SINGLE_PHOTO, NULL, NULL);
-#line 723 "/home/jens/Source/shotwell/src/Resources.vala"
-	_g_object_unref0 (_tmp28_);
-#line 724 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp29_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_CAMERAS);
-#line 724 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp30_ = _tmp29_;
-#line 724 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_add_stock_icon_from_themed_icon (_tmp30_, RESOURCES_ICON_CAMERAS, NULL, NULL);
-#line 724 "/home/jens/Source/shotwell/src/Resources.vala"
-	_g_object_unref0 (_tmp30_);
-#line 726 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp31_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_FILTER_FLAGGED);
-#line 726 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp32_ = _tmp31_;
-#line 726 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_add_stock_icon_from_themed_icon (_tmp32_, RESOURCES_ICON_FILTER_FLAGGED_DISABLED, _dim_pixbuf_resources_add_stock_icon_modify, NULL);
-#line 726 "/home/jens/Source/shotwell/src/Resources.vala"
-	_g_object_unref0 (_tmp32_);
-#line 728 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp33_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_FILTER_PHOTOS);
-#line 728 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp34_ = _tmp33_;
-#line 728 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_add_stock_icon_from_themed_icon (_tmp34_, RESOURCES_ICON_FILTER_PHOTOS_DISABLED, _dim_pixbuf_resources_add_stock_icon_modify, NULL);
-#line 728 "/home/jens/Source/shotwell/src/Resources.vala"
-	_g_object_unref0 (_tmp34_);
-#line 730 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp35_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_FILTER_VIDEOS);
-#line 730 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp36_ = _tmp35_;
-#line 730 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_add_stock_icon_from_themed_icon (_tmp36_, RESOURCES_ICON_FILTER_VIDEOS_DISABLED, _dim_pixbuf_resources_add_stock_icon_modify, NULL);
-#line 730 "/home/jens/Source/shotwell/src/Resources.vala"
-	_g_object_unref0 (_tmp36_);
-#line 732 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp37_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_FILTER_RAW);
-#line 732 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp38_ = _tmp37_;
-#line 732 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_add_stock_icon_from_themed_icon (_tmp38_, RESOURCES_ICON_FILTER_RAW_DISABLED, _dim_pixbuf_resources_add_stock_icon_modify, NULL);
-#line 732 "/home/jens/Source/shotwell/src/Resources.vala"
-	_g_object_unref0 (_tmp38_);
-#line 735 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp39_ = resources_factory;
-#line 735 "/home/jens/Source/shotwell/src/Resources.vala"
-	gtk_icon_factory_add_default (_tmp39_);
-#line 737 "/home/jens/Source/shotwell/src/Resources.vala"
-	resources_generate_rating_strings ();
 #line 707 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp27_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_SINGLE_PHOTO);
+#line 707 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp28_ = _tmp27_;
+#line 707 "/home/jens/Source/shotwell/src/Resources.vala"
+	resources_add_stock_icon_from_themed_icon (_tmp28_, RESOURCES_ICON_SINGLE_PHOTO, NULL, NULL);
+#line 707 "/home/jens/Source/shotwell/src/Resources.vala"
+	_g_object_unref0 (_tmp28_);
+#line 708 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp29_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_CAMERAS);
+#line 708 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp30_ = _tmp29_;
+#line 708 "/home/jens/Source/shotwell/src/Resources.vala"
+	resources_add_stock_icon_from_themed_icon (_tmp30_, RESOURCES_ICON_CAMERAS, NULL, NULL);
+#line 708 "/home/jens/Source/shotwell/src/Resources.vala"
+	_g_object_unref0 (_tmp30_);
+#line 710 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp31_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_FILTER_FLAGGED);
+#line 710 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp32_ = _tmp31_;
+#line 710 "/home/jens/Source/shotwell/src/Resources.vala"
+	resources_add_stock_icon_from_themed_icon (_tmp32_, RESOURCES_ICON_FILTER_FLAGGED_DISABLED, _dim_pixbuf_resources_add_stock_icon_modify, NULL);
+#line 710 "/home/jens/Source/shotwell/src/Resources.vala"
+	_g_object_unref0 (_tmp32_);
+#line 712 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp33_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_FILTER_PHOTOS);
+#line 712 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp34_ = _tmp33_;
+#line 712 "/home/jens/Source/shotwell/src/Resources.vala"
+	resources_add_stock_icon_from_themed_icon (_tmp34_, RESOURCES_ICON_FILTER_PHOTOS_DISABLED, _dim_pixbuf_resources_add_stock_icon_modify, NULL);
+#line 712 "/home/jens/Source/shotwell/src/Resources.vala"
+	_g_object_unref0 (_tmp34_);
+#line 714 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp35_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_FILTER_VIDEOS);
+#line 714 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp36_ = _tmp35_;
+#line 714 "/home/jens/Source/shotwell/src/Resources.vala"
+	resources_add_stock_icon_from_themed_icon (_tmp36_, RESOURCES_ICON_FILTER_VIDEOS_DISABLED, _dim_pixbuf_resources_add_stock_icon_modify, NULL);
+#line 714 "/home/jens/Source/shotwell/src/Resources.vala"
+	_g_object_unref0 (_tmp36_);
+#line 716 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp37_ = (GThemedIcon*) g_themed_icon_new (RESOURCES_ICON_FILTER_RAW);
+#line 716 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp38_ = _tmp37_;
+#line 716 "/home/jens/Source/shotwell/src/Resources.vala"
+	resources_add_stock_icon_from_themed_icon (_tmp38_, RESOURCES_ICON_FILTER_RAW_DISABLED, _dim_pixbuf_resources_add_stock_icon_modify, NULL);
+#line 716 "/home/jens/Source/shotwell/src/Resources.vala"
+	_g_object_unref0 (_tmp38_);
+#line 719 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp39_ = resources_factory;
+#line 719 "/home/jens/Source/shotwell/src/Resources.vala"
+	gtk_icon_factory_add_default (_tmp39_);
+#line 721 "/home/jens/Source/shotwell/src/Resources.vala"
+	resources_generate_rating_strings ();
+#line 691 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (icons_dir);
-#line 2588 "Resources.c"
+#line 2423 "Resources.c"
 }
 
 
@@ -2657,129 +2492,129 @@ void resources_fetch_lc_time_format (void) {
 	gchar* _tmp21_ = NULL;
 	const gchar* _tmp22_ = NULL;
 	const gchar* _tmp24_ = NULL;
-#line 756 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 740 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = g_getenv ("LANGUAGE");
-#line 756 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 740 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 756 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 740 "/home/jens/Source/shotwell/src/Resources.vala"
 	old_language = _tmp1_;
-#line 757 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 741 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = old_language;
-#line 757 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 741 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp2_ != NULL) {
-#line 758 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 742 "/home/jens/Source/shotwell/src/Resources.vala"
 		g_unsetenv ("LANGUAGE");
-#line 2645 "Resources.c"
+#line 2480 "Resources.c"
 	}
-#line 762 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 746 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = setlocale (LC_MESSAGES, NULL);
-#line 762 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 746 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = g_strdup (_tmp3_);
-#line 762 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 746 "/home/jens/Source/shotwell/src/Resources.vala"
 	old_messages = _tmp4_;
-#line 763 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 747 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp5_ = setlocale (LC_TIME, NULL);
-#line 763 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 747 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp6_ = g_strdup (_tmp5_);
-#line 763 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 747 "/home/jens/Source/shotwell/src/Resources.vala"
 	lc_time = _tmp6_;
-#line 765 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 749 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp7_ = lc_time;
-#line 765 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 749 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp7_ != NULL) {
-#line 2663 "Resources.c"
+#line 2498 "Resources.c"
 		const gchar* _tmp8_ = NULL;
-#line 766 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 750 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp8_ = lc_time;
-#line 766 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 750 "/home/jens/Source/shotwell/src/Resources.vala"
 		setlocale (LC_MESSAGES, _tmp8_);
-#line 2669 "Resources.c"
+#line 2504 "Resources.c"
 	}
-#line 773 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 757 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp9_ = g_strdup ("%X");
-#line 773 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 757 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_HH_MM_FORMAT_STRING);
-#line 773 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 757 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_HH_MM_FORMAT_STRING = _tmp9_;
-#line 778 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 762 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp10_ = nl_langinfo (T_FMT);
-#line 778 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 762 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp11_ = g_strdup (_tmp10_);
-#line 778 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 762 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_HH_MM_SS_FORMAT_STRING);
-#line 778 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 762 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_HH_MM_SS_FORMAT_STRING = _tmp11_;
-#line 782 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 766 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp12_ = _ ("%a %b %d, %Y");
-#line 782 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 766 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp13_ = g_strdup (_tmp12_);
-#line 782 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 766 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_LONG_DATE_FORMAT_STRING);
-#line 782 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 766 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_LONG_DATE_FORMAT_STRING = _tmp13_;
-#line 787 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 771 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp14_ = C_ ("MultidayFormat", "%a %b %d");
-#line 787 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 771 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp15_ = g_strdup (_tmp14_);
-#line 787 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 771 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_START_MULTIDAY_DATE_FORMAT_STRING);
-#line 787 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 771 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_START_MULTIDAY_DATE_FORMAT_STRING = _tmp15_;
-#line 792 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 776 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp16_ = C_ ("MultidayFormat", "%d, %Y");
-#line 792 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 776 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp17_ = g_strdup (_tmp16_);
-#line 792 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 776 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_END_MULTIDAY_DATE_FORMAT_STRING);
-#line 792 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 776 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_END_MULTIDAY_DATE_FORMAT_STRING = _tmp17_;
-#line 797 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 781 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp18_ = C_ ("MultimonthFormat", "%a %b %d");
-#line 797 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 781 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp19_ = g_strdup (_tmp18_);
-#line 797 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 781 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_START_MULTIMONTH_DATE_FORMAT_STRING);
-#line 797 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 781 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_START_MULTIMONTH_DATE_FORMAT_STRING = _tmp19_;
-#line 802 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 786 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp20_ = C_ ("MultimonthFormat", "%a %b %d, %Y");
-#line 802 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 786 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp21_ = g_strdup (_tmp20_);
-#line 802 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 786 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (resources_END_MULTIMONTH_DATE_FORMAT_STRING);
-#line 802 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 786 "/home/jens/Source/shotwell/src/Resources.vala"
 	resources_END_MULTIMONTH_DATE_FORMAT_STRING = _tmp21_;
-#line 805 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 789 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp22_ = old_messages;
-#line 805 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 789 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp22_ != NULL) {
-#line 2729 "Resources.c"
+#line 2564 "Resources.c"
 		const gchar* _tmp23_ = NULL;
-#line 806 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 790 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp23_ = old_messages;
-#line 806 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 790 "/home/jens/Source/shotwell/src/Resources.vala"
 		setlocale (LC_MESSAGES, _tmp23_);
-#line 2735 "Resources.c"
+#line 2570 "Resources.c"
 	}
-#line 809 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 793 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp24_ = old_language;
-#line 809 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 793 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp24_ != NULL) {
-#line 2741 "Resources.c"
+#line 2576 "Resources.c"
 		const gchar* _tmp25_ = NULL;
-#line 810 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 794 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp25_ = old_language;
-#line 810 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 794 "/home/jens/Source/shotwell/src/Resources.vala"
 		g_setenv ("LANGUAGE", _tmp25_, TRUE);
-#line 2747 "Resources.c"
+#line 2582 "Resources.c"
 	}
-#line 753 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 737 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (lc_time);
-#line 753 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 737 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (old_messages);
-#line 753 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 737 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (old_language);
-#line 2755 "Resources.c"
+#line 2590 "Resources.c"
 }
 
 
@@ -2792,23 +2627,23 @@ gchar* resources_get_hh_mm_format_string (void) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 819 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 803 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = resources_HH_MM_FORMAT_STRING;
-#line 819 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 803 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ == NULL) {
-#line 820 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 804 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2774 "Resources.c"
+#line 2609 "Resources.c"
 	}
-#line 823 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 807 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_HH_MM_FORMAT_STRING;
-#line 823 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 807 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 823 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 807 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp2_;
-#line 823 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 807 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2784 "Resources.c"
+#line 2619 "Resources.c"
 }
 
 
@@ -2817,23 +2652,23 @@ gchar* resources_get_hh_mm_ss_format_string (void) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 827 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 811 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = resources_HH_MM_SS_FORMAT_STRING;
-#line 827 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 811 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ == NULL) {
-#line 828 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 812 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2799 "Resources.c"
+#line 2634 "Resources.c"
 	}
-#line 831 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 815 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_HH_MM_SS_FORMAT_STRING;
-#line 831 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 815 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 831 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 815 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp2_;
-#line 831 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 815 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2809 "Resources.c"
+#line 2644 "Resources.c"
 }
 
 
@@ -2842,23 +2677,23 @@ gchar* resources_get_long_date_format_string (void) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 835 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 819 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = resources_LONG_DATE_FORMAT_STRING;
-#line 835 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 819 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ == NULL) {
-#line 836 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 820 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2824 "Resources.c"
+#line 2659 "Resources.c"
 	}
-#line 839 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 823 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_LONG_DATE_FORMAT_STRING;
-#line 839 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 823 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 839 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 823 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp2_;
-#line 839 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 823 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2834 "Resources.c"
+#line 2669 "Resources.c"
 }
 
 
@@ -2867,23 +2702,23 @@ gchar* resources_get_start_multiday_span_format_string (void) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 843 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 827 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = resources_START_MULTIDAY_DATE_FORMAT_STRING;
-#line 843 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 827 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ == NULL) {
-#line 844 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 828 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2849 "Resources.c"
+#line 2684 "Resources.c"
 	}
-#line 847 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 831 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_START_MULTIDAY_DATE_FORMAT_STRING;
-#line 847 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 831 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 847 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 831 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp2_;
-#line 847 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 831 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2859 "Resources.c"
+#line 2694 "Resources.c"
 }
 
 
@@ -2892,23 +2727,23 @@ gchar* resources_get_end_multiday_span_format_string (void) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 851 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 835 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = resources_END_MULTIDAY_DATE_FORMAT_STRING;
-#line 851 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 835 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ == NULL) {
-#line 852 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 836 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2874 "Resources.c"
+#line 2709 "Resources.c"
 	}
-#line 855 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 839 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_END_MULTIDAY_DATE_FORMAT_STRING;
-#line 855 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 839 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 855 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 839 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp2_;
-#line 855 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 839 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2884 "Resources.c"
+#line 2719 "Resources.c"
 }
 
 
@@ -2917,23 +2752,23 @@ gchar* resources_get_start_multimonth_span_format_string (void) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 843 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = resources_START_MULTIMONTH_DATE_FORMAT_STRING;
-#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 843 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ == NULL) {
-#line 860 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 844 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2899 "Resources.c"
+#line 2734 "Resources.c"
 	}
-#line 863 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 847 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_START_MULTIMONTH_DATE_FORMAT_STRING;
-#line 863 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 847 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 863 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 847 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp2_;
-#line 863 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 847 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2909 "Resources.c"
+#line 2744 "Resources.c"
 }
 
 
@@ -2942,23 +2777,23 @@ gchar* resources_get_end_multimonth_span_format_string (void) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 867 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 851 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = resources_END_MULTIMONTH_DATE_FORMAT_STRING;
-#line 867 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 851 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ == NULL) {
-#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 852 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_fetch_lc_time_format ();
-#line 2924 "Resources.c"
+#line 2759 "Resources.c"
 	}
-#line 871 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 855 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = resources_END_MULTIMONTH_DATE_FORMAT_STRING;
-#line 871 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 855 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 871 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 855 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp2_;
-#line 871 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 855 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2934 "Resources.c"
+#line 2769 "Resources.c"
 }
 
 
@@ -2971,38 +2806,38 @@ GFile* resources_get_ui (const gchar* filename) {
 	const gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
 	GFile* _tmp6_ = NULL;
-#line 874 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 858 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (filename != NULL, NULL);
-#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = app_dirs_get_resources_dir ();
-#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = _tmp0_;
-#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_file_get_child (_tmp1_, "ui");
-#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = _tmp2_;
-#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = filename;
-#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp5_ = g_file_get_child (_tmp3_, _tmp4_);
-#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp6_ = _tmp5_;
-#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp3_);
-#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp1_);
-#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp6_;
-#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 859 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 2971 "Resources.c"
+#line 2806 "Resources.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 891 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 2978 "Resources.c"
+#line 2813 "Resources.c"
 }
 
 
@@ -3012,11 +2847,11 @@ GdkPixbuf* resources_get_noninterpretable_badge_pixbuf (void) {
 	GdkPixbuf* _tmp14_ = NULL;
 	GdkPixbuf* _tmp15_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 882 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 866 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = resources_noninterpretable_badge_pixbuf;
-#line 882 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 866 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ == NULL) {
-#line 2992 "Resources.c"
+#line 2827 "Resources.c"
 		{
 			GdkPixbuf* _tmp1_ = NULL;
 			GFile* _tmp2_ = NULL;
@@ -3030,92 +2865,92 @@ GdkPixbuf* resources_get_noninterpretable_badge_pixbuf (void) {
 			GdkPixbuf* _tmp10_ = NULL;
 			GdkPixbuf* _tmp11_ = NULL;
 			GdkPixbuf* _tmp12_ = NULL;
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp2_ = app_dirs_get_resources_dir ();
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp3_ = _tmp2_;
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp4_ = g_file_get_child (_tmp3_, "icons");
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp5_ = _tmp4_;
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp6_ = g_file_get_child (_tmp5_, RESOURCES_NONINTERPRETABLE_BADGE_FILE);
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp7_ = _tmp6_;
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp8_ = g_file_get_path (_tmp7_);
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp9_ = _tmp8_;
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp10_ = gdk_pixbuf_new_from_file (_tmp9_, &_inner_error_);
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp11_ = _tmp10_;
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_free0 (_tmp9_);
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_object_unref0 (_tmp7_);
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_object_unref0 (_tmp5_);
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_object_unref0 (_tmp3_);
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp1_ = _tmp11_;
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3038 "Resources.c"
-				goto __catch429_g_error;
+#line 2873 "Resources.c"
+				goto __catch426_g_error;
 			}
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp12_ = _tmp1_;
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp1_ = NULL;
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_object_unref0 (resources_noninterpretable_badge_pixbuf);
-#line 884 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 868 "/home/jens/Source/shotwell/src/Resources.vala"
 			resources_noninterpretable_badge_pixbuf = _tmp12_;
-#line 883 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 867 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_object_unref0 (_tmp1_);
-#line 3051 "Resources.c"
+#line 2886 "Resources.c"
 		}
-		goto __finally429;
-		__catch429_g_error:
+		goto __finally426;
+		__catch426_g_error:
 		{
 			GError* err = NULL;
 			const gchar* _tmp13_ = NULL;
-#line 883 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 867 "/home/jens/Source/shotwell/src/Resources.vala"
 			err = _inner_error_;
-#line 883 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 867 "/home/jens/Source/shotwell/src/Resources.vala"
 			_inner_error_ = NULL;
-#line 887 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 871 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp13_ = err->message;
-#line 887 "/home/jens/Source/shotwell/src/Resources.vala"
-			g_error ("Resources.vala:887: VideoReader can't load noninterpretable badge imag" \
+#line 871 "/home/jens/Source/shotwell/src/Resources.vala"
+			g_error ("Resources.vala:871: VideoReader can't load noninterpretable badge imag" \
 "e: %s", _tmp13_);
-#line 883 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 867 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_error_free0 (err);
-#line 3068 "Resources.c"
+#line 2903 "Resources.c"
 		}
-		__finally429:
-#line 883 "/home/jens/Source/shotwell/src/Resources.vala"
+		__finally426:
+#line 867 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 883 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 867 "/home/jens/Source/shotwell/src/Resources.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 883 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 867 "/home/jens/Source/shotwell/src/Resources.vala"
 			g_clear_error (&_inner_error_);
-#line 883 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 867 "/home/jens/Source/shotwell/src/Resources.vala"
 			return NULL;
-#line 3079 "Resources.c"
+#line 2914 "Resources.c"
 		}
 	}
-#line 891 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp14_ = resources_noninterpretable_badge_pixbuf;
-#line 891 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp15_ = _g_object_ref0 (_tmp14_);
-#line 891 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp15_;
-#line 891 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 875 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 3090 "Resources.c"
+#line 2925 "Resources.c"
 }
 
 
@@ -3130,37 +2965,37 @@ GtkIconTheme* resources_get_icon_theme_engine (void) {
 	GFile* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
-#line 895 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 879 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = gtk_icon_theme_get_default ();
-#line 895 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 879 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 895 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 879 "/home/jens/Source/shotwell/src/Resources.vala"
 	icon_theme = _tmp1_;
-#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 880 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = app_dirs_get_resources_dir ();
-#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 880 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = _tmp2_;
-#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 880 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = g_file_get_child (_tmp3_, "icons");
-#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 880 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp5_ = _tmp4_;
-#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 880 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp6_ = g_file_get_path (_tmp5_);
-#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 880 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp7_ = _tmp6_;
-#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 880 "/home/jens/Source/shotwell/src/Resources.vala"
 	gtk_icon_theme_append_search_path (icon_theme, _tmp7_);
-#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 880 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp7_);
-#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 880 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp5_);
-#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 880 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp3_);
-#line 898 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 882 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = icon_theme;
-#line 898 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 882 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 3135 "Resources.c"
+#line 2970 "Resources.c"
 }
 
 
@@ -3185,13 +3020,13 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 	gchar* _tmp31_ = NULL;
 	gchar* _tmp32_ = NULL;
 	GdkPixbuf* _tmp33_ = NULL;
-#line 903 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 887 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 904 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 888 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = resources_scaled_icon_cache;
-#line 904 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 888 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ != NULL) {
-#line 3166 "Resources.c"
+#line 3001 "Resources.c"
 		gchar* scaled_name = NULL;
 		const gchar* _tmp1_ = NULL;
 		gint _tmp2_ = 0;
@@ -3199,162 +3034,162 @@ GdkPixbuf* resources_get_icon (const gchar* name, gint scale) {
 		GeeHashMap* _tmp4_ = NULL;
 		const gchar* _tmp5_ = NULL;
 		gboolean _tmp6_ = FALSE;
-#line 905 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 889 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp1_ = name;
-#line 905 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 889 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp2_ = scale;
-#line 905 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 889 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp3_ = g_strdup_printf ("%s-%d", _tmp1_, _tmp2_);
-#line 905 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 889 "/home/jens/Source/shotwell/src/Resources.vala"
 		scaled_name = _tmp3_;
-#line 906 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 890 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp4_ = resources_scaled_icon_cache;
-#line 906 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 890 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp5_ = scaled_name;
-#line 906 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 890 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp6_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp5_);
-#line 906 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 890 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (_tmp6_) {
-#line 3190 "Resources.c"
+#line 3025 "Resources.c"
 			GeeHashMap* _tmp7_ = NULL;
 			const gchar* _tmp8_ = NULL;
 			gpointer _tmp9_ = NULL;
-#line 907 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 891 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp7_ = resources_scaled_icon_cache;
-#line 907 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 891 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp8_ = scaled_name;
-#line 907 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 891 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp9_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp8_);
-#line 907 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 891 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = (GdkPixbuf*) _tmp9_;
-#line 907 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 891 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_free0 (scaled_name);
-#line 907 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 891 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 3206 "Resources.c"
+#line 3041 "Resources.c"
 		}
-#line 904 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 888 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_free0 (scaled_name);
-#line 3210 "Resources.c"
+#line 3045 "Resources.c"
 	}
-#line 912 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp10_ = resources_icon_cache;
-#line 912 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 896 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp10_ == NULL) {
-#line 3216 "Resources.c"
+#line 3051 "Resources.c"
 		GeeHashMap* _tmp11_ = NULL;
-#line 913 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 897 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp11_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, gdk_pixbuf_get_type (), (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 913 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 897 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (resources_icon_cache);
-#line 913 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 897 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_icon_cache = _tmp11_;
-#line 3224 "Resources.c"
+#line 3059 "Resources.c"
 	}
-#line 916 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 900 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp12_ = resources_icon_cache;
-#line 916 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 900 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp13_ = name;
-#line 916 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 900 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp14_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp13_);
-#line 916 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 900 "/home/jens/Source/shotwell/src/Resources.vala"
 	pixbuf = (GdkPixbuf*) _tmp14_;
-#line 917 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 901 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp15_ = pixbuf;
-#line 917 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 901 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp15_ == NULL) {
-#line 3238 "Resources.c"
+#line 3073 "Resources.c"
 		const gchar* _tmp16_ = NULL;
 		GdkPixbuf* _tmp17_ = NULL;
 		GdkPixbuf* _tmp18_ = NULL;
 		GeeHashMap* _tmp19_ = NULL;
 		const gchar* _tmp20_ = NULL;
 		GdkPixbuf* _tmp21_ = NULL;
-#line 918 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 902 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp16_ = name;
-#line 918 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 902 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp17_ = resources_load_icon (_tmp16_, 0);
-#line 918 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 902 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (pixbuf);
-#line 918 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 902 "/home/jens/Source/shotwell/src/Resources.vala"
 		pixbuf = _tmp17_;
-#line 919 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 903 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp18_ = pixbuf;
-#line 919 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 903 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (_tmp18_ == NULL) {
-#line 920 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 904 "/home/jens/Source/shotwell/src/Resources.vala"
 			result = NULL;
-#line 920 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 904 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_object_unref0 (pixbuf);
-#line 920 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 904 "/home/jens/Source/shotwell/src/Resources.vala"
 			return result;
-#line 3263 "Resources.c"
+#line 3098 "Resources.c"
 		}
-#line 922 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 906 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp19_ = resources_icon_cache;
-#line 922 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 906 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp20_ = name;
-#line 922 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 906 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp21_ = pixbuf;
-#line 922 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 906 "/home/jens/Source/shotwell/src/Resources.vala"
 		gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp20_, _tmp21_);
-#line 3273 "Resources.c"
+#line 3108 "Resources.c"
 	}
-#line 925 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 909 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp22_ = scale;
-#line 925 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 909 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp22_ <= 0) {
-#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 910 "/home/jens/Source/shotwell/src/Resources.vala"
 		result = pixbuf;
-#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 910 "/home/jens/Source/shotwell/src/Resources.vala"
 		return result;
-#line 3283 "Resources.c"
+#line 3118 "Resources.c"
 	}
-#line 928 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 912 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp23_ = pixbuf;
-#line 928 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 912 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp24_ = scale;
-#line 928 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 912 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp25_ = scale_pixbuf (_tmp23_, _tmp24_, GDK_INTERP_BILINEAR, FALSE);
-#line 928 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 912 "/home/jens/Source/shotwell/src/Resources.vala"
 	scaled_pixbuf = _tmp25_;
-#line 930 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 914 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp26_ = resources_scaled_icon_cache;
-#line 930 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 914 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp26_ == NULL) {
-#line 3297 "Resources.c"
+#line 3132 "Resources.c"
 		GeeHashMap* _tmp27_ = NULL;
-#line 931 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 915 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp27_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, gdk_pixbuf_get_type (), (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 931 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 915 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (resources_scaled_icon_cache);
-#line 931 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 915 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_scaled_icon_cache = _tmp27_;
-#line 3305 "Resources.c"
+#line 3140 "Resources.c"
 	}
-#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 917 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp28_ = resources_scaled_icon_cache;
-#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 917 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp29_ = name;
-#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 917 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp30_ = scale;
-#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 917 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp31_ = g_strdup_printf ("%s-%d", _tmp29_, _tmp30_);
-#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 917 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp32_ = _tmp31_;
-#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 917 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp33_ = scaled_pixbuf;
-#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 917 "/home/jens/Source/shotwell/src/Resources.vala"
 	gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp32_, _tmp33_);
-#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 917 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp32_);
-#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 919 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = scaled_pixbuf;
-#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 919 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (pixbuf);
-#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 919 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 3329 "Resources.c"
+#line 3164 "Resources.c"
 }
 
 
@@ -3370,23 +3205,23 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 	GdkPixbuf* _tmp17_ = NULL;
 	gint _tmp18_ = 0;
 	GError * _inner_error_ = NULL;
-#line 938 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 922 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 939 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 923 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = app_dirs_get_resources_dir ();
-#line 939 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 923 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = _tmp0_;
-#line 939 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 923 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_file_get_child (_tmp1_, "icons");
-#line 939 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 923 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = _tmp2_;
-#line 939 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 923 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp1_);
-#line 939 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 923 "/home/jens/Source/shotwell/src/Resources.vala"
 	icons_dir = _tmp3_;
-#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 925 "/home/jens/Source/shotwell/src/Resources.vala"
 	pixbuf = NULL;
-#line 3361 "Resources.c"
+#line 3196 "Resources.c"
 	{
 		GdkPixbuf* _tmp4_ = NULL;
 		const gchar* _tmp5_ = NULL;
@@ -3397,136 +3232,136 @@ GdkPixbuf* resources_load_icon (const gchar* name, gint scale) {
 		GdkPixbuf* _tmp10_ = NULL;
 		GdkPixbuf* _tmp11_ = NULL;
 		GdkPixbuf* _tmp12_ = NULL;
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp5_ = name;
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp6_ = g_file_get_child (icons_dir, _tmp5_);
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp7_ = _tmp6_;
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp8_ = g_file_get_path (_tmp7_);
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp9_ = _tmp8_;
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp10_ = gdk_pixbuf_new_from_file (_tmp9_, &_inner_error_);
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp11_ = _tmp10_;
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_free0 (_tmp9_);
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (_tmp7_);
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp4_ = _tmp11_;
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3394 "Resources.c"
-			goto __catch430_g_error;
+#line 3229 "Resources.c"
+			goto __catch427_g_error;
 		}
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp12_ = _tmp4_;
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp4_ = NULL;
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (pixbuf);
-#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 927 "/home/jens/Source/shotwell/src/Resources.vala"
 		pixbuf = _tmp12_;
-#line 942 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (_tmp4_);
-#line 3407 "Resources.c"
+#line 3242 "Resources.c"
 	}
-	goto __finally430;
-	__catch430_g_error:
+	goto __finally427;
+	__catch427_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp13_ = NULL;
 		GError* _tmp14_ = NULL;
 		const gchar* _tmp15_ = NULL;
-#line 942 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
 		err = _inner_error_;
-#line 942 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
 		_inner_error_ = NULL;
-#line 945 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 929 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp13_ = name;
-#line 945 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 929 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp14_ = err;
-#line 945 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 929 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp15_ = _tmp14_->message;
-#line 945 "/home/jens/Source/shotwell/src/Resources.vala"
-		g_critical ("Resources.vala:945: Unable to load icon %s: %s", _tmp13_, _tmp15_);
-#line 942 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 929 "/home/jens/Source/shotwell/src/Resources.vala"
+		g_critical ("Resources.vala:929: Unable to load icon %s: %s", _tmp13_, _tmp15_);
+#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_error_free0 (err);
-#line 3430 "Resources.c"
+#line 3265 "Resources.c"
 	}
-	__finally430:
-#line 942 "/home/jens/Source/shotwell/src/Resources.vala"
+	__finally427:
+#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 942 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (pixbuf);
-#line 942 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (icons_dir);
-#line 942 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 942 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
 		g_clear_error (&_inner_error_);
-#line 942 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 926 "/home/jens/Source/shotwell/src/Resources.vala"
 		return NULL;
-#line 3445 "Resources.c"
+#line 3280 "Resources.c"
 	}
-#line 948 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 932 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp16_ = pixbuf;
-#line 948 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 932 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp16_ == NULL) {
-#line 949 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
 		result = NULL;
-#line 949 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (pixbuf);
-#line 949 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (icons_dir);
-#line 949 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 933 "/home/jens/Source/shotwell/src/Resources.vala"
 		return result;
-#line 3459 "Resources.c"
+#line 3294 "Resources.c"
 	}
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp18_ = scale;
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp18_ > 0) {
-#line 3465 "Resources.c"
+#line 3300 "Resources.c"
 		GdkPixbuf* _tmp19_ = NULL;
 		gint _tmp20_ = 0;
 		GdkPixbuf* _tmp21_ = NULL;
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp19_ = pixbuf;
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp20_ = scale;
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp21_ = scale_pixbuf (_tmp19_, _tmp20_, GDK_INTERP_BILINEAR, FALSE);
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (_tmp17_);
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp17_ = _tmp21_;
-#line 3479 "Resources.c"
+#line 3314 "Resources.c"
 	} else {
 		GdkPixbuf* _tmp22_ = NULL;
 		GdkPixbuf* _tmp23_ = NULL;
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp22_ = pixbuf;
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp23_ = _g_object_ref0 (_tmp22_);
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (_tmp17_);
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp17_ = _tmp23_;
-#line 3491 "Resources.c"
+#line 3326 "Resources.c"
 	}
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp17_;
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (pixbuf);
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (icons_dir);
-#line 951 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 935 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 3501 "Resources.c"
+#line 3336 "Resources.c"
 }
 
 
@@ -3538,13 +3373,13 @@ void resources_add_stock_icon (GFile* file, const gchar* stock_id) {
 	GtkIconFactory* _tmp12_ = NULL;
 	const gchar* _tmp13_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 954 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 938 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 954 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 938 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_if_fail (stock_id != NULL);
-#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 939 "/home/jens/Source/shotwell/src/Resources.vala"
 	pixbuf = NULL;
-#line 3519 "Resources.c"
+#line 3354 "Resources.c"
 	{
 		GdkPixbuf* _tmp0_ = NULL;
 		GFile* _tmp1_ = NULL;
@@ -3553,90 +3388,90 @@ void resources_add_stock_icon (GFile* file, const gchar* stock_id) {
 		GdkPixbuf* _tmp4_ = NULL;
 		GdkPixbuf* _tmp5_ = NULL;
 		GdkPixbuf* _tmp6_ = NULL;
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp1_ = file;
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp2_ = g_file_get_path (_tmp1_);
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp3_ = _tmp2_;
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp4_ = gdk_pixbuf_new_from_file (_tmp3_, &_inner_error_);
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp5_ = _tmp4_;
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_free0 (_tmp3_);
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = _tmp5_;
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3544 "Resources.c"
-			goto __catch431_g_error;
+#line 3379 "Resources.c"
+			goto __catch428_g_error;
 		}
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp6_ = _tmp0_;
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp0_ = NULL;
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (pixbuf);
-#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 941 "/home/jens/Source/shotwell/src/Resources.vala"
 		pixbuf = _tmp6_;
-#line 956 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 940 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (_tmp0_);
-#line 3557 "Resources.c"
+#line 3392 "Resources.c"
 	}
-	goto __finally431;
-	__catch431_g_error:
+	goto __finally428;
+	__catch428_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp7_ = NULL;
 		GError* _tmp8_ = NULL;
 		const gchar* _tmp9_ = NULL;
-#line 956 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 940 "/home/jens/Source/shotwell/src/Resources.vala"
 		err = _inner_error_;
-#line 956 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 940 "/home/jens/Source/shotwell/src/Resources.vala"
 		_inner_error_ = NULL;
-#line 959 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp7_ = stock_id;
-#line 959 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp8_ = err;
-#line 959 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp9_ = _tmp8_->message;
-#line 959 "/home/jens/Source/shotwell/src/Resources.vala"
-		g_critical ("Resources.vala:959: Unable to load stock icon %s: %s", _tmp7_, _tmp9_);
-#line 956 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 943 "/home/jens/Source/shotwell/src/Resources.vala"
+		g_critical ("Resources.vala:943: Unable to load stock icon %s: %s", _tmp7_, _tmp9_);
+#line 940 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_error_free0 (err);
-#line 3580 "Resources.c"
+#line 3415 "Resources.c"
 	}
-	__finally431:
-#line 956 "/home/jens/Source/shotwell/src/Resources.vala"
+	__finally428:
+#line 940 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 956 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 940 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (pixbuf);
-#line 956 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 940 "/home/jens/Source/shotwell/src/Resources.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 956 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 940 "/home/jens/Source/shotwell/src/Resources.vala"
 		g_clear_error (&_inner_error_);
-#line 956 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 940 "/home/jens/Source/shotwell/src/Resources.vala"
 		return;
-#line 3593 "Resources.c"
+#line 3428 "Resources.c"
 	}
-#line 962 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 946 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp10_ = pixbuf;
-#line 962 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 946 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp11_ = gtk_icon_set_new_from_pixbuf (_tmp10_);
-#line 962 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 946 "/home/jens/Source/shotwell/src/Resources.vala"
 	icon_set = _tmp11_;
-#line 963 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 947 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp12_ = resources_factory;
-#line 963 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 947 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp13_ = stock_id;
-#line 963 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 947 "/home/jens/Source/shotwell/src/Resources.vala"
 	gtk_icon_factory_add (_tmp12_, _tmp13_, icon_set);
-#line 954 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 938 "/home/jens/Source/shotwell/src/Resources.vala"
 	_gtk_icon_set_unref0 (icon_set);
-#line 954 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 938 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (pixbuf);
-#line 3611 "Resources.c"
+#line 3446 "Resources.c"
 }
 
 
@@ -3657,63 +3492,63 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 	GtkIconInfo* _tmp11_ = NULL;
 	GtkIconInfo* _tmp12_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 968 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 952 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_if_fail (G_IS_THEMED_ICON (gicon));
-#line 968 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 952 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_if_fail (stock_id != NULL);
-#line 970 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 954 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = gtk_icon_theme_get_default ();
-#line 970 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 954 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 970 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 954 "/home/jens/Source/shotwell/src/Resources.vala"
 	icon_theme = _tmp1_;
-#line 971 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = icon_theme;
-#line 971 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = app_dirs_get_resources_dir ();
-#line 971 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = _tmp3_;
-#line 971 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp5_ = g_file_get_child (_tmp4_, "icons");
-#line 971 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp6_ = _tmp5_;
-#line 971 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp7_ = g_file_get_path (_tmp6_);
-#line 971 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp8_ = _tmp7_;
-#line 971 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	gtk_icon_theme_append_search_path (_tmp2_, _tmp8_);
-#line 971 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (_tmp8_);
-#line 971 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp6_);
-#line 971 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 955 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp4_);
-#line 973 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp9_ = icon_theme;
-#line 973 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp10_ = gicon;
-#line 973 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp11_ = gtk_icon_theme_lookup_by_gicon (_tmp9_, G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, g_icon_get_type (), GIcon), RESOURCES_DEFAULT_ICON_SCALE, GTK_ICON_LOOKUP_FORCE_SIZE);
-#line 973 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 957 "/home/jens/Source/shotwell/src/Resources.vala"
 	info = _tmp11_;
-#line 975 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 959 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp12_ = info;
-#line 975 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 959 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp12_ == NULL) {
-#line 3676 "Resources.c"
+#line 3511 "Resources.c"
 		const gchar* _tmp13_ = NULL;
-#line 976 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 960 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp13_ = stock_id;
-#line 976 "/home/jens/Source/shotwell/src/Resources.vala"
-		g_debug ("Resources.vala:976: unable to load icon for: %s", _tmp13_);
-#line 977 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 960 "/home/jens/Source/shotwell/src/Resources.vala"
+		g_debug ("Resources.vala:960: unable to load icon for: %s", _tmp13_);
+#line 961 "/home/jens/Source/shotwell/src/Resources.vala"
 		_gtk_icon_info_free0 (info);
-#line 977 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 961 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (icon_theme);
-#line 977 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 961 "/home/jens/Source/shotwell/src/Resources.vala"
 		return;
-#line 3688 "Resources.c"
+#line 3523 "Resources.c"
 	}
 	{
 		GdkPixbuf* pix = NULL;
@@ -3727,97 +3562,97 @@ void resources_add_stock_icon_from_themed_icon (GThemedIcon* gicon, const gchar*
 		GtkIconFactory* _tmp21_ = NULL;
 		const gchar* _tmp22_ = NULL;
 		GtkIconSet* _tmp23_ = NULL;
-#line 981 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 965 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp14_ = info;
-#line 981 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 965 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp15_ = gtk_icon_info_load_icon (_tmp14_, &_inner_error_);
-#line 981 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 965 "/home/jens/Source/shotwell/src/Resources.vala"
 		pix = _tmp15_;
-#line 981 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 965 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3710 "Resources.c"
-			goto __catch432_g_error;
+#line 3545 "Resources.c"
+			goto __catch429_g_error;
 		}
-#line 982 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 966 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp16_ = modify;
-#line 982 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 966 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp16__target = modify_target;
-#line 982 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 966 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (_tmp16_ != NULL) {
-#line 3719 "Resources.c"
+#line 3554 "Resources.c"
 			ResourcesAddStockIconModify _tmp17_ = NULL;
 			void* _tmp17__target = NULL;
 			GdkPixbuf* _tmp18_ = NULL;
-#line 983 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 967 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp17_ = modify;
-#line 983 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 967 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp17__target = modify_target;
-#line 983 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 967 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp18_ = pix;
-#line 983 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 967 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp17_ (_tmp18_, _tmp17__target);
-#line 3731 "Resources.c"
+#line 3566 "Resources.c"
 		}
-#line 985 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 969 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp19_ = pix;
-#line 985 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 969 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp20_ = gtk_icon_set_new_from_pixbuf (_tmp19_);
-#line 985 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 969 "/home/jens/Source/shotwell/src/Resources.vala"
 		icon_set = _tmp20_;
-#line 986 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 970 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp21_ = resources_factory;
-#line 986 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 970 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp22_ = stock_id;
-#line 986 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 970 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp23_ = icon_set;
-#line 986 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 970 "/home/jens/Source/shotwell/src/Resources.vala"
 		gtk_icon_factory_add (_tmp21_, _tmp22_, _tmp23_);
-#line 980 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 964 "/home/jens/Source/shotwell/src/Resources.vala"
 		_gtk_icon_set_unref0 (icon_set);
-#line 980 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 964 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (pix);
-#line 3751 "Resources.c"
+#line 3586 "Resources.c"
 	}
-	goto __finally432;
-	__catch432_g_error:
+	goto __finally429;
+	__catch429_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp24_ = NULL;
 		const gchar* _tmp25_ = NULL;
-#line 980 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 964 "/home/jens/Source/shotwell/src/Resources.vala"
 		err = _inner_error_;
-#line 980 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 964 "/home/jens/Source/shotwell/src/Resources.vala"
 		_inner_error_ = NULL;
-#line 988 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 972 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp24_ = err;
-#line 988 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 972 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp25_ = _tmp24_->message;
-#line 988 "/home/jens/Source/shotwell/src/Resources.vala"
-		g_debug ("Resources.vala:988: %s", _tmp25_);
-#line 980 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 972 "/home/jens/Source/shotwell/src/Resources.vala"
+		g_debug ("Resources.vala:972: %s", _tmp25_);
+#line 964 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_error_free0 (err);
-#line 3771 "Resources.c"
+#line 3606 "Resources.c"
 	}
-	__finally432:
-#line 980 "/home/jens/Source/shotwell/src/Resources.vala"
+	__finally429:
+#line 964 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 980 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 964 "/home/jens/Source/shotwell/src/Resources.vala"
 		_gtk_icon_info_free0 (info);
-#line 980 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 964 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (icon_theme);
-#line 980 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 964 "/home/jens/Source/shotwell/src/Resources.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 980 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 964 "/home/jens/Source/shotwell/src/Resources.vala"
 		g_clear_error (&_inner_error_);
-#line 980 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 964 "/home/jens/Source/shotwell/src/Resources.vala"
 		return;
-#line 3786 "Resources.c"
+#line 3621 "Resources.c"
 	}
-#line 968 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 952 "/home/jens/Source/shotwell/src/Resources.vala"
 	_gtk_icon_info_free0 (info);
-#line 968 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 952 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (icon_theme);
-#line 3792 "Resources.c"
+#line 3627 "Resources.c"
 }
 
 
@@ -3835,88 +3670,88 @@ gchar* resources_get_help_path (void) {
 	GFile* _tmp7_ = NULL;
 	GFile* _tmp8_ = NULL;
 	gboolean _tmp9_ = FALSE;
-#line 1000 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 984 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = app_dirs_get_exec_dir ();
-#line 1000 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 984 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = _tmp0_;
-#line 1000 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 984 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = g_file_get_child (_tmp1_, "help");
-#line 1000 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 984 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = _tmp2_;
-#line 1000 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 984 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = g_file_get_child (_tmp3_, "C");
-#line 1000 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 984 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp5_ = _tmp4_;
-#line 1000 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 984 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp3_);
-#line 1000 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 984 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1000 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 984 "/home/jens/Source/shotwell/src/Resources.vala"
 	help_dir = _tmp5_;
-#line 1001 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 985 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp6_ = help_dir;
-#line 1001 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 985 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp7_ = g_file_get_child (_tmp6_, "index.page");
-#line 1001 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 985 "/home/jens/Source/shotwell/src/Resources.vala"
 	help_index = _tmp7_;
-#line 1003 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 987 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp8_ = help_index;
-#line 1003 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 987 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp9_ = g_file_query_exists (_tmp8_, NULL);
-#line 1003 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 987 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp9_) {
-#line 3840 "Resources.c"
+#line 3675 "Resources.c"
 		gchar* help_path = NULL;
 		GFile* _tmp10_ = NULL;
 		gchar* _tmp11_ = NULL;
 		const gchar* _tmp12_ = NULL;
 		gboolean _tmp13_ = FALSE;
-#line 1006 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 990 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp10_ = help_dir;
-#line 1006 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 990 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp11_ = g_file_get_path (_tmp10_);
-#line 1006 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 990 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_free0 (help_path);
-#line 1006 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 990 "/home/jens/Source/shotwell/src/Resources.vala"
 		help_path = _tmp11_;
-#line 1008 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 992 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp12_ = help_path;
-#line 1008 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 992 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp13_ = g_str_has_suffix (_tmp12_, "/");
-#line 1008 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 992 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (!_tmp13_) {
-#line 3860 "Resources.c"
+#line 3695 "Resources.c"
 			const gchar* _tmp14_ = NULL;
 			gchar* _tmp15_ = NULL;
-#line 1009 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 993 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp14_ = help_path;
-#line 1009 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 993 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp15_ = g_strconcat (_tmp14_, "/", NULL);
-#line 1009 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 993 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_free0 (help_path);
-#line 1009 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 993 "/home/jens/Source/shotwell/src/Resources.vala"
 			help_path = _tmp15_;
-#line 3871 "Resources.c"
+#line 3706 "Resources.c"
 		}
-#line 1012 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 996 "/home/jens/Source/shotwell/src/Resources.vala"
 		result = help_path;
-#line 1012 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 996 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (help_index);
-#line 1012 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 996 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (help_dir);
-#line 1012 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 996 "/home/jens/Source/shotwell/src/Resources.vala"
 		return result;
-#line 3881 "Resources.c"
+#line 3716 "Resources.c"
 	}
-#line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = NULL;
-#line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (help_index);
-#line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (help_dir);
-#line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1002 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 3891 "Resources.c"
+#line 3726 "Resources.c"
 }
 
 
@@ -3926,17 +3761,17 @@ void resources_launch_help (GdkScreen* screen, const gchar* anchor, GError** err
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp27_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1021 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1005 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_if_fail (GDK_IS_SCREEN (screen));
-#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1006 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = resources_get_help_path ();
-#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1006 "/home/jens/Source/shotwell/src/Resources.vala"
 	help_path = _tmp0_;
-#line 1024 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1008 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = help_path;
-#line 1024 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1008 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp1_ != NULL) {
-#line 3911 "Resources.c"
+#line 3746 "Resources.c"
 		const gchar* _tmp2_ = NULL;
 		gchar** argv = NULL;
 		gchar** _tmp6_ = NULL;
@@ -3968,179 +3803,179 @@ void resources_launch_help (GdkScreen* screen, const gchar* anchor, GError** err
 		gchar** _tmp25_ = NULL;
 		gint _tmp25__length1 = 0;
 		const gchar* _tmp26_ = NULL;
-#line 1028 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1012 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp2_ = anchor;
-#line 1028 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1012 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (_tmp2_ != NULL) {
-#line 3947 "Resources.c"
+#line 3782 "Resources.c"
 			const gchar* _tmp3_ = NULL;
 			const gchar* _tmp4_ = NULL;
 			gchar* _tmp5_ = NULL;
-#line 1029 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp3_ = help_path;
-#line 1029 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp4_ = anchor;
-#line 1029 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Resources.vala"
 			_tmp5_ = g_strconcat (_tmp3_, _tmp4_, NULL);
-#line 1029 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_free0 (help_path);
-#line 1029 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Resources.vala"
 			help_path = _tmp5_;
-#line 3961 "Resources.c"
+#line 3796 "Resources.c"
 		}
-#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp6_ = g_new0 (gchar*, 3 + 1);
-#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Resources.vala"
 		argv = _tmp6_;
-#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Resources.vala"
 		argv_length1 = 3;
-#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Resources.vala"
 		_argv_size_ = argv_length1;
-#line 1033 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1017 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp7_ = argv;
-#line 1033 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1017 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp7__length1 = argv_length1;
-#line 1033 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1017 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp8_ = g_strdup ("yelp");
-#line 1033 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1017 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_free0 (_tmp7_[0]);
-#line 1033 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1017 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp7_[0] = _tmp8_;
-#line 1033 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1017 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp9_ = _tmp7_[0];
-#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp10_ = argv;
-#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp10__length1 = argv_length1;
-#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp11_ = help_path;
-#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp12_ = g_strdup (_tmp11_);
-#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_free0 (_tmp10_[1]);
-#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp10_[1] = _tmp12_;
-#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1018 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp13_ = _tmp10_[1];
-#line 1035 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp14_ = argv;
-#line 1035 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp14__length1 = argv_length1;
-#line 1035 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_free0 (_tmp14_[2]);
-#line 1035 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp14_[2] = NULL;
-#line 1035 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp15_ = _tmp14_[2];
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp17_ = app_dirs_get_exec_dir ();
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp18_ = _tmp17_;
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp19_ = g_file_get_path (_tmp18_);
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp20_ = _tmp19_;
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp21_ = argv;
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp21__length1 = argv_length1;
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp23_ = g_spawn_async (_tmp20_, _tmp21_, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_STDERR_TO_DEV_NULL, NULL, NULL, &_tmp22_, &_inner_error_);
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		pid = _tmp22_;
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp24_ = _tmp23_;
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_free0 (_tmp20_);
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (_tmp18_);
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp16_ = _tmp24_;
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 			g_propagate_error (error, _inner_error_);
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 			argv = (_vala_array_free (argv, argv_length1, (GDestroyNotify) g_free), NULL);
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_free0 (help_path);
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 			return;
-#line 4041 "Resources.c"
+#line 3876 "Resources.c"
 		}
-#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (_tmp16_) {
-#line 1040 "/home/jens/Source/shotwell/src/Resources.vala"
-			argv = (_vala_array_free (argv, argv_length1, (GDestroyNotify) g_free), NULL);
-#line 1040 "/home/jens/Source/shotwell/src/Resources.vala"
-			_g_free0 (help_path);
-#line 1040 "/home/jens/Source/shotwell/src/Resources.vala"
-			return;
-#line 4051 "Resources.c"
-		}
-#line 1043 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp25_ = argv;
-#line 1043 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp25__length1 = argv_length1;
-#line 1043 "/home/jens/Source/shotwell/src/Resources.vala"
-		_tmp26_ = _tmp25_[0];
-#line 1043 "/home/jens/Source/shotwell/src/Resources.vala"
-		g_warning ("Resources.vala:1043: Unable to launch %s", _tmp26_);
 #line 1024 "/home/jens/Source/shotwell/src/Resources.vala"
+			argv = (_vala_array_free (argv, argv_length1, (GDestroyNotify) g_free), NULL);
+#line 1024 "/home/jens/Source/shotwell/src/Resources.vala"
+			_g_free0 (help_path);
+#line 1024 "/home/jens/Source/shotwell/src/Resources.vala"
+			return;
+#line 3886 "Resources.c"
+		}
+#line 1027 "/home/jens/Source/shotwell/src/Resources.vala"
+		_tmp25_ = argv;
+#line 1027 "/home/jens/Source/shotwell/src/Resources.vala"
+		_tmp25__length1 = argv_length1;
+#line 1027 "/home/jens/Source/shotwell/src/Resources.vala"
+		_tmp26_ = _tmp25_[0];
+#line 1027 "/home/jens/Source/shotwell/src/Resources.vala"
+		g_warning ("Resources.vala:1027: Unable to launch %s", _tmp26_);
+#line 1008 "/home/jens/Source/shotwell/src/Resources.vala"
 		argv = (_vala_array_free (argv, argv_length1, (GDestroyNotify) g_free), NULL);
-#line 4063 "Resources.c"
+#line 3898 "Resources.c"
 	}
-#line 1047 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1031 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp27_ = anchor;
-#line 1047 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1031 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp27_ != NULL) {
-#line 4069 "Resources.c"
+#line 3904 "Resources.c"
 		GdkScreen* _tmp28_ = NULL;
 		const gchar* _tmp29_ = NULL;
 		gchar* _tmp30_ = NULL;
 		gchar* _tmp31_ = NULL;
-#line 1048 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp28_ = screen;
-#line 1048 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp29_ = anchor;
-#line 1048 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp30_ = g_strconcat ("help:shotwell", _tmp29_, NULL);
-#line 1048 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp31_ = _tmp30_;
-#line 1048 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
 		sys_show_uri (_tmp28_, _tmp31_, &_inner_error_);
-#line 1048 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_free0 (_tmp31_);
-#line 1048 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1048 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
 			g_propagate_error (error, _inner_error_);
-#line 1048 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_free0 (help_path);
-#line 1048 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1032 "/home/jens/Source/shotwell/src/Resources.vala"
 			return;
-#line 4094 "Resources.c"
+#line 3929 "Resources.c"
 		}
 	} else {
 		GdkScreen* _tmp32_ = NULL;
-#line 1050 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp32_ = screen;
-#line 1050 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
 		sys_show_uri (_tmp32_, "help:shotwell", &_inner_error_);
-#line 1050 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1050 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
 			g_propagate_error (error, _inner_error_);
-#line 1050 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
 			_g_free0 (help_path);
-#line 1050 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1034 "/home/jens/Source/shotwell/src/Resources.vala"
 			return;
-#line 4110 "Resources.c"
+#line 3945 "Resources.c"
 		}
 	}
-#line 1021 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1005 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_free0 (help_path);
-#line 4115 "Resources.c"
+#line 3950 "Resources.c"
 }
 
 
@@ -4156,33 +3991,33 @@ gchar* resources_to_css_color (GdkRGBA* color) {
 	GdkRGBA _tmp4_ = {0};
 	gdouble _tmp5_ = 0.0;
 	gchar* _tmp6_ = NULL;
-#line 1054 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1038 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_val_if_fail (color != NULL, NULL);
-#line 1055 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1039 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = *color;
-#line 1055 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1039 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp1_ = _tmp0_.red;
-#line 1055 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1039 "/home/jens/Source/shotwell/src/Resources.vala"
 	r = (gint) (_tmp1_ * 255);
-#line 1056 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1040 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = *color;
-#line 1056 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1040 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = _tmp2_.green;
-#line 1056 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1040 "/home/jens/Source/shotwell/src/Resources.vala"
 	g = (gint) (_tmp3_ * 255);
-#line 1057 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1041 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = *color;
-#line 1057 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1041 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp5_ = _tmp4_.blue;
-#line 1057 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1041 "/home/jens/Source/shotwell/src/Resources.vala"
 	b = (gint) (_tmp5_ * 255);
-#line 1059 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1043 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp6_ = g_strdup_printf ("rgb(%d, %d, %d)", r, g, b);
-#line 1059 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1043 "/home/jens/Source/shotwell/src/Resources.vala"
 	result = _tmp6_;
-#line 1059 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1043 "/home/jens/Source/shotwell/src/Resources.vala"
 	return result;
-#line 4157 "Resources.c"
+#line 3992 "Resources.c"
 }
 
 
@@ -4200,136 +4035,136 @@ void resources_style_widget (GtkWidget* widget, const gchar* stylesheet) {
 	GtkWidget* _tmp21_ = NULL;
 	GtkCssProvider* _tmp22_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1066 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1050 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_if_fail (GTK_IS_WIDGET (widget));
-#line 1066 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1050 "/home/jens/Source/shotwell/src/Resources.vala"
 	g_return_if_fail (stylesheet != NULL);
-#line 1067 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1051 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp0_ = resources_providers;
-#line 1067 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1051 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp0_ == NULL) {
-#line 4183 "Resources.c"
+#line 4018 "Resources.c"
 		GeeHashMap* _tmp1_ = NULL;
-#line 1068 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1052 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp1_ = gee_hash_map_new (gtk_widget_get_type (), (GBoxedCopyFunc) g_object_ref, g_object_unref, GTK_TYPE_CSS_PROVIDER, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 1068 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1052 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (resources_providers);
-#line 1068 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1052 "/home/jens/Source/shotwell/src/Resources.vala"
 		resources_providers = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_MAP, GeeMap);
-#line 4191 "Resources.c"
+#line 4026 "Resources.c"
 	}
-#line 1070 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1054 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp2_ = resources_providers;
-#line 1070 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1054 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp3_ = widget;
-#line 1070 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1054 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp4_ = gee_map_has_key (_tmp2_, _tmp3_);
-#line 1070 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1054 "/home/jens/Source/shotwell/src/Resources.vala"
 	if (_tmp4_) {
-#line 4201 "Resources.c"
+#line 4036 "Resources.c"
 		GtkWidget* _tmp5_ = NULL;
 		GtkStyleContext* _tmp6_ = NULL;
 		GeeMap* _tmp7_ = NULL;
 		GtkWidget* _tmp8_ = NULL;
 		gpointer _tmp9_ = NULL;
 		GtkCssProvider* _tmp10_ = NULL;
-#line 1071 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp5_ = widget;
-#line 1071 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp6_ = gtk_widget_get_style_context (_tmp5_);
-#line 1071 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp7_ = resources_providers;
-#line 1071 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp8_ = widget;
-#line 1071 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp9_ = gee_map_get (_tmp7_, _tmp8_);
-#line 1071 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp10_ = (GtkCssProvider*) _tmp9_;
-#line 1071 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Resources.vala"
 		gtk_style_context_remove_provider (_tmp6_, G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, GTK_TYPE_STYLE_PROVIDER, GtkStyleProvider));
-#line 1071 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1055 "/home/jens/Source/shotwell/src/Resources.vala"
 		_g_object_unref0 (_tmp10_);
-#line 4224 "Resources.c"
+#line 4059 "Resources.c"
 	}
-#line 1073 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1057 "/home/jens/Source/shotwell/src/Resources.vala"
 	_tmp11_ = gtk_css_provider_new ();
-#line 1073 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1057 "/home/jens/Source/shotwell/src/Resources.vala"
 	styler = _tmp11_;
-#line 4230 "Resources.c"
+#line 4065 "Resources.c"
 	{
 		GtkCssProvider* _tmp12_ = NULL;
 		const gchar* _tmp13_ = NULL;
-#line 1076 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1060 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp12_ = styler;
-#line 1076 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1060 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp13_ = stylesheet;
-#line 1076 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1060 "/home/jens/Source/shotwell/src/Resources.vala"
 		gtk_css_provider_load_from_data (_tmp12_, _tmp13_, (gssize) RESOURCES_ALL_DATA, &_inner_error_);
-#line 1076 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1060 "/home/jens/Source/shotwell/src/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4242 "Resources.c"
-			goto __catch433_g_error;
+#line 4077 "Resources.c"
+			goto __catch430_g_error;
 		}
 	}
-	goto __finally433;
-	__catch433_g_error:
+	goto __finally430;
+	__catch430_g_error:
 	{
 		GError* e = NULL;
 		const gchar* _tmp14_ = NULL;
 		GError* _tmp15_ = NULL;
 		const gchar* _tmp16_ = NULL;
-#line 1075 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1059 "/home/jens/Source/shotwell/src/Resources.vala"
 		e = _inner_error_;
-#line 1075 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1059 "/home/jens/Source/shotwell/src/Resources.vala"
 		_inner_error_ = NULL;
-#line 1078 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1062 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp14_ = stylesheet;
-#line 1078 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1062 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp15_ = e;
-#line 1078 "/home/jens/Source/shotwell/src/Resources.vala"
+#line 1062 "/home/jens/Source/shotwell/src/Resources.vala"
 		_tmp16_ = _tmp15_->message;
-#line 1078 "/home/jens/Source/shotwell/src/Resources.vala"
-		g_warning ("Resources.vala:1078: couldn't parse widget stylesheet '%s': %s", _tmp14_, _tmp16_);
-#line 1082 "/home/jens/Source/shotwell/src/Resources.vala"
-		_g_error_free0 (e);
-#line 1082 "/home/jens/Source/shotwell/src/Resources.vala"
-		_g_object_unref0 (styler);
-#line 1082 "/home/jens/Source/shotwell/src/Resources.vala"
-		return;
-#line 4271 "Resources.c"
-	}
-	__finally433:
-#line 1075 "/home/jens/Source/shotwell/src/Resources.vala"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1075 "/home/jens/Source/shotwell/src/Resources.vala"
-		_g_object_unref0 (styler);
-#line 1075 "/home/jens/Source/shotwell/src/Resources.vala"
-		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1075 "/home/jens/Source/shotwell/src/Resources.vala"
-		g_clear_error (&_inner_error_);
-#line 1075 "/home/jens/Source/shotwell/src/Resources.vala"
-		return;
-#line 4284 "Resources.c"
-	}
-#line 1085 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp17_ = widget;
-#line 1085 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp18_ = gtk_widget_get_style_context (_tmp17_);
-#line 1085 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp19_ = styler;
-#line 1085 "/home/jens/Source/shotwell/src/Resources.vala"
-	gtk_style_context_add_provider (_tmp18_, G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, GTK_TYPE_STYLE_PROVIDER, GtkStyleProvider), (guint) GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-#line 1088 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp20_ = resources_providers;
-#line 1088 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp21_ = widget;
-#line 1088 "/home/jens/Source/shotwell/src/Resources.vala"
-	_tmp22_ = styler;
-#line 1088 "/home/jens/Source/shotwell/src/Resources.vala"
-	gee_map_set (_tmp20_, _tmp21_, _tmp22_);
+#line 1062 "/home/jens/Source/shotwell/src/Resources.vala"
+		g_warning ("Resources.vala:1062: couldn't parse widget stylesheet '%s': %s", _tmp14_, _tmp16_);
 #line 1066 "/home/jens/Source/shotwell/src/Resources.vala"
+		_g_error_free0 (e);
+#line 1066 "/home/jens/Source/shotwell/src/Resources.vala"
+		_g_object_unref0 (styler);
+#line 1066 "/home/jens/Source/shotwell/src/Resources.vala"
+		return;
+#line 4106 "Resources.c"
+	}
+	__finally430:
+#line 1059 "/home/jens/Source/shotwell/src/Resources.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 1059 "/home/jens/Source/shotwell/src/Resources.vala"
+		_g_object_unref0 (styler);
+#line 1059 "/home/jens/Source/shotwell/src/Resources.vala"
+		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 1059 "/home/jens/Source/shotwell/src/Resources.vala"
+		g_clear_error (&_inner_error_);
+#line 1059 "/home/jens/Source/shotwell/src/Resources.vala"
+		return;
+#line 4119 "Resources.c"
+	}
+#line 1069 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp17_ = widget;
+#line 1069 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp18_ = gtk_widget_get_style_context (_tmp17_);
+#line 1069 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp19_ = styler;
+#line 1069 "/home/jens/Source/shotwell/src/Resources.vala"
+	gtk_style_context_add_provider (_tmp18_, G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, GTK_TYPE_STYLE_PROVIDER, GtkStyleProvider), (guint) GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+#line 1072 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp20_ = resources_providers;
+#line 1072 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp21_ = widget;
+#line 1072 "/home/jens/Source/shotwell/src/Resources.vala"
+	_tmp22_ = styler;
+#line 1072 "/home/jens/Source/shotwell/src/Resources.vala"
+	gee_map_set (_tmp20_, _tmp21_, _tmp22_);
+#line 1050 "/home/jens/Source/shotwell/src/Resources.vala"
 	_g_object_unref0 (styler);
-#line 4304 "Resources.c"
+#line 4139 "Resources.c"
 }
 
 

@@ -746,7 +746,7 @@ gboolean quick_time_metadata_loader_is_supported (QuickTimeMetadataLoader* self)
 #line 80 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 749 "VideoMetadata.c"
-			goto __catch576_g_error;
+			goto __catch573_g_error;
 		}
 #line 81 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		_tmp3_ = test;
@@ -755,7 +755,7 @@ gboolean quick_time_metadata_loader_is_supported (QuickTimeMetadataLoader* self)
 #line 81 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 758 "VideoMetadata.c"
-			goto __catch576_g_error;
+			goto __catch573_g_error;
 		}
 #line 84 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		_tmp4_ = test;
@@ -809,7 +809,7 @@ gboolean quick_time_metadata_loader_is_supported (QuickTimeMetadataLoader* self)
 #line 95 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 812 "VideoMetadata.c"
-					goto __catch576_g_error;
+					goto __catch573_g_error;
 				}
 #line 96 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 				_tmp13_ = test;
@@ -818,7 +818,7 @@ gboolean quick_time_metadata_loader_is_supported (QuickTimeMetadataLoader* self)
 #line 96 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 821 "VideoMetadata.c"
-					goto __catch576_g_error;
+					goto __catch573_g_error;
 				}
 #line 97 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 				_tmp14_ = test;
@@ -833,8 +833,8 @@ gboolean quick_time_metadata_loader_is_supported (QuickTimeMetadataLoader* self)
 			}
 		}
 	}
-	goto __finally576;
-	__catch576_g_error:
+	goto __finally573;
+	__catch573_g_error:
 	{
 		GError* e = NULL;
 		GFile* _tmp16_ = NULL;
@@ -865,7 +865,7 @@ gboolean quick_time_metadata_loader_is_supported (QuickTimeMetadataLoader* self)
 		_g_error_free0 (e);
 #line 866 "VideoMetadata.c"
 	}
-	__finally576:
+	__finally573:
 #line 79 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 79 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
@@ -887,11 +887,11 @@ gboolean quick_time_metadata_loader_is_supported (QuickTimeMetadataLoader* self)
 #line 107 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 889 "VideoMetadata.c"
-			goto __catch577_g_error;
+			goto __catch574_g_error;
 		}
 	}
-	goto __finally577;
-	__catch577_g_error:
+	goto __finally574;
+	__catch574_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp22_ = NULL;
@@ -910,7 +910,7 @@ gboolean quick_time_metadata_loader_is_supported (QuickTimeMetadataLoader* self)
 		_g_error_free0 (e);
 #line 911 "VideoMetadata.c"
 	}
-	__finally577:
+	__finally574:
 #line 106 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 106 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
@@ -963,7 +963,7 @@ static gulong quick_time_metadata_loader_get_creation_date_time_for_quicktime (Q
 #line 119 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 965 "VideoMetadata.c"
-			goto __catch578_g_error;
+			goto __catch575_g_error;
 		}
 #line 120 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		done = FALSE;
@@ -994,7 +994,7 @@ static gulong quick_time_metadata_loader_get_creation_date_time_for_quicktime (Q
 #line 123 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 996 "VideoMetadata.c"
-				goto __catch578_g_error;
+				goto __catch575_g_error;
 			}
 #line 124 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 			_tmp5_ = test;
@@ -1058,7 +1058,7 @@ static gulong quick_time_metadata_loader_get_creation_date_time_for_quicktime (Q
 #line 129 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 						_quick_time_atom_unref0 (child);
 #line 1060 "VideoMetadata.c"
-						goto __catch578_g_error;
+						goto __catch575_g_error;
 					}
 #line 130 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 					_tmp16_ = child;
@@ -1114,7 +1114,7 @@ static gulong quick_time_metadata_loader_get_creation_date_time_for_quicktime (Q
 #line 137 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 							_quick_time_atom_unref0 (child);
 #line 1116 "VideoMetadata.c"
-							goto __catch578_g_error;
+							goto __catch575_g_error;
 						}
 #line 139 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 						_tmp26_ = child;
@@ -1127,7 +1127,7 @@ static gulong quick_time_metadata_loader_get_creation_date_time_for_quicktime (Q
 #line 139 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 							_quick_time_atom_unref0 (child);
 #line 1129 "VideoMetadata.c"
-							goto __catch578_g_error;
+							goto __catch575_g_error;
 						}
 #line 139 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 						timestamp = _tmp25_ - QUICK_TIME_METADATA_LOADER_QUICKTIME_EPOCH_ADJUSTMENT;
@@ -1146,7 +1146,7 @@ static gulong quick_time_metadata_loader_get_creation_date_time_for_quicktime (Q
 #line 143 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 						_quick_time_atom_unref0 (child);
 #line 1148 "VideoMetadata.c"
-						goto __catch578_g_error;
+						goto __catch575_g_error;
 					}
 				}
 #line 125 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
@@ -1160,12 +1160,12 @@ static gulong quick_time_metadata_loader_get_creation_date_time_for_quicktime (Q
 #line 146 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1162 "VideoMetadata.c"
-				goto __catch578_g_error;
+				goto __catch575_g_error;
 			}
 		}
 	}
-	goto __finally578;
-	__catch578_g_error:
+	goto __finally575;
+	__catch575_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp30_ = NULL;
@@ -1184,7 +1184,7 @@ static gulong quick_time_metadata_loader_get_creation_date_time_for_quicktime (Q
 		_g_error_free0 (e);
 #line 1185 "VideoMetadata.c"
 	}
-	__finally578:
+	__finally575:
 #line 118 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 118 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
@@ -1206,11 +1206,11 @@ static gulong quick_time_metadata_loader_get_creation_date_time_for_quicktime (Q
 #line 153 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1208 "VideoMetadata.c"
-			goto __catch579_g_error;
+			goto __catch576_g_error;
 		}
 	}
-	goto __finally579;
-	__catch579_g_error:
+	goto __finally576;
+	__catch576_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp33_ = NULL;
@@ -1229,7 +1229,7 @@ static gulong quick_time_metadata_loader_get_creation_date_time_for_quicktime (Q
 		_g_error_free0 (e);
 #line 1230 "VideoMetadata.c"
 	}
-	__finally579:
+	__finally576:
 #line 152 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 152 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
@@ -2602,7 +2602,7 @@ gboolean avi_metadata_loader_is_supported (AVIMetadataLoader* self) {
 #line 323 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2604 "VideoMetadata.c"
-			goto __catch580_g_error;
+			goto __catch577_g_error;
 		}
 #line 324 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		_tmp3_ = chunk;
@@ -2611,7 +2611,7 @@ gboolean avi_metadata_loader_is_supported (AVIMetadataLoader* self) {
 #line 324 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2613 "VideoMetadata.c"
-			goto __catch580_g_error;
+			goto __catch577_g_error;
 		}
 #line 326 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		_tmp5_ = chunk;
@@ -2640,7 +2640,7 @@ gboolean avi_metadata_loader_is_supported (AVIMetadataLoader* self) {
 #line 327 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2642 "VideoMetadata.c"
-				goto __catch580_g_error;
+				goto __catch577_g_error;
 			}
 #line 327 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 			_tmp12_ = _tmp9_;
@@ -2667,8 +2667,8 @@ gboolean avi_metadata_loader_is_supported (AVIMetadataLoader* self) {
 #line 2667 "VideoMetadata.c"
 		}
 	}
-	goto __finally580;
-	__catch580_g_error:
+	goto __finally577;
+	__catch577_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp14_ = NULL;
@@ -2687,7 +2687,7 @@ gboolean avi_metadata_loader_is_supported (AVIMetadataLoader* self) {
 		_g_error_free0 (e);
 #line 2688 "VideoMetadata.c"
 	}
-	__finally580:
+	__finally577:
 #line 322 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 322 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
@@ -2709,11 +2709,11 @@ gboolean avi_metadata_loader_is_supported (AVIMetadataLoader* self) {
 #line 335 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2711 "VideoMetadata.c"
-			goto __catch581_g_error;
+			goto __catch578_g_error;
 		}
 	}
-	goto __finally581;
-	__catch581_g_error:
+	goto __finally578;
+	__catch578_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp17_ = NULL;
@@ -2732,7 +2732,7 @@ gboolean avi_metadata_loader_is_supported (AVIMetadataLoader* self) {
 		_g_error_free0 (e);
 #line 2733 "VideoMetadata.c"
 	}
-	__finally581:
+	__finally578:
 #line 334 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 334 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
@@ -4073,7 +4073,7 @@ static gulong avi_metadata_loader_get_creation_date_time_for_avi (AVIMetadataLoa
 #line 515 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4075 "VideoMetadata.c"
-			goto __catch582_g_error;
+			goto __catch579_g_error;
 		}
 #line 516 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		_tmp3_ = chunk;
@@ -4082,7 +4082,7 @@ static gulong avi_metadata_loader_get_creation_date_time_for_avi (AVIMetadataLoa
 #line 516 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4084 "VideoMetadata.c"
-			goto __catch582_g_error;
+			goto __catch579_g_error;
 		}
 #line 517 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		_tmp4_ = chunk;
@@ -4093,7 +4093,7 @@ static gulong avi_metadata_loader_get_creation_date_time_for_avi (AVIMetadataLoa
 #line 517 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4095 "VideoMetadata.c"
-			goto __catch582_g_error;
+			goto __catch579_g_error;
 		}
 #line 518 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		_tmp6_ = sdate;
@@ -4122,8 +4122,8 @@ static gulong avi_metadata_loader_get_creation_date_time_for_avi (AVIMetadataLoa
 		_g_free0 (sdate);
 #line 4123 "VideoMetadata.c"
 	}
-	goto __finally582;
-	__catch582_g_error:
+	goto __finally579;
+	__catch579_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp11_ = NULL;
@@ -4142,7 +4142,7 @@ static gulong avi_metadata_loader_get_creation_date_time_for_avi (AVIMetadataLoa
 		_g_error_free0 (e);
 #line 4143 "VideoMetadata.c"
 	}
-	__finally582:
+	__finally579:
 #line 514 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 514 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
@@ -4164,11 +4164,11 @@ static gulong avi_metadata_loader_get_creation_date_time_for_avi (AVIMetadataLoa
 #line 526 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4166 "VideoMetadata.c"
-			goto __catch583_g_error;
+			goto __catch580_g_error;
 		}
 	}
-	goto __finally583;
-	__catch583_g_error:
+	goto __finally580;
+	__catch580_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp14_ = NULL;
@@ -4187,7 +4187,7 @@ static gulong avi_metadata_loader_get_creation_date_time_for_avi (AVIMetadataLoa
 		_g_error_free0 (e);
 #line 4188 "VideoMetadata.c"
 	}
-	__finally583:
+	__finally580:
 #line 525 "/home/jens/Source/shotwell/src/VideoMetadata.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 525 "/home/jens/Source/shotwell/src/VideoMetadata.vala"

@@ -16,6 +16,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
 #include <webkit2/webkit2.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -131,6 +132,17 @@ typedef struct _PublishingRESTSupportGooglePublisherAuthenticatedTransactionPriv
 typedef struct _ShotwellPluginsCommonWebAuthenticationPane ShotwellPluginsCommonWebAuthenticationPane;
 typedef struct _ShotwellPluginsCommonWebAuthenticationPaneClass ShotwellPluginsCommonWebAuthenticationPaneClass;
 typedef struct _ShotwellPluginsCommonWebAuthenticationPanePrivate ShotwellPluginsCommonWebAuthenticationPanePrivate;
+
+#define SHOTWELL_PLUGINS_COMMON_TYPE_BUILDER_PANE (shotwell_plugins_common_builder_pane_get_type ())
+#define SHOTWELL_PLUGINS_COMMON_BUILDER_PANE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SHOTWELL_PLUGINS_COMMON_TYPE_BUILDER_PANE, ShotwellPluginsCommonBuilderPane))
+#define SHOTWELL_PLUGINS_COMMON_BUILDER_PANE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SHOTWELL_PLUGINS_COMMON_TYPE_BUILDER_PANE, ShotwellPluginsCommonBuilderPaneClass))
+#define SHOTWELL_PLUGINS_COMMON_IS_BUILDER_PANE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SHOTWELL_PLUGINS_COMMON_TYPE_BUILDER_PANE))
+#define SHOTWELL_PLUGINS_COMMON_IS_BUILDER_PANE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SHOTWELL_PLUGINS_COMMON_TYPE_BUILDER_PANE))
+#define SHOTWELL_PLUGINS_COMMON_BUILDER_PANE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SHOTWELL_PLUGINS_COMMON_TYPE_BUILDER_PANE, ShotwellPluginsCommonBuilderPaneClass))
+
+typedef struct _ShotwellPluginsCommonBuilderPane ShotwellPluginsCommonBuilderPane;
+typedef struct _ShotwellPluginsCommonBuilderPaneClass ShotwellPluginsCommonBuilderPaneClass;
+typedef struct _ShotwellPluginsCommonBuilderPanePrivate ShotwellPluginsCommonBuilderPanePrivate;
 
 struct _PublishingRESTSupportSession {
 	GTypeInstance parent_instance;
@@ -257,6 +269,18 @@ struct _ShotwellPluginsCommonWebAuthenticationPane {
 struct _ShotwellPluginsCommonWebAuthenticationPaneClass {
 	GObjectClass parent_class;
 	void (*on_page_load) (ShotwellPluginsCommonWebAuthenticationPane* self);
+};
+
+struct _ShotwellPluginsCommonBuilderPane {
+	GObject parent_instance;
+	ShotwellPluginsCommonBuilderPanePrivate * priv;
+};
+
+struct _ShotwellPluginsCommonBuilderPaneClass {
+	GObjectClass parent_class;
+	GtkWidget* (*get_default_widget) (ShotwellPluginsCommonBuilderPane* self);
+	void (*on_pane_installed) (ShotwellPluginsCommonBuilderPane* self);
+	void (*on_pane_uninstalled) (ShotwellPluginsCommonBuilderPane* self);
 };
 
 
@@ -407,6 +431,16 @@ WebKitWebView* shotwell_plugins_common_web_authentication_pane_get_view (Shotwel
 ShotwellPluginsCommonWebAuthenticationPane* shotwell_plugins_common_web_authentication_pane_construct (GType object_type);
 SpitPublishingDialogPaneGeometryOptions shotwell_plugins_common_web_authentication_pane_get_preferred_geometry (ShotwellPluginsCommonWebAuthenticationPane* self);
 gchar* shotwell_plugins_common_web_authentication_pane_get_login_uri (ShotwellPluginsCommonWebAuthenticationPane* self);
+GType shotwell_plugins_common_builder_pane_get_type (void) G_GNUC_CONST;
+GtkBuilder* shotwell_plugins_common_builder_pane_get_builder (ShotwellPluginsCommonBuilderPane* self);
+GtkWidget* shotwell_plugins_common_builder_pane_get_default_widget (ShotwellPluginsCommonBuilderPane* self);
+void shotwell_plugins_common_builder_pane_on_pane_installed (ShotwellPluginsCommonBuilderPane* self);
+void shotwell_plugins_common_builder_pane_on_pane_uninstalled (ShotwellPluginsCommonBuilderPane* self);
+ShotwellPluginsCommonBuilderPane* shotwell_plugins_common_builder_pane_construct (GType object_type);
+SpitPublishingDialogPaneGeometryOptions shotwell_plugins_common_builder_pane_get_preferred_geometry (ShotwellPluginsCommonBuilderPane* self);
+gchar* shotwell_plugins_common_builder_pane_get_resource_path (ShotwellPluginsCommonBuilderPane* self);
+gboolean shotwell_plugins_common_builder_pane_get_connect_signals (ShotwellPluginsCommonBuilderPane* self);
+gchar* shotwell_plugins_common_builder_pane_get_default_id (ShotwellPluginsCommonBuilderPane* self);
 
 
 G_END_DECLS

@@ -14,6 +14,7 @@
 #include <string.h>
 #include <gee.h>
 #include <gdk/gdk.h>
+#include <gio/gio.h>
 #include <glib/gi18n-lib.h>
 
 
@@ -367,7 +368,7 @@ typedef struct _MediaSourceClass MediaSourceClass;
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -377,8 +378,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -386,10 +385,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -501,13 +498,13 @@ struct _MediaPageClass {
 	void (*on_move_to_trash) (MediaPage* self);
 	void (*on_edit_title) (MediaPage* self);
 	void (*on_edit_comment) (MediaPage* self);
-	void (*on_display_titles) (MediaPage* self, GtkAction* action);
-	void (*on_display_comments) (MediaPage* self, GtkAction* action);
-	void (*on_display_ratings) (MediaPage* self, GtkAction* action);
-	void (*on_display_tags) (MediaPage* self, GtkAction* action);
+	void (*on_display_titles) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_comments) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_ratings) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_tags) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*get_config_photos_sort) (MediaPage* self, gboolean* sort_order, gint* sort_by);
 	void (*set_config_photos_sort) (MediaPage* self, gboolean sort_order, gint sort_by);
-	void (*on_sort_changed) (MediaPage* self);
+	void (*on_sort_changed) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*developer_changed) (MediaPage* self, RawDeveloper rd);
 	DataView* (*create_thumbnail) (MediaPage* self, DataSource* source);
 };
@@ -711,7 +708,7 @@ static void last_import_page_finalize (GObject* obj);
 static void _last_import_page_on_import_rolls_altered_media_source_collection_import_roll_altered (MediaSourceCollection* _sender, gpointer self) {
 #line 41 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	last_import_page_on_import_rolls_altered ((LastImportPage*) self);
-#line 715 "LastImportPage.c"
+#line 712 "LastImportPage.c"
 }
 
 
@@ -719,7 +716,7 @@ LastImportPage* last_import_page_construct (GType object_type) {
 	LastImportPage * self = NULL;
 #line 28 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	self = (LastImportPage*) collection_page_construct (object_type, LAST_IMPORT_PAGE_NAME);
-#line 723 "LastImportPage.c"
+#line 720 "LastImportPage.c"
 	{
 		GeeIterator* _col_it = NULL;
 		MediaCollectionRegistry* _tmp0_ = NULL;
@@ -748,7 +745,7 @@ LastImportPage* last_import_page_construct (GType object_type) {
 		_col_it = _tmp5_;
 #line 31 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 		while (TRUE) {
-#line 752 "LastImportPage.c"
+#line 749 "LastImportPage.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			MediaSourceCollection* col = NULL;
@@ -763,7 +760,7 @@ LastImportPage* last_import_page_construct (GType object_type) {
 			if (!_tmp7_) {
 #line 31 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 				break;
-#line 767 "LastImportPage.c"
+#line 764 "LastImportPage.c"
 			}
 #line 31 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 			_tmp8_ = _col_it;
@@ -777,24 +774,24 @@ LastImportPage* last_import_page_construct (GType object_type) {
 			g_signal_connect_object (_tmp10_, "import-roll-altered", (GCallback) _last_import_page_on_import_rolls_altered_media_source_collection_import_roll_altered, self, 0);
 #line 31 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 			_data_collection_unref0 (col);
-#line 781 "LastImportPage.c"
+#line 778 "LastImportPage.c"
 		}
 #line 31 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 		_g_object_unref0 (_col_it);
-#line 785 "LastImportPage.c"
+#line 782 "LastImportPage.c"
 	}
 #line 36 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	last_import_page_on_import_rolls_altered (self);
 #line 27 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	return self;
-#line 791 "LastImportPage.c"
+#line 788 "LastImportPage.c"
 }
 
 
 LastImportPage* last_import_page_new (void) {
 #line 27 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	return last_import_page_construct (TYPE_LAST_IMPORT_PAGE);
-#line 798 "LastImportPage.c"
+#line 795 "LastImportPage.c"
 }
 
 
@@ -832,7 +829,7 @@ static void last_import_page_on_import_rolls_altered (LastImportPage* self) {
 	_tmp4_ = current_last_import_id;
 #line 50 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	if (_tmp4_ == NULL) {
-#line 836 "LastImportPage.c"
+#line 833 "LastImportPage.c"
 		ViewCollection* _tmp5_ = NULL;
 		ViewCollection* _tmp6_ = NULL;
 		ViewCollection* _tmp7_ = NULL;
@@ -857,7 +854,7 @@ static void last_import_page_on_import_rolls_altered (LastImportPage* self) {
 		_import_id_free0 (current_last_import_id);
 #line 54 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 		return;
-#line 861 "LastImportPage.c"
+#line 858 "LastImportPage.c"
 	}
 #line 57 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	_tmp9_ = current_last_import_id;
@@ -873,7 +870,7 @@ static void last_import_page_on_import_rolls_altered (LastImportPage* self) {
 		_import_id_free0 (current_last_import_id);
 #line 58 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 		return;
-#line 877 "LastImportPage.c"
+#line 874 "LastImportPage.c"
 	}
 #line 60 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	_tmp13_ = current_last_import_id;
@@ -895,7 +892,7 @@ static void last_import_page_on_import_rolls_altered (LastImportPage* self) {
 	data_collection_clear (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, TYPE_DATA_COLLECTION, DataCollection));
 #line 63 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	_data_collection_unref0 (_tmp17_);
-#line 899 "LastImportPage.c"
+#line 896 "LastImportPage.c"
 	{
 		GeeIterator* _col_it = NULL;
 		MediaCollectionRegistry* _tmp18_ = NULL;
@@ -924,7 +921,7 @@ static void last_import_page_on_import_rolls_altered (LastImportPage* self) {
 		_col_it = _tmp23_;
 #line 65 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 		while (TRUE) {
-#line 928 "LastImportPage.c"
+#line 925 "LastImportPage.c"
 			GeeIterator* _tmp24_ = NULL;
 			gboolean _tmp25_ = FALSE;
 			MediaSourceCollection* col = NULL;
@@ -947,7 +944,7 @@ static void last_import_page_on_import_rolls_altered (LastImportPage* self) {
 			if (!_tmp25_) {
 #line 65 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 				break;
-#line 951 "LastImportPage.c"
+#line 948 "LastImportPage.c"
 			}
 #line 65 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 			_tmp26_ = _col_it;
@@ -981,15 +978,15 @@ static void last_import_page_on_import_rolls_altered (LastImportPage* self) {
 			_data_collection_unref0 (_tmp29_);
 #line 65 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 			_data_collection_unref0 (col);
-#line 985 "LastImportPage.c"
+#line 982 "LastImportPage.c"
 		}
 #line 65 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 		_g_object_unref0 (_col_it);
-#line 989 "LastImportPage.c"
+#line 986 "LastImportPage.c"
 	}
 #line 45 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	_import_id_free0 (current_last_import_id);
-#line 993 "LastImportPage.c"
+#line 990 "LastImportPage.c"
 }
 
 
@@ -1019,13 +1016,13 @@ static void last_import_page_real_get_config_photos_sort (MediaPage* base, gbool
 	if (sort_order) {
 #line 71 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 		*sort_order = _vala_sort_order;
-#line 1023 "LastImportPage.c"
+#line 1020 "LastImportPage.c"
 	}
 #line 71 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	if (sort_by) {
 #line 71 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 		*sort_by = _vala_sort_by;
-#line 1029 "LastImportPage.c"
+#line 1026 "LastImportPage.c"
 	}
 }
 
@@ -1050,7 +1047,7 @@ static void last_import_page_real_set_config_photos_sort (MediaPage* base, gbool
 	configuration_facade_set_library_photos_sort (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp2_, _tmp3_);
 #line 76 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1054 "LastImportPage.c"
+#line 1051 "LastImportPage.c"
 }
 
 
@@ -1072,14 +1069,14 @@ static LastImportPageLastImportViewManager* last_import_page_last_import_view_ma
 	self->priv->import_id = _tmp1_;
 #line 13 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	return self;
-#line 1076 "LastImportPage.c"
+#line 1073 "LastImportPage.c"
 }
 
 
 static LastImportPageLastImportViewManager* last_import_page_last_import_view_manager_new (LastImportPage* owner, ImportID* import_id) {
 #line 13 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	return last_import_page_last_import_view_manager_construct (LAST_IMPORT_PAGE_TYPE_LAST_IMPORT_VIEW_MANAGER, owner, import_id);
-#line 1083 "LastImportPage.c"
+#line 1080 "LastImportPage.c"
 }
 
 
@@ -1109,7 +1106,7 @@ static gboolean last_import_page_last_import_view_manager_real_include_in_view (
 	result = _tmp2_ == _tmp4_;
 #line 20 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	return result;
-#line 1113 "LastImportPage.c"
+#line 1110 "LastImportPage.c"
 }
 
 
@@ -1122,14 +1119,14 @@ static void last_import_page_last_import_view_manager_class_init (LastImportPage
 	g_type_class_add_private (klass, sizeof (LastImportPageLastImportViewManagerPrivate));
 #line 10 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	((ViewManagerClass *) klass)->include_in_view = last_import_page_last_import_view_manager_real_include_in_view;
-#line 1126 "LastImportPage.c"
+#line 1123 "LastImportPage.c"
 }
 
 
 static void last_import_page_last_import_view_manager_instance_init (LastImportPageLastImportViewManager * self) {
 #line 10 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	self->priv = LAST_IMPORT_PAGE_LAST_IMPORT_VIEW_MANAGER_GET_PRIVATE (self);
-#line 1133 "LastImportPage.c"
+#line 1130 "LastImportPage.c"
 }
 
 
@@ -1139,7 +1136,7 @@ static void last_import_page_last_import_view_manager_finalize (ViewManager* obj
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, LAST_IMPORT_PAGE_TYPE_LAST_IMPORT_VIEW_MANAGER, LastImportPageLastImportViewManager);
 #line 10 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	VIEW_MANAGER_CLASS (last_import_page_last_import_view_manager_parent_class)->finalize (obj);
-#line 1143 "LastImportPage.c"
+#line 1140 "LastImportPage.c"
 }
 
 
@@ -1166,7 +1163,7 @@ static void last_import_page_class_init (LastImportPageClass * klass) {
 	((MediaPageClass *) klass)->set_config_photos_sort = last_import_page_real_set_config_photos_sort;
 #line 7 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = last_import_page_finalize;
-#line 1170 "LastImportPage.c"
+#line 1167 "LastImportPage.c"
 }
 
 
@@ -1180,7 +1177,7 @@ static void last_import_page_instance_init (LastImportPage * self) {
 	_tmp0_ = alteration_new ("metadata", "import-id");
 #line 25 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	self->priv->last_import_alteration = _tmp0_;
-#line 1184 "LastImportPage.c"
+#line 1181 "LastImportPage.c"
 }
 
 
@@ -1188,7 +1185,7 @@ static void last_import_page_finalize (GObject* obj) {
 	LastImportPage * self;
 #line 7 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_LAST_IMPORT_PAGE, LastImportPage);
-#line 1192 "LastImportPage.c"
+#line 1189 "LastImportPage.c"
 	{
 		GeeIterator* _col_it = NULL;
 		MediaCollectionRegistry* _tmp0_ = NULL;
@@ -1217,7 +1214,7 @@ static void last_import_page_finalize (GObject* obj) {
 		_col_it = _tmp5_;
 #line 40 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 		while (TRUE) {
-#line 1221 "LastImportPage.c"
+#line 1218 "LastImportPage.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			MediaSourceCollection* col = NULL;
@@ -1233,7 +1230,7 @@ static void last_import_page_finalize (GObject* obj) {
 			if (!_tmp7_) {
 #line 40 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 				break;
-#line 1237 "LastImportPage.c"
+#line 1234 "LastImportPage.c"
 			}
 #line 40 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 			_tmp8_ = _col_it;
@@ -1249,17 +1246,17 @@ static void last_import_page_finalize (GObject* obj) {
 			g_signal_handlers_disconnect_matched (_tmp10_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp11_, 0, NULL, (GCallback) _last_import_page_on_import_rolls_altered_media_source_collection_import_roll_altered, self);
 #line 40 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 			_data_collection_unref0 (col);
-#line 1253 "LastImportPage.c"
+#line 1250 "LastImportPage.c"
 		}
 #line 40 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 		_g_object_unref0 (_col_it);
-#line 1257 "LastImportPage.c"
+#line 1254 "LastImportPage.c"
 	}
 #line 25 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	_alteration_unref0 (self->priv->last_import_alteration);
 #line 7 "/home/jens/Source/shotwell/src/library/LastImportPage.vala"
 	G_OBJECT_CLASS (last_import_page_parent_class)->finalize (obj);
-#line 1263 "LastImportPage.c"
+#line 1260 "LastImportPage.c"
 }
 
 

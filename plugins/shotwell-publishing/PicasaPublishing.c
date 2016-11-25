@@ -485,6 +485,7 @@ PublishingPicasaUploadTransaction* publishing_picasa_upload_transaction_new (Pub
 PublishingPicasaUploadTransaction* publishing_picasa_upload_transaction_construct (GType object_type, PublishingRESTSupportGoogleSession* session, PublishingPicasaPublishingParameters* parameters, SpitPublishingPublishable* publishable);
 gchar* publishing_picasa_publishing_parameters_get_target_album_feed_url (PublishingPicasaPublishingParameters* self);
 static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSupportTransaction* base, GError** error);
+static guint8* _vala_array_dup5 (guint8* self, int length);
 static void _vala_SoupBuffer_free (SoupBuffer* self);
 static void _vala_SoupMultipart_free (SoupMultipart* self);
 static void publishing_picasa_upload_transaction_finalize (PublishingRESTSupportTransaction* obj);
@@ -542,8 +543,8 @@ enum  {
 	PUBLISHING_PICASA_PUBLISHING_PARAMETERS_DUMMY_PROPERTY
 };
 gchar* publishing_picasa_publishing_parameters_get_target_album_entry_url (PublishingPicasaPublishingParameters* self);
-static PublishingPicasaAlbum** _vala_array_dup5 (PublishingPicasaAlbum** self, int length);
 static PublishingPicasaAlbum** _vala_array_dup6 (PublishingPicasaAlbum** self, int length);
+static PublishingPicasaAlbum** _vala_array_dup7 (PublishingPicasaAlbum** self, int length);
 static void publishing_picasa_publishing_parameters_finalize (PublishingPicasaPublishingParameters* obj);
 #define PUBLISHING_PICASA_UPLOADER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), PUBLISHING_PICASA_TYPE_UPLOADER, PublishingPicasaUploaderPrivate))
 enum  {
@@ -570,7 +571,7 @@ PicasaService* picasa_service_construct (GType object_type, GFile* resource_dire
 	_tmp0__length1 = picasa_service_icon_pixbuf_set_length1;
 #line 13 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (_tmp0_ == NULL) {
-#line 562 "PicasaPublishing.c"
+#line 563 "PicasaPublishing.c"
 		gint _tmp1_ = 0;
 		GdkPixbuf** _tmp2_ = NULL;
 #line 14 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -583,18 +584,18 @@ PicasaService* picasa_service_construct (GType object_type, GFile* resource_dire
 		picasa_service_icon_pixbuf_set_length1 = _tmp1_;
 #line 14 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_picasa_service_icon_pixbuf_set_size_ = picasa_service_icon_pixbuf_set_length1;
-#line 575 "PicasaPublishing.c"
+#line 576 "PicasaPublishing.c"
 	}
 #line 12 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self;
-#line 579 "PicasaPublishing.c"
+#line 580 "PicasaPublishing.c"
 }
 
 
 PicasaService* picasa_service_new (GFile* resource_directory) {
 #line 12 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return picasa_service_construct (TYPE_PICASA_SERVICE, resource_directory);
-#line 586 "PicasaPublishing.c"
+#line 587 "PicasaPublishing.c"
 }
 
 
@@ -616,7 +617,7 @@ static gint picasa_service_real_get_pluggable_interface (SpitPluggable* base, gi
 	result = _tmp2_;
 #line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 608 "PicasaPublishing.c"
+#line 609 "PicasaPublishing.c"
 }
 
 
@@ -629,7 +630,7 @@ static const gchar* picasa_service_real_get_id (SpitPluggable* base) {
 	result = "org.yorba.shotwell.publishing.picasa";
 #line 24 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 621 "PicasaPublishing.c"
+#line 622 "PicasaPublishing.c"
 }
 
 
@@ -642,14 +643,14 @@ static const gchar* picasa_service_real_get_pluggable_name (SpitPluggable* base)
 	result = "Picasa Web Albums";
 #line 28 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 634 "PicasaPublishing.c"
+#line 635 "PicasaPublishing.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 641 "PicasaPublishing.c"
+#line 642 "PicasaPublishing.c"
 }
 
 
@@ -660,17 +661,17 @@ static GdkPixbuf** _vala_array_dup4 (GdkPixbuf** self, int length) {
 	result = g_new0 (GdkPixbuf*, length + 1);
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 652 "PicasaPublishing.c"
+#line 653 "PicasaPublishing.c"
 		GdkPixbuf* _tmp0_ = NULL;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp0_ = _g_object_ref0 (self[i]);
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		result[i] = _tmp0_;
-#line 658 "PicasaPublishing.c"
+#line 659 "PicasaPublishing.c"
 	}
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 662 "PicasaPublishing.c"
+#line 663 "PicasaPublishing.c"
 }
 
 
@@ -752,7 +753,7 @@ static void picasa_service_real_get_info (SpitPluggable* base, SpitPluggableInfo
 	(*info).icons = _tmp9_;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*info).icons_length1 = _tmp9__length1;
-#line 744 "PicasaPublishing.c"
+#line 745 "PicasaPublishing.c"
 }
 
 
@@ -773,7 +774,7 @@ static SpitPublishingPublisher* picasa_service_real_create_publisher (SpitPublis
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher);
 #line 44 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 765 "PicasaPublishing.c"
+#line 766 "PicasaPublishing.c"
 }
 
 
@@ -786,7 +787,7 @@ static SpitPublishingPublisherMediaType picasa_service_real_get_supported_media 
 	result = SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO | SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO;
 #line 48 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 778 "PicasaPublishing.c"
+#line 779 "PicasaPublishing.c"
 }
 
 
@@ -794,7 +795,7 @@ static void picasa_service_real_activation (SpitPluggable* base, gboolean enable
 	PicasaService * self;
 #line 52 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PICASA_SERVICE, PicasaService);
-#line 786 "PicasaPublishing.c"
+#line 787 "PicasaPublishing.c"
 }
 
 
@@ -803,7 +804,7 @@ static void picasa_service_class_init (PicasaServiceClass * klass) {
 	picasa_service_parent_class = g_type_class_peek_parent (klass);
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = picasa_service_finalize;
-#line 795 "PicasaPublishing.c"
+#line 796 "PicasaPublishing.c"
 }
 
 
@@ -820,7 +821,7 @@ static void picasa_service_spit_pluggable_interface_init (SpitPluggableIface * i
 	iface->get_info = (void (*)(SpitPluggable*, SpitPluggableInfo*)) picasa_service_real_get_info;
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	iface->activation = (void (*)(SpitPluggable*, gboolean)) picasa_service_real_activation;
-#line 812 "PicasaPublishing.c"
+#line 813 "PicasaPublishing.c"
 }
 
 
@@ -831,7 +832,7 @@ static void picasa_service_spit_publishing_service_interface_init (SpitPublishin
 	iface->create_publisher = (SpitPublishingPublisher* (*)(SpitPublishingService*, SpitPublishingPluginHost*)) picasa_service_real_create_publisher;
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	iface->get_supported_media = (SpitPublishingPublisherMediaType (*)(SpitPublishingService*)) picasa_service_real_get_supported_media;
-#line 823 "PicasaPublishing.c"
+#line 824 "PicasaPublishing.c"
 }
 
 
@@ -845,7 +846,7 @@ static void picasa_service_finalize (GObject* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PICASA_SERVICE, PicasaService);
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	G_OBJECT_CLASS (picasa_service_parent_class)->finalize (obj);
-#line 837 "PicasaPublishing.c"
+#line 838 "PicasaPublishing.c"
 }
 
 
@@ -905,7 +906,7 @@ PublishingPicasaPicasaPublisher* publishing_picasa_picasa_publisher_construct (G
 	_tmp4_ = host;
 #line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp6_ = spit_publishing_plugin_host_get_publishables (_tmp4_, &_tmp5_);
-#line 897 "PicasaPublishing.c"
+#line 898 "PicasaPublishing.c"
 	{
 		SpitPublishingPublishable** p_collection = NULL;
 		gint p_collection_length1 = 0;
@@ -917,14 +918,14 @@ PublishingPicasaPicasaPublisher* publishing_picasa_picasa_publisher_construct (G
 		p_collection_length1 = _tmp5_;
 #line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		for (p_it = 0; p_it < _tmp5_; p_it = p_it + 1) {
-#line 909 "PicasaPublishing.c"
+#line 910 "PicasaPublishing.c"
 			SpitPublishingPublishable* _tmp7_ = NULL;
 			SpitPublishingPublishable* p = NULL;
 #line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			_tmp7_ = _g_object_ref0 (p_collection[p_it]);
 #line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			p = _tmp7_;
-#line 916 "PicasaPublishing.c"
+#line 917 "PicasaPublishing.c"
 			{
 				SpitPublishingPublisherMediaType _tmp8_ = 0;
 				SpitPublishingPublishable* _tmp9_ = NULL;
@@ -939,12 +940,12 @@ PublishingPicasaPicasaPublisher* publishing_picasa_picasa_publisher_construct (G
 				media_type = _tmp8_ | _tmp10_;
 #line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				_g_object_unref0 (p);
-#line 931 "PicasaPublishing.c"
+#line 932 "PicasaPublishing.c"
 			}
 		}
 #line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		p_collection = (_vala_array_free (p_collection, p_collection_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 936 "PicasaPublishing.c"
+#line 937 "PicasaPublishing.c"
 	}
 #line 78 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp11_ = self->priv->publishing_parameters;
@@ -976,14 +977,14 @@ PublishingPicasaPicasaPublisher* publishing_picasa_picasa_publisher_construct (G
 	self->priv->progress_reporter_target_destroy_notify = NULL;
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self;
-#line 968 "PicasaPublishing.c"
+#line 969 "PicasaPublishing.c"
 }
 
 
 PublishingPicasaPicasaPublisher* publishing_picasa_picasa_publisher_new (SpitPublishingService* service, SpitPublishingPluginHost* host) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return publishing_picasa_picasa_publisher_construct (PUBLISHING_PICASA_TYPE_PICASA_PUBLISHER, service, host);
-#line 975 "PicasaPublishing.c"
+#line 976 "PicasaPublishing.c"
 }
 
 
@@ -994,13 +995,13 @@ static void _vala_array_add12 (PublishingPicasaAlbum*** array, int* length, int*
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 117 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*array = g_renew (PublishingPicasaAlbum*, *array, (*size) + 1);
-#line 986 "PicasaPublishing.c"
+#line 987 "PicasaPublishing.c"
 	}
 #line 117 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[(*length)++] = value;
 #line 117 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[*length] = NULL;
-#line 992 "PicasaPublishing.c"
+#line 993 "PicasaPublishing.c"
 }
 
 
@@ -1034,7 +1035,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 	_tmp2_ = _tmp1_->name;
 #line 89 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (g_strcmp0 (_tmp2_, "feed") == 0) {
-#line 1026 "PicasaPublishing.c"
+#line 1027 "PicasaPublishing.c"
 		xmlNode* _tmp3_ = NULL;
 		xmlNode* _tmp4_ = NULL;
 #line 90 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -1043,7 +1044,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 		_tmp4_ = _tmp3_->children;
 #line 90 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		doc_node_iter = _tmp4_;
-#line 1035 "PicasaPublishing.c"
+#line 1036 "PicasaPublishing.c"
 	} else {
 		xmlNode* _tmp5_ = NULL;
 		const gchar* _tmp6_ = NULL;
@@ -1053,13 +1054,13 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 		_tmp6_ = _tmp5_->name;
 #line 91 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		if (g_strcmp0 (_tmp6_, "entry") == 0) {
-#line 1045 "PicasaPublishing.c"
+#line 1046 "PicasaPublishing.c"
 			xmlNode* _tmp7_ = NULL;
 #line 92 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			_tmp7_ = document_root;
 #line 92 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			doc_node_iter = _tmp7_;
-#line 1051 "PicasaPublishing.c"
+#line 1052 "PicasaPublishing.c"
 		} else {
 			GError* _tmp8_ = NULL;
 #line 94 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -1074,7 +1075,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 				_result_ = (_vala_array_free (_result_, _result__length1, (GDestroyNotify) publishing_picasa_album_unref), NULL);
 #line 94 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				return NULL;
-#line 1066 "PicasaPublishing.c"
+#line 1067 "PicasaPublishing.c"
 			} else {
 #line 94 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				_result_ = (_vala_array_free (_result_, _result__length1, (GDestroyNotify) publishing_picasa_album_unref), NULL);
@@ -1084,7 +1085,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 				g_clear_error (&_inner_error_);
 #line 94 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				return NULL;
-#line 1076 "PicasaPublishing.c"
+#line 1077 "PicasaPublishing.c"
 			}
 		}
 	}
@@ -1094,7 +1095,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 		_tmp9_ = TRUE;
 #line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		while (TRUE) {
-#line 1086 "PicasaPublishing.c"
+#line 1087 "PicasaPublishing.c"
 			xmlNode* _tmp12_ = NULL;
 			xmlNode* _tmp13_ = NULL;
 			const gchar* _tmp14_ = NULL;
@@ -1110,7 +1111,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 			PublishingPicasaAlbum* _tmp35_ = NULL;
 #line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			if (!_tmp9_) {
-#line 1102 "PicasaPublishing.c"
+#line 1103 "PicasaPublishing.c"
 				xmlNode* _tmp10_ = NULL;
 				xmlNode* _tmp11_ = NULL;
 #line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -1119,7 +1120,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 				_tmp11_ = _tmp10_->next;
 #line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				doc_node_iter = _tmp11_;
-#line 1111 "PicasaPublishing.c"
+#line 1112 "PicasaPublishing.c"
 			}
 #line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			_tmp9_ = FALSE;
@@ -1129,7 +1130,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 			if (!(_tmp12_ != NULL)) {
 #line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				break;
-#line 1121 "PicasaPublishing.c"
+#line 1122 "PicasaPublishing.c"
 			}
 #line 98 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			_tmp13_ = doc_node_iter;
@@ -1139,7 +1140,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 			if (g_strcmp0 (_tmp14_, "entry") != 0) {
 #line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				continue;
-#line 1131 "PicasaPublishing.c"
+#line 1132 "PicasaPublishing.c"
 			}
 #line 101 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			name_val = NULL;
@@ -1151,20 +1152,20 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 			_tmp16_ = _tmp15_->children;
 #line 103 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			album_node_iter = _tmp16_;
-#line 1143 "PicasaPublishing.c"
+#line 1144 "PicasaPublishing.c"
 			{
 				gboolean _tmp17_ = FALSE;
 #line 104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				_tmp17_ = TRUE;
 #line 104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				while (TRUE) {
-#line 1150 "PicasaPublishing.c"
+#line 1151 "PicasaPublishing.c"
 					xmlNode* _tmp20_ = NULL;
 					xmlNode* _tmp21_ = NULL;
 					const gchar* _tmp22_ = NULL;
 #line 104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					if (!_tmp17_) {
-#line 1156 "PicasaPublishing.c"
+#line 1157 "PicasaPublishing.c"
 						xmlNode* _tmp18_ = NULL;
 						xmlNode* _tmp19_ = NULL;
 #line 104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -1173,7 +1174,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 						_tmp19_ = _tmp18_->next;
 #line 104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						album_node_iter = _tmp19_;
-#line 1165 "PicasaPublishing.c"
+#line 1166 "PicasaPublishing.c"
 					}
 #line 104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					_tmp17_ = FALSE;
@@ -1183,7 +1184,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 					if (!(_tmp20_ != NULL)) {
 #line 104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						break;
-#line 1175 "PicasaPublishing.c"
+#line 1176 "PicasaPublishing.c"
 					}
 #line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					_tmp21_ = album_node_iter;
@@ -1191,7 +1192,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 					_tmp22_ = _tmp21_->name;
 #line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					if (g_strcmp0 (_tmp22_, "title") == 0) {
-#line 1183 "PicasaPublishing.c"
+#line 1184 "PicasaPublishing.c"
 						xmlNode* _tmp23_ = NULL;
 						gchar* _tmp24_ = NULL;
 #line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -1202,7 +1203,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 						_g_free0 (name_val);
 #line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						name_val = _tmp24_;
-#line 1194 "PicasaPublishing.c"
+#line 1195 "PicasaPublishing.c"
 					} else {
 						xmlNode* _tmp25_ = NULL;
 						const gchar* _tmp26_ = NULL;
@@ -1212,7 +1213,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 						_tmp26_ = _tmp25_->name;
 #line 107 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						if (g_strcmp0 (_tmp26_, "id") == 0) {
-#line 1204 "PicasaPublishing.c"
+#line 1205 "PicasaPublishing.c"
 							xmlNode* _tmp27_ = NULL;
 							xmlNs* _tmp28_ = NULL;
 							const gchar* _tmp29_ = NULL;
@@ -1228,7 +1229,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 							if (_tmp29_ != NULL) {
 #line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 								continue;
-#line 1220 "PicasaPublishing.c"
+#line 1221 "PicasaPublishing.c"
 							}
 #line 113 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 							_tmp30_ = album_node_iter;
@@ -1238,7 +1239,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 							_g_free0 (url_val);
 #line 113 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 							url_val = _tmp31_;
-#line 1230 "PicasaPublishing.c"
+#line 1231 "PicasaPublishing.c"
 						}
 					}
 				}
@@ -1259,7 +1260,7 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 			_g_free0 (url_val);
 #line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			_g_free0 (name_val);
-#line 1251 "PicasaPublishing.c"
+#line 1252 "PicasaPublishing.c"
 		}
 	}
 #line 120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -1270,13 +1271,13 @@ static PublishingPicasaAlbum** publishing_picasa_picasa_publisher_extract_albums
 	if (result_length1) {
 #line 120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*result_length1 = _tmp36__length1;
-#line 1262 "PicasaPublishing.c"
+#line 1263 "PicasaPublishing.c"
 	}
 #line 120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	result = _tmp36_;
 #line 120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 1268 "PicasaPublishing.c"
+#line 1269 "PicasaPublishing.c"
 }
 
 
@@ -1323,7 +1324,7 @@ static void publishing_picasa_picasa_publisher_load_parameters_from_configuratio
 	publishing_picasa_publishing_parameters_set_target_album_name (_tmp6_, _tmp9_);
 #line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_g_free0 (_tmp9_);
-#line 1315 "PicasaPublishing.c"
+#line 1316 "PicasaPublishing.c"
 }
 
 
@@ -1370,7 +1371,7 @@ static void publishing_picasa_picasa_publisher_save_parameters_to_configuration_
 	spit_host_interface_set_config_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "last-album", _tmp9_);
 #line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_g_free0 (_tmp9_);
-#line 1362 "PicasaPublishing.c"
+#line 1363 "PicasaPublishing.c"
 }
 
 
@@ -1388,13 +1389,13 @@ static void publishing_picasa_picasa_publisher_on_service_welcome_login (Publish
 	if (!_tmp0_) {
 #line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 1379 "PicasaPublishing.c"
+#line 1380 "PicasaPublishing.c"
 	}
 #line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp1_ = self->priv->refresh_token;
 #line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_rest_support_google_publisher_start_oauth_flow (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher), _tmp1_);
-#line 1385 "PicasaPublishing.c"
+#line 1386 "PicasaPublishing.c"
 }
 
 
@@ -1448,21 +1449,21 @@ static void publishing_picasa_picasa_publisher_real_on_login_flow_complete (Publ
 	_publishing_rest_support_session_unref0 (_tmp7_);
 #line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_do_fetch_account_information (self);
-#line 1439 "PicasaPublishing.c"
+#line 1440 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_picasa_publisher_on_initial_album_fetch_complete_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
 #line 155 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_on_initial_album_fetch_complete ((PublishingPicasaPicasaPublisher*) self, _sender);
-#line 1446 "PicasaPublishing.c"
+#line 1447 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_picasa_publisher_on_initial_album_fetch_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
 #line 156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_on_initial_album_fetch_error ((PublishingPicasaPicasaPublisher*) self, _sender, err);
-#line 1453 "PicasaPublishing.c"
+#line 1454 "PicasaPublishing.c"
 }
 
 
@@ -1495,7 +1496,7 @@ static void publishing_picasa_picasa_publisher_on_initial_album_fetch_complete (
 	if (!_tmp4_) {
 #line 159 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 1486 "PicasaPublishing.c"
+#line 1487 "PicasaPublishing.c"
 	}
 #line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_debug ("PicasaPublishing.vala:161: EVENT: finished fetching account and album " \
@@ -1504,7 +1505,7 @@ static void publishing_picasa_picasa_publisher_on_initial_album_fetch_complete (
 	_tmp5_ = txn;
 #line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_do_parse_and_display_account_information (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, PUBLISHING_PICASA_TYPE_ALBUM_DIRECTORY_TRANSACTION, PublishingPicasaAlbumDirectoryTransaction));
-#line 1494 "PicasaPublishing.c"
+#line 1495 "PicasaPublishing.c"
 }
 
 
@@ -1542,7 +1543,7 @@ static void publishing_picasa_picasa_publisher_on_initial_album_fetch_error (Pub
 	if (!_tmp4_) {
 #line 172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 1532 "PicasaPublishing.c"
+#line 1533 "PicasaPublishing.c"
 	}
 #line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp5_ = bad_txn;
@@ -1563,7 +1564,7 @@ static void publishing_picasa_picasa_publisher_on_initial_album_fetch_error (Pub
 	if (_tmp10_ == ((guint) 403)) {
 #line 177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp8_ = TRUE;
-#line 1552 "PicasaPublishing.c"
+#line 1553 "PicasaPublishing.c"
 	} else {
 		PublishingRESTSupportTransaction* _tmp11_ = NULL;
 		guint _tmp12_ = 0U;
@@ -1573,13 +1574,13 @@ static void publishing_picasa_picasa_publisher_on_initial_album_fetch_error (Pub
 		_tmp12_ = publishing_rest_support_transaction_get_status_code (_tmp11_);
 #line 177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp8_ = _tmp12_ == ((guint) 404);
-#line 1562 "PicasaPublishing.c"
+#line 1563 "PicasaPublishing.c"
 	}
 #line 177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (_tmp8_) {
 #line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_rest_support_google_publisher_do_logout (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
-#line 1568 "PicasaPublishing.c"
+#line 1569 "PicasaPublishing.c"
 	} else {
 		SpitPublishingPluginHost* _tmp13_ = NULL;
 		GError* _tmp14_ = NULL;
@@ -1589,7 +1590,7 @@ static void publishing_picasa_picasa_publisher_on_initial_album_fetch_error (Pub
 		_tmp14_ = err;
 #line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp13_, _tmp14_);
-#line 1578 "PicasaPublishing.c"
+#line 1579 "PicasaPublishing.c"
 	}
 }
 
@@ -1604,14 +1605,14 @@ static void publishing_picasa_picasa_publisher_on_publishing_options_logout (Pub
 	if (!_tmp0_) {
 #line 187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 1593 "PicasaPublishing.c"
+#line 1594 "PicasaPublishing.c"
 	}
 #line 189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_debug ("PicasaPublishing.vala:189: EVENT: user clicked 'Logout' in the publish" \
 "ing options pane.");
 #line 191 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_rest_support_google_publisher_do_logout (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
-#line 1599 "PicasaPublishing.c"
+#line 1600 "PicasaPublishing.c"
 }
 
 
@@ -1628,7 +1629,7 @@ static void publishing_picasa_picasa_publisher_on_publishing_options_publish (Pu
 	if (!_tmp0_) {
 #line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 1616 "PicasaPublishing.c"
+#line 1617 "PicasaPublishing.c"
 	}
 #line 198 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_debug ("PicasaPublishing.vala:198: EVENT: user clicked 'Publish' in the publis" \
@@ -1645,11 +1646,11 @@ static void publishing_picasa_picasa_publisher_on_publishing_options_publish (Pu
 	if (_tmp3_) {
 #line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_picasa_publisher_do_create_album (self);
-#line 1632 "PicasaPublishing.c"
+#line 1633 "PicasaPublishing.c"
 	} else {
 #line 205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_picasa_publisher_do_upload (self);
-#line 1636 "PicasaPublishing.c"
+#line 1637 "PicasaPublishing.c"
 	}
 }
 
@@ -1657,21 +1658,21 @@ static void publishing_picasa_picasa_publisher_on_publishing_options_publish (Pu
 static void _publishing_picasa_picasa_publisher_on_album_creation_complete_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
 #line 210 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_on_album_creation_complete ((PublishingPicasaPicasaPublisher*) self, _sender);
-#line 1644 "PicasaPublishing.c"
+#line 1645 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_picasa_publisher_on_album_creation_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
 #line 211 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_on_album_creation_error ((PublishingPicasaPicasaPublisher*) self, _sender, err);
-#line 1651 "PicasaPublishing.c"
+#line 1652 "PicasaPublishing.c"
 }
 
 
 static gpointer _publishing_rest_support_transaction_ref0 (gpointer self) {
 #line 218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self ? publishing_rest_support_transaction_ref (self) : NULL;
-#line 1658 "PicasaPublishing.c"
+#line 1659 "PicasaPublishing.c"
 }
 
 
@@ -1680,7 +1681,7 @@ static gchar* _publishing_picasa_album_directory_transaction_validate_xml_publis
 	result = publishing_picasa_album_directory_transaction_validate_xml (doc);
 #line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 1667 "PicasaPublishing.c"
+#line 1668 "PicasaPublishing.c"
 }
 
 
@@ -1727,7 +1728,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 	if (!_tmp4_) {
 #line 214 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 1714 "PicasaPublishing.c"
+#line 1715 "PicasaPublishing.c"
 	}
 #line 216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_debug ("PicasaPublishing.vala:216: EVENT: finished creating album on remote se" \
@@ -1738,7 +1739,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 	_tmp6_ = _publishing_rest_support_transaction_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, PUBLISHING_PICASA_TYPE_ALBUM_CREATION_TRANSACTION, PublishingPicasaAlbumCreationTransaction));
 #line 218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	downcast_txn = _tmp6_;
-#line 1724 "PicasaPublishing.c"
+#line 1725 "PicasaPublishing.c"
 	{
 		PublishingRESTSupportXmlDocument* _tmp7_ = NULL;
 		PublishingPicasaAlbumCreationTransaction* _tmp8_ = NULL;
@@ -1765,7 +1766,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 1751 "PicasaPublishing.c"
+#line 1752 "PicasaPublishing.c"
 				goto __catch7_spit_publishing_publishing_error;
 			}
 #line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -1778,7 +1779,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 			g_clear_error (&_inner_error_);
 #line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return;
-#line 1764 "PicasaPublishing.c"
+#line 1765 "PicasaPublishing.c"
 		}
 #line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp13_ = _tmp7_;
@@ -1790,7 +1791,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 		response_doc = _tmp13_;
 #line 220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_publishing_rest_support_xml_document_unref0 (_tmp7_);
-#line 1776 "PicasaPublishing.c"
+#line 1777 "PicasaPublishing.c"
 	}
 	goto __finally7;
 	__catch7_spit_publishing_publishing_error:
@@ -1816,7 +1817,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 		_publishing_rest_support_transaction_unref0 (downcast_txn);
 #line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 1802 "PicasaPublishing.c"
+#line 1803 "PicasaPublishing.c"
 	}
 	__finally7:
 #line 220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -1831,7 +1832,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 		g_clear_error (&_inner_error_);
 #line 220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 1817 "PicasaPublishing.c"
+#line 1818 "PicasaPublishing.c"
 	}
 	{
 		PublishingPicasaAlbum** _tmp16_ = NULL;
@@ -1859,7 +1860,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 230 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 1845 "PicasaPublishing.c"
+#line 1846 "PicasaPublishing.c"
 				goto __catch8_spit_publishing_publishing_error;
 			}
 #line 230 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -1874,7 +1875,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 			g_clear_error (&_inner_error_);
 #line 230 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return;
-#line 1860 "PicasaPublishing.c"
+#line 1861 "PicasaPublishing.c"
 		}
 #line 230 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp21_ = _tmp16_;
@@ -1894,7 +1895,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 		_response_albums_size_ = response_albums_length1;
 #line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp16_ = (_vala_array_free (_tmp16_, _tmp16__length1, (GDestroyNotify) publishing_picasa_album_unref), NULL);
-#line 1880 "PicasaPublishing.c"
+#line 1881 "PicasaPublishing.c"
 	}
 	goto __finally8;
 	__catch8_spit_publishing_publishing_error:
@@ -1922,7 +1923,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 		_publishing_rest_support_transaction_unref0 (downcast_txn);
 #line 233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 1908 "PicasaPublishing.c"
+#line 1909 "PicasaPublishing.c"
 	}
 	__finally8:
 #line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -1939,7 +1940,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 		g_clear_error (&_inner_error_);
 #line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 1925 "PicasaPublishing.c"
+#line 1926 "PicasaPublishing.c"
 	}
 #line 236 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp24_ = response_albums;
@@ -1947,7 +1948,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 	_tmp24__length1 = response_albums_length1;
 #line 236 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (_tmp24__length1 != 1) {
-#line 1933 "PicasaPublishing.c"
+#line 1934 "PicasaPublishing.c"
 		SpitPublishingPluginHost* _tmp25_ = NULL;
 		GError* _tmp26_ = NULL;
 		GError* _tmp27_ = NULL;
@@ -1970,7 +1971,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 		_publishing_rest_support_transaction_unref0 (downcast_txn);
 #line 240 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 1955 "PicasaPublishing.c"
+#line 1956 "PicasaPublishing.c"
 	}
 #line 243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp28_ = self->priv->publishing_parameters;
@@ -1992,7 +1993,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_complete (Publi
 	_publishing_rest_support_xml_document_unref0 (response_doc);
 #line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_publishing_rest_support_transaction_unref0 (downcast_txn);
-#line 1977 "PicasaPublishing.c"
+#line 1978 "PicasaPublishing.c"
 }
 
 
@@ -2029,7 +2030,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_error (Publishi
 	if (!_tmp4_) {
 #line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2014 "PicasaPublishing.c"
+#line 2015 "PicasaPublishing.c"
 	}
 #line 256 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp5_ = bad_txn;
@@ -2048,7 +2049,7 @@ static void publishing_picasa_picasa_publisher_on_album_creation_error (Publishi
 	_tmp9_ = err;
 #line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	spit_publishing_plugin_host_post_error (_tmp8_, _tmp9_);
-#line 2032 "PicasaPublishing.c"
+#line 2033 "PicasaPublishing.c"
 }
 
 
@@ -2069,7 +2070,7 @@ static void publishing_picasa_picasa_publisher_on_upload_status_updated (Publish
 	if (!_tmp0_) {
 #line 264 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2053 "PicasaPublishing.c"
+#line 2054 "PicasaPublishing.c"
 	}
 #line 266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp1_ = completed_fraction;
@@ -2092,21 +2093,21 @@ static void publishing_picasa_picasa_publisher_on_upload_status_updated (Publish
 	_tmp5_ = completed_fraction;
 #line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp3_ (_tmp4_, _tmp5_, _tmp3__target);
-#line 2075 "PicasaPublishing.c"
+#line 2076 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_picasa_publisher_on_upload_complete_publishing_rest_support_batch_uploader_upload_complete (PublishingRESTSupportBatchUploader* _sender, gint num_photos_published, gpointer self) {
 #line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_on_upload_complete ((PublishingPicasaPicasaPublisher*) self, _sender, num_photos_published);
-#line 2082 "PicasaPublishing.c"
+#line 2083 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_picasa_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error (PublishingRESTSupportBatchUploader* _sender, GError* err, gpointer self) {
 #line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_on_upload_error ((PublishingPicasaPicasaPublisher*) self, _sender, err);
-#line 2089 "PicasaPublishing.c"
+#line 2090 "PicasaPublishing.c"
 }
 
 
@@ -2127,7 +2128,7 @@ static void publishing_picasa_picasa_publisher_on_upload_complete (PublishingPic
 	if (!_tmp0_) {
 #line 276 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2110 "PicasaPublishing.c"
+#line 2111 "PicasaPublishing.c"
 	}
 #line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp1_ = num_published;
@@ -2148,7 +2149,7 @@ static void publishing_picasa_picasa_publisher_on_upload_complete (PublishingPic
 	g_signal_handlers_disconnect_matched (_tmp4_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp5_, 0, NULL, (GCallback) _publishing_picasa_picasa_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error, self);
 #line 283 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_do_show_success_pane (self);
-#line 2130 "PicasaPublishing.c"
+#line 2131 "PicasaPublishing.c"
 }
 
 
@@ -2172,7 +2173,7 @@ static void publishing_picasa_picasa_publisher_on_upload_error (PublishingPicasa
 	if (!_tmp0_) {
 #line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2154 "PicasaPublishing.c"
+#line 2155 "PicasaPublishing.c"
 	}
 #line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp1_ = err;
@@ -2199,14 +2200,14 @@ static void publishing_picasa_picasa_publisher_on_upload_error (PublishingPicasa
 	_tmp8_ = err;
 #line 296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	spit_publishing_plugin_host_post_error (_tmp7_, _tmp8_);
-#line 2180 "PicasaPublishing.c"
+#line 2181 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_picasa_publisher_on_service_welcome_login_spit_publishing_login_callback (gpointer self) {
 #line 302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_on_service_welcome_login ((PublishingPicasaPicasaPublisher*) self);
-#line 2187 "PicasaPublishing.c"
+#line 2188 "PicasaPublishing.c"
 }
 
 
@@ -2220,7 +2221,7 @@ static void publishing_picasa_picasa_publisher_do_show_service_welcome_pane (Pub
 	_tmp0_ = publishing_rest_support_google_publisher_get_host (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
 #line 302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	spit_publishing_plugin_host_install_welcome_pane (_tmp0_, PUBLISHING_PICASA_SERVICE_WELCOME_MESSAGE, _publishing_picasa_picasa_publisher_on_service_welcome_login_spit_publishing_login_callback, self);
-#line 2201 "PicasaPublishing.c"
+#line 2202 "PicasaPublishing.c"
 }
 
 
@@ -2262,7 +2263,7 @@ static void publishing_picasa_picasa_publisher_do_fetch_account_information (Pub
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (directory_trans, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_picasa_picasa_publisher_on_initial_album_fetch_error_publishing_rest_support_transaction_network_error, self, 0);
 #line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (directory_trans, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_picasa_picasa_publisher_on_initial_album_fetch_complete_publishing_rest_support_transaction_completed, self, 0);
-#line 2242 "PicasaPublishing.c"
+#line 2243 "PicasaPublishing.c"
 	{
 #line 317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (directory_trans, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
@@ -2270,7 +2271,7 @@ static void publishing_picasa_picasa_publisher_do_fetch_account_information (Pub
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 2250 "PicasaPublishing.c"
+#line 2251 "PicasaPublishing.c"
 				goto __catch9_spit_publishing_publishing_error;
 			}
 #line 317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -2281,7 +2282,7 @@ static void publishing_picasa_picasa_publisher_do_fetch_account_information (Pub
 			g_clear_error (&_inner_error_);
 #line 317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return;
-#line 2261 "PicasaPublishing.c"
+#line 2262 "PicasaPublishing.c"
 		}
 	}
 	goto __finally9;
@@ -2299,7 +2300,7 @@ static void publishing_picasa_picasa_publisher_do_fetch_account_information (Pub
 		publishing_picasa_picasa_publisher_on_initial_album_fetch_error (self, G_TYPE_CHECK_INSTANCE_CAST (directory_trans, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), _tmp6_);
 #line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_g_error_free0 (err);
-#line 2279 "PicasaPublishing.c"
+#line 2280 "PicasaPublishing.c"
 	}
 	__finally9:
 #line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -2312,11 +2313,11 @@ static void publishing_picasa_picasa_publisher_do_fetch_account_information (Pub
 		g_clear_error (&_inner_error_);
 #line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2292 "PicasaPublishing.c"
+#line 2293 "PicasaPublishing.c"
 	}
 #line 305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_publishing_rest_support_transaction_unref0 (directory_trans);
-#line 2296 "PicasaPublishing.c"
+#line 2297 "PicasaPublishing.c"
 }
 
 
@@ -2330,7 +2331,7 @@ static void publishing_picasa_picasa_publisher_do_parse_and_display_account_info
 #line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_debug ("PicasaPublishing.vala:327: ACTION: parsing account and album informati" \
 "on from server response XML");
-#line 2309 "PicasaPublishing.c"
+#line 2310 "PicasaPublishing.c"
 	{
 		PublishingRESTSupportXmlDocument* _tmp0_ = NULL;
 		PublishingPicasaAlbumDirectoryTransaction* _tmp1_ = NULL;
@@ -2357,7 +2358,7 @@ static void publishing_picasa_picasa_publisher_do_parse_and_display_account_info
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 2336 "PicasaPublishing.c"
+#line 2337 "PicasaPublishing.c"
 				goto __catch10_spit_publishing_publishing_error;
 			}
 #line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -2368,7 +2369,7 @@ static void publishing_picasa_picasa_publisher_do_parse_and_display_account_info
 			g_clear_error (&_inner_error_);
 #line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return;
-#line 2347 "PicasaPublishing.c"
+#line 2348 "PicasaPublishing.c"
 		}
 #line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp6_ = _tmp0_;
@@ -2380,7 +2381,7 @@ static void publishing_picasa_picasa_publisher_do_parse_and_display_account_info
 		response_doc = _tmp6_;
 #line 330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_publishing_rest_support_xml_document_unref0 (_tmp0_);
-#line 2359 "PicasaPublishing.c"
+#line 2360 "PicasaPublishing.c"
 	}
 	goto __finally10;
 	__catch10_spit_publishing_publishing_error:
@@ -2404,7 +2405,7 @@ static void publishing_picasa_picasa_publisher_do_parse_and_display_account_info
 		_publishing_rest_support_xml_document_unref0 (response_doc);
 #line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2383 "PicasaPublishing.c"
+#line 2384 "PicasaPublishing.c"
 	}
 	__finally10:
 #line 330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -2417,7 +2418,7 @@ static void publishing_picasa_picasa_publisher_do_parse_and_display_account_info
 		g_clear_error (&_inner_error_);
 #line 330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2396 "PicasaPublishing.c"
+#line 2397 "PicasaPublishing.c"
 	}
 	{
 		PublishingPicasaAlbum** _tmp9_ = NULL;
@@ -2444,7 +2445,7 @@ static void publishing_picasa_picasa_publisher_do_parse_and_display_account_info
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 2423 "PicasaPublishing.c"
+#line 2424 "PicasaPublishing.c"
 				goto __catch11_spit_publishing_publishing_error;
 			}
 #line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -2455,7 +2456,7 @@ static void publishing_picasa_picasa_publisher_do_parse_and_display_account_info
 			g_clear_error (&_inner_error_);
 #line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return;
-#line 2434 "PicasaPublishing.c"
+#line 2435 "PicasaPublishing.c"
 		}
 #line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp14_ = self->priv->publishing_parameters;
@@ -2463,7 +2464,7 @@ static void publishing_picasa_picasa_publisher_do_parse_and_display_account_info
 		publishing_picasa_publishing_parameters_set_albums (_tmp14_, _tmp9_, _tmp9__length1);
 #line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp9_ = (_vala_array_free (_tmp9_, _tmp9__length1, (GDestroyNotify) publishing_picasa_album_unref), NULL);
-#line 2442 "PicasaPublishing.c"
+#line 2443 "PicasaPublishing.c"
 	}
 	goto __finally11;
 	__catch11_spit_publishing_publishing_error:
@@ -2487,7 +2488,7 @@ static void publishing_picasa_picasa_publisher_do_parse_and_display_account_info
 		_publishing_rest_support_xml_document_unref0 (response_doc);
 #line 342 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2466 "PicasaPublishing.c"
+#line 2467 "PicasaPublishing.c"
 	}
 	__finally11:
 #line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -2500,27 +2501,27 @@ static void publishing_picasa_picasa_publisher_do_parse_and_display_account_info
 		g_clear_error (&_inner_error_);
 #line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2479 "PicasaPublishing.c"
+#line 2480 "PicasaPublishing.c"
 	}
 #line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_do_show_publishing_options_pane (self);
 #line 326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 2485 "PicasaPublishing.c"
+#line 2486 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_picasa_publisher_on_publishing_options_publish_publishing_picasa_publishing_options_pane_publish (PublishingPicasaPublishingOptionsPane* _sender, gpointer self) {
 #line 366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_on_publishing_options_publish ((PublishingPicasaPicasaPublisher*) self);
-#line 2492 "PicasaPublishing.c"
+#line 2493 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_picasa_publisher_on_publishing_options_logout_publishing_picasa_publishing_options_pane_logout (PublishingPicasaPublishingOptionsPane* _sender, gpointer self) {
 #line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_on_publishing_options_logout ((PublishingPicasaPicasaPublisher*) self);
-#line 2499 "PicasaPublishing.c"
+#line 2500 "PicasaPublishing.c"
 }
 
 
@@ -2545,7 +2546,7 @@ static void publishing_picasa_picasa_publisher_do_show_publishing_options_pane (
 	_tmp0_ = gtk_builder_new ();
 #line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	builder = _tmp0_;
-#line 2524 "PicasaPublishing.c"
+#line 2525 "PicasaPublishing.c"
 	{
 		GtkBuilder* _tmp1_ = NULL;
 #line 355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -2554,7 +2555,7 @@ static void publishing_picasa_picasa_publisher_do_show_publishing_options_pane (
 		gtk_builder_add_from_resource (_tmp1_, PLUGIN_RESOURCE_PATH "/" "picasa_publishing_options_pane.ui", &_inner_error_);
 #line 355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2533 "PicasaPublishing.c"
+#line 2534 "PicasaPublishing.c"
 			goto __catch12_g_error;
 		}
 	}
@@ -2597,7 +2598,7 @@ static void publishing_picasa_picasa_publisher_do_show_publishing_options_pane (
 		_g_object_unref0 (builder);
 #line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2575 "PicasaPublishing.c"
+#line 2576 "PicasaPublishing.c"
 	}
 	__finally12:
 #line 352 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -2610,7 +2611,7 @@ static void publishing_picasa_picasa_publisher_do_show_publishing_options_pane (
 		g_clear_error (&_inner_error_);
 #line 352 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2588 "PicasaPublishing.c"
+#line 2589 "PicasaPublishing.c"
 	}
 #line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp8_ = builder;
@@ -2642,7 +2643,7 @@ static void publishing_picasa_picasa_publisher_do_show_publishing_options_pane (
 	_g_object_unref0 (opts_pane);
 #line 348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_g_object_unref0 (builder);
-#line 2620 "PicasaPublishing.c"
+#line 2621 "PicasaPublishing.c"
 }
 
 
@@ -2709,7 +2710,7 @@ static void publishing_picasa_picasa_publisher_do_create_album (PublishingPicasa
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (creation_trans, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_picasa_picasa_publisher_on_album_creation_error_publishing_rest_support_transaction_network_error, self, 0);
 #line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (creation_trans, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_picasa_picasa_publisher_on_album_creation_complete_publishing_rest_support_transaction_completed, self, 0);
-#line 2686 "PicasaPublishing.c"
+#line 2687 "PicasaPublishing.c"
 	{
 #line 388 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (creation_trans, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
@@ -2717,7 +2718,7 @@ static void publishing_picasa_picasa_publisher_do_create_album (PublishingPicasa
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 388 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 2694 "PicasaPublishing.c"
+#line 2695 "PicasaPublishing.c"
 				goto __catch13_spit_publishing_publishing_error;
 			}
 #line 388 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -2728,7 +2729,7 @@ static void publishing_picasa_picasa_publisher_do_create_album (PublishingPicasa
 			g_clear_error (&_inner_error_);
 #line 388 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return;
-#line 2705 "PicasaPublishing.c"
+#line 2706 "PicasaPublishing.c"
 		}
 	}
 	goto __finally13;
@@ -2749,7 +2750,7 @@ static void publishing_picasa_picasa_publisher_do_create_album (PublishingPicasa
 		spit_publishing_plugin_host_post_error (_tmp13_, _tmp14_);
 #line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_g_error_free0 (err);
-#line 2726 "PicasaPublishing.c"
+#line 2727 "PicasaPublishing.c"
 	}
 	__finally13:
 #line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -2762,18 +2763,18 @@ static void publishing_picasa_picasa_publisher_do_create_album (PublishingPicasa
 		g_clear_error (&_inner_error_);
 #line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2739 "PicasaPublishing.c"
+#line 2740 "PicasaPublishing.c"
 	}
 #line 373 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_publishing_rest_support_transaction_unref0 (creation_trans);
-#line 2743 "PicasaPublishing.c"
+#line 2744 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_picasa_publisher_on_upload_status_updated_spit_publishing_progress_callback (gint file_number, gdouble fraction_complete, gpointer self) {
 #line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_on_upload_status_updated ((PublishingPicasaPicasaPublisher*) self, file_number, fraction_complete);
-#line 2750 "PicasaPublishing.c"
+#line 2751 "PicasaPublishing.c"
 }
 
 
@@ -2846,7 +2847,7 @@ static void publishing_picasa_picasa_publisher_do_upload (PublishingPicasaPicasa
 	if (!_tmp9_) {
 #line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2822 "PicasaPublishing.c"
+#line 2823 "PicasaPublishing.c"
 	}
 #line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp10_ = publishing_rest_support_google_publisher_get_host (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
@@ -2892,7 +2893,7 @@ static void publishing_picasa_picasa_publisher_do_upload (PublishingPicasaPicasa
 	_publishing_rest_support_batch_uploader_unref0 (uploader);
 #line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishables = (_vala_array_free (publishables, publishables_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 2868 "PicasaPublishing.c"
+#line 2869 "PicasaPublishing.c"
 }
 
 
@@ -2911,7 +2912,7 @@ static void publishing_picasa_picasa_publisher_do_show_success_pane (PublishingP
 	_tmp1_ = publishing_rest_support_google_publisher_get_host (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
 #line 423 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	spit_publishing_plugin_host_install_success_pane (_tmp1_);
-#line 2887 "PicasaPublishing.c"
+#line 2888 "PicasaPublishing.c"
 }
 
 
@@ -2942,7 +2943,7 @@ static void publishing_picasa_picasa_publisher_real_do_logout (PublishingRESTSup
 	spit_host_interface_unset_config_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "refresh_token");
 #line 434 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_picasa_publisher_do_show_service_welcome_pane (self);
-#line 2918 "PicasaPublishing.c"
+#line 2919 "PicasaPublishing.c"
 }
 
 
@@ -2958,7 +2959,7 @@ static gboolean publishing_picasa_picasa_publisher_real_is_running (PublishingRE
 	result = _tmp0_;
 #line 438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 2934 "PicasaPublishing.c"
+#line 2935 "PicasaPublishing.c"
 }
 
 
@@ -2976,7 +2977,7 @@ static void publishing_picasa_picasa_publisher_real_start (PublishingRESTSupport
 	if (_tmp0_) {
 #line 445 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return;
-#line 2952 "PicasaPublishing.c"
+#line 2953 "PicasaPublishing.c"
 	}
 #line 447 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->running = TRUE;
@@ -2986,14 +2987,14 @@ static void publishing_picasa_picasa_publisher_real_start (PublishingRESTSupport
 	if (_tmp1_ == NULL) {
 #line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_picasa_publisher_do_show_service_welcome_pane (self);
-#line 2962 "PicasaPublishing.c"
+#line 2963 "PicasaPublishing.c"
 	} else {
 		const gchar* _tmp2_ = NULL;
 #line 452 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp2_ = self->priv->refresh_token;
 #line 452 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_rest_support_google_publisher_start_oauth_flow (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher), _tmp2_);
-#line 2969 "PicasaPublishing.c"
+#line 2970 "PicasaPublishing.c"
 	}
 }
 
@@ -3016,7 +3017,7 @@ static void publishing_picasa_picasa_publisher_real_stop (PublishingRESTSupportG
 	_publishing_rest_support_session_unref0 (_tmp1_);
 #line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->running = FALSE;
-#line 2992 "PicasaPublishing.c"
+#line 2993 "PicasaPublishing.c"
 }
 
 
@@ -3037,14 +3038,14 @@ static void publishing_picasa_picasa_publisher_class_init (PublishingPicasaPicas
 	((PublishingRESTSupportGooglePublisherClass *) klass)->stop = publishing_picasa_picasa_publisher_real_stop;
 #line 62 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_picasa_picasa_publisher_finalize;
-#line 3013 "PicasaPublishing.c"
+#line 3014 "PicasaPublishing.c"
 }
 
 
 static void publishing_picasa_picasa_publisher_instance_init (PublishingPicasaPicasaPublisher * self) {
 #line 62 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv = PUBLISHING_PICASA_PICASA_PUBLISHER_GET_PRIVATE (self);
-#line 3020 "PicasaPublishing.c"
+#line 3021 "PicasaPublishing.c"
 }
 
 
@@ -3066,7 +3067,7 @@ static void publishing_picasa_picasa_publisher_finalize (GObject* obj) {
 	_g_free0 (self->priv->refresh_token);
 #line 62 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	G_OBJECT_CLASS (publishing_picasa_picasa_publisher_parent_class)->finalize (obj);
-#line 3042 "PicasaPublishing.c"
+#line 3043 "PicasaPublishing.c"
 }
 
 
@@ -3112,21 +3113,21 @@ PublishingPicasaAlbum* publishing_picasa_album_construct (GType object_type, con
 	self->url = _tmp3_;
 #line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self;
-#line 3088 "PicasaPublishing.c"
+#line 3089 "PicasaPublishing.c"
 }
 
 
 PublishingPicasaAlbum* publishing_picasa_album_new (const gchar* name, const gchar* url) {
 #line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return publishing_picasa_album_construct (PUBLISHING_PICASA_TYPE_ALBUM, name, url);
-#line 3095 "PicasaPublishing.c"
+#line 3096 "PicasaPublishing.c"
 }
 
 
 static void publishing_picasa_value_album_init (GValue* value) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 3102 "PicasaPublishing.c"
+#line 3103 "PicasaPublishing.c"
 }
 
 
@@ -3135,7 +3136,7 @@ static void publishing_picasa_value_album_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_album_unref (value->data[0].v_pointer);
-#line 3111 "PicasaPublishing.c"
+#line 3112 "PicasaPublishing.c"
 	}
 }
 
@@ -3145,11 +3146,11 @@ static void publishing_picasa_value_album_copy_value (const GValue* src_value, G
 	if (src_value->data[0].v_pointer) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_picasa_album_ref (src_value->data[0].v_pointer);
-#line 3121 "PicasaPublishing.c"
+#line 3122 "PicasaPublishing.c"
 	} else {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 3125 "PicasaPublishing.c"
+#line 3126 "PicasaPublishing.c"
 	}
 }
 
@@ -3157,37 +3158,37 @@ static void publishing_picasa_value_album_copy_value (const GValue* src_value, G
 static gpointer publishing_picasa_value_album_peek_pointer (const GValue* value) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return value->data[0].v_pointer;
-#line 3133 "PicasaPublishing.c"
+#line 3134 "PicasaPublishing.c"
 }
 
 
 static gchar* publishing_picasa_value_album_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 3140 "PicasaPublishing.c"
+#line 3141 "PicasaPublishing.c"
 		PublishingPicasaAlbum* object;
 		object = collect_values[0].v_pointer;
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3147 "PicasaPublishing.c"
+#line 3148 "PicasaPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3151 "PicasaPublishing.c"
+#line 3152 "PicasaPublishing.c"
 		}
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = publishing_picasa_album_ref (object);
-#line 3155 "PicasaPublishing.c"
+#line 3156 "PicasaPublishing.c"
 	} else {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 3159 "PicasaPublishing.c"
+#line 3160 "PicasaPublishing.c"
 	}
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return NULL;
-#line 3163 "PicasaPublishing.c"
+#line 3164 "PicasaPublishing.c"
 }
 
 
@@ -3198,25 +3199,25 @@ static gchar* publishing_picasa_value_album_lcopy_value (const GValue* value, gu
 	if (!object_p) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 3174 "PicasaPublishing.c"
+#line 3175 "PicasaPublishing.c"
 	}
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (!value->data[0].v_pointer) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*object_p = NULL;
-#line 3180 "PicasaPublishing.c"
+#line 3181 "PicasaPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 3184 "PicasaPublishing.c"
+#line 3185 "PicasaPublishing.c"
 	} else {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*object_p = publishing_picasa_album_ref (value->data[0].v_pointer);
-#line 3188 "PicasaPublishing.c"
+#line 3189 "PicasaPublishing.c"
 	}
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return NULL;
-#line 3192 "PicasaPublishing.c"
+#line 3193 "PicasaPublishing.c"
 }
 
 
@@ -3230,7 +3231,7 @@ GParamSpec* publishing_picasa_param_spec_album (const gchar* name, const gchar* 
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 3206 "PicasaPublishing.c"
+#line 3207 "PicasaPublishing.c"
 }
 
 
@@ -3239,7 +3240,7 @@ gpointer publishing_picasa_value_get_album (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_PICASA_TYPE_ALBUM), NULL);
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return value->data[0].v_pointer;
-#line 3215 "PicasaPublishing.c"
+#line 3216 "PicasaPublishing.c"
 }
 
 
@@ -3259,17 +3260,17 @@ void publishing_picasa_value_set_album (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_album_ref (value->data[0].v_pointer);
-#line 3235 "PicasaPublishing.c"
+#line 3236 "PicasaPublishing.c"
 	} else {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 3239 "PicasaPublishing.c"
+#line 3240 "PicasaPublishing.c"
 	}
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (old) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_album_unref (old);
-#line 3245 "PicasaPublishing.c"
+#line 3246 "PicasaPublishing.c"
 	}
 }
 
@@ -3288,17 +3289,17 @@ void publishing_picasa_value_take_album (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 3264 "PicasaPublishing.c"
+#line 3265 "PicasaPublishing.c"
 	} else {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 3268 "PicasaPublishing.c"
+#line 3269 "PicasaPublishing.c"
 	}
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (old) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_album_unref (old);
-#line 3274 "PicasaPublishing.c"
+#line 3275 "PicasaPublishing.c"
 	}
 }
 
@@ -3308,14 +3309,14 @@ static void publishing_picasa_album_class_init (PublishingPicasaAlbumClass * kla
 	publishing_picasa_album_parent_class = g_type_class_peek_parent (klass);
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	((PublishingPicasaAlbumClass *) klass)->finalize = publishing_picasa_album_finalize;
-#line 3284 "PicasaPublishing.c"
+#line 3285 "PicasaPublishing.c"
 }
 
 
 static void publishing_picasa_album_instance_init (PublishingPicasaAlbum * self) {
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->ref_count = 1;
-#line 3291 "PicasaPublishing.c"
+#line 3292 "PicasaPublishing.c"
 }
 
 
@@ -3329,7 +3330,7 @@ static void publishing_picasa_album_finalize (PublishingPicasaAlbum* obj) {
 	_g_free0 (self->name);
 #line 466 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_g_free0 (self->url);
-#line 3305 "PicasaPublishing.c"
+#line 3306 "PicasaPublishing.c"
 }
 
 
@@ -3354,7 +3355,7 @@ gpointer publishing_picasa_album_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return instance;
-#line 3330 "PicasaPublishing.c"
+#line 3331 "PicasaPublishing.c"
 }
 
 
@@ -3367,7 +3368,7 @@ void publishing_picasa_album_unref (gpointer instance) {
 		PUBLISHING_PICASA_ALBUM_GET_CLASS (self)->finalize (self);
 #line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 3343 "PicasaPublishing.c"
+#line 3344 "PicasaPublishing.c"
 	}
 }
 
@@ -3383,14 +3384,14 @@ PublishingPicasaAlbumDirectoryTransaction* publishing_picasa_album_directory_tra
 	self = (PublishingPicasaAlbumDirectoryTransaction*) publishing_rest_support_google_publisher_authenticated_transaction_construct (object_type, _tmp0_, PUBLISHING_PICASA_ALBUM_DIRECTORY_TRANSACTION_ENDPOINT_URL, PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET);
 #line 479 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self;
-#line 3359 "PicasaPublishing.c"
+#line 3360 "PicasaPublishing.c"
 }
 
 
 PublishingPicasaAlbumDirectoryTransaction* publishing_picasa_album_directory_transaction_new (PublishingRESTSupportGoogleSession* session) {
 #line 479 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return publishing_picasa_album_directory_transaction_construct (PUBLISHING_PICASA_TYPE_ALBUM_DIRECTORY_TRANSACTION, session);
-#line 3366 "PicasaPublishing.c"
+#line 3367 "PicasaPublishing.c"
 }
 
 
@@ -3418,7 +3419,7 @@ gchar* publishing_picasa_album_directory_transaction_validate_xml (PublishingRES
 	if (g_strcmp0 (_tmp4_, "feed") == 0) {
 #line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp2_ = TRUE;
-#line 3394 "PicasaPublishing.c"
+#line 3395 "PicasaPublishing.c"
 	} else {
 		xmlNode* _tmp5_ = NULL;
 		const gchar* _tmp6_ = NULL;
@@ -3428,7 +3429,7 @@ gchar* publishing_picasa_album_directory_transaction_validate_xml (PublishingRES
 		_tmp6_ = _tmp5_->name;
 #line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp2_ = g_strcmp0 (_tmp6_, "entry") == 0;
-#line 3404 "PicasaPublishing.c"
+#line 3405 "PicasaPublishing.c"
 	}
 #line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (_tmp2_) {
@@ -3436,7 +3437,7 @@ gchar* publishing_picasa_album_directory_transaction_validate_xml (PublishingRES
 		result = NULL;
 #line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return result;
-#line 3412 "PicasaPublishing.c"
+#line 3413 "PicasaPublishing.c"
 	} else {
 		gchar* _tmp7_ = NULL;
 #line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -3445,7 +3446,7 @@ gchar* publishing_picasa_album_directory_transaction_validate_xml (PublishingRES
 		result = _tmp7_;
 #line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return result;
-#line 3421 "PicasaPublishing.c"
+#line 3422 "PicasaPublishing.c"
 	}
 }
 
@@ -3453,7 +3454,7 @@ gchar* publishing_picasa_album_directory_transaction_validate_xml (PublishingRES
 static void publishing_picasa_album_directory_transaction_class_init (PublishingPicasaAlbumDirectoryTransactionClass * klass) {
 #line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_album_directory_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 3429 "PicasaPublishing.c"
+#line 3430 "PicasaPublishing.c"
 }
 
 
@@ -3503,11 +3504,11 @@ PublishingPicasaAlbumCreationTransaction* publishing_picasa_album_creation_trans
 	if (_tmp3_) {
 #line 504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp1_ = "public";
-#line 3479 "PicasaPublishing.c"
+#line 3480 "PicasaPublishing.c"
 	} else {
 #line 504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp1_ = "private";
-#line 3483 "PicasaPublishing.c"
+#line 3484 "PicasaPublishing.c"
 	}
 #line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp4_ = parameters;
@@ -3535,21 +3536,21 @@ PublishingPicasaAlbumCreationTransaction* publishing_picasa_album_creation_trans
 	_g_free0 (post_body);
 #line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self;
-#line 3511 "PicasaPublishing.c"
+#line 3512 "PicasaPublishing.c"
 }
 
 
 PublishingPicasaAlbumCreationTransaction* publishing_picasa_album_creation_transaction_new (PublishingRESTSupportGoogleSession* session, PublishingPicasaPublishingParameters* parameters) {
 #line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return publishing_picasa_album_creation_transaction_construct (PUBLISHING_PICASA_TYPE_ALBUM_CREATION_TRANSACTION, session, parameters);
-#line 3518 "PicasaPublishing.c"
+#line 3519 "PicasaPublishing.c"
 }
 
 
 static void publishing_picasa_album_creation_transaction_class_init (PublishingPicasaAlbumCreationTransactionClass * klass) {
 #line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_album_creation_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 3525 "PicasaPublishing.c"
+#line 3526 "PicasaPublishing.c"
 }
 
 
@@ -3572,14 +3573,14 @@ GType publishing_picasa_album_creation_transaction_get_type (void) {
 static gpointer _publishing_rest_support_session_ref0 (gpointer self) {
 #line 524 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self ? publishing_rest_support_session_ref (self) : NULL;
-#line 3548 "PicasaPublishing.c"
+#line 3549 "PicasaPublishing.c"
 }
 
 
 static gpointer _publishing_picasa_publishing_parameters_ref0 (gpointer self) {
 #line 525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self ? publishing_picasa_publishing_parameters_ref (self) : NULL;
-#line 3555 "PicasaPublishing.c"
+#line 3556 "PicasaPublishing.c"
 }
 
 
@@ -3657,11 +3658,11 @@ PublishingPicasaUploadTransaction* publishing_picasa_upload_transaction_construc
 	if (_tmp14_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
 #line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp12_ = "video/mpeg";
-#line 3633 "PicasaPublishing.c"
+#line 3634 "PicasaPublishing.c"
 	} else {
 #line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp12_ = "image/jpeg";
-#line 3637 "PicasaPublishing.c"
+#line 3638 "PicasaPublishing.c"
 	}
 #line 527 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp15_ = g_strdup (_tmp12_);
@@ -3671,14 +3672,14 @@ PublishingPicasaUploadTransaction* publishing_picasa_upload_transaction_construc
 	self->priv->mime_type = _tmp15_;
 #line 519 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self;
-#line 3647 "PicasaPublishing.c"
+#line 3648 "PicasaPublishing.c"
 }
 
 
 PublishingPicasaUploadTransaction* publishing_picasa_upload_transaction_new (PublishingRESTSupportGoogleSession* session, PublishingPicasaPublishingParameters* parameters, SpitPublishingPublishable* publishable) {
 #line 519 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return publishing_picasa_upload_transaction_construct (PUBLISHING_PICASA_TYPE_UPLOAD_TRANSACTION, session, parameters, publishable);
-#line 3654 "PicasaPublishing.c"
+#line 3655 "PicasaPublishing.c"
 }
 
 
@@ -3701,7 +3702,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 	_tmp3_ = end;
 #line 1296 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp3_ == NULL) {
-#line 3677 "PicasaPublishing.c"
+#line 3678 "PicasaPublishing.c"
 		glong _tmp4_ = 0L;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp4_ = maxlen;
@@ -3709,7 +3710,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = _tmp4_;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 3685 "PicasaPublishing.c"
+#line 3686 "PicasaPublishing.c"
 	} else {
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -3721,7 +3722,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = (glong) (_tmp5_ - _tmp6_);
 #line 1299 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 3697 "PicasaPublishing.c"
+#line 3698 "PicasaPublishing.c"
 	}
 }
 
@@ -3745,21 +3746,21 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	_tmp1_ = offset;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp1_ >= ((glong) 0)) {
-#line 3721 "PicasaPublishing.c"
+#line 3722 "PicasaPublishing.c"
 		glong _tmp2_ = 0L;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = len;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = _tmp2_ >= ((glong) 0);
-#line 3727 "PicasaPublishing.c"
+#line 3728 "PicasaPublishing.c"
 	} else {
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = FALSE;
-#line 3731 "PicasaPublishing.c"
+#line 3732 "PicasaPublishing.c"
 	}
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp0_) {
-#line 3735 "PicasaPublishing.c"
+#line 3736 "PicasaPublishing.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 		glong _tmp5_ = 0L;
@@ -3771,7 +3772,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp5_ = string_strnlen ((gchar*) self, _tmp3_ + _tmp4_);
 #line 1310 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = _tmp5_;
-#line 3747 "PicasaPublishing.c"
+#line 3748 "PicasaPublishing.c"
 	} else {
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
@@ -3781,13 +3782,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp7_ = _tmp6_;
 #line 1312 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = (glong) _tmp7_;
-#line 3757 "PicasaPublishing.c"
+#line 3758 "PicasaPublishing.c"
 	}
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp8_ = offset;
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp8_ < ((glong) 0)) {
-#line 3763 "PicasaPublishing.c"
+#line 3764 "PicasaPublishing.c"
 		glong _tmp9_ = 0L;
 		glong _tmp10_ = 0L;
 		glong _tmp11_ = 0L;
@@ -3801,7 +3802,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp11_ = offset;
 #line 1317 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp11_ >= ((glong) 0), NULL);
-#line 3777 "PicasaPublishing.c"
+#line 3778 "PicasaPublishing.c"
 	} else {
 		glong _tmp12_ = 0L;
 		glong _tmp13_ = 0L;
@@ -3811,13 +3812,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp13_ = string_length;
 #line 1319 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp12_ <= _tmp13_, NULL);
-#line 3787 "PicasaPublishing.c"
+#line 3788 "PicasaPublishing.c"
 	}
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp14_ = len;
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp14_ < ((glong) 0)) {
-#line 3793 "PicasaPublishing.c"
+#line 3794 "PicasaPublishing.c"
 		glong _tmp15_ = 0L;
 		glong _tmp16_ = 0L;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -3826,7 +3827,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp16_ = offset;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		len = _tmp15_ - _tmp16_;
-#line 3802 "PicasaPublishing.c"
+#line 3803 "PicasaPublishing.c"
 	}
 #line 1324 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp17_ = offset;
@@ -3846,7 +3847,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	result = _tmp22_;
 #line 1325 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 3822 "PicasaPublishing.c"
+#line 3823 "PicasaPublishing.c"
 }
 
 
@@ -3863,7 +3864,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 	if (_tmp0_ == NULL) {
 #line 1055 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		separator = "";
-#line 3839 "PicasaPublishing.c"
+#line 3840 "PicasaPublishing.c"
 	}
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp3_ = str_array;
@@ -3873,7 +3874,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 	if (_tmp3_ != NULL) {
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = TRUE;
-#line 3849 "PicasaPublishing.c"
+#line 3850 "PicasaPublishing.c"
 	} else {
 		gchar** _tmp4_ = NULL;
 		gint _tmp4__length1 = 0;
@@ -3883,13 +3884,13 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		_tmp4__length1 = str_array_length1;
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = _tmp4__length1 > 0;
-#line 3859 "PicasaPublishing.c"
+#line 3860 "PicasaPublishing.c"
 	}
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp2_) {
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp1_ = TRUE;
-#line 3865 "PicasaPublishing.c"
+#line 3866 "PicasaPublishing.c"
 	} else {
 		gboolean _tmp5_ = FALSE;
 		gchar** _tmp6_ = NULL;
@@ -3900,7 +3901,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		_tmp6__length1 = str_array_length1;
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		if (_tmp6__length1 == -1) {
-#line 3876 "PicasaPublishing.c"
+#line 3877 "PicasaPublishing.c"
 			gchar** _tmp7_ = NULL;
 			gint _tmp7__length1 = 0;
 			const gchar* _tmp8_ = NULL;
@@ -3912,19 +3913,19 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 			_tmp8_ = _tmp7_[0];
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_tmp5_ = _tmp8_ != NULL;
-#line 3888 "PicasaPublishing.c"
+#line 3889 "PicasaPublishing.c"
 		} else {
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_tmp5_ = FALSE;
-#line 3892 "PicasaPublishing.c"
+#line 3893 "PicasaPublishing.c"
 		}
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp1_ = _tmp5_;
-#line 3896 "PicasaPublishing.c"
+#line 3897 "PicasaPublishing.c"
 	}
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp1_) {
-#line 3900 "PicasaPublishing.c"
+#line 3901 "PicasaPublishing.c"
 		gint i = 0;
 		gsize len = 0UL;
 		gint _tmp31_ = 0;
@@ -3947,7 +3948,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		const gchar* _tmp62_ = NULL;
 #line 1059 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		len = (gsize) 1;
-#line 3923 "PicasaPublishing.c"
+#line 3924 "PicasaPublishing.c"
 		{
 			gboolean _tmp9_ = FALSE;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -3956,7 +3957,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 			_tmp9_ = TRUE;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			while (TRUE) {
-#line 3932 "PicasaPublishing.c"
+#line 3933 "PicasaPublishing.c"
 				gboolean _tmp11_ = FALSE;
 				gboolean _tmp12_ = FALSE;
 				gchar** _tmp13_ = NULL;
@@ -3969,13 +3970,13 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				gsize _tmp30_ = 0UL;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (!_tmp9_) {
-#line 3945 "PicasaPublishing.c"
+#line 3946 "PicasaPublishing.c"
 					gint _tmp10_ = 0;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp10_ = i;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					i = _tmp10_ + 1;
-#line 3951 "PicasaPublishing.c"
+#line 3952 "PicasaPublishing.c"
 				}
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp9_ = FALSE;
@@ -3985,7 +3986,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				_tmp13__length1 = str_array_length1;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (_tmp13__length1 != -1) {
-#line 3961 "PicasaPublishing.c"
+#line 3962 "PicasaPublishing.c"
 					gint _tmp14_ = 0;
 					gchar** _tmp15_ = NULL;
 					gint _tmp15__length1 = 0;
@@ -3997,17 +3998,17 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 					_tmp15__length1 = str_array_length1;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp12_ = _tmp14_ < _tmp15__length1;
-#line 3973 "PicasaPublishing.c"
+#line 3974 "PicasaPublishing.c"
 				} else {
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp12_ = FALSE;
-#line 3977 "PicasaPublishing.c"
+#line 3978 "PicasaPublishing.c"
 				}
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (_tmp12_) {
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp11_ = TRUE;
-#line 3983 "PicasaPublishing.c"
+#line 3984 "PicasaPublishing.c"
 				} else {
 					gboolean _tmp16_ = FALSE;
 					gchar** _tmp17_ = NULL;
@@ -4018,7 +4019,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 					_tmp17__length1 = str_array_length1;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					if (_tmp17__length1 == -1) {
-#line 3994 "PicasaPublishing.c"
+#line 3995 "PicasaPublishing.c"
 						gchar** _tmp18_ = NULL;
 						gint _tmp18__length1 = 0;
 						gint _tmp19_ = 0;
@@ -4033,21 +4034,21 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 						_tmp20_ = _tmp18_[_tmp19_];
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 						_tmp16_ = _tmp20_ != NULL;
-#line 4009 "PicasaPublishing.c"
+#line 4010 "PicasaPublishing.c"
 					} else {
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 						_tmp16_ = FALSE;
-#line 4013 "PicasaPublishing.c"
+#line 4014 "PicasaPublishing.c"
 					}
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp11_ = _tmp16_;
-#line 4017 "PicasaPublishing.c"
+#line 4018 "PicasaPublishing.c"
 				}
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (!_tmp11_) {
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					break;
-#line 4023 "PicasaPublishing.c"
+#line 4024 "PicasaPublishing.c"
 				}
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp22_ = str_array;
@@ -4059,7 +4060,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				_tmp24_ = _tmp22_[_tmp23_];
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (_tmp24_ != NULL) {
-#line 4035 "PicasaPublishing.c"
+#line 4036 "PicasaPublishing.c"
 					gchar** _tmp25_ = NULL;
 					gint _tmp25__length1 = 0;
 					gint _tmp26_ = 0;
@@ -4080,24 +4081,24 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 					_tmp29_ = _tmp28_;
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp21_ = _tmp29_;
-#line 4056 "PicasaPublishing.c"
+#line 4057 "PicasaPublishing.c"
 				} else {
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp21_ = 0;
-#line 4060 "PicasaPublishing.c"
+#line 4061 "PicasaPublishing.c"
 				}
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp30_ = len;
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				len = _tmp30_ + _tmp21_;
-#line 4066 "PicasaPublishing.c"
+#line 4067 "PicasaPublishing.c"
 			}
 		}
 #line 1063 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp31_ = i;
 #line 1063 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		if (_tmp31_ == 0) {
-#line 4073 "PicasaPublishing.c"
+#line 4074 "PicasaPublishing.c"
 			gchar* _tmp32_ = NULL;
 #line 1064 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_tmp32_ = g_strdup ("");
@@ -4105,7 +4106,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 			result = _tmp32_;
 #line 1064 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return result;
-#line 4081 "PicasaPublishing.c"
+#line 4082 "PicasaPublishing.c"
 		}
 #line 1066 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp33_ = i;
@@ -4143,7 +4144,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		_tmp45_ = g_stpcpy ((void*) _tmp42_, (const gchar*) _tmp44_);
 #line 1070 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		ptr = _tmp45_;
-#line 4119 "PicasaPublishing.c"
+#line 4120 "PicasaPublishing.c"
 		{
 			gboolean _tmp46_ = FALSE;
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -4152,7 +4153,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 			_tmp46_ = TRUE;
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			while (TRUE) {
-#line 4128 "PicasaPublishing.c"
+#line 4129 "PicasaPublishing.c"
 				gint _tmp48_ = 0;
 				gchar** _tmp49_ = NULL;
 				gint _tmp49__length1 = 0;
@@ -4168,13 +4169,13 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				void* _tmp61_ = NULL;
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (!_tmp46_) {
-#line 4144 "PicasaPublishing.c"
+#line 4145 "PicasaPublishing.c"
 					gint _tmp47_ = 0;
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp47_ = i;
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					i = _tmp47_ + 1;
-#line 4150 "PicasaPublishing.c"
+#line 4151 "PicasaPublishing.c"
 				}
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp46_ = FALSE;
@@ -4188,7 +4189,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				if (!(_tmp48_ < _tmp49__length1)) {
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					break;
-#line 4164 "PicasaPublishing.c"
+#line 4165 "PicasaPublishing.c"
 				}
 #line 1072 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp50_ = ptr;
@@ -4208,7 +4209,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				_tmp56_ = _tmp54_[_tmp55_];
 #line 1073 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (_tmp56_ != NULL) {
-#line 4184 "PicasaPublishing.c"
+#line 4185 "PicasaPublishing.c"
 					gchar** _tmp57_ = NULL;
 					gint _tmp57__length1 = 0;
 					gint _tmp58_ = 0;
@@ -4223,11 +4224,11 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 					_tmp59_ = _tmp57_[_tmp58_];
 #line 1073 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp53_ = (const gchar*) _tmp59_;
-#line 4199 "PicasaPublishing.c"
+#line 4200 "PicasaPublishing.c"
 				} else {
 #line 1073 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp53_ = "";
-#line 4203 "PicasaPublishing.c"
+#line 4204 "PicasaPublishing.c"
 				}
 #line 1073 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp60_ = ptr;
@@ -4235,7 +4236,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				_tmp61_ = g_stpcpy (_tmp60_, _tmp53_);
 #line 1073 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				ptr = _tmp61_;
-#line 4211 "PicasaPublishing.c"
+#line 4212 "PicasaPublishing.c"
 			}
 		}
 #line 1076 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -4246,7 +4247,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		result = (gchar*) _tmp62_;
 #line 1076 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 4222 "PicasaPublishing.c"
+#line 4223 "PicasaPublishing.c"
 	} else {
 		gchar* _tmp63_ = NULL;
 #line 1078 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -4255,7 +4256,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		result = _tmp63_;
 #line 1078 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 4231 "PicasaPublishing.c"
+#line 4232 "PicasaPublishing.c"
 	}
 }
 
@@ -4300,27 +4301,34 @@ static guint8* string_get_data (const gchar* self, int* result_length1) {
 	if (result_length1) {
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		*result_length1 = _tmp4__length1;
-#line 4276 "PicasaPublishing.c"
+#line 4277 "PicasaPublishing.c"
 	}
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	result = _tmp4_;
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 4282 "PicasaPublishing.c"
+#line 4283 "PicasaPublishing.c"
+}
+
+
+static guint8* _vala_array_dup5 (guint8* self, int length) {
+#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
+	return g_memdup (self, length * sizeof (guint8));
+#line 4290 "PicasaPublishing.c"
 }
 
 
 static void _vala_SoupBuffer_free (SoupBuffer* self) {
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_boxed_free (soup_buffer_get_type (), self);
-#line 4289 "PicasaPublishing.c"
+#line 4297 "PicasaPublishing.c"
 }
 
 
 static void _vala_SoupMultipart_free (SoupMultipart* self) {
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_boxed_free (soup_multipart_get_type (), self);
-#line 4296 "PicasaPublishing.c"
+#line 4304 "PicasaPublishing.c"
 }
 
 
@@ -4360,38 +4368,40 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 	gint _tmp61__length1 = 0;
 	guint8* _tmp62_ = NULL;
 	gint _tmp62__length1 = 0;
-	SoupBuffer* _tmp63_ = NULL;
-	SoupMultipart* _tmp64_ = NULL;
-	SoupBuffer* _tmp65_ = NULL;
+	guint8* _tmp63_ = NULL;
+	gint _tmp63__length1 = 0;
+	SoupBuffer* _tmp64_ = NULL;
+	SoupMultipart* _tmp65_ = NULL;
+	SoupBuffer* _tmp66_ = NULL;
 	guint8* photo_data = NULL;
-	GMappedFile* _tmp87_ = NULL;
-	gchar* _tmp88_ = NULL;
+	GMappedFile* _tmp88_ = NULL;
+	gchar* _tmp89_ = NULL;
 	gint photo_data_length1 = 0;
 	gint _photo_data_size_ = 0;
-	GMappedFile* _tmp89_ = NULL;
-	gsize _tmp90_ = 0UL;
-	gint _tmp91_ = 0;
+	GMappedFile* _tmp90_ = NULL;
+	gsize _tmp91_ = 0UL;
+	gint _tmp92_ = 0;
 	SoupBuffer* bindable_data = NULL;
-	SoupBuffer* _tmp92_ = NULL;
-	SoupMultipart* _tmp93_ = NULL;
-	SpitPublishingPublishable* _tmp94_ = NULL;
-	GFile* _tmp95_ = NULL;
+	SoupBuffer* _tmp93_ = NULL;
+	SoupMultipart* _tmp94_ = NULL;
+	SpitPublishingPublishable* _tmp95_ = NULL;
 	GFile* _tmp96_ = NULL;
-	gchar* _tmp97_ = NULL;
+	GFile* _tmp97_ = NULL;
 	gchar* _tmp98_ = NULL;
-	const gchar* _tmp99_ = NULL;
+	gchar* _tmp99_ = NULL;
+	const gchar* _tmp100_ = NULL;
 	SoupMessage* outbound_message = NULL;
-	gchar* _tmp100_ = NULL;
 	gchar* _tmp101_ = NULL;
-	SoupMultipart* _tmp102_ = NULL;
-	SoupMessage* _tmp103_ = NULL;
+	gchar* _tmp102_ = NULL;
+	SoupMultipart* _tmp103_ = NULL;
 	SoupMessage* _tmp104_ = NULL;
-	SoupMessageHeaders* _tmp105_ = NULL;
-	PublishingRESTSupportGoogleSession* _tmp106_ = NULL;
-	gchar* _tmp107_ = NULL;
+	SoupMessage* _tmp105_ = NULL;
+	SoupMessageHeaders* _tmp106_ = NULL;
+	PublishingRESTSupportGoogleSession* _tmp107_ = NULL;
 	gchar* _tmp108_ = NULL;
 	gchar* _tmp109_ = NULL;
 	gchar* _tmp110_ = NULL;
+	gchar* _tmp111_ = NULL;
 	GError * _inner_error_ = NULL;
 #line 531 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_PICASA_TYPE_UPLOAD_TRANSACTION, PublishingPicasaUploadTransaction);
@@ -4415,7 +4425,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 	_g_free0 (_tmp4_);
 #line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (_tmp5_) {
-#line 4391 "PicasaPublishing.c"
+#line 4401 "PicasaPublishing.c"
 		SpitPublishingPublishable* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
@@ -4442,7 +4452,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 		_g_free0 (_tmp10_);
 #line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_g_free0 (_tmp8_);
-#line 4418 "PicasaPublishing.c"
+#line 4428 "PicasaPublishing.c"
 	}
 #line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp12_ = self->priv->publishable;
@@ -4464,7 +4474,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 	_tmp16__length1 = keywords_length1;
 #line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (_tmp16__length1 > 0) {
-#line 4440 "PicasaPublishing.c"
+#line 4450 "PicasaPublishing.c"
 		const gchar* _tmp47_ = NULL;
 		gchar* _tmp48_ = NULL;
 		const gchar* _tmp49_ = NULL;
@@ -4473,14 +4483,14 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 			gint i = 0;
 #line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			i = 0;
-#line 4449 "PicasaPublishing.c"
+#line 4459 "PicasaPublishing.c"
 			{
 				gboolean _tmp17_ = FALSE;
 #line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				_tmp17_ = TRUE;
 #line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				while (TRUE) {
-#line 4456 "PicasaPublishing.c"
+#line 4466 "PicasaPublishing.c"
 					gint _tmp19_ = 0;
 					gchar** _tmp20_ = NULL;
 					gint _tmp20__length1 = 0;
@@ -4497,13 +4507,13 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 					gint _tmp39_ = 0;
 #line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					if (!_tmp17_) {
-#line 4473 "PicasaPublishing.c"
+#line 4483 "PicasaPublishing.c"
 						gint _tmp18_ = 0;
 #line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						_tmp18_ = i;
 #line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						i = _tmp18_ + 1;
-#line 4479 "PicasaPublishing.c"
+#line 4489 "PicasaPublishing.c"
 					}
 #line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					_tmp17_ = FALSE;
@@ -4517,7 +4527,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 					if (!(_tmp19_ < _tmp20__length1)) {
 #line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						break;
-#line 4493 "PicasaPublishing.c"
+#line 4503 "PicasaPublishing.c"
 					}
 #line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					_tmp21_ = keywords;
@@ -4531,7 +4541,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 					_tmp24_ = g_str_has_prefix (_tmp23_, "/");
 #line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					if (_tmp24_) {
-#line 4507 "PicasaPublishing.c"
+#line 4517 "PicasaPublishing.c"
 						gchar** _tmp25_ = NULL;
 						gint _tmp25__length1 = 0;
 						gint _tmp26_ = 0;
@@ -4564,7 +4574,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 						_tmp_size_ = tmp_length1;
 #line 548 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						_g_free0 (_tmp29_);
-#line 4540 "PicasaPublishing.c"
+#line 4550 "PicasaPublishing.c"
 					} else {
 						gchar** _tmp32_ = NULL;
 						gint _tmp32__length1 = 0;
@@ -4590,7 +4600,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 						tmp_length1 = _vala_array_length (_tmp35_);
 #line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						_tmp_size_ = tmp_length1;
-#line 4566 "PicasaPublishing.c"
+#line 4576 "PicasaPublishing.c"
 					}
 #line 552 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					_tmp37_ = keywords_string;
@@ -4600,7 +4610,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 					_tmp39_ = _tmp38_;
 #line 552 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					if (_tmp39_ > 0) {
-#line 4576 "PicasaPublishing.c"
+#line 4586 "PicasaPublishing.c"
 						const gchar* _tmp40_ = NULL;
 						gchar** _tmp41_ = NULL;
 						gint _tmp41__length1 = 0;
@@ -4625,7 +4635,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 						keywords_string = _tmp44_;
 #line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						_g_free0 (_tmp43_);
-#line 4601 "PicasaPublishing.c"
+#line 4611 "PicasaPublishing.c"
 					} else {
 						gchar** _tmp45_ = NULL;
 						gint _tmp45__length1 = 0;
@@ -4640,11 +4650,11 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 						_g_free0 (keywords_string);
 #line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						keywords_string = _tmp46_;
-#line 4616 "PicasaPublishing.c"
+#line 4626 "PicasaPublishing.c"
 					}
 #line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					tmp = (_vala_array_free (tmp, tmp_length1, (GDestroyNotify) g_free), NULL);
-#line 4620 "PicasaPublishing.c"
+#line 4630 "PicasaPublishing.c"
 				}
 			}
 		}
@@ -4664,7 +4674,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 		_g_free0 (keywords_string);
 #line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		keywords_string = _tmp50_;
-#line 4640 "PicasaPublishing.c"
+#line 4650 "PicasaPublishing.c"
 	}
 #line 562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp51_ = self->priv->publishable;
@@ -4699,51 +4709,55 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 #line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp62__length1 = _tmp61__length1;
 #line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp63_ = soup_buffer_new (SOUP_MEMORY_COPY, _tmp62_, _tmp62__length1);
+	_tmp63_ = (_tmp62_ != NULL) ? _vala_array_dup5 (_tmp62_, _tmp62__length1) : ((gpointer) _tmp62_);
 #line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	metadata_buffer = _tmp63_;
+	_tmp63__length1 = _tmp62__length1;
+#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
+	_tmp64_ = soup_buffer_new_take (_tmp63_, _tmp63__length1);
+#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
+	metadata_buffer = _tmp64_;
 #line 566 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp64_ = message_parts;
+	_tmp65_ = message_parts;
 #line 566 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp65_ = metadata_buffer;
+	_tmp66_ = metadata_buffer;
 #line 566 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	soup_multipart_append_form_file (_tmp64_, "", "", "application/atom+xml", _tmp65_);
-#line 4684 "PicasaPublishing.c"
+	soup_multipart_append_form_file (_tmp65_, "", "", "application/atom+xml", _tmp66_);
+#line 4698 "PicasaPublishing.c"
 	{
-		GMappedFile* _tmp66_ = NULL;
-		SpitPublishingPublishable* _tmp67_ = NULL;
-		GFile* _tmp68_ = NULL;
+		GMappedFile* _tmp67_ = NULL;
+		SpitPublishingPublishable* _tmp68_ = NULL;
 		GFile* _tmp69_ = NULL;
-		gchar* _tmp70_ = NULL;
+		GFile* _tmp70_ = NULL;
 		gchar* _tmp71_ = NULL;
-		GMappedFile* _tmp72_ = NULL;
+		gchar* _tmp72_ = NULL;
 		GMappedFile* _tmp73_ = NULL;
 		GMappedFile* _tmp74_ = NULL;
+		GMappedFile* _tmp75_ = NULL;
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp67_ = self->priv->publishable;
+		_tmp68_ = self->priv->publishable;
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp68_ = spit_publishing_publishable_get_serialized_file (_tmp67_);
+		_tmp69_ = spit_publishing_publishable_get_serialized_file (_tmp68_);
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp69_ = _tmp68_;
+		_tmp70_ = _tmp69_;
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp70_ = g_file_get_path (_tmp69_);
+		_tmp71_ = g_file_get_path (_tmp70_);
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp71_ = _tmp70_;
+		_tmp72_ = _tmp71_;
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp72_ = g_mapped_file_new (_tmp71_, FALSE, &_inner_error_);
+		_tmp73_ = g_mapped_file_new (_tmp72_, FALSE, &_inner_error_);
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp73_ = _tmp72_;
+		_tmp74_ = _tmp73_;
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_g_free0 (_tmp71_);
+		_g_free0 (_tmp72_);
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_g_object_unref0 (_tmp69_);
+		_g_object_unref0 (_tmp70_);
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp66_ = _tmp73_;
+		_tmp67_ = _tmp74_;
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			if (_inner_error_->domain == G_FILE_ERROR) {
-#line 4719 "PicasaPublishing.c"
+#line 4733 "PicasaPublishing.c"
 				goto __catch14_g_file_error;
 			}
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -4764,80 +4778,80 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 			g_clear_error (&_inner_error_);
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return;
-#line 4740 "PicasaPublishing.c"
+#line 4754 "PicasaPublishing.c"
 		}
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp74_ = _tmp66_;
+		_tmp75_ = _tmp67_;
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp66_ = NULL;
+		_tmp67_ = NULL;
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_g_mapped_file_unref0 (self->priv->mapped_file);
 #line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		self->priv->mapped_file = _tmp74_;
+		self->priv->mapped_file = _tmp75_;
 #line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_g_mapped_file_unref0 (_tmp66_);
-#line 4752 "PicasaPublishing.c"
+		_g_mapped_file_unref0 (_tmp67_);
+#line 4766 "PicasaPublishing.c"
 	}
 	goto __finally14;
 	__catch14_g_file_error:
 	{
 		GError* e = NULL;
 		gchar* msg = NULL;
-		SpitPublishingPublishable* _tmp75_ = NULL;
-		GFile* _tmp76_ = NULL;
+		SpitPublishingPublishable* _tmp76_ = NULL;
 		GFile* _tmp77_ = NULL;
-		gchar* _tmp78_ = NULL;
+		GFile* _tmp78_ = NULL;
 		gchar* _tmp79_ = NULL;
-		GError* _tmp80_ = NULL;
-		const gchar* _tmp81_ = NULL;
-		gchar* _tmp82_ = NULL;
+		gchar* _tmp80_ = NULL;
+		GError* _tmp81_ = NULL;
+		const gchar* _tmp82_ = NULL;
 		gchar* _tmp83_ = NULL;
-		const gchar* _tmp84_ = NULL;
+		gchar* _tmp84_ = NULL;
 		const gchar* _tmp85_ = NULL;
-		GError* _tmp86_ = NULL;
+		const gchar* _tmp86_ = NULL;
+		GError* _tmp87_ = NULL;
 #line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		e = _inner_error_;
 #line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_inner_error_ = NULL;
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp75_ = self->priv->publishable;
+		_tmp76_ = self->priv->publishable;
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp76_ = spit_publishing_publishable_get_serialized_file (_tmp75_);
+		_tmp77_ = spit_publishing_publishable_get_serialized_file (_tmp76_);
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp77_ = _tmp76_;
+		_tmp78_ = _tmp77_;
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp78_ = g_file_get_path (_tmp77_);
+		_tmp79_ = g_file_get_path (_tmp78_);
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp79_ = _tmp78_;
+		_tmp80_ = _tmp79_;
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp80_ = e;
+		_tmp81_ = e;
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp81_ = _tmp80_->message;
+		_tmp82_ = _tmp81_->message;
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp82_ = g_strdup_printf ("Picasa: couldn't read data from %s: %s", _tmp79_, _tmp81_);
+		_tmp83_ = g_strdup_printf ("Picasa: couldn't read data from %s: %s", _tmp80_, _tmp82_);
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp83_ = _tmp82_;
+		_tmp84_ = _tmp83_;
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_g_free0 (_tmp79_);
+		_g_free0 (_tmp80_);
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_g_object_unref0 (_tmp77_);
+		_g_object_unref0 (_tmp78_);
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		msg = _tmp83_;
+		msg = _tmp84_;
 #line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp84_ = msg;
-#line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		g_warning ("PicasaPublishing.vala:574: %s", _tmp84_);
-#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp85_ = msg;
+#line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
+		g_warning ("PicasaPublishing.vala:574: %s", _tmp85_);
 #line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_tmp86_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp85_);
+		_tmp86_ = msg;
 #line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-		_inner_error_ = _tmp86_;
+		_tmp87_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp86_);
+#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
+		_inner_error_ = _tmp87_;
 #line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_g_free0 (msg);
 #line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_g_error_free0 (e);
-#line 4813 "PicasaPublishing.c"
+#line 4827 "PicasaPublishing.c"
 		goto __finally14;
 	}
 	__finally14:
@@ -4861,7 +4875,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 			__vala_SoupMultipart_free0 (message_parts);
 #line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return;
-#line 4837 "PicasaPublishing.c"
+#line 4851 "PicasaPublishing.c"
 		} else {
 #line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			__vala_SoupBuffer_free0 (metadata_buffer);
@@ -4881,83 +4895,83 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 			g_clear_error (&_inner_error_);
 #line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return;
-#line 4857 "PicasaPublishing.c"
+#line 4871 "PicasaPublishing.c"
 		}
 	}
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp87_ = self->priv->mapped_file;
+	_tmp88_ = self->priv->mapped_file;
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp88_ = g_mapped_file_get_contents (_tmp87_);
+	_tmp89_ = g_mapped_file_get_contents (_tmp88_);
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	photo_data = (guint8*) _tmp88_;
+	photo_data = (guint8*) _tmp89_;
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	photo_data_length1 = -1;
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_photo_data_size_ = photo_data_length1;
 #line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp89_ = self->priv->mapped_file;
+	_tmp90_ = self->priv->mapped_file;
 #line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp90_ = g_mapped_file_get_length (_tmp89_);
+	_tmp91_ = g_mapped_file_get_length (_tmp90_);
 #line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	photo_data_length1 = (gint) _tmp90_;
+	photo_data_length1 = (gint) _tmp91_;
 #line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp91_ = photo_data_length1;
+	_tmp92_ = photo_data_length1;
 #line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp92_ = soup_buffer_new (SOUP_MEMORY_TEMPORARY, photo_data, photo_data_length1);
+	_tmp93_ = soup_buffer_new_with_owner (photo_data, photo_data_length1, self, NULL);
 #line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	bindable_data = _tmp92_;
+	bindable_data = _tmp93_;
 #line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp93_ = message_parts;
+	_tmp94_ = message_parts;
 #line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp94_ = self->priv->publishable;
+	_tmp95_ = self->priv->publishable;
 #line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp95_ = spit_publishing_publishable_get_serialized_file (_tmp94_);
+	_tmp96_ = spit_publishing_publishable_get_serialized_file (_tmp95_);
 #line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp96_ = _tmp95_;
+	_tmp97_ = _tmp96_;
 #line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp97_ = g_file_get_path (_tmp96_);
+	_tmp98_ = g_file_get_path (_tmp97_);
 #line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp98_ = _tmp97_;
+	_tmp99_ = _tmp98_;
 #line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp99_ = self->priv->mime_type;
+	_tmp100_ = self->priv->mime_type;
 #line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	soup_multipart_append_form_file (_tmp93_, "", _tmp98_, _tmp99_, bindable_data);
+	soup_multipart_append_form_file (_tmp94_, "", _tmp99_, _tmp100_, bindable_data);
 #line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_g_free0 (_tmp98_);
+	_g_free0 (_tmp99_);
 #line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_g_object_unref0 (_tmp96_);
+	_g_object_unref0 (_tmp97_);
 #line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp100_ = publishing_rest_support_transaction_get_endpoint_url (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
+	_tmp101_ = publishing_rest_support_transaction_get_endpoint_url (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
 #line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp101_ = _tmp100_;
+	_tmp102_ = _tmp101_;
 #line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp102_ = message_parts;
+	_tmp103_ = message_parts;
 #line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp103_ = soup_form_request_new_from_multipart (_tmp101_, _tmp102_);
+	_tmp104_ = soup_form_request_new_from_multipart (_tmp102_, _tmp103_);
 #line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp104_ = _tmp103_;
+	_tmp105_ = _tmp104_;
 #line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_g_free0 (_tmp101_);
+	_g_free0 (_tmp102_);
 #line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	outbound_message = _tmp104_;
+	outbound_message = _tmp105_;
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp105_ = outbound_message->request_headers;
+	_tmp106_ = outbound_message->request_headers;
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp106_ = self->priv->session;
+	_tmp107_ = self->priv->session;
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp107_ = publishing_rest_support_google_session_get_access_token (_tmp106_);
+	_tmp108_ = publishing_rest_support_google_session_get_access_token (_tmp107_);
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp108_ = _tmp107_;
+	_tmp109_ = _tmp108_;
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp109_ = g_strconcat ("Bearer ", _tmp108_, NULL);
+	_tmp110_ = g_strconcat ("Bearer ", _tmp109_, NULL);
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp110_ = _tmp109_;
+	_tmp111_ = _tmp110_;
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	soup_message_headers_append (_tmp105_, "Authorization", _tmp110_);
+	soup_message_headers_append (_tmp106_, "Authorization", _tmp111_);
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_g_free0 (_tmp110_);
+	_g_free0 (_tmp111_);
 #line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_g_free0 (_tmp108_);
+	_g_free0 (_tmp109_);
 #line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_rest_support_transaction_set_message (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), outbound_message);
 #line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -4988,7 +5002,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 			__vala_SoupMultipart_free0 (message_parts);
 #line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return;
-#line 4964 "PicasaPublishing.c"
+#line 4978 "PicasaPublishing.c"
 		} else {
 #line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			_g_object_unref0 (outbound_message);
@@ -5012,7 +5026,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 			g_clear_error (&_inner_error_);
 #line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return;
-#line 4988 "PicasaPublishing.c"
+#line 5002 "PicasaPublishing.c"
 		}
 	}
 #line 531 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -5031,7 +5045,7 @@ static void publishing_picasa_upload_transaction_real_execute (PublishingRESTSup
 	_g_free0 (summary);
 #line 531 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	__vala_SoupMultipart_free0 (message_parts);
-#line 5007 "PicasaPublishing.c"
+#line 5021 "PicasaPublishing.c"
 }
 
 
@@ -5044,14 +5058,14 @@ static void publishing_picasa_upload_transaction_class_init (PublishingPicasaUpl
 	g_type_class_add_private (klass, sizeof (PublishingPicasaUploadTransactionPrivate));
 #line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->execute = publishing_picasa_upload_transaction_real_execute;
-#line 5020 "PicasaPublishing.c"
+#line 5034 "PicasaPublishing.c"
 }
 
 
 static void publishing_picasa_upload_transaction_instance_init (PublishingPicasaUploadTransaction * self) {
 #line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv = PUBLISHING_PICASA_UPLOAD_TRANSACTION_GET_PRIVATE (self);
-#line 5027 "PicasaPublishing.c"
+#line 5041 "PicasaPublishing.c"
 }
 
 
@@ -5071,7 +5085,7 @@ static void publishing_picasa_upload_transaction_finalize (PublishingRESTSupport
 	_g_mapped_file_unref0 (self->priv->mapped_file);
 #line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_CLASS (publishing_picasa_upload_transaction_parent_class)->finalize (obj);
-#line 5047 "PicasaPublishing.c"
+#line 5061 "PicasaPublishing.c"
 }
 
 
@@ -5090,42 +5104,42 @@ GType publishing_picasa_upload_transaction_get_type (void) {
 static gpointer _publishing_picasa_publishing_options_pane_size_description_ref0 (gpointer self) {
 #line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self ? publishing_picasa_publishing_options_pane_size_description_ref (self) : NULL;
-#line 5066 "PicasaPublishing.c"
+#line 5080 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_publishing_options_pane_on_use_existing_radio_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 680 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_publishing_options_pane_on_use_existing_radio_clicked ((PublishingPicasaPublishingOptionsPane*) self);
-#line 5073 "PicasaPublishing.c"
+#line 5087 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_publishing_options_pane_on_create_new_radio_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 681 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_publishing_options_pane_on_create_new_radio_clicked ((PublishingPicasaPublishingOptionsPane*) self);
-#line 5080 "PicasaPublishing.c"
+#line 5094 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_publishing_options_pane_on_new_album_entry_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self) {
 #line 682 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_publishing_options_pane_on_new_album_entry_changed ((PublishingPicasaPublishingOptionsPane*) self);
-#line 5087 "PicasaPublishing.c"
+#line 5101 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_publishing_options_pane_on_logout_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 683 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_publishing_options_pane_on_logout_clicked ((PublishingPicasaPublishingOptionsPane*) self);
-#line 5094 "PicasaPublishing.c"
+#line 5108 "PicasaPublishing.c"
 }
 
 
 static void _publishing_picasa_publishing_options_pane_on_publish_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 684 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_publishing_options_pane_on_publish_clicked ((PublishingPicasaPublishingOptionsPane*) self);
-#line 5101 "PicasaPublishing.c"
+#line 5115 "PicasaPublishing.c"
 }
 
 
@@ -5397,7 +5411,7 @@ PublishingPicasaPublishingOptionsPane* publishing_picasa_publishing_options_pane
 	_tmp58_ = publishing_picasa_publishing_parameters_get_media_type (_tmp57_);
 #line 664 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if ((_tmp58_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) == 0) {
-#line 5373 "PicasaPublishing.c"
+#line 5387 "PicasaPublishing.c"
 		GtkLabel* _tmp59_ = NULL;
 		const gchar* _tmp60_ = NULL;
 		GtkComboBoxText* _tmp61_ = NULL;
@@ -5416,7 +5430,7 @@ PublishingPicasaPublishingOptionsPane* publishing_picasa_publishing_options_pane
 		_tmp62_ = self->priv->size_combo;
 #line 667 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp62_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 5392 "PicasaPublishing.c"
+#line 5406 "PicasaPublishing.c"
 	} else {
 		GtkLabel* _tmp63_ = NULL;
 		const gchar* _tmp64_ = NULL;
@@ -5437,7 +5451,7 @@ PublishingPicasaPublishingOptionsPane* publishing_picasa_publishing_options_pane
 		_tmp65_ = self->priv->size_descriptions;
 #line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp65__length1 = self->priv->size_descriptions_length1;
-#line 5413 "PicasaPublishing.c"
+#line 5427 "PicasaPublishing.c"
 		{
 			PublishingPicasaPublishingOptionsPaneSizeDescription** desc_collection = NULL;
 			gint desc_collection_length1 = 0;
@@ -5449,14 +5463,14 @@ PublishingPicasaPublishingOptionsPane* publishing_picasa_publishing_options_pane
 			desc_collection_length1 = _tmp65__length1;
 #line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			for (desc_it = 0; desc_it < _tmp65__length1; desc_it = desc_it + 1) {
-#line 5425 "PicasaPublishing.c"
+#line 5439 "PicasaPublishing.c"
 				PublishingPicasaPublishingOptionsPaneSizeDescription* _tmp66_ = NULL;
 				PublishingPicasaPublishingOptionsPaneSizeDescription* desc = NULL;
 #line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				_tmp66_ = _publishing_picasa_publishing_options_pane_size_description_ref0 (desc_collection[desc_it]);
 #line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				desc = _tmp66_;
-#line 5432 "PicasaPublishing.c"
+#line 5446 "PicasaPublishing.c"
 				{
 					GtkComboBoxText* _tmp67_ = NULL;
 					PublishingPicasaPublishingOptionsPaneSizeDescription* _tmp68_ = NULL;
@@ -5471,7 +5485,7 @@ PublishingPicasaPublishingOptionsPane* publishing_picasa_publishing_options_pane
 					gtk_combo_box_text_append_text (_tmp67_, _tmp69_);
 #line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					_publishing_picasa_publishing_options_pane_size_description_unref0 (desc);
-#line 5447 "PicasaPublishing.c"
+#line 5461 "PicasaPublishing.c"
 				}
 			}
 		}
@@ -5491,7 +5505,7 @@ PublishingPicasaPublishingOptionsPane* publishing_picasa_publishing_options_pane
 		_tmp74_ = publishing_picasa_publishing_parameters_get_major_axis_size_selection_id (_tmp73_);
 #line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, gtk_combo_box_get_type (), GtkComboBox), _tmp74_);
-#line 5467 "PicasaPublishing.c"
+#line 5481 "PicasaPublishing.c"
 	}
 #line 680 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp75_ = self->priv->use_existing_radio;
@@ -5515,14 +5529,14 @@ PublishingPicasaPublishingOptionsPane* publishing_picasa_publishing_options_pane
 	g_signal_connect_object (_tmp79_, "clicked", (GCallback) _publishing_picasa_publishing_options_pane_on_publish_clicked_gtk_button_clicked, self, 0);
 #line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self;
-#line 5491 "PicasaPublishing.c"
+#line 5505 "PicasaPublishing.c"
 }
 
 
 PublishingPicasaPublishingOptionsPane* publishing_picasa_publishing_options_pane_new (GtkBuilder* builder, PublishingPicasaPublishingParameters* parameters) {
 #line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return publishing_picasa_publishing_options_pane_construct (PUBLISHING_PICASA_TYPE_PUBLISHING_OPTIONS_PANE, builder, parameters);
-#line 5498 "PicasaPublishing.c"
+#line 5512 "PicasaPublishing.c"
 }
 
 
@@ -5558,7 +5572,7 @@ static void publishing_picasa_publishing_options_pane_on_publish_clicked (Publis
 	_tmp2_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_combo_box_get_type (), GtkComboBox));
 #line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (_tmp2_ >= 0) {
-#line 5534 "PicasaPublishing.c"
+#line 5548 "PicasaPublishing.c"
 		GtkComboBoxText* _tmp3_ = NULL;
 		gint _tmp4_ = 0;
 #line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -5567,11 +5581,11 @@ static void publishing_picasa_publishing_options_pane_on_publish_clicked (Publis
 		_tmp4_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_combo_box_get_type (), GtkComboBox));
 #line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp0_ = _tmp4_;
-#line 5543 "PicasaPublishing.c"
+#line 5557 "PicasaPublishing.c"
 	} else {
 #line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp0_ = 0;
-#line 5547 "PicasaPublishing.c"
+#line 5561 "PicasaPublishing.c"
 	}
 #line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	size_combo_last_active = _tmp0_;
@@ -5619,7 +5633,7 @@ static void publishing_picasa_publishing_options_pane_on_publish_clicked (Publis
 	_tmp19_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_toggle_button_get_type (), GtkToggleButton));
 #line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (_tmp19_) {
-#line 5595 "PicasaPublishing.c"
+#line 5609 "PicasaPublishing.c"
 		PublishingPicasaPublishingParameters* _tmp20_ = NULL;
 		GtkEntry* _tmp21_ = NULL;
 		const gchar* _tmp22_ = NULL;
@@ -5649,7 +5663,7 @@ static void publishing_picasa_publishing_options_pane_on_publish_clicked (Publis
 		publishing_picasa_publishing_parameters_set_is_new_album_public (_tmp24_, _tmp26_);
 #line 704 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		g_signal_emit_by_name (self, "publish");
-#line 5625 "PicasaPublishing.c"
+#line 5639 "PicasaPublishing.c"
 	} else {
 		PublishingPicasaPublishingParameters* _tmp27_ = NULL;
 		PublishingPicasaAlbum** _tmp28_ = NULL;
@@ -5704,11 +5718,11 @@ static void publishing_picasa_publishing_options_pane_on_publish_clicked (Publis
 		publishing_picasa_publishing_parameters_set_target_album_entry_url (_tmp34_, _tmp39_);
 #line 709 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		g_signal_emit_by_name (self, "publish");
-#line 5680 "PicasaPublishing.c"
+#line 5694 "PicasaPublishing.c"
 	}
 #line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	albums = (_vala_array_free (albums, albums_length1, (GDestroyNotify) publishing_picasa_album_unref), NULL);
-#line 5684 "PicasaPublishing.c"
+#line 5698 "PicasaPublishing.c"
 }
 
 
@@ -5737,7 +5751,7 @@ static void publishing_picasa_publishing_options_pane_on_use_existing_radio_clic
 	_tmp3_ = self->priv->public_check;
 #line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 5713 "PicasaPublishing.c"
+#line 5727 "PicasaPublishing.c"
 }
 
 
@@ -5766,7 +5780,7 @@ static void publishing_picasa_publishing_options_pane_on_create_new_radio_clicke
 	_tmp3_ = self->priv->public_check;
 #line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 5742 "PicasaPublishing.c"
+#line 5756 "PicasaPublishing.c"
 }
 
 
@@ -5775,7 +5789,7 @@ static void publishing_picasa_publishing_options_pane_on_logout_clicked (Publish
 	g_return_if_fail (PUBLISHING_PICASA_IS_PUBLISHING_OPTIONS_PANE (self));
 #line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_signal_emit_by_name (self, "logout");
-#line 5751 "PicasaPublishing.c"
+#line 5765 "PicasaPublishing.c"
 }
 
 
@@ -5798,7 +5812,7 @@ static gchar* string_strip (const gchar* self) {
 	result = _result_;
 #line 1210 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 5774 "PicasaPublishing.c"
+#line 5788 "PicasaPublishing.c"
 }
 
 
@@ -5835,7 +5849,7 @@ static void publishing_picasa_publishing_options_pane_update_publish_button_sens
 	_g_free0 (_tmp6_);
 #line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (_tmp7_) {
-#line 5811 "PicasaPublishing.c"
+#line 5825 "PicasaPublishing.c"
 		GtkRadioButton* _tmp8_ = NULL;
 		gboolean _tmp9_ = FALSE;
 #line 736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -5844,11 +5858,11 @@ static void publishing_picasa_publishing_options_pane_update_publish_button_sens
 		_tmp9_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_toggle_button_get_type (), GtkToggleButton));
 #line 736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp3_ = _tmp9_;
-#line 5820 "PicasaPublishing.c"
+#line 5834 "PicasaPublishing.c"
 	} else {
 #line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp3_ = FALSE;
-#line 5824 "PicasaPublishing.c"
+#line 5838 "PicasaPublishing.c"
 	}
 #line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp10_ = self->priv->publish_button;
@@ -5856,7 +5870,7 @@ static void publishing_picasa_publishing_options_pane_update_publish_button_sens
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget), !_tmp3_);
 #line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_g_free0 (album_name);
-#line 5832 "PicasaPublishing.c"
+#line 5846 "PicasaPublishing.c"
 }
 
 
@@ -5865,7 +5879,7 @@ static void publishing_picasa_publishing_options_pane_on_new_album_entry_changed
 	g_return_if_fail (PUBLISHING_PICASA_IS_PUBLISHING_OPTIONS_PANE (self));
 #line 740 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_publishing_options_pane_update_publish_button_sensitivity (self);
-#line 5841 "PicasaPublishing.c"
+#line 5855 "PicasaPublishing.c"
 }
 
 
@@ -5876,13 +5890,13 @@ static void _vala_array_add13 (PublishingPicasaPublishingOptionsPaneSizeDescript
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*array = g_renew (PublishingPicasaPublishingOptionsPaneSizeDescription*, *array, (*size) + 1);
-#line 5852 "PicasaPublishing.c"
+#line 5866 "PicasaPublishing.c"
 	}
 #line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[(*length)++] = value;
 #line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[*length] = NULL;
-#line 5858 "PicasaPublishing.c"
+#line 5872 "PicasaPublishing.c"
 }
 
 
@@ -5893,13 +5907,13 @@ static void _vala_array_add14 (PublishingPicasaPublishingOptionsPaneSizeDescript
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*array = g_renew (PublishingPicasaPublishingOptionsPaneSizeDescription*, *array, (*size) + 1);
-#line 5869 "PicasaPublishing.c"
+#line 5883 "PicasaPublishing.c"
 	}
 #line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[(*length)++] = value;
 #line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[*length] = NULL;
-#line 5875 "PicasaPublishing.c"
+#line 5889 "PicasaPublishing.c"
 }
 
 
@@ -5910,13 +5924,13 @@ static void _vala_array_add15 (PublishingPicasaPublishingOptionsPaneSizeDescript
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*array = g_renew (PublishingPicasaPublishingOptionsPaneSizeDescription*, *array, (*size) + 1);
-#line 5886 "PicasaPublishing.c"
+#line 5900 "PicasaPublishing.c"
 	}
 #line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[(*length)++] = value;
 #line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[*length] = NULL;
-#line 5892 "PicasaPublishing.c"
+#line 5906 "PicasaPublishing.c"
 }
 
 
@@ -5927,13 +5941,13 @@ static void _vala_array_add16 (PublishingPicasaPublishingOptionsPaneSizeDescript
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*array = g_renew (PublishingPicasaPublishingOptionsPaneSizeDescription*, *array, (*size) + 1);
-#line 5903 "PicasaPublishing.c"
+#line 5917 "PicasaPublishing.c"
 	}
 #line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[(*length)++] = value;
 #line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[*length] = NULL;
-#line 5909 "PicasaPublishing.c"
+#line 5923 "PicasaPublishing.c"
 }
 
 
@@ -5944,13 +5958,13 @@ static void _vala_array_add17 (PublishingPicasaPublishingOptionsPaneSizeDescript
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*array = g_renew (PublishingPicasaPublishingOptionsPaneSizeDescription*, *array, (*size) + 1);
-#line 5920 "PicasaPublishing.c"
+#line 5934 "PicasaPublishing.c"
 	}
 #line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[(*length)++] = value;
 #line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	(*array)[*length] = NULL;
-#line 5926 "PicasaPublishing.c"
+#line 5940 "PicasaPublishing.c"
 }
 
 
@@ -6050,13 +6064,13 @@ static PublishingPicasaPublishingOptionsPaneSizeDescription** publishing_picasa_
 	if (result_length1) {
 #line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*result_length1 = _tmp16__length1;
-#line 6026 "PicasaPublishing.c"
+#line 6040 "PicasaPublishing.c"
 	}
 #line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	result = _tmp16_;
 #line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 6032 "PicasaPublishing.c"
+#line 6046 "PicasaPublishing.c"
 }
 
 
@@ -6093,19 +6107,19 @@ void publishing_picasa_publishing_options_pane_installed (PublishingPicasaPublis
 	albums_length1 = _tmp3_;
 #line 759 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_albums_size_ = albums_length1;
-#line 6069 "PicasaPublishing.c"
+#line 6083 "PicasaPublishing.c"
 	{
 		gint i = 0;
 #line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		i = 0;
-#line 6074 "PicasaPublishing.c"
+#line 6088 "PicasaPublishing.c"
 		{
 			gboolean _tmp5_ = FALSE;
 #line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			_tmp5_ = TRUE;
 #line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			while (TRUE) {
-#line 6081 "PicasaPublishing.c"
+#line 6095 "PicasaPublishing.c"
 				gint _tmp7_ = 0;
 				PublishingPicasaAlbum** _tmp8_ = NULL;
 				gint _tmp8__length1 = 0;
@@ -6124,13 +6138,13 @@ void publishing_picasa_publishing_options_pane_installed (PublishingPicasaPublis
 				const gchar* _tmp19_ = NULL;
 #line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				if (!_tmp5_) {
-#line 6100 "PicasaPublishing.c"
+#line 6114 "PicasaPublishing.c"
 					gint _tmp6_ = 0;
 #line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					_tmp6_ = i;
 #line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					i = _tmp6_ + 1;
-#line 6106 "PicasaPublishing.c"
+#line 6120 "PicasaPublishing.c"
 				}
 #line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				_tmp5_ = FALSE;
@@ -6144,7 +6158,7 @@ void publishing_picasa_publishing_options_pane_installed (PublishingPicasaPublis
 				if (!(_tmp7_ < _tmp8__length1)) {
 #line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					break;
-#line 6120 "PicasaPublishing.c"
+#line 6134 "PicasaPublishing.c"
 				}
 #line 762 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				_tmp9_ = self->priv->existing_albums_combo;
@@ -6176,7 +6190,7 @@ void publishing_picasa_publishing_options_pane_installed (PublishingPicasaPublis
 				if (g_strcmp0 (_tmp18_, _tmp19_) == 0) {
 #line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					_tmp14_ = TRUE;
-#line 6152 "PicasaPublishing.c"
+#line 6166 "PicasaPublishing.c"
 				} else {
 					gboolean _tmp20_ = FALSE;
 					PublishingPicasaAlbum** _tmp21_ = NULL;
@@ -6196,31 +6210,31 @@ void publishing_picasa_publishing_options_pane_installed (PublishingPicasaPublis
 					_tmp24_ = _tmp23_->name;
 #line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					if (g_strcmp0 (_tmp24_, PUBLISHING_PICASA_DEFAULT_ALBUM_NAME) == 0) {
-#line 6172 "PicasaPublishing.c"
+#line 6186 "PicasaPublishing.c"
 						gint _tmp25_ = 0;
 #line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						_tmp25_ = default_album_id;
 #line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						_tmp20_ = _tmp25_ == -1;
-#line 6178 "PicasaPublishing.c"
+#line 6192 "PicasaPublishing.c"
 					} else {
 #line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 						_tmp20_ = FALSE;
-#line 6182 "PicasaPublishing.c"
+#line 6196 "PicasaPublishing.c"
 					}
 #line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					_tmp14_ = _tmp20_;
-#line 6186 "PicasaPublishing.c"
+#line 6200 "PicasaPublishing.c"
 				}
 #line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 				if (_tmp14_) {
-#line 6190 "PicasaPublishing.c"
+#line 6204 "PicasaPublishing.c"
 					gint _tmp26_ = 0;
 #line 765 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					_tmp26_ = i;
 #line 765 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 					default_album_id = _tmp26_;
-#line 6196 "PicasaPublishing.c"
+#line 6210 "PicasaPublishing.c"
 				}
 			}
 		}
@@ -6231,7 +6245,7 @@ void publishing_picasa_publishing_options_pane_installed (PublishingPicasaPublis
 	_tmp27__length1 = albums_length1;
 #line 768 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (_tmp27__length1 == 0) {
-#line 6207 "PicasaPublishing.c"
+#line 6221 "PicasaPublishing.c"
 		GtkComboBoxText* _tmp28_ = NULL;
 		GtkRadioButton* _tmp29_ = NULL;
 		GtkRadioButton* _tmp30_ = NULL;
@@ -6257,14 +6271,14 @@ void publishing_picasa_publishing_options_pane_installed (PublishingPicasaPublis
 		_tmp32_ = self->priv->new_album_entry;
 #line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		gtk_entry_set_text (_tmp32_, PUBLISHING_PICASA_DEFAULT_ALBUM_NAME);
-#line 6233 "PicasaPublishing.c"
+#line 6247 "PicasaPublishing.c"
 	} else {
 		gint _tmp33_ = 0;
 #line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp33_ = default_album_id;
 #line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		if (_tmp33_ >= 0) {
-#line 6240 "PicasaPublishing.c"
+#line 6254 "PicasaPublishing.c"
 			GtkRadioButton* _tmp34_ = NULL;
 			GtkComboBoxText* _tmp35_ = NULL;
 			gint _tmp36_ = 0;
@@ -6288,7 +6302,7 @@ void publishing_picasa_publishing_options_pane_installed (PublishingPicasaPublis
 			_tmp38_ = self->priv->public_check;
 #line 779 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 6264 "PicasaPublishing.c"
+#line 6278 "PicasaPublishing.c"
 		} else {
 			GtkRadioButton* _tmp39_ = NULL;
 			GtkComboBoxText* _tmp40_ = NULL;
@@ -6315,7 +6329,7 @@ void publishing_picasa_publishing_options_pane_installed (PublishingPicasaPublis
 			_tmp43_ = self->priv->public_check;
 #line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 6291 "PicasaPublishing.c"
+#line 6305 "PicasaPublishing.c"
 		}
 	}
 #line 788 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -6324,7 +6338,7 @@ void publishing_picasa_publishing_options_pane_installed (PublishingPicasaPublis
 	albums = (_vala_array_free (albums, albums_length1, (GDestroyNotify) publishing_picasa_album_unref), NULL);
 #line 755 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_g_free0 (last_album);
-#line 6300 "PicasaPublishing.c"
+#line 6314 "PicasaPublishing.c"
 }
 
 
@@ -6343,7 +6357,7 @@ static GtkWidget* publishing_picasa_publishing_options_pane_real_get_widget (Spi
 	result = _tmp1_;
 #line 792 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 6319 "PicasaPublishing.c"
+#line 6333 "PicasaPublishing.c"
 }
 
 
@@ -6356,7 +6370,7 @@ static SpitPublishingDialogPaneGeometryOptions publishing_picasa_publishing_opti
 	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
 #line 796 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 6332 "PicasaPublishing.c"
+#line 6346 "PicasaPublishing.c"
 }
 
 
@@ -6366,7 +6380,7 @@ static void publishing_picasa_publishing_options_pane_real_on_pane_installed (Sp
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_PICASA_TYPE_PUBLISHING_OPTIONS_PANE, PublishingPicasaPublishingOptionsPane);
 #line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	publishing_picasa_publishing_options_pane_installed (self);
-#line 6342 "PicasaPublishing.c"
+#line 6356 "PicasaPublishing.c"
 }
 
 
@@ -6374,7 +6388,7 @@ static void publishing_picasa_publishing_options_pane_real_on_pane_uninstalled (
 	PublishingPicasaPublishingOptionsPane * self;
 #line 803 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_PICASA_TYPE_PUBLISHING_OPTIONS_PANE, PublishingPicasaPublishingOptionsPane);
-#line 6350 "PicasaPublishing.c"
+#line 6364 "PicasaPublishing.c"
 }
 
 
@@ -6401,21 +6415,21 @@ static PublishingPicasaPublishingOptionsPaneSizeDescription* publishing_picasa_p
 	self->major_axis_pixels = _tmp2_;
 #line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self;
-#line 6377 "PicasaPublishing.c"
+#line 6391 "PicasaPublishing.c"
 }
 
 
 static PublishingPicasaPublishingOptionsPaneSizeDescription* publishing_picasa_publishing_options_pane_size_description_new (const gchar* name, gint major_axis_pixels) {
 #line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return publishing_picasa_publishing_options_pane_size_description_construct (PUBLISHING_PICASA_PUBLISHING_OPTIONS_PANE_TYPE_SIZE_DESCRIPTION, name, major_axis_pixels);
-#line 6384 "PicasaPublishing.c"
+#line 6398 "PicasaPublishing.c"
 }
 
 
 static void publishing_picasa_publishing_options_pane_value_size_description_init (GValue* value) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 6391 "PicasaPublishing.c"
+#line 6405 "PicasaPublishing.c"
 }
 
 
@@ -6424,7 +6438,7 @@ static void publishing_picasa_publishing_options_pane_value_size_description_fre
 	if (value->data[0].v_pointer) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_publishing_options_pane_size_description_unref (value->data[0].v_pointer);
-#line 6400 "PicasaPublishing.c"
+#line 6414 "PicasaPublishing.c"
 	}
 }
 
@@ -6434,11 +6448,11 @@ static void publishing_picasa_publishing_options_pane_value_size_description_cop
 	if (src_value->data[0].v_pointer) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_picasa_publishing_options_pane_size_description_ref (src_value->data[0].v_pointer);
-#line 6410 "PicasaPublishing.c"
+#line 6424 "PicasaPublishing.c"
 	} else {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 6414 "PicasaPublishing.c"
+#line 6428 "PicasaPublishing.c"
 	}
 }
 
@@ -6446,37 +6460,37 @@ static void publishing_picasa_publishing_options_pane_value_size_description_cop
 static gpointer publishing_picasa_publishing_options_pane_value_size_description_peek_pointer (const GValue* value) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return value->data[0].v_pointer;
-#line 6422 "PicasaPublishing.c"
+#line 6436 "PicasaPublishing.c"
 }
 
 
 static gchar* publishing_picasa_publishing_options_pane_value_size_description_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 6429 "PicasaPublishing.c"
+#line 6443 "PicasaPublishing.c"
 		PublishingPicasaPublishingOptionsPaneSizeDescription* object;
 		object = collect_values[0].v_pointer;
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 6436 "PicasaPublishing.c"
+#line 6450 "PicasaPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 6440 "PicasaPublishing.c"
+#line 6454 "PicasaPublishing.c"
 		}
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = publishing_picasa_publishing_options_pane_size_description_ref (object);
-#line 6444 "PicasaPublishing.c"
+#line 6458 "PicasaPublishing.c"
 	} else {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 6448 "PicasaPublishing.c"
+#line 6462 "PicasaPublishing.c"
 	}
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return NULL;
-#line 6452 "PicasaPublishing.c"
+#line 6466 "PicasaPublishing.c"
 }
 
 
@@ -6487,25 +6501,25 @@ static gchar* publishing_picasa_publishing_options_pane_value_size_description_l
 	if (!object_p) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 6463 "PicasaPublishing.c"
+#line 6477 "PicasaPublishing.c"
 	}
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (!value->data[0].v_pointer) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*object_p = NULL;
-#line 6469 "PicasaPublishing.c"
+#line 6483 "PicasaPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 6473 "PicasaPublishing.c"
+#line 6487 "PicasaPublishing.c"
 	} else {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*object_p = publishing_picasa_publishing_options_pane_size_description_ref (value->data[0].v_pointer);
-#line 6477 "PicasaPublishing.c"
+#line 6491 "PicasaPublishing.c"
 	}
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return NULL;
-#line 6481 "PicasaPublishing.c"
+#line 6495 "PicasaPublishing.c"
 }
 
 
@@ -6519,7 +6533,7 @@ static GParamSpec* publishing_picasa_publishing_options_pane_param_spec_size_des
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 6495 "PicasaPublishing.c"
+#line 6509 "PicasaPublishing.c"
 }
 
 
@@ -6528,7 +6542,7 @@ static gpointer publishing_picasa_publishing_options_pane_value_get_size_descrip
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_PICASA_PUBLISHING_OPTIONS_PANE_TYPE_SIZE_DESCRIPTION), NULL);
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return value->data[0].v_pointer;
-#line 6504 "PicasaPublishing.c"
+#line 6518 "PicasaPublishing.c"
 }
 
 
@@ -6548,17 +6562,17 @@ static void publishing_picasa_publishing_options_pane_value_set_size_description
 		value->data[0].v_pointer = v_object;
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_publishing_options_pane_size_description_ref (value->data[0].v_pointer);
-#line 6524 "PicasaPublishing.c"
+#line 6538 "PicasaPublishing.c"
 	} else {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 6528 "PicasaPublishing.c"
+#line 6542 "PicasaPublishing.c"
 	}
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (old) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_publishing_options_pane_size_description_unref (old);
-#line 6534 "PicasaPublishing.c"
+#line 6548 "PicasaPublishing.c"
 	}
 }
 
@@ -6577,17 +6591,17 @@ static void publishing_picasa_publishing_options_pane_value_take_size_descriptio
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 6553 "PicasaPublishing.c"
+#line 6567 "PicasaPublishing.c"
 	} else {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 6557 "PicasaPublishing.c"
+#line 6571 "PicasaPublishing.c"
 	}
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (old) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_publishing_options_pane_size_description_unref (old);
-#line 6563 "PicasaPublishing.c"
+#line 6577 "PicasaPublishing.c"
 	}
 }
 
@@ -6597,14 +6611,14 @@ static void publishing_picasa_publishing_options_pane_size_description_class_ini
 	publishing_picasa_publishing_options_pane_size_description_parent_class = g_type_class_peek_parent (klass);
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	((PublishingPicasaPublishingOptionsPaneSizeDescriptionClass *) klass)->finalize = publishing_picasa_publishing_options_pane_size_description_finalize;
-#line 6573 "PicasaPublishing.c"
+#line 6587 "PicasaPublishing.c"
 }
 
 
 static void publishing_picasa_publishing_options_pane_size_description_instance_init (PublishingPicasaPublishingOptionsPaneSizeDescription * self) {
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->ref_count = 1;
-#line 6580 "PicasaPublishing.c"
+#line 6594 "PicasaPublishing.c"
 }
 
 
@@ -6616,7 +6630,7 @@ static void publishing_picasa_publishing_options_pane_size_description_finalize 
 	g_signal_handlers_destroy (self);
 #line 604 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_g_free0 (self->name);
-#line 6592 "PicasaPublishing.c"
+#line 6606 "PicasaPublishing.c"
 }
 
 
@@ -6641,7 +6655,7 @@ static gpointer publishing_picasa_publishing_options_pane_size_description_ref (
 	g_atomic_int_inc (&self->ref_count);
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return instance;
-#line 6617 "PicasaPublishing.c"
+#line 6631 "PicasaPublishing.c"
 }
 
 
@@ -6654,7 +6668,7 @@ static void publishing_picasa_publishing_options_pane_size_description_unref (gp
 		PUBLISHING_PICASA_PUBLISHING_OPTIONS_PANE_SIZE_DESCRIPTION_GET_CLASS (self)->finalize (self);
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 6630 "PicasaPublishing.c"
+#line 6644 "PicasaPublishing.c"
 	}
 }
 
@@ -6670,7 +6684,7 @@ static void publishing_picasa_publishing_options_pane_class_init (PublishingPica
 	g_signal_new ("publish", PUBLISHING_PICASA_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 #line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_signal_new ("logout", PUBLISHING_PICASA_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 6646 "PicasaPublishing.c"
+#line 6660 "PicasaPublishing.c"
 }
 
 
@@ -6685,7 +6699,7 @@ static void publishing_picasa_publishing_options_pane_spit_publishing_dialog_pan
 	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_picasa_publishing_options_pane_real_on_pane_installed;
 #line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_picasa_publishing_options_pane_real_on_pane_uninstalled;
-#line 6661 "PicasaPublishing.c"
+#line 6675 "PicasaPublishing.c"
 }
 
 
@@ -6718,7 +6732,7 @@ static void publishing_picasa_publishing_options_pane_instance_init (PublishingP
 	self->priv->publish_button = NULL;
 #line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->logout_button = NULL;
-#line 6694 "PicasaPublishing.c"
+#line 6708 "PicasaPublishing.c"
 }
 
 
@@ -6758,7 +6772,7 @@ static void publishing_picasa_publishing_options_pane_finalize (GObject* obj) {
 	_publishing_picasa_publishing_parameters_unref0 (self->priv->parameters);
 #line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	G_OBJECT_CLASS (publishing_picasa_publishing_options_pane_parent_class)->finalize (obj);
-#line 6734 "PicasaPublishing.c"
+#line 6748 "PicasaPublishing.c"
 }
 
 
@@ -6817,14 +6831,14 @@ PublishingPicasaPublishingParameters* publishing_picasa_publishing_parameters_co
 	self->priv->to_new_album = TRUE;
 #line 821 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self;
-#line 6793 "PicasaPublishing.c"
+#line 6807 "PicasaPublishing.c"
 }
 
 
 PublishingPicasaPublishingParameters* publishing_picasa_publishing_parameters_new (void) {
 #line 821 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return publishing_picasa_publishing_parameters_construct (PUBLISHING_PICASA_TYPE_PUBLISHING_PARAMETERS);
-#line 6800 "PicasaPublishing.c"
+#line 6814 "PicasaPublishing.c"
 }
 
 
@@ -6839,7 +6853,7 @@ gboolean publishing_picasa_publishing_parameters_is_to_new_album (PublishingPica
 	result = _tmp0_;
 #line 835 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 6815 "PicasaPublishing.c"
+#line 6829 "PicasaPublishing.c"
 }
 
 
@@ -6851,7 +6865,7 @@ void publishing_picasa_publishing_parameters_set_is_to_new_album (PublishingPica
 	_tmp0_ = to_new_album;
 #line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->to_new_album = _tmp0_;
-#line 6827 "PicasaPublishing.c"
+#line 6841 "PicasaPublishing.c"
 }
 
 
@@ -6863,7 +6877,7 @@ void publishing_picasa_publishing_parameters_set_is_new_album_public (Publishing
 	_tmp0_ = album_public;
 #line 843 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->album_public = _tmp0_;
-#line 6839 "PicasaPublishing.c"
+#line 6853 "PicasaPublishing.c"
 }
 
 
@@ -6878,7 +6892,7 @@ gboolean publishing_picasa_publishing_parameters_is_new_album_public (Publishing
 	result = _tmp0_;
 #line 847 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 6854 "PicasaPublishing.c"
+#line 6868 "PicasaPublishing.c"
 }
 
 
@@ -6896,7 +6910,7 @@ gchar* publishing_picasa_publishing_parameters_get_target_album_name (Publishing
 	result = _tmp1_;
 #line 851 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 6872 "PicasaPublishing.c"
+#line 6886 "PicasaPublishing.c"
 }
 
 
@@ -6915,7 +6929,7 @@ void publishing_picasa_publishing_parameters_set_target_album_name (PublishingPi
 	_g_free0 (self->priv->target_album_name);
 #line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->target_album_name = _tmp1_;
-#line 6891 "PicasaPublishing.c"
+#line 6905 "PicasaPublishing.c"
 }
 
 
@@ -6934,7 +6948,7 @@ void publishing_picasa_publishing_parameters_set_target_album_entry_url (Publish
 	_g_free0 (self->priv->target_album_url);
 #line 859 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->target_album_url = _tmp1_;
-#line 6910 "PicasaPublishing.c"
+#line 6924 "PicasaPublishing.c"
 }
 
 
@@ -6952,7 +6966,7 @@ gchar* publishing_picasa_publishing_parameters_get_target_album_entry_url (Publi
 	result = _tmp1_;
 #line 863 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 6928 "PicasaPublishing.c"
+#line 6942 "PicasaPublishing.c"
 }
 
 
@@ -6965,7 +6979,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 	g_return_val_if_fail (old != NULL, NULL);
 #line 1380 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	g_return_val_if_fail (replacement != NULL, NULL);
-#line 6941 "PicasaPublishing.c"
+#line 6955 "PicasaPublishing.c"
 	{
 		GRegex* regex = NULL;
 		const gchar* _tmp0_ = NULL;
@@ -6996,7 +7010,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 6972 "PicasaPublishing.c"
+#line 6986 "PicasaPublishing.c"
 				goto __catch15_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -7005,7 +7019,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 6981 "PicasaPublishing.c"
+#line 6995 "PicasaPublishing.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp6_ = regex;
@@ -7021,7 +7035,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 6997 "PicasaPublishing.c"
+#line 7011 "PicasaPublishing.c"
 				goto __catch15_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -7032,7 +7046,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 7008 "PicasaPublishing.c"
+#line 7022 "PicasaPublishing.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp9_ = _tmp5_;
@@ -7046,7 +7060,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 7022 "PicasaPublishing.c"
+#line 7036 "PicasaPublishing.c"
 	}
 	goto __finally15;
 	__catch15_g_regex_error:
@@ -7060,7 +7074,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_assert_not_reached ();
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_g_error_free0 (e);
-#line 7036 "PicasaPublishing.c"
+#line 7050 "PicasaPublishing.c"
 	}
 	__finally15:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -7071,7 +7085,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_clear_error (&_inner_error_);
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return NULL;
-#line 7047 "PicasaPublishing.c"
+#line 7061 "PicasaPublishing.c"
 	}
 }
 
@@ -7098,7 +7112,7 @@ gchar* publishing_picasa_publishing_parameters_get_target_album_feed_url (Publis
 	_g_free0 (entry_url);
 #line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 7074 "PicasaPublishing.c"
+#line 7088 "PicasaPublishing.c"
 }
 
 
@@ -7116,7 +7130,7 @@ gchar* publishing_picasa_publishing_parameters_get_user_name (PublishingPicasaPu
 	result = _tmp1_;
 #line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 7092 "PicasaPublishing.c"
+#line 7106 "PicasaPublishing.c"
 }
 
 
@@ -7135,35 +7149,35 @@ void publishing_picasa_publishing_parameters_set_user_name (PublishingPicasaPubl
 	_g_free0 (self->priv->user_name);
 #line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->user_name = _tmp1_;
-#line 7111 "PicasaPublishing.c"
+#line 7125 "PicasaPublishing.c"
 }
 
 
 static gpointer _publishing_picasa_album_ref0 (gpointer self) {
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self ? publishing_picasa_album_ref (self) : NULL;
-#line 7118 "PicasaPublishing.c"
+#line 7132 "PicasaPublishing.c"
 }
 
 
-static PublishingPicasaAlbum** _vala_array_dup5 (PublishingPicasaAlbum** self, int length) {
+static PublishingPicasaAlbum** _vala_array_dup6 (PublishingPicasaAlbum** self, int length) {
 	PublishingPicasaAlbum** result;
 	int i;
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	result = g_new0 (PublishingPicasaAlbum*, length + 1);
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 7129 "PicasaPublishing.c"
+#line 7143 "PicasaPublishing.c"
 		PublishingPicasaAlbum* _tmp0_ = NULL;
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp0_ = _publishing_picasa_album_ref0 (self[i]);
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		result[i] = _tmp0_;
-#line 7135 "PicasaPublishing.c"
+#line 7149 "PicasaPublishing.c"
 	}
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 7139 "PicasaPublishing.c"
+#line 7153 "PicasaPublishing.c"
 }
 
 
@@ -7182,7 +7196,7 @@ PublishingPicasaAlbum** publishing_picasa_publishing_parameters_get_albums (Publ
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp0__length1 = self->priv->albums_length1;
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup5 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
+	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup6 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp1__length1 = _tmp0__length1;
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -7193,34 +7207,34 @@ PublishingPicasaAlbum** publishing_picasa_publishing_parameters_get_albums (Publ
 	if (result_length1) {
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*result_length1 = _tmp2__length1;
-#line 7169 "PicasaPublishing.c"
+#line 7183 "PicasaPublishing.c"
 	}
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	result = _tmp2_;
 #line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 7175 "PicasaPublishing.c"
+#line 7189 "PicasaPublishing.c"
 }
 
 
-static PublishingPicasaAlbum** _vala_array_dup6 (PublishingPicasaAlbum** self, int length) {
+static PublishingPicasaAlbum** _vala_array_dup7 (PublishingPicasaAlbum** self, int length) {
 	PublishingPicasaAlbum** result;
 	int i;
 #line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	result = g_new0 (PublishingPicasaAlbum*, length + 1);
 #line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 7186 "PicasaPublishing.c"
+#line 7200 "PicasaPublishing.c"
 		PublishingPicasaAlbum* _tmp0_ = NULL;
 #line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		_tmp0_ = _publishing_picasa_album_ref0 (self[i]);
 #line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		result[i] = _tmp0_;
-#line 7192 "PicasaPublishing.c"
+#line 7206 "PicasaPublishing.c"
 	}
 #line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 7196 "PicasaPublishing.c"
+#line 7210 "PicasaPublishing.c"
 }
 
 
@@ -7236,7 +7250,7 @@ void publishing_picasa_publishing_parameters_set_albums (PublishingPicasaPublish
 #line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp0__length1 = albums_length1;
 #line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup6 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
+	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup7 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
 #line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp1__length1 = _tmp0__length1;
 #line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
@@ -7247,7 +7261,7 @@ void publishing_picasa_publishing_parameters_set_albums (PublishingPicasaPublish
 	self->priv->albums_length1 = _tmp1__length1;
 #line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->_albums_size_ = self->priv->albums_length1;
-#line 7223 "PicasaPublishing.c"
+#line 7237 "PicasaPublishing.c"
 }
 
 
@@ -7259,7 +7273,7 @@ void publishing_picasa_publishing_parameters_set_major_axis_size_pixels (Publish
 	_tmp0_ = pixels;
 #line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->major_axis_size_pixels = _tmp0_;
-#line 7235 "PicasaPublishing.c"
+#line 7249 "PicasaPublishing.c"
 }
 
 
@@ -7274,7 +7288,7 @@ gint publishing_picasa_publishing_parameters_get_major_axis_size_pixels (Publish
 	result = _tmp0_;
 #line 894 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 7250 "PicasaPublishing.c"
+#line 7264 "PicasaPublishing.c"
 }
 
 
@@ -7286,7 +7300,7 @@ void publishing_picasa_publishing_parameters_set_major_axis_size_selection_id (P
 	_tmp0_ = selection_id;
 #line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->major_axis_size_selection_id = _tmp0_;
-#line 7262 "PicasaPublishing.c"
+#line 7276 "PicasaPublishing.c"
 }
 
 
@@ -7301,7 +7315,7 @@ gint publishing_picasa_publishing_parameters_get_major_axis_size_selection_id (P
 	result = _tmp0_;
 #line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 7277 "PicasaPublishing.c"
+#line 7291 "PicasaPublishing.c"
 }
 
 
@@ -7313,7 +7327,7 @@ void publishing_picasa_publishing_parameters_set_strip_metadata (PublishingPicas
 	_tmp0_ = strip_metadata;
 #line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->strip_metadata = _tmp0_;
-#line 7289 "PicasaPublishing.c"
+#line 7303 "PicasaPublishing.c"
 }
 
 
@@ -7328,7 +7342,7 @@ gboolean publishing_picasa_publishing_parameters_get_strip_metadata (PublishingP
 	result = _tmp0_;
 #line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 7304 "PicasaPublishing.c"
+#line 7318 "PicasaPublishing.c"
 }
 
 
@@ -7340,7 +7354,7 @@ void publishing_picasa_publishing_parameters_set_media_type (PublishingPicasaPub
 	_tmp0_ = media_type;
 #line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->media_type = _tmp0_;
-#line 7316 "PicasaPublishing.c"
+#line 7330 "PicasaPublishing.c"
 }
 
 
@@ -7355,14 +7369,14 @@ SpitPublishingPublisherMediaType publishing_picasa_publishing_parameters_get_med
 	result = _tmp0_;
 #line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 7331 "PicasaPublishing.c"
+#line 7345 "PicasaPublishing.c"
 }
 
 
 static void publishing_picasa_value_publishing_parameters_init (GValue* value) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 7338 "PicasaPublishing.c"
+#line 7352 "PicasaPublishing.c"
 }
 
 
@@ -7371,7 +7385,7 @@ static void publishing_picasa_value_publishing_parameters_free_value (GValue* va
 	if (value->data[0].v_pointer) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_publishing_parameters_unref (value->data[0].v_pointer);
-#line 7347 "PicasaPublishing.c"
+#line 7361 "PicasaPublishing.c"
 	}
 }
 
@@ -7381,11 +7395,11 @@ static void publishing_picasa_value_publishing_parameters_copy_value (const GVal
 	if (src_value->data[0].v_pointer) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_picasa_publishing_parameters_ref (src_value->data[0].v_pointer);
-#line 7357 "PicasaPublishing.c"
+#line 7371 "PicasaPublishing.c"
 	} else {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 7361 "PicasaPublishing.c"
+#line 7375 "PicasaPublishing.c"
 	}
 }
 
@@ -7393,37 +7407,37 @@ static void publishing_picasa_value_publishing_parameters_copy_value (const GVal
 static gpointer publishing_picasa_value_publishing_parameters_peek_pointer (const GValue* value) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return value->data[0].v_pointer;
-#line 7369 "PicasaPublishing.c"
+#line 7383 "PicasaPublishing.c"
 }
 
 
 static gchar* publishing_picasa_value_publishing_parameters_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 7376 "PicasaPublishing.c"
+#line 7390 "PicasaPublishing.c"
 		PublishingPicasaPublishingParameters* object;
 		object = collect_values[0].v_pointer;
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 7383 "PicasaPublishing.c"
+#line 7397 "PicasaPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 7387 "PicasaPublishing.c"
+#line 7401 "PicasaPublishing.c"
 		}
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = publishing_picasa_publishing_parameters_ref (object);
-#line 7391 "PicasaPublishing.c"
+#line 7405 "PicasaPublishing.c"
 	} else {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 7395 "PicasaPublishing.c"
+#line 7409 "PicasaPublishing.c"
 	}
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return NULL;
-#line 7399 "PicasaPublishing.c"
+#line 7413 "PicasaPublishing.c"
 }
 
 
@@ -7434,25 +7448,25 @@ static gchar* publishing_picasa_value_publishing_parameters_lcopy_value (const G
 	if (!object_p) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 7410 "PicasaPublishing.c"
+#line 7424 "PicasaPublishing.c"
 	}
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (!value->data[0].v_pointer) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*object_p = NULL;
-#line 7416 "PicasaPublishing.c"
+#line 7430 "PicasaPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 7420 "PicasaPublishing.c"
+#line 7434 "PicasaPublishing.c"
 	} else {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		*object_p = publishing_picasa_publishing_parameters_ref (value->data[0].v_pointer);
-#line 7424 "PicasaPublishing.c"
+#line 7438 "PicasaPublishing.c"
 	}
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return NULL;
-#line 7428 "PicasaPublishing.c"
+#line 7442 "PicasaPublishing.c"
 }
 
 
@@ -7466,7 +7480,7 @@ GParamSpec* publishing_picasa_param_spec_publishing_parameters (const gchar* nam
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 7442 "PicasaPublishing.c"
+#line 7456 "PicasaPublishing.c"
 }
 
 
@@ -7475,7 +7489,7 @@ gpointer publishing_picasa_value_get_publishing_parameters (const GValue* value)
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_PICASA_TYPE_PUBLISHING_PARAMETERS), NULL);
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return value->data[0].v_pointer;
-#line 7451 "PicasaPublishing.c"
+#line 7465 "PicasaPublishing.c"
 }
 
 
@@ -7495,17 +7509,17 @@ void publishing_picasa_value_set_publishing_parameters (GValue* value, gpointer 
 		value->data[0].v_pointer = v_object;
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_publishing_parameters_ref (value->data[0].v_pointer);
-#line 7471 "PicasaPublishing.c"
+#line 7485 "PicasaPublishing.c"
 	} else {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 7475 "PicasaPublishing.c"
+#line 7489 "PicasaPublishing.c"
 	}
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (old) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_publishing_parameters_unref (old);
-#line 7481 "PicasaPublishing.c"
+#line 7495 "PicasaPublishing.c"
 	}
 }
 
@@ -7524,17 +7538,17 @@ void publishing_picasa_value_take_publishing_parameters (GValue* value, gpointer
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 7500 "PicasaPublishing.c"
+#line 7514 "PicasaPublishing.c"
 	} else {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 7504 "PicasaPublishing.c"
+#line 7518 "PicasaPublishing.c"
 	}
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	if (old) {
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		publishing_picasa_publishing_parameters_unref (old);
-#line 7510 "PicasaPublishing.c"
+#line 7524 "PicasaPublishing.c"
 	}
 }
 
@@ -7546,7 +7560,7 @@ static void publishing_picasa_publishing_parameters_class_init (PublishingPicasa
 	((PublishingPicasaPublishingParametersClass *) klass)->finalize = publishing_picasa_publishing_parameters_finalize;
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingPicasaPublishingParametersPrivate));
-#line 7522 "PicasaPublishing.c"
+#line 7536 "PicasaPublishing.c"
 }
 
 
@@ -7555,7 +7569,7 @@ static void publishing_picasa_publishing_parameters_instance_init (PublishingPic
 	self->priv = PUBLISHING_PICASA_PUBLISHING_PARAMETERS_GET_PRIVATE (self);
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->ref_count = 1;
-#line 7531 "PicasaPublishing.c"
+#line 7545 "PicasaPublishing.c"
 }
 
 
@@ -7573,7 +7587,7 @@ static void publishing_picasa_publishing_parameters_finalize (PublishingPicasaPu
 	_g_free0 (self->priv->user_name);
 #line 817 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv->albums = (_vala_array_free (self->priv->albums, self->priv->albums_length1, (GDestroyNotify) publishing_picasa_album_unref), NULL);
-#line 7549 "PicasaPublishing.c"
+#line 7563 "PicasaPublishing.c"
 }
 
 
@@ -7598,7 +7612,7 @@ gpointer publishing_picasa_publishing_parameters_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return instance;
-#line 7574 "PicasaPublishing.c"
+#line 7588 "PicasaPublishing.c"
 }
 
 
@@ -7611,7 +7625,7 @@ void publishing_picasa_publishing_parameters_unref (gpointer instance) {
 		PUBLISHING_PICASA_PUBLISHING_PARAMETERS_GET_CLASS (self)->finalize (self);
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 7587 "PicasaPublishing.c"
+#line 7601 "PicasaPublishing.c"
 	}
 }
 
@@ -7645,14 +7659,14 @@ PublishingPicasaUploader* publishing_picasa_uploader_construct (GType object_typ
 	self->priv->parameters = _tmp3_;
 #line 925 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return self;
-#line 7621 "PicasaPublishing.c"
+#line 7635 "PicasaPublishing.c"
 }
 
 
 PublishingPicasaUploader* publishing_picasa_uploader_new (PublishingRESTSupportGoogleSession* session, SpitPublishingPublishable** publishables, int publishables_length1, PublishingPicasaPublishingParameters* parameters) {
 #line 925 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return publishing_picasa_uploader_construct (PUBLISHING_PICASA_TYPE_UPLOADER, session, publishables, publishables_length1, parameters);
-#line 7628 "PicasaPublishing.c"
+#line 7642 "PicasaPublishing.c"
 }
 
 
@@ -7692,7 +7706,7 @@ static PublishingRESTSupportTransaction* publishing_picasa_uploader_real_create_
 	result = _tmp6_;
 #line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	return result;
-#line 7668 "PicasaPublishing.c"
+#line 7682 "PicasaPublishing.c"
 }
 
 
@@ -7705,14 +7719,14 @@ static void publishing_picasa_uploader_class_init (PublishingPicasaUploaderClass
 	g_type_class_add_private (klass, sizeof (PublishingPicasaUploaderPrivate));
 #line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	((PublishingRESTSupportBatchUploaderClass *) klass)->create_transaction = publishing_picasa_uploader_real_create_transaction;
-#line 7681 "PicasaPublishing.c"
+#line 7695 "PicasaPublishing.c"
 }
 
 
 static void publishing_picasa_uploader_instance_init (PublishingPicasaUploader * self) {
 #line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	self->priv = PUBLISHING_PICASA_UPLOADER_GET_PRIVATE (self);
-#line 7688 "PicasaPublishing.c"
+#line 7702 "PicasaPublishing.c"
 }
 
 
@@ -7724,7 +7738,7 @@ static void publishing_picasa_uploader_finalize (PublishingRESTSupportBatchUploa
 	_publishing_picasa_publishing_parameters_unref0 (self->priv->parameters);
 #line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	PUBLISHING_REST_SUPPORT_BATCH_UPLOADER_CLASS (publishing_picasa_uploader_parent_class)->finalize (obj);
-#line 7700 "PicasaPublishing.c"
+#line 7714 "PicasaPublishing.c"
 }
 
 

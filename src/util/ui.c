@@ -21,9 +21,6 @@
 #define TYPE_COMPASS_POINT (compass_point_get_type ())
 
 #define TYPE_DIRECTION (direction_get_type ())
-#define _g_free0(var) (var = (g_free (var), NULL))
-#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
-#define _g_list_free0(var) ((var == NULL) ? NULL : (var = (g_list_free (var), NULL)))
 
 typedef enum  {
 	ADJUSTMENT_RELATION_BELOW,
@@ -54,7 +51,6 @@ void spin_event_loop (void);
 AdjustmentRelation get_adjustment_relation (GtkAdjustment* adjustment, gint value);
 void get_adjustment_page (GtkAdjustment* hadj, GtkAdjustment* vadj, GdkRectangle* result);
 gboolean has_only_key_modifier (GdkModifierType field, GdkModifierType mask);
-gchar* build_dummy_ui_string (GtkActionGroup** groups, int groups_length1);
 
 
 GType adjustment_relation_get_type (void) {
@@ -87,23 +83,23 @@ SpitTransitionsDirection direction_to_transition_direction (Direction self) {
 	switch (self) {
 #line 25 "/home/jens/Source/shotwell/src/util/ui.vala"
 		case DIRECTION_FORWARD:
-#line 91 "ui.c"
+#line 87 "ui.c"
 		{
 #line 27 "/home/jens/Source/shotwell/src/util/ui.vala"
 			result = SPIT_TRANSITIONS_DIRECTION_FORWARD;
 #line 27 "/home/jens/Source/shotwell/src/util/ui.vala"
 			return result;
-#line 97 "ui.c"
+#line 93 "ui.c"
 		}
 #line 25 "/home/jens/Source/shotwell/src/util/ui.vala"
 		case DIRECTION_BACKWARD:
-#line 101 "ui.c"
+#line 97 "ui.c"
 		{
 #line 30 "/home/jens/Source/shotwell/src/util/ui.vala"
 			result = SPIT_TRANSITIONS_DIRECTION_BACKWARD;
 #line 30 "/home/jens/Source/shotwell/src/util/ui.vala"
 			return result;
-#line 107 "ui.c"
+#line 103 "ui.c"
 		}
 		default:
 		{
@@ -112,7 +108,7 @@ SpitTransitionsDirection direction_to_transition_direction (Direction self) {
 			_tmp0_ = g_enum_get_value (g_type_class_ref (TYPE_DIRECTION), self);
 #line 33 "/home/jens/Source/shotwell/src/util/ui.vala"
 			g_error ("ui.vala:33: Unknown Direction %s", (_tmp0_ != NULL) ? _tmp0_->value_name : NULL);
-#line 116 "ui.c"
+#line 112 "ui.c"
 		}
 	}
 }
@@ -133,7 +129,7 @@ GType direction_get_type (void) {
 void spin_event_loop (void) {
 #line 39 "/home/jens/Source/shotwell/src/util/ui.vala"
 	while (TRUE) {
-#line 137 "ui.c"
+#line 133 "ui.c"
 		gboolean _tmp0_ = FALSE;
 #line 39 "/home/jens/Source/shotwell/src/util/ui.vala"
 		_tmp0_ = gtk_events_pending ();
@@ -141,11 +137,11 @@ void spin_event_loop (void) {
 		if (!_tmp0_) {
 #line 39 "/home/jens/Source/shotwell/src/util/ui.vala"
 			break;
-#line 145 "ui.c"
+#line 141 "ui.c"
 		}
 #line 40 "/home/jens/Source/shotwell/src/util/ui.vala"
 		gtk_main_iteration ();
-#line 149 "ui.c"
+#line 145 "ui.c"
 	}
 }
 
@@ -169,7 +165,7 @@ AdjustmentRelation get_adjustment_relation (GtkAdjustment* adjustment, gint valu
 		result = ADJUSTMENT_RELATION_BELOW;
 #line 45 "/home/jens/Source/shotwell/src/util/ui.vala"
 		return result;
-#line 173 "ui.c"
+#line 169 "ui.c"
 	} else {
 		gint _tmp3_ = 0;
 		GtkAdjustment* _tmp4_ = NULL;
@@ -192,13 +188,13 @@ AdjustmentRelation get_adjustment_relation (GtkAdjustment* adjustment, gint valu
 			result = ADJUSTMENT_RELATION_ABOVE;
 #line 47 "/home/jens/Source/shotwell/src/util/ui.vala"
 			return result;
-#line 196 "ui.c"
+#line 192 "ui.c"
 		} else {
 #line 49 "/home/jens/Source/shotwell/src/util/ui.vala"
 			result = ADJUSTMENT_RELATION_IN_RANGE;
 #line 49 "/home/jens/Source/shotwell/src/util/ui.vala"
 			return result;
-#line 202 "ui.c"
+#line 198 "ui.c"
 		}
 	}
 }
@@ -248,7 +244,7 @@ void get_adjustment_page (GtkAdjustment* hadj, GtkAdjustment* vadj, GdkRectangle
 	*result = rect;
 #line 59 "/home/jens/Source/shotwell/src/util/ui.vala"
 	return;
-#line 252 "ui.c"
+#line 248 "ui.c"
 }
 
 
@@ -264,141 +260,7 @@ gboolean has_only_key_modifier (GdkModifierType field, GdkModifierType mask) {
 	result = (_tmp0_ & ((((((((GDK_SHIFT_MASK | GDK_CONTROL_MASK) | GDK_MOD1_MASK) | GDK_MOD3_MASK) | GDK_MOD4_MASK) | GDK_MOD5_MASK) | GDK_SUPER_MASK) | GDK_HYPER_MASK) | GDK_META_MASK)) == _tmp1_;
 #line 77 "/home/jens/Source/shotwell/src/util/ui.vala"
 	return result;
-#line 268 "ui.c"
-}
-
-
-static gpointer _g_object_ref0 (gpointer self) {
-#line 91 "/home/jens/Source/shotwell/src/util/ui.vala"
-	return self ? g_object_ref (self) : NULL;
-#line 275 "ui.c"
-}
-
-
-gchar* build_dummy_ui_string (GtkActionGroup** groups, int groups_length1) {
-	gchar* result = NULL;
-	gchar* ui_string = NULL;
-	gchar* _tmp0_ = NULL;
-	GtkActionGroup** _tmp1_ = NULL;
-	gint _tmp1__length1 = 0;
-	const gchar* _tmp16_ = NULL;
-	gchar* _tmp17_ = NULL;
-#line 90 "/home/jens/Source/shotwell/src/util/ui.vala"
-	_tmp0_ = g_strdup ("<ui>");
-#line 90 "/home/jens/Source/shotwell/src/util/ui.vala"
-	ui_string = _tmp0_;
-#line 91 "/home/jens/Source/shotwell/src/util/ui.vala"
-	_tmp1_ = groups;
-#line 91 "/home/jens/Source/shotwell/src/util/ui.vala"
-	_tmp1__length1 = groups_length1;
-#line 295 "ui.c"
-	{
-		GtkActionGroup** group_collection = NULL;
-		gint group_collection_length1 = 0;
-		gint _group_collection_size_ = 0;
-		gint group_it = 0;
-#line 91 "/home/jens/Source/shotwell/src/util/ui.vala"
-		group_collection = _tmp1_;
-#line 91 "/home/jens/Source/shotwell/src/util/ui.vala"
-		group_collection_length1 = _tmp1__length1;
-#line 91 "/home/jens/Source/shotwell/src/util/ui.vala"
-		for (group_it = 0; group_it < _tmp1__length1; group_it = group_it + 1) {
-#line 307 "ui.c"
-			GtkActionGroup* _tmp2_ = NULL;
-			GtkActionGroup* group = NULL;
-#line 91 "/home/jens/Source/shotwell/src/util/ui.vala"
-			_tmp2_ = _g_object_ref0 (group_collection[group_it]);
-#line 91 "/home/jens/Source/shotwell/src/util/ui.vala"
-			group = _tmp2_;
-#line 314 "ui.c"
-			{
-				GtkActionGroup* _tmp3_ = NULL;
-				GList* _tmp4_ = NULL;
-#line 92 "/home/jens/Source/shotwell/src/util/ui.vala"
-				_tmp3_ = group;
-#line 92 "/home/jens/Source/shotwell/src/util/ui.vala"
-				_tmp4_ = gtk_action_group_list_actions (_tmp3_);
-#line 322 "ui.c"
-				{
-					GList* action_collection = NULL;
-					GList* action_it = NULL;
-#line 92 "/home/jens/Source/shotwell/src/util/ui.vala"
-					action_collection = _tmp4_;
-#line 92 "/home/jens/Source/shotwell/src/util/ui.vala"
-					for (action_it = action_collection; action_it != NULL; action_it = action_it->next) {
-#line 330 "ui.c"
-						GtkAction* _tmp5_ = NULL;
-						GtkAction* action = NULL;
-#line 92 "/home/jens/Source/shotwell/src/util/ui.vala"
-						_tmp5_ = _g_object_ref0 ((GtkAction*) action_it->data);
-#line 92 "/home/jens/Source/shotwell/src/util/ui.vala"
-						action = _tmp5_;
-#line 337 "ui.c"
-						{
-							const gchar* _tmp6_ = NULL;
-							GtkAction* _tmp7_ = NULL;
-							const gchar* _tmp8_ = NULL;
-							const gchar* _tmp9_ = NULL;
-							GtkAction* _tmp10_ = NULL;
-							const gchar* _tmp11_ = NULL;
-							const gchar* _tmp12_ = NULL;
-							gchar* _tmp13_ = NULL;
-							gchar* _tmp14_ = NULL;
-							gchar* _tmp15_ = NULL;
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_tmp6_ = ui_string;
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_tmp7_ = action;
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_tmp8_ = gtk_action_get_name (_tmp7_);
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_tmp9_ = _tmp8_;
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_tmp10_ = action;
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_tmp11_ = gtk_action_get_name (_tmp10_);
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_tmp12_ = _tmp11_;
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_tmp13_ = g_strdup_printf ("<accelerator name=\"%s\" action=\"%s\" />", _tmp9_, _tmp12_);
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_tmp14_ = _tmp13_;
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_tmp15_ = g_strconcat (_tmp6_, _tmp14_, NULL);
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_g_free0 (ui_string);
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							ui_string = _tmp15_;
-#line 93 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_g_free0 (_tmp14_);
-#line 92 "/home/jens/Source/shotwell/src/util/ui.vala"
-							_g_object_unref0 (action);
-#line 377 "ui.c"
-						}
-					}
-#line 92 "/home/jens/Source/shotwell/src/util/ui.vala"
-					_g_list_free0 (action_collection);
-#line 382 "ui.c"
-				}
-#line 91 "/home/jens/Source/shotwell/src/util/ui.vala"
-				_g_object_unref0 (group);
-#line 386 "ui.c"
-			}
-		}
-	}
-#line 95 "/home/jens/Source/shotwell/src/util/ui.vala"
-	_tmp16_ = ui_string;
-#line 95 "/home/jens/Source/shotwell/src/util/ui.vala"
-	_tmp17_ = g_strconcat (_tmp16_, "</ui>", NULL);
-#line 95 "/home/jens/Source/shotwell/src/util/ui.vala"
-	_g_free0 (ui_string);
-#line 95 "/home/jens/Source/shotwell/src/util/ui.vala"
-	ui_string = _tmp17_;
-#line 97 "/home/jens/Source/shotwell/src/util/ui.vala"
-	result = ui_string;
-#line 97 "/home/jens/Source/shotwell/src/util/ui.vala"
-	return result;
-#line 402 "ui.c"
+#line 264 "ui.c"
 }
 
 

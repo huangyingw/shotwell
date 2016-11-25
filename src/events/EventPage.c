@@ -14,6 +14,7 @@
 #include <string.h>
 #include <gee.h>
 #include <gdk/gdk.h>
+#include <gio/gio.h>
 #include <glib/gi18n-lib.h>
 
 
@@ -304,6 +305,16 @@ typedef struct _ViewCollectionClass ViewCollectionClass;
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 #define _g_free0(var) (var = (g_free (var), NULL))
 
+#define TYPE_APP_WINDOW (app_window_get_type ())
+#define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
+#define APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APP_WINDOW, AppWindowClass))
+#define IS_APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APP_WINDOW))
+#define IS_APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APP_WINDOW))
+#define APP_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APP_WINDOW, AppWindowClass))
+
+typedef struct _AppWindow AppWindow;
+typedef struct _AppWindowClass AppWindowClass;
+
 #define TYPE_CONFIGURATION_FACADE (configuration_facade_get_type ())
 #define CONFIGURATION_FACADE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_CONFIGURATION_FACADE, ConfigurationFacade))
 #define CONFIGURATION_FACADE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_CONFIGURATION_FACADE, ConfigurationFacadeClass))
@@ -405,16 +416,6 @@ typedef struct _CommandManagerClass CommandManagerClass;
 
 typedef struct _MediaSource MediaSource;
 typedef struct _MediaSourceClass MediaSourceClass;
-
-#define TYPE_APP_WINDOW (app_window_get_type ())
-#define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
-#define APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APP_WINDOW, AppWindowClass))
-#define IS_APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APP_WINDOW))
-#define IS_APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APP_WINDOW))
-#define APP_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APP_WINDOW, AppWindowClass))
-
-typedef struct _AppWindow AppWindow;
-typedef struct _AppWindowClass AppWindowClass;
 
 #define TYPE_LIBRARY_WINDOW (library_window_get_type ())
 #define LIBRARY_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_LIBRARY_WINDOW, LibraryWindow))
@@ -518,7 +519,7 @@ typedef struct _EventID EventID;
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -528,8 +529,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -537,10 +536,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -652,13 +649,13 @@ struct _MediaPageClass {
 	void (*on_move_to_trash) (MediaPage* self);
 	void (*on_edit_title) (MediaPage* self);
 	void (*on_edit_comment) (MediaPage* self);
-	void (*on_display_titles) (MediaPage* self, GtkAction* action);
-	void (*on_display_comments) (MediaPage* self, GtkAction* action);
-	void (*on_display_ratings) (MediaPage* self, GtkAction* action);
-	void (*on_display_tags) (MediaPage* self, GtkAction* action);
+	void (*on_display_titles) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_comments) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_ratings) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_tags) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*get_config_photos_sort) (MediaPage* self, gboolean* sort_order, gint* sort_by);
 	void (*set_config_photos_sort) (MediaPage* self, gboolean sort_order, gint sort_by);
-	void (*on_sort_changed) (MediaPage* self);
+	void (*on_sort_changed) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*developer_changed) (MediaPage* self, RawDeveloper rd);
 	DataView* (*create_thumbnail) (MediaPage* self, DataSource* source);
 };
@@ -812,6 +809,12 @@ static void _event_page_on_events_altered_data_collection_items_altered (DataCol
 GType view_collection_get_type (void) G_GNUC_CONST;
 ViewCollection* page_get_view (Page* self);
 void view_collection_halt_mirroring (ViewCollection* self);
+static void event_page_on_make_primary (EventPage* self);
+static void _event_page_on_make_primary_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void event_page_on_rename (EventPage* self);
+static void _event_page_on_rename_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+void media_page_on_edit_comment (MediaPage* self);
+static void _media_page_on_edit_comment_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
 EventPage* event_page_new (Event* page_event);
 EventPage* event_page_construct (GType object_type, Event* page_event);
 gchar* data_object_get_name (DataObject* self);
@@ -826,22 +829,10 @@ gint view_collection_get_selected_count (ViewCollection* self);
 gboolean page_on_app_key_pressed (Page* self, GdkEventKey* event);
 static void event_page_real_init_collect_ui_filenames (Page* base, GeeList* ui_filenames);
 void page_init_collect_ui_filenames (Page* self, GeeList* ui_filenames);
-static GtkActionEntry* event_page_real_init_collect_action_entries (Page* base, int* result_length1);
-GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length1);
-#define RESOURCES_MAKE_PRIMARY "shotwell-make-primary"
-#define TRANSLATABLE "translatable"
-static void event_page_on_make_primary (EventPage* self);
-static void _event_page_on_make_primary_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_MAKE_KEY_PHOTO_MENU _ ("Make _Key Photo for Event")
-static void _vala_array_add130 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-static void event_page_on_rename (EventPage* self);
-static void _event_page_on_rename_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_RENAME_EVENT_MENU _ ("Re_name Event…")
-static void _vala_array_add131 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_EDIT_EVENT_COMMENT_MENU _ ("Edit Event _Comment…")
-void media_page_on_edit_comment (MediaPage* self);
-static void _media_page_on_edit_comment_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add132 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
+static void event_page_real_add_actions (Page* base);
+void page_add_actions (Page* self);
+GType app_window_get_type (void) G_GNUC_CONST;
+AppWindow* app_window_get_instance (void);
 static void event_page_real_init_actions (Page* base, gint selected_count, gint count);
 void page_init_actions (Page* self, gint selected_count, gint count);
 static void event_page_real_update_actions (Page* base, gint selected_count, gint count);
@@ -888,7 +879,6 @@ GType media_source_get_type (void) G_GNUC_CONST;
 gboolean event_set_primary_source (Event* self, MediaSource* source);
 DataView* view_collection_get_selected_at (ViewCollection* self, gint index);
 DataSource* data_view_get_source (DataView* self);
-GType app_window_get_type (void) G_GNUC_CONST;
 GType library_window_get_type (void) G_GNUC_CONST;
 LibraryWindow* library_window_get_app (void);
 void library_window_rename_event_in_sidebar (LibraryWindow* self, Event* event);
@@ -940,18 +930,40 @@ void media_source_get_event_id (MediaSource* self, EventID* result);
 gboolean view_manager_include_in_view (ViewManager* self, DataSource* source);
 static void no_event_page_finalize (GObject* obj);
 
+static const GActionEntry EVENT_PAGE_entries[3] = {{"MakePrimary", _event_page_on_make_primary_gsimple_action_activate_callback}, {"Rename", _event_page_on_rename_gsimple_action_activate_callback}, {"EditEventComment", _media_page_on_edit_comment_gsimple_action_activate_callback}};
 
 static void _event_page_on_events_altered_data_collection_items_altered (DataCollection* _sender, GeeMap* items, gpointer self) {
 #line 40 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	event_page_on_events_altered ((EventPage*) self, items);
-#line 948 "EventPage.c"
+#line 939 "EventPage.c"
+}
+
+
+static void _event_page_on_make_primary_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 50 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+	event_page_on_make_primary ((EventPage*) self);
+#line 946 "EventPage.c"
+}
+
+
+static void _event_page_on_rename_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 50 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+	event_page_on_rename ((EventPage*) self);
+#line 953 "EventPage.c"
+}
+
+
+static void _media_page_on_edit_comment_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 50 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+	media_page_on_edit_comment ((MediaPage*) self);
+#line 960 "EventPage.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 13 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 955 "EventPage.c"
+#line 967 "EventPage.c"
 }
 
 
@@ -960,7 +972,7 @@ static DataView* _media_page_create_thumbnail_create_view (DataSource* source, g
 	result = media_page_create_thumbnail ((MediaPage*) self, source);
 #line 14 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	return result;
-#line 964 "EventPage.c"
+#line 976 "EventPage.c"
 }
 
 
@@ -1013,14 +1025,14 @@ EventPage* event_page_construct (GType object_type, Event* page_event) {
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, TYPE_DATA_COLLECTION, DataCollection), "items-altered", (GCallback) _event_page_on_events_altered_data_collection_items_altered, self, 0);
 #line 10 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	return self;
-#line 1017 "EventPage.c"
+#line 1029 "EventPage.c"
 }
 
 
 EventPage* event_page_new (Event* page_event) {
 #line 10 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	return event_page_construct (TYPE_EVENT_PAGE, page_event);
-#line 1024 "EventPage.c"
+#line 1036 "EventPage.c"
 }
 
 
@@ -1038,7 +1050,7 @@ Event* event_page_get_event (EventPage* self) {
 	result = _tmp1_;
 #line 22 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	return result;
-#line 1042 "EventPage.c"
+#line 1054 "EventPage.c"
 }
 
 
@@ -1062,7 +1074,7 @@ static gboolean event_page_real_on_app_key_pressed (Page* base, GdkEventKey* eve
 	_tmp2_ = gdk_keyval_name (_tmp1_);
 #line 30 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	if (g_strcmp0 (_tmp2_, "F2") == 0) {
-#line 1066 "EventPage.c"
+#line 1078 "EventPage.c"
 		ViewCollection* _tmp3_ = NULL;
 		ViewCollection* _tmp4_ = NULL;
 		gint _tmp5_ = 0;
@@ -1083,7 +1095,7 @@ static gboolean event_page_real_on_app_key_pressed (Page* base, GdkEventKey* eve
 			result = TRUE;
 #line 32 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 			return result;
-#line 1087 "EventPage.c"
+#line 1099 "EventPage.c"
 		}
 	}
 #line 36 "/home/jens/Source/shotwell/src/events/EventPage.vala"
@@ -1094,7 +1106,7 @@ static gboolean event_page_real_on_app_key_pressed (Page* base, GdkEventKey* eve
 	result = _tmp8_;
 #line 36 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	return result;
-#line 1098 "EventPage.c"
+#line 1110 "EventPage.c"
 }
 
 
@@ -1114,198 +1126,27 @@ static void event_page_real_init_collect_ui_filenames (Page* base, GeeList* ui_f
 	_tmp1_ = ui_filenames;
 #line 47 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_COLLECTION, GeeCollection), "event.ui");
-#line 1118 "EventPage.c"
+#line 1130 "EventPage.c"
 }
 
 
-static void _event_page_on_make_primary_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 53 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	event_page_on_make_primary ((EventPage*) self);
-#line 1125 "EventPage.c"
-}
-
-
-static void _vala_array_add130 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 56 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	if ((*length) == (*size)) {
-#line 56 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 56 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1136 "EventPage.c"
-	}
-#line 56 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	(*array)[(*length)++] = *value;
-#line 1140 "EventPage.c"
-}
-
-
-static void _event_page_on_rename_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 58 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	event_page_on_rename ((EventPage*) self);
-#line 1147 "EventPage.c"
-}
-
-
-static void _vala_array_add131 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 60 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	if ((*length) == (*size)) {
-#line 60 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 60 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1158 "EventPage.c"
-	}
-#line 60 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	(*array)[(*length)++] = *value;
-#line 1162 "EventPage.c"
-}
-
-
-static void _media_page_on_edit_comment_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 62 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	media_page_on_edit_comment ((MediaPage*) self);
-#line 1169 "EventPage.c"
-}
-
-
-static void _vala_array_add132 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 65 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	if ((*length) == (*size)) {
-#line 65 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 65 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1180 "EventPage.c"
-	}
-#line 65 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	(*array)[(*length)++] = *value;
-#line 1184 "EventPage.c"
-}
-
-
-static GtkActionEntry* event_page_real_init_collect_action_entries (Page* base, int* result_length1) {
+static void event_page_real_add_actions (Page* base) {
 	EventPage * self;
-	GtkActionEntry* result = NULL;
-	GtkActionEntry* new_actions = NULL;
-	gint _tmp0_ = 0;
-	GtkActionEntry* _tmp1_ = NULL;
-	gint new_actions_length1 = 0;
-	gint _new_actions_size_ = 0;
-	GtkActionEntry make_primary = {0};
-	GtkActionEntry _tmp2_ = {0};
-	GtkActionEntry* _tmp3_ = NULL;
-	gint _tmp3__length1 = 0;
-	GtkActionEntry _tmp4_ = {0};
-	GtkActionEntry rename = {0};
-	GtkActionEntry _tmp5_ = {0};
-	GtkActionEntry* _tmp6_ = NULL;
-	gint _tmp6__length1 = 0;
-	GtkActionEntry _tmp7_ = {0};
-	GtkActionEntry comment = {0};
-	GtkActionEntry _tmp8_ = {0};
-	GtkActionEntry* _tmp9_ = NULL;
-	gint _tmp9__length1 = 0;
-	GtkActionEntry _tmp10_ = {0};
-	GtkActionEntry* _tmp11_ = NULL;
-	gint _tmp11__length1 = 0;
-#line 50 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+	AppWindow* _tmp0_ = NULL;
+	AppWindow* _tmp1_ = NULL;
+#line 56 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENT_PAGE, EventPage);
-#line 51 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp1_ = PAGE_CLASS (event_page_parent_class)->init_collect_action_entries (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_COLLECTION_PAGE, CollectionPage), TYPE_PAGE, Page), &_tmp0_);
-#line 51 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	new_actions = _tmp1_;
-#line 51 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	new_actions_length1 = _tmp0_;
-#line 51 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_new_actions_size_ = new_actions_length1;
-#line 53 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp2_.name = "MakePrimary";
-#line 53 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp2_.stock_id = RESOURCES_MAKE_PRIMARY;
-#line 53 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp2_.label = TRANSLATABLE;
-#line 53 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp2_.accelerator = NULL;
-#line 53 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp2_.tooltip = TRANSLATABLE;
-#line 53 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp2_.callback = (GCallback) _event_page_on_make_primary_gtk_action_callback;
-#line 53 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	make_primary = _tmp2_;
-#line 55 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	make_primary.label = RESOURCES_MAKE_KEY_PHOTO_MENU;
-#line 56 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp3_ = new_actions;
-#line 56 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp3__length1 = new_actions_length1;
-#line 56 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp4_ = make_primary;
-#line 56 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_vala_array_add130 (&new_actions, &new_actions_length1, &_new_actions_size_, &_tmp4_);
-#line 58 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp5_.name = "Rename";
-#line 58 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp5_.stock_id = NULL;
-#line 58 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp5_.label = TRANSLATABLE;
-#line 58 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp5_.accelerator = NULL;
-#line 58 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp5_.tooltip = TRANSLATABLE;
-#line 58 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp5_.callback = (GCallback) _event_page_on_rename_gtk_action_callback;
-#line 58 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	rename = _tmp5_;
+#line 57 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+	PAGE_CLASS (event_page_parent_class)->add_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_COLLECTION_PAGE, CollectionPage), TYPE_PAGE, Page));
 #line 59 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	rename.label = RESOURCES_RENAME_EVENT_MENU;
-#line 60 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp6_ = new_actions;
-#line 60 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp6__length1 = new_actions_length1;
-#line 60 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp7_ = rename;
-#line 60 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_vala_array_add131 (&new_actions, &new_actions_length1, &_new_actions_size_, &_tmp7_);
-#line 62 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp8_.name = "EditEventComment";
-#line 62 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp8_.stock_id = NULL;
-#line 62 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp8_.label = TRANSLATABLE;
-#line 62 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp8_.accelerator = NULL;
-#line 62 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp8_.tooltip = RESOURCES_EDIT_EVENT_COMMENT_MENU;
-#line 62 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp8_.callback = (GCallback) _media_page_on_edit_comment_gtk_action_callback;
-#line 62 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	comment = _tmp8_;
-#line 64 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	comment.label = RESOURCES_EDIT_EVENT_COMMENT_MENU;
-#line 65 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp9_ = new_actions;
-#line 65 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp9__length1 = new_actions_length1;
-#line 65 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp10_ = comment;
-#line 65 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_vala_array_add132 (&new_actions, &new_actions_length1, &_new_actions_size_, &_tmp10_);
-#line 67 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp11_ = new_actions;
-#line 67 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	_tmp11__length1 = new_actions_length1;
-#line 67 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	if (result_length1) {
-#line 67 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-		*result_length1 = _tmp11__length1;
-#line 1303 "EventPage.c"
-	}
-#line 67 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	result = _tmp11_;
-#line 67 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	return result;
-#line 1309 "EventPage.c"
+	_tmp0_ = app_window_get_instance ();
+#line 59 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+	_tmp1_ = _tmp0_;
+#line 59 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+	g_action_map_add_action_entries (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, g_action_map_get_type (), GActionMap), EVENT_PAGE_entries, G_N_ELEMENTS (EVENT_PAGE_entries), self);
+#line 59 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+	_g_object_unref0 (_tmp1_);
+#line 1150 "EventPage.c"
 }
 
 
@@ -1313,15 +1154,15 @@ static void event_page_real_init_actions (Page* base, gint selected_count, gint 
 	EventPage * self;
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
-#line 70 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 62 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENT_PAGE, EventPage);
-#line 71 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 63 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = selected_count;
-#line 71 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 63 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = count;
-#line 71 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 63 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	PAGE_CLASS (event_page_parent_class)->init_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_COLLECTION_PAGE, CollectionPage), TYPE_PAGE, Page), _tmp0_, _tmp1_);
-#line 1325 "EventPage.c"
+#line 1166 "EventPage.c"
 }
 
 
@@ -1330,23 +1171,23 @@ static void event_page_real_update_actions (Page* base, gint selected_count, gin
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
 	gint _tmp2_ = 0;
-#line 74 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 66 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENT_PAGE, EventPage);
-#line 75 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 67 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = selected_count;
-#line 75 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 67 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "MakePrimary", _tmp0_ == 1);
-#line 78 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 70 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	page_set_action_visible (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "CommonJumpToEvent", FALSE);
-#line 80 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 72 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = selected_count;
-#line 80 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 72 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp2_ = count;
-#line 80 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 72 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	PAGE_CLASS (event_page_parent_class)->update_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_COLLECTION_PAGE, CollectionPage), TYPE_PAGE, Page), _tmp1_, _tmp2_);
-#line 84 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 76 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "EditEventComment", TRUE);
-#line 1350 "EventPage.c"
+#line 1191 "EventPage.c"
 }
 
 
@@ -1358,31 +1199,31 @@ static void event_page_real_get_config_photos_sort (MediaPage* base, gboolean* s
 	ConfigFacade* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	gint _tmp3_ = 0;
-#line 87 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 79 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENT_PAGE, EventPage);
-#line 88 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = config_facade_get_instance ();
-#line 88 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = _tmp0_;
-#line 88 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	configuration_facade_get_event_photos_sort (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), &_tmp2_, &_tmp3_);
-#line 88 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_vala_sort_order = _tmp2_;
-#line 88 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_vala_sort_by = _tmp3_;
-#line 88 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_g_object_unref0 (_tmp1_);
-#line 87 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 79 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	if (sort_order) {
-#line 87 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 79 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		*sort_order = _vala_sort_order;
-#line 1380 "EventPage.c"
+#line 1221 "EventPage.c"
 	}
-#line 87 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 79 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	if (sort_by) {
-#line 87 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 79 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		*sort_by = _vala_sort_by;
-#line 1386 "EventPage.c"
+#line 1227 "EventPage.c"
 	}
 }
 
@@ -1393,21 +1234,21 @@ static void event_page_real_set_config_photos_sort (MediaPage* base, gboolean so
 	ConfigFacade* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	gint _tmp3_ = 0;
-#line 91 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 83 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENT_PAGE, EventPage);
-#line 92 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 84 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = config_facade_get_instance ();
-#line 92 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 84 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = _tmp0_;
-#line 92 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 84 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp2_ = sort_order;
-#line 92 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 84 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp3_ = sort_by;
-#line 92 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 84 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	configuration_facade_set_event_photos_sort (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp2_, _tmp3_);
-#line 92 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 84 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1411 "EventPage.c"
+#line 1252 "EventPage.c"
 }
 
 
@@ -1415,33 +1256,33 @@ static void event_page_on_events_altered (EventPage* self, GeeMap* map) {
 	GeeMap* _tmp0_ = NULL;
 	Event* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
-#line 95 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	g_return_if_fail (IS_EVENT_PAGE (self));
-#line 95 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	g_return_if_fail (GEE_IS_MAP (map));
-#line 96 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 88 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = map;
-#line 96 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 88 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = self->priv->page_event;
-#line 96 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 88 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp2_ = gee_map_has_key (_tmp0_, G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_OBJECT, DataObject));
-#line 96 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 88 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	if (_tmp2_) {
-#line 1431 "EventPage.c"
+#line 1272 "EventPage.c"
 		Event* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
-#line 97 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 89 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp3_ = self->priv->page_event;
-#line 97 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 89 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp4_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_DATA_OBJECT, DataObject));
-#line 97 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 89 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp5_ = _tmp4_;
-#line 97 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 89 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		page_set_page_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), _tmp5_);
-#line 97 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 89 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_g_free0 (_tmp5_);
-#line 1445 "EventPage.c"
+#line 1286 "EventPage.c"
 	}
 }
 
@@ -1452,21 +1293,21 @@ static void event_page_real_on_edit_comment (MediaPage* base) {
 	ViewCollection* _tmp1_ = NULL;
 	gint _tmp2_ = 0;
 	gboolean _tmp3_ = FALSE;
-#line 100 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 92 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENT_PAGE, EventPage);
-#line 101 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 101 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = _tmp0_;
-#line 101 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp2_ = view_collection_get_selected_count (_tmp1_);
-#line 101 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp3_ = _tmp2_ == 0;
-#line 101 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 101 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	if (_tmp3_) {
-#line 1470 "EventPage.c"
+#line 1311 "EventPage.c"
 		EditCommentDialog* edit_comment_dialog = NULL;
 		Event* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
@@ -1484,69 +1325,69 @@ static void event_page_real_on_edit_comment (MediaPage* base) {
 		CommandManager* _tmp15_ = NULL;
 		CommandManager* _tmp16_ = NULL;
 		EditEventCommentCommand* _tmp17_ = NULL;
-#line 102 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 94 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp4_ = self->priv->page_event;
-#line 102 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 94 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp5_ = event_source_get_comment (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_EVENT_SOURCE, EventSource));
-#line 102 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 94 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp6_ = _tmp5_;
-#line 102 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 94 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp7_ = edit_comment_dialog_new (_tmp6_, TRUE);
-#line 102 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 94 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp8_ = _tmp7_;
-#line 102 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 94 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_g_free0 (_tmp6_);
-#line 102 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 94 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		edit_comment_dialog = _tmp8_;
-#line 104 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp9_ = edit_comment_dialog;
-#line 104 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp10_ = edit_comment_dialog_execute (_tmp9_);
-#line 104 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		new_comment = _tmp10_;
-#line 105 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 97 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp11_ = new_comment;
-#line 105 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 97 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		if (_tmp11_ == NULL) {
-#line 106 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 98 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 			_g_free0 (new_comment);
-#line 106 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 98 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 			_multi_text_entry_dialog_mediator_unref0 (edit_comment_dialog);
-#line 106 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 98 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 			return;
-#line 1518 "EventPage.c"
+#line 1359 "EventPage.c"
 		}
-#line 108 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 100 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp12_ = self->priv->page_event;
-#line 108 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 100 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp13_ = new_comment;
-#line 108 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 100 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp14_ = edit_event_comment_command_new (_tmp12_, _tmp13_);
-#line 108 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 100 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		command = _tmp14_;
-#line 109 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 101 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp15_ = page_get_command_manager (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 109 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 101 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp16_ = _tmp15_;
-#line 109 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 101 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp17_ = command;
-#line 109 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 101 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		command_manager_execute (_tmp16_, G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, TYPE_COMMAND, Command));
-#line 109 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 101 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_command_manager_unref0 (_tmp16_);
-#line 110 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 102 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_g_object_unref0 (command);
-#line 110 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 102 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_g_free0 (new_comment);
-#line 110 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 102 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_multi_text_entry_dialog_mediator_unref0 (edit_comment_dialog);
-#line 110 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 102 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		return;
-#line 1546 "EventPage.c"
+#line 1387 "EventPage.c"
 	}
-#line 113 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 105 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	MEDIA_PAGE_CLASS (event_page_parent_class)->on_edit_comment (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_COLLECTION_PAGE, CollectionPage), TYPE_MEDIA_PAGE, MediaPage));
-#line 1550 "EventPage.c"
+#line 1391 "EventPage.c"
 }
 
 
@@ -1562,47 +1403,47 @@ static void event_page_on_make_primary (EventPage* self) {
 	DataView* _tmp8_ = NULL;
 	DataSource* _tmp9_ = NULL;
 	MediaSource* _tmp10_ = NULL;
-#line 116 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 108 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	g_return_if_fail (IS_EVENT_PAGE (self));
-#line 117 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 109 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 117 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 109 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = _tmp0_;
-#line 117 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 109 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp2_ = view_collection_get_selected_count (_tmp1_);
-#line 117 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 109 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp3_ = _tmp2_ != 1;
-#line 117 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 109 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 117 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 109 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	if (_tmp3_) {
-#line 118 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 110 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		return;
-#line 1582 "EventPage.c"
+#line 1423 "EventPage.c"
 	}
-#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 112 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp4_ = self->priv->page_event;
-#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 112 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp5_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 112 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp6_ = _tmp5_;
-#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 112 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp7_ = view_collection_get_selected_at (_tmp6_, 0);
-#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 112 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp8_ = _tmp7_;
-#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 112 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp9_ = data_view_get_source (_tmp8_);
-#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 112 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp10_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_MEDIA_SOURCE, MediaSource);
-#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 112 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	event_set_primary_source (_tmp4_, _tmp10_);
-#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 112 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_g_object_unref0 (_tmp10_);
-#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 112 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_g_object_unref0 (_tmp8_);
-#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 112 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_data_collection_unref0 (_tmp6_);
-#line 1606 "EventPage.c"
+#line 1447 "EventPage.c"
 }
 
 
@@ -1610,19 +1451,19 @@ static void event_page_on_rename (EventPage* self) {
 	LibraryWindow* _tmp0_ = NULL;
 	LibraryWindow* _tmp1_ = NULL;
 	Event* _tmp2_ = NULL;
-#line 123 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 115 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	g_return_if_fail (IS_EVENT_PAGE (self));
-#line 124 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 116 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = library_window_get_app ();
-#line 124 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 116 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = _tmp0_;
-#line 124 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 116 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp2_ = self->priv->page_event;
-#line 124 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 116 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	library_window_rename_event_in_sidebar (_tmp1_, _tmp2_);
-#line 124 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 116 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1626 "EventPage.c"
+#line 1467 "EventPage.c"
 }
 
 
@@ -1636,7 +1477,7 @@ static void event_page_class_init (EventPageClass * klass) {
 #line 7 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	((PageClass *) klass)->init_collect_ui_filenames = event_page_real_init_collect_ui_filenames;
 #line 7 "/home/jens/Source/shotwell/src/events/EventPage.vala"
-	((PageClass *) klass)->init_collect_action_entries = event_page_real_init_collect_action_entries;
+	((PageClass *) klass)->add_actions = event_page_real_add_actions;
 #line 7 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	((PageClass *) klass)->init_actions = event_page_real_init_actions;
 #line 7 "/home/jens/Source/shotwell/src/events/EventPage.vala"
@@ -1649,14 +1490,14 @@ static void event_page_class_init (EventPageClass * klass) {
 	((MediaPageClass *) klass)->on_edit_comment = event_page_real_on_edit_comment;
 #line 7 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = event_page_finalize;
-#line 1653 "EventPage.c"
+#line 1494 "EventPage.c"
 }
 
 
 static void event_page_instance_init (EventPage * self) {
 #line 7 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self->priv = EVENT_PAGE_GET_PRIVATE (self);
-#line 1660 "EventPage.c"
+#line 1501 "EventPage.c"
 }
 
 
@@ -1686,7 +1527,7 @@ static void event_page_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->page_event);
 #line 7 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	G_OBJECT_CLASS (event_page_parent_class)->finalize (obj);
-#line 1690 "EventPage.c"
+#line 1531 "EventPage.c"
 }
 
 
@@ -1718,56 +1559,56 @@ NoEventPage* no_event_page_construct (GType object_type) {
 	Alteration* _tmp10_ = NULL;
 	ViewCollectionMonitor* _tmp11_ = NULL;
 	ViewCollectionMonitor* _tmp12_ = NULL;
-#line 147 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 139 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = (NoEventPage*) collection_page_construct (object_type, NO_EVENT_PAGE_NAME);
-#line 149 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 141 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = no_event_page_no_event_view_manager_new (self);
-#line 149 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 141 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	filter = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_VIEW_MANAGER, ViewManager);
-#line 150 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 142 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 150 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 142 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp2_ = _tmp1_;
-#line 150 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 142 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp3_ = library_photo_global;
-#line 150 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 142 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp4_ = no_event_page_no_event_page_alteration;
-#line 150 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 142 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp5_ = view_collection_monitor_source_collection (_tmp2_, G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_SOURCE_COLLECTION, SourceCollection), filter, _tmp4_, NULL, NULL, NULL);
-#line 150 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 142 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp6_ = _tmp5_;
-#line 150 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 142 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_view_collection_monitor_unref0 (_tmp6_);
-#line 150 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 142 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_data_collection_unref0 (_tmp2_);
-#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp7_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp8_ = _tmp7_;
-#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp9_ = video_global;
-#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp10_ = no_event_page_no_event_page_alteration;
-#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp11_ = view_collection_monitor_source_collection (_tmp8_, G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_SOURCE_COLLECTION, SourceCollection), filter, _tmp10_, NULL, NULL, NULL);
-#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp12_ = _tmp11_;
-#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_view_collection_monitor_unref0 (_tmp12_);
-#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_data_collection_unref0 (_tmp8_);
-#line 146 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 138 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_view_manager_unref0 (filter);
-#line 146 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 138 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	return self;
-#line 1764 "EventPage.c"
+#line 1605 "EventPage.c"
 }
 
 
 NoEventPage* no_event_page_new (void) {
-#line 146 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 138 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	return no_event_page_construct (TYPE_NO_EVENT_PAGE);
-#line 1771 "EventPage.c"
+#line 1612 "EventPage.c"
 }
 
 
@@ -1779,31 +1620,31 @@ static void no_event_page_real_get_config_photos_sort (MediaPage* base, gboolean
 	ConfigFacade* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	gint _tmp3_ = 0;
-#line 154 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 146 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_NO_EVENT_PAGE, NoEventPage);
-#line 155 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 147 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = config_facade_get_instance ();
-#line 155 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 147 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = _tmp0_;
-#line 155 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 147 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	configuration_facade_get_event_photos_sort (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), &_tmp2_, &_tmp3_);
-#line 155 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 147 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_vala_sort_order = _tmp2_;
-#line 155 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 147 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_vala_sort_by = _tmp3_;
-#line 155 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 147 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_g_object_unref0 (_tmp1_);
-#line 154 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 146 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	if (sort_order) {
-#line 154 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 146 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		*sort_order = _vala_sort_order;
-#line 1801 "EventPage.c"
+#line 1642 "EventPage.c"
 	}
-#line 154 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 146 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	if (sort_by) {
-#line 154 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 146 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		*sort_by = _vala_sort_by;
-#line 1807 "EventPage.c"
+#line 1648 "EventPage.c"
 	}
 }
 
@@ -1814,43 +1655,43 @@ static void no_event_page_real_set_config_photos_sort (MediaPage* base, gboolean
 	ConfigFacade* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	gint _tmp3_ = 0;
-#line 158 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 150 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_NO_EVENT_PAGE, NoEventPage);
-#line 159 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = config_facade_get_instance ();
-#line 159 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = _tmp0_;
-#line 159 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp2_ = sort_order;
-#line 159 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp3_ = sort_by;
-#line 159 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	configuration_facade_set_event_photos_sort (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp2_, _tmp3_);
-#line 159 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 151 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1832 "EventPage.c"
+#line 1673 "EventPage.c"
 }
 
 
 static NoEventPageNoEventViewManager* no_event_page_no_event_view_manager_construct (GType object_type, NoEventPage* page) {
 	NoEventPageNoEventViewManager* self = NULL;
 	NoEventPage* _tmp0_ = NULL;
-#line 133 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 125 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	g_return_val_if_fail (IS_NO_EVENT_PAGE (page), NULL);
-#line 134 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 126 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = page;
-#line 134 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 126 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = (NoEventPageNoEventViewManager*) collection_view_manager_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_COLLECTION_PAGE, CollectionPage));
-#line 133 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 125 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	return self;
-#line 1847 "EventPage.c"
+#line 1688 "EventPage.c"
 }
 
 
 static NoEventPageNoEventViewManager* no_event_page_no_event_view_manager_new (NoEventPage* page) {
-#line 133 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 125 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	return no_event_page_no_event_view_manager_construct (NO_EVENT_PAGE_TYPE_NO_EVENT_VIEW_MANAGER, page);
-#line 1854 "EventPage.c"
+#line 1695 "EventPage.c"
 }
 
 
@@ -1861,46 +1702,46 @@ static gboolean no_event_page_no_event_view_manager_real_include_in_view (ViewMa
 	DataSource* _tmp1_ = NULL;
 	EventID _tmp2_ = {0};
 	gint64 _tmp3_ = 0LL;
-#line 138 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 130 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, NO_EVENT_PAGE_TYPE_NO_EVENT_VIEW_MANAGER, NoEventPageNoEventViewManager);
-#line 138 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 130 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	g_return_val_if_fail (IS_DATA_SOURCE (source), FALSE);
-#line 139 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 131 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp1_ = source;
-#line 139 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 131 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	media_source_get_event_id (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_MEDIA_SOURCE, MediaSource), &_tmp2_);
-#line 139 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 131 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp3_ = _tmp2_.id;
-#line 139 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 131 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	if (_tmp3_ != EVENT_ID_INVALID) {
-#line 139 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 131 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp0_ = FALSE;
-#line 1879 "EventPage.c"
+#line 1720 "EventPage.c"
 	} else {
 		DataSource* _tmp4_ = NULL;
 		gboolean _tmp5_ = FALSE;
-#line 140 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 132 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp4_ = source;
-#line 140 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 132 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp5_ = VIEW_MANAGER_CLASS (no_event_page_no_event_view_manager_parent_class)->include_in_view (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_COLLECTION_VIEW_MANAGER, CollectionViewManager), TYPE_VIEW_MANAGER, ViewManager), _tmp4_);
-#line 140 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 132 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 		_tmp0_ = _tmp5_;
-#line 1889 "EventPage.c"
+#line 1730 "EventPage.c"
 	}
-#line 139 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 131 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	result = _tmp0_;
-#line 139 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 131 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	return result;
-#line 1895 "EventPage.c"
+#line 1736 "EventPage.c"
 }
 
 
 static void no_event_page_no_event_view_manager_class_init (NoEventPageNoEventViewManagerClass * klass) {
-#line 132 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 124 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	no_event_page_no_event_view_manager_parent_class = g_type_class_peek_parent (klass);
-#line 132 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 124 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	((ViewManagerClass *) klass)->include_in_view = no_event_page_no_event_view_manager_real_include_in_view;
-#line 1904 "EventPage.c"
+#line 1745 "EventPage.c"
 }
 
 
@@ -1922,19 +1763,19 @@ static GType no_event_page_no_event_view_manager_get_type (void) {
 
 static void no_event_page_class_init (NoEventPageClass * klass) {
 	Alteration* _tmp0_ = NULL;
-#line 128 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	no_event_page_parent_class = g_type_class_peek_parent (klass);
-#line 128 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	((MediaPageClass *) klass)->get_config_photos_sort = no_event_page_real_get_config_photos_sort;
-#line 128 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	((MediaPageClass *) klass)->set_config_photos_sort = no_event_page_real_set_config_photos_sort;
-#line 128 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = no_event_page_finalize;
-#line 144 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 136 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	_tmp0_ = alteration_new ("metadata", "event");
-#line 144 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 136 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	no_event_page_no_event_page_alteration = _tmp0_;
-#line 1938 "EventPage.c"
+#line 1779 "EventPage.c"
 }
 
 
@@ -1944,11 +1785,11 @@ static void no_event_page_instance_init (NoEventPage * self) {
 
 static void no_event_page_finalize (GObject* obj) {
 	NoEventPage * self;
-#line 128 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_NO_EVENT_PAGE, NoEventPage);
-#line 128 "/home/jens/Source/shotwell/src/events/EventPage.vala"
+#line 120 "/home/jens/Source/shotwell/src/events/EventPage.vala"
 	G_OBJECT_CLASS (no_event_page_parent_class)->finalize (obj);
-#line 1952 "EventPage.c"
+#line 1793 "EventPage.c"
 }
 
 
